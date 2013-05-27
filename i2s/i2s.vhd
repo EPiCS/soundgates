@@ -15,7 +15,7 @@ entity i2s is
 generic(
 		
 		RefClkFrequency : integer := 25000000;		-- clock frequency of the reference clock in hz
-		BitsPerSample : integer := 16;				-- 8/16/24
+		BitsPerSample : integer := 24;				-- 8/16/24
 		SampleRate    : integer := 44100;			-- in Hz
 		NumChannels   : integer := 2					-- 1 = mono, 2 = stereo
 );
@@ -24,240 +24,136 @@ port(
 		clk    : in std_logic;		-- reference clock
 		rst    : in std_logic; 		-- reset
 
-		SD 	 : out std_logic;		-- serial data
-		WS 	 : out std_logic;		-- word select
-		SCK 	 : out std_logic;	   -- serial data clock
+		sample_l_in   : in  std_logic_vector(BitsPerSample - 1 downto 0);		-- sample for left and right channel
+		sample_r_in   : in  std_logic_vector(BitsPerSample - 1 downto 0);		-- sample for left and right channel
 		
-		BUFFER_FULL : out std_logic; --indicates that the internal buffer is full
+		sd 	 : out std_logic;		-- serial data
+		ws 	 : out std_logic;		-- word select
+		sck 	 : out std_logic;	   -- serial data clock
+		mclk   : out std_logic;    -- master clock
 		
-		sample_in   : in  std_logic_vector((BitsPerSample * 2) - 1 downto 0);		-- sample for left channel
 		load_sample : out std_logic
 		);
 end entity i2s;
 
-
 architecture Behavior of i2s is 
 
---	component fifo generic( 
---		depth      : integer;
---		data_width : integer
---	);
---
---	port ( clk : in std_logic;
---          enr : in std_logic;   --enable read,should be '0' when not in use.
---          enw : in std_logic;   --enable write,should be '0' when not in use.
---          dataout : out std_logic_vector(data_width -1 downto 0);    --output data
---          datain : in std_logic_vector (data_width -1 downto 0);     --input data
---          empty : out std_logic;     --set as '1' when the queue is empty
---          full : out std_logic     --set as '1' when the queue is full
---   );
---
---	end component;
 
-constant serial_clock_period : real := 1.0 / (real(SampleRate) * real(BitsPerSample) * real(NumChannels));
-constant refclk_divide : real := real(RefClkFrequency) * serial_clock_period;
+-- calculate MCLK_ACC_PRESCALER
+constant MCLK_FREQ : integer := 256 * SampleRate;
+constant MCLK_ACC_WIDTH : integer := 16;	
+constant MCLK_ACC_PRESCALER : integer := integer(real(2**MCLK_ACC_WIDTH)/(real(RefClkFrequency)/real(MCLK_FREQ)));
 
-constant u_refclk_divide : UNSIGNED(7 downto 0) 	:= (to_unsigned(integer(refclk_divide), 8) / 2) - 1;
+-- calculate SCLK_ACC_PRESCALER
+constant SCLK_FREQ : real := (real(MCLK_FREQ)/real(256)) * real(BitsPerSample * NumChannels);
+constant SCLK_ACC_WIDTH : integer := 16;
+constant SCLK_ACC_PRESCALER : integer := integer(real(2**SCLK_ACC_WIDTH)/(real(MCLK_FREQ)/real(SCLK_FREQ)));
 
 
-signal u_refclk_divide_count : UNSIGNED(7 downto 0) := u_refclk_divide;
+signal sclk_acc : unsigned(SCLK_ACC_WIDTH - 1 downto 0):= (others => '0');
+signal mclk_acc : unsigned(MCLK_ACC_WIDTH - 1 downto 0) := (others => '0');
 
-constant sample_index_init : UNSIGNED(7 downto 0)	:= to_unsigned((BitsPerSample * 2) - 1, 8) + 1;
+signal mclk_i : STD_LOGIC;
+signal sclk_i : STD_LOGIC;
 
-constant sample_width  : integer :=  (BitsPerSample * NumChannels);
+-------------------------------------------------------------------------------------------------------------
+-- Shift register
+-------------------------------------------------------------------------------------------------------------
+constant sample_index_init : UNSIGNED(7 downto 0)	:= to_unsigned(BitsPerSample - 1, 8);
+
+signal sample_data_shift : std_logic_vector(BitsPerSample - 1 downto 0) := (others => '0');
+
+signal sample_parallel_load : std_logic := '0';
+
 
 -- TODO: increase width of sample index for larger samples later
 signal sample_index : UNSIGNED(7 downto 0) := sample_index_init;
 
-signal reset_i : std_logic := '1';
+-------------------------------------------------------------------------------------------------------------
+-- internal i2s related signals
+-------------------------------------------------------------------------------------------------------------
 
-signal sample_parallel_load : std_logic := '0';
-signal serial_data : std_logic := '0';
-signal serial_clk  : std_logic := '0';
-signal word_select : std_logic := '1';
+--signal serial_data 	: std_logic := '0';
 
-signal sample_data_shift : std_logic_vector(sample_width - 1 downto 0) := (others => '0');
+signal word_select 	: std_logic := '0';
 
---signal BUFFER_FULL : std_logic := '0';
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------
-
---type fifo_state_type is (s0, s1, s2);
---signal fifo_ctlr_state : fifo_state_type := s0;
---
---signal fifo_out : std_logic_vector((BitsPerSample * 2) -1 downto 0);
---
---signal fifo_0_in  : std_logic_vector((BitsPerSample * 2) -1 downto 0);
---signal fifo_1_in  : std_logic_vector((BitsPerSample * 2) -1 downto 0);
---
---signal fifo_0_out  : std_logic_vector((BitsPerSample * 2) -1 downto 0);
---signal fifo_1_out  : std_logic_vector((BitsPerSample * 2) -1 downto 0);
---
---signal fifo_in_sel  : std_logic; 
---signal fifo_out_sel : std_logic;
---
---signal fifo_0_clk : std_logic;
---signal fifo_1_clk : std_logic;
---
---signal fifo_0_write_enable : std_logic := '0';
---signal fifo_0_read_enable : std_logic  := '0';
---
---signal fifo_1_write_enable : std_logic := '0';
---signal fifo_1_read_enable : std_logic  := '0';
---
---signal fifo_0_full : std_logic;
---signal fifo_1_full : std_logic;
---
---signal fifo_0_empty : std_logic;
---signal fifo_1_empty : std_logic;
---
---signal fifo_empty : std_logic;
---signal fifo_full  : std_logic;
---constant fifo_depth : integer := 8;
------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------
 
 begin
 
---	
---	sample_fifo_0 : fifo generic map(
---		depth 	  => fifo_depth,
---		data_width => (BitsPerSample * 2)
---	)
---	port map (
---		clk 		=> clk,
---		enr 		=> fifo_0_read_enable,
---		enw 		=> fifo_0_write_enable,
---		datain 	=> sample_in,
---		dataout  => fifo_out,
---		empty	 	=> fifo_0_empty,
---		full 		=> fifo_0_full
---	);
---	
---	sample_fifo_1 : fifo generic map(
---		depth 	  => fifo_depth,
---		data_width => (BitsPerSample * 2)
---	)
---	port map (
---		clk 		=> clk,
---		enr 		=> fifo_read_enable,
---		enw 		=> fifo_write_enable,
---		datain 	=> sample_in,
---		dataout  => fifo_out,
---		empty	 	=> fifo_empty,
---		full 		=> fifo_1_full
---	);
---
-
----------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------
---	
---	fifo_ctrl : process(clk, serial_clk)
---	
---	begin
---	
---	
---	end process;
---	
---
-
----------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------	
 	
---	sample_in2fifo : process(clk)	
---	begin
---		if rising_edge(clk) then
---			if fifo_read_enable = '0' then
---				fifo_write_enable <= '1';
---			else
---				fifo_write_enable <= '0';
---			end if;
---		end if;	
---	end process;
---	
---	fifo2shift : process(serial_clk, load_sample)	
---	begin		
---		if rising_edge(serial_clk) and load_sample = '1' then
---			fifo_read_enable <= '1';
---			fifo_write_enable <= '0';
---			sample_data_shift <= fifo_out;
---		else
---			fifo_read_enable <= '0';
---		end if;	
---	end process;
-
-	
-	sample_in2shift : process(serial_clk)
-	
+		-- generates mclk as defined by MCLK_MHZ
+	mclk_gen : process(rst, clk)
 	begin
-			if rising_edge(serial_clk) then
-				if sample_index = 0 then
-					
-					sample_parallel_load <= '1';
-				else
-					sample_parallel_load <= '0';
-				end if;
-
-			end if;
-			
-	end process;
-	
-	
-	clk_divide : process(clk)
-	begin
-		if rising_edge(clk) then
-			if(u_refclk_divide_count = 0) then
-				serial_clk <= not serial_clk;
-				u_refclk_divide_count <= u_refclk_divide;
-			else
-				u_refclk_divide_count <= u_refclk_divide_count - 1;
-			end if;
+		if rst = '1' then
+			mclk_acc <= (others => '0');
+		elsif clk'event and clk = '1' then
+			mclk_acc <= mclk_acc + to_unsigned(MCLK_ACC_PRESCALER,MCLK_ACC_WIDTH);		
 		end if;
-	end process;
+	end process mclk_gen;
 	
-	serial_data_shift : process(serial_clk)
+	mclk_i <= mclk_acc(MCLK_ACC_WIDTH-1);
+	
+	sclk_gen : process(rst, mclk_i)
 	begin
-		if falling_edge(serial_clk) then
-			
-			if reset_i = '1' then
-					
-				sample_index <= sample_index_init;
-				sample_data_shift <= (others => '0');
-				serial_data <= '0';
-			else
-			
-				-- shift one bit of a sample
-				serial_data <= sample_data_shift(sample_width - 1);
-				sample_data_shift <= sample_data_shift(sample_width - 2 downto 0) & '0';
-			
-				-- word select
-				if(sample_index = (BitsPerSample + 1) or sample_index = 1) then
+		if rst = '1' then
+			sclk_acc <= (others => '0');
+		elsif mclk_i'event and mclk_i = '1' then
+			sclk_acc <= sclk_acc + to_unsigned(SCLK_ACC_PRESCALER,SCLK_ACC_WIDTH);
+		end if;
+	end process sclk_gen;
+	
+	sclk_i <= sclk_acc(SCLK_ACC_WIDTH-1);
+	
+
+	word_select_gen : process(sclk_i, clk, rst)
+	begin
+		if rst = '1' then
+			word_select <= '0';
+		end if;
+	
+		if falling_edge(sclk_i) then
+			if sample_index = 1 then
 					word_select <= not word_select;
-				end if;
-						
-				-- reload shift register
-				if sample_index = 0 then
-					sample_data_shift <= sample_in;
-					sample_index <= sample_index_init;
-				else
-					sample_index <= sample_index - 1;
-				end if;
+			end if;
+		end if;
+	end process;
+	
+	serial_data_shift : process(sclk_i, clk, rst)
+	begin
+		if rst = '1' then
+			sample_index <= sample_index_init;
+			sample_data_shift <= (others => '0');
+		end if;
+		if falling_edge(sclk_i) then
+	
+			--- Load new sample
+			if sample_index = 0 then
 			
+				sample_parallel_load <= '1';
+				sample_index <= sample_index_init;
+				if word_select = '1' then
+					sample_data_shift <= sample_l_in;
+				else
+					sample_data_shift <= sample_r_in;
+				end if;
+			else	-- shift one bit of a sample
+				
+				-- serial_data <= sample_data_shift(BitsPerSample - 1);
+				sample_data_shift <= sample_data_shift(BitsPerSample - 2 downto 0) & '0';
+				sample_index <= sample_index - 1;
+			
+				sample_parallel_load <= '0';
 			end if;
 			
 		end if;
 	end process;
 	
-	-- wiring 
-	reset_i <= rst;
-
-	buffer_full <= '0';
-	
+	-- i2s wiring
+	sd <= sample_data_shift(BitsPerSample - 1);
+	mclk <= mclk_i;
+	ws <= word_select;
+	sck <= sclk_i;
 	load_sample <= sample_parallel_load;
-	
-	SD <= serial_data;
-	
-	WS <= word_select;
-	SCK <= serial_clk;
-
 end architecture;

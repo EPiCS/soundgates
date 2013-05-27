@@ -59,13 +59,20 @@ ARCHITECTURE behavior OF i2s_test IS
 --    END COMPONENT;
 	 
 	 
-	     COMPONENT main
+	 COMPONENT main
     PORT(
-         uclk : IN  std_logic;
-         rst : IN std_logic;
-         SD : OUT  std_logic;
-         WS : OUT  std_logic;
-         SCK : OUT  std_logic
+         uclk 	: in  std_logic;
+         rst 	: in std_logic;
+         
+			sw 	: in  std_logic_vector(7 downto 0);
+			btn 	: in  std_logic_vector(3 downto 0);
+         
+			SD 	: out  std_logic;
+         WS 	: out  std_logic;
+			Mclk 	: out std_logic;
+			Led 	: out std_logic_vector(7 downto 0);
+			SCK 	: out  std_logic
+			
         );
     END COMPONENT;
     
@@ -73,13 +80,14 @@ ARCHITECTURE behavior OF i2s_test IS
    --Inputs
    signal clk : std_logic := '0';
    signal rst : std_logic := '0';
-
+	signal btn :  std_logic_vector(3 downto 0) := "0000";
+	signal sw  :  std_logic_vector(7 downto 0) := "00000000";
  	--Outputs
-   signal SD : std_logic;
-   signal WS : std_logic;
-   signal SCK : std_logic;
-   signal BUFFER_FULL : std_logic;
-
+	signal MCLK : std_logic;
+   signal SD 	: std_logic;
+   signal WS 	: std_logic;
+   signal SCK 	: std_logic;
+	signal Led 	: std_logic_vector(7 downto 0);
    -- Clock period definitions
    constant clk_period : time := 40 ns;
  
@@ -111,7 +119,11 @@ BEGIN
           rst => rst,
           SD => SD,
           WS => WS,
-          SCK => SCK
+			 sw => sw,
+			 mclk => MCLK,
+          SCK => SCK,
+			 Led => Led,
+			 btn => btn
         );
 
    -- Clock process definitions
