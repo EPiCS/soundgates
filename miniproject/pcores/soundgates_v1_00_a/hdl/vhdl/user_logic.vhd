@@ -130,7 +130,24 @@ end entity user_logic;
 architecture IMP of user_logic is
 
   --USER signal declarations added here, as needed for user logic
-
+  component musicgenerator
+    port( 
+      uclk 	: in std_logic;
+      rst 	: in std_logic;
+      -- mb
+      freq  : in std_logic_vector(31 downto 0);
+      freq_time  : in std_logic_vector(31 downto 0);    
+      -- i2s output
+      sd  	: out std_logic;
+      ws	 	: out std_logic;
+      mclk 	: out std_logic;
+      sck 	: out std_logic;
+      --
+      led   : out std_logic_vector(3 downto 0);
+      btn 	: in std_logic_vector(3 downto 0);
+      en    : out std_logic
+      );
+    end component;
   ------------------------------------------
   -- Signals for user logic slave model s/w accessible register example
   ------------------------------------------
@@ -145,7 +162,20 @@ architecture IMP of user_logic is
 begin
 
   --USER logic implementation added here
-
+  musicgenerator_0 : musicgenerator
+  port map (
+    clk => Bus2IP_Clk,
+    rst => Bus2IP_Reset,
+    -- i2s output
+		sd  => sd_pin;
+		ws	 	=> ws_pin;
+		mclk => mclk_pin;
+		sck => sck_pin;
+		--
+		led  : out std_logic_vector(3 downto 0);
+ 		btn 	: in std_logic_vector(3 downto 0);
+		en  : out std_logic
+      );
   ------------------------------------------
   -- Example code to read/write user logic slave model s/w accessible registers
   -- 
