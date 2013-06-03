@@ -1,0 +1,48 @@
+Running: /opt/Xilinx/12.3/ISE_DS/ISE/bin/lin64/unwrapped/fuse -intstyle ise -incremental -lib unisims_ver -lib unimacro_ver -lib xilinxcorelib_ver -lib secureip -o /home/hendrik/Soundgates/Cordic/tb_sin_gen_isim_beh.exe -prj /home/hendrik/Soundgates/Cordic/tb_sin_gen_beh.prj work.tb_sin_gen work.glbl 
+ISim M.70d (signature 0x61e1bd6e)
+Number of CPUs detected in this system: 8
+Turning on mult-threading, number of parallel sub-compilation jobs: 16 
+Determining compilation order of HDL files
+Analyzing Verilog file \"/home/hendrik/Soundgates/Cordic/cordic_v4_0.v\" into library work
+Analyzing Verilog file \"/opt/Xilinx/12.3/ISE_DS/ISE//verilog/src/glbl.v\" into library work
+WARNING:HDLCompiler:687 - "/opt/Xilinx/12.3/ISE_DS/ISE//verilog/src/glbl.v" Line 5: Illegal redeclaration of module <glbl>.
+Parsing VHDL file "/home/hendrik/Soundgates/Cordic/sin_generator.vhd" into library work
+Parsing VHDL file "/home/hendrik/Soundgates/Cordic/tb_sin_gen.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Fuse Memory Usage: 80056 KB
+Fuse CPU Usage: 190 ms
+Using precompiled package standard from library std
+Using precompiled package std_logic_1164 from library ieee
+Using precompiled package std_logic_arith from library ieee
+Using precompiled package std_logic_signed from library ieee
+Using precompiled package numeric_std from library ieee
+Using precompiled package textio from library std
+Using precompiled package std_logic_textio from library ieee
+Using precompiled package vl_types from library vl
+Compiling module glbl
+Compiling module VCC
+Compiling module GND
+Compiling module FDRE
+Compiling module LUT2(INIT=4'b1000)
+Compiling module FDE
+Compiling module SRLC16E
+Compiling module INV
+Compiling module FD
+Compiling module LUT1(INIT=2'b10)
+Compiling module LUT3(INIT=8'b10010110)
+Compiling module LUT6(INIT=64'b111111111110011110...
+Compiling module LUT5(INIT=32'b100110011000000100...
+Compiling module XORCY
+Compiling module MUXCY
+Compiling module cordic_v4_0
+Compiling architecture behavioral of entity sin_generator [sin_generator_default]
+Compiling architecture behavior of entity tb_sin_gen
+Time Resolution for simulation is 1ps.
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 11 VHDL Units
+Compiled 23 Verilog Units
+Built simulation executable /home/hendrik/Soundgates/Cordic/tb_sin_gen_isim_beh.exe
+Fuse Memory Usage: 181440 KB
+Fuse CPU Usage: 340 ms
+GCC CPU Usage: 1810 ms

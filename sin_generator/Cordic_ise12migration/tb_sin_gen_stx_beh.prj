@@ -1,0 +1,3 @@
+vhdl isim_temp "sin_generator.vhd"
+vhdl isim_temp "tb_sin_gen.vhd"
+verilog isim_temp "/opt/Xilinx/12.3/ISE_DS/ISE//verilog/src/glbl.v"
