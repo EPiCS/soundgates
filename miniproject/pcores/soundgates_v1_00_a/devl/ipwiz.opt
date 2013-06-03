@@ -1,0 +1,9 @@
+-batch 
+-create soundgates 
+-ver 1.00.a 
+-dir "/home/caius/pg/git/pg-soundgates/miniproject" 
+-lang vhdl 
+-bus plbv46 s 
+-reg 2 
+-xps 
+-ise 
