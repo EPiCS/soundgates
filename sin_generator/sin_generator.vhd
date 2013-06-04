@@ -22,7 +22,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 --use ieee.std_logic_unsigned.all;
 use ieee.std_logic_signed.all;
-use IEEE.numeric_std.ALL;
+--use IEEE.numeric_std.ALL;
 use std.textio.all;
 use ieee.std_logic_textio.all;
 
@@ -74,6 +74,7 @@ architecture Behavioral of sin_generator is
 	signal intern_clk  : std_logic := '0';
 	constant pi : std_logic_vector(15 downto 0) := "0110010010000000";
 	constant n_pi : std_logic_vector(15 downto 0) := "1001101110000000" ;
+	
 	constant clk_period  : integer := 2560;  -- 200MHz / 78.125KHz
 	signal clk_counter : integer := 0;
 	--signal increase	 : STD_LOGIC_VECTOR(15 downto 0);
@@ -83,7 +84,13 @@ architecture Behavioral of sin_generator is
 	signal converterInput : std_logic_vector(15 downto 0);
 	signal converterOutput : std_logic_vector(15 downto 0);
 	
-	signal phase_inc : std_logic_vector(15 downto 0);
+	signal phase_inc : std_logic_vector(15 downto 0) := "0000000000000000"; -- smallest possible phase increase yield a frequency of 0.75914373445 HZ
+	
+	signal temp_phase_inc : std_logic_vector(31 downto 0) := "00000000000000000000000000000000"; -- larger vector for temporary multiplikation
+
+	constant t1 : unsigned(15 downto 0) := "1010100010011101"; --multiplikator ( 43165 ) --> 43165 / 32768
+	
+
 
 	FILE test_out_data: TEXT open WRITE_MODE is "F:\Temp\output_cordic.txt";
 
@@ -118,9 +125,15 @@ begin
 -- osc_max is the longest time a single sine oscillation may take (given that phase_inc is 000.0001)
 -- F_min := 1 / osc_max  is therefore the minimum frequency
 -- phase_inc := hertz / F_min
-	set_phase_increase : process ( intern_clk, hertz ) is
+-- F_min in our case is 0.75914 Hz or 37957/50000
+-- => phase_inc = hertz * 50000 / 37957
+-- Division is complicated if not with powers of to. Therefore we approximate the value by 43165 / 32768
+	set_phase_increase : process ( intern_clk ) is
 	begin
-		phase_inc <= "0000001001000100"; -- 440 Hz
+		if rising_edge(intern_clk) then
+			temp_phase_inc <= unsigned(hertz) * t1;
+			phase_inc(15 downto 0) <= temp_phase_inc(30 downto 15); -- / 32768
+		end if;
 	end process set_phase_increase;
 
 	

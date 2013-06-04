@@ -27,7 +27,7 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
+use ieee.std_logic_unsigned.all;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
@@ -53,6 +53,7 @@ ARCHITECTURE behavior OF tb_sin_gen IS
    signal sin : std_logic := '1';
    signal hertz : std_logic_vector(15 downto 0) := "0000000110111000"; -- 440 Hz
    signal clk : std_logic := '0';
+	signal passes : std_logic_vector(1 downto 0):= "00";
 
  	--Outputs
    signal sfp_wave : std_logic_vector(15 downto 0);
@@ -80,5 +81,23 @@ BEGIN
 		clk <= '1';
 		wait for 2.5 ns;
    end process;
+	
+	adjust_process :process(passes)
+	begin
+		if passes = "00" then
+			hertz <= "0000000011011100"; -- 220 Hz
+		else
+			if passes = "10" then
+				hertz <= "0000000110111000"; -- 4400 Hz
+			end if;
+		end if;
+	end process;
+	
+	pass_process :process(uint_wave)
+	begin
+		if uint_wave = "1111111111111111" then
+			passes <= passes + "01";
+		end if;
+	end process;
 	
 END;
