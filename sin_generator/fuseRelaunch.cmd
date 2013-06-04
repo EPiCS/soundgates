@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -o "F:/Dropbox/Uni/Projektgruppe/workbench/vhdl/testing/Cordic/tb_sin_gen_isim_beh.exe" -prj "F:/Dropbox/Uni/Projektgruppe/workbench/vhdl/testing/Cordic/tb_sin_gen_beh.prj" "work.tb_sin_gen" "work.glbl" 

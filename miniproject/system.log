@@ -1,0 +1,29 @@
+Xilinx Platform Studio (XPS)
+Xilinx EDK 14.2 Build EDK_P.28xd
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
+Assigned Driver generic 1.00.a for instance i2s_0
+i2s_0 has been added to the project
+WARNING:EDK:2137 - Peripheral i2s_0 is not accessible from any processor in the system. Check Bus Interface connections and address parameters. 
+WARNING:EDK:2137 - Peripheral i2s_0 is not accessible from any processor in the system. Check Bus Interface connections and address parameters. 
+Overriding Xilinx file <TextEditor.cfg> with local file </opt/Xilinx/14.2/ISE_DS/EDK/data/TextEditor.cfg>
+i2s_0 has been deleted from the project
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
+Xilinx Platform Studio (XPS)
+Xilinx EDK 14.2 Build EDK_P.28xd
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
