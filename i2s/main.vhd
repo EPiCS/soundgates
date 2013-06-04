@@ -23,7 +23,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
-use work.sine_package.all;
+--use work.sine_package.all;
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
 --library UNISIM;
@@ -35,14 +35,13 @@ port( uclk 	: in std_logic;
 		rst 	: in std_logic;
 		
 		btn 	: in std_logic_vector(3 downto 0);
-		sw    : in std_logic_vector(7 downto 0); 
 		-- i2s output
 		sd  	: out std_logic;
 		ws	 	: out std_logic;
 		mclk 	: out std_logic;
 		sck 	: out std_logic;
 		--
-		led  : out std_logic_vector(7 downto 0);
+		led  : out std_logic_vector(3 downto 0);
 		
 		en  : out std_logic
 );
@@ -99,7 +98,6 @@ begin
 
 
 	Led(3 downto 0) <= btn;
-	led(7 downto 4) <= "0000";
 
 	sdata_rom  : SampleDataRom port map(
 		clk => serial_clk,
@@ -109,7 +107,7 @@ begin
 	);
 
 	i2s_inst : i2s generic map(
-		RefClkFrequency 	=> 25_000_000,
+		RefClkFrequency 	=> 100_000_000,
 		BitsPerSample 		=> bps,
 		SampleRate    		=> 44100,
 		NumChannels   		=> 2)
