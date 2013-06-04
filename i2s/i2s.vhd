@@ -39,7 +39,7 @@ architecture Behavior of i2s is
 
 -- calculate MCLK_ACC_PRESCALER
 constant MCLK_FREQ : integer := 256 * SampleRate;
-constant MCLK_ACC_WIDTH : integer := 16;	
+constant MCLK_ACC_WIDTH : integer := 16;
 constant MCLK_ACC_PRESCALER : integer := integer(real(2**MCLK_ACC_WIDTH)/(real(RefClkFrequency)/real(MCLK_FREQ)));
 
 -- calculate SCLK_ACC_PRESCALER
@@ -75,45 +75,45 @@ signal sample_index : UNSIGNED(sample_index_addr_width downto 0) := sample_index
 signal word_select 	: std_logic := '0';
 ---------------------------------------------------------------------------------------
 
-component fifo is
-generic(
-	depth : integer := 128;
-	data_width : integer := 24 
-);
-port (
-	clk : in std_logic;
-	enr : in std_logic;
-   enw : in std_logic;
-   dataout : out std_logic_vector(data_width -1 downto 0);
-   datain : in std_logic_vector (data_width -1 downto 0);
-   empty : out std_logic;
-   full : out std_logic
-         );
-end component;
+--component fifo is
+--generic(
+--	depth : integer := 128;
+--	data_width : integer := 24 
+--);
+--port (
+--	clk : in std_logic;
+--	enr : in std_logic;
+--   enw : in std_logic;
+--   dataout : out std_logic_vector(data_width -1 downto 0);
+--   datain : in std_logic_vector (data_width -1 downto 0);
+--   empty : out std_logic;
+--   full : out std_logic
+--         );
+--end component;
 
-signal fifo_read_enable  : std_logic;
-signal fifo_write_enable : std_logic;
-signal fifo_data_out : std_logic_vector(BitsPerSample -1 downto 0);
-signal fifo_data_in  : std_logic_vector(BitsPerSample -1 downto 0);
-signal fifo_empty : std_logic;
-signal fifo_fill : std_logic;
+--signal fifo_read_enable  : std_logic;
+--signal fifo_write_enable : std_logic;
+--signal fifo_data_out : std_logic_vector(BitsPerSample -1 downto 0);
+--signal fifo_data_in  : std_logic_vector(BitsPerSample -1 downto 0);
+--signal fifo_empty : std_logic;
+--signal fifo_fill : std_logic;
 
 begin
 	
-	fifo_inst : fifo
-	generic map(
-		depth => 128,
-		data_width => BitsPerSample
-	)
-	port map(
-		clk => clk,
-		enr => fifo_read_enable,
-		enw => fifo_write_enable,
-		dataout => fifo_data_out,
-		datain => fifo_data_in,
-		empty => fifo_empty,
-		full => fifo_fill
-	);
+--	fifo_inst : fifo
+--	generic map(
+--		depth => 128,
+--		data_width => BitsPerSample
+--	)
+--	port map(
+--		clk => clk,
+--		enr => fifo_read_enable,
+--		enw => fifo_write_enable,
+--		dataout => fifo_data_out,
+--		datain => fifo_data_in,
+--		empty => fifo_empty,
+--		full => fifo_fill
+--	);
 	
 	
 	-- generates mclk as defined by MCLK_MHZ

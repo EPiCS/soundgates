@@ -8839,11 +8839,12 @@ begin
 	end process;
 ClockProc: process (clk, rst) is
 begin
+
 if rising_edge(clk) then
 	if rst = '1' then
 		count <= (others => '0');
-	end if;
-	if (ENABLE = '1') then
+	
+	elsif (ENABLE = '1') then
 		if (unsigned(count) < rom_type'length) then
 			count <= std_logic_vector(unsigned(count) + 1);
 		else
@@ -8851,5 +8852,6 @@ if rising_edge(clk) then
 		end if;
 	end if;
 end if;
+
 end process;
 end Behavioral;

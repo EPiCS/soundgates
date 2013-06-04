@@ -26,14 +26,15 @@ use IEEE.NUMERIC_STD.ALL;
 --use work.sine_package.all;
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+library UNISIM;
+use UNISIM.VComponents.all;
 
 entity main is
 
-port( uclk 	: in std_logic;
+port( --uclk 	: in std_logic;
 		rst 	: in std_logic;
-		
+		lvdsclk_p : in std_logic;
+		lvdsclk_n : in std_logic;
 		btn 	: in std_logic_vector(3 downto 0);
 		-- i2s output
 		sd  	: out std_logic;
@@ -61,6 +62,23 @@ component SampleDataRom
 end component;
 
 
+
+component square_generator
+	generic(
+		RefClkFrequency : integer := 200_000_000
+	 );
+	
+    Port ( 
+			  clk : in  STD_LOGIC;
+			  frq_up : in std_logic;
+			  frq_down : in std_logic;
+           sample_req : in  STD_LOGIC;
+           sample_l_out : out  STD_LOGIC_VECTOR (23 downto 0);
+           sample_r_out : out STD_LOGIC_VECTOR (23 downto 0)
+			  
+			  );
+end component;
+
 COMPONENT i2s
 	 generic(
 		
@@ -87,27 +105,48 @@ COMPONENT i2s
         );
     END COMPONENT;
 
-signal sample_in 		: std_logic_vector(bps - 1 downto 0);
+--signal sample_in 		: std_logic_vector(bps - 1 downto 0);
+
+signal sample_l_int	: std_logic_vector(bps - 1 downto 0);
+signal sample_r_int	: std_logic_vector(bps - 1 downto 0);
+
+
 signal word_select  	: std_logic;
 signal serial_clk 	: std_logic;
 signal master_clk    : std_logic;
 signal load_sample 	: std_logic;
 signal serial_data  	: std_logic;
-
+signal uclk : std_logic;
 begin
-
+	
+	
+	LVDS_CLOCK : IBUFGDS
+   port map ( O  => uclk,
+              I  => lvdsclk_p,
+              IB => lvdsclk_n
+   );
 
 	Led(3 downto 0) <= btn;
 
-	sdata_rom  : SampleDataRom port map(
-		clk => serial_clk,
-		enable => load_sample,
-		data_out => sample_in,
-		rst => rst
-	);
+--	sdata_rom  : SampleDataRom port map(
+--		clk => uclk,
+--		enable => load_sample,
+--		data_out => sample_in,
+--		rst => rst
+--	);
+	
+	square_gen_inst : square_generator
+	port map ( 
+		clk => uclk,
+		frq_up => '0',
+		frq_down => '0',
+      sample_req => load_sample,
+      sample_l_out => sample_l_int,
+      sample_r_out => sample_r_int
+		);
 
 	i2s_inst : i2s generic map(
-		RefClkFrequency 	=> 100_000_000,
+		RefClkFrequency 	=> 200_000_000,
 		BitsPerSample 		=> bps,
 		SampleRate    		=> 44100,
 		NumChannels   		=> 2)
@@ -118,8 +157,8 @@ begin
 			ws => word_select,
 			sck => serial_clk,
 			mclk => master_clk,
-			sample_l_in => sample_in,
-			sample_r_in => sample_in,
+			sample_l_in => sample_l_int,
+			sample_r_in => sample_r_int,
 			load_sample => load_sample 
 		);
 		
