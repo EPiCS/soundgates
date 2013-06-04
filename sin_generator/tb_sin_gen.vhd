@@ -44,14 +44,14 @@ ARCHITECTURE behavior OF tb_sin_gen IS
          sin : IN  std_logic;
          sfp_wave : OUT  std_logic_vector(15 downto 0);
 			uint_wave : OUT std_logic_vector(15 downto 0);
-         phase_inc : IN  std_logic_vector(15 downto 0);
+         hertz : IN  std_logic_vector(15 downto 0);
          clk : IN  std_logic
         );
     END COMPONENT;
 
    --Inputs
    signal sin : std_logic := '1';
-   signal phase_inc : std_logic_vector(15 downto 0) := "0000000101110010";
+   signal hertz : std_logic_vector(15 downto 0) := "0000000110111000"; -- 440 Hz
    signal clk : std_logic := '0';
 
  	--Outputs
@@ -68,7 +68,7 @@ BEGIN
           sin => sin,
           sfp_wave => sfp_wave,
 			 uint_wave => uint_wave,
-          phase_inc => phase_inc,
+          hertz => hertz,
           clk => clk
         );
 

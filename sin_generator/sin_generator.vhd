@@ -41,7 +41,7 @@ entity sin_generator is
   --		  ref_clk	  : in integer;
            sfp_wave    : out  STD_LOGIC_VECTOR(15 downto 0);
 			  uint_wave	  : out STD_LOGIC_VECTOR(15downto 0);
-			  phase_inc	  : in STD_LOGIC_VECTOR(15 downto 0);
+			  hertz	  : in STD_LOGIC_VECTOR(15 downto 0);
 			  clk			  : in STD_LOGIC);
 end sin_generator;
 
@@ -82,8 +82,10 @@ architecture Behavioral of sin_generator is
 	signal direction_lock : std_logic_vector(1 downto 0) := "00";
 	signal converterInput : std_logic_vector(15 downto 0);
 	signal converterOutput : std_logic_vector(15 downto 0);
+	
+	signal phase_inc : std_logic_vector(15 downto 0);
 
-	FILE test_out_data: TEXT open WRITE_MODE is "/home/hendrik/Soundgates/output_cordic.txt";
+	FILE test_out_data: TEXT open WRITE_MODE is "F:\Temp\output_cordic.txt";
 
 begin
 
@@ -110,6 +112,18 @@ begin
 	uint_wave <= converterOutput;
 		
 		
+-- Steps to set the correct phase_inc
+-- Interpret PI as integer and multiply by 4 =: R
+-- osc_max := R / intern_clk 
+-- osc_max is the longest time a single sine oscillation may take (given that phase_inc is 000.0001)
+-- F_min := 1 / osc_max  is therefore the minimum frequency
+-- phase_inc := hertz / F_min
+	set_phase_increase : process ( intern_clk, hertz ) is
+	begin
+		phase_inc <= "0000001001000100"; -- 440 Hz
+	end process set_phase_increase;
+
+	
   increase_phase : process	( intern_clk ) is
 		
   variable L1              : LINE;
