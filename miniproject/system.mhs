@@ -435,3 +435,9 @@ BEGIN proc_sys_reset
  PORT Peripheral_Reset = sys_periph_reset
 END
 
+BEGIN soundgates
+ PARAMETER INSTANCE = soundgates_0
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE SPLB = mb_plb
+END
+

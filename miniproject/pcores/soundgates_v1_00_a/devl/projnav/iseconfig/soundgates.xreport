@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2013-06-03T11:38:10</DateModified>
+  <DateModified>2013-06-03T12:14:42</DateModified>
   <ModuleName>soundgates</ModuleName>
-  <SummaryTimeStamp>Unknown</SummaryTimeStamp>
+  <SummaryTimeStamp>2013-06-03T11:54:35</SummaryTimeStamp>
   <SavedFilePath>/home/caius/pg/git/pg-soundgates/miniproject/pcores/soundgates_v1_00_a/devl/projnav/iseconfig/soundgates.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/caius/pg/git/pg-soundgates/miniproject/pcores/soundgates_v1_00_a/devl/projnav</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>/home/caius/pg/git/pg-soundgates/miniproject/pcores/soundgates_v1_00_a/devl/projnav/</ImplementationReportsDirectory>
   <DateInitialized>2013-06-03T11:38:10</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

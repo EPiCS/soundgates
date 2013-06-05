@@ -191,7 +191,11 @@ Net fpga_0_clk_1_sys_clk_n_pin LOC = H9  |  IOSTANDARD=LVDS_25  |  DIFF_TERM = T
 Net fpga_0_rst_1_sys_rst_pin TIG;
 Net fpga_0_rst_1_sys_rst_pin LOC = H10  |  IOSTANDARD=SSTL15  |  PULLUP  |  TIG;
 Net fpga_0_FLASH_CE_inverter_Res_pin LOC=AJ12  |  IOSTANDARD=LVCMOS25;
-
+# i2s
+NET SCK  LOC = "B5"; #| IOSTANDARD = "LVCMOS33";          # JB Pin 4
+NET WS   LOC = "B2"; # | IOSTANDARD = "LVCMOS33";          # JB Pin 1
+NET MCLK LOC = "C5"; 
+NET SD   LOC = "A3";# | IOSTANDARD = "LVCMOS33";          # JB Pin 2
 ###### DDR3_SDRAM
 
 
