@@ -121,8 +121,6 @@ CORE_STATE_DEVELOPMENT_FILES = /opt/Xilinx/14.2/ISE_DS/EDK/hw/XilinxProcessorIPL
 /opt/Xilinx/14.2/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/plbv46_slave_single_v1_01_a/hdl/vhdl/plb_slave_attachment.vhd \
 /opt/Xilinx/14.2/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/plbv46_slave_single_v1_01_a/hdl/vhdl/plbv46_slave_single.vhd \
 pcores/soundgates_v1_00_a/hdl/vhdl/i2s.vhd \
-pcores/soundgates_v1_00_a/hdl/vhdl/SampleDataRom.vhd \
-pcores/soundgates_v1_00_a/hdl/vhdl/musicgenerator.vhd \
 pcores/soundgates_v1_00_a/hdl/vhdl/user_logic.vhd \
 pcores/soundgates_v1_00_a/hdl/vhdl/soundgates.vhd
 

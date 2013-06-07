@@ -3562,3 +3562,77 @@ Done writing filter settings to:
 	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
 Done writing Tab View settings to:
 	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
+Xilinx Platform Studio (XPS)
+Xilinx EDK 14.2 Build EDK_P.28xd
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
+Xilinx Platform Studio (XPS)
+Xilinx EDK 14.2 Build EDK_P.28xd
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
+ERROR:EDK:1405 - File not found in any repository 'soundgates_v1_00_a/hdl/vhdl/musicgenerator.vhd'
+
+********************************************************************************
+At Local date and time: Fri Jun  7 16:42:56 2013
+ make -f system.make hwclean started...
+rm -f implementation/system.ngc
+rm -f implementation/system_microblaze_0_wrapper.ngc implementation/system_mb_plb_wrapper.ngc implementation/system_ilmb_wrapper.ngc implementation/system_dlmb_wrapper.ngc implementation/system_dlmb_cntlr_wrapper.ngc implementation/system_ilmb_cntlr_wrapper.ngc implementation/system_lmb_bram_wrapper.ngc implementation/system_rs232_uart_1_wrapper.ngc implementation/system_leds_8bit_wrapper.ngc implementation/system_leds_positions_wrapper.ngc implementation/system_push_buttons_5bit_wrapper.ngc implementation/system_dip_switches_8bit_wrapper.ngc implementation/system_iic_eeprom_wrapper.ngc implementation/system_iic_fmc_lpc_wrapper.ngc implementation/system_iic_dvi_wrapper.ngc implementation/system_iic_sfp_wrapper.ngc implementation/system_flash_wrapper.ngc implementation/system_ethernet_mac_wrapper.ngc implementation/system_ddr3_sdram_wrapper.ngc implementation/system_sysace_compactflash_wrapper.ngc implementation/system_xps_timer_0_wrapper.ngc implementation/system_flash_ce_inverter_wrapper.ngc implementation/system_clock_generator_0_wrapper.ngc implementation/system_mdm_0_wrapper.ngc implementation/system_proc_sys_reset_0_wrapper.ngc implementation/system_soundgates_0_wrapper.ngc
+rm -f platgen.log
+rm -f __xps/ise/_xmsgs/platgen.xmsgs
+rm -f implementation/system.bmm
+rm -rf implementation/cache
+rm -f implementation/system.bit
+rm -f implementation/system.ncd
+rm -f implementation/system_bd.bmm 
+rm -f implementation/system_map.ncd 
+rm -f implementation/download.bit 
+rm -f __xps/system_bits
+rm -rf implementation synthesis xst hdl
+rm -rf xst.srp system.srp
+rm -f __xps/ise/_xmsgs/bitinit.xmsgs
+rm -rf __xps/ps7_instance.mhs
+Done!
+ERROR:EDK:1405 - File not found in any repository 'soundgates_v1_00_a/hdl/vhdl/musicgenerator.vhd'
+Overriding Xilinx file <TextEditor.cfg> with local file </opt/Xilinx/14.2/ISE_DS/EDK/data/TextEditor.cfg>
+ERROR:EDK:1405 - File not found in any repository 'soundgates_v1_00_a/hdl/vhdl/musicgenerator.vhd'
+
+********************************************************************************
+At Local date and time: Fri Jun  7 16:50:02 2013
+ make -f system.make hwclean started...
+rm -f implementation/system.ngc
+rm -f implementation/system_microblaze_0_wrapper.ngc implementation/system_mb_plb_wrapper.ngc implementation/system_ilmb_wrapper.ngc implementation/system_dlmb_wrapper.ngc implementation/system_dlmb_cntlr_wrapper.ngc implementation/system_ilmb_cntlr_wrapper.ngc implementation/system_lmb_bram_wrapper.ngc implementation/system_rs232_uart_1_wrapper.ngc implementation/system_leds_8bit_wrapper.ngc implementation/system_leds_positions_wrapper.ngc implementation/system_push_buttons_5bit_wrapper.ngc implementation/system_dip_switches_8bit_wrapper.ngc implementation/system_iic_eeprom_wrapper.ngc implementation/system_iic_fmc_lpc_wrapper.ngc implementation/system_iic_dvi_wrapper.ngc implementation/system_iic_sfp_wrapper.ngc implementation/system_flash_wrapper.ngc implementation/system_ethernet_mac_wrapper.ngc implementation/system_ddr3_sdram_wrapper.ngc implementation/system_sysace_compactflash_wrapper.ngc implementation/system_xps_timer_0_wrapper.ngc implementation/system_flash_ce_inverter_wrapper.ngc implementation/system_clock_generator_0_wrapper.ngc implementation/system_mdm_0_wrapper.ngc implementation/system_proc_sys_reset_0_wrapper.ngc implementation/system_soundgates_0_wrapper.ngc
+rm -f platgen.log
+rm -f __xps/ise/_xmsgs/platgen.xmsgs
+rm -f implementation/system.bmm
+rm -rf implementation/cache
+rm -f implementation/system.bit
+rm -f implementation/system.ncd
+rm -f implementation/system_bd.bmm 
+rm -f implementation/system_map.ncd 
+rm -f implementation/download.bit 
+rm -f __xps/system_bits
+rm -rf implementation synthesis xst hdl
+rm -rf xst.srp system.srp
+rm -f __xps/ise/_xmsgs/bitinit.xmsgs
+rm -rf __xps/ps7_instance.mhs
+Done!
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui
+Writing filter settings....
+Done writing filter settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.filters
+Done writing Tab View settings to:
+	/home/caius/pg/git/pg-soundgates/miniproject/etc/system.gui

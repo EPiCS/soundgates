@@ -58,15 +58,15 @@ signal sclk_i : STD_LOGIC;
 -- Shift register
 -------------------------------------------------------------------------------------------------------------
 
-constant sample_index_addr_width : natural := natural(ceil(log2(real(BitsPerSample))));
+constant sample_index_addr_width : natural := natural(ceil(log2(real(BitsPerSample)))) - 1;
 
-constant sample_index_init : UNSIGNED(sample_index_addr_width downto 0)	:= to_unsigned(BitsPerSample - 1, sample_index_addr_width + 1);
+constant sample_index_init :  integer range 0 to (BitsPerSample - 1)	:= (BitsPerSample - 1);
 
 signal sample_data_shift : std_logic_vector(BitsPerSample - 1 downto 0) := (others => '0');
 
 signal sample_parallel_load : std_logic := '0';
 
-signal sample_index : UNSIGNED(sample_index_addr_width downto 0) := sample_index_init;
+signal sample_index : integer range 0 to (BitsPerSample - 1) := sample_index_init;
 
 -------------------------------------------------------------------------------------------------------------
 -- internal i2s related signals
@@ -98,6 +98,11 @@ signal word_select 	: std_logic := '0';
 --signal fifo_empty : std_logic;
 --signal fifo_fill : std_logic;
 
+signal delay_reg_mclk : std_logic;
+signal delay_reg_sclk : std_logic;
+signal mclk_tick : std_logic;	-- generates a tick on a rising edge of sclk
+signal sclk_tick : std_logic;	-- generates a tick on a falling edge of sclk
+
 begin
 	
 --	fifo_inst : fifo
@@ -116,6 +121,31 @@ begin
 --	);
 	
 	
+	mclk_tick_gen: process (clk, rst)
+	begin
+		if rst = '1' then
+		
+		elsif rising_edge(clk) then
+			delay_reg_mclk <= mclk_i;		
+		end if;
+		
+	end process;
+	
+	mclk_tick <= (not delay_reg_mclk) and mclk_i;
+	
+	sclk_tick_gen: process (clk, rst)
+	begin
+		if rst = '1' then
+		
+		elsif rising_edge(clk) then
+			delay_reg_sclk <= sclk_i;		
+		end if;
+		
+	end process;
+	
+	sclk_tick <= (delay_reg_sclk) and not sclk_i;
+	
+	
 	-- generates mclk as defined by MCLK_MHZ
 	mclk_gen : process(rst, clk, mclk_acc)
 	begin
@@ -128,12 +158,15 @@ begin
 	
 	mclk_i <= mclk_acc(MCLK_ACC_WIDTH-1);
 	----------------------------------------------------------------
-	sclk_gen : process(rst, mclk_i, sclk_acc)
+	sclk_gen : process(rst, clk,  mclk_i, sclk_acc)
 	begin
 		if rst = '1' then
 			sclk_acc <= (others => '0');
-		elsif rising_edge(mclk_i) then
-			sclk_acc <= sclk_acc + to_unsigned(SCLK_ACC_PRESCALER, SCLK_ACC_WIDTH);
+		elsif rising_edge(clk) then
+			if mclk_tick = '1' then
+				sclk_acc <= sclk_acc + to_unsigned(SCLK_ACC_PRESCALER, SCLK_ACC_WIDTH);
+			end if;
+		
 		end if;
 	end process sclk_gen;
 	
@@ -146,35 +179,33 @@ begin
 		if rst = '1' then
 			sample_index <= sample_index_init;
 			sample_data_shift <= (others => '0');
-
-		elsif falling_edge(sclk_i) then
+			
+		  elsif rising_edge(clk) then
 			
 			sample_parallel_load <= '0';
-			sample_index <= sample_index - 1;
-				
 			
-			if sample_index = 0 then
+			if sclk_tick = '1' then
 				
-				sample_parallel_load <= '1'; --- Load new sample
-				
-				sample_index <= sample_index_init;
-				
-				if word_select = '1' then
-					sample_data_shift <= sample_l_in;
-				else
-					sample_data_shift <= sample_r_in;
-				end if;
+				sample_index <= sample_index - 1;
 			
-			elsif sample_index = 1 then
-			
-				word_select <= not word_select;
-					
-			else	-- shift one bit of a sample
-				
-				sample_data_shift <= sample_data_shift(BitsPerSample - 2 downto 0) & '0';
-
+				case sample_index is				
+					when 0 =>
+						sample_parallel_load <= '1'; --- Load new sample
+						
+						sample_index <= sample_index_init;						
+						case word_select is
+							when '1' =>
+								sample_data_shift <= sample_l_in;
+							when '0' =>
+								sample_data_shift <= sample_r_in;
+							when others => null;
+						end case;						
+					when 1 =>
+						word_select <= not word_select;
+					when others =>
+						sample_data_shift <= sample_data_shift(BitsPerSample - 2 downto 0) & '0';
+				end case;		
 			end if;
-			
 		end if;
 	end process;
 	----------------------------------------------------------------
