@@ -50,6 +50,13 @@
 
 *.ini 
 
+impact.xsl
+impact_impact.xwbt
+webtalk_impact.xwbt
+webtalk_impact.xml
+fuse.xmsgs
+xilinxsim.ini
+
 # project-wide generated files
 *.gise
 par_usage_statistics.html

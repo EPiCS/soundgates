@@ -31,20 +31,17 @@ use UNISIM.VComponents.all;
 
 entity main is
 
-port( --uclk 	: in std_logic;
-		rst 	: in std_logic;
+port( 	
 		lvdsclk_p : in std_logic;
 		lvdsclk_n : in std_logic;
-		btn 	: in std_logic_vector(3 downto 0);
+		rst 	: in std_logic;
+		en  	: in std_logic;
+		
 		-- i2s output
 		sd  	: out std_logic;
 		ws	 	: out std_logic;
 		mclk 	: out std_logic;
-		sck 	: out std_logic;
-		--
-		led  : out std_logic_vector(3 downto 0);
-		
-		en  : out std_logic
+		sck 	: out std_logic				
 );
 end main;
 
@@ -70,8 +67,6 @@ component square_generator
 	
     Port ( 
 			  clk : in  STD_LOGIC;
-			  frq_up : in std_logic;
-			  frq_down : in std_logic;
            sample_req : in  STD_LOGIC;
            sample_l_out : out  STD_LOGIC_VECTOR (23 downto 0);
            sample_r_out : out STD_LOGIC_VECTOR (23 downto 0)
@@ -85,7 +80,7 @@ COMPONENT i2s
 		RefClkFrequency : integer;		-- clock frequency of the reference clock in hz
 		BitsPerSample   : integer;		-- 8/16/32
 		SampleRate      : integer;		-- in Hz
-		NumChannels     : integer			-- 1 = mono, 2 = stereo
+		NumChannels     : integer		-- 1 = mono, 2 = stereo
 	);
     PORT(
          clk : in  std_logic;
@@ -125,9 +120,7 @@ begin
               I  => lvdsclk_p,
               IB => lvdsclk_n
    );
-
-	Led(3 downto 0) <= btn;
-
+	
 --	sdata_rom  : SampleDataRom port map(
 --		clk => uclk,
 --		enable => load_sample,
@@ -138,8 +131,6 @@ begin
 	square_gen_inst : square_generator
 	port map ( 
 		clk => uclk,
-		frq_up => '0',
-		frq_down => '0',
       sample_req => load_sample,
       sample_l_out => sample_l_int,
       sample_r_out => sample_r_int
@@ -148,7 +139,7 @@ begin
 	i2s_inst : i2s generic map(
 		RefClkFrequency 	=> 200_000_000,
 		BitsPerSample 		=> bps,
-		SampleRate    		=> 44100,
+		SampleRate    		=> 78125,
 		NumChannels   		=> 2)
 		port map(
 			clk => uclk,
@@ -168,8 +159,6 @@ begin
 	sck <= serial_clk;
 	sd <= serial_data;
 ------
-	EN <= '1';
-
 
 end Behavioral;
 

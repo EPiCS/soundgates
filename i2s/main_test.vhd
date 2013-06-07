@@ -41,54 +41,61 @@ ARCHITECTURE behavior OF i2s_test IS
 	 
 	 COMPONENT main
     PORT(
-         uclk 	: in  std_logic;
-         rst 	: in std_logic;
-        
-			btn 	: in  std_logic_vector(3 downto 0);
-         
-			SD 	: out  std_logic;
-         WS 	: out  std_logic;
-			Mclk 	: out std_logic;
-			Led 	: out std_logic_vector(3 downto 0);
-			SCK 	: out  std_logic
+			lvdsclk_p : in std_logic;
+			lvdsclk_n : in std_logic;
+			rst 	: in std_logic;
+			en  	: in std_logic;
+		
+			-- i2s output
+			sd  	: out std_logic;
+			ws	 	: out std_logic;
+			mclk 	: out std_logic;
+			sck 	: out std_logic
 			
         );
     END COMPONENT;
     
 
    --Inputs
-   signal clk : std_logic := '0';
+   signal lvdsclk_n : std_logic := '0';
+	signal lvdsclk_p : std_logic := '1';
    signal rst : std_logic := '0';
-	signal btn :  std_logic_vector(3 downto 0) := "0000";
+	signal en : std_logic := '1';
  	--Outputs
+	
 	signal MCLK : std_logic;
    signal SD 	: std_logic;
    signal WS 	: std_logic;
    signal SCK 	: std_logic;
-	signal Led 	: std_logic_vector(3 downto 0);
+	
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
+   constant clk_period : time := 5 ns;
  
 BEGIN
  
 	uut : main
 			PORT MAP (
-          uclk => clk,
-          rst => rst,
-          SD => SD,
-          WS => WS,
-			 mclk => MCLK,
-          SCK => SCK,
-			 Led => Led,
-			 btn => btn
+         lvdsclk_n => lvdsclk_n,
+			lvdsclk_p => lvdsclk_p,
+			rst 	=>  rst,
+			en  	=> en,
+		
+			-- i2s output
+			sd  	=> SD,
+			ws	 	=> WS,
+			mclk 	=> MCLK,
+			sck 	=> SCK
         );
-
+	
+	
+	lvdsclk_p <= not lvdsclk_n;
+	
    -- Clock process definitions
    clk_process :process
    begin
-		clk <= '0';
+		lvdsclk_n <= '0';
 		wait for clk_period/2;
-		clk <= '1';
+		lvdsclk_n <= '1';
 		wait for clk_period/2;
    end process;
  

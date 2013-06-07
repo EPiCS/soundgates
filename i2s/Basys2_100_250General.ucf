@@ -21,20 +21,20 @@ NET MCLK LOC = "C5";
 NET SD   LOC = "A3";# | IOSTANDARD = "LVCMOS33";          # JB Pin 2
 
 # rosetta buttons (5) 
-NET "btn<3>" LOC = "AM21"; # West
-NET "btn<2>" LOC = "AP22"; # North
-NET "btn<1>" LOC = "AK21"; # East
-NET "btn<0>" LOC = "AK22"; # South
+#NET "btn<3>" LOC = "AM21"; # West
+#NET "btn<2>" LOC = "AP22"; # North
+#NET "btn<1>" LOC = "AK21"; # East
+#NET "btn<0>" LOC = "AK22"; # South
 #NET "rst"	 LOC = "AJ21"; # Center
-NET "btn<*>" IOSTANDARD = LVCMOS25;  # CONN_BUT-all 
+#NET "btn<*>" IOSTANDARD = LVCMOS25;  # CONN_BUT-all 
 
 # rosetta leds (5) 
-NET "Led<0>" LOC = "AM22";   # CONN_BUT_LED0 - center 
-NET "Led<1>" LOC = "AL21";   # CONN_BUT_LED1 - west 
-NET "Led<2>" LOC = "AN23";   # CONN_BUT_LED2 - north 
-NET "Led<3>" LOC = "AN22";   # CONN_BUT_LED3 - east 
+#NET "Led<0>" LOC = "AM22";   # CONN_BUT_LED0 - center 
+#NET "Led<1>" LOC = "AL21";   # CONN_BUT_LED1 - west 
+#NET "Led<2>" LOC = "AN23";   # CONN_BUT_LED2 - north 
+#NET "Led<3>" LOC = "AN22";   # CONN_BUT_LED3 - east 
 #NET "Led<4>" LOC = "AJ22";  # CONN_BUT_LED4 - south 
-NET "Led<*>" IOSTANDARD = LVCMOS25; # CONN_BUT-all 
+#NET "Led<*>" IOSTANDARD = LVCMOS25; # CONN_BUT-all 
 
 # Aux I/O 8 bit 2 x 4 connector JB 
 NET "WS"   LOC="AM18"| IOSTANDARD = LVCMOS25;

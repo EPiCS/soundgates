@@ -36,9 +36,7 @@ entity square_generator is
 	
     Port ( 
 			  clk : in  STD_LOGIC;
-			  frq_up : in std_logic;
-			  frq_down : in std_logic;
-           sample_req : in  STD_LOGIC;
+	        sample_req : in  STD_LOGIC;
            sample_l_out : out  STD_LOGIC_VECTOR (23 downto 0);
            sample_r_out : out STD_LOGIC_VECTOR (23 downto 0)
 			  
@@ -47,14 +45,11 @@ end square_generator;
 
 architecture Behavioral of square_generator is
 	constant base_freq : integer := 440;
-	signal square_frq_prescaler : UNSIGNED(31 downto 0) := to_unsigned(integer(real(RefClkFrequency)/real(base_freq)), 32);
+	constant square_frq_prescaler : UNSIGNED(31 downto 0) := to_unsigned(integer(real(RefClkFrequency)/real(base_freq)) / 2, 32);
 	
 	signal square_acc : UNSIGNED(31 downto 0) := (others => '0');
 	
-	--constant square_high : std_logic_vector(23 downto 0) := "011111111111111111111111";
-	constant square_low  : std_logic_vector(23 downto 0) := "100000000000000000000000";
-	
-	constant frq_diff_20Hz : integer := 21645;
+	constant square_low : std_logic_vector := "100000000000000000001000"; 
 	
 	signal sample_out : std_logic_vector(23 downto 0) := square_low;
 	signal square_signal : std_logic_vector(23 downto 0) := square_low;
