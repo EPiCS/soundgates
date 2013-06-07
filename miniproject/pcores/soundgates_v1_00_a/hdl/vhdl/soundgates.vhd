@@ -163,8 +163,15 @@ entity soundgates is
   (
     -- ADD USER PORTS BELOW THIS LINE ------------------
     --USER ports added here
+    -- i2s Signals
+	sd  	: out std_logic;
+	ws	 	: out std_logic;
+	mclk 	: out std_logic;
+	sck 	: out std_logic;
+	-- Debug signals
+	led  : out std_logic_vector(3 downto 0);
+	en  : out std_logic;
     -- ADD USER PORTS ABOVE THIS LINE ------------------
-
     -- DO NOT EDIT BELOW THIS LINE ---------------------
     -- Bus protocol ports, do not add to or delete
     SPLB_Clk                       : in  std_logic;
@@ -390,7 +397,14 @@ begin
     port map
     (
       -- MAP USER PORTS BELOW THIS LINE ------------------
-      --USER ports mapped here
+    	-- i2s Signals
+		sd  	: out std_logic;
+		ws	 	: out std_logic;
+		mclk 	: out std_logic;
+		sck 	: out std_logic;
+		-- Debug signals
+		led  : out std_logic_vector(3 downto 0);
+		en  : out std_logic
       -- MAP USER PORTS ABOVE THIS LINE ------------------
 
       Bus2IP_Clk                     => ipif_Bus2IP_Clk,

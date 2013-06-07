@@ -97,7 +97,13 @@ entity user_logic is
   port
   (
     -- ADD USER PORTS BELOW THIS LINE ------------------
-    --USER ports added here
+    sd  	: out std_logic;
+	ws	 	: out std_logic;
+	mclk 	: out std_logic;
+	sck 	: out std_logic;
+	-- Debug signals
+	led  : out std_logic_vector(3 downto 0);
+	en  : out std_logic
     -- ADD USER PORTS ABOVE THIS LINE ------------------
 
     -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -128,26 +134,77 @@ end entity user_logic;
 ------------------------------------------------------------------------------
 
 architecture IMP of user_logic is
+	constant bps : integer := 24;
+	
+	component sin_generator
+	port(   sin 		  : in  STD_LOGIC;
+				--         sample_rate : in integer;
+			   --		  ref_clk	  : in integer;
+           sfp_wave    : out  STD_LOGIC_VECTOR(15 downto 0);
+			  uint_wave	  : out STD_LOGIC_VECTOR(15 downto 0);
+			  hertz	  : in STD_LOGIC_VECTOR(15 downto 0);
+			  clk			  : in STD_LOGIC);
+	end component;
+	
+	COMPONENT i2s
+	 generic(		
+		RefClkFrequency : integer;		-- clock frequency of the reference clock in hz
+		BitsPerSample   : integer;		-- 8/16/32
+		SampleRate      : integer;		-- in Hz
+		NumChannels     : integer			-- 1 = mono, 2 = stereo
+	);
+    PORT(
+         clk : in  std_logic;
+         rst : in  std_logic;
+			
+		sample_l_in : in  std_logic_vector(BitsPerSample - 1 downto 0);
+		sample_r_in : in  std_logic_vector(BitsPerSample - 1 downto 0);
+			
+		-- i2s output
+		sd 	: out  std_logic;
+        ws 	: out  std_logic;
+        sck 	: out  std_logic;
+		mclk 	: out std_logic;
+        ------
+		load_sample : out std_logic		
+        );
+    END COMPONENT;
 
-  --USER signal declarations added here, as needed for user logic
-  component musicgenerator
-    port( 
-      uclk 	: in std_logic;
-      rst 	: in std_logic;
-      -- mb
-      freq  : in std_logic_vector(31 downto 0);
-      freq_time  : in std_logic_vector(31 downto 0);    
+	signal sample_l_int	: std_logic_vector(15 downto 0);
+	signal sample_r_int	: std_logic_vector(bps - 1 downto 0);
+	signal sample_l_helper : std_logic_vector(bps - 1 downto 0);
+	-- dummy signal
+	signal sfp_wave_dummy : std_logic_vector(15 downto 0);
+
+	signal word_select  	: std_logic;
+	signal serial_clk 	: std_logic;
+	signal master_clk    : std_logic;
+	signal load_sample 	: std_logic;
+	signal serial_data  	: std_logic;
+	--signal uclk : std_logic;
+
+	signal hertz : std_logic_vector(15 downto 0) := "0000000110111000";
+	signal clk_counter : integer := 0;
+	constant clk_period  : integer := 2560000;  -- 200MHz / 78.125KHz
+
+--  component musicgenerator
+--    port( 
+--      uclk 	: in std_logic;
+--      rst 	: in std_logic;
+--      -- mb
+--      freq  : in std_logic_vector(31 downto 0);
+--      freq_time  : in std_logic_vector(31 downto 0);    
       -- i2s output
-      sd  	: out std_logic;
-      ws	 	: out std_logic;
-      mclk 	: out std_logic;
-      sck 	: out std_logic;
+--      sd  	: out std_logic;
+--      ws	 	: out std_logic;
+--      mclk 	: out std_logic;
+--      sck 	: out std_logic;
       --
-      led   : out std_logic_vector(3 downto 0);
-      btn 	: in std_logic_vector(3 downto 0);
-      en    : out std_logic
-      );
-    end component;
+--      led   : out std_logic_vector(3 downto 0);
+--      btn 	: in std_logic_vector(3 downto 0);
+--      en    : out std_logic
+--      );
+--    end component;
   ------------------------------------------
   -- Signals for user logic slave model s/w accessible register example
   ------------------------------------------
@@ -161,21 +218,45 @@ architecture IMP of user_logic is
 
 begin
 
-  --USER logic implementation added here
-  musicgenerator_0 : musicgenerator
-  port map (
-    clk => Bus2IP_Clk,
-    rst => Bus2IP_Reset,
-    -- i2s output
-		sd  => sd_pin;
-		ws	 	=> ws_pin;
-		mclk => mclk_pin;
-		sck => sck_pin;
-		--
-		led  : out std_logic_vector(3 downto 0);
- 		btn 	: in std_logic_vector(3 downto 0);
-		en  : out std_logic
-      );
+    --USER logic implementation added here
+	Led(3 downto 0) <= btn;
+	sample_l_helper <= sample_l_int & "00000000";
+	
+	-- wire i2s output
+	mclk <= master_clk;
+	ws <=  word_select;
+	sck <= serial_clk;
+	sd <= serial_data;
+	------
+	EN <= '1';
+	
+	sin_generator_inst : sin_generator
+	port map (
+		sin => '1',
+		--  sample_rate : in integer;
+		--  ref_clk	  : in integer;
+        sfp_wave  => sample_l_int,
+		uint_wave => sfp_wave_dummy,
+		hertz	    =>  hertz,
+		clk	    => clk
+	);
+	
+	i2s_inst : i2s generic map(
+		RefClkFrequency 	=> 200_000_000,
+		BitsPerSample 		=> bps,
+		SampleRate    		=> 78125,
+		NumChannels   		=> 2)
+		port map(
+			clk => clk,
+			rst => rst,
+			sd => serial_data,
+			ws => word_select,
+			sck => serial_clk,
+			mclk => master_clk,
+			sample_l_in => sample_l_helper,
+			sample_r_in => sample_l_helper,
+			load_sample => load_sample 
+		);
   ------------------------------------------
   -- Example code to read/write user logic slave model s/w accessible registers
   -- 
@@ -215,6 +296,8 @@ begin
                 slv_reg0(byte_index*8 to byte_index*8+7) <= Bus2IP_Data(byte_index*8 to byte_index*8+7);
               end if;
             end loop;
+            
+            --generator_in <= slv_reg0;
           when "01" =>
             for byte_index in 0 to (C_SLV_DWIDTH/8)-1 loop
               if ( Bus2IP_BE(byte_index) = '1' ) then
