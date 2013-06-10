@@ -1,0 +1,69 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+#Xilinx ISE files
+UROP
+
+#Xilinx EDK files
+blockkdiagram/
+synthesis/
+
+__xps
+*.log
+*.svf
+*.scr
+*.cmd
+*.bak
+*.elf
+#*.ace
+*.bsb
+*.make
+XpsGuiSessionLock
+*.opt
+*.ut
+*.filters
+*.gui
+*.xrpt
+*.ngc
+*.xpi
+*.bld
+*.map
+*.blc
+*.drc
+*.bmm
+*.mrp
+*.ncd
+*.pcf
+*.par
+*.pad
+*.bgn
+*.flw
+*.twr
+*.twx
+*.unroutes
+*.ncf
+*.ngm
+*.ptwx
+*.xwbt
+*.ngd
+*.edn
+*.ngo
+_xmsgs
+cache
+revup/
+#bak files
+*.bak
+
+
+#swp files
+*.swp
