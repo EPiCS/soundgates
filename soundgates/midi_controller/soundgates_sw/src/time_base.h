@@ -10,7 +10,7 @@
 *
 *******************************************************************/
 
-
+#include "xparameters.h"
 // calculates difference for 32 bit register
 unsigned int calc_timediff( unsigned int start, unsigned int stop )
 {

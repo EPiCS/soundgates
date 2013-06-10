@@ -25,5 +25,5 @@ EnableParTimingError: 1
 ShowLicenseDialog: 1
 BInfo: 
 Processor: microblaze_0
-ElfImp: 
+ElfImp: midi_controller/soundgates_sw/Debug/soundgates_sw.elf
 ElfSim: 

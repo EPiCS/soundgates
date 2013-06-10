@@ -284,3 +284,11 @@ BEGIN musicgenerator
  PORT mclk = musicgenerator_0_mclk
 END
 
+BEGIN simple_timebase
+ PARAMETER INSTANCE = simple_timebase_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0xc2400000
+ PARAMETER C_HIGHADDR = 0xc240ffff
+ BUS_INTERFACE SPLB = mb_plb
+END
+

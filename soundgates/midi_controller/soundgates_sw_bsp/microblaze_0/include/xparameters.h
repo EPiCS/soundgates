@@ -12,8 +12,8 @@
 *
 *******************************************************************/
 
-#define STDIN_BASEADDRESS 0x84000000
-#define STDOUT_BASEADDRESS 0x84000000
+#define STDIN_BASEADDRESS 0x84400000
+#define STDOUT_BASEADDRESS 0x84400000
 
 /******************************************************************/
 
@@ -245,6 +245,11 @@
 /* Definitions for peripheral MUSICGENERATOR_0 */
 #define XPAR_MUSICGENERATOR_0_BASEADDR 0xC3C00000
 #define XPAR_MUSICGENERATOR_0_HIGHADDR 0xC3C0FFFF
+
+
+/* Definitions for peripheral SIMPLE_TIMEBASE_0 */
+#define XPAR_SIMPLE_TIMEBASE_0_BASEADDR 0xC2400000
+#define XPAR_SIMPLE_TIMEBASE_0_HIGHADDR 0xC240FFFF
 
 
 /******************************************************************/

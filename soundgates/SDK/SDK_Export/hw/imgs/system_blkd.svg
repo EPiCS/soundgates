@@ -605,6 +605,15 @@
       <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#PLBV46_busconn_SLAVE"/>
       <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">SPLB</text>
     </g>
+    <g id="sbsbktmodule_simple_timebase_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="64" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">simple_timebase</text>
+      <text x="45" y="74" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">simple_timebase_0</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="29" y="28" xlink:href="#PLBV46_BifLabel"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#PLBV46_busconn_SLAVE"/>
+      <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">SPLB</text>
+    </g>
     <g id="sbsbktmodule_LEDs_8Bit">
       <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
       <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
@@ -661,17 +670,19 @@
       <rect x="0" y="0" rx="4" ry="4" width="334" height="358" style="stroke-width:2; stroke:#BB9955; fill:#FFFFDD"/>
       <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="16" xlink:href="#sbsbktmodule_musicgenerator_0"/>
       <rect x="0" y="24" width="61" height="8" style="fill:#BB9955"/>
-      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="16" xlink:href="#sbsbktmodule_LEDs_8Bit"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="16" xlink:href="#sbsbktmodule_simple_timebase_0"/>
       <rect x="61" y="24" width="106" height="8" style="fill:#BB9955"/>
-      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="228" y="16" xlink:href="#sbsbktmodule_Push_Buttons_5Bit"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="228" y="16" xlink:href="#sbsbktmodule_LEDs_8Bit"/>
       <rect x="167" y="24" width="106" height="8" style="fill:#BB9955"/>
-      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="130" xlink:href="#sbsbktmodule_xps_intc_0"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="130" xlink:href="#sbsbktmodule_Push_Buttons_5Bit"/>
       <rect x="0" y="138" width="61" height="8" style="fill:#BB9955"/>
-      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="130" xlink:href="#sbsbktmodule_xps_timer_0"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="130" xlink:href="#sbsbktmodule_xps_intc_0"/>
       <rect x="61" y="138" width="106" height="8" style="fill:#BB9955"/>
-      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="228" y="130" xlink:href="#sbsbktmodule_RS232_Uart_1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="228" y="130" xlink:href="#sbsbktmodule_xps_timer_0"/>
       <rect x="167" y="138" width="106" height="8" style="fill:#BB9955"/>
-      <rect x="0" y="24" width="8" height="114" style="fill:#BB9955"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="244" xlink:href="#sbsbktmodule_RS232_Uart_1"/>
+      <rect x="0" y="252" width="61" height="8" style="fill:#BB9955"/>
+      <rect x="0" y="24" width="8" height="228" style="fill:#BB9955"/>
     </g>
     <g id="ipbktmodule_clock_generator_0">
       <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#000000; stroke-width:2"/>
@@ -900,7 +911,7 @@
       <text x="241" y="72" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">xc6vlx240tff1156-1</text>
       <rect x="0" y="80" width="300" height="16" style="fill:#EEEEEE; stroke:none;"/>
       <text x="4" y="92" fill="#000000" stroke="none" font-size="10pt" font-weight="bold" text-anchor="start" font-family="Arial Helvetica san-serif">GENERATED</text>
-      <text x="217" y="92" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">Mon Jun 10 13:02:11 2013</text>
+      <text x="217" y="92" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">Mon Jun 10 18:15:53 2013</text>
     </g>
   </defs>
   <rect x="0" y="0" width="992" height="1693" fill="#FFFFFF" stroke="#000000" stroke-width="4"/>
