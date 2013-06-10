@@ -99,12 +99,21 @@ COMPONENT i2s
 			
         );
     END COMPONENT;
+	 
+component sin_generator
+    Port ( sin 		  : in  STD_LOGIC;
+			  sample_req  : in  std_logic;
+           sfp_wave    : out  STD_LOGIC_VECTOR(23 downto 0);
+			  uint_wave	  : out STD_LOGIC_VECTOR(23 downto 0);
+			  hertz	  	  : in STD_LOGIC_VECTOR(15 downto 0);
+			  clk			  : in STD_LOGIC);
+end component;	 
+	 
 
---signal sample_in 		: std_logic_vector(bps - 1 downto 0);
+signal sample_in 		: std_logic_vector(bps - 1 downto 0);
 
 signal sample_l_int	: std_logic_vector(bps - 1 downto 0);
 signal sample_r_int	: std_logic_vector(bps - 1 downto 0);
-
 
 signal word_select  	: std_logic;
 signal serial_clk 	: std_logic;
@@ -127,14 +136,22 @@ begin
 --		data_out => sample_in,
 --		rst => rst
 --	);
+
+	sin_gen_inst : sin_generator
+   Port map (	sin 		  => '1',
+				   sample_req =>  load_sample,
+					sfp_wave    => open,
+					uint_wave	  => sample_in,
+					hertz	  	  => "0000000110111000",
+					clk			  => uclk);
 	
-	square_gen_inst : square_generator
-	port map ( 
-		clk => uclk,
-      sample_req => load_sample,
-      sample_l_out => sample_l_int,
-      sample_r_out => sample_r_int
-		);
+--	square_gen_inst : square_generator
+--	port map ( 
+--		clk => uclk,
+--      sample_req => load_sample,
+--      sample_l_out => sample_l_int,
+--      sample_r_out => sample_r_int
+--		);
 
 	i2s_inst : i2s generic map(
 		RefClkFrequency 	=> 200_000_000,
@@ -152,6 +169,9 @@ begin
 			sample_r_in => sample_r_int,
 			load_sample => load_sample 
 		);
+		
+sample_l_int <= sample_in;
+sample_r_int <= sample_in;
 		
 -- wire i2s output
 	mclk <= master_clk;

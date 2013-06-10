@@ -23,8 +23,8 @@ use ieee.std_logic_arith.all;
 --use ieee.std_logic_unsigned.all;
 use ieee.std_logic_signed.all;
 --use IEEE.numeric_std.ALL;
-use std.textio.all;
-use ieee.std_logic_textio.all;
+--use std.textio.all;
+--use ieee.std_logic_textio.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -37,23 +37,20 @@ use ieee.std_logic_textio.all;
 
 entity sin_generator is
     Port ( sin 		  : in  STD_LOGIC;
-  --         sample_rate : in integer;
-  --		  ref_clk	  : in integer;
-           sfp_wave    : out  STD_LOGIC_VECTOR(15 downto 0);
-			  uint_wave	  : out STD_LOGIC_VECTOR(15downto 0);
-			  hertz	  : in STD_LOGIC_VECTOR(15 downto 0);
+			  sample_req  : in  std_logic;
+           sfp_wave    : out  STD_LOGIC_VECTOR(23 downto 0);
+			  uint_wave	  : out STD_LOGIC_VECTOR(23 downto 0);
+			  hertz	  	  : in STD_LOGIC_VECTOR(15 downto 0);
 			  clk			  : in STD_LOGIC);
 end sin_generator;
 
 architecture Behavioral of sin_generator is
 
-	 COMPONENT cordic_v4_0
+	 COMPONENT cordic
     PORT(
          phase_in : IN  std_logic_vector(15 downto 0);
-         x_out 	: OUT std_logic_vector(15 downto 0);
-         y_out 	: OUT std_logic_vector(15 downto 0);
-			rdy	   : OUT std_logic;
-			ND 		: IN  std_logic;
+         x_out 	: OUT std_logic_vector(23 downto 0);
+         y_out 	: OUT std_logic_vector(23 downto 0);
          clk 		: IN  std_logic
         );
     END COMPONENT;
@@ -61,28 +58,26 @@ architecture Behavioral of sin_generator is
 	 COMPONENT fixedpointToInteger
 	 PORT (
 			clk : in STD_LOGIC;
-			signedFixed : in  STD_LOGIC_VECTOR(15 downto 0);
-			unsignedInt : out  STD_LOGIC_VECTOR(15 downto 0)
+			signedFixed : in  STD_LOGIC_VECTOR(23 downto 0);
+			signedInt : out  STD_LOGIC_VECTOR(23 downto 0)
 	 );
 	 END COMPONENT;
 
 	signal phase_in	 : std_logic_vector(15 downto 0) := "0000000000000000";
-   signal x_out 		 : std_logic_vector(15 downto 0);
-	signal y_out		 : std_logic_vector(15 downto 0);
-	signal rdy 			 : std_logic;
-	signal ND 			 : std_logic := '1';
-	signal intern_clk  : std_logic := '0';
+   signal x_out 		 : std_logic_vector(23 downto 0);
+	signal y_out		 : std_logic_vector(23 downto 0);
+	--signal intern_clk  : std_logic := '0';
 	constant pi : std_logic_vector(15 downto 0) := "0110010010000000";
 	constant n_pi : std_logic_vector(15 downto 0) := "1001101110000000" ;
 	
-	constant clk_period  : integer := 2560;  -- 200MHz / 78.125KHz
-	signal clk_counter : integer := 0;
+	--constant clk_period  : integer := 2560;  -- 200MHz / 78.125KHz
+	--signal clk_counter : integer := 0;
 	--signal increase	 : STD_LOGIC_VECTOR(15 downto 0);
 	signal phase		 : std_logic_vector(15 downto 0) := "0000000000000000";
 	signal count_direction : std_logic := '0'; -- 0 = hoch
 	signal direction_lock : std_logic_vector(1 downto 0) := "00";
-	signal converterInput : std_logic_vector(15 downto 0);
-	signal converterOutput : std_logic_vector(15 downto 0);
+	signal converterInput : std_logic_vector(23 downto 0);
+	signal converterOutput : std_logic_vector(23 downto 0);
 	
 	signal phase_inc : std_logic_vector(15 downto 0) := "0000000000000000"; -- smallest possible phase increase yield a frequency of 0.75914373445 HZ
 	
@@ -96,19 +91,17 @@ architecture Behavioral of sin_generator is
 
 begin
 
-	cordic: cordic_v4_0 PORT MAP (
+	cordic_inst: cordic PORT MAP (
           phase_in => phase_in,
           x_out 	 => x_out,  --sinus
           y_out    => y_out,	--cosinus
-			 rdy		 => rdy,
-			 ND		 => ND,
           clk 		 => clk
         );
 		  
 	converter: fixedpointToInteger PORT MAP (
 			clk => clk,
 			signedFixed => converterInput,
-			unsignedInt => converterOutput
+			signedInt => converterOutput
 	);
 	
 	
@@ -128,39 +121,40 @@ begin
 -- F_min in our case is 0.75914 Hz or 37957/50000
 -- => phase_inc = hertz * 50000 / 37957
 -- Division is complicated if not with powers of to. Therefore we approximate the value by 43165 / 32768
-	set_phase_increase : process ( intern_clk ) is
+	set_phase_increase : process (clk, sample_req, hertz, temp_phase_inc) is
 	begin
-		if rising_edge(intern_clk) then
-			temp_phase_inc <= unsigned(hertz) * t1;
-			phase_inc(15 downto 0) <= temp_phase_inc(30 downto 15); -- / 32768
+		if rising_edge(clk) then
+			if sample_req = '1' then
+				temp_phase_inc <= unsigned(hertz) * t1;
+				phase_inc(15 downto 0) <= temp_phase_inc(30 downto 15); -- / 32768
+			end if;
 		end if;
 	end process set_phase_increase;
 
 	
-  increase_phase : process	( intern_clk ) is
+  increase_phase : process	(clk, sample_req, count_direction, direction_lock, phase, phase_inc) is
 		
-  variable L1              : LINE;
+--  variable L1              : LINE;
     begin
-	 
-
-
-		 if rising_edge(intern_clk) then 
-			if (phase >= pi or phase <= n_pi) and direction_lock = "00"  then
-				direction_lock <= "11";
-				count_direction <= not count_direction;
-			end if;
-			if count_direction = '0' then
-				phase <= phase + phase_inc;
-				if not (direction_lock = "00") then
-					direction_lock <= direction_lock - "01";
+		 if rising_edge(clk) then 
+		 
+			if sample_req = '1' then		 
+				if (phase >= pi or phase <= n_pi) and direction_lock = "00"  then
+					direction_lock <= "11";
+					count_direction <= not count_direction;
 				end if;
-			else
-				phase <= phase - phase_inc;
-				if not(direction_lock = "00") then
-					direction_lock <= direction_lock - "01";
+				if count_direction = '0' then
+					phase <= phase + phase_inc;
+					if not (direction_lock = "00") then
+						direction_lock <= direction_lock - "01";
+					end if;
+				else
+					phase <= phase - phase_inc;
+					if not(direction_lock = "00") then
+						direction_lock <= direction_lock - "01";
+					end if;
 				end if;
 			end if;
-			
 --			write(L1, phase);
 --		   write(L1, " ");
 --		   write(L1, x_out);  -- first value in row
@@ -172,19 +166,19 @@ begin
   end process increase_phase;
 
 
-  create_intern_clk : process ( clk ) is
-  begin
-		
-		if rising_edge(clk) then
-			if clk_counter = clk_period then
-				clk_counter <= 0;
-				intern_clk <= not intern_clk;
-			else
-				clk_counter <= clk_counter + 1;
-			end if;
-			
-		end if;
-  end process create_intern_clk;
+--  create_intern_clk : process ( clk ) is
+--  begin
+--		
+--		if rising_edge(clk) then
+--			if clk_counter = clk_period then
+--				clk_counter <= 0;
+--				intern_clk <= not intern_clk;
+--			else
+--				clk_counter <= clk_counter + 1;
+--			end if;
+--			
+--		end if;
+--  end process create_intern_clk;
   
   
 

@@ -26,8 +26,8 @@
 --    All rights reserved.                                                    --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- You must compile the wrapper file cordic_v4_0.vhd when simulating
--- the core, cordic_v4_0. When compiling the wrapper file, be sure to
+-- You must compile the wrapper file cordic.vhd when simulating
+-- the core, cordic. When compiling the wrapper file, be sure to
 -- reference the XilinxCoreLib VHDL simulation library. For detailed
 -- instructions, please refer to the "CORE Generator Help".
 
@@ -40,18 +40,18 @@ USE ieee.std_logic_1164.ALL;
 -- synthesis translate_off
 LIBRARY XilinxCoreLib;
 -- synthesis translate_on
-ENTITY cordic_v4_0 IS
+ENTITY cordic IS
   PORT (
     phase_in : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     x_out : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
     y_out : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
     clk : IN STD_LOGIC
   );
-END cordic_v4_0;
+END cordic;
 
-ARCHITECTURE cordic_v4_0_a OF cordic_v4_0 IS
+ARCHITECTURE cordic_a OF cordic IS
 -- synthesis translate_off
-COMPONENT wrapped_cordic_v4_0
+COMPONENT wrapped_cordic
   PORT (
     phase_in : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     x_out : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
@@ -61,7 +61,7 @@ COMPONENT wrapped_cordic_v4_0
 END COMPONENT;
 
 -- Configuration specification
-  FOR ALL : wrapped_cordic_v4_0 USE ENTITY XilinxCoreLib.cordic_v4_0(behavioral)
+  FOR ALL : wrapped_cordic USE ENTITY XilinxCoreLib.cordic_v4_0(behavioral)
     GENERIC MAP (
       c_architecture => 2,
       c_coarse_rotate => 1,
@@ -95,7 +95,7 @@ END COMPONENT;
 -- synthesis translate_on
 BEGIN
 -- synthesis translate_off
-U0 : wrapped_cordic_v4_0
+U0 : wrapped_cordic
   PORT MAP (
     phase_in => phase_in,
     x_out => x_out,
@@ -104,4 +104,4 @@ U0 : wrapped_cordic_v4_0
   );
 -- synthesis translate_on
 
-END cordic_v4_0_a;
+END cordic_a;
