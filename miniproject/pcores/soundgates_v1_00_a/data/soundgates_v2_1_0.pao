@@ -7,7 +7,5 @@
 lib proc_common_v3_00_a  all 
 lib plbv46_slave_single_v1_01_a  all
 lib soundgates_v1_00_a i2s vhdl
-lib soundgates_v1_00_a SampleDataRom vhdl 
-lib soundgates_v1_00_a musicgenerator vhdl
 lib soundgates_v1_00_a user_logic vhdl
 lib soundgates_v1_00_a soundgates vhdl
