@@ -1,8 +1,0 @@
-INTSTYLE=ise
-INFILE=C:\Users\soundgates\Desktop\pg-soundgates\completesystem\main.ncd
-OUTFILE=C:\Users\soundgates\Desktop\pg-soundgates\completesystem\main.bit
-FAMILY=Virtex6
-PART=xc6vlx240t-1ff1156
-WORKINGDIR=C:\Users\soundgates\Desktop\pg-soundgates\completesystem
-LICENSE=ISE
-USER_INFO=210756782_1777492317_210560775_246

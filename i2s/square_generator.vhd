@@ -49,18 +49,24 @@ architecture Behavioral of square_generator is
 	
 	signal square_acc : UNSIGNED(31 downto 0) := (others => '0');
 	
-	constant square_low : std_logic_vector := "100000000000000000001000"; 
-	
+	constant square_low : std_logic_vector  := "100000000000000000000001"; 
+	constant square_high : std_logic_vector := "011111111111111111111111"; 
 	signal sample_out : std_logic_vector(23 downto 0) := square_low;
 	signal square_signal : std_logic_vector(23 downto 0) := square_low;
 begin
 	
-   square_signal_gen : process(clk, square_acc)	
+   square_signal_gen : process(clk, square_acc)
+		
 	begin
 		if rising_edge(clk) then			
 			if square_acc = square_frq_prescaler then
 				square_acc <= (others => '0');
-				square_signal <= not square_signal;			
+							
+				if square_signal(23) = '1' then
+					square_signal <= square_high;
+				else
+					square_signal <= square_low;
+				end if;
 			else
 				square_acc <= square_acc + 1;
 			end if;
