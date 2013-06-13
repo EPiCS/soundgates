@@ -15,10 +15,10 @@ Net lvdsclk_n LOC = H9  |  IOSTANDARD=LVDS_25  |  DIFF_TERM = TRUE;
 Net rst TIG;
 Net rst LOC = H10  |  IOSTANDARD=SSTL15  |  PULLUP  |  TIG;
 
-NET SCK  LOC = "B5"; #| IOSTANDARD = "LVCMOS33";          # JB Pin 4
-NET WS   LOC = "B2"; # | IOSTANDARD = "LVCMOS33";          # JB Pin 1
-NET MCLK LOC = "C5"; 
-NET SD   LOC = "A3";# | IOSTANDARD = "LVCMOS33";          # JB Pin 2
+#NET SCK  LOC = "B5"; #| IOSTANDARD = "LVCMOS33";          # JB Pin 4
+#NET WS   LOC = "B2"; # | IOSTANDARD = "LVCMOS33";          # JB Pin 1
+#NET MCLK LOC = "C5"; 
+#NET SD   LOC = "A3";# | IOSTANDARD = "LVCMOS33";          # JB Pin 2
 
 # rosetta buttons (5) 
 #NET "btn<3>" LOC = "AM21"; # West
@@ -37,7 +37,7 @@ NET SD   LOC = "A3";# | IOSTANDARD = "LVCMOS33";          # JB Pin 2
 #NET "Led<*>" IOSTANDARD = LVCMOS25; # CONN_BUT-all 
 
 # Aux I/O 8 bit 2 x 4 connector JB 
-NET "WS"   LOC="AM18"| IOSTANDARD = LVCMOS25;
+NET "ws"   LOC="AM18"| IOSTANDARD = LVCMOS25;
 NET "sd"   LOC="AH22"| IOSTANDARD = LVCMOS25;
 #NET "AUX_JB<3>"   LOC="AG21"; 
 NET "sck"   LOC="AL19" | IOSTANDARD = LVCMOS25;
@@ -58,5 +58,11 @@ NET "mclk"   LOC="AG20" | IOSTANDARD = LVCMOS25;
 #NET "AUX_JB<10>" LOC="AK19"; 
 #NET "AUX_JB<*>" IOSTANDARD = LVCMOS25;   
 
-
-
+# SPI audio dac left 
+NET "AUDIO_DAC_left_MOSI_pin" LOC="AH24"  | IOSTANDARD = LVCMOS25; 
+NET "AUDIO_DAC_left_SCK_pin"  LOC="AG25"  | IOSTANDARD = LVCMOS25; 
+NET "AUDIO_DAC_left_SS_pin" 	LOC="AG26"  | IOSTANDARD = LVCMOS25; 
+# SPI audio dac right
+NET "AUDIO_DAC_right_MOSI_pin" LOC="AJ24" | IOSTANDARD = LVCMOS25; 
+NET "AUDIO_DAC_right_SCK_pin"  LOC="AK24" | IOSTANDARD = LVCMOS25; 
+NET "AUDIO_DAC_right_SS_pin"   LOC="AH23" | IOSTANDARD = LVCMOS25; 

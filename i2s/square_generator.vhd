@@ -31,7 +31,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity square_generator is
 	generic(
-		RefClkFrequency : integer := 200_000_000
+		RefClkFrequency : integer := 200_000_000;
+		SampleWidth     : integer := 24
 	 );
 	
     Port ( 

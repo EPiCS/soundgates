@@ -41,7 +41,17 @@ port(
 		sd  	: out std_logic;
 		ws	 	: out std_logic;
 		mclk 	: out std_logic;
-		sck 	: out std_logic				
+		sck 	: out std_logic;
+
+	   -- dac out left
+		AUDIO_DAC_left_MOSI_pin : out std_logic;
+		AUDIO_DAC_left_SCK_pin	: out std_logic;
+		AUDIO_DAC_left_SS_pin	: out std_logic;
+		-- dac out right
+		AUDIO_DAC_right_MOSI_pin : out std_logic;
+		AUDIO_DAC_right_SCK_pin	 : out std_logic;
+		AUDIO_DAC_right_SS_pin	 : out std_logic
+		
 );
 end main;
 
@@ -62,7 +72,8 @@ end component;
 
 component square_generator
 	generic(
-		RefClkFrequency : integer := 200_000_000
+		RefClkFrequency : integer := 200_000_000;
+		SampleWidth : integer := 24
 	 );
 	
     Port ( 
@@ -107,8 +118,23 @@ component sin_generator
 			  uint_wave	  : out STD_LOGIC_VECTOR(23 downto 0);
 			  hertz	  	  : in STD_LOGIC_VECTOR(15 downto 0);
 			  clk			  : in STD_LOGIC);
-end component;	 
-	 
+end component;
+
+component DACControl
+	Port(
+			clk : in std_logic;
+			rst : in std_logic;
+			
+			data : in std_logic_vector(11 downto 0);
+			op_mode : in std_logic_vector(1 downto 0);
+			
+			busy : out std_logic;
+			
+			dac_clk  : out std_logic;
+			dac_data : out std_logic;
+			dac_sync : out std_logic
+	);
+end component;
 
 signal sample_in 		: std_logic_vector(bps - 1 downto 0);
 
@@ -136,27 +162,58 @@ begin
 --		data_out => sample_in,
 --		rst => rst
 --	);
-
-	sin_gen_inst : sin_generator
-   Port map (	sin 		  => '1',
-				   sample_req =>  load_sample,
-					sfp_wave    => open,
-					uint_wave	  => sample_in,
-					hertz	  	  => "0000000110111000",
-					clk			  => uclk);
+--
+--	sin_gen_inst : sin_generator
+--   Port map (	sin 		  => '1',
+--				   sample_req =>  load_sample,
+--					sfp_wave    => open,
+--					uint_wave	  => sample_in,
+--					hertz	  	  => "0000000110111000",
+--					clk			  => uclk);
 	
---	square_gen_inst : square_generator
---	port map ( 
---		clk => uclk,
---      sample_req => load_sample,
---      sample_l_out => sample_l_int,
---      sample_r_out => sample_r_int
---		);
+	square_gen_inst : square_generator
+	generic map(
+		SampleWidth => 12
+	)
+	port map ( 
+		clk => uclk,
+      sample_req => load_sample,
+      sample_l_out => sample_l_int,
+      sample_r_out => sample_r_int
+		);
+
+	dac_isnt_l : DACControl
+	port map(
+		   clk => uclk,
+			rst => rst,
+			data => sample_r_int(11 downto 0),
+			op_mode => "00",
+			
+			busy => open,
+			
+			dac_clk  => AUDIO_DAC_left_SCK_pin,
+			dac_data => AUDIO_DAC_left_MOSI_pin,
+			dac_sync => AUDIO_DAC_left_SS_pin
+	);
+	
+	dac_isnt_r : DACControl
+	port map(
+		   clk => uclk,
+			rst => rst,
+			data => sample_r_int(11 downto 0),
+			op_mode => "00",
+			
+			busy => open,
+			
+			dac_clk  => AUDIO_DAC_right_SCK_pin,
+			dac_data => AUDIO_DAC_right_MOSI_pin,
+			dac_sync => AUDIO_DAC_right_SS_pin
+	);
 
 	i2s_inst : i2s generic map(
 		RefClkFrequency 	=> 200_000_000,
 		BitsPerSample 		=> bps,
-		SampleRate    		=> 78125,
+		SampleRate    		=> 8000,
 		NumChannels   		=> 2)
 		port map(
 			clk => uclk,
@@ -170,8 +227,8 @@ begin
 			load_sample => load_sample 
 		);
 		
-sample_l_int <= sample_in;
-sample_r_int <= sample_in;
+--sample_l_int <= sample_in;
+--sample_r_int <= sample_in;
 		
 -- wire i2s output
 	mclk <= master_clk;

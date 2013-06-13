@@ -32,7 +32,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity DACControl is
 	Generic(		
 		RefClkFrequency : integer := 200_000_000; --Reference clock
-		SampleRate		 : integer := 100_000	-- Sample rate
+		SampleRate		 : integer := 200_000	-- Sample rate
 	);
 	Port(
 			clk : in std_logic;
@@ -58,13 +58,13 @@ architecture Behavioral of DACControl is
 	
 	constant sclk_prescaler : integer := integer(real(RefClkFrequency) / real(sclk_freq) / 2.0);
 		
-	type DAC_STATE is (IDLE, PREPARE, TRANSMIT);
+	type DAC_STATE is (IDLE, PREPARE, SYNC, TRANSMIT);
 	signal current_state, next_state : DAC_STATE;
 	
 	signal sclk_acc : unsigned(15 downto 0) := (others => '0');
 	
 	signal dac_data_shift : std_logic_vector(15 downto 0) := "0000000000000000";
-	signal dac_data_count : unsigned(4 downto 0) := (others => '0');
+	signal dac_data_count : unsigned(5 downto 0) := (others => '0');
 	signal busy_int : std_logic  := '0';
 	
 	signal sync_int  : std_logic := '1';
@@ -76,6 +76,7 @@ architecture Behavioral of DACControl is
 	
 	signal sclk_falling : std_logic;	-- generates a tick on a falling edge of sclk
 	signal sclk_rising  : std_logic;
+	signal tsucl_hold : unsigned(1 downto 0) := "00";
 begin
 	
 	--------------------------------------------------------------
@@ -106,7 +107,8 @@ begin
 	sclk_falling <= (delay_reg_sclk_falling) and not sclk_int;
 	
 	--------------------------------------------------------------
-	--------------------------------------------------------------		
+	--------------------------------------------------------------
+		
 	sclk_gen : process(clk)
 	begin	
 		if rising_edge(clk) then
@@ -125,49 +127,58 @@ begin
 	--------------------------------------------------------------
 	-- state register
 	--------------------------------------------------------------
-	fsm_nextstate : process(clk, rst)
-	begin
-		if rst = '1' then
-			current_state <= IDLE;		
-		elsif rising_edge(clk) then
-			current_state <= next_state;		
-		end if;	
-	end process;
+--	fsm_nextstate : process(sclk_int, rst)
+--	begin
+--		if rst = '1' then
+--			current_state <= IDLE;		
+--		elsif rising_edge(sclk_int) then
+--			current_state <= next_state;		
+--		end if;	
+--	end process;
 	
-	dac_ctrl : process(clk)
+	dac_ctrl : process(clk, sclk_int, current_state, dac_data_count)
 	begin
 	
 	if rising_edge(clk) then
-		
-		if sclk_rising = '1' then
-		busy_int <= '0';
-		sync_int <= '1';	
+						
 			case current_state is
 				when IDLE =>
+						
+					current_state <= PREPARE;
 					
-					next_state <= PREPARE;
+					sync_int <= '1';
 					
 				when PREPARE =>
 					dac_data_shift	<= "00" & op_mode & data;
 					
-					next_state <= TRANSMIT;
-				when TRANSMIT =>
-					next_state <= TRANSMIT;
-					
-					if dac_data_count = 15 then
-						dac_data_count <= (others => '0');
-						next_state <= IDLE;				
-					else
-						dac_data_count <= dac_data_count + 1;
+					if sclk_rising = '1' then
+						sync_int <= '0';
+						current_state <= SYNC;
 					end if;
+				when SYNC =>
+					if sclk_rising = '1' then
+						current_state <= TRANSMIT;
+					end if;
+				when TRANSMIT =>
 					
-					dac_data_shift <= dac_data_shift(14 downto 0) & '0';				
-								
-					busy_int <= '1';
 					sync_int <= '0';
+					
+					if sclk_rising = '1' then
+						current_state <= TRANSMIT;
+												
+						if dac_data_count = 15 then
+							sync_int <= '1';
+							dac_data_count <= (others => '0');
+							current_state <= IDLE;
+						else
+							dac_data_count <= dac_data_count + 1;
+						end if;
+						
+						dac_data_shift <= dac_data_shift(14 downto 0) & '0';
+					end if;
 				when others => null;
 			end case;
-		end if;
+		
 	end if;
 	end process;
 	

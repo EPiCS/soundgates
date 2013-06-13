@@ -55,6 +55,26 @@ ARCHITECTURE behavior OF i2s_test IS
         );
     END COMPONENT;
     
+	 component DACControl
+		Generic(		
+			RefClkFrequency : integer := 200_000_000; --Reference clock
+			SampleRate		 : integer := 100_000	-- Sample rate
+		);
+		Port(
+			clk : in std_logic;
+			rst : in std_logic;
+			
+			data : in std_logic_vector(11 downto 0);
+			op_mode : in std_logic_vector(1 downto 0);
+			
+			busy : out std_logic;
+			
+			dac_clk  : out std_logic;
+			dac_data : out std_logic;
+			dac_sync : out std_logic
+		);
+
+	end component;
 
    --Inputs
    signal lvdsclk_n : std_logic := '0';
@@ -68,10 +88,33 @@ ARCHITECTURE behavior OF i2s_test IS
    signal WS 	: std_logic;
    signal SCK 	: std_logic;
 	
+	-- dac input
+	signal dac_data_in : std_logic_vector(11 downto 0) := "011111100111";
+	
+	signal dac_busy : std_logic;
+	signal dac_sclk  : std_logic;
+	signal dac_sync : std_logic;
+	signal dac_data : std_logic;
+	
    -- Clock period definitions
    constant clk_period : time := 5 ns;
  
 BEGIN
+
+	dac_int : DACControl
+	Port map(
+			clk => lvdsclk_n,
+			rst => '0',
+			
+			data => dac_data_in,
+			op_mode => "00",
+			
+			busy => dac_busy,
+			
+			dac_clk  => dac_sclk,
+			dac_data => dac_data,
+			dac_sync => dac_sync
+		);
  
 	uut : main
 			PORT MAP (

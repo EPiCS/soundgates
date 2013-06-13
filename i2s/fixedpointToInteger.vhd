@@ -63,7 +63,7 @@ begin
 		
 		signedInt <= std_logic_vector(temp);
 	end if;
-	
+
 	
 	
 --		if signedFixed(15) = '1' then    -- negative value
@@ -85,5 +85,7 @@ begin
 --	end if;
 
 	end process convertProcess;
+	
+	--signedInt <= signedFixed;
 	
 end Behavioral;

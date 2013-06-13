@@ -37,7 +37,6 @@
 #include "time_base.h"
 #include "helloworld.h"
 #include "xparameters.h"
-
 /**
 Variables
 **/
@@ -269,6 +268,7 @@ void changeFrequence(Xuint32 frequence)
 	*freq = frequence;
 }
 
+Xuint32 Push_Read;
 int main()
 {
     init_platform();
@@ -280,6 +280,7 @@ int main()
 
     while(1){
     for(lastOfftime = 0, i = 0; i<size; i++)  {
+
         struct midiNote currentMidiNote = notes[i];
 		int pauseDuration = currentMidiNote.ontime - lastOfftime;
         int playDuration = currentMidiNote.offtime - currentMidiNote.ontime;
