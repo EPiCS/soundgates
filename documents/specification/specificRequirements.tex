@@ -1,5 +1,70 @@
 \chapter{Specific requirements}
+
+% TODO: definition in separate datei packen (und evtl. verbessern)
+\newcommand{\funcRequirement}[6]{
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+Req. ID 		& #1 \\ \hline
+Use Case 		& #2 \\ \hline
+Name 				& #3 \\ \hline
+Description & #4 \\ \hline
+Priority 		& #5 \\ \hline
+Comment 		& #6 \\ \hline
+\end{tabular}
+\end{center}
+}
+
+
 	\section{Functional requirements}
+	
+%\funcRequirement{Requirement ID (0-...)}
+%{Link to use case goes here}
+%{Name}
+%{Description goes here}
+%{Priority goes here (low/mid/high}
+%{Comment/Further description goes here}
+
+	\funcRequirement{1}
+	{??}
+	{Add component to a patch}
+	{The soundgate designer user should be able to add components to a patch.}
+	{high}
+	{--}
+  \funcRequirement{2}
+	{??}
+	{Remove component from a path}
+	{The soundgate designer user should be able to remove components from a patch.}
+	{high}
+	{--}
+  \funcRequirement{3}
+	{??}
+	{Modify attributes of a component}
+	{The soundgate designer user should be able to modify static parameters of a component.}
+	{mid}
+	{The value of static parameters, like the channel of an audio output interface, are only allowed to be changed during design time.}
+	
+	\funcRequirement{4}
+	{??}
+	{Add composite components}
+	{The soundgate designer user should be able to create composite components.}
+	{mid}
+	{The priority is classified as medium, because a correct patch could be created without composite components. }
+	
+	\funcRequirement{5}
+	{??}
+	{Add port to a composite component}
+	{The soundgate designer user should be able to add a port to a composite component.}
+	{mid}
+	{Only composite components can have user defined ports. Ports of atomic components are fixed, such they cannot be added, removed or modified.}
+	
+	\funcRequirement{6}
+	{??}
+	{Connect Components via Links}
+	{The soundgate designer user should be able to connect ports of multiple components.}
+	{high}
+	{The soundgate designer user can should be ablte to connect an outport of a component to in inport of another component. All other combinations are invalid.}
+	
 	\section{Non-functional requirements}
 	\section{External interfaces}
 	\section{Design constraints}
