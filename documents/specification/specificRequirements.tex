@@ -57,109 +57,110 @@ Anmerkung    & #6\\ \hline
 
 	\funcRequirement{1.1}
 	{Add component to a patch}
-	{The soundgate designer (SD) user must be able to add components to a patch.}
+	{The soundgate designer (SD) must be able to add components to a patch.}
 	{high}
 	{--}
 	
   \funcRequirement{1.2}
 	{Remove component from a path}
-	{The SD user must be able to remove components from a patch.}
+	{The SD must be able to remove components from a patch.}
 	{high}
 	{--}
 	
   \funcRequirement{1.3}
 	{Modify attributes of a component}
-	{The SD user should be able to modify static parameters of a component.}
+	{The SD should be able to modify static parameters of a component.}
 	{mid}
-	{The value of static parameters, like the channel of an audio output interface, are only allowed to be changed during design time.}
+	{The values of static parameters, like the channel of an audio output interface, must not be changed outside of the designing time.}
 	
 	\funcRequirement{1.4}
 	{Add composite components}
 	{The SD user must be able to create composite components.}
+	{The SD must be able to create composite components.}
 	{mid}
 	{The priority is classified as medium, because a correct patch could be created without composite components. }
 	
 	\funcRequirement{1.5}
 	{Add port to a composite component}
-	{The SD user must be able to add a port to a composite component.}
+	{The SD must be able to add a port to a composite component.}
 	{mid}
 	{Only composite components can have user defined ports. Ports of atomic components are fixed, such they cannot be added, removed or modified.}
 	
 	\funcRequirement{1.5.1}
 	{Set port direction}
-	{The SD user must be able to set the direction of a port.}
+	{The SD must be able to set the direction of a port.}
 	{mid}
 	{A port is either incoming or outgoing.}
 	
 	\funcRequirement{1.5.2}
 	{Set port constraints}
-	{The SD user should be able to add constraints to a port.}
+	{The SD should be able to add constraints to a port.}
 	{mid}
-	{This feature is subject to further discussions. In general a port has a certain datatype. The user could further reduce the datatype width by port constraints. As an example the frequenzy port of a waveform generator could have a user defined range of 10 .. 1000 Hz }
+	{This feature is subject to further discussions. In general a port has a certain datatype. The user could further reduce the datatype width by port constraints. As an example the frequency port of a waveform generator could have a user defined range of 10 .. 1000 Hz }
 	
 	\funcRequirement{1.6}
 	{Connect Components by Links}
 	{The SD user must be able to connect ports of multiple components.}
 	{high}
-	{The soundgate designer user can should be ablte to connect an outport of a component to in inport of another component. All other combinations are invalid.}
+	{The soundgate designer should be able to connect an outport of a component to an inport of another component. All other combinations are invalid.}
 	
 	\funcRequirement{1.7}
 	{Validate Patch}
-	{The SD user must be able to validate a before created patch.}
+	{The SD must be able to validate a created patch.}
 	{high}
-	{The user will be notified on error or warnings (port datatype missmatch for e.g). There sould also be a live validation.}
+	{The user will be notified on error or warnings (port datatype missmatch for e.g). There should also be a live validation.}
 	
 	\funcRequirement{1.8}
 	{Perform editor operation}
-	{The SD user should be must to perform standard editor operation.}
+	{The SD should be able to perform standard editor operation.}
 	{high}
 	{Standard editor operations are for instance cut, copy, paste, move, etc..}
 	
 	\funcRequirement{1.9}
 	{Import/Export patch}
-	{The SD user must be able to export a before created patch.}
+	{The SD must be able to export a created patch.}
 	{high}
-	{The patch can be exported as single file. It can then be imported into another soundgate editor.}
+	{The patch can be exported as a single file. Additionally it can be imported into another soundgate patch.}
 	
 	\funcRequirement{1.9}
 	{Build patch}
-	{The SD user must be able to build/synthesize a patch and download it afterwords to an FPGA}
+	{The SD must be able to build/synthesize a patch and download it afterwards to a FPGA}
 	{high}
 	{--}
 	
 	\funcRequirement{1.10}
 	{Import/Export composite components}
-	{The SD user should be able to export a composite component in order to provide this to other SD users. The SD user should also be able to import composite components which were created by other SD users.}
+	{The SD should be able to export a composite component in order to provide this to other SDs. The SD should also be able to import composite components which were created by other SDs.}
 	{mid}
 	{--}
 	
 	\funcRequirement{1.11}
 	{Start/Stop/Pause simulation}
-	{The SD user must be able to run a simulation of patch.}
+	{The SD must be able to simulate a patch.}
 	{high}
 	{--}
 	
 	\funcRequirement{1.12}
 	{Record simulation}
-	{The SD user and the customer should be able to record a running simulation.}
+	{The SD and the customer should be able to record a running simulation.}
 	{low}
-	{The SD user as well as the customer should be able to record the output of a running simulation. The requirement is defined as low, because the simulation can be run at any time.}
+	{The SD as well as the customer should be able to record the output of a running simulation. The requirement is defined as low, because the simulation can be run at any time.}
 	
 	\funcRequirement{1.13}
 	{Import patch}
-	{The SD user must be able to import a patch into the simulation environment.}
+	{The SD must be able to import a patch into the simulation environment.}
 	{high}
 	{--}
 	
 	\funcRequirement{1.14}
 	{Perform sensor/device action}
-	{The user must be able to adjust a parameter by a sensor action.}
+	{The SD must be able to adjust a parameter by a sensor action.}
 	{high}
 	{A sensor is represented as a block inside a patch. The output of a sensor block depends on the action the user performs with a sensor.}
 	
 	\funcRequirement{1.15}
 	{Autocomplete composite components}
-	{The SD user should be able to perform an autocompletion of a composite component.}
+	{The SD should be able to perform an autocompletion of a composite component.}
 	{low}
 	{Example: a composite component consits of two unconnected atomic components with one parameter each. The user can autocomplete this composite. Afterwards the editor adds two ports to the composite component. Each port is connected to the parameter of one atomic component.}
 	
