@@ -1,0 +1,60 @@
+Projektplan Notizen:
+
+Feste Arbeitszeiten vor Ort festlegen? Muss keine Vollversammlung sein (haben eh nur 3 Rechner)!
+
+
+Projektleiter vielleicht sinnvoll?
+ - Überblick über alles
+ - koordiniert Gruppen
+ - trifft im Zweifelsfall Entscheidungen
+
+ --> Einzelne Führungsperson eventuell effektiver als breite demokratische Diskussionen in der Gruppe
+ --> bedeutet für Gruppenleiter natürlich Mehraufwand
+ --> sollte natürlich trotzdem Meinungen in der Gruppe berücksichtigen
+ 
+ Milestones:
+ 
+ Angenommener Arbeitszeitraum: 01.08.2013 - 01.04.2014 (d.h. Anfang nächstes Semester, keine Ahnung wie genau das passt)
+ 
+ 1.: Arbeitsgrundlage schaffen		01.08. - 01.10.
+	- lauffähiges Gesamtssystem, das dann in 2. iterativ erweitert werden kann
+	- nur wenige Basisfunktionen
+	- aber kompletter Workflow kann exemplarisch durchgegangen werden
+	
+	1.2.: Modellierung
+		Würde vielleicht hier schon überlegen, wie wir die Integration von Hard- und Software umsetzen, damit man das beim Entwickeln schonmal im Hinterkopf hat
+	1.3.: Editor
+		Kann Blöcke setzen und Verbindungen ziehen und als Patch speichern
+		So einem Patch kann man dann hereinstecken in:		
+		1.3.1: Simulation
+			Softwareimplementierung der Blöcke um den Sound abzuspielen
+		1.3.1: Hardware
+			1.3.1.1 FMC kann ähnlich wie beim Miniprojekt einfachen Sound abspielen, zum Beispiel aus einem Sinusgenerator
+			1.3.1.2 Anhand der Patches wird HDL Code generiert (TopLevel Modul das einzelne Komponenten verschaltet)
+	
+2.: Basissystem vervollständigen	01.10. - 01.01.
+	2.1.: Review des bisherigen Systems		
+		- ist unsere Architektur sinnvoll? Sollte man vielleicht Teile nochmal umbauen, bevor das System in 2.2. ausgebaut wird?
+	2.2: Funktionsausbau
+		- Voll funktionsfähiger Editor
+		- Alle wichtigen Blöcke sowohl in Software als auch in Hardware implementiert
+		- Erstellung von beliebigen Synthezisern möglich
+		- Alle 1/2 Wochen Planung welche Punkte im Detail abgearbeitet werden sollen
+
+3.: Weiterführende Interaktionssysteme 01.01. - 01.02.
+	- Anbindung an externe Geräte, z.B. Android Beschleunigungssensor
+
+4.: Polishing, Bugfixes, Buffer: 01.02. - 01.04.
+	4.1.:
+		- Keine neuen Funktionalitäten mehr anfangen, nur noch offene wichtige Punkte abhaken
+	4.2.:
+		- Dokumentation vervollständigen (nach Möglichkeit sollte schon während der Arbeit dokumentiert werden ;))
+		- Fehlersuche und -behebung
+	4.3.:
+		- kleine Kinderkrankheiten ausmerzen
+		- Zuckerguss
+	
+5.: Bierdienstag
+	5.1.: Bier kaufen
+		5.1.1.: (optional) Schnaps kaufen 
+	5.2.: Eskalieren
