@@ -1,0 +1,23 @@
+Zeitplan – Vorschlag
+
+Milestone 1 – Prototyp Portierung (bisherigen Prototyp auf neue Technologie anpassen)
+
+- Lauffähigkeit auf Reconos
+- FMC-CE Modul wird genutzt
+- Software Realisierung des Prototyps
+- MetaModell
+
+
+Milestone 2 – Erweiterter Prototyp
+
+- Umsetzung neuer Components (neue Waveforms, erste Filter)
+- Umsetzung der neuen Components in Software
+- Editor kann benutzt werden (Nur grafisch, ohne tiefere Funktionalität)
+
+
+Milestone 3 – Prototyp Merging
+
+- Weitere Components
+- Editor erstellt model
+- Model to Code
+- Interface Realisierung
