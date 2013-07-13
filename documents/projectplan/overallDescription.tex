@@ -1,0 +1,14 @@
+\chapter{Overall description}
+	\section{Product perspective}
+	Our editor is in some way similar to other music composition applications especially cycling74's MAX. Also it offers a drawing canvas, which can be filled with connected components. At any time the patch, which of the combination of every used component, can be simulated to hear the generated sound. However, this covers only the simulation part of our entire system. These components can be exported as a combination of VHDL code and prepared netlists in order to create a bitfile to generate that sound live on a FPGA. Furthermore it is possible to change the behavior of some components at runtime my manipulating their input values through different sensors.
+		\subsection{System interfaces}
+		\subsection{User interfaces}
+		\subsection{Hardware interfaces}
+		\subsection{Software interfaces}
+		\subsection{Operations}
+	\section{Product functions}
+	We provide a graphical editor for the synthesizer development. The library of the editor offers components like sound generators, filters etc. which the designer can choose from and connect to create an own synthesizer with specific sounds. Some components have attributes, which can be modified inside of the editor. It is possible to create composed components by combining several components into one. Additionally, the patch can be simulated in order to evaluate the created sound. Furthermore components can be labeled as interactable so the user can manipulate them at runtime. The developed patch can be exported as VHDL-code, which is synthesized and put on a FPGA.
+
+	The user of the synthesizer (e.g. a musician) interacts with the interactable components without knowing about the internal structure of the system. E.g. he can connect a MIDI device or specific sensors to the FPGA to modify input values and create different sounds. 
+	\section{User characteristics}
+	\section{Optional features}
