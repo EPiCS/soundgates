@@ -1,0 +1,78 @@
+[+] should be in our document
+[/] maybe, possibly in a variation
+[-] should not be in our document
+(comments)
+
+Example Project Plan analysis:
+
+-no leader, equal responsibilites [/](manager for special tasks, timing/deadlines and team coordination)
+-grassroots democracy process [/](limited)
+-agile development with iterations [+]
+-one iteration per milestone [+]
+Agile Development [+] (With another title, as our approach will not be only agile)
+-integrated testing [+]
+-incremental development by iterations [+]
+-regular releases by iterations [+]
+-easy adaptations of changes [+]
+-agile -> team member involvement and friendly environment [/]
+-less overhead [+]
+Meetings [+]
+-twice a week, one mandatory [/](one mandatory meeting, task based sub-team-meetings)
+ -mandatory [+]
+  -all members [+]
+  -project status discussion [+]
+  -further tasks and assignment by beforehand experience [+]
+  -track progress against milestones [+]
+  -buy cookies if not attending without prior notice [-]
+ -non mandatory [-]
+  -interaction between team members for tasks
+  -no cookies 
+ -additional timeslot each week [+]
+  -reserved for teamwork
+  -can replace the mandatory meeting if too often cancelled
+Tools [+]
+-Github repo [+](additionally repo structure)
+-Github wiki [+]
+ -Tracking meeting attendation [/]
+ -Tracking members missing deadlines [-](job of an issue tracking syste/redmine)
+ -Tracking members cookie debts [-]
+-Redmine [+] (or some other system)
+ -representing project plan with milestones [+]
+  -tracking deadlines [+]
+  -tracking progress [+]
+-Skype [+]
+ -real time communication [/]
+Member role [+]
+-each member organizes and developes [+] (additional managers for special task)
+-frequent commits, compilable code [+]
+-informative commit messages [+]
+-members inform themself by reading minutes of not attend meetings the same day [+]
+-as tasks are created, the assignees add them to redmine [+]
+-immediately report bugs in redmine [+]
+-immediately discuss problems and other issues [+]
+Milestone presentation [+]
+-at the end of each iteration [+]
+-first part description of plan for milestone and current status [+]
+ -if tasks are not compleated, reasons for failure are explained in detail [+]
+-second part [+]
+ -revised plan for next milestones [+]
+ -feedback of project mentors [/] (will happen automatically)
+ -discussion about new plan [/] (ditto)
+Limitations [/]
+-chances of no clear majority in decision taking [+]
+-fruitfull discussions [-]
+-individual performance is subject to group discussion [/] (will happen, has it to be in the document?)
+-tasks are assigned to the most possible satisfaction [+]
+ -can be just assigned if no other possibility [+]
+-in case of problems using this approach, a change to another approach will be considered [+]
+Members specialization [-]
+-Table assigning concrete members to specializitions [-](not needed if only roles are described)
+
+Additional organization Soundgates:
+
+-milestones representing stages of development, oriented at presentable prototypes
+-"elevated members"
+ -management of deadlines, presentation-dates etc.
+ -team coordinator
+  -overviews task progress
+  -coordinate workforce to reach the planned deadlines
