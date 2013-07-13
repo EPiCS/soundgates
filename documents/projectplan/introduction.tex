@@ -1,19 +1,62 @@
 \chapter{Introduction}
-	\section{Purpose}
-	\section{Document overview}
+	\label{chapter:Introduction}
+	\section{About this document}
+	This document is the project plan of the project group ``Soundgates'' at the University of Paderborn. 
+	It introduces the topic of our project group in Chapter \ref{chapter:Introduction} and the goals we want to achieve in Chapter \ref{chapter:Goals}.
+	Chapter \ref{chapter:RelatedWork} covers systems similar to what we are going to create, escpecially the software called MAX.
+	Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe how the group will organize itself and the groups' milestones.
+
+	Not only should this document serve as a basis for the later evaluation and grading by our professor, but also as a reference for our group during the main working phase.
+	This working phase runs from ??.2013 to ??.2014
 	\section{Definitions}
+	 The following table displays some definitions, that will be used throughout this document.
+	
 	 \begin{tabular}[h]{|c|p{9.75cm}|}
 	  \hline
 	  Term & Definition \\
 	  \hline
 	  \hline
 	  Composite Component & Definition \\\hline
-	  Component & A basic building block to generate music \\\hline
+	  Component & A basic building block to generate music ??Haben wir uns hier auf Block als Bezeichnung geeinight? Component eher im Sinne von Softwarekomponente\\\hline
 	  Editor & The Editor is used to create a patch out of components to generate synthesizable code which can be put on a FPGA \\\hline
 	  FPGA & Field Programmable Gate Array \\\hline
 	  Patch & The entire system which consists of Components and Composite Components. A set of single Components can build a new Component \\\hline
 	  Port & The interface from one Component to another one \\\hline
 	  Simulation & The developed patch is played through the PC speakers \\\hline
 	 \end{tabular}
-	\section{System overview}
-	\section{References}
+	 
+	\section{Project outline}
+	  - Creating an editor for synthesizers. 
+	  - Components of the synthesizer implemented in hardware (and software for simulation purpose)
+	  - Implementation of generative music concepts
+	  ------- Warum wollen wir das eigentlich tun? Was ist die Motivation dahinter (zumal es das aus Oslo ja aschon in Software gibt)
+	
+	\section{Introduction to sound synthsis}
+	  - Artifical generation of sound
+	  - Generation of basic waveforms
+	    - More complex and rich patterns by methods like additive/subtractive/... synth 
+	  - Further addition of filters etc
+	  
+	  - Originated from analog synthesizers, nowadays mostly digital. Software for general purpose PCs exist
+	  
+	  - Building patches: job of a sound designer, rather than a musician
+	  
+	\section{Introduction to generative music}
+	  - Creatioin of music depending on user interaction
+	  - Users do not need to be musicians
+	  - Playful approach to making music
+	  - tightly connected to sound synthesis
+	  
+	\section{Employed systems}
+	  \subsection{VHDL}
+	    - Hardware components implemented in VHDL
+	  \subsection{ReconOS}
+	    - Developed at the University of Paderborn
+	    - Operating system running on a softcore alongside our VHDL components
+	    - Especially useful for integration of external devices (generative music)
+	  \subsection{Eclipse/GMF}
+	    - Synthesizer Editor developed as an Eclipse Plugin.
+	    - Will use GMF
+
+	  
+      
