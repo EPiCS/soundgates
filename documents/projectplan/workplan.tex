@@ -1,1 +1,106 @@
 \chapter{Workplan}
+
+\section{Overview}
+
+The whole project is divided into multiple milestones. Each milestones consists of set of tasks. One milestone must be completed before antoher milestone can start.
+
+\section{Milestones}
+
+Five milestones are planned, where each milestones should be completed in approximately five to six weeks. Depending on the set of tasks in each milestone, some may consume more time, some less.
+
+\subsection{Milestone 1 - Prototyping infrastructure/environment}
+%Due to the explorative charachter of this project the first milestones objective is to get
+The fundamental infrastructure to achive the project objectives is prototyped in the first milestone. This involves three basic tasks:
+
+\begin{enumerate}
+	\item prototype a graphical design environment (editor) for audio-generation as well as audio-processing blocks
+	\item prototype a simulation environment to simulate a patch created with the editor
+	\item prototype a hardware infrastructure such as digital-to-analog (dac) controller, (rotary) switches and an interface to a external sensors (Reconos)
+\end{enumerate}
+% LF: Mir ist immer noch nicht so ganz klar, welche Rolle Reconos bei uns spielen wird
+The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development.
+
+In detail the basic tasks can be further subdevided:
+
+\begin{enumerate}
+%--------------------------------------------------------------------
+	\item Editor prototype
+		\begin{itemize}
+			\item Implementation of a basic meta-model
+			\item Prototye editor:
+				\begin{itemize}
+					\item Create/delete atomic blocks
+					\item Connect atomic blocks
+					\item Save and load a model (patch)
+					\item Serialize the patch to a human readable format (e.g XML)
+				\end{itemize}
+			\item Create at least two atomic blocks (a sound generator block and an audio output)
+		\end{itemize}
+%--------------------------------------------------------------------		
+	\item Simulator prototype
+		\begin{itemize}
+			\item Evaluate JAVA-Sound API
+			\item Design a framework
+			\item Proof-of-concept implementation
+			\begin{itemize}
+				\item Import a patch-file
+				\item Simulate system input
+			\end{itemize}
+		\end{itemize}
+%--------------------------------------------------------------------
+	\item Hardware prototype
+		\begin{itemize}
+			\item Setup Reconos environment
+			\item Prototype I/O expension interface
+			\begin{itemize}
+				\item DAC-Controler should work
+				\item Rotary switch should work
+			\end{itemize}
+			\item Setup communication between a host pc and reconos
+			\item Encapsulate access to the XILINX FPGA-Toolchain (e.g. Eclipse plugin)
+		\end{itemize}
+\end{enumerate}
+
+
+\subsection{Milestone 2 - Topic of milestone}
+
+In the second milestone more featues will be added to the whole system. The goal of this milestone is to move the system to a working toolflow.
+
+	\begin{enumerate}
+		\item Editor continued
+			\begin{itemize}
+				\item Add the ability to create and import user-defined atomic blocks
+				\item Add the ability to create composite blocks
+			\end{itemize}
+		\item Basic sensor interaction
+			\begin{itemize}
+			\end{itemize}
+		\item Codegeneration	
+			\begin{itemize}
+				\item Transform a patch to a syntesizable HDL description
+				\item Import of existing HW-Framework components (e.g. DAC, switches)
+			\end{itemize}
+		\item Implement a set of basic atomic blocks
+			\begin{itemize}
+				\item wave generator (saw, square, sine)
+				\item multiplication
+				\item addition
+				\item ramp generator
+			\end{itemize}
+	\end{enumerate}
+
+\subsection{Milestone 3 - Topic of milestone}
+	
+	\begin{enumerate}
+		\item Implement additional audio processing blocks
+		\begin{itemize}
+			\item Arithmetic/Logic-Blocks (like "`Equals"')
+			\item Routing objects
+			\item midi processing blocks
+			\item Low/high-pass filters
+			\item delay
+			\item ...
+		\end{itemize}
+	\end{enumerate}
+	
+%\subsection{Milestone 4 - Topic of milestone}
