@@ -25,7 +25,7 @@ It a patch is finished, it can be validated. The program tests if all constraint
 		\label{fig:Soundgate_Simulator}
 	\end{figure}
 
-We want to develop a software simulator for a patch such the designer und the user can test the sound of the patch before putting it on the FPGA. A designer or an end-user must be able to import a patch to the simulator and to start the simulation. Then he can pause or stop the simulation. An extra feature we want to implement is that the simulation can be recorded.
+We want to develop a software simulator for a patch such the designer and the user can test the sound of the patch before putting it on a FPGA. A designer must be able to import a patch to the simulator and to start the simulation. Afterwars he is able to pause or even stop the simulation. An optional feature we would like to implement is the possibility to save the output of a simulation on the HDD.
 
 \section{End-user product}
 
@@ -36,10 +36,22 @@ We want to develop a software simulator for a patch such the designer und the us
 		\label{fig:Soundgate_UserInterface}
 	\end{figure}
 	
-	As mentioned before, a patch created in the editor can be exported as XML-file which is used to generate VHDL-code. This VHDL-code is synthesized and put on a FPGA. The end-user (e.g. a musician or a performer) maps sensor values and other inputs to the interfaces defined by the designer (see ..). He starts the session by pushing a button. During the session he performs some sensor actions or actions with other devices to create input values to the system. An extra feature we want to develop is that a session can be recorded.
+	As mentioned before, a patch created in the editor can be exported as a XML-file which is used to generate VHDL-code. This VHDL-code is synthesized and put on a FPGA. The end-user (e.g. a musician or a performer) maps sensor values and other inputs to the interfaces defined by the designer (see ..). He starts the session by pushing a button. During the session he performs some sensor actions or actions with other devices to create input values for the system.
 	
 \subsection{Input}
-We plan to use smartphones as sensor devices. For this purpose we want to develop a special smartphone app. Furthermore the end-user should be able to use MIDI devices.
+Today's mobile phones are full of different sensors which can easily be accessed with a small application. The Android SDK offers three different groups of sensors, namely:
+\begin{itemize}
+	\item \bold{Motion Sensors} \\
+			This group contains accelerometers, gravity sensors, gyroscope, and rotational vector sensors (TODO see ref to Android page). 
+	\item \bold{Environmental Sensors} \\
+			With their help it is possible to check the air temperature illumination and humidity.
+	\item \bold{Position Sensors} \\
+			Orientation sensors and magnometers.
+\end{itemize}
+
+However environmental sensors are not suitable since modfiying their values can not be done quickly enough. The other sensors are perfectly suited for changing values since they are modified simply by moving the phone and changing it's orientation. We will develop an Android Application because the Android OS is widespred. On the one hand the sensors have to be read by the application and on the other hand these values have to be forwared to the simulation environment. This can be done with Sockets to send these values over a network connection.
+
+Furthermore the end-user should be able to use MIDI devices.
 
 \section{Component library}
 We plan to provide following components:
