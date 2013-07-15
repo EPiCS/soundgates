@@ -102,12 +102,8 @@ Furthermore, one or more users should use this interactive system, by means of m
 	  \subsection{VHDL}
 	    - Hardware components implemented in VHDL
 	  \subsection{ReconOS}
-	    - Developed at the University of Paderborn
-	    - Operating system running on a softcore alongside our VHDL components
-	    - Especially useful for integration of external devices (generative music)
+		ReconOS is an Operating System which can be run on a softcore CPU on a FPGA. Through it's support for the Linux kernel it is possible to write applications which consist of Hard- and Software threads. Therefore the software threads can be used to communicate via sockets with sensors and hand over these values to the hardware threads, which are responsible for generating sounds.
 	  \subsection{Eclipse/GMF}
-	    - Synthesizer Editor developed as an Eclipse Plugin.
-	    - Will use GMF
-
+		We avoid building a new graphical editor from ground up since this is an error prone process. Instead we rely on the Model Driven Software Development process for graphical editors which is provided by the GMF framework. Therefore we can generate an editor by specifing the Meta-Model. The graphical surface with our components are connections are the result. Additionally it is neccessary to provide functions for every component, so it will be possible to simulate the generated output.
 	  
       
