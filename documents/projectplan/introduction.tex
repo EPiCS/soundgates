@@ -102,8 +102,9 @@ Finally Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe 
 		
 		\subsection{Waveform generation}
 		Creating a specific base shape of our sound can be done in several ways, each with it's advantages and disadvantages and a spectrum of sounds that can be created.
+		Of course, many of these approaches are not mutually exclusive but can be combined with each other.
 		\subsubsection{Additive synthesis}
-			In additive synthesis one uses multiple waveform generators, adds up their outputs and normalizes the result.
+			In additive synthesis one uses multiple waveform generators, usually sine waves, adds up their outputs and normalizes the result.
 			For example, adding a sine wave with frequency $2F$ to a sine wave with frequency $F$ would result in a different sound color but still with an overall frequency of $F$ and therefore the same note.
 			
 			A sound designer has very tight control over the produced sound with additive synthesis.
@@ -111,14 +112,25 @@ Finally Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe 
 			Therefore, a real world sound could be analyzed and rebuilt this way.
 			However this approach may need a lot of separate oscillators and might therefore become unfeasible to handle for very complex sounds with a broad frequency spectrum.
 		\subsubsection{Subtractive synthesis}
-			- Start with noise, filter frequencies
+			A subtractive synthesis starts with waveforms like a sawtooth, square, triangle or even periodic noise.
+			Contrary to a bare sine wave, these patterns have a wide frequency spectrum. 
+			By feeding these waves into diferent filters (section \ref{subsec:filters}) the broad spectrum can then be reduced again. 
+			
+			Compared to additive synthesis, it is cheaper to create rich sounds with subtractive synthesis but it sacrifices the very tight control over every single frequency.
 		\subsubsection{Frequency/amplitude modulation}
-			- Modulate the frequency/amplitude of one wave by the value of another one
-			- "Vibrato"
+			Another possibility is to modify the frequency or amplitude of one waveform by the value of another.
+			This can create relatively rich results with relatively little effort.
+			However, this approach usually creates hearable vibrato or tremolo effects.
 		\subsubsection{Sampling}
-			- Any form can just be sampled and be stored in a table
-		
+			Any result of the aforementioned approaches, as well as real sound can of course be saved and reused.
+			It is relatively cheap and efficient to store small sound samples. 
+			Instead of calculating the values of a sine wave, they could just be taken from a lookup table.
+			Or instead of trying to synthesize a violin, a real one could be recorded and sampled later for further use.
+			
+			Such samples are very inflexibile of course.
+			It is possible to modify the frequency by changing the playback speed and it is possible to	process them further, but they cannot serve as the only basis for a synthesizer that should be able to create arbitrary sound.			
 		\subsection{Filters and further modulation}
+			\label{subsec:filters}
 			- High pass / low pass
 			- ADSR
 			- echo /chor / delay	
