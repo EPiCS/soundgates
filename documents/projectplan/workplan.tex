@@ -14,25 +14,26 @@ The whole project is divided into multiple milestones. Each milestones consists 
 Five milestones are planned, where each milestones should be completed in approximately five to six weeks. Depending on the set of tasks in each milestone, some may consume more time, some less.
 
 \subsection{Milestone 1 - Prototyping infrastructure/environment}
-%Due to the explorative charachter of this project the first milestones objective is to get
-The fundamental infrastructure to achive the project objectives is prototyped in the first milestone. This involves three basic tasks:
+
+The fundamental infrastructure to achieve the project objectives is prototyped in the first milestone. This involves three basic tasks:
 
 \begin{enumerate}
-	\item prototype a graphical design environment (editor) for audio-generation as well as audio-processing blocks
+	\item prototype a graphical design environment (editor) for audio-generation as well as audio-processing components
 	\item prototype a simulation environment to simulate a patch created with the editor
 	\item prototype a hardware infrastructure such as digital-to-analog (dac) controller, (rotary) switches and an interface to a external sensors (Reconos)
 \end{enumerate}
-% LF: Mir ist immer noch nicht so ganz klar, welche Rolle Reconos bei uns spielen wird
-The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development.
 
-In detail the basic tasks can be further subdevided:
+The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development. At the end of this milestone one should be able to open an editor and add/connect dummy components. The dummy components representing signal/audio processing components in later stages of development. The system of dummy components, refereed to as patch, can be exported to a simulator. The simulator will playback the patch on the editors host-pc. 
+In addition to the software-side there will exist a working interface for the FPGA expansion board components at the end of this milestone, written in an HDL language. For testing purposes and later evaluation, it will be possible to interface the expansion board components with the schneckonos operating system. %TODO: write reconos here
+
+In detail the basic tasks can be further subdivided:
 
 \begin{enumerate}
 %--------------------------------------------------------------------
 	\item Editor prototype
 		\begin{itemize}
 			\item Implementation of a basic meta-model
-			\item Prototye editor:
+			\item Prototype editor:
 				\begin{itemize}
 					\item Create/delete atomic blocks
 					\item Connect atomic blocks
@@ -56,20 +57,20 @@ In detail the basic tasks can be further subdevided:
 	\item Hardware prototype
 		\begin{itemize}
 			\item Setup Reconos environment
-			\item Prototype I/O expension interface
+			\item Prototype I/O expansion interface
 			\begin{itemize}
-				\item DAC-Controler should work
+				\item DAC-Controller should work
 				\item Rotary switch should work
 			\end{itemize}
-			\item Setup communication between a host pc and reconos
+			\item Setup communication between a host-pc and reconos
 			\item Encapsulate access to the XILINX FPGA-Toolchain (e.g. Eclipse plugin)
 		\end{itemize}
 \end{enumerate}
 
 
-\subsection{Milestone 2 - Topic of milestone}
+\subsection{Milestone 2 - Prototype of a digital synthesizer}
 
-In the second milestone more featues will be added to the whole system. The goal of this milestone is to move the system to a working toolflow.
+In the second milestone more features will be added to the whole system. The goal of this milestone should be, that a basic digital synthesizer system can be modeled by using the soundgate editor toolkit. The user will find basic components, known from digital signal processing (adders, multiplicators, delays, ...), in the editors soundcomponent library as well as components which represent external interfaces (DAC-Output, basic sensors likes (rotary) switches). The following list represents the set of tasks of achieve the the suggested goal
 
 	\begin{enumerate}
 		\item Editor continued
@@ -83,7 +84,7 @@ In the second milestone more featues will be added to the whole system. The goal
 			\end{itemize}
 		\item Codegeneration	
 			\begin{itemize}
-				\item Transform a patch to a syntesizable HDL description
+				\item Transform a patch to a synthesizable HDL description
 				\item Import of existing HW-Framework components (e.g. DAC, switches)
 			\end{itemize}
 		\item Implement a set of basic atomic blocks
