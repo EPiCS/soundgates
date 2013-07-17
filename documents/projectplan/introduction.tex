@@ -1,19 +1,19 @@
 \chapter{Introduction}
 	\label{chapter:Introduction}
-	\section{Introduction}
+	\section{About this document}
 	
 "`Soundgates – Interactive Music Synthesis on FPGAs"' is a project initiated by the Computer Engineering Group of the University of Paderborn, aiming to synthesise music on modern FPGAs. 
-Furthermore, one or more users should use this interactive system, by means of manipulating the synthesised music with advanced sensors such as the acceleration sensor in modern smartphones.
-	
+Furthermore, users should be able to interact with the system in a playful way by manipulating the synthesised music with advanced sensors such as the acceleration sensor in modern smartphones.
 
-	
-	
-	\section{About this document}
-	This document is the project plan of the project group ``Soundgates'' at the University of Paderborn. 
-	
 
-	Not only should this document serve as a basis for the later evaluation and grading by our professor, but also as a reference for our group during the main working phase.
-	This working phase runs from ??.2013 to ??.2014
+This document is the project plan of our project group.
+Not only should this document serve as a basis for the later evaluation and grading, 
+but also as a reference for our group during the main working phase running from ??.2013 to ??.2014.
+
+This first chapter introduces some concepts and system we plan to use to achieve the goals outlined in Chapter \ref{chapter:Goals}. 
+Chapter \ref{chapter:RelatedWork} covers systems similar to what we are going to create, escpecially the software called MAX.	
+Finally Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe how the group will organize itself and the groups' milestones.
+
 	\section{Definitions}
 	 The following table displays some definitions, that will be used throughout this document.\\
 	
@@ -46,7 +46,6 @@ Furthermore, one or more users should use this interactive system, by means of m
 	An early an popular example for generative music was Mozart's musical dice game. Given a set of small sections of music, it was randomly chosen which part was played next.
 
 
-
 	\subsection{Approaches} 
 
 	Genarative music (or algorithmic music) can be devided into the following subcategories \cite{Wooller2005}.
@@ -74,8 +73,55 @@ Furthermore, one or more users should use this interactive system, by means of m
 	
 			
 				
-	\section{Introduction to sound synthsis}
-		The easiest way to generate sound on a digital system, e.\,g. on a computer, is basicly originated from analog synthesizers. The main idea to generate waveforms, such as a basic sine wave. The digital stored values of the wave are then fed into an Digital-Analaog-Converter (DAC), which converts the values to an analog signal. These signals are now able to be played on a speaker. Figure \ref{fig:sound_generation} depicts this easy example. Advanced ways of generating sounds would be with additional waveforms, filters and arithmetic functions.
+	\section{Introduction to sound synthesis}
+		Sound synthesis is the artificial creation of sound. 
+		Cleverly built synthesizers can mimic many real instruments 
+		and of course are able to create sounds with no real world counterpart.
+		
+		The first synthesizers consisted of seperate analog electronic blocks.
+		A user could connect these blocks with cables in many different ways to generate, modify and filter a signal, depending on the order and fashion of connected blocks.
+		As with many other systems, digital components replaced the analog ones over time.
+		The general approach, however, remained the same. 
+		Users do not necessarily plug in cables anymore but conceptually one still connects separate building blocks to create the sound that he wants.
+		
+		The most basic digital synthesizer would be the one shown in Figure \ref{fig:sound_generation}. 
+		In this example an oscillator generates a waveform, for example a basic sine wave.
+		Sampled values of the waveform are fed into an Digital-Analog-Converter (DAC) which converts them to an analog signal which can then be played on a speaker.
+		While it is not very pleasing to listen to an unmodified sine wave, it is already some artifical and therefore synthesized sound.
+		
+		\subsection{Frequency and notes}
+		The previous example only used a single sine wave. 
+		With a small addition this setup can already be used to play notes.
+		The only thing that needs to be added would be a way to control the frequency of the sine wave since the value of a note is determined only by the frequency of the sound wave. 
+		An A4 for example corresponds to exactly 440 Hz.
+		This is true regardless of the actual shape of the waveform, be it a sine wave, a square wave or something completely different. 
+
+		Thinking of different instruments this circumstance quickly becomes obvious. 
+		While both a violin and a piano can play the same specific note it will sound differently on both instruments.
+		This is due to the fact, that the sound waves those instruments create have a different shape.
+		
+		\subsection{Waveform generation}
+		Creating a specific base shape of our sound can be done in several ways, each with it's advantages and disadvantages and a spectrum of sounds that can be created.
+		\subsubsection{Additive synthesis}
+			In additive synthesis one uses multiple waveform generators, adds up their outputs and normalizes the result.
+			For example, adding a sine wave with frequency $2F$ to a sine wave with frequency $F$ would result in a different sound color but still with an overall frequency of $F$ and therefore the same note.
+			
+			A sound designer has very tight control over the produced sound with additive synthesis.
+			According to the fourier theorem it is possible to approximate every periodic function by the combination of sines. 
+			Therefore, a real world sound could be analyzed and rebuilt this way.
+			However this approach may need a lot of separate oscillators and might therefore become unfeasible to handle for very complex sounds with a broad frequency spectrum.
+		\subsubsection{Subtractive synthesis}
+			- Start with noise, filter frequencies
+		\subsubsection{Frequency/amplitude modulation}
+			- Modulate the frequency/amplitude of one wave by the value of another one
+			- "Vibrato"
+		\subsubsection{Sampling}
+			- Any form can just be sampled and be stored in a table
+		
+		\subsection{Filters and further modulation}
+			- High pass / low pass
+			- ADSR
+			- echo /chor / delay	
 	
 	  	\begin{figure}[!h]
 		\centering
@@ -111,8 +157,4 @@ Furthermore, one or more users should use this interactive system, by means of m
 		ReconOS is an Operating System which can be run on a softcore CPU on a FPGA. Through it's support for the Linux kernel it is possible to write applications which consist of Hard- and Software threads. Therefore the software threads can be used to communicate via sockets with sensors and hand over these values to the hardware threads, which are responsible for generating sounds.
 	  \subsection{Eclipse/GMF}
 		We avoid building a new graphical editor from ground up since this is an error prone process. Instead we rely on the Model Driven Software Development process for graphical editors which is provided by the GMF framework. Therefore we can generate an editor by specifing the Meta-Model. The graphical surface with our components are connections are the result. Additionally it is neccessary to provide functions for every component, so it will be possible to simulate the generated output.
-	  
-		\section{Document Structure}
-		First of all the goals we want to achieve are described in Chapter \ref{chapter:Goals}. Chapter \ref{chapter:RelatedWork} covers systems similar to what we are going to create, escpecially the software 
-		called MAX.	Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe how the group will organize itself and the groups' milestones.
       
