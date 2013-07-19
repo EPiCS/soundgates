@@ -33,14 +33,14 @@ In detail the basic tasks can be further subdivided:
 	\item Editor prototype
 		\begin{itemize}
 			\item Implementation of a basic meta-model
-			\item Prototype editor:
+			\item The editor prototype should implement at least the following basic features:
 				\begin{itemize}
-					\item Create/delete atomic blocks
-					\item Connect atomic blocks
+					\item Create/delete dummy sound-components
+					\item Connect/disconnect dummy sound-components
 					\item Save and load a model (patch)
 					\item Serialize the patch to a human readable format (e.g XML)
 				\end{itemize}
-			\item Create at least two atomic blocks (a sound generator block and an audio output)
+			\item Create at least two sound-components: a sound generator component (sine/square) and an audio output component
 		\end{itemize}
 %--------------------------------------------------------------------		
 	\item Simulator prototype
@@ -56,10 +56,10 @@ In detail the basic tasks can be further subdivided:
 %--------------------------------------------------------------------
 	\item Hardware prototype
 		\begin{itemize}
-			\item Setup Reconos environment
+			\item Setup Reconos development environment
 			\item Prototype I/O expansion interface
 			\begin{itemize}
-				\item DAC-Controller should work
+				\item Create the DAC-controller and a correspondent testbench
 				\item Rotary switch should work
 			\end{itemize}
 			\item Setup communication between a host-pc and reconos
@@ -70,17 +70,18 @@ In detail the basic tasks can be further subdivided:
 
 \subsection{Milestone 2 - Prototype of a digital synthesizer}
 
-In the second milestone more features will be added to the whole system. The goal of this milestone should be, that a basic digital synthesizer system can be modeled by using the soundgate editor toolkit. The user will find basic components, known from digital signal processing (adders, multiplicators, delays, ...), in the editors soundcomponent library as well as components which represent external interfaces (DAC-Output, basic sensors likes (rotary) switches). The following list represents the set of tasks of achieve the the suggested goal
+In the second milestone more features will be added to the whole system. The goal of this milestone should be, that a basic digital synthesizer system can be modeled by using the soundgate editor toolkit. The user will find basic components, known from digital signal processing (constants, adders, multiplicators, delays, ...), in the editors sound-component library as well as components which represent external interfaces (DAC-Audio-Output, basic sensors likes (rotary) switches). With these components it will be possible for a user to alter audio-signals in a signal processing manner and listen to the result on the COSMIC system. The interaction with the system is restricted to the basic sensors, mentioned in milestone one. The following list represents the set of tasks of achieve the the suggested goal.
 
 	\begin{enumerate}
 		\item Editor continued
 			\begin{itemize}
-				\item Add the ability to create and import user-defined atomic blocks
-				\item Add the ability to create composite blocks
+				\item Add the ability to plugin new sound-components into the editor
+				\item Add the ability to pass a patch to a codegeneration unit
+				\item Add the ability to mark the input of a sound-component instance as an interactive parameter
 			\end{itemize}
 		\item Basic sensor interaction
 			\begin{itemize}
-			\item empty
+				\item It should be possible adjust a parameter with a sensor, that is attached to the I/O expansion board
 			\end{itemize}
 		\item Codegeneration	
 			\begin{itemize}
@@ -96,18 +97,45 @@ In the second milestone more features will be added to the whole system. The goa
 			\end{itemize}
 	\end{enumerate}
 
-\subsection{Milestone 3 - Topic of milestone}
-	
+\subsection{Milestone 3 - Polishing editing environment}
+
+At the third milestone it should be possible for a musician to emulate the sound of an analog synthesizer. To achieve this, the editor will provide abstract sound-components a musician is familiar with (such as a mixer, waveform generators, filters, envelope generators,...), in the component library. With this a  musician will be able to create a patch and export it to the COSMIC system by simply start an export-process. The musician will be informed on the progress of the export-process. Furthermore a musician will be able to create his own sound-components in order to share them with others and import them accordingly.
+
 	\begin{enumerate}
-		\item Implement additional audio processing blocks
-		\begin{itemize}
-			\item Arithmetic/Logic-Blocks (like "`Equals"')
-			\item Routing objects
-			\item midi processing blocks
-			\item Low/high-pass filters
-			\item delay
-			\item ...
-		\end{itemize}
+		\item Editor continued
+			\begin{itemize}
+				\item Add the ability to create composite sound-components
+				\item Add the ability to import/export composite sound-components in a portable format
+				%\item Add the ability to upload awesome sound-components to community platform %
+			\end{itemize}
+		\item Complex sensor interaction
+			\begin{itemize}
+			\item empty
+			\end{itemize}
+		\item Implement additional audio processing components	
+			\begin{itemize}
+				\item Filter: Low
+			\end{itemize}
+		\item Implement a set of basic atomic blocks
+			\begin{itemize}
+				\item wave generator (saw, square, sine)
+				\item multiplication
+				\item addition
+				\item ramp generator
+			\end{itemize}
 	\end{enumerate}
+	
+	
+	%\begin{enumerate}
+		%\item Implement additional audio processing blocks
+		%\begin{itemize}
+			%\item Arithmetic/Logic-Blocks (like "`Equals"')
+			%\item Routing objects
+			%\item midi processing blocks
+			%\item Low/high-pass filters
+			%\item delay
+			%\item ...
+		%\end{itemize}
+	%\end{enumerate}
 	
 %\subsection{Milestone 4 - Topic of milestone}
