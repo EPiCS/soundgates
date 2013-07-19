@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="soundgates.presentation.SoundgatesModelWizardID"
+            name="%_UI_SoundgatesModelWizard_label"
+            class="soundgates.presentation.SoundgatesModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/SoundgatesModelFile.gif">
+         <description>%_UI_SoundgatesModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="soundgates.presentation.SoundgatesEditorID"
+            name="%_UI_SoundgatesEditor_label"
+            icon="icons/full/obj16/SoundgatesModelFile.gif"
+            extensions="soundgates"
+            class="soundgates.presentation.SoundgatesEditor"
+            contributorClass="soundgates.presentation.SoundgatesActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

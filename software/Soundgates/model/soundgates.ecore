@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="soundgates" nsURI="soundgates" nsPrefix="soundgates">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Patch">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Element" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Port" eOpposite="#//Port/outgoingLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Port" eOpposite="#//Port/incomingLink"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SoundComponent" abstract="true" eSuperTypes="#//NamedElement #//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Sound-component"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/receivingComponent">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Ports"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/sendingComponent">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Ports"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentComponent" eType="#//CompositeSoundComponent"
+        eOpposite="#//CompositeSoundComponent/embeddedComponents"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Ports"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingLink" eType="#//Link"
+        eOpposite="#//Link/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingLink" eType="#//Link"
+        eOpposite="#//Link/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receivingComponent" eType="#//SoundComponent"
+        eOpposite="#//SoundComponent/inputPorts"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sendingComponent" eType="#//SoundComponent"
+        eOpposite="#//SoundComponent/outputPorts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeSoundComponent" eSuperTypes="#//SoundComponent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Composite sound-component"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="RightLinksOnPorts"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+      <details key="RightLinksOnPorts" value="(self.inputPorts->forAll(if (not (outgoingLink=null)) then if (outgoingLink.parentComponent=self) then true else false endif else true endif)) and &#xD;&#xA;(self.outputPorts->forAll(if (not (incomingLink=null)) then if (incomingLink.parentComponent=self) then true else false endif else true endif))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedComponents" upperBound="-1"
+        eType="#//SoundComponent" containment="true" eOpposite="#//SoundComponent/parentComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//Link" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AtomicSoundComponent" eSuperTypes="#//SoundComponent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Atomic sound-component"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="RightLinksOnPorts"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+      <details key="RightLinksOnPorts" value="(self.inputPorts->forAll( not (incomingLink=null) and outgoingLink=null)) and (self.outputPorts->forAll( not (outgoingLink=null) and incomingLink=null))"/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

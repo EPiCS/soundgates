@@ -1,0 +1,42 @@
+/**
+ */
+package soundgates;
+
+import org.eclipse.emf.common.util.EList;
+
+import org.eclipse.emf.ecore.EObject;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Patch</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link soundgates.Patch#getElements <em>Elements</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @see soundgates.SoundgatesPackage#getPatch()
+ * @model
+ * @generated
+ */
+public interface Patch extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
+	 * The list contents are of type {@link soundgates.Element}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Elements</em>' containment reference list.
+	 * @see soundgates.SoundgatesPackage#getPatch_Elements()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Element> getElements();
+
+} // Patch
