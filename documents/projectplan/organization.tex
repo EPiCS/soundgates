@@ -12,6 +12,7 @@ The affiliation to one of these teams is based on previous experiences of the sp
 
 The agile software development method uses iterations.
 In this project, each iteration has a unique milestone and achieving this milestone is the goal in each iteration.
+A milestone represents a stage of development and is oriented at presentable prototypes. 
 
 \section{Agile inspired development}
 The following reasons inspired the agile-like development process that we discussed in the last section:
@@ -53,6 +54,80 @@ Each member or subgroup has at least one time slot per week such that every grou
 
 \section{Tools}
 
+GitHub and Remind are used to organize the project.
+Source code, documents, presentations are shared using a GitHub repository.
+The corresponding Github wiki is used to track statistics of the group meetings (attendees, time, \dots) and to track deadline misses of individual members.
+This data is then used to see if one or more thresholds are exceeded such that the group can take actions against it and talk to the group member.
+The GitHub wiki also contains the private contact details of all the team members.
+
+Redmine is used to represent the whole project plan with all milestones.
+A Milestone is divided in task that are created and assigned to the team members according to the meeting outcomes.
+Each task has a deadline and the work progress of each member is tracked through Redmine.
+If a team member identifies a bug or new task, then he creates the task or bug in Redmine and the details are immediately informed to all the other team members via email.
+Redmine is also used to track the overall project progress for each milestone and the tasks that are pending.
+
+Skype is used by all the team members to have a real-time conversations medium between team members throughout the week.
+
+A mailing list which includes all member email addresses is used for email communication between members.
+
 \section{Member role and specialization}
 
+Each team member in the project is responsible for both the project development and the project organization.
+Each member’s project development responsibilities include planning, analyzing, coding, documenting, testing, discussing and evaluating.
+The project organization role of each member involves frequent interaction between all members, using
+the project organization tools efficiently and update of current status wherever possible.
+Each member updates his error-less compilable code to GitHub repository as frequent as possible, even if the code change is very little.
+While committing the error-less code, the member also provides a brief information about the code change in the commit message.
+The same commit rule is applied for any information that is committed to the repository.
+Binaries are not allowed in the repository.
+When a member has not attended a team meeting with or without excuse, the member
+goes through the minutes of meeting in GitHub wiki mostly within the day of the meeting conducted.
+The member himself has the whole responsibility to identify the task allocated in a team meeting.
+He also responsible to communicate with the other team members if any confusion arises about new tasks.
+A task that was identified and assigned to given member during a team meeting must also be created and assign in Redmine by this member (if it has not been created so far).
+Each member of a task updates its details in Redmine including problems faced, unique experiences and the solution identified.
+If more than one solution is identified then the reason is provided for the chosen solution.
+These information provided by the member are used by the team whenever a similar task has to be identified or when the corresponding part is explained in the documentation.
+If a member identifies any bug while testing or coding, it is immediately reported in Redmine as a new bug, which will then be emailed to all the team members.
+
+In conclusion all tasks in Redmine are frequently updated by the associated members.
+Hence the status of all the tasks is known to the whole team in the team meeting even in the absence of members.
+This helps to determine the project progress in the meeting and to identify problems.
+
+\vspace{1cm}
+
+\begin{center}
+\begin{tabular}{c|c|c}
+\hline
+Member & Specialization & Status \\
+\hline
+\hline
+Martin Boonk & Software, Simulation &  \\ 
+\hline
+Caius Cioran & Hardware, Sensors &  \\ 
+\hline
+Lukas Funke & Hardware & deputy \\ 
+\hline
+Hendrik Hangmann & Hardware, \todo{?} &  \\ 
+\hline
+Andrey Pines & Software, Editor &  \\ 
+\hline
+Thorbj\"orn Posewsky & Hardware, Sensors & Team coordinator \\ 
+\hline
+Gunnar Wuellrich & Software, \todo{?} &  \\ 
+\hline 
+\end{tabular}
+\end{center}
+
 \section{Milestone presentation}
+
+At the end of each iteration the is presented by the team members to the project mentors. This presentation has two parts.
+In the ﬁrst part of the milestone presentation, the plan for the completed milestone and its current status will be described in detail.
+If any of the planned features are not completed within the milestone, the reason for failure and current status are explained.
+The members will also propose a revised plan for the incomplete feature for new milestone work plan (part two of the presentation).
+Demos and screen shots of results from the milestone features will be provided wherever it is reasonable.
+In the second part of the presentation, the revisited work plan for the next milestone is described.
+
+The group members expect feedback from the project group mentors about the milestone and plans on the next milestone.
+This represents the "continuous delivery" of an agile development process which ensures that the project does not deviate from its main goal,
+that no features are forgotten or that the quality is obtained.
