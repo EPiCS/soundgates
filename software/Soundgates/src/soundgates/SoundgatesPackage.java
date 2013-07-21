@@ -132,13 +132,22 @@ public interface SoundgatesPackage extends EPackage {
 	int LINK__TARGET = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Parent Component</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK__PARENT_COMPONENT = ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Link</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LINK_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 2;
+	int LINK_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.NamedElementImpl <em>Named Element</em>}' class.
@@ -480,6 +489,17 @@ public interface SoundgatesPackage extends EPackage {
 	EReference getLink_Target();
 
 	/**
+	 * Returns the meta object for the container reference '{@link soundgates.Link#getParentComponent <em>Parent Component</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent Component</em>'.
+	 * @see soundgates.Link#getParentComponent()
+	 * @see #getLink()
+	 * @generated
+	 */
+	EReference getLink_ParentComponent();
+
+	/**
 	 * Returns the meta object for class '{@link soundgates.SoundComponent <em>Sound Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -714,6 +734,14 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LINK__TARGET = eINSTANCE.getLink_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Parent Component</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LINK__PARENT_COMPONENT = eINSTANCE.getLink_ParentComponent();
 
 		/**
 		 * The meta object literal for the '{@link soundgates.impl.SoundComponentImpl <em>Sound Component</em>}' class.

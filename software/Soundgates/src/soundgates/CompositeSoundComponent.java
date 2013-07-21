@@ -48,6 +48,7 @@ public interface CompositeSoundComponent extends SoundComponent {
 	/**
 	 * Returns the value of the '<em><b>Links</b></em>' containment reference list.
 	 * The list contents are of type {@link soundgates.Link}.
+	 * It is bidirectional and its opposite is '{@link soundgates.Link#getParentComponent <em>Parent Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Links</em>' containment reference list isn't clear,
@@ -56,7 +57,8 @@ public interface CompositeSoundComponent extends SoundComponent {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Links</em>' containment reference list.
 	 * @see soundgates.SoundgatesPackage#getCompositeSoundComponent_Links()
-	 * @model containment="true"
+	 * @see soundgates.Link#getParentComponent
+	 * @model opposite="parentComponent" containment="true"
 	 * @generated
 	 */
 	EList<Link> getLinks();

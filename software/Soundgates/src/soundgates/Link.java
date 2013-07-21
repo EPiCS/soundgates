@@ -13,6 +13,7 @@ package soundgates;
  * <ul>
  *   <li>{@link soundgates.Link#getSource <em>Source</em>}</li>
  *   <li>{@link soundgates.Link#getTarget <em>Target</em>}</li>
+ *   <li>{@link soundgates.Link#getParentComponent <em>Parent Component</em>}</li>
  * </ul>
  * </p>
  *
@@ -76,5 +77,33 @@ public interface Link extends Element {
 	 * @generated
 	 */
 	void setTarget(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Parent Component</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link soundgates.CompositeSoundComponent#getLinks <em>Links</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Parent Component</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Parent Component</em>' container reference.
+	 * @see #setParentComponent(CompositeSoundComponent)
+	 * @see soundgates.SoundgatesPackage#getLink_ParentComponent()
+	 * @see soundgates.CompositeSoundComponent#getLinks
+	 * @model opposite="links" transient="false"
+	 * @generated
+	 */
+	CompositeSoundComponent getParentComponent();
+
+	/**
+	 * Sets the value of the '{@link soundgates.Link#getParentComponent <em>Parent Component</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Parent Component</em>' container reference.
+	 * @see #getParentComponent()
+	 * @generated
+	 */
+	void setParentComponent(CompositeSoundComponent value);
 
 } // Link

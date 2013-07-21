@@ -10,6 +10,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import soundgates.CompositeSoundComponent;
 import soundgates.Link;
 import soundgates.Port;
 import soundgates.SoundgatesPackage;
@@ -23,6 +25,7 @@ import soundgates.SoundgatesPackage;
  * <ul>
  *   <li>{@link soundgates.impl.LinkImpl#getSource <em>Source</em>}</li>
  *   <li>{@link soundgates.impl.LinkImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link soundgates.impl.LinkImpl#getParentComponent <em>Parent Component</em>}</li>
  * </ul>
  * </p>
  *
@@ -193,6 +196,47 @@ public class LinkImpl extends ElementImpl implements Link {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CompositeSoundComponent getParentComponent() {
+		if (eContainerFeatureID() != SoundgatesPackage.LINK__PARENT_COMPONENT) return null;
+		return (CompositeSoundComponent)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetParentComponent(CompositeSoundComponent newParentComponent, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newParentComponent, SoundgatesPackage.LINK__PARENT_COMPONENT, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setParentComponent(CompositeSoundComponent newParentComponent) {
+		if (newParentComponent != eInternalContainer() || (eContainerFeatureID() != SoundgatesPackage.LINK__PARENT_COMPONENT && newParentComponent != null)) {
+			if (EcoreUtil.isAncestor(this, newParentComponent))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newParentComponent != null)
+				msgs = ((InternalEObject)newParentComponent).eInverseAdd(this, SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__LINKS, CompositeSoundComponent.class, msgs);
+			msgs = basicSetParentComponent(newParentComponent, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.LINK__PARENT_COMPONENT, newParentComponent, newParentComponent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -204,6 +248,10 @@ public class LinkImpl extends ElementImpl implements Link {
 				if (target != null)
 					msgs = ((InternalEObject)target).eInverseRemove(this, SoundgatesPackage.PORT__INCOMING_LINK, Port.class, msgs);
 				return basicSetTarget((Port)otherEnd, msgs);
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetParentComponent((CompositeSoundComponent)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -220,8 +268,24 @@ public class LinkImpl extends ElementImpl implements Link {
 				return basicSetSource(null, msgs);
 			case SoundgatesPackage.LINK__TARGET:
 				return basicSetTarget(null, msgs);
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				return basicSetParentComponent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				return eInternalContainer().eInverseRemove(this, SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__LINKS, CompositeSoundComponent.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -238,6 +302,8 @@ public class LinkImpl extends ElementImpl implements Link {
 			case SoundgatesPackage.LINK__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				return getParentComponent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -255,6 +321,9 @@ public class LinkImpl extends ElementImpl implements Link {
 				return;
 			case SoundgatesPackage.LINK__TARGET:
 				setTarget((Port)newValue);
+				return;
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				setParentComponent((CompositeSoundComponent)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -274,6 +343,9 @@ public class LinkImpl extends ElementImpl implements Link {
 			case SoundgatesPackage.LINK__TARGET:
 				setTarget((Port)null);
 				return;
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				setParentComponent((CompositeSoundComponent)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -290,6 +362,8 @@ public class LinkImpl extends ElementImpl implements Link {
 				return source != null;
 			case SoundgatesPackage.LINK__TARGET:
 				return target != null;
+			case SoundgatesPackage.LINK__PARENT_COMPONENT:
+				return getParentComponent() != null;
 		}
 		return super.eIsSet(featureID);
 	}

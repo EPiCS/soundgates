@@ -16,6 +16,8 @@
         eType="#//Port" eOpposite="#//Port/outgoingLink"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
         eType="#//Port" eOpposite="#//Port/incomingLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentComponent" eType="#//CompositeSoundComponent"
+        eOpposite="#//CompositeSoundComponent/links"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SoundComponent" abstract="true" eSuperTypes="#//NamedElement #//Element">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -65,7 +67,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedComponents" upperBound="-1"
         eType="#//SoundComponent" containment="true" eOpposite="#//SoundComponent/parentComponent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
-        eType="#//Link" containment="true"/>
+        eType="#//Link" containment="true" eOpposite="#//Link/parentComponent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomicSoundComponent" eSuperTypes="#//SoundComponent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

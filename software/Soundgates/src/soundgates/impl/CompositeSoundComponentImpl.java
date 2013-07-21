@@ -93,7 +93,7 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 	 */
 	public EList<Link> getLinks() {
 		if (links == null) {
-			links = new EObjectContainmentEList<Link>(Link.class, this, SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__LINKS);
+			links = new EObjectContainmentWithInverseEList<Link>(Link.class, this, SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__LINKS, SoundgatesPackage.LINK__PARENT_COMPONENT);
 		}
 		return links;
 	}
@@ -109,6 +109,8 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 		switch (featureID) {
 			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__EMBEDDED_COMPONENTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getEmbeddedComponents()).basicAdd(otherEnd, msgs);
+			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__LINKS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinks()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}

@@ -215,6 +215,15 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLink_ParentComponent() {
+		return (EReference)linkEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSoundComponent() {
 		return soundComponentEClass;
 	}
@@ -381,6 +390,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		linkEClass = createEClass(LINK);
 		createEReference(linkEClass, LINK__SOURCE);
 		createEReference(linkEClass, LINK__TARGET);
+		createEReference(linkEClass, LINK__PARENT_COMPONENT);
 
 		soundComponentEClass = createEClass(SOUND_COMPONENT);
 		createEReference(soundComponentEClass, SOUND_COMPONENT__INPUT_PORTS);
@@ -447,6 +457,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLink_Source(), this.getPort(), this.getPort_OutgoingLink(), "source", null, 1, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLink_Target(), this.getPort(), this.getPort_IncomingLink(), "target", null, 1, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLink_ParentComponent(), this.getCompositeSoundComponent(), this.getCompositeSoundComponent_Links(), "parentComponent", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(soundComponentEClass, SoundComponent.class, "SoundComponent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSoundComponent_InputPorts(), this.getPort(), this.getPort_ReceivingComponent(), "inputPorts", null, 0, -1, SoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -464,7 +475,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 
 		initEClass(compositeSoundComponentEClass, CompositeSoundComponent.class, "CompositeSoundComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCompositeSoundComponent_EmbeddedComponents(), this.getSoundComponent(), this.getSoundComponent_ParentComponent(), "embeddedComponents", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCompositeSoundComponent_Links(), this.getLink(), null, "links", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCompositeSoundComponent_Links(), this.getLink(), this.getLink_ParentComponent(), "links", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(atomicSoundComponentEClass, AtomicSoundComponent.class, "AtomicSoundComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
