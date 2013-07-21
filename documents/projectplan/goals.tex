@@ -69,14 +69,10 @@ Furthermore the end-user should be able to use MIDI devices.
 
 \section{Open Sound Control}
 The communication between the sensors and the entire system will be made through ethernet and WiFi. Therefore it is possible to send different values to the \ac{FPGA} so it changes it's parameters. Through ReconOS and a Linux kernel it is possible to open a server socket to listen for those messages. However it is necessary to agree on a specific protocol. Instead of developing an own protocol, we are going to use the Open Sound Control Protocol. \\
-The OSC is a message based communication protocol. Signals can be created by the different sensors and send to the receiver. Additionally it is not transport protocol dependent, so we could either use error detecting TCP or the faster UDP protocol. Since a device is capable of generating a relative big amount of data per second, we are most likely forced to use UDP. If there is any packet loss or transmission error it will not be detected. However the user usually would not hear this \todo{omfg überarbeite mich}.  
-\begin{itemize}
-\item{OSC message}
-\begin{itemize}
-\item{1 Byte contains length of packet and the rest data. length = $2^x$}
-\item{datatypes: int32, float32, OSCString, OSCTimetag, OSCBlob}
-\end{itemize}
-\end{itemize}
+The \ac{OSC} is a message based communication protocol. Signals can be created by different sensors and send to the receiver. Additionally it is not transport protocol dependent, so we could either use error detecting TCP or the faster UDP protocol. Since a device is capable of generating a relative big amount of data per second, we are most likely forced to use UDP. If there is any packet loss or transmission error the users won't probably here it, since the sensors are continuously generating new values. Additionally we could use as many devices as the system could handle, since it does not care about who is sending a message. \\
+An \ac{OSC} message contains the target component of the synthesizer together with some new parameters. An example message, which would modify the frequence of a specific sine wave generator would look like this: \\
+\emph{/synthesizer1/oscillator/sine1/freq “int32” 440} \\
+
 
 \section{Component library}
 In order to create a patch in the first place, we provide the basic components, that are necessary to build an advanced synthesizer. These components can also be combined to create new components.
