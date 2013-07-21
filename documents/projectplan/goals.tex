@@ -1,6 +1,6 @@
 \chapter{Goals}
 \label{chapter:Goals}
-Our goal is to develop a graphical editor for music generation. With its help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on an \ac{FPGA}. A patch consists of different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on an \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime.
+Our goal is to develop a graphical editor for music generation. With its help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on an \ac{FPGA}. A patch consists of different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on a \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime. %first appearance of FPGA, therefore "a FPGA"
 
 To describe the functions which we want to develop in detail, we provide use case diagrams.
 
@@ -16,7 +16,6 @@ Figure \ref{fig:Soundgate_Designer} shows the use cases for the editor.
 	\end{figure}
 
 In the editor the designer can create new patches, open existing ones and save them.
-
 He can add and remove sound-components from the patch and connect the sound-components by drawing links between their ports.
 A sound-component can either be an atomic or a composite component. 
 Atomic sound-components are stored within XML-libraries and consist of waveform generators, filters, etc; their ports are predefinied. 
@@ -40,7 +39,7 @@ Of course, all standard editor operations like selecting, moving objects etc. ar
 
 \section{Simulator}
 
-We want to develop a software simulator for patches such that the designer and the user can test the sound of the patch before putting it onto an \ac{FPGA}. Figure \ref{fig:Soundgate_Simulator} shows the use cases for the Soundgate simulator.
+We want to develop a software simulator for patches such that the designer and the user can test the sound of the patch before loading it on an \ac{FPGA}. Figure \ref{fig:Soundgate_Simulator} shows the use cases for the Soundgate simulator.
 
 	\begin{figure}[!h]
 		\centering
@@ -80,7 +79,7 @@ Today's mobile phones are full of different sensors which can easily be accessed
 	\item \textbf{Motion Sensors} \\
 			This group contains accelerometers, gravity sensors, gyroscope, and rotational vector sensors \todo{see ref to Android page}.
 	\item \textbf{Environmental Sensors} \\
-			With their help it is possible to check the air temperature illumination and humidity.
+			With their help it is possible to check the air temperature, illumination and humidity.
 	\item \textbf{Position Sensors} \\
 			Orientation sensors and magnetometers.
 \end{itemize}
@@ -98,7 +97,7 @@ So it is possible to connect parameters of a sound component i.e. the altitude, 
 This method abstracts the sensors so it feels like if the person himself is possible to change the sound.
 
 \section{Open Sound Control}
-The communication between the sensors and the entire system will be made possible through ethernet and WiFi. 
+The communication between the sensors and the entire system will be realized with ethernet and WiFi. 
 Therefore it is possible to send different values to the \ac{FPGA} so it changes its parameters. 
 Through ReconOS and a Linux kernel it is possible to open a server socket to listen for those messages. 
 However it is necessary to agree on a specific protocol. Instead of developing a protocol of our own, we are going to use the Open Sound Control Protocol.
@@ -119,6 +118,7 @@ An example message, which would modify the frequency of a specific sine wave gen
 \section{Component library}
 In order to create a patch in the first place, we provide the basic components that are necessary to build an advanced synthesizer. 
 These components can also be combined to create new components.
+
 
 
 	 \begin{tabular}[h]{|c|p{9.75cm}|}
