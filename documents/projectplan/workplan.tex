@@ -24,7 +24,7 @@ The fundamental infrastructure to achieve the project objectives is prototyped i
 \end{enumerate}
 
 The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development. At the end of this milestone one should be able to open an editor and add/connect dummy components. The dummy components representing signal/audio processing components in later stages of development. The system of dummy components, refereed to as patch, can be exported to a simulator. The simulator will playback the patch on the editors host-pc. 
-In addition to the software-side there will exist a working interface for the FPGA expansion board components at the end of this milestone, written in an HDL language. For testing purposes and later evaluation, it will be possible to interface the expansion board components with the schneckonos operating system. \todo{write reconos here}
+In addition to the software-side there will exist a working interface for the \ac{FPGA} expansion board components at the end of this milestone, written in an HDL language. For testing purposes and later evaluation, it will be possible to interface the expansion board components with the schneckonos operating system. \todo{write reconos here}
 
 In detail the basic tasks can be further subdivided:
 
@@ -38,7 +38,7 @@ In detail the basic tasks can be further subdivided:
 					\item Create/delete dummy sound-components
 					\item Connect/disconnect dummy sound-components
 					\item Save and load a model (patch)
-					\item Serialize the patch to a human readable format (e.g XML)
+					\item Serialize the patch to a human readable format (e.g \ac{XML})
 				\end{itemize}
 			\item Create at least two sound-components: a sound generator component (sine/square) and an audio output component
 		\end{itemize}
@@ -63,7 +63,7 @@ In detail the basic tasks can be further subdivided:
 				\item Rotary switch should work
 			\end{itemize}
 			\item Setup communication between a host-pc and reconos
-			\item Encapsulate access to the XILINX FPGA-Toolchain (e.g. Eclipse plugin)
+			\item Encapsulate access to the XILINX \ac{FPGA}-Toolchain (e.g. Eclipse plugin)
 		\end{itemize}
 \end{enumerate}
 
@@ -86,7 +86,7 @@ In the second milestone more features will be added to the whole system. The goa
 		\item Codegeneration	
 			\begin{itemize}
 				\item Transform a patch to a synthesizable HDL description
-				\item Import of existing HW-Framework components (e.g. DAC, switches)
+				\item Import of existing HW-Framework components (e.g. \ac{DAC}, switches)
 			\end{itemize}
 		\item Implement a set of basic atomic blocks
 			\begin{itemize}
