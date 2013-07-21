@@ -1,7 +1,8 @@
 \chapter{Goals}
 \label{chapter:Goals}
-Our goal is to develop a graphical editor for music generation. With it's help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on a \ac{FPGA}. A patch can be build with different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on a \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime. \\
-To describe the functions, which we want to develop, in detail, we provide use case diagrams.
+Our goal is to develop a graphical editor for music generation. With its help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on a \ac{FPGA}. A patch consists of different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on a \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime.
+
+To describe the functions which we want to develop in detail, we provide use case diagrams.
 
 \section{Editor for the designer}
 \label{editor}
@@ -23,7 +24,7 @@ Of course, all standard editor operations like selecting, moving objects etc. ar
 
 \section{Simulator}
 
-We want to develop a software simulator for a patch such that the designer and the user can test the sound of the patch before putting it on a \ac{FPGA}. Figure \ref{fig:Soundgate_Simulator} shows the use cases for the Soundgate simulator.
+We want to develop a software simulator for patches such that the designer and the user can test the sound of the patch before putting it onto an \ac{FPGA}. Figure \ref{fig:Soundgate_Simulator} shows the use cases for the Soundgate simulator.
 
 	\begin{figure}[!h]
 		\centering
@@ -36,7 +37,7 @@ A designer must be able to import a patch to the simulator and to start the simu
 
 \section{COSMIC system}
 
-Figure \ref{fig:Soundgate_UserInterface} shows use cases for the \ac{COSMIC} system.
+Figure \ref{fig:Soundgate_UserInterface} shows use cases for the our so called \ac{COSMIC} system. 
 
 	\begin{figure}[!h]
 		\centering
@@ -45,7 +46,10 @@ Figure \ref{fig:Soundgate_UserInterface} shows use cases for the \ac{COSMIC} sys
 		\label{fig:Soundgate_UserInterface}
 	\end{figure}
 	
-	As mentioned before, a patch created in the editor can be exported as a XML-file which is used to generate VHDL-code. This VHDL-code is synthesized and put on a \ac{FPGA}. The end-user (e.g. a musician or a performer) maps sensor values and other inputs to the interfaces defined by the designer (see Sec. \ref{editor}). He starts the session by pushing a button. During the session he performs some sensor actions or actions with other devices to create input values for the system.
+	As mentioned before, a patch created in the editor can be exported as an XML-file which is used to generate VHDL-code. This VHDL-code is synthesized and put on an \ac{FPGA}. 
+	The term \ac{COSMIC} refers to this final system, running on the \ac{FPGA}.
+	
+	The end-user (e.g. a musician or a performer) can then map sensor values and other inputs to the interfaces defined by the designer (see Section \ref{editor}). The user starts the session by pushing a button. During the session he performs some sensor actions or actions with other devices to create input values for the system.
 	
 \subsection{Input}
 We will provide different ways of modfiying the patch at runtime through sensors. The first approach uses a device as a sensors whereas the other one will use the body of the musician, which will be tracked by a 3D depth camera. 

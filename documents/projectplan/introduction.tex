@@ -127,7 +127,7 @@ Finally Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe 
 		This characteristic of a sound is called \emph{timbre} or \emph{sound color}.
 		
 		\subsection{Waveform generation}
-		Creating a specific base shape of our waveform can be done in several ways, each with it's advantages and disadvantages and a spectrum of sounds that can be created.
+		Creating a specific base shape of our waveform can be done in several ways, each with its advantages and disadvantages and a spectrum of sounds that can be created.
 		Of course, many of these approaches are not mutually exclusive but can be combined with each other.
 			\subsubsection{Additive synthesis}
 				In additive synthesis a sound designer uses multiple basic waveforms with different frequencies, usually sine waves, adds up their outputs and normalizes the result.
@@ -215,7 +215,7 @@ Finally Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe 
 	    The overall hardware system is implemented in VHDL, using the Xilinx Platform Studio (XPS), which offers the MicroBlaze Softcore Processor. Additionally it provides the possibility to synthesise the source code.
 	  
 	  \subsection{ReconOS}
-		ReconOS is an Operating System which can be run on a softcore CPU on a FPGA. Through it's support for the Linux kernel it is possible to write applications which consist of Hard- and Software threads. Software threads can be written in C, whereas Hardware threads have to be described in VHDL. The communication between these threads is abstracted through simple function calls. Therefore it is easy to extend an application by calculating time consuming algorithms in hardware, whereas the program flow is controlled in software.
+		ReconOS is an Operating System which can be run on a softcore CPU on a FPGA. Through its support for the Linux kernel it is possible to write applications which consist of Hard- and Software threads. Software threads can be written in C, whereas Hardware threads have to be described in VHDL. The communication between these threads is abstracted through simple function calls. Therefore it is easy to extend an application by calculating time consuming algorithms in hardware, whereas the program flow is controlled in software.
 
 	  \subsection{Eclipse/GMF}
 		We avoid building a new graphical editor from ground up since this is an error prone process. Instead we rely on the Model Driven Software Development process for graphical editors which is provided by the GMF framework. Therefore we can generate an editor by specifying the Meta-Model. The graphical surface with our components and connections are the result. Additionally it is necessary to provide functions for every component, so it will be possible to simulate the generated output.      
