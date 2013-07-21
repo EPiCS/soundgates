@@ -18,13 +18,17 @@ Five milestones are planned, where each milestones should be completed in approx
 The fundamental infrastructure to achieve the project objectives is prototyped in the first milestone. This involves three basic tasks:
 
 \begin{enumerate}
-	\item prototype a graphical design environment (editor) for signal\footnote{The term "`signal"' is restricted to audio signals by the application domain}-generation and signal-processing components. 
+	\item prototype a graphical design environment (editor) for signal\footnote{The term "signal" is restricted to audio signals by the application domain} generation and signal processing components. 
 	\item prototype a simulation environment to simulate a patch created with the editor
 	\item prototype a hardware infrastructure such as digital-to-analog (dac) controller, (rotary) switches and an interface to a external sensors (Reconos)
 \end{enumerate}
 
-The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development. At the end of this milestone one should be able to open an editor and add/connect dummy components. The dummy components representing signal/audio processing components in later stages of development. The system of dummy components, refereed to as patch, can be exported to a simulator. The simulator will playback the patch on the editors host-pc. 
-In addition to the software-side there will exist a working interface for the \ac{FPGA} expansion board components at the end of this milestone, written in an HDL language. For testing purposes and later evaluation, it will be possible to interface the expansion board components with the schneckonos operating system. \todo{write reconos here}
+The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development. 
+At the end of this milestone one should be able to open an editor and add/connect dummy components. 
+The dummy components representing signal/audio processing components in later stages of development. 
+The system of dummy components, refereed to as patch, can be exported to a simulator. The simulator will playback the patch on the editors host-pc. 
+In addition to the software-side there will exist a working interface for the \ac{FPGA} expansion board components at the end of this milestone, written in an HDL language. 
+For testing purposes and later evaluation, it will be possible to interface the expansion board components with the Reconos operating system.
 
 In detail the basic tasks can be further subdivided:
 
@@ -40,7 +44,7 @@ In detail the basic tasks can be further subdivided:
 					\item Save and load a model (patch)
 					\item Serialize the patch to a human readable format (e.g \ac{XML})
 				\end{itemize}
-			\item Create at least two sound-components: a sound generator component (sine/square) and an audio output component
+			\item Create at least two sound-components: a waveform generator component (sine/square) and an audio output component
 		\end{itemize}
 %--------------------------------------------------------------------		
 	\item Simulator prototype
@@ -70,7 +74,11 @@ In detail the basic tasks can be further subdivided:
 
 \subsection{Milestone 2 - Prototype of a digital synthesizer}
 
-In the second milestone more features will be added to the whole system. The goal of this milestone should be, that a basic digital synthesizer system can be modeled by using the soundgate editor toolkit. The user will find basic components, known from digital signal processing (constants, adders, multiplicators, delays, ...), in the editors sound-component library as well as components which represent external interfaces (DAC-Audio-Output, basic sensors likes (rotary) switches). With these components it will be possible for a user to alter audio-signals in a signal processing manner and listen to the result on the \ac{COSMIC} system. The interaction with the system is restricted to the basic sensors, mentioned in milestone one. The following list represents the set of tasks of achieve the the suggested goal.
+In the second milestone more features will be added to the whole system. 
+The goal of this milestone should be, that a basic digital synthesizer system can be modeled by using the soundgate editor toolkit. 
+The user will find basic components, known from digital signal processing (constants, adders, multiplicators, delays, ...), in the editors sound-component library as well as components which represent external interfaces (DAC-Audio-Output, basic sensors likes (rotary) switches).
+ With these components it will be possible for a user to alter audio-signals in a signal processing manner and listen to the result on the \ac{COSMIC} system. 
+ The interaction with the system is restricted to the basic sensors, mentioned in milestone one. The following list represents the set of tasks to achieve the suggested goal.
 
 	\begin{enumerate}
 		\item Editor
@@ -81,7 +89,7 @@ In the second milestone more features will be added to the whole system. The goa
 			\end{itemize}
 		\item Basic sensor interaction
 			\begin{itemize}
-				\item It should be possible adjust a parameter with a sensor, that is attached to the I/O expansion board
+				\item It should be possible to adjust a parameter with a sensor, that is attached to the I/O expansion board
 			\end{itemize}
 		\item Codegeneration	
 			\begin{itemize}
@@ -100,7 +108,11 @@ In the second milestone more features will be added to the whole system. The goa
 
 \subsection{Milestone 3 - Polishing editing environment}
 
-At the third milestone it should be possible for a musician to emulate the sound of an analog synthesizer. To achieve this, the editor will provide abstract sound-components a musician is familiar with (such as a mixer, waveform generators, filters, envelope generators,...), in the component library. With this a  musician will be able to create a patch and export it to the \ac{COSMIC} system by simply start an export-process. The musician will be informed on the progress of the export-process. Furthermore a musician will be able to create his own sound-components in order to share them with others and import them accordingly.
+At the third milestone it should be possible for a musician to emulate the sound of an analog synthesizer. 
+To achieve this, the editor will provide abstract sound-components a musician is familiar with (such as a mixer, waveform generators, filters, envelope generators,...), in the component library. 
+With this a musician will be able to create a patch and export it to the \ac{COSMIC} system by simply starting an export process. 
+The musician will be informed on the progress of the export process. 
+Furthermore a musician will be able to create his own sound-components in order to share them with others and import them accordingly.
 
 	\begin{enumerate}
 		\item Editor
@@ -117,19 +129,24 @@ At the third milestone it should be possible for a musician to emulate the sound
 		\item Implement additional audio processing components	
 			\begin{itemize}
 				\item Filter: Low/High/Band-pass filters components
-				\item Mixer: a component that mixes and wights multiple inputs into a single output signal
+				\item Mixer: a component that mixes and weights multiple inputs into a single output signal
 				\item Amplifier: a component that amplifies a signal by a certain input parameter
-				\item Envelope Generator: a component to control the attack, decay, sustain and release time of a signal
+				\item Envelope Generator: a component to control the \ac{ADSR} time of a signal
 				\item Sample and Hold: a component that samples an input signal provides it as an output signal
 				\item Noise Generators: a component that creates white/pink noise
-				\item 
 			\end{itemize}
 		\item Create/evaluate different presets and sample patches
 	\end{enumerate}
 	
 \subsection{Milestone 4 - System integration and benchmarking}
 
-The forth milestone is focusing on a fully integrated system and benchmarking. When the milestone is reached, a musician will be able to create or import a patch and download it to the \ac{COSMIC} system. Multiple users will be able to connect to the \ac{COSMIC} system by their smartphones and interact with it. Due to hardware (area) constraints of the \ac{COSMIC} system this milestones is also exploring its limitations. This is done by benchmarking the system in terms of large patches, many users with different sensors and so on. This benchmark will be feed back to the editor environment to give musicians/designers the ability to estimate how their patch will perform. Also, it will open an opportunity to make optimizations on different aspects of the system such as sound-components and sensor applications.
+The fourth milestone is focussing on a fully integrated system and benchmarking.
+When the milestone is reached, a musician will be able to create or import a patch and download it to the \ac{COSMIC} system. 
+Multiple users will be able to connect to the \ac{COSMIC} system by their smartphones and interact with it. 
+Due to hardware (area) constraints of the \ac{COSMIC} system this milestones is also exploring its limitations. 
+This is done by benchmarking the system in terms of large patches, many users with different sensors and so on. 
+This benchmark will be fed back to the editor environment to give musicians/designers the ability to estimate how their patch will perform. 
+Also, it will open an opportunity to make optimizations on different aspects of the system such as sound-components and sensor applications.
 
 	\begin{enumerate}
 		\item Benchmarking
@@ -152,4 +169,8 @@ The forth milestone is focusing on a fully integrated system and benchmarking. W
 
 \subsection{Milestone 5 - Documentation, Testing, Presentation}
 
-The fifth milestone is designed to polish different aspects of the system. One aspect targets the documentation of the editor, sound-components and the \ac{COSMIC} system. Although all system-level components will be documented during development, these documents are just fragments of bigger picture. These fragments will be gathered and assembled into a well understandable form (e.g webpage or handbook). The target audience of these documentation will be musicians, and non-technical but interested end-users.  
+The fifth milestone is designed to polish different aspects of the system. 
+One aspect targets the documentation of the editor, sound-components and the \ac{COSMIC} system. 
+Although all system-level components will be documented during development, these documents are just fragments of a bigger picture. 
+These fragments will be gathered and assembled into a well understandable form (e.g webpage or handbook). 
+The target audience of these documentation will be musicians, and non-technical but interested end-users.  
