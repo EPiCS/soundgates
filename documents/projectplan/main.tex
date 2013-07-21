@@ -3,9 +3,15 @@
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage[printonlyused]{acronym}
+\usepackage{hyperref}
+\usepackage{color}
 
+\newcommand{\todo}[1]{
+   {\color{red} \textbf{TODO: }#1}
+}
 
 \begin{document}
+
 \include{title}
 \tableofcontents
 \begin{abstract}
@@ -15,6 +21,9 @@
 \include{related_work}
 \include{organization}
 \include{workplan}
+
+\include{acronyms}
+
 \bibliography{bib}
 \bibliographystyle{plain}
 \end{document}

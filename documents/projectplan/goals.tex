@@ -1,4 +1,5 @@
 \chapter{Goals}
+\label{chapter:Goals}
 Our goal is to develop a graphical editor for music generation. With it's help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on a \ac{FPGA}. A patch can be build with different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on a \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime. \\
 To describe the functions, which we want to develop, in detail, we provide use case diagrams.
 
@@ -30,7 +31,7 @@ We want to develop a software simulator for a patch such that the designer and t
 		\label{fig:Soundgate_Simulator}
 	\end{figure}
 
-A designer must be able to import a patch to the simulator and to start the simulation. Afterwars he is able to pause or stop the simulation. An optional feature we would like to implement is the possibility to save the output of a simulation on the HDD.
+A designer must be able to import a patch to the simulator and to start the simulation. Afterwards he is able to pause or stop the simulation. An optional feature we would like to implement is the possibility to save the output of a simulation on the HDD.
 
 \section{COSMIC system}
 
@@ -52,23 +53,23 @@ We will provide different ways of modfiying the patch at runtime through sensors
 Today's mobile phones are full of different sensors which can easily be accessed with a small application. The Android SDK offers three different groups of sensors, namely:
 \begin{itemize}
 	\item \textbf{Motion Sensors} \\
-			This group contains accelerometers, gravity sensors, gyroscope, and rotational vector sensors (TODO see ref to Android page). 
+			This group contains accelerometers, gravity sensors, gyroscope, and rotational vector sensors \todo{see ref to Android page}.
 	\item \textbf{Environmental Sensors} \\
 			With their help it is possible to check the air temperature illumination and humidity.
 	\item \textbf{Position Sensors} \\
-			Orientation sensors and magnometers.
+			Orientation sensors and magnetometers.
 \end{itemize}
 
-However, environmental sensors are not suitable since modfiying their values can not be done quickly enough. The other sensors are perfectly suited for changing values since they are modified simply by moving the phone and changing it's orientation. We will develop an Android Application because the Android OS is widespred. On the one hand the sensors have to be read by the application and on the other hand these values have to be forwared to the simulation environment. This can be done with Sockets to send these values over a network connection.
+However, environmental sensors are not suitable since modifying their values can not be done quickly enough. The other sensors are perfectly suited for changing values since they are modified simply by moving the phone and changing it's orientation. We will develop an Android Application because the Android OS is widespread. On the one hand the sensors have to be read by the application and on the other hand these values have to be forwarded to the simulation environment. This can be done with Sockets to send these values over a network connection.
 
 \subsubsection{3D depth camera}
-A 3D camera like the Microsoft Kinect system is able to calculate the depth of an image. Therefore it is possible to track the movement of a person by tracking different joints, which have to be calibrated at the beginning. So it is possible to connect parametes of a sound component i.e. the altitude, to one of the person's arms. This method abstracts the sensors so it feels like if the person himself is possible to change the sound.
+A 3D camera like the Microsoft Kinect system is able to calculate the depth of an image. Therefore it is possible to track the movement of a person by tracking different joints, which have to be calibrated at the beginning. So it is possible to connect parameters of a sound component i.e. the altitude, to one of the person's arms. This method abstracts the sensors so it feels like if the person himself is possible to change the sound.
 
 Furthermore the end-user should be able to use MIDI devices.
 
 \section{Open Sound Control}
 The communication between the sensors and the entire system will be made through ethernet and WiFi. Therefore it is possible to send different values to the \ac{FPGA} so it changes it's parameters. Through ReconOS and a Linux kernel it is possible to open a server socket to listen for those messages. However it is necessary to agree on a specific protocol. Instead of developing an own protocol, we are going to use the Open Sound Control Protocol. \\
-The OSC is a message based communication protocol. Signals can be created by the different sensors and send to the receiver. Additionally it is not transport protocol dependent, so we could either use error detecting TCP or the faster UDP protocol. Since a device is capable of generating a relative big amount of data per second, we are most likely forced to use UDP. If there is any packet loss or transmission error it will not be detected. However the user usually would not hear this (omfg überarbeite mich).  
+The OSC is a message based communication protocol. Signals can be created by the different sensors and send to the receiver. Additionally it is not transport protocol dependent, so we could either use error detecting TCP or the faster UDP protocol. Since a device is capable of generating a relative big amount of data per second, we are most likely forced to use UDP. If there is any packet loss or transmission error it will not be detected. However the user usually would not hear this \todo{omfg überarbeite mich}.  
 \begin{itemize}
 \item{OSC message}
 \begin{itemize}
@@ -78,45 +79,72 @@ The OSC is a message based communication protocol. Signals can be created by the
 \end{itemize}
 
 \section{Component library}
-We plan to provide following components:
+In order to create a patch in the first place, we provide the basic components, that are necessary to build an advanced synthesizer. These components can also be combined to create new components.
 
-\begin{itemize}
-\item Generators:
-\begin{itemize}
-\item Sinus
-\item Sawtooth
-\end{itemize}
 
-\item Filters:
-\begin{itemize}
-\item Ramp
-\item Low pass
-\item Delay
-\end{itemize}
+	 \begin{tabular}[h]{|c|p{9.75cm}|}
+	  \hline
+	  Component & Description \\
+	  \hline
+	  \hline
+	  Wave Generators & Basic soundaves that create simple tones (e.g. Sinus, sawtooth, rectangular) \\\hline
+		Basic Arithmetic functions & Components that support simple arithmetic operations on soundsignals (e.g. addition, multiplication)\\\hline
+		Filters & Arithmetic functions can be combined to complex filters (e.g. ramp, low pass). Filters emphasize or eliminate some frequencies from a signal \\\hline
+		Mixer & Used to mix several sound signals to one sound output \\\hline
+		Constants & Defined inputs for components \\\hline
+		Interactive Inputs & Inputs, that can be changed at runtime with interactive sensors \\\hline
+		MIDI components & Stores a MIDI file and outputs the different frequencies \\\hline
+		Sound output & All signals end up here in order to be sent to the \ac{DAC} and played on the speaker \\\hline
+	 \end{tabular}
+\\\\
 
-\item Arithmetic:
-\begin{itemize}
-\item Addition 
-\item Multiplication
-\item Equals
-\end{itemize}
 
-\item Mixer
+Figure \ref{fig:ex_patch} depicts an example patch, which could be produced by the system. There are three different types of waveform generators (sinus, sawtooth and rectangular), which are mixed in the Mixer. Each of the waveform generators have different possible inputs: First, the input of the sinus waveform generator is predefined with 440\,Hz. The sawtooth waveform generator gets its input from an interactive sensor, which can be connected to the \ac{FPGA}. At last, there is a MIDI controller used for the rectangular waveform generator, which stores a MIDI file and outputs the frequencies of the file.
+After mixing the waveforms, the signal is filtered by a ramp filter before it is played on the speaker.
 
-\item Sources:
-\begin{itemize}
-\item Constant
-\end{itemize}
+%\begin{itemize}
+%\item Generators:
+%\begin{itemize}
+%\item Sinus
+%\item Sawtooth
+%\end{itemize}
+%
+%\item Filters:
+%\begin{itemize}
+%\item Ramp
+%\item Low pass
+%\item Delay
+%\end{itemize}
+%
+%\item Arithmetic:
+%\begin{itemize}
+%\item Addition 
+%\item Multiplication
+%\item Equals
+%\end{itemize}
+%
+%\item Mixer
+%
+%\item Sources:
+%\begin{itemize}
+%\item Constant
+%\end{itemize}
+%
+%\item Sinks:
+%\begin{itemize}
+%\item Sound output
+%\end{itemize}
+%
+%\item MIDI: 
+%\begin{itemize}
+%\item MIDI note to frequency converter
+%\item MIDI scheduler
+%\end{itemize}
+%\end{itemize}
+	\begin{figure}[!h]
+		\centering
+			\includegraphics[width=\textwidth]{images/ex_patch.pdf}
+		\caption{Example patch}
+		\label{fig:ex_patch}
+	\end{figure}
 
-\item Sinks:
-\begin{itemize}
-\item Sound output
-\end{itemize}
-
-\item MIDI: 
-\begin{itemize}
-\item MIDI note to frequency converter
-\item MIDI scheduler
-\end{itemize}
-
-\end{itemize}
