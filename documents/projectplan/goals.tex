@@ -83,7 +83,7 @@ In order to create a patch in the first place, we provide the basic components, 
 	  Component & Description \\
 	  \hline
 	  \hline
-	  Wave Generators & Basic soundaves that create simple tones (e.g. Sinus, sawtooth, rectangular) \\\hline
+	  Wave Generators & Basic soundaves that create simple tones (e.g. sine, sawtooth, rectangular) \\\hline
 		Basic Arithmetic functions & Components that support simple arithmetic operations on soundsignals (e.g. addition, multiplication)\\\hline
 		Filters & Arithmetic functions can be combined to complex filters (e.g. ramp, low pass). Filters emphasize or eliminate some frequencies from a signal \\\hline
 		Mixer & Used to mix several sound signals to one sound output \\\hline
@@ -95,13 +95,13 @@ In order to create a patch in the first place, we provide the basic components, 
 \\\\
 
 
-Figure \ref{fig:ex_patch} depicts an example patch, which could be produced by the system. There are three different types of waveform generators (sinus, sawtooth and rectangular), which are mixed in the Mixer. Each of the waveform generators have different possible inputs: First, the input of the sinus waveform generator is predefined with 440\,Hz. The sawtooth waveform generator gets its input from an interactive sensor, which can be connected to the \ac{FPGA}. At last, there is a MIDI controller used for the rectangular waveform generator, which stores a MIDI file and outputs the frequencies of the file.
+Figure \ref{fig:ex_patch} depicts an example patch, which could be produced by the system. There are three different types of waveform generators (sine, sawtooth and rectangular), which are mixed in the Mixer. Each of the waveform generators have different possible inputs: First, the input of the sine waveform generator is predefined with 440\,Hz. The sawtooth waveform generator gets its input from an interactive sensor, which can be connected to the \ac{FPGA}. At last, there is a MIDI controller used for the rectangular waveform generator, which stores a MIDI file and outputs the frequencies of the file.
 After mixing the waveforms, the signal is filtered by a ramp filter before it is played on the speaker.
 
 %\begin{itemize}
 %\item Generators:
 %\begin{itemize}
-%\item Sinus
+%\item sine
 %\item Sawtooth
 %\end{itemize}
 %
