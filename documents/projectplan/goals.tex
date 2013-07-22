@@ -128,7 +128,7 @@ These components can also be combined to create new components.
 	  \hline
 	  Wave Generators & Basic soundwaves that create simple tones (e.g. sine, sawtooth, rectangular) \\\hline
 		Basic Arithmetic functions & Components that support simple arithmetic operations on soundsignals (e.g. addition, multiplication)\\\hline
-		Filters & Arithmetic functions can be combined to complex filters (e.g. ramp, low pass). Filters emphasize or eliminate some frequencies from a signal \\\hline
+		Filters & Arithmetic functions can be combined to complex filters (e.g. low pass). Filters emphasize or eliminate some frequencies from a signal \\\hline
 		Mixer & Used to mix several sound signals to one sound output \\\hline
 		Constants & Defined inputs for components \\\hline
 		Interactive Inputs & Inputs, that can be changed at runtime with interactive sensors \\\hline
@@ -144,7 +144,7 @@ Each of the waveform generators has different possible inputs:
 First, the input of the sine waveform generator is predefined with 440\,Hz. 
 The sawtooth waveform generator gets its input from an interactive sensor, which can be connected to the \ac{FPGA}. 
 At last, there is a MIDI controller used for the rectangular waveform generator, which stores a MIDI file and outputs the frequencies of the file.
-After mixing the waveforms, the signal is filtered by a ramp filter before it is played on the speaker.
+After mixing the waveforms, the signal is filtered by a low pass filter before it is played on the speaker.
 
 %\begin{itemize}
 %\item Generators:
