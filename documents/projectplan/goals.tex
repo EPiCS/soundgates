@@ -144,7 +144,7 @@ Each of the waveform generators has different possible inputs:
 First, the input of the sine waveform generator is predefined with 440\,Hz. 
 The sawtooth waveform generator gets its input from an interactive sensor, which can be connected to the \ac{FPGA}. 
 At last, there is a MIDI controller used for the rectangular waveform generator, which stores a MIDI file and outputs the frequencies of the file.
-After mixing the waveforms, the signal is filtered by a low pass filter before it is played on the speaker.
+After mixing the waveforms, the signal is filtered by a low pass filter before it is played on the speaker. In this example, the low pass filter filters each frequency above the threshold of 600 Hz.
 
 %\begin{itemize}
 %\item Generators:
