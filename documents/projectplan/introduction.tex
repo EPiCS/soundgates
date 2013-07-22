@@ -1,4 +1,4 @@
-%\chapter{Introduction}
+\chapter{Introduction}
 	\label{chapter:Introduction}
 	\section{About this document}
 	
@@ -214,7 +214,7 @@ Finally Chapters \ref{chapter:Organization} and \ref{chapter:Workplan} describe 
 	    The overall hardware system is implemented in \ac{VHDL}, using the Xilinx Platform Studio (XPS), which offers the MicroBlaze Softcore Processor. Additionally it provides the possibility to synthesize the source code.
 	  
 	  \subsection{ReconOS}
-		ReconOS offers the possibility to develop concurrent applications, which consists of Software and Hardware threads and can be executed on an FPGA. Software threads can be written in C, whereas Hardware threads have to be described in \ac{VHDL}. The communication between these threads is abstracted through simple function calls. Therefore it is easy to extend an application by calculating time consuming algorithms in hardware, whereas the program flow is controlled in software.
+		\ac{ReconOS} offers the possibility to develop concurrent applications, which consists of Software and Hardware threads and can be executed on an FPGA. Software threads can be written in C, whereas Hardware threads have to be described in \ac{VHDL}. The communication between these threads is abstracted through simple function calls. Therefore it is easy to extend an application by calculating time consuming algorithms in hardware, whereas the program flow is controlled in software.
 
 	  \subsection{Eclipse/GMF}
 		We avoid building a new graphical editor from ground up since this is an error prone process. Instead we rely on the Model Driven Software Development process for graphical editors which is provided by the \ac{GMF}\footnote{\url{https://projects.eclipse.org/projects/modeling.gmp.gmf-runtime}} framework. Therefore we can generate an editor by specifying the Meta-Model. The graphical surface with our components and connections is the result. Additionally it is necessary to provide functions for every component, so it will be possible to simulate the generated output.      
