@@ -1,8 +1,8 @@
 \chapter{Goals}
 \label{chapter:Goals}
-Our goal is to develop a graphical editor for music generation. With its help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on an \ac{FPGA}. A patch consists of different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on a \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime. %first appearance of FPGA, therefore "a FPGA"
+One of our goals is to develop a graphical editor for music generation. With its help it will be possible to create patches, test their output in a simulation and produce a netlist to generate that sound on an \ac{FPGA}. A patch consists of different sound-components like wave generators and filters. In order to create specific sounds, the sound-components have to be connected. The exported netlist can be put on an \ac{FPGA} so the user of the synthesizer (e.g. a musician) can connect a MIDI device or specific sensors to the \ac{FPGA} to modify input values at runtime. %first appearance of FPGA, therefore "a FPGA"
 
-To describe the functions which we want to develop in detail, we provide use case diagrams.
+To describe the functions which we want to develop in detail, the following section will provide use case diagrams and their description.
 
 \section{Editor for the designer}
 \label{editor}
@@ -18,13 +18,13 @@ Figure \ref{fig:Soundgate_Designer} shows the use cases for the editor.
 In the editor the designer can create new patches, open existing ones and save them.
 He can add and remove sound-components from the patch and connect the sound-components by drawing links between their ports.
 A sound-component can either be an atomic or a composite component. 
-Atomic sound-components are stored within XML-libraries and consist of waveform generators, filters, etc; their ports are predefinied. 
-The ports of an atomic sound-component are mapped to its dynamic properties such that the value of a dynamic property changes during the runtime depending on the signal which the according port receives.  
-Some of these sound-components have static properties which the designer can modify (e.g. the value of a constant-block). 
+Atomic sound-components are stored within XML-libraries and represent waveform generators, filters, etc; their ports are predefined. 
+The ports of an atomic sound-component are mapped to its dynamic properties. Therefore a dynamic property changes according to the signal the mapped port receives.  
+Some of these sound-components may have static properties which the designer can modify (e.g. the value of a constant-block) at design time, but cannot be changed during runtime. 
 
-Composite sound-components are not predefined. 
-The designer can add a composite sound-components to the patch and fill it on his own with other sound-components and links between them. 
-He can add ports to a composite sound-components and define their direction and constraints. 
+In contrast to atomic sound-components, composite sound-components are not predefined. 
+The designer can add composite sound-components to the patch and fill them with either atomic sound-components or other composite sound-components. The internal linkage of a composite sound-components is setup also by drawing links between the components.
+The designer can add ports to a composite sound-components and define their direction and constraints. 
 We want to make it possible to export finished composite sound-components as XML-files and to import existing ones to the editor such that different designers can exchange their sound-components.
 
 
@@ -69,7 +69,7 @@ A designer must be able to import a patch to the simulator and to start the simu
 	During the session he performs some sensor actions or actions with other devices to create input values for the system.
 	
 \subsection{Input}
-We will provide different ways of modfiying the patch at runtime through sensors. 
+We will provide different ways of modifying the patch at runtime through sensors input. 
 The first approach uses a device as a sensors whereas the other one will use the body of the musician, which will be tracked by a 3D depth camera. 
 Apart from the control through sensors, the end-user should also be able to use MIDI devices, e.g. a keyboard.
 
@@ -126,7 +126,7 @@ These components can also be combined to create new components.
 	  Component & Description \\
 	  \hline
 	  \hline
-	  Wave Generators & Basic soundaves that create simple tones (e.g. sine, sawtooth, rectangular) \\\hline
+	  Wave Generators & Basic soundwaves that create simple tones (e.g. sine, sawtooth, rectangular) \\\hline
 		Basic Arithmetic functions & Components that support simple arithmetic operations on soundsignals (e.g. addition, multiplication)\\\hline
 		Filters & Arithmetic functions can be combined to complex filters (e.g. ramp, low pass). Filters emphasize or eliminate some frequencies from a signal \\\hline
 		Mixer & Used to mix several sound signals to one sound output \\\hline
