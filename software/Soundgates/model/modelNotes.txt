@@ -1,5 +1,0 @@
-- Properties für Komponenten
-- AtomicComponent -> abstrakt? (Realisierungen werden von uns eingebaut)
-
-- OCL Constraint bzgl. Anzahl Links ermöglicht trotzdem das Erstellen fehlerhafter Modellinstanzen. Das wird dann nur in der Validierung angemerkt 
-- Unterscheidung zwischen Input und Output Ports?

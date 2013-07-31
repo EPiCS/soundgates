@@ -514,7 +514,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		  (atomicSoundComponentEClass, 
 		   source, 
 		   new String[] {
-			 "constraints", "RightLinksOnPorts NumPortsTest"
+			 "constraints", "RightLinksOnPorts"
 		   });	
 	}
 
@@ -536,8 +536,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		  (atomicSoundComponentEClass, 
 		   source, 
 		   new String[] {
-			 "RightLinksOnPorts", "(self.inputPorts->forAll( not (incomingLink=null) and outgoingLink=null)) and (self.outputPorts->forAll( not (outgoingLink=null) and incomingLink=null))",
-			 "NumPortsTest", "self.inputPorts->size()=1"
+			 "RightLinksOnPorts", "(self.inputPorts->forAll( not (incomingLink=null) and outgoingLink=null)) and (self.outputPorts->forAll( not (outgoingLink=null) and incomingLink=null))"
 		   });
 	}
 

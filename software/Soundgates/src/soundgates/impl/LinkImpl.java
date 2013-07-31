@@ -198,7 +198,7 @@ public class LinkImpl extends ElementImpl implements Link {
 	 */
 	public CompositeSoundComponent getParentComponent() {
 		if (eContainerFeatureID() != SoundgatesPackage.LINK__PARENT_COMPONENT) return null;
-		return (CompositeSoundComponent)eInternalContainer();
+		return (CompositeSoundComponent)eContainer();
 	}
 
 	/**

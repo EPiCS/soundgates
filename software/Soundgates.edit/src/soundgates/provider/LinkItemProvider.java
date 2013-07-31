@@ -56,6 +56,7 @@ public class LinkItemProvider
 
 			addSourcePropertyDescriptor(object);
 			addTargetPropertyDescriptor(object);
+			addParentComponentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -96,6 +97,28 @@ public class LinkItemProvider
 				 getString("_UI_Link_target_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Link_target_feature", "_UI_Link_type"),
 				 SoundgatesPackage.Literals.LINK__TARGET,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Parent Component feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addParentComponentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Link_parentComponent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Link_parentComponent_feature", "_UI_Link_type"),
+				 SoundgatesPackage.Literals.LINK__PARENT_COMPONENT,
 				 true,
 				 false,
 				 true,

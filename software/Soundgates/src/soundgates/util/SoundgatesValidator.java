@@ -226,7 +226,6 @@ public class SoundgatesValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(atomicSoundComponent, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(atomicSoundComponent, diagnostics, context);
 		if (result || diagnostics != null) result &= validateAtomicSoundComponent_RightLinksOnPorts(atomicSoundComponent, diagnostics, context);
-		if (result || diagnostics != null) result &= validateAtomicSoundComponent_NumPortsTest(atomicSoundComponent, diagnostics, context);
 		return result;
 	}
 
@@ -254,35 +253,6 @@ public class SoundgatesValidator extends EObjectValidator {
 				 "http://www.eclipse.org/emf/2002/Ecore/OCL",
 				 "RightLinksOnPorts",
 				 ATOMIC_SOUND_COMPONENT__RIGHT_LINKS_ON_PORTS__EEXPRESSION,
-				 Diagnostic.ERROR,
-				 DIAGNOSTIC_SOURCE,
-				 0);
-	}
-
-	/**
-	 * The cached validation expression for the NumPortsTest constraint of '<em>Atomic Sound Component</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected static final String ATOMIC_SOUND_COMPONENT__NUM_PORTS_TEST__EEXPRESSION = "self.inputPorts->size()=1";
-
-	/**
-	 * Validates the NumPortsTest constraint of '<em>Atomic Sound Component</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateAtomicSoundComponent_NumPortsTest(AtomicSoundComponent atomicSoundComponent, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return
-			validate
-				(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT,
-				 atomicSoundComponent,
-				 diagnostics,
-				 context,
-				 "http://www.eclipse.org/emf/2002/Ecore/OCL",
-				 "NumPortsTest",
-				 ATOMIC_SOUND_COMPONENT__NUM_PORTS_TEST__EEXPRESSION,
 				 Diagnostic.ERROR,
 				 DIAGNOSTIC_SOURCE,
 				 0);
