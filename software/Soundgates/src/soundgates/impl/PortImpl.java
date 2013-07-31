@@ -200,7 +200,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 */
 	public SoundComponent getReceivingComponent() {
 		if (eContainerFeatureID() != SoundgatesPackage.PORT__RECEIVING_COMPONENT) return null;
-		return (SoundComponent)eContainer();
+		return (SoundComponent)eInternalContainer();
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 */
 	public SoundComponent getSendingComponent() {
 		if (eContainerFeatureID() != SoundgatesPackage.PORT__SENDING_COMPONENT) return null;
-		return (SoundComponent)eContainer();
+		return (SoundComponent)eInternalContainer();
 	}
 
 	/**

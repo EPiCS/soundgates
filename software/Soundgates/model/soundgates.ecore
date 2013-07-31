@@ -74,10 +74,11 @@
       <details key="documentation" value="Atomic sound-component"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="RightLinksOnPorts"/>
+      <details key="constraints" value="RightLinksOnPorts NumPortsTest"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
       <details key="RightLinksOnPorts" value="(self.inputPorts->forAll( not (incomingLink=null) and outgoingLink=null)) and (self.outputPorts->forAll( not (outgoingLink=null) and incomingLink=null))"/>
+      <details key="NumPortsTest" value="self.inputPorts->size()=1"/>
     </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>
