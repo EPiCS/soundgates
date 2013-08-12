@@ -64,7 +64,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
         eType="#//Connection"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AtomicSoundComponent" eSuperTypes="#//SoundComponent #//EStringToEBooleanObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AtomicSoundComponent" eSuperTypes="#//SoundComponent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Atomic sound-component"/>
     </eAnnotations>
