@@ -13,10 +13,10 @@ use reconos_v3_00_b.reconos_pkg.all;
 library proc_common_v3_00_a;
 use proc_common_v3_00_a.proc_common_pkg.all;
 
-entity musicgenerator is
+entity user_logic is
   port
   (
-	-- OSIF FSL
+    -- OSIF FSL
 	OSFSL_S_Read    : out std_logic;                 -- Read signal, requiring next available input to be read
 	OSFSL_S_Data    : in  std_logic_vector(0 to 31); -- Input data
 	OSFSL_S_Control : in  std_logic;                 -- Control Bit, indicating the input data are control word
@@ -37,25 +37,25 @@ entity musicgenerator is
 		
 	-- HWT reset and clock
 	clk           : in std_logic;
-	rst           : in std_logic;	
+	rst           : in std_logic	
 	
 	-- i2s
 	sd  	: out std_logic;
 	ws	: out std_logic;
 	mclk 	: out std_logic;
-	sck 	: out std_logic	
- );
+	sck 	: out std_logic;	
+ 
 
 --  attribute MAX_FANOUT : string;
 --  attribute SIGIS : string;
 
-end entity musicgenerator;
+end entity user_logic;
 
 ------------------------------------------------------------------------------
 -- Architecture section
 ------------------------------------------------------------------------------
 
-architecture IMP of musicgenerator is
+architecture IMP of user_logic is
 
 	--USER signal declarations added here, as needed for user logic
 	constant bps : integer := 24;
@@ -69,14 +69,10 @@ architecture IMP of musicgenerator is
 	signal serial_data      : std_logic;
 	signal freq_in		: std_logic_vector(31 downto 0);
 	--signal uclk : std_logic;
-	type STATE_TYPE is (STATE_GET_INIT, STATE_WRITE_MBOX ,STATE_EXIT);
-	signal state    : STATE_TYPE;
+
 	-- ReconOS stuff
 	constant MBOX_COMM      : std_logic_vector(C_FSL_WIDTH-1 downto 0) := x"00000000";
 	signal frequency        : std_logic_vector(C_FSL_WIDTH-1 downto 0);
-	signal i_osif   : i_osif_t;
-	signal o_osif   : o_osif_t;
-		signal ignore   : std_logic_vector(C_FSL_WIDTH-1 downto 0);
 	
   COMPONENT i2s
 	 generic(
@@ -180,7 +176,7 @@ begin
 				end if;
 				
    			when STATE_WRITE_MBOX =>				
-				osif_mbox_put(i_osif, o_osif, MBOX_COMM, frequency, ignore, done);
+				osif_mbox_put(i_osif, o_osif, MBOX_SEND, frequency, ignore, done);
   			  	if done then
   			  		state <= STATE_EXIT;
   			  	end if;	
@@ -195,10 +191,10 @@ begin
 sample_l_int <= sample_in;
 sample_r_int <= sample_in;
 
-freq_in <= frequency;
+freq_in <= frequency;  --TODO!!!
 mclk <= master_clk;
 ws <=  word_select;
 sck <= serial_clk;
-sd <= serial_data;		
+sd <= serial_data;			
 
 end IMP;

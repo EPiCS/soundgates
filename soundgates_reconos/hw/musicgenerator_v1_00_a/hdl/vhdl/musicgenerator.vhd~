@@ -195,7 +195,7 @@ begin
 sample_l_int <= sample_in;
 sample_r_int <= sample_in;
 
-freq_in <= frequency;
+freq_in <= frequency;  --TODO!!!
 mclk <= master_clk;
 ws <=  word_select;
 sck <= serial_clk;

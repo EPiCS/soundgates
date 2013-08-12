@@ -4,7 +4,6 @@
 ## Date:              Mon Jun 10 12:27:04 2013 (by Create and Import Peripheral Wizard)
 ##############################################################################
 
-lib reconos_v3_00_b reconos_pkg vhdl
 lib proc_common_v3_00_a  all 
 lib musicgenerator_v1_00_a fixedpointToInteger vhdl
 lib musicgenerator_v1_00_a cordic_wrapper vhdl
