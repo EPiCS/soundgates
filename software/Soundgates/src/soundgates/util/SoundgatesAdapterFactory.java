@@ -2,6 +2,8 @@
  */
 package soundgates.util;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -76,10 +78,6 @@ public class SoundgatesAdapterFactory extends AdapterFactoryImpl {
 				return createElementAdapter();
 			}
 			@Override
-			public Adapter caseLink(Link object) {
-				return createLinkAdapter();
-			}
-			@Override
 			public Adapter caseSoundComponent(SoundComponent object) {
 				return createSoundComponentAdapter();
 			}
@@ -98,6 +96,30 @@ public class SoundgatesAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAtomicSoundComponent(AtomicSoundComponent object) {
 				return createAtomicSoundComponentAdapter();
+			}
+			@Override
+			public Adapter caseConnection(Connection object) {
+				return createConnectionAdapter();
+			}
+			@Override
+			public Adapter caseDelegation(Delegation object) {
+				return createDelegationAdapter();
+			}
+			@Override
+			public Adapter caseLink(Link object) {
+				return createLinkAdapter();
+			}
+			@Override
+			public Adapter caseEStringToEFloatObject(Map.Entry<String, Float> object) {
+				return createEStringToEFloatObjectAdapter();
+			}
+			@Override
+			public Adapter caseEStringToEIntegerObject(Map.Entry<String, Integer> object) {
+				return createEStringToEIntegerObjectAdapter();
+			}
+			@Override
+			public Adapter caseEStringToEBooleanObject(Map.Entry<String, Boolean> object) {
+				return createEStringToEBooleanObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -144,20 +166,6 @@ public class SoundgatesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createElementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link soundgates.Link <em>Link</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see soundgates.Link
-	 * @generated
-	 */
-	public Adapter createLinkAdapter() {
 		return null;
 	}
 
@@ -228,6 +236,90 @@ public class SoundgatesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAtomicSoundComponentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link soundgates.Connection <em>Connection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see soundgates.Connection
+	 * @generated
+	 */
+	public Adapter createConnectionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link soundgates.Delegation <em>Delegation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see soundgates.Delegation
+	 * @generated
+	 */
+	public Adapter createDelegationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link soundgates.Link <em>Link</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see soundgates.Link
+	 * @generated
+	 */
+	public Adapter createLinkAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To EFloat Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToEFloatObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To EInteger Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToEIntegerObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To EBoolean Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToEBooleanObjectAdapter() {
 		return null;
 	}
 

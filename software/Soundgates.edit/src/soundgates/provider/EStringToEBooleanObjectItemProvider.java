@@ -5,34 +5,33 @@ package soundgates.provider;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
-
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import soundgates.Patch;
-import soundgates.SoundgatesFactory;
 import soundgates.SoundgatesPackage;
 
 /**
- * This is the item provider adapter for a {@link soundgates.Patch} object.
+ * This is the item provider adapter for a {@link java.util.Map.Entry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PatchItemProvider
+public class EStringToEBooleanObjectItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -46,7 +45,7 @@ public class PatchItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PatchItemProvider(AdapterFactory adapterFactory) {
+	public EStringToEBooleanObjectItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,49 +60,65 @@ public class PatchItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addKeyPropertyDescriptor(object);
+			addValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Key feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(SoundgatesPackage.Literals.PATCH__ELEMENTS);
-		}
-		return childrenFeatures;
+	protected void addKeyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EStringToEBooleanObject_key_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EStringToEBooleanObject_key_feature", "_UI_EStringToEBooleanObject_type"),
+				 SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT__KEY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
+	 * This adds a property descriptor for the Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
+	protected void addValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EStringToEBooleanObject_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EStringToEBooleanObject_value_feature", "_UI_EStringToEBooleanObject_type"),
+				 SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT__VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns Patch.gif.
+	 * This returns EStringToEBooleanObject.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Patch"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EStringToEBooleanObject"));
 	}
 
 	/**
@@ -114,7 +129,8 @@ public class PatchItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Patch_type");
+		Map.Entry<?, ?> eStringToEBooleanObject = (Map.Entry<?, ?>)object;
+		return "" + eStringToEBooleanObject.getKey() + " -> " + eStringToEBooleanObject.getValue();
 	}
 
 	/**
@@ -128,9 +144,10 @@ public class PatchItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Patch.class)) {
-			case SoundgatesPackage.PATCH__ELEMENTS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+		switch (notification.getFeatureID(Map.Entry.class)) {
+			case SoundgatesPackage.ESTRING_TO_EBOOLEAN_OBJECT__KEY:
+			case SoundgatesPackage.ESTRING_TO_EBOOLEAN_OBJECT__VALUE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -146,21 +163,6 @@ public class PatchItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
-				 SoundgatesFactory.eINSTANCE.createCompositeSoundComponent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
-				 SoundgatesFactory.eINSTANCE.createAtomicSoundComponent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
-				 SoundgatesFactory.eINSTANCE.createLink()));
 	}
 
 	/**

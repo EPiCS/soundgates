@@ -17,12 +17,12 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
- * This is the item provider adapter for a {@link soundgates.Link} object.
+ * This is the item provider adapter for a {@link soundgates.Delegation} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LinkItemProvider
+public class DelegationItemProvider
 	extends ConnectionItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -36,7 +36,7 @@ public class LinkItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LinkItemProvider(AdapterFactory adapterFactory) {
+	public DelegationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -56,14 +56,14 @@ public class LinkItemProvider
 	}
 
 	/**
-	 * This returns Link.gif.
+	 * This returns Delegation.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Link"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Delegation"));
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class LinkItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Link_type");
+		return getString("_UI_Delegation_type");
 	}
 
 	/**

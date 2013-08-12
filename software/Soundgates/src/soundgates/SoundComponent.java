@@ -16,8 +16,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link soundgates.SoundComponent#getInputPorts <em>Input Ports</em>}</li>
- *   <li>{@link soundgates.SoundComponent#getOutputPorts <em>Output Ports</em>}</li>
+ *   <li>{@link soundgates.SoundComponent#getPorts <em>Ports</em>}</li>
  *   <li>{@link soundgates.SoundComponent#getParentComponent <em>Parent Component</em>}</li>
  * </ul>
  * </p>
@@ -28,38 +27,21 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface SoundComponent extends NamedElement, Element {
 	/**
-	 * Returns the value of the '<em><b>Input Ports</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Ports</b></em>' containment reference list.
 	 * The list contents are of type {@link soundgates.Port}.
-	 * It is bidirectional and its opposite is '{@link soundgates.Port#getReceivingComponent <em>Receiving Component</em>}'.
+	 * It is bidirectional and its opposite is '{@link soundgates.Port#getComponent <em>Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Ports
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Input Ports</em>' containment reference list.
-	 * @see soundgates.SoundgatesPackage#getSoundComponent_InputPorts()
-	 * @see soundgates.Port#getReceivingComponent
-	 * @model opposite="receivingComponent" containment="true"
+	 * @return the value of the '<em>Ports</em>' containment reference list.
+	 * @see soundgates.SoundgatesPackage#getSoundComponent_Ports()
+	 * @see soundgates.Port#getComponent
+	 * @model opposite="component" containment="true"
 	 * @generated
 	 */
-	EList<Port> getInputPorts();
-
-	/**
-	 * Returns the value of the '<em><b>Output Ports</b></em>' containment reference list.
-	 * The list contents are of type {@link soundgates.Port}.
-	 * It is bidirectional and its opposite is '{@link soundgates.Port#getSendingComponent <em>Sending Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Ports
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Output Ports</em>' containment reference list.
-	 * @see soundgates.SoundgatesPackage#getSoundComponent_OutputPorts()
-	 * @see soundgates.Port#getSendingComponent
-	 * @model opposite="sendingComponent" containment="true"
-	 * @generated
-	 */
-	EList<Port> getOutputPorts();
+	EList<Port> getPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Parent Component</b></em>' container reference.

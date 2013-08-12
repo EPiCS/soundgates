@@ -2,6 +2,7 @@
  */
 package soundgates;
 
+import org.eclipse.emf.common.util.EMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -12,11 +13,69 @@ package soundgates;
  * Atomic sound-component
  * <!-- end-model-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link soundgates.AtomicSoundComponent#getFloatProperties <em>Float Properties</em>}</li>
+ *   <li>{@link soundgates.AtomicSoundComponent#getIntegerProperties <em>Integer Properties</em>}</li>
+ *   <li>{@link soundgates.AtomicSoundComponent#getBooleanProperties <em>Boolean Properties</em>}</li>
+ * </ul>
+ * </p>
  *
  * @see soundgates.SoundgatesPackage#getAtomicSoundComponent()
- * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='RightLinksOnPorts'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL RightLinksOnPorts='(self.inputPorts->forAll( not (incomingLink=null) and outgoingLink=null)) and (self.outputPorts->forAll( not (outgoingLink=null) and incomingLink=null))'"
+ * @model
  * @generated
  */
 public interface AtomicSoundComponent extends SoundComponent {
+	/**
+	 * Returns the value of the '<em><b>Float Properties</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link java.lang.Float},
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Float Properties</em>' map isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Float Properties</em>' map.
+	 * @see soundgates.SoundgatesPackage#getAtomicSoundComponent_FloatProperties()
+	 * @model mapType="soundgates.EStringToEFloatObject<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EFloatObject>"
+	 * @generated
+	 */
+	EMap<String, Float> getFloatProperties();
+
+	/**
+	 * Returns the value of the '<em><b>Integer Properties</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link java.lang.Integer},
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Integer Properties</em>' map isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Integer Properties</em>' map.
+	 * @see soundgates.SoundgatesPackage#getAtomicSoundComponent_IntegerProperties()
+	 * @model mapType="soundgates.EStringToEIntegerObject<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EIntegerObject>"
+	 * @generated
+	 */
+	EMap<String, Integer> getIntegerProperties();
+
+	/**
+	 * Returns the value of the '<em><b>Boolean Properties</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link java.lang.Boolean},
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Boolean Properties</em>' map isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Boolean Properties</em>' map.
+	 * @see soundgates.SoundgatesPackage#getAtomicSoundComponent_BooleanProperties()
+	 * @model mapType="soundgates.EStringToEBooleanObject<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EBooleanObject>"
+	 * @generated
+	 */
+	EMap<String, Boolean> getBooleanProperties();
+
 } // AtomicSoundComponent

@@ -4,25 +4,25 @@ package soundgates.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import soundgates.Link;
+import soundgates.Delegation;
 import soundgates.SoundgatesPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Link</b></em>'.
+ * An implementation of the model object '<em><b>Delegation</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
-public class LinkImpl extends ConnectionImpl implements Link {
+public class DelegationImpl extends ConnectionImpl implements Delegation {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LinkImpl() {
+	protected DelegationImpl() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public class LinkImpl extends ConnectionImpl implements Link {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return SoundgatesPackage.Literals.LINK;
+		return SoundgatesPackage.Literals.DELEGATION;
 	}
 
-} //LinkImpl
+} //DelegationImpl

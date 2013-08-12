@@ -30,8 +30,7 @@ import soundgates.SoundgatesPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link soundgates.impl.SoundComponentImpl#getInputPorts <em>Input Ports</em>}</li>
- *   <li>{@link soundgates.impl.SoundComponentImpl#getOutputPorts <em>Output Ports</em>}</li>
+ *   <li>{@link soundgates.impl.SoundComponentImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link soundgates.impl.SoundComponentImpl#getParentComponent <em>Parent Component</em>}</li>
  * </ul>
  * </p>
@@ -40,24 +39,14 @@ import soundgates.SoundgatesPackage;
  */
 public abstract class SoundComponentImpl extends NamedElementImpl implements SoundComponent {
 	/**
-	 * The cached value of the '{@link #getInputPorts() <em>Input Ports</em>}' containment reference list.
+	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getInputPorts()
+	 * @see #getPorts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Port> inputPorts;
-
-	/**
-	 * The cached value of the '{@link #getOutputPorts() <em>Output Ports</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOutputPorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Port> outputPorts;
+	protected EList<Port> ports;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -83,23 +72,11 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Port> getInputPorts() {
-		if (inputPorts == null) {
-			inputPorts = new EObjectContainmentWithInverseEList<Port>(Port.class, this, SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS, SoundgatesPackage.PORT__RECEIVING_COMPONENT);
+	public EList<Port> getPorts() {
+		if (ports == null) {
+			ports = new EObjectContainmentWithInverseEList<Port>(Port.class, this, SoundgatesPackage.SOUND_COMPONENT__PORTS, SoundgatesPackage.PORT__COMPONENT);
 		}
-		return inputPorts;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<Port> getOutputPorts() {
-		if (outputPorts == null) {
-			outputPorts = new EObjectContainmentWithInverseEList<Port>(Port.class, this, SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS, SoundgatesPackage.PORT__SENDING_COMPONENT);
-		}
-		return outputPorts;
+		return ports;
 	}
 
 	/**
@@ -152,10 +129,8 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputPorts()).basicAdd(otherEnd, msgs);
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputPorts()).basicAdd(otherEnd, msgs);
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getPorts()).basicAdd(otherEnd, msgs);
 			case SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT:
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
@@ -172,10 +147,8 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-				return ((InternalEList<?>)getInputPorts()).basicRemove(otherEnd, msgs);
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
-				return ((InternalEList<?>)getOutputPorts()).basicRemove(otherEnd, msgs);
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
+				return ((InternalEList<?>)getPorts()).basicRemove(otherEnd, msgs);
 			case SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT:
 				return basicSetParentComponent(null, msgs);
 		}
@@ -204,10 +177,8 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-				return getInputPorts();
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
-				return getOutputPorts();
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
+				return getPorts();
 			case SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT:
 				return getParentComponent();
 		}
@@ -223,13 +194,9 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-				getInputPorts().clear();
-				getInputPorts().addAll((Collection<? extends Port>)newValue);
-				return;
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
-				getOutputPorts().clear();
-				getOutputPorts().addAll((Collection<? extends Port>)newValue);
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
+				getPorts().clear();
+				getPorts().addAll((Collection<? extends Port>)newValue);
 				return;
 			case SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT:
 				setParentComponent((CompositeSoundComponent)newValue);
@@ -246,11 +213,8 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-				getInputPorts().clear();
-				return;
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
-				getOutputPorts().clear();
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
+				getPorts().clear();
 				return;
 			case SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT:
 				setParentComponent((CompositeSoundComponent)null);
@@ -267,10 +231,8 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-				return inputPorts != null && !inputPorts.isEmpty();
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
-				return outputPorts != null && !outputPorts.isEmpty();
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
+				return ports != null && !ports.isEmpty();
 			case SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT:
 				return getParentComponent() != null;
 		}

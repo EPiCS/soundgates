@@ -18,12 +18,13 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link soundgates.CompositeSoundComponent#getEmbeddedComponents <em>Embedded Components</em>}</li>
  *   <li>{@link soundgates.CompositeSoundComponent#getLinks <em>Links</em>}</li>
+ *   <li>{@link soundgates.CompositeSoundComponent#getDelegations <em>Delegations</em>}</li>
+ *   <li>{@link soundgates.CompositeSoundComponent#getConnections <em>Connections</em>}</li>
  * </ul>
  * </p>
  *
  * @see soundgates.SoundgatesPackage#getCompositeSoundComponent()
- * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='RightLinksOnPorts'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL RightLinksOnPorts='(self.inputPorts->forAll(if (not (outgoingLink=null)) then if (outgoingLink.parentComponent=self) then true else false endif else true endif)) and \r\n(self.outputPorts->forAll(if (not (incomingLink=null)) then if (incomingLink.parentComponent=self) then true else false endif else true endif))'"
+ * @model
  * @generated
  */
 public interface CompositeSoundComponent extends SoundComponent {
@@ -48,7 +49,6 @@ public interface CompositeSoundComponent extends SoundComponent {
 	/**
 	 * Returns the value of the '<em><b>Links</b></em>' containment reference list.
 	 * The list contents are of type {@link soundgates.Link}.
-	 * It is bidirectional and its opposite is '{@link soundgates.Link#getParentComponent <em>Parent Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Links</em>' containment reference list isn't clear,
@@ -57,10 +57,41 @@ public interface CompositeSoundComponent extends SoundComponent {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Links</em>' containment reference list.
 	 * @see soundgates.SoundgatesPackage#getCompositeSoundComponent_Links()
-	 * @see soundgates.Link#getParentComponent
-	 * @model opposite="parentComponent" containment="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<Link> getLinks();
+
+	/**
+	 * Returns the value of the '<em><b>Delegations</b></em>' containment reference list.
+	 * The list contents are of type {@link soundgates.Delegation}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Delegations</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Delegations</em>' containment reference list.
+	 * @see soundgates.SoundgatesPackage#getCompositeSoundComponent_Delegations()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Delegation> getDelegations();
+
+	/**
+	 * Returns the value of the '<em><b>Connections</b></em>' reference list.
+	 * The list contents are of type {@link soundgates.Connection}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Connections</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Connections</em>' reference list.
+	 * @see soundgates.SoundgatesPackage#getCompositeSoundComponent_Connections()
+	 * @model
+	 * @generated
+	 */
+	EList<Connection> getConnections();
 
 } // CompositeSoundComponent
