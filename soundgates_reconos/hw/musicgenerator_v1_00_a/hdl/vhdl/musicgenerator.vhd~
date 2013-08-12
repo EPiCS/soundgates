@@ -69,10 +69,11 @@ architecture IMP of musicgenerator is
 	signal serial_data      : std_logic;
 	signal freq_in		: std_logic_vector(31 downto 0);
 	--signal uclk : std_logic;
-	type STATE_TYPE is (STATE_GET_INIT, STATE_WRITE_MBOX ,STATE_EXIT);
+	type STATE_TYPE is (STATE_GET_INIT, STATE_WRITE_MBOX, STATE_READ_MBOX, STATE_EXIT);
 	signal state    : STATE_TYPE;
 	-- ReconOS stuff
-	constant MBOX_COMM      : std_logic_vector(C_FSL_WIDTH-1 downto 0) := x"00000000";
+	constant MBOX_READFREQ      : std_logic_vector(C_FSL_WIDTH-1 downto 0) := x"00000000";
+	constant MBOX_DEBUG         : std_logic_vector(C_FSL_WIDTH-1 downto 0) := x"00000001";
 	signal frequency        : std_logic_vector(C_FSL_WIDTH-1 downto 0);
 	signal i_osif   : i_osif_t;
 	signal o_osif   : o_osif_t;
@@ -179,10 +180,16 @@ begin
 					--answer <= message;
 				end if;
 				
-   			when STATE_WRITE_MBOX =>				
-				osif_mbox_put(i_osif, o_osif, MBOX_COMM, frequency, ignore, done);
+   			when STATE_WRITE_MBOX =>		
+				osif_mbox_put(i_osif, o_osif, MBOX_GET, frequency, ignore, done);
   			  	if done then
-  			  		state <= STATE_EXIT;
+  			  		state <= STATE_READ_MBOX;
+  			  	end if;	
+  			  	
+  			when STATE_READ_MBOX =>	
+				osif_mbox_get(i_osif, o_osif, MBOX_PUT, frequency, done);
+  			  	if done then
+  			  		state <= STATE_WRITE_MBOX;
   			  	end if;	
 					       
 			when STATE_EXIT =>
@@ -195,7 +202,7 @@ begin
 sample_l_int <= sample_in;
 sample_r_int <= sample_in;
 
-freq_in <= frequency;  --TODO!!!
+freq_in <= frequency;
 mclk <= master_clk;
 ws <=  word_select;
 sck <= serial_clk;

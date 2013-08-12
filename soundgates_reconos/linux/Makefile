@@ -1,7 +1,7 @@
 CFLAGS=-O3 -g -Wall
 CC=microblaze-unknown-linux-gnu-gcc
 TARGET=soundgates
-APPLICATION_SRC=soundgates.c
+APPLICATION_SRC=notes.h soundgates.c
 RECONOS := $(shell echo $(RECONOS))
 
 all: $(TARGET)
