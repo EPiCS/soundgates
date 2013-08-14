@@ -34,7 +34,7 @@
           <labelMappings
               xsi:type="gmfmap:FeatureLabelMapping">
             <diagramLabel
-                href="soundgates.gmfgraph#AtomicSoundComponentName"/>
+                href="soundgates.gmfgraph#PortName"/>
             <features
                 href="soundgates.ecore#//NamedElement/name"/>
           </labelMappings>

@@ -1,91 +1,254 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gmfgen:GenEditorGenerator xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gmfgen="http://www.eclipse.org/gmf/2009/GenModel">
-  <diagram visualID="1000" editPartClassName="PatchEditPart" itemSemanticEditPolicyClassName="PatchItemSemanticEditPolicy" canonicalEditPolicyClassName="PatchCanonicalEditPolicy" iconProviderPriority="Low" validationProviderPriority="Low">
-    <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Diagram"/>
-    <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="PatchEditHelper"/>
-    <viewmap xsi:type="gmfgen:FigureViewmap" figureQualifiedClassName="org.eclipse.draw2d.FreeformLayer"/>
-    <domainDiagramElement href="soundgates.genmodel#//soundgates/Patch"/>
-    <childNodes visualID="3001" editPartClassName="PortEditPart" itemSemanticEditPolicyClassName="PortItemSemanticEditPolicy" canonicalEditPolicyClassName="PortCanonicalEditPolicy" graphicalNodeEditPolicyClassName="PortGraphicalNodeEditPolicy" createCommandClassName="PortCreateCommand" containers="//@diagram/@topLevelNodes.0 //@diagram/@topLevelNodes.1">
-      <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
-      <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="PortEditHelper"/>
-      <viewmap xsi:type="gmfgen:InnerClassViewmap" layoutType="FLOW_LAYOUT" className="PortFigure" classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class PortFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigurePortNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public PortFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.FlowLayout layoutThis = new org.eclipse.draw2d.FlowLayout();&#xA;&#x9;layoutThis.setStretchMinorAxis(false);&#xA;&#x9;layoutThis.setMinorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#xA;&#x9;layoutThis.setMajorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#x9;layoutThis.setMajorSpacing(5);&#xA;&#x9;layoutThis.setMinorSpacing(5);&#xA;&#x9;layoutThis.setHorizontal(true);&#xA;&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigurePortNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigurePortNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigurePortNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigurePortNameFigure() {&#xA;&#x9;&#x9;return fFigurePortNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
+<gmfgen:GenEditorGenerator
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gmfgen="http://www.eclipse.org/gmf/2009/GenModel">
+  <diagram
+      visualID="1000"
+      editPartClassName="PatchEditPart"
+      itemSemanticEditPolicyClassName="PatchItemSemanticEditPolicy"
+      canonicalEditPolicyClassName="PatchCanonicalEditPolicy"
+      iconProviderPriority="Low"
+      validationProviderPriority="Low">
+    <diagramRunTimeClass
+        href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Diagram"/>
+    <elementType
+        xsi:type="gmfgen:MetamodelType"
+        editHelperClassName="PatchEditHelper"/>
+    <viewmap
+        xsi:type="gmfgen:FigureViewmap"
+        figureQualifiedClassName="org.eclipse.draw2d.FreeformLayer"/>
+    <domainDiagramElement
+        href="soundgates.genmodel#//soundgates/Patch"/>
+    <childNodes
+        visualID="3001"
+        editPartClassName="PortEditPart"
+        itemSemanticEditPolicyClassName="PortItemSemanticEditPolicy"
+        notationViewFactoryClassName="PortViewFactory"
+        canonicalEditPolicyClassName="PortCanonicalEditPolicy"
+        graphicalNodeEditPolicyClassName="PortGraphicalNodeEditPolicy"
+        createCommandClassName="PortCreateCommand"
+        containers="//@diagram/@topLevelNodes.0 //@diagram/@topLevelNodes.1">
+      <diagramRunTimeClass
+          href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+      <elementType
+          xsi:type="gmfgen:MetamodelType"
+          editHelperClassName="PortEditHelper"/>
+      <viewmap
+          xsi:type="gmfgen:InnerClassViewmap"
+          className="PortFigure"
+          classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class PortFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigurePortNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public PortFigure() {&#xA;&#x9;&#x9;this.setLayoutManager(new org.eclipse.draw2d.StackLayout());&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigurePortNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigurePortNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigurePortNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigurePortNameFigure() {&#xA;&#x9;&#x9;return fFigurePortNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
       <modelFacet>
-        <metaClass href="soundgates.genmodel#//soundgates/Port"/>
-        <containmentMetaFeature href="soundgates.genmodel#//soundgates/SoundComponent/ports"/>
-        <childMetaFeature href="soundgates.genmodel#//soundgates/SoundComponent/ports"/>
+        <metaClass
+            href="soundgates.genmodel#//soundgates/Port"/>
+        <containmentMetaFeature
+            href="soundgates.genmodel#//soundgates/SoundComponent/ports"/>
+        <childMetaFeature
+            href="soundgates.genmodel#//soundgates/SoundComponent/ports"/>
       </modelFacet>
-      <labels visualID="5001" editPartClassName="PortNameEditPart" itemSemanticEditPolicyClassName="PortNameItemSemanticEditPolicy" elementIcon="true">
-        <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
-        <viewmap xsi:type="gmfgen:ParentAssignedViewmap" getterName="getFigureAtomicSoundComponentNameFigure" figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel"/>
-        <modelFacet xsi:type="gmfgen:FeatureLabelModelFacet" parser="//@labelParsers/@implementations.0">
-          <metaFeatures href="soundgates.genmodel#//soundgates/NamedElement/name"/>
+      <labels
+          visualID="5001"
+          editPartClassName="PortNameEditPart"
+          itemSemanticEditPolicyClassName="PortNameItemSemanticEditPolicy"
+          notationViewFactoryClassName="PortNameViewFactory"
+          elementIcon="true">
+        <diagramRunTimeClass
+            href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+        <viewmap
+            xsi:type="gmfgen:ParentAssignedViewmap"
+            getterName="getFigurePortNameFigure"
+            figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel"/>
+        <modelFacet
+            xsi:type="gmfgen:FeatureLabelModelFacet"
+            parser="//@labelParsers/@implementations.0">
+          <metaFeatures
+              href="soundgates.genmodel#//soundgates/NamedElement/name"/>
         </modelFacet>
       </labels>
     </childNodes>
-    <topLevelNodes visualID="2001" editPartClassName="AtomicSoundComponentEditPart" itemSemanticEditPolicyClassName="AtomicSoundComponentItemSemanticEditPolicy" canonicalEditPolicyClassName="AtomicSoundComponentCanonicalEditPolicy" childNodes="//@diagram/@childNodes.0" graphicalNodeEditPolicyClassName="AtomicSoundComponentGraphicalNodeEditPolicy" createCommandClassName="AtomicSoundComponentCreateCommand">
-      <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
-      <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="AtomicSoundComponentEditHelper"/>
-      <viewmap xsi:type="gmfgen:InnerClassViewmap" layoutType="FLOW_LAYOUT" className="AtomicSoundComponentFigure" classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class AtomicSoundComponentFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigureAtomicSoundComponentNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public AtomicSoundComponentFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.FlowLayout layoutThis = new org.eclipse.draw2d.FlowLayout();&#xA;&#x9;layoutThis.setStretchMinorAxis(false);&#xA;&#x9;layoutThis.setMinorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#xA;&#x9;layoutThis.setMajorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#x9;layoutThis.setMajorSpacing(5);&#xA;&#x9;layoutThis.setMinorSpacing(5);&#xA;&#x9;layoutThis.setHorizontal(true);&#xA;&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigureAtomicSoundComponentNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigureAtomicSoundComponentNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigureAtomicSoundComponentNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigureAtomicSoundComponentNameFigure() {&#xA;&#x9;&#x9;return fFigureAtomicSoundComponentNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
+    <topLevelNodes
+        visualID="2001"
+        editPartClassName="AtomicSoundComponentEditPart"
+        itemSemanticEditPolicyClassName="AtomicSoundComponentItemSemanticEditPolicy"
+        notationViewFactoryClassName="AtomicSoundComponentViewFactory"
+        canonicalEditPolicyClassName="AtomicSoundComponentCanonicalEditPolicy"
+        childNodes="//@diagram/@childNodes.0"
+        graphicalNodeEditPolicyClassName="AtomicSoundComponentGraphicalNodeEditPolicy"
+        createCommandClassName="AtomicSoundComponentCreateCommand">
+      <diagramRunTimeClass
+          href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+      <elementType
+          xsi:type="gmfgen:MetamodelType"
+          editHelperClassName="AtomicSoundComponentEditHelper"/>
+      <viewmap
+          xsi:type="gmfgen:InnerClassViewmap"
+          className="AtomicSoundComponentFigure"
+          classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class AtomicSoundComponentFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigureAtomicSoundComponentNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public AtomicSoundComponentFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.BorderLayout layoutThis = new org.eclipse.draw2d.BorderLayout();&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigureAtomicSoundComponentNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigureAtomicSoundComponentNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigureAtomicSoundComponentNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigureAtomicSoundComponentNameFigure() {&#xA;&#x9;&#x9;return fFigureAtomicSoundComponentNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
       <modelFacet>
-        <metaClass href="soundgates.genmodel#//soundgates/AtomicSoundComponent"/>
-        <containmentMetaFeature href="soundgates.genmodel#//soundgates/Patch/elements"/>
-        <childMetaFeature href="soundgates.genmodel#//soundgates/Patch/elements"/>
+        <metaClass
+            href="soundgates.genmodel#//soundgates/AtomicSoundComponent"/>
+        <containmentMetaFeature
+            href="soundgates.genmodel#//soundgates/Patch/elements"/>
+        <childMetaFeature
+            href="soundgates.genmodel#//soundgates/Patch/elements"/>
       </modelFacet>
-      <labels visualID="5002" editPartClassName="AtomicSoundComponentNameEditPart" itemSemanticEditPolicyClassName="AtomicSoundComponentNameItemSemanticEditPolicy" elementIcon="true">
-        <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
-        <viewmap xsi:type="gmfgen:ParentAssignedViewmap" getterName="getFigureAtomicSoundComponentNameFigure" figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel"/>
-        <modelFacet xsi:type="gmfgen:FeatureLabelModelFacet" parser="//@labelParsers/@implementations.0">
-          <metaFeatures href="soundgates.genmodel#//soundgates/NamedElement/name"/>
+      <labels
+          visualID="5002"
+          editPartClassName="AtomicSoundComponentNameEditPart"
+          itemSemanticEditPolicyClassName="AtomicSoundComponentNameItemSemanticEditPolicy"
+          notationViewFactoryClassName="AtomicSoundComponentNameViewFactory"
+          elementIcon="true">
+        <diagramRunTimeClass
+            href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+        <viewmap
+            xsi:type="gmfgen:ParentAssignedViewmap"
+            getterName="getFigureAtomicSoundComponentNameFigure"
+            figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel"/>
+        <modelFacet
+            xsi:type="gmfgen:FeatureLabelModelFacet"
+            parser="//@labelParsers/@implementations.0">
+          <metaFeatures
+              href="soundgates.genmodel#//soundgates/NamedElement/name"/>
         </modelFacet>
       </labels>
     </topLevelNodes>
-    <topLevelNodes visualID="2002" editPartClassName="CompositeSoundComponentEditPart" itemSemanticEditPolicyClassName="CompositeSoundComponentItemSemanticEditPolicy" canonicalEditPolicyClassName="CompositeSoundComponentCanonicalEditPolicy" childNodes="//@diagram/@childNodes.0" graphicalNodeEditPolicyClassName="CompositeSoundComponentGraphicalNodeEditPolicy" createCommandClassName="CompositeSoundComponentCreateCommand">
-      <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
-      <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="CompositeSoundComponentEditHelper"/>
-      <viewmap xsi:type="gmfgen:InnerClassViewmap" layoutType="FLOW_LAYOUT" className="CompositeSoundComponentFigure" classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class CompositeSoundComponentFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigureCompositeSoundComponentNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public CompositeSoundComponentFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.FlowLayout layoutThis = new org.eclipse.draw2d.FlowLayout();&#xA;&#x9;layoutThis.setStretchMinorAxis(false);&#xA;&#x9;layoutThis.setMinorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#xA;&#x9;layoutThis.setMajorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#x9;layoutThis.setMajorSpacing(5);&#xA;&#x9;layoutThis.setMinorSpacing(5);&#xA;&#x9;layoutThis.setHorizontal(true);&#xA;&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigureCompositeSoundComponentNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigureCompositeSoundComponentNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigureCompositeSoundComponentNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigureCompositeSoundComponentNameFigure() {&#xA;&#x9;&#x9;return fFigureCompositeSoundComponentNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
+    <topLevelNodes
+        visualID="2002"
+        editPartClassName="CompositeSoundComponentEditPart"
+        itemSemanticEditPolicyClassName="CompositeSoundComponentItemSemanticEditPolicy"
+        notationViewFactoryClassName="CompositeSoundComponentViewFactory"
+        canonicalEditPolicyClassName="CompositeSoundComponentCanonicalEditPolicy"
+        childNodes="//@diagram/@childNodes.0"
+        graphicalNodeEditPolicyClassName="CompositeSoundComponentGraphicalNodeEditPolicy"
+        createCommandClassName="CompositeSoundComponentCreateCommand">
+      <diagramRunTimeClass
+          href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+      <elementType
+          xsi:type="gmfgen:MetamodelType"
+          editHelperClassName="CompositeSoundComponentEditHelper"/>
+      <viewmap
+          xsi:type="gmfgen:InnerClassViewmap"
+          layoutType="FLOW_LAYOUT"
+          className="CompositeSoundComponentFigure"
+          classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class CompositeSoundComponentFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigureCompositeSoundComponentNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public CompositeSoundComponentFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.FlowLayout layoutThis = new org.eclipse.draw2d.FlowLayout();&#xA;&#x9;layoutThis.setStretchMinorAxis(false);&#xA;&#x9;layoutThis.setMinorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#xA;&#x9;layoutThis.setMajorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#x9;layoutThis.setMajorSpacing(5);&#xA;&#x9;layoutThis.setMinorSpacing(5);&#xA;&#x9;layoutThis.setHorizontal(true);&#xA;&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigureCompositeSoundComponentNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigureCompositeSoundComponentNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigureCompositeSoundComponentNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigureCompositeSoundComponentNameFigure() {&#xA;&#x9;&#x9;return fFigureCompositeSoundComponentNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
       <modelFacet>
-        <metaClass href="soundgates.genmodel#//soundgates/CompositeSoundComponent"/>
-        <containmentMetaFeature href="soundgates.genmodel#//soundgates/Patch/elements"/>
-        <childMetaFeature href="soundgates.genmodel#//soundgates/Patch/elements"/>
+        <metaClass
+            href="soundgates.genmodel#//soundgates/CompositeSoundComponent"/>
+        <containmentMetaFeature
+            href="soundgates.genmodel#//soundgates/Patch/elements"/>
+        <childMetaFeature
+            href="soundgates.genmodel#//soundgates/Patch/elements"/>
       </modelFacet>
-      <labels visualID="5003" editPartClassName="CompositeSoundComponentNameEditPart" itemSemanticEditPolicyClassName="CompositeSoundComponentNameItemSemanticEditPolicy" elementIcon="true">
-        <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
-        <viewmap xsi:type="gmfgen:ParentAssignedViewmap" getterName="getFigureCompositeSoundComponentNameFigure" figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel"/>
-        <modelFacet xsi:type="gmfgen:FeatureLabelModelFacet" parser="//@labelParsers/@implementations.0">
-          <metaFeatures href="soundgates.genmodel#//soundgates/NamedElement/name"/>
+      <labels
+          visualID="5003"
+          editPartClassName="CompositeSoundComponentNameEditPart"
+          itemSemanticEditPolicyClassName="CompositeSoundComponentNameItemSemanticEditPolicy"
+          notationViewFactoryClassName="CompositeSoundComponentNameViewFactory"
+          elementIcon="true">
+        <diagramRunTimeClass
+            href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+        <viewmap
+            xsi:type="gmfgen:ParentAssignedViewmap"
+            getterName="getFigureCompositeSoundComponentNameFigure"
+            figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel"/>
+        <modelFacet
+            xsi:type="gmfgen:FeatureLabelModelFacet"
+            parser="//@labelParsers/@implementations.0">
+          <metaFeatures
+              href="soundgates.genmodel#//soundgates/NamedElement/name"/>
         </modelFacet>
       </labels>
     </topLevelNodes>
-    <links visualID="4001" editPartClassName="LinkEditPart" itemSemanticEditPolicyClassName="LinkItemSemanticEditPolicy" createCommandClassName="LinkCreateCommand" reorientCommandClassName="LinkReorientCommand">
-      <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
-      <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="LinkEditHelper"/>
-      <viewmap xsi:type="gmfgen:FigureViewmap" figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.PolylineConnectionEx"/>
-      <modelFacet xsi:type="gmfgen:TypeLinkModelFacet">
-        <metaClass href="soundgates.genmodel#//soundgates/Link"/>
-        <containmentMetaFeature href="soundgates.genmodel#//soundgates/Patch/elements"/>
-        <childMetaFeature href="soundgates.genmodel#//soundgates/Patch/elements"/>
-        <sourceMetaFeature href="soundgates.genmodel#//soundgates/Connection/source"/>
-        <targetMetaFeature href="soundgates.genmodel#//soundgates/Connection/target"/>
+    <links
+        visualID="4001"
+        editPartClassName="LinkEditPart"
+        itemSemanticEditPolicyClassName="LinkItemSemanticEditPolicy"
+        notationViewFactoryClassName="LinkViewFactory"
+        createCommandClassName="LinkCreateCommand"
+        reorientCommandClassName="LinkReorientCommand">
+      <diagramRunTimeClass
+          href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
+      <elementType
+          xsi:type="gmfgen:MetamodelType"
+          editHelperClassName="LinkEditHelper"/>
+      <viewmap
+          xsi:type="gmfgen:FigureViewmap"
+          figureQualifiedClassName="org.eclipse.gmf.runtime.draw2d.ui.figures.PolylineConnectionEx"/>
+      <modelFacet
+          xsi:type="gmfgen:TypeLinkModelFacet">
+        <metaClass
+            href="soundgates.genmodel#//soundgates/Link"/>
+        <containmentMetaFeature
+            href="soundgates.genmodel#//soundgates/Patch/elements"/>
+        <childMetaFeature
+            href="soundgates.genmodel#//soundgates/Patch/elements"/>
+        <sourceMetaFeature
+            href="soundgates.genmodel#//soundgates/Connection/source"/>
+        <targetMetaFeature
+            href="soundgates.genmodel#//soundgates/Connection/target"/>
       </modelFacet>
     </links>
     <palette>
-      <groups title="Components">
-        <entries xsi:type="gmfgen:ToolEntry" title="AtomicSoundComponent" description="Create new AtomicSoundComponent" genNodes="//@diagram/@topLevelNodes.0"/>
-        <entries xsi:type="gmfgen:ToolEntry" title="CompositeSoundComponent" description="Create new CompositeSoundComponent" genNodes="//@diagram/@topLevelNodes.1"/>
+      <groups
+          title="Components">
+        <entries
+            xsi:type="gmfgen:ToolEntry"
+            title="AtomicSoundComponent"
+            description="Create new AtomicSoundComponent"
+            genNodes="//@diagram/@topLevelNodes.0"/>
+        <entries
+            xsi:type="gmfgen:ToolEntry"
+            title="CompositeSoundComponent"
+            description="Create new CompositeSoundComponent"
+            genNodes="//@diagram/@topLevelNodes.1"/>
       </groups>
-      <groups title="Ports">
-        <entries xsi:type="gmfgen:ToolEntry" title="Port" description="Create new Port" genNodes="//@diagram/@childNodes.0"/>
+      <groups
+          title="Ports">
+        <entries
+            xsi:type="gmfgen:ToolEntry"
+            title="Port"
+            description="Create new Port"
+            genNodes="//@diagram/@childNodes.0"/>
       </groups>
-      <groups title="Connections" description="">
-        <entries xsi:type="gmfgen:ToolEntry" title="Link" description="Create new Link" genLinks="//@diagram/@links.0"/>
-        <entries xsi:type="gmfgen:ToolEntry" title="Delegation" description="Create new Delegation"/>
+      <groups
+          title="Connections"
+          description="">
+        <entries
+            xsi:type="gmfgen:ToolEntry"
+            title="Link"
+            description="Create new Link"
+            genLinks="//@diagram/@links.0"/>
+        <entries
+            xsi:type="gmfgen:ToolEntry"
+            title="Delegation"
+            description="Create new Delegation"/>
       </groups>
     </palette>
-    <preferencePages xsi:type="gmfgen:GenStandardPreferencePage" iD="Soundgates.diagram.general" name="Soundgates Diagram">
-      <children xsi:type="gmfgen:GenStandardPreferencePage" iD="Soundgates.diagram.appearance" name="Appearance" kind="Appearance"/>
-      <children xsi:type="gmfgen:GenStandardPreferencePage" iD="Soundgates.diagram.connections" name="Connections" kind="Connections"/>
-      <children xsi:type="gmfgen:GenStandardPreferencePage" iD="Soundgates.diagram.printing" name="Printing" kind="Printing"/>
-      <children xsi:type="gmfgen:GenStandardPreferencePage" iD="Soundgates.diagram.rulersAndGrid" name="Rulers And Grid" kind="RulersAndGrid"/>
+    <preferencePages
+        xsi:type="gmfgen:GenStandardPreferencePage"
+        iD="Soundgates.diagram.general"
+        name="Soundgates Diagram">
+      <children
+          xsi:type="gmfgen:GenStandardPreferencePage"
+          iD="Soundgates.diagram.appearance"
+          name="Appearance"
+          kind="Appearance"/>
+      <children
+          xsi:type="gmfgen:GenStandardPreferencePage"
+          iD="Soundgates.diagram.connections"
+          name="Connections"
+          kind="Connections"/>
+      <children
+          xsi:type="gmfgen:GenStandardPreferencePage"
+          iD="Soundgates.diagram.printing"
+          name="Printing"
+          kind="Printing"/>
+      <children
+          xsi:type="gmfgen:GenStandardPreferencePage"
+          iD="Soundgates.diagram.rulersAndGrid"
+          name="Rulers And Grid"
+          kind="RulersAndGrid"/>
     </preferencePages>
   </diagram>
   <plugin>
@@ -95,34 +258,81 @@
   </plugin>
   <editor/>
   <navigator>
-    <childReferences child="//@diagram"/>
-    <childReferences parent="//@diagram/@topLevelNodes.0" child="//@diagram/@childNodes.0"/>
-    <childReferences parent="//@diagram" child="//@diagram/@topLevelNodes.0"/>
-    <childReferences parent="//@diagram/@topLevelNodes.1" child="//@diagram/@childNodes.0"/>
-    <childReferences parent="//@diagram" child="//@diagram/@topLevelNodes.1"/>
-    <childReferences parent="//@diagram" child="//@diagram/@links.0" groupName="links" groupIcon="icons/linksNavigatorGroup.gif"/>
-    <childReferences parent="//@diagram/@links.0" child="//@diagram/@childNodes.0" referenceType="out_target" groupName="target" groupIcon="icons/linkTargetNavigatorGroup.gif"/>
-    <childReferences parent="//@diagram/@childNodes.0" child="//@diagram/@links.0" referenceType="in_source" groupName="incoming links" groupIcon="icons/incomingLinksNavigatorGroup.gif"/>
-    <childReferences parent="//@diagram/@links.0" child="//@diagram/@childNodes.0" referenceType="in_source" groupName="source" groupIcon="icons/linkSourceNavigatorGroup.gif"/>
-    <childReferences parent="//@diagram/@childNodes.0" child="//@diagram/@links.0" referenceType="out_target" groupName="outgoing links" groupIcon="icons/outgoingLinksNavigatorGroup.gif"/>
+    <childReferences
+        child="//@diagram"/>
+    <childReferences
+        parent="//@diagram/@topLevelNodes.0"
+        child="//@diagram/@childNodes.0"/>
+    <childReferences
+        parent="//@diagram"
+        child="//@diagram/@topLevelNodes.0"/>
+    <childReferences
+        parent="//@diagram/@topLevelNodes.1"
+        child="//@diagram/@childNodes.0"/>
+    <childReferences
+        parent="//@diagram"
+        child="//@diagram/@topLevelNodes.1"/>
+    <childReferences
+        parent="//@diagram"
+        child="//@diagram/@links.0"
+        groupName="links"
+        groupIcon="icons/linksNavigatorGroup.gif"/>
+    <childReferences
+        parent="//@diagram/@links.0"
+        child="//@diagram/@childNodes.0"
+        referenceType="out_target"
+        groupName="target"
+        groupIcon="icons/linkTargetNavigatorGroup.gif"/>
+    <childReferences
+        parent="//@diagram/@childNodes.0"
+        child="//@diagram/@links.0"
+        referenceType="in_source"
+        groupName="incoming links"
+        groupIcon="icons/incomingLinksNavigatorGroup.gif"/>
+    <childReferences
+        parent="//@diagram/@links.0"
+        child="//@diagram/@childNodes.0"
+        referenceType="in_source"
+        groupName="source"
+        groupIcon="icons/linkSourceNavigatorGroup.gif"/>
+    <childReferences
+        parent="//@diagram/@childNodes.0"
+        child="//@diagram/@links.0"
+        referenceType="out_target"
+        groupName="outgoing links"
+        groupIcon="icons/outgoingLinksNavigatorGroup.gif"/>
   </navigator>
   <diagramUpdater/>
   <propertySheet>
-    <tabs xsi:type="gmfgen:GenStandardPropertyTab" iD="appearance"/>
-    <tabs xsi:type="gmfgen:GenStandardPropertyTab" iD="diagram"/>
-    <tabs xsi:type="gmfgen:GenCustomPropertyTab" iD="domain" label="Core">
-      <filter xsi:type="gmfgen:TypeTabFilter">
+    <tabs
+        xsi:type="gmfgen:GenStandardPropertyTab"
+        iD="appearance"/>
+    <tabs
+        xsi:type="gmfgen:GenStandardPropertyTab"
+        iD="diagram"/>
+    <tabs
+        xsi:type="gmfgen:GenCustomPropertyTab"
+        iD="domain"
+        label="Core">
+      <filter
+          xsi:type="gmfgen:TypeTabFilter">
         <types>org.eclipse.gmf.runtime.notation.View</types>
         <types>org.eclipse.gef.EditPart</types>
         <generatedTypes>abstractNavigatorItem</generatedTypes>
       </filter>
     </tabs>
   </propertySheet>
-  <domainGenModel href="soundgates.genmodel#/"/>
-  <labelParsers extensibleViaService="true">
-    <implementations xsi:type="gmfgen:PredefinedParser" uses="//@diagram/@childNodes.0/@labels.0/@modelFacet //@diagram/@topLevelNodes.0/@labels.0/@modelFacet //@diagram/@topLevelNodes.1/@labels.0/@modelFacet"/>
+  <domainGenModel
+      href="soundgates.genmodel#/"/>
+  <labelParsers
+      extensibleViaService="true">
+    <implementations
+        xsi:type="gmfgen:PredefinedParser"
+        uses="//@diagram/@childNodes.0/@labels.0/@modelFacet //@diagram/@topLevelNodes.0/@labels.0/@modelFacet //@diagram/@topLevelNodes.1/@labels.0/@modelFacet"/>
   </labelParsers>
-  <contextMenus context="//@diagram">
-    <items xsi:type="gmfgen:LoadResourceAction"/>
+  <contextMenus
+      context="//@diagram">
+    <items
+        xsi:type="gmfgen:LoadResourceAction"/>
   </contextMenus>
 </gmfgen:GenEditorGenerator>
