@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_DESIGN="ml605_linux_14.2_cache"
+BASE_DESIGN="base_design_ml605"
 #BASE_DESIGN="ml605_linux_14.2"
 HWTS="musicgenerator_v1_00_a"
 
@@ -13,7 +13,7 @@ fi
 
 
 # copy base design
-cp -r $RECONOS/designs/$BASE_DESIGN edk
+cp -r ../$BASE_DESIGN edk
 
 # link to ReconOS pcores
 mkdir edk/pcores
