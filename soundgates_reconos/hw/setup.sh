@@ -3,7 +3,7 @@
 BASE_DESIGN="base_design_ml605"
 #BASE_DESIGN="ml605_linux_14.2"
 HWTS="musicgenerator_v1_00_a"
-
+EDKDIR="edk"
 
 if [ -z "$RECONOS" ]
 then
@@ -11,6 +11,12 @@ then
 	exit 1
 fi
 
+if [ -d "$EDKDIR" ]; then
+  # Control will enter here if $DIRECTORY exists.
+  echo "Removing EDK folder ..."
+  rm -r edk/
+  ls -ahl
+fi
 
 # copy base design
 cp -r ../$BASE_DESIGN edk

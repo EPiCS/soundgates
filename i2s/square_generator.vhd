@@ -45,12 +45,12 @@ entity square_generator is
 end square_generator;
 
 architecture Behavioral of square_generator is
-	constant base_freq : integer := 440;
+	constant base_freq : integer := 4400;
 	constant square_frq_prescaler : UNSIGNED(31 downto 0) := to_unsigned(integer(real(RefClkFrequency)/real(base_freq)) / 2, 32);
 	
 	signal square_acc : UNSIGNED(31 downto 0) := (others => '0');
 	
-	constant square_low : std_logic_vector  := "100000000000000000000001"; 
+	constant square_low : std_logic_vector  := "100000000000000000000000"; 
 	constant square_high : std_logic_vector := "011111111111111111111111"; 
 	signal sample_out : std_logic_vector(23 downto 0) := square_low;
 	signal square_signal : std_logic_vector(23 downto 0) := square_low;
@@ -77,9 +77,9 @@ begin
 	sampler : process(clk, sample_req, square_signal)	
 	begin
 		if rising_edge(clk) then
-			if sample_req = '1' then
+			--if sample_req = '1' then
 				sample_out <= square_signal;
-			end if;
+			--end if;
 		end if;
 	end process;
 	
