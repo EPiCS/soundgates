@@ -265,7 +265,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 */
 	public SoundComponent getComponent() {
 		if (eContainerFeatureID() != SoundgatesPackage.PORT__COMPONENT) return null;
-		return (SoundComponent)eInternalContainer();
+		return (SoundComponent)eContainer();
 	}
 
 	/**

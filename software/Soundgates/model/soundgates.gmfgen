@@ -5,7 +5,7 @@
     <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="PatchEditHelper"/>
     <viewmap xsi:type="gmfgen:FigureViewmap" figureQualifiedClassName="org.eclipse.draw2d.FreeformLayer"/>
     <domainDiagramElement href="soundgates.genmodel#//soundgates/Patch"/>
-    <childNodes visualID="3001" editPartClassName="PortEditPart" itemSemanticEditPolicyClassName="PortItemSemanticEditPolicy" canonicalEditPolicyClassName="PortCanonicalEditPolicy" graphicalNodeEditPolicyClassName="PortGraphicalNodeEditPolicy" createCommandClassName="PortCreateCommand" containers="//@diagram/@topLevelNodes.0 //@diagram/@topLevelNodes.1">
+    <childNodes xsi:type="gmfgen:GenChildSideAffixedNode" visualID="3001" editPartClassName="PortEditPart" itemSemanticEditPolicyClassName="PortItemSemanticEditPolicy" canonicalEditPolicyClassName="PortCanonicalEditPolicy" graphicalNodeEditPolicyClassName="PortGraphicalNodeEditPolicy" createCommandClassName="PortCreateCommand" containers="//@diagram/@topLevelNodes.0" preferredSideName="WEST">
       <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
       <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="PortEditHelper"/>
       <viewmap xsi:type="gmfgen:InnerClassViewmap" layoutType="FLOW_LAYOUT" className="PortFigure" classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class PortFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigurePortNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public PortFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.FlowLayout layoutThis = new org.eclipse.draw2d.FlowLayout();&#xA;&#x9;layoutThis.setStretchMinorAxis(false);&#xA;&#x9;layoutThis.setMinorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#xA;&#x9;layoutThis.setMajorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#x9;layoutThis.setMajorSpacing(5);&#xA;&#x9;layoutThis.setMinorSpacing(5);&#xA;&#x9;layoutThis.setHorizontal(true);&#xA;&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigurePortNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigurePortNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigurePortNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigurePortNameFigure() {&#xA;&#x9;&#x9;return fFigurePortNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
@@ -39,7 +39,7 @@
         </modelFacet>
       </labels>
     </topLevelNodes>
-    <topLevelNodes visualID="2002" editPartClassName="CompositeSoundComponentEditPart" itemSemanticEditPolicyClassName="CompositeSoundComponentItemSemanticEditPolicy" canonicalEditPolicyClassName="CompositeSoundComponentCanonicalEditPolicy" childNodes="//@diagram/@childNodes.0" graphicalNodeEditPolicyClassName="CompositeSoundComponentGraphicalNodeEditPolicy" createCommandClassName="CompositeSoundComponentCreateCommand">
+    <topLevelNodes visualID="2002" editPartClassName="CompositeSoundComponentEditPart" itemSemanticEditPolicyClassName="CompositeSoundComponentItemSemanticEditPolicy" canonicalEditPolicyClassName="CompositeSoundComponentCanonicalEditPolicy" graphicalNodeEditPolicyClassName="CompositeSoundComponentGraphicalNodeEditPolicy" createCommandClassName="CompositeSoundComponentCreateCommand">
       <diagramRunTimeClass href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
       <elementType xsi:type="gmfgen:MetamodelType" editHelperClassName="CompositeSoundComponentEditHelper"/>
       <viewmap xsi:type="gmfgen:InnerClassViewmap" layoutType="FLOW_LAYOUT" className="CompositeSoundComponentFigure" classBody="&#xA;/**&#xA; * @generated&#xA; */&#xA;public class CompositeSoundComponentFigure extends org.eclipse.draw2d.RectangleFigure {&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel fFigureCompositeSoundComponentNameFigure; &#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public CompositeSoundComponentFigure() {&#xA;&#x9;&#x9;&#xA;&#x9;org.eclipse.draw2d.FlowLayout layoutThis = new org.eclipse.draw2d.FlowLayout();&#xA;&#x9;layoutThis.setStretchMinorAxis(false);&#xA;&#x9;layoutThis.setMinorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#xA;&#x9;layoutThis.setMajorAlignment(org.eclipse.draw2d.FlowLayout.ALIGN_LEFTTOP&#xA;);&#xA;&#x9;layoutThis.setMajorSpacing(5);&#xA;&#x9;layoutThis.setMinorSpacing(5);&#xA;&#x9;layoutThis.setHorizontal(true);&#xA;&#xA;&#x9;this.setLayoutManager(layoutThis);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;createContents();&#xA;&#x9;}&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;private void createContents(){&#xA;&#xA;&#xA;fFigureCompositeSoundComponentNameFigure = new org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel();&#xA;&#xA;fFigureCompositeSoundComponentNameFigure.setText(&quot;&lt;...>&quot;);&#xA;&#xA;this.add(fFigureCompositeSoundComponentNameFigure);&#xA;&#xA;&#xA;&#x9;}&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#x9;/**&#xA;&#x9; * @generated&#xA;&#x9; */&#xA;&#x9;public org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel getFigureCompositeSoundComponentNameFigure() {&#xA;&#x9;&#x9;return fFigureCompositeSoundComponentNameFigure;&#xA;&#x9;}&#xA;&#xA;&#xA;}&#xA;&#xA;"/>
@@ -74,7 +74,7 @@
         <entries xsi:type="gmfgen:ToolEntry" title="CompositeSoundComponent" description="Create new CompositeSoundComponent" genNodes="//@diagram/@topLevelNodes.1"/>
       </groups>
       <groups title="Ports">
-        <entries xsi:type="gmfgen:ToolEntry" title="Port" description="Create new Port" genNodes="//@diagram/@childNodes.0"/>
+        <entries xsi:type="gmfgen:ToolEntry" title="Port" description="Create new Port"/>
       </groups>
       <groups title="Connections" description="">
         <entries xsi:type="gmfgen:ToolEntry" title="Link" description="Create new Link" genLinks="//@diagram/@links.0"/>
@@ -96,7 +96,7 @@
   <editor/>
   <navigator>
     <childReferences child="//@diagram"/>
-    <childReferences parent="//@diagram/@topLevelNodes.0" child="//@diagram/@childNodes.0"/>
+    <childReferences parent="//@diagram/@topLevelNodes.0" child="//@diagram/@childNodes.0" groupIcon=""/>
     <childReferences parent="//@diagram" child="//@diagram/@topLevelNodes.0"/>
     <childReferences parent="//@diagram/@topLevelNodes.1" child="//@diagram/@childNodes.0"/>
     <childReferences parent="//@diagram" child="//@diagram/@topLevelNodes.1"/>

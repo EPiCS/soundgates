@@ -30,7 +30,7 @@ public class SoundgatesFactoryImpl extends EFactoryImpl implements SoundgatesFac
 	 */
 	public static SoundgatesFactory init() {
 		try {
-			SoundgatesFactory theSoundgatesFactory = (SoundgatesFactory)EPackage.Registry.INSTANCE.getEFactory(SoundgatesPackage.eNS_URI);
+			SoundgatesFactory theSoundgatesFactory = (SoundgatesFactory)EPackage.Registry.INSTANCE.getEFactory("soundgates"); 
 			if (theSoundgatesFactory != null) {
 				return theSoundgatesFactory;
 			}

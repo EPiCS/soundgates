@@ -86,7 +86,7 @@ public abstract class SoundComponentImpl extends NamedElementImpl implements Sou
 	 */
 	public CompositeSoundComponent getParentComponent() {
 		if (eContainerFeatureID() != SoundgatesPackage.SOUND_COMPONENT__PARENT_COMPONENT) return null;
-		return (CompositeSoundComponent)eInternalContainer();
+		return (CompositeSoundComponent)eContainer();
 	}
 
 	/**

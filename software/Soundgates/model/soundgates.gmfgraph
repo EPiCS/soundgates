@@ -1,147 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gmfgraph:Canvas
-    xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:gmfgraph="http://www.eclipse.org/gmf/2006/GraphicalDefinition"
-    name="soundgates">
-  <figures
-      name="Default">
-    <figures
-        xsi:type="gmfgraph:PolylineDecoration"
-        name="PortOutgoingConnectionTargetDecoration"/>
-    <figures
-        xsi:type="gmfgraph:PolylineDecoration"
-        name="PortIncomingConnectionTargetDecoration"/>
-    <figures
-        xsi:type="gmfgraph:PolylineDecoration"
-        name="CompositeSoundComponentLinksTargetDecoration"/>
-    <figures
-        xsi:type="gmfgraph:PolylineDecoration"
-        name="CompositeSoundComponentDelegationsTargetDecoration"/>
-    <descriptors
-        name="PortFigure">
-      <actualFigure
-          xsi:type="gmfgraph:Rectangle"
-          name="PortFigure">
-        <layout
-            xsi:type="gmfgraph:StackLayout"/>
-        <children
-            xsi:type="gmfgraph:Label"
-            name="PortNameFigure"
-            text="&lt;...>"/>
+<gmfgraph:Canvas xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gmfgraph="http://www.eclipse.org/gmf/2006/GraphicalDefinition" name="soundgates">
+  <figures name="Default">
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="PortOutgoingConnectionTargetDecoration"/>
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="PortIncomingConnectionTargetDecoration"/>
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="CompositeSoundComponentLinksTargetDecoration"/>
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="CompositeSoundComponentDelegationsTargetDecoration"/>
+    <descriptors name="PortFigure">
+      <actualFigure xsi:type="gmfgraph:Rectangle" name="PortFigure" fill="false">
+        <layout xsi:type="gmfgraph:StackLayout"/>
+        <children xsi:type="gmfgraph:Rectangle" name="inner">
+          <layout xsi:type="gmfgraph:StackLayout"/>
+          <children xsi:type="gmfgraph:Label" name="PortNameFigure" text="&lt;...>"/>
+        </children>
       </actualFigure>
-      <accessors
-          figure="//@figures.0/@descriptors.0/@actualFigure/@children.0"/>
+      <accessors figure="//@figures.0/@descriptors.0/@actualFigure/@children.0/@children.0"/>
     </descriptors>
-    <descriptors
-        name="PortOutgoingConnectionFigure">
-      <actualFigure
-          xsi:type="gmfgraph:PolylineConnection"
-          name="PortOutgoingConnectionFigure"
-          targetDecoration="//@figures.0/@figures.0"/>
+    <descriptors name="PortOutgoingConnectionFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="PortOutgoingConnectionFigure" targetDecoration="//@figures.0/@figures.0"/>
     </descriptors>
-    <descriptors
-        name="PortIncomingConnectionFigure">
-      <actualFigure
-          xsi:type="gmfgraph:PolylineConnection"
-          name="PortIncomingConnectionFigure"
-          targetDecoration="//@figures.0/@figures.1"/>
+    <descriptors name="PortIncomingConnectionFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="PortIncomingConnectionFigure" targetDecoration="//@figures.0/@figures.1"/>
     </descriptors>
-    <descriptors
-        name="CompositeSoundComponentFigure">
-      <actualFigure
-          xsi:type="gmfgraph:Rectangle"
-          name="CompositeSoundComponentFigure">
-        <layout
-            xsi:type="gmfgraph:FlowLayout"/>
-        <children
-            xsi:type="gmfgraph:Label"
-            name="CompositeSoundComponentNameFigure"
-            text="&lt;...>"/>
+    <descriptors name="CompositeSoundComponentFigure">
+      <actualFigure xsi:type="gmfgraph:Rectangle" name="CompositeSoundComponentFigure">
+        <layout xsi:type="gmfgraph:FlowLayout"/>
+        <children xsi:type="gmfgraph:Label" name="CompositeSoundComponentNameFigure" text="&lt;...>"/>
       </actualFigure>
-      <accessors
-          figure="//@figures.0/@descriptors.3/@actualFigure/@children.0"/>
+      <accessors figure="//@figures.0/@descriptors.3/@actualFigure/@children.0"/>
     </descriptors>
-    <descriptors
-        name="CompositeSoundComponentLinksFigure">
-      <actualFigure
-          xsi:type="gmfgraph:PolylineConnection"
-          name="CompositeSoundComponentLinksFigure"
-          targetDecoration="//@figures.0/@figures.2"/>
+    <descriptors name="CompositeSoundComponentLinksFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="CompositeSoundComponentLinksFigure" targetDecoration="//@figures.0/@figures.2"/>
     </descriptors>
-    <descriptors
-        name="CompositeSoundComponentDelegationsFigure">
-      <actualFigure
-          xsi:type="gmfgraph:PolylineConnection"
-          name="CompositeSoundComponentDelegationsFigure"
-          targetDecoration="//@figures.0/@figures.3"/>
+    <descriptors name="CompositeSoundComponentDelegationsFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="CompositeSoundComponentDelegationsFigure" targetDecoration="//@figures.0/@figures.3"/>
     </descriptors>
-    <descriptors
-        name="AtomicSoundComponentFigure">
-      <actualFigure
-          xsi:type="gmfgraph:Rectangle"
-          name="AtomicSoundComponentFigure">
-        <layout
-            xsi:type="gmfgraph:BorderLayout"/>
-        <children
-            xsi:type="gmfgraph:Label"
-            name="AtomicSoundComponentNameFigure"
-            text="&lt;...>"/>
+    <descriptors name="AtomicSoundComponentFigure">
+      <actualFigure xsi:type="gmfgraph:Rectangle" name="AtomicSoundComponentFigure">
+        <layout xsi:type="gmfgraph:BorderLayout"/>
+        <children xsi:type="gmfgraph:Label" name="AtomicSoundComponentNameFigure" text="&lt;...>"/>
       </actualFigure>
-      <accessors
-          figure="//@figures.0/@descriptors.6/@actualFigure/@children.0"/>
+      <accessors figure="//@figures.0/@descriptors.6/@actualFigure/@children.0"/>
     </descriptors>
-    <descriptors
-        name="DelegationFigure">
-      <actualFigure
-          xsi:type="gmfgraph:PolylineConnection"
-          name="DelegationFigure"/>
+    <descriptors name="DelegationFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="DelegationFigure"/>
     </descriptors>
-    <descriptors
-        name="LinkFigure">
-      <actualFigure
-          xsi:type="gmfgraph:PolylineConnection"
-          name="LinkFigure"/>
+    <descriptors name="LinkFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="LinkFigure"/>
     </descriptors>
   </figures>
-  <nodes
-      name="CompositeSoundComponent"
-      figure="CompositeSoundComponentFigure"/>
-  <nodes
-      name="AtomicSoundComponent"
-      figure="AtomicSoundComponentFigure"/>
-  <nodes
-      name="Port"
-      figure="PortFigure"/>
-  <connections
-      name="PortOutgoingConnection"
-      figure="PortOutgoingConnectionFigure"/>
-  <connections
-      name="PortIncomingConnection"
-      figure="PortIncomingConnectionFigure"/>
-  <connections
-      name="CompositeSoundComponentLinks"
-      figure="CompositeSoundComponentLinksFigure"/>
-  <connections
-      name="CompositeSoundComponentDelegations"
-      figure="CompositeSoundComponentDelegationsFigure"/>
-  <connections
-      name="Delegation"
-      figure="DelegationFigure"/>
-  <connections
-      name="Link"
-      figure="LinkFigure"/>
-  <labels
-      name="PortName"
-      figure="PortFigure"
-      accessor="//@figures.0/@descriptors.0/@accessors.0"/>
-  <labels
-      name="CompositeSoundComponentName"
-      figure="CompositeSoundComponentFigure"
-      accessor="//@figures.0/@descriptors.3/@accessors.0"/>
-  <labels
-      name="AtomicSoundComponentName"
-      figure="AtomicSoundComponentFigure"
-      accessor="//@figures.0/@descriptors.6/@accessors.0"/>
+  <nodes name="CompositeSoundComponent" figure="CompositeSoundComponentFigure"/>
+  <nodes name="AtomicSoundComponent" figure="AtomicSoundComponentFigure"/>
+  <nodes name="Port" figure="PortFigure" affixedParentSide="SOUTH">
+    <facets xsi:type="gmfgraph:DefaultSizeFacet">
+      <defaultSize dx="20" dy="20"/>
+    </facets>
+  </nodes>
+  <connections name="PortOutgoingConnection" figure="PortOutgoingConnectionFigure"/>
+  <connections name="PortIncomingConnection" figure="PortIncomingConnectionFigure"/>
+  <connections name="CompositeSoundComponentLinks" figure="CompositeSoundComponentLinksFigure"/>
+  <connections name="CompositeSoundComponentDelegations" figure="CompositeSoundComponentDelegationsFigure"/>
+  <connections name="Delegation" figure="DelegationFigure"/>
+  <connections name="Link" figure="LinkFigure"/>
+  <labels name="PortName" figure="PortFigure" accessor="//@figures.0/@descriptors.0/@accessors.0"/>
+  <labels name="CompositeSoundComponentName" figure="CompositeSoundComponentFigure" accessor="//@figures.0/@descriptors.3/@accessors.0"/>
+  <labels name="AtomicSoundComponentName" figure="AtomicSoundComponentFigure" accessor="//@figures.0/@descriptors.6/@accessors.0"/>
 </gmfgraph:Canvas>
