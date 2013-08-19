@@ -12,12 +12,7 @@
       <tools
           xsi:type="gmftool:CreationTool"
           title="AtomicSoundComponent"
-          description="Create new AtomicSoundComponent">
-        <smallIcon
-            xsi:type="gmftool:DefaultImage"/>
-        <largeIcon
-            xsi:type="gmftool:DefaultImage"/>
-      </tools>
+          description="Create new AtomicSoundComponent"/>
       <tools
           xsi:type="gmftool:CreationTool"
           title="CompositeSoundComponent"
