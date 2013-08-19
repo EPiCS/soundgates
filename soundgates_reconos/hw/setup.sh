@@ -11,11 +11,14 @@ then
 	exit 1
 fi
 
+echo "------------------------------------------------ WARNING ------------------------------------------------"
+echo "-------------------- BUG: You have to make the i2s ports external inside of XPS -------------------------"
+echo "------------------------------------------------ WARNING ------------------------------------------------"
+
 if [ -d "$EDKDIR" ]; then
-  # Control will enter here if $DIRECTORY exists.
+  # Control will enter here if $EDKDIR exists.
   echo "Removing EDK folder ..."
   rm -r edk/
-  ls -ahl
 fi
 
 # copy base design
