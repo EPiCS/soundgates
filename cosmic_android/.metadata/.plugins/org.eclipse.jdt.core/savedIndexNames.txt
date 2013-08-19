@@ -1,4 +1,0 @@
-INDEX VERSION 1.126+/home/soundgates/git/pg-soundgates/cosmic_android/.metadata/.plugins/org.eclipse.jdt.core
-1865857368.index
-693831142.index
-698536563.index

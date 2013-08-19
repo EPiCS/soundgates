@@ -1,5 +1,0 @@
-package de.upb.soundgates.cosmic.controller;
-
-public class SocketSender {
-
-}
