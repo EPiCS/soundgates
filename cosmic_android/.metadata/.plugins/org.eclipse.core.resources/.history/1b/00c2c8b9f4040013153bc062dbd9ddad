@@ -1,0 +1,34 @@
+package de.upb.soundgates.cosmic.controller;
+
+import java.io.BufferedWriter;
+04	import java.io.IOException;
+05	import java.io.OutputStreamWriter;
+06	import java.io.PrintWriter;
+07	import java.net.InetAddress;
+08	import java.net.Socket;
+09	import java.net.UnknownHostException;
+
+public class SocketSender {
+	
+	static String FPGAIP 	= "192.168.31.1";
+	static int    FPGAPORT	= 8888;
+	
+	
+	static void sendFrequency(int frequency)
+	{
+		Socket client;
+
+		try{
+		   client = new Socket(FPGAIP, FPGAPORT);
+		   out = new PrintWriter(client.getOutputStream(),true);
+		   in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+		} catch(UnknownHostException e) {
+		   System.out.println("Unknown host: www.example.com");
+
+		} catch(IOException e) {
+		   System.out.println("No I/O");
+		}
+	}
+
+}

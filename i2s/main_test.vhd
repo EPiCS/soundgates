@@ -43,9 +43,7 @@ ARCHITECTURE behavior OF i2s_test IS
     PORT(
 			lvdsclk_p : in std_logic;
 			lvdsclk_n : in std_logic;
-			rst 	: in std_logic;
-			en  	: in std_logic;
-		
+					
 			-- i2s output
 			sd  	: out std_logic;
 			ws	 	: out std_logic;
@@ -54,75 +52,30 @@ ARCHITECTURE behavior OF i2s_test IS
 			
         );
     END COMPONENT;
-    
-	 component DACControl
-		Generic(		
-			RefClkFrequency : integer := 200_000_000; --Reference clock
-			SampleRate		 : integer := 100_000	-- Sample rate
-		);
-		Port(
-			clk : in std_logic;
-			rst : in std_logic;
-			
-			data : in std_logic_vector(11 downto 0);
-			op_mode : in std_logic_vector(1 downto 0);
-			
-			busy : out std_logic;
-			
-			dac_clk  : out std_logic;
-			dac_data : out std_logic;
-			dac_sync : out std_logic
-		);
-
-	end component;
 
    --Inputs
    signal lvdsclk_n : std_logic := '0';
 	signal lvdsclk_p : std_logic := '1';
-   signal rst : std_logic := '0';
-	signal en : std_logic := '1';
+   signal en : std_logic := '1';
+	
  	--Outputs
 	
+	--signal DCM_LOCKED : std_logic;
 	signal MCLK : std_logic;
    signal SD 	: std_logic;
    signal WS 	: std_logic;
    signal SCK 	: std_logic;
-	
-	-- dac input
-	signal dac_data_in : std_logic_vector(11 downto 0) := "011111100111";
-	
-	signal dac_busy : std_logic;
-	signal dac_sclk  : std_logic;
-	signal dac_sync : std_logic;
-	signal dac_data : std_logic;
-	
+		
    -- Clock period definitions
    constant clk_period : time := 5 ns;
  
 BEGIN
-
-	dac_int : DACControl
-	Port map(
-			clk => lvdsclk_n,
-			rst => '0',
-			
-			data => dac_data_in,
-			op_mode => "00",
-			
-			busy => dac_busy,
-			
-			dac_clk  => dac_sclk,
-			dac_data => dac_data,
-			dac_sync => dac_sync
-		);
  
 	uut : main
 			PORT MAP (
          lvdsclk_n => lvdsclk_n,
 			lvdsclk_p => lvdsclk_p,
-			rst 	=>  rst,
-			en  	=> en,
-		
+			
 			-- i2s output
 			sd  	=> SD,
 			ws	 	=> WS,

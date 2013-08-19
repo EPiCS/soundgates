@@ -1,0 +1,12 @@
+##############################################################################
+## Filename:          C:/Users/soundgates/Desktop/pg-soundgates/soundgates/pcores/musicgenerator_v1_00_a/data/musicgenerator_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Mon Jun 10 12:27:04 2013 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib proc_common_v3_00_a  all 
+lib musicgenerator_v1_00_a fixedpointToInteger vhdl
+lib musicgenerator_v1_00_a cordic_wrapper vhdl
+lib musicgenerator_v1_00_a sin_generator vhdl
+lib musicgenerator_v1_00_a i2s vhdl
+lib musicgenerator_v1_00_a musicgenerator vhdl

@@ -1,0 +1,10 @@
+package de.upb.soundgates.cosmic.controller;
+
+public class SocketSender {
+	
+	static void sendFrequency(int frequency)
+	{
+		
+	}
+
+}
