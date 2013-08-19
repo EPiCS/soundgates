@@ -22,6 +22,8 @@ Atomic sound-components are stored within XML-libraries and represent waveform g
 The ports of an atomic sound-component are mapped to its dynamic properties. Therefore a dynamic property changes according to the signal the mapped port receives.  
 Some of these sound-components may have static properties which the designer can modify (e.g. the value of a constant-block) at design time, but cannot be changed during runtime. 
 
+We distinguish between sound ports and control ports. Sound ports receive and send sound signals (e.g. the output of a sine generator). Control ports receive and send control signals (e.g. the input frequency of a sine generator).
+
 In contrast to atomic sound-components, composite sound-components are not predefined. 
 The designer can add composite sound-components to the patch and fill them with either atomic sound-components or other composite sound-components. The internal linkage of a composite sound-components is setup also by drawing links between the components.
 The designer can add ports to a composite sound-components and define their direction and constraints. 
@@ -126,7 +128,7 @@ These components can also be combined to create new components.
 	  \hline
 	  \hline
 	  Wave Generators & Basic soundwaves that create simple tones (e.g. sine, sawtooth, rectangular) \\\hline
-		Basic Arithmetic functions & Components that support simple arithmetic operations on soundsignals (e.g. addition, multiplication)\\\hline
+		Basic Arithmetic functions & Components that support simple arithmetic operations on signals (e.g. addition, multiplication)\\\hline
 		Filters & Arithmetic functions can be combined to complex filters (e.g. low pass). Filters emphasize or eliminate some frequencies from a signal \\\hline
 		Mixer & Used to mix several sound signals to one sound output \\\hline
 		Constants & Defined inputs for components \\\hline
