@@ -25,8 +25,7 @@ Some of these sound-components may have static properties which the designer can
 In contrast to atomic sound-components, composite sound-components are not predefined. 
 The designer can add composite sound-components to the patch and fill them with either atomic sound-components or other composite sound-components. The internal linkage of a composite sound-components is setup also by drawing links between the components.
 The designer can add ports to a composite sound-components and define their direction and constraints. 
-We want to make it possible to export finished composite sound-components as XML-files and to import existing ones to the editor such that different designers can exchange their sound-components.
-
+We want to make it possible to export finished composite sound-components as XML-files and to import existing ones to the editor such that different designers can exchange their sound-components. Additionally the export and import of complete patches to other software systems like the Pure Data signal processing tool should be possible. A level of compatibility to the proprietary, but widely used Tool Max can be reached through usage of the Pure Data import and export methods to Max.
 
 Furthermore, the designer must define the interfaces of his patch. 
 The interfaces are the points where the end-user interacts with the system. 
@@ -48,7 +47,7 @@ We want to develop a software simulator for patches such that the designer and t
 		\label{fig:Soundgate_Simulator}
 	\end{figure}
 
-A designer must be able to import a patch to the simulator and to start the simulation. Afterwards he is able to pause or stop the simulation. An optional feature we would like to implement is the possibility to save the output of a simulation to the HDD.
+A designer must be able to import a patch to the simulator and to start the simulation. Afterwards he is able to pause or stop the simulation. An optional feature we would like to implement is the possibility to save the output of a simulation to the HDD. The implementation will use Pure Data as a sound engine and will be realized by transforming the patch model into an Pure Data compatible input file. Control of the simulated patch is possible by wrapping it into a specialized Pure Data patch receiving OSC messages.
 
 \section{COSMIC system}
 	Figure \ref{fig:Soundgate_UserInterface} shows use cases for our so called \ac{COSMIC} system. 
