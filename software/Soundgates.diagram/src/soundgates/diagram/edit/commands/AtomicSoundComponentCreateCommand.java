@@ -67,7 +67,7 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 		//MYTOOL
 		Object concreteType = this.getRequest().getParameter("concreteType"); 
 		System.out.println(concreteType);
-		if (concreteType.toString().contentEquals("sine")) {
+		if (concreteType != null && concreteType.toString().contentEquals("sine")) {
 			newElement.setName("Sine generator");
 			newElement.getPorts().add(SoundgatesFactory.eINSTANCE.createPort());
 		}
