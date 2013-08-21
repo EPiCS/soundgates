@@ -50,19 +50,28 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
 		AtomicSoundComponent newElement = SoundgatesFactory.eINSTANCE
 				.createAtomicSoundComponent();
-
+		
 		Patch owner = (Patch) getElementToEdit();
 		owner.getElements().add(newElement);
 
 		doConfigure(newElement, monitor, info);
 
 		((CreateElementRequest) getRequest()).setNewElement(newElement);
+		
+		//MYTOOL
+		Object concreteType = this.getRequest().getParameter("concreteType"); 
+		System.out.println(concreteType);
+		if (concreteType.toString().contentEquals("sine")) {
+			newElement.setName("Sine generator");
+			newElement.getPorts().add(SoundgatesFactory.eINSTANCE.createPort());
+		}
+		//---MYTOOL
 		return CommandResult.newOKCommandResult(newElement);
 	}
 

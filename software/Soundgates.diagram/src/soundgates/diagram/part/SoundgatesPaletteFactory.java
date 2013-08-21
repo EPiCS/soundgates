@@ -1,13 +1,16 @@
 package soundgates.diagram.part;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.gef.Request;
 import org.eclipse.gef.Tool;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.ToolEntry;
+import org.eclipse.gmf.runtime.diagram.ui.requests.CreateUnspecifiedTypeRequest;
 import org.eclipse.gmf.runtime.diagram.ui.tools.UnspecifiedTypeConnectionTool;
 import org.eclipse.gmf.runtime.diagram.ui.tools.UnspecifiedTypeCreationTool;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
@@ -37,6 +40,7 @@ public class SoundgatesPaletteFactory {
 				Messages.Components1Group_title);
 		paletteContainer.setId("createComponents1Group"); //$NON-NLS-1$
 		paletteContainer.add(createAtomicSoundComponent1CreationTool());
+		paletteContainer.add(createSineGeneratorCreationTool()); //MYTOOL
 		paletteContainer.add(createCompositeSoundComponent2CreationTool());
 		return paletteContainer;
 	}
@@ -140,6 +144,45 @@ public class SoundgatesPaletteFactory {
 		return entry;
 	}
 
+	
+	//MYTOOL
+	private ToolEntry createSineGeneratorCreationTool() {
+		NodeToolEntry entry = new CustomNodeToolEntry(
+				"Sine",
+				Messages.AtomicSoundComponent1CreationTool_desc,
+				Collections
+						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
+		entry.setSmallIcon(SoundgatesElementTypes
+				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
+		entry.setLargeIcon(entry.getSmallIcon());
+		return entry;
+	}
+	private static class CustomUnspecifiedTypeCreationTool extends UnspecifiedTypeCreationTool {
+		public CustomUnspecifiedTypeCreationTool(List elementTypes) {
+			super(elementTypes);
+		}
+		protected Request createTargetRequest() {
+			Request r = super.createTargetRequest();
+			HashMap<String, String> map = new HashMap<String,String>();
+			map.put("concreteType", "sine");
+			r.setExtendedData(map);
+			return r;
+		}
+	}
+	private static class CustomNodeToolEntry extends NodeToolEntry {
+		protected CustomNodeToolEntry(String title, String description,
+				List<IElementType> elementTypes) {
+			super(title, description, elementTypes);
+		}
+		public Tool createTool() {
+			Tool tool = new CustomUnspecifiedTypeCreationTool(elementTypes);
+			tool.setProperties(getToolProperties());
+			return tool;
+		}
+	}
+	//---MYTOOL
+	
 	/**
 	 * @generated
 	 */
@@ -148,12 +191,12 @@ public class SoundgatesPaletteFactory {
 		/**
 		 * @generated
 		 */
-		private final List<IElementType> elementTypes;
+		protected final List<IElementType> elementTypes;
 
 		/**
 		 * @generated
 		 */
-		private NodeToolEntry(String title, String description,
+		protected NodeToolEntry(String title, String description,
 				List<IElementType> elementTypes) {
 			super(title, description, null, null);
 			this.elementTypes = elementTypes;
