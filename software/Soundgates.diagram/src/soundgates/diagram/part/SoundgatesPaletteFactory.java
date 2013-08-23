@@ -33,7 +33,7 @@ public class SoundgatesPaletteFactory {
 
 	/**
 	 * Creates "Components" palette tool group
-	 * @generated
+	 * @generated NOT
 	 */
 	private PaletteContainer createComponents1Group() {
 		PaletteGroup paletteContainer = new PaletteGroup(
@@ -69,22 +69,6 @@ public class SoundgatesPaletteFactory {
 		paletteContainer.add(createLink1CreationTool());
 		paletteContainer.add(createDelegation2CreationTool());
 		return paletteContainer;
-	}
-
-	/**
-	 * @generated
-	 */
-	private ToolEntry createAtomicSoundComponent1CreationTool() {
-		NodeToolEntry entry = new NodeToolEntry(
-				Messages.AtomicSoundComponent1CreationTool_title,
-				Messages.AtomicSoundComponent1CreationTool_desc,
-				Collections
-						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
-		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
-		entry.setSmallIcon(SoundgatesElementTypes
-				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
-		entry.setLargeIcon(entry.getSmallIcon());
-		return entry;
 	}
 
 	/**
@@ -144,7 +128,22 @@ public class SoundgatesPaletteFactory {
 		return entry;
 	}
 
-	
+	/**
+	 * @generated
+	 */
+	private ToolEntry createAtomicSoundComponent1CreationTool() {
+		NodeToolEntry entry = new NodeToolEntry(
+				Messages.AtomicSoundComponent1CreationTool_title,
+				Messages.AtomicSoundComponent1CreationTool_desc,
+				Collections
+						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
+		entry.setSmallIcon(SoundgatesElementTypes
+				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
+		entry.setLargeIcon(entry.getSmallIcon());
+		return entry;
+	}
+
 	//MYTOOL
 	private ToolEntry createSineGeneratorCreationTool() {
 		NodeToolEntry entry = new CustomNodeToolEntry(
@@ -158,45 +157,51 @@ public class SoundgatesPaletteFactory {
 		entry.setLargeIcon(entry.getSmallIcon());
 		return entry;
 	}
-	private static class CustomUnspecifiedTypeCreationTool extends UnspecifiedTypeCreationTool {
+
+	private static class CustomUnspecifiedTypeCreationTool extends
+			UnspecifiedTypeCreationTool {
 		public CustomUnspecifiedTypeCreationTool(List elementTypes) {
 			super(elementTypes);
 		}
+
 		protected Request createTargetRequest() {
 			Request r = super.createTargetRequest();
-			HashMap<String, String> map = new HashMap<String,String>();
+			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("concreteType", "sine");
 			r.setExtendedData(map);
 			return r;
 		}
 	}
+
 	private static class CustomNodeToolEntry extends NodeToolEntry {
 		protected CustomNodeToolEntry(String title, String description,
 				List<IElementType> elementTypes) {
 			super(title, description, elementTypes);
 		}
+
 		public Tool createTool() {
 			Tool tool = new CustomUnspecifiedTypeCreationTool(elementTypes);
 			tool.setProperties(getToolProperties());
 			return tool;
 		}
 	}
+
 	//---MYTOOL
-	
+
 	/**
 	 * @generated
 	 */
 	private static class NodeToolEntry extends ToolEntry {
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		protected final List<IElementType> elementTypes;
 
 		/**
 		 * @generated
 		 */
-		protected NodeToolEntry(String title, String description,
+		private NodeToolEntry(String title, String description,
 				List<IElementType> elementTypes) {
 			super(title, description, null, null);
 			this.elementTypes = elementTypes;

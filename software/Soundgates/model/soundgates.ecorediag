@@ -131,6 +131,10 @@
   <children xmi:type="notation:Node" xmi:id="_Md7fT_C2EeKgiOpry-G8ZQ" type="1001">
     <children xmi:type="notation:Node" xmi:id="_Md7fUvC2EeKgiOpry-G8ZQ" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_Md7fU_C2EeKgiOpry-G8ZQ" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_n0nEIAvYEeOO7qQM3jKB8Q" type="2001">
+        <element xmi:type="ecore:EAttribute" href="soundgates.ecore#//AtomicSoundComponent/type"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_n0nEIQvYEeOO7qQM3jKB8Q"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_Md7fVPC2EeKgiOpry-G8ZQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_Md7fVfC2EeKgiOpry-G8ZQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_Md7fVvC2EeKgiOpry-G8ZQ"/>

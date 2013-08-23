@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: soundgates.diagram.part.SoundgatesDiagramEditorPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Export-Package: soundgates.diagram.edit.parts, 
+Export-Package: soundgates.diagram.edit.parts,
  soundgates.diagram.part,
  soundgates.diagram.providers
 Require-Bundle: org.eclipse.core.runtime,

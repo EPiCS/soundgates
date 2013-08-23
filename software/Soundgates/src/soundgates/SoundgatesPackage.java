@@ -407,13 +407,22 @@ public interface SoundgatesPackage extends EPackage {
 	int ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_SOUND_COMPONENT__TYPE = SOUND_COMPONENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Atomic Sound Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 3;
+	int ATOMIC_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.ConnectionImpl <em>Connection</em>}' class.
@@ -953,6 +962,17 @@ public interface SoundgatesPackage extends EPackage {
 	EReference getAtomicSoundComponent_BooleanProperties();
 
 	/**
+	 * Returns the meta object for the attribute '{@link soundgates.AtomicSoundComponent#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see soundgates.AtomicSoundComponent#getType()
+	 * @see #getAtomicSoundComponent()
+	 * @generated
+	 */
+	EAttribute getAtomicSoundComponent_Type();
+
+	/**
 	 * Returns the meta object for class '{@link soundgates.Connection <em>Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1374,6 +1394,14 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES = eINSTANCE.getAtomicSoundComponent_BooleanProperties();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATOMIC_SOUND_COMPONENT__TYPE = eINSTANCE.getAtomicSoundComponent_Type();
 
 		/**
 		 * The meta object literal for the '{@link soundgates.impl.ConnectionImpl <em>Connection</em>}' class.

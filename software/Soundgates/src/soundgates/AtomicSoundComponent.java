@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link soundgates.AtomicSoundComponent#getFloatProperties <em>Float Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getIntegerProperties <em>Integer Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getBooleanProperties <em>Boolean Properties</em>}</li>
+ *   <li>{@link soundgates.AtomicSoundComponent#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -77,5 +78,20 @@ public interface AtomicSoundComponent extends SoundComponent {
 	 * @generated
 	 */
 	EMap<String, Boolean> getBooleanProperties();
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' attribute.
+	 * @see soundgates.SoundgatesPackage#getAtomicSoundComponent_Type()
+	 * @model required="true" changeable="false"
+	 * @generated
+	 */
+	String getType();
 
 } // AtomicSoundComponent

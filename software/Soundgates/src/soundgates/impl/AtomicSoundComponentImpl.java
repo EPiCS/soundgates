@@ -26,6 +26,7 @@ import soundgates.SoundgatesPackage;
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getFloatProperties <em>Float Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getIntegerProperties <em>Integer Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getBooleanProperties <em>Boolean Properties</em>}</li>
+ *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +62,26 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	 * @ordered
 	 */
 	protected EMap<String, Boolean> booleanProperties;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String type = TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -122,6 +143,15 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -152,6 +182,8 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
 				if (coreType) return getBooleanProperties();
 				else return getBooleanProperties().map();
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__TYPE:
+				return getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -212,8 +244,26 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return integerProperties != null && !integerProperties.isEmpty();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
 				return booleanProperties != null && !booleanProperties.isEmpty();
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__TYPE:
+				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (type: ");
+		result.append(type);
+		result.append(')');
+		return result.toString();
 	}
 
 } //AtomicSoundComponentImpl
