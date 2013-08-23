@@ -19,7 +19,6 @@ package soundgates;
  *   <li>{@link soundgates.Port#getIncomingConnection <em>Incoming Connection</em>}</li>
  *   <li>{@link soundgates.Port#getComponent <em>Component</em>}</li>
  *   <li>{@link soundgates.Port#getDirection <em>Direction</em>}</li>
- *   <li>{@link soundgates.Port#getKind <em>Kind</em>}</li>
  *   <li>{@link soundgates.Port#getDataType <em>Data Type</em>}</li>
  * </ul>
  * </p>
@@ -141,35 +140,6 @@ public interface Port extends NamedElement {
 	 * @generated
 	 */
 	void setDirection(Direction value);
-
-	/**
-	 * Returns the value of the '<em><b>Kind</b></em>' attribute.
-	 * The literals are from the enumeration {@link soundgates.Kind}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Kind</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Kind</em>' attribute.
-	 * @see soundgates.Kind
-	 * @see #setKind(Kind)
-	 * @see soundgates.SoundgatesPackage#getPort_Kind()
-	 * @model required="true"
-	 * @generated
-	 */
-	Kind getKind();
-
-	/**
-	 * Sets the value of the '{@link soundgates.Port#getKind <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Kind</em>' attribute.
-	 * @see soundgates.Kind
-	 * @see #getKind()
-	 * @generated
-	 */
-	void setKind(Kind value);
 
 	/**
 	 * Returns the value of the '<em><b>Data Type</b></em>' attribute.

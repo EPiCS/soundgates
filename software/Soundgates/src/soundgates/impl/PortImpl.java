@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import soundgates.Connection;
 import soundgates.DataType;
 import soundgates.Direction;
-import soundgates.Kind;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesPackage;
@@ -31,7 +30,6 @@ import soundgates.SoundgatesPackage;
  *   <li>{@link soundgates.impl.PortImpl#getIncomingConnection <em>Incoming Connection</em>}</li>
  *   <li>{@link soundgates.impl.PortImpl#getComponent <em>Component</em>}</li>
  *   <li>{@link soundgates.impl.PortImpl#getDirection <em>Direction</em>}</li>
- *   <li>{@link soundgates.impl.PortImpl#getKind <em>Kind</em>}</li>
  *   <li>{@link soundgates.impl.PortImpl#getDataType <em>Data Type</em>}</li>
  * </ul>
  * </p>
@@ -78,26 +76,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @ordered
 	 */
 	protected Direction direction = DIRECTION_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getKind()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final Kind KIND_EDEFAULT = Kind.SOUND;
-
-	/**
-	 * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getKind()
-	 * @generated
-	 * @ordered
-	 */
-	protected Kind kind = KIND_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDataType() <em>Data Type</em>}' attribute.
@@ -325,27 +303,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Kind getKind() {
-		return kind;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setKind(Kind newKind) {
-		Kind oldKind = kind;
-		kind = newKind == null ? KIND_EDEFAULT : newKind;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__KIND, oldKind, kind));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public DataType getDataType() {
 		return dataType;
 	}
@@ -436,8 +393,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 				return getComponent();
 			case SoundgatesPackage.PORT__DIRECTION:
 				return getDirection();
-			case SoundgatesPackage.PORT__KIND:
-				return getKind();
 			case SoundgatesPackage.PORT__DATA_TYPE:
 				return getDataType();
 		}
@@ -463,9 +418,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 				return;
 			case SoundgatesPackage.PORT__DIRECTION:
 				setDirection((Direction)newValue);
-				return;
-			case SoundgatesPackage.PORT__KIND:
-				setKind((Kind)newValue);
 				return;
 			case SoundgatesPackage.PORT__DATA_TYPE:
 				setDataType((DataType)newValue);
@@ -494,9 +446,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 			case SoundgatesPackage.PORT__DIRECTION:
 				setDirection(DIRECTION_EDEFAULT);
 				return;
-			case SoundgatesPackage.PORT__KIND:
-				setKind(KIND_EDEFAULT);
-				return;
 			case SoundgatesPackage.PORT__DATA_TYPE:
 				setDataType(DATA_TYPE_EDEFAULT);
 				return;
@@ -520,8 +469,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 				return getComponent() != null;
 			case SoundgatesPackage.PORT__DIRECTION:
 				return direction != DIRECTION_EDEFAULT;
-			case SoundgatesPackage.PORT__KIND:
-				return kind != KIND_EDEFAULT;
 			case SoundgatesPackage.PORT__DATA_TYPE:
 				return dataType != DATA_TYPE_EDEFAULT;
 		}
@@ -540,8 +487,6 @@ public class PortImpl extends NamedElementImpl implements Port {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (direction: ");
 		result.append(direction);
-		result.append(", kind: ");
-		result.append(kind);
 		result.append(", dataType: ");
 		result.append(dataType);
 		result.append(')');

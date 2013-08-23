@@ -167,25 +167,6 @@
     <element xmi:type="ecore:EEnum" href="soundgates.ecore#//Direction"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5SQ6gv9mEeKQSp-KNU3wBA" x="228" y="666"/>
   </children>
-  <children xmi:type="notation:Node" xmi:id="_IbI-IP9nEeKQSp-KNU3wBA" type="1005">
-    <children xmi:type="notation:Node" xmi:id="_IbI-I_9nEeKQSp-KNU3wBA" type="4010"/>
-    <children xmi:type="notation:Node" xmi:id="_IbPEwP9nEeKQSp-KNU3wBA" type="5008">
-      <children xmi:type="notation:Node" xmi:id="_JyucIP9nEeKQSp-KNU3wBA" type="2006">
-        <element xmi:type="ecore:EEnumLiteral" href="soundgates.ecore#//Kind/SOUND"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_JyucIf9nEeKQSp-KNU3wBA"/>
-      </children>
-      <children xmi:type="notation:Node" xmi:id="_KKajYP9nEeKQSp-KNU3wBA" type="2006">
-        <element xmi:type="ecore:EEnumLiteral" href="soundgates.ecore#//Kind/CONTROL"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_KKajYf9nEeKQSp-KNU3wBA"/>
-      </children>
-      <styles xmi:type="notation:DrawerStyle" xmi:id="_IbPEwf9nEeKQSp-KNU3wBA"/>
-      <styles xmi:type="notation:SortingStyle" xmi:id="_IbPEwv9nEeKQSp-KNU3wBA"/>
-      <styles xmi:type="notation:FilteringStyle" xmi:id="_IbPEw_9nEeKQSp-KNU3wBA"/>
-    </children>
-    <styles xmi:type="notation:ShapeStyle" xmi:id="_IbI-If9nEeKQSp-KNU3wBA" fontColor="4210752" fontName="Segoe UI" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EEnum" href="soundgates.ecore#//Kind"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_IbI-Iv9nEeKQSp-KNU3wBA" x="414" y="666"/>
-  </children>
   <children xmi:type="notation:Node" xmi:id="_v-yukP9nEeKQSp-KNU3wBA" type="1001">
     <children xmi:type="notation:Node" xmi:id="_v-yuk_9nEeKQSp-KNU3wBA" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_v-yulP9nEeKQSp-KNU3wBA" type="5001">
