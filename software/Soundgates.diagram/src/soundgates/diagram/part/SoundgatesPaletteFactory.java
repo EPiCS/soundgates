@@ -40,7 +40,9 @@ public class SoundgatesPaletteFactory {
 				Messages.Components1Group_title);
 		paletteContainer.setId("createComponents1Group"); //$NON-NLS-1$
 		paletteContainer.add(createAtomicSoundComponent1CreationTool());
-		paletteContainer.add(createSineGeneratorCreationTool()); //MYTOOL
+		for (int i = 1; i < 4; i++ ) { //TODO elemente aus XML lesen
+			paletteContainer.add(createConcreteAtomicNodeCreationTool("Type: "+i)); //MYTOOL
+		}
 		paletteContainer.add(createCompositeSoundComponent2CreationTool());
 		return paletteContainer;
 	}
@@ -145,42 +147,61 @@ public class SoundgatesPaletteFactory {
 	}
 
 	//MYTOOL
-	private ToolEntry createSineGeneratorCreationTool() {
-		NodeToolEntry entry = new CustomNodeToolEntry(
-				"Sine",
-				Messages.AtomicSoundComponent1CreationTool_desc,
-				Collections
-						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+	private ToolEntry createConcreteAtomicNodeCreationTool(String atomicType) {
+		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
+				atomicType,
+				"Create "+atomicType,
+				Collections.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
 		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
-		entry.setLargeIcon(entry.getSmallIcon());
+		entry.setLargeIcon(entry.getSmallIcon()); //TODO Icon anpassen?
 		return entry;
 	}
+	
+	
+//	private ToolEntry createSineGeneratorCreationTool() {
+//		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
+//				"Sine",
+//				Messages.AtomicSoundComponent1CreationTool_desc,
+//				Collections
+//						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+//		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
+//		entry.setSmallIcon(SoundgatesElementTypes
+//				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
+//		entry.setLargeIcon(entry.getSmallIcon());
+//		return entry;
+//	}
 
-	private static class CustomUnspecifiedTypeCreationTool extends
+	private static class ConcreteAtomicTypeCreationTool extends
 			UnspecifiedTypeCreationTool {
-		public CustomUnspecifiedTypeCreationTool(List elementTypes) {
+		private String atomicType;
+		
+		public ConcreteAtomicTypeCreationTool(List elementTypes, String atomicType) {
 			super(elementTypes);
+			this.atomicType = atomicType;
 		}
 
 		protected Request createTargetRequest() {
 			Request r = super.createTargetRequest();
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("concreteType", "sine");
+			map.put("concreteType", this.atomicType);
 			r.setExtendedData(map);
 			return r;
 		}
 	}
 
-	private static class CustomNodeToolEntry extends NodeToolEntry {
-		protected CustomNodeToolEntry(String title, String description,
+	private static class ConcreteAtomicNodeToolEntry extends NodeToolEntry {
+		private String atomicType;
+		
+		protected ConcreteAtomicNodeToolEntry(String title, String description,
 				List<IElementType> elementTypes) {
 			super(title, description, elementTypes);
+			this.atomicType = title;
 		}
 
 		public Tool createTool() {
-			Tool tool = new CustomUnspecifiedTypeCreationTool(elementTypes);
+			Tool tool = new ConcreteAtomicTypeCreationTool(elementTypes, atomicType);
 			tool.setProperties(getToolProperties());
 			return tool;
 		}

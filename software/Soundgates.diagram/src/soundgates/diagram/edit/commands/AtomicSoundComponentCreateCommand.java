@@ -64,13 +64,18 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 
 		((CreateElementRequest) getRequest()).setNewElement(newElement);
 
-		//MYTOOL
+		//MYTOOL TODO elemente aus XML lesen
 		Object concreteType = this.getRequest().getParameter("concreteType");
 		System.out.println(concreteType);
-		if (concreteType != null
-				&& concreteType.toString().contentEquals("sine")) {
-			newElement.setName("Sine generator");
-			newElement.getPorts().add(SoundgatesFactory.eINSTANCE.createPort());
+		if (concreteType != null) {
+			try {
+				int i = Integer.parseInt(concreteType.toString().split(" ")[1]);
+				newElement.setName(concreteType.toString());
+				for (int j = 0; j < i; j++) { 
+					newElement.getPorts().add(SoundgatesFactory.eINSTANCE.createPort());
+				}
+			}
+			catch(Exception e) {}
 		}
 		//---MYTOOL
 		return CommandResult.newOKCommandResult(newElement);
