@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="AtomicSoundComponent">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="Type" type="xs:string"/>
+      <xs:element name="Ports">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:choice>
+              <xs:element name="Port">
+                <xs:attribute name="Name" type="xs:string"/>
+                <xs:attribute name="Direction" type="xs:string"/>
+                <xs:attribute name="DataType" type="xs:string"/>
+                <xs:attribute name="Kind" type="xs:string"/>
+              </xs:element>
+            </xs:choice>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Code">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Simulation" type="xs:string"/>
+            <xs:element name="Hardware" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
