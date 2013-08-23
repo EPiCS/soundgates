@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Sine generator</Type>
+	<Ports>
+		<Port Name="Frequency" Direction="IN" DataType="INT"/>
+		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+	</Ports>
+	<Code>
+		<Simulation>
+			PD Code
+		</Simulation>
+		<Hardware>
+			VHDL Stuff
+		</Hardware>
+	</Code>
+</AtomicSoundComponent> 

@@ -8,14 +8,11 @@
       <xs:element name="Ports">
         <xs:complexType>
           <xs:sequence>
-            <xs:choice>
               <xs:element name="Port">
                 <xs:attribute name="Name" type="xs:string"/>
                 <xs:attribute name="Direction" type="xs:string"/>
                 <xs:attribute name="DataType" type="xs:string"/>
-                <xs:attribute name="Kind" type="xs:string"/>
               </xs:element>
-            </xs:choice>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
