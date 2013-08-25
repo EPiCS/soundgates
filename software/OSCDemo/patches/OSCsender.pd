@@ -1,0 +1,30 @@
+#N canvas 661 571 584 298 10;
+#X declare -lib mrpeach;
+#X obj 110 34 import mrpeach;
+#X obj 80 245 udpsend;
+#X msg 189 124 disconnect;
+#X obj 323 198 packOSC;
+#X floatatom 323 113 5 0 0 0 - - -;
+#X obj 64 63 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 116 87 connect localhost 9001;
+#X obj 322 32 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 277 88 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 323 155 send /test/beep \$1;
+#X msg 468 155 send /test/mute;
+#X obj 464 104 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 363 66 random;
+#X connect 2 0 1 0;
+#X connect 3 0 1 0;
+#X connect 4 0 9 0;
+#X connect 5 0 6 0;
+#X connect 6 0 1 0;
+#X connect 7 0 12 0;
+#X connect 8 0 2 0;
+#X connect 9 0 3 0;
+#X connect 10 0 3 0;
+#X connect 11 0 10 0;
+#X connect 12 0 4 0;
