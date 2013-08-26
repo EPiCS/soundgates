@@ -16,6 +16,7 @@ import org.eclipse.gmf.runtime.diagram.ui.tools.UnspecifiedTypeCreationTool;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 
 import soundgates.diagram.providers.SoundgatesElementTypes;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 /**
  * @generated
@@ -33,6 +34,7 @@ public class SoundgatesPaletteFactory {
 
 	/**
 	 * Creates "Components" palette tool group
+	 * 
 	 * @generated NOT
 	 */
 	private PaletteContainer createComponents1Group() {
@@ -40,8 +42,14 @@ public class SoundgatesPaletteFactory {
 				Messages.Components1Group_title);
 		paletteContainer.setId("createComponents1Group"); //$NON-NLS-1$
 		paletteContainer.add(createAtomicSoundComponent1CreationTool());
-		for (int i = 1; i < 4; i++ ) { //TODO elemente aus XML lesen
-			paletteContainer.add(createConcreteAtomicNodeCreationTool("Type: "+i)); //MYTOOL
+		List<String> availableTypes = AtomicSoundComponentLibrary.getInstance()
+				.getAvailableTypes();
+		// instead of putting the type descriptor in the palette, use the name
+		// of the blueprint soundcomponent
+		for (int i = 0; i < availableTypes.size(); i++) {
+			paletteContainer
+					.add(createConcreteAtomicNodeCreationTool(availableTypes
+							.get(i))); // MYTOOL
 		}
 		paletteContainer.add(createCompositeSoundComponent2CreationTool());
 		return paletteContainer;
@@ -49,6 +57,7 @@ public class SoundgatesPaletteFactory {
 
 	/**
 	 * Creates "Ports" palette tool group
+	 * 
 	 * @generated
 	 */
 	private PaletteContainer createPorts2Group() {
@@ -61,6 +70,7 @@ public class SoundgatesPaletteFactory {
 
 	/**
 	 * Creates "Connections" palette tool group
+	 * 
 	 * @generated
 	 */
 	private PaletteContainer createConnections3Group() {
@@ -146,38 +156,42 @@ public class SoundgatesPaletteFactory {
 		return entry;
 	}
 
-	//MYTOOL
+	// MYTOOL
 	private ToolEntry createConcreteAtomicNodeCreationTool(String atomicType) {
+		String atomicName = AtomicSoundComponentLibrary.getInstance()
+				.createAtomicSoundComponentInstance(atomicType).getName();
 		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
+				atomicName,
 				atomicType,
-				"Create "+atomicType,
-				Collections.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+				"Create " + atomicName,
+				Collections
+						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
 		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
-		entry.setLargeIcon(entry.getSmallIcon()); //TODO Icon anpassen?
+		entry.setLargeIcon(entry.getSmallIcon()); // TODO Icon anpassen?
 		return entry;
 	}
-	
-	
-//	private ToolEntry createSineGeneratorCreationTool() {
-//		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
-//				"Sine",
-//				Messages.AtomicSoundComponent1CreationTool_desc,
-//				Collections
-//						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
-//		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
-//		entry.setSmallIcon(SoundgatesElementTypes
-//				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
-//		entry.setLargeIcon(entry.getSmallIcon());
-//		return entry;
-//	}
+
+	// private ToolEntry createSineGeneratorCreationTool() {
+	// NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
+	// "Sine",
+	// Messages.AtomicSoundComponent1CreationTool_desc,
+	// Collections
+	// .singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+	//		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
+	// entry.setSmallIcon(SoundgatesElementTypes
+	// .getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
+	// entry.setLargeIcon(entry.getSmallIcon());
+	// return entry;
+	// }
 
 	private static class ConcreteAtomicTypeCreationTool extends
 			UnspecifiedTypeCreationTool {
 		private String atomicType;
-		
-		public ConcreteAtomicTypeCreationTool(List elementTypes, String atomicType) {
+
+		public ConcreteAtomicTypeCreationTool(List elementTypes,
+				String atomicType) {
 			super(elementTypes);
 			this.atomicType = atomicType;
 		}
@@ -193,21 +207,22 @@ public class SoundgatesPaletteFactory {
 
 	private static class ConcreteAtomicNodeToolEntry extends NodeToolEntry {
 		private String atomicType;
-		
-		protected ConcreteAtomicNodeToolEntry(String title, String description,
-				List<IElementType> elementTypes) {
+
+		protected ConcreteAtomicNodeToolEntry(String title, String type,
+				String description, List<IElementType> elementTypes) {
 			super(title, description, elementTypes);
-			this.atomicType = title;
+			this.atomicType = type;
 		}
 
 		public Tool createTool() {
-			Tool tool = new ConcreteAtomicTypeCreationTool(elementTypes, atomicType);
+			Tool tool = new ConcreteAtomicTypeCreationTool(elementTypes,
+					atomicType);
 			tool.setProperties(getToolProperties());
 			return tool;
 		}
 	}
 
-	//---MYTOOL
+	// ---MYTOOL
 
 	/**
 	 * @generated

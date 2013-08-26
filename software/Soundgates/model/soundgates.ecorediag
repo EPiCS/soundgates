@@ -71,10 +71,6 @@
         <element xmi:type="ecore:EAttribute" href="soundgates.ecore#//Port/direction"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_AJeC4f9nEeKQSp-KNU3wBA"/>
       </children>
-      <children xmi:type="notation:Node" xmi:id="_QUguIP9nEeKQSp-KNU3wBA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="soundgates.ecore#//Port/kind"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_QUguIf9nEeKQSp-KNU3wBA"/>
-      </children>
       <children xmi:type="notation:Node" xmi:id="_0o40MAAtEeOQSp-KNU3wBA" type="2001">
         <element xmi:type="ecore:EAttribute" href="soundgates.ecore#//Port/dataType"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_0o40MQAtEeOQSp-KNU3wBA"/>

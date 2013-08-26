@@ -146,6 +146,10 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	public String getType() {
 		return type;
 	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	/**
 	 * <!-- begin-user-doc -->

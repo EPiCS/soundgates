@@ -15,6 +15,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.AtomicSoundComponent;
 import soundgates.Patch;
 import soundgates.SoundgatesFactory;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 /**
  * @generated
@@ -54,30 +55,26 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
-		AtomicSoundComponent newElement = SoundgatesFactory.eINSTANCE
-				.createAtomicSoundComponent();
-
-		Patch owner = (Patch) getElementToEdit();
-		owner.getElements().add(newElement);
-
-		doConfigure(newElement, monitor, info);
-
-		((CreateElementRequest) getRequest()).setNewElement(newElement);
+		AtomicSoundComponent newElement = null;
 
 		//MYTOOL TODO elemente aus XML lesen
 		Object concreteType = this.getRequest().getParameter("concreteType");
 		System.out.println(concreteType);
 		if (concreteType != null) {
-			try {
-				int i = Integer.parseInt(concreteType.toString().split(" ")[1]);
-				newElement.setName(concreteType.toString());
-				for (int j = 0; j < i; j++) { 
-					newElement.getPorts().add(SoundgatesFactory.eINSTANCE.createPort());
-				}
-			}
-			catch(Exception e) {}
+			newElement = AtomicSoundComponentLibrary.getInstance().createAtomicSoundComponentInstance((String)concreteType);
+		}
+		else {
+			newElement = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();			
 		}
 		//---MYTOOL
+		
+		Patch owner = (Patch) getElementToEdit();
+		owner.getElements().add(newElement);
+		
+		doConfigure(newElement, monitor, info);
+		
+		((CreateElementRequest) getRequest()).setNewElement(newElement);
+		
 		return CommandResult.newOKCommandResult(newElement);
 	}
 
