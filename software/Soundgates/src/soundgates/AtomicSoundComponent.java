@@ -93,5 +93,12 @@ public interface AtomicSoundComponent extends SoundComponent {
 	 * @generated
 	 */
 	String getType();
+	
+	/**
+	 * Sets the value of the '<em><b>Type</b></em>' attribute
+	 * The user should not be able to set this, it is only meant to be called from code
+	 * @param type
+	 */
+	void setType(String type);
 
 } // AtomicSoundComponent

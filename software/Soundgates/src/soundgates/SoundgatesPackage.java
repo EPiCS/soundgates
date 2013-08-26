@@ -234,22 +234,13 @@ public interface SoundgatesPackage extends EPackage {
 	int PORT__DIRECTION = NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Kind</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__KIND = NAMED_ELEMENT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Data Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DATA_TYPE = NAMED_ELEMENT_FEATURE_COUNT + 5;
+	int PORT__DATA_TYPE = NAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -258,7 +249,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int PORT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.CompositeSoundComponentImpl <em>Composite Sound Component</em>}' class.
@@ -674,16 +665,6 @@ public interface SoundgatesPackage extends EPackage {
 	int ESTRING_TO_EBOOLEAN_OBJECT_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link soundgates.Kind <em>Kind</em>}' enum.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see soundgates.Kind
-	 * @see soundgates.impl.SoundgatesPackageImpl#getKind()
-	 * @generated
-	 */
-	int KIND = 13;
-
-	/**
 	 * The meta object id for the '{@link soundgates.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -691,7 +672,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @see soundgates.impl.SoundgatesPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 14;
+	int DIRECTION = 13;
 
 	/**
 	 * The meta object id for the '{@link soundgates.DataType <em>Data Type</em>}' enum.
@@ -701,7 +682,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @see soundgates.impl.SoundgatesPackageImpl#getDataType()
 	 * @generated
 	 */
-	int DATA_TYPE = 15;
+	int DATA_TYPE = 14;
 
 
 	/**
@@ -820,17 +801,6 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_Direction();
-
-	/**
-	 * Returns the meta object for the attribute '{@link soundgates.Port#getKind <em>Kind</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Kind</em>'.
-	 * @see soundgates.Port#getKind()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EAttribute getPort_Kind();
 
 	/**
 	 * Returns the meta object for the attribute '{@link soundgates.Port#getDataType <em>Data Type</em>}'.
@@ -1138,16 +1108,6 @@ public interface SoundgatesPackage extends EPackage {
 	EAttribute getEStringToEBooleanObject_Value();
 
 	/**
-	 * Returns the meta object for enum '{@link soundgates.Kind <em>Kind</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Kind</em>'.
-	 * @see soundgates.Kind
-	 * @generated
-	 */
-	EEnum getKind();
-
-	/**
 	 * Returns the meta object for enum '{@link soundgates.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1284,14 +1244,6 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__DIRECTION = eINSTANCE.getPort_Direction();
-
-		/**
-		 * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT__KIND = eINSTANCE.getPort_Kind();
 
 		/**
 		 * The meta object literal for the '<em><b>Data Type</b></em>' attribute feature.
@@ -1534,16 +1486,6 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_EBOOLEAN_OBJECT__VALUE = eINSTANCE.getEStringToEBooleanObject_Value();
-
-		/**
-		 * The meta object literal for the '{@link soundgates.Kind <em>Kind</em>}' enum.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see soundgates.Kind
-		 * @see soundgates.impl.SoundgatesPackageImpl#getKind()
-		 * @generated
-		 */
-		EEnum KIND = eINSTANCE.getKind();
 
 		/**
 		 * The meta object literal for the '{@link soundgates.Direction <em>Direction</em>}' enum.

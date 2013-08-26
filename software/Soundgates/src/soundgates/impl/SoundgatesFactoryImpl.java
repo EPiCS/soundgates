@@ -81,8 +81,6 @@ public class SoundgatesFactoryImpl extends EFactoryImpl implements SoundgatesFac
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case SoundgatesPackage.KIND:
-				return createKindFromString(eDataType, initialValue);
 			case SoundgatesPackage.DIRECTION:
 				return createDirectionFromString(eDataType, initialValue);
 			case SoundgatesPackage.DATA_TYPE:
@@ -100,8 +98,6 @@ public class SoundgatesFactoryImpl extends EFactoryImpl implements SoundgatesFac
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case SoundgatesPackage.KIND:
-				return convertKindToString(eDataType, instanceValue);
 			case SoundgatesPackage.DIRECTION:
 				return convertDirectionToString(eDataType, instanceValue);
 			case SoundgatesPackage.DATA_TYPE:
@@ -199,26 +195,6 @@ public class SoundgatesFactoryImpl extends EFactoryImpl implements SoundgatesFac
 	public Map.Entry<String, Boolean> createEStringToEBooleanObject() {
 		EStringToEBooleanObjectImpl eStringToEBooleanObject = new EStringToEBooleanObjectImpl();
 		return eStringToEBooleanObject;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Kind createKindFromString(EDataType eDataType, String initialValue) {
-		Kind result = Kind.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertKindToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

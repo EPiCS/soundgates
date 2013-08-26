@@ -20,7 +20,6 @@ import soundgates.DataType;
 import soundgates.Delegation;
 import soundgates.Direction;
 import soundgates.Element;
-import soundgates.Kind;
 import soundgates.Link;
 import soundgates.NamedElement;
 import soundgates.Patch;
@@ -128,13 +127,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * @generated
 	 */
 	private EClass eStringToEBooleanObjectEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EEnum kindEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -324,17 +316,8 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_Kind() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getPort_DataType() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -585,15 +568,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EEnum getKind() {
-		return kindEEnum;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -649,7 +623,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		createEReference(portEClass, PORT__INCOMING_CONNECTION);
 		createEReference(portEClass, PORT__COMPONENT);
 		createEAttribute(portEClass, PORT__DIRECTION);
-		createEAttribute(portEClass, PORT__KIND);
 		createEAttribute(portEClass, PORT__DATA_TYPE);
 
 		namedElementEClass = createEClass(NAMED_ELEMENT);
@@ -689,7 +662,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		createEAttribute(eStringToEBooleanObjectEClass, ESTRING_TO_EBOOLEAN_OBJECT__VALUE);
 
 		// Create enums
-		kindEEnum = createEEnum(KIND);
 		directionEEnum = createEEnum(DIRECTION);
 		dataTypeEEnum = createEEnum(DATA_TYPE);
 	}
@@ -746,7 +718,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEReference(getPort_IncomingConnection(), this.getConnection(), this.getConnection_Target(), "incomingConnection", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPort_Component(), this.getSoundComponent(), this.getSoundComponent_Ports(), "component", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_Direction(), this.getDirection(), "direction", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_Kind(), this.getKind(), "kind", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DataType(), this.getDataType(), "dataType", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -786,10 +757,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEAttribute(getEStringToEBooleanObject_Value(), ecorePackage.getEBooleanObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
-		initEEnum(kindEEnum, Kind.class, "Kind");
-		addEEnumLiteral(kindEEnum, Kind.SOUND);
-		addEEnumLiteral(kindEEnum, Kind.CONTROL);
-
 		initEEnum(directionEEnum, Direction.class, "Direction");
 		addEEnumLiteral(directionEEnum, Direction.IN);
 		addEEnumLiteral(directionEEnum, Direction.OUT);
@@ -798,6 +765,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		addEEnumLiteral(dataTypeEEnum, DataType.FLOAT);
 		addEEnumLiteral(dataTypeEEnum, DataType.INTEGER);
 		addEEnumLiteral(dataTypeEEnum, DataType.BOOLEAN);
+		addEEnumLiteral(dataTypeEEnum, DataType.SOUND);
 
 		// Create resource
 		createResource(eNS_URI);

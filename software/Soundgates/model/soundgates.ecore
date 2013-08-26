@@ -6,13 +6,15 @@
     <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
     <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EEnum" name="Kind">
-    <eLiterals name="SOUND"/>
-    <eLiterals name="CONTROL" value="1"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Direction">
     <eLiterals name="IN"/>
     <eLiterals name="OUT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="FLOAT"/>
+    <eLiterals name="INTEGER" value="1"/>
+    <eLiterals name="BOOLEAN" value="2"/>
+    <eLiterals name="SOUND" value="3" literal="SOUND"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Patch">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
@@ -44,7 +46,6 @@
         eType="#//SoundComponent" eOpposite="#//SoundComponent/ports"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" lowerBound="1"
         eType="#//Direction"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//Kind"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
         eType="#//DataType"/>
   </eClassifiers>
@@ -118,11 +119,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="EStringToEFloatObject" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
-    <eLiterals name="FLOAT"/>
-    <eLiterals name="INTEGER" value="1"/>
-    <eLiterals name="BOOLEAN" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EStringToEIntegerObject" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -46,7 +46,17 @@ public enum DataType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	BOOLEAN(2, "BOOLEAN", "BOOLEAN");
+	BOOLEAN(2, "BOOLEAN", "BOOLEAN"),
+
+	/**
+	 * The '<em><b>SOUND</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #SOUND_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	SOUND(3, "SOUND", "SOUND");
 
 	/**
 	 * The '<em><b>FLOAT</b></em>' literal value.
@@ -94,6 +104,21 @@ public enum DataType implements Enumerator {
 	public static final int BOOLEAN_VALUE = 2;
 
 	/**
+	 * The '<em><b>SOUND</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>SOUND</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #SOUND
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int SOUND_VALUE = 3;
+
+	/**
 	 * An array of all the '<em><b>Data Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -104,6 +129,7 @@ public enum DataType implements Enumerator {
 			FLOAT,
 			INTEGER,
 			BOOLEAN,
+			SOUND,
 		};
 
 	/**
@@ -157,6 +183,7 @@ public enum DataType implements Enumerator {
 			case FLOAT_VALUE: return FLOAT;
 			case INTEGER_VALUE: return INTEGER;
 			case BOOLEAN_VALUE: return BOOLEAN;
+			case SOUND_VALUE: return SOUND;
 		}
 		return null;
 	}
