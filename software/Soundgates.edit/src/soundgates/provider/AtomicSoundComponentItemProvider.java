@@ -57,14 +57,37 @@ public class AtomicSoundComponentItemProvider
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+		// Reset the itemProperty Descriptors, else the are loaded only upon starting the editor for each class
+		// Since instances of AtomicSoundComponent may have different sets of properties, they need to be rebuilt
+		// Or maybe build a generic PropertyEntry Descriptor that handles this (possibly better)
+		itemPropertyDescriptors = null;
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
 			addTypePropertyDescriptor(object);
+			
+			addPropertiesEntryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
-
+	
+	protected void addPropertiesEntryPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+		(createItemPropertyDescriptor
+			(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			 getResourceLocator(),
+			 "Bool",
+			 "BoolDesc",
+			 SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT__VALUE,
+			 true,
+			 false,
+			 false,
+			 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+			 null,
+			 null));
+	}
+	
+	
 	/**
 	 * This adds a property descriptor for the Type feature.
 	 * <!-- begin-user-doc -->
