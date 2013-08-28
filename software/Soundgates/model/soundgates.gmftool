@@ -31,9 +31,9 @@
           title="Port"
           description="Create new Port">
         <smallIcon
-            xsi:type="gmftool:DefaultImage"/>
-        <largeIcon
-            xsi:type="gmftool:DefaultImage"/>
+            xsi:type="gmftool:BundleImage"
+            path="icons/toolspalette/PortIn.gif"
+            bundle="Soundgates.edit"/>
       </tools>
     </tools>
     <tools

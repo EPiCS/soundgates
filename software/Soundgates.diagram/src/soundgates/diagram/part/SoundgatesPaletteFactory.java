@@ -108,8 +108,8 @@ public class SoundgatesPaletteFactory {
 				Messages.Port1CreationTool_desc,
 				Collections.singletonList(SoundgatesElementTypes.Port_3001));
 		entry.setId("createPort1CreationTool"); //$NON-NLS-1$
-		entry.setSmallIcon(SoundgatesElementTypes
-				.getImageDescriptor(SoundgatesElementTypes.Port_3001));
+		entry.setSmallIcon(SoundgatesDiagramEditorPlugin
+				.findImageDescriptor("/Soundgates.edit/icons/toolspalette/PortIn.gif")); //$NON-NLS-1$
 		entry.setLargeIcon(entry.getSmallIcon());
 		return entry;
 	}

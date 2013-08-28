@@ -59,8 +59,7 @@
           visualID="5001"
           editPartClassName="PortNameEditPart"
           itemSemanticEditPolicyClassName="PortNameItemSemanticEditPolicy"
-          notationViewFactoryClassName="PortNameViewFactory"
-          elementIcon="true">
+          notationViewFactoryClassName="PortNameViewFactory">
         <diagramRunTimeClass
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <viewmap
@@ -153,8 +152,7 @@
           visualID="5003"
           editPartClassName="CompositeSoundComponentNameEditPart"
           itemSemanticEditPolicyClassName="CompositeSoundComponentNameItemSemanticEditPolicy"
-          notationViewFactoryClassName="CompositeSoundComponentNameViewFactory"
-          elementIcon="true">
+          notationViewFactoryClassName="CompositeSoundComponentNameViewFactory">
         <diagramRunTimeClass
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <viewmap
@@ -218,6 +216,7 @@
             xsi:type="gmfgen:ToolEntry"
             title="Port"
             description="Create new Port"
+            smallIconPath="/Soundgates.edit/icons/toolspalette/PortIn.gif"
             genNodes="//@diagram/@childNodes.0"/>
       </groups>
       <groups

@@ -238,11 +238,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	 * @generated
 	 */
 	protected Image getLabelIcon() {
-		EObject parserElement = getParserElement();
-		if (parserElement == null) {
-			return null;
-		}
-		return SoundgatesElementTypes.getImage(parserElement.eClass());
+		return null;
 	}
 
 	/**

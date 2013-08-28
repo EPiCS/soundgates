@@ -61,20 +61,21 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 		Object concreteType = this.getRequest().getParameter("concreteType");
 		System.out.println(concreteType);
 		if (concreteType != null) {
-			newElement = AtomicSoundComponentLibrary.getInstance().createAtomicSoundComponentInstance((String)concreteType);
-		}
-		else {
-			newElement = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();			
+			newElement = AtomicSoundComponentLibrary.getInstance()
+					.createAtomicSoundComponentInstance((String) concreteType);
+		} else {
+			newElement = SoundgatesFactory.eINSTANCE
+					.createAtomicSoundComponent();
 		}
 		//---MYTOOL
-		
+
 		Patch owner = (Patch) getElementToEdit();
 		owner.getElements().add(newElement);
-		
+
 		doConfigure(newElement, monitor, info);
-		
+
 		((CreateElementRequest) getRequest()).setNewElement(newElement);
-		
+
 		return CommandResult.newOKCommandResult(newElement);
 	}
 
