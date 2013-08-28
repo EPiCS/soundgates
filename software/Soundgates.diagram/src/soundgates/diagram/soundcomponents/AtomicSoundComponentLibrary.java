@@ -70,7 +70,12 @@ public class AtomicSoundComponentLibrary {
 		}
 		
 		AtomicSoundComponent copy = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
-		copy.setName(blueprint.getName());
+		if (blueprint.getName()!= null && blueprint.getName().length()>0) {
+			copy.setName(blueprint.getName());
+		}
+		else {
+			copy.setName(blueprint.getType());
+		}
 		copy.setType(blueprint.getType());
 		Iterator<Port> pi = blueprint.getPorts().iterator();
 		while (pi.hasNext()) {

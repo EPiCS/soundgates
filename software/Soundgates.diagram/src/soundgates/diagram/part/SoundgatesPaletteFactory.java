@@ -44,8 +44,6 @@ public class SoundgatesPaletteFactory {
 		paletteContainer.add(createAtomicSoundComponent1CreationTool());
 		List<String> availableTypes = AtomicSoundComponentLibrary.getInstance()
 				.getAvailableTypes();
-		// instead of putting the type descriptor in the palette, use the name
-		// of the blueprint soundcomponent
 		for (int i = 0; i < availableTypes.size(); i++) {
 			paletteContainer
 					.add(createConcreteAtomicNodeCreationTool(availableTypes
@@ -158,12 +156,9 @@ public class SoundgatesPaletteFactory {
 
 	// MYTOOL
 	private ToolEntry createConcreteAtomicNodeCreationTool(String atomicType) {
-		String atomicName = AtomicSoundComponentLibrary.getInstance()
-				.createAtomicSoundComponentInstance(atomicType).getName();
 		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
-				atomicName,
 				atomicType,
-				"Create " + atomicName,
+				"Create " + atomicType,
 				Collections
 						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
 		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
@@ -208,10 +203,10 @@ public class SoundgatesPaletteFactory {
 	private static class ConcreteAtomicNodeToolEntry extends NodeToolEntry {
 		private String atomicType;
 
-		protected ConcreteAtomicNodeToolEntry(String title, String type,
+		protected ConcreteAtomicNodeToolEntry(String title,
 				String description, List<IElementType> elementTypes) {
 			super(title, description, elementTypes);
-			this.atomicType = type;
+			this.atomicType = title;
 		}
 
 		public Tool createTool() {
