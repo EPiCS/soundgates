@@ -23,6 +23,5 @@
 *.synctex.gz
 *.kilepr
 *.class
-*.classpath
 .settings
 *~
