@@ -195,7 +195,7 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -208,6 +208,9 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return;
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
 				((EStructuralFeature.Setting)getBooleanProperties()).set(newValue);
+				return;
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__TYPE:
+				setType((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
