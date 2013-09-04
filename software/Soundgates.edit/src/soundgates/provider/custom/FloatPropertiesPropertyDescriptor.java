@@ -41,15 +41,14 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 			// if (genericFeature instanceof EStructuralFeature)
 		}
 
-		
-		
 		return new ExtendedDialogCellEditor(parent, getLabelProvider()) {
 
 			@Override
 			protected Object openDialogBox(Control cellEditorWindow) {
-				InputDialog dialog = new FloatPropertyInputDialog(PlatformUI.getWorkbench()
-						.getDisplay().getActiveShell(), "dialogTitle",
-						"dialogMessage", "initialValue", null, object);
+				InputDialog dialog = new FloatPropertyInputDialog(PlatformUI
+						.getWorkbench().getDisplay().getActiveShell(),
+						"dialogTitle", "dialogMessage", "initialValue", null,
+						object);
 				int result = dialog.open();
 				return result == Window.OK ? dialog.getReturnCode() : null;
 			}
@@ -77,31 +76,35 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 }
 
 class FloatPropertyInputDialog extends InputDialog {
-	//TODO so bauen, dass für jede Property eine Zeile existiert
-	//TODO Label im Property Tab zeigt Blödsinn an
-	//TODO Wird aktuell nur im Tree Editor nicht im Diagramm Editor benutzt
+	// TODO so bauen, dass für jede Property eine Zeile existiert
+	// TODO Label im Property Tab zeigt Blödsinn an
+	// TODO Wird aktuell nur im Tree Editor nicht im Diagramm Editor benutzt
+	// TODO Änderungen werden nicht registriert (kein speichern möglich)
+	// Funktioniert aber wenn man noch was anderes ändert
 
 	Object object;
-	
+
 	public FloatPropertyInputDialog(Shell parentShell, String dialogTitle,
-			String dialogMessage, String initialValue, IInputValidator validator, Object object) {
+			String dialogMessage, String initialValue,
+			IInputValidator validator, Object object) {
 		super(parentShell, dialogTitle, dialogMessage, initialValue, validator);
 		this.object = object;
 
 	}
-	
+
 	@Override
 	protected void okPressed() {
 		System.out.println("Try to set \"SomeValue\" to " + this.getValue());
 		try {
-			AtomicSoundComponent ats = (AtomicSoundComponent)object;
-			ats.getFloatProperties().put("SomeValue", Float.parseFloat(this.getValue())); //Verdammt, das funktioniert!
-			
-		}
-		catch (Exception e) {
-			
+			AtomicSoundComponent ats = (AtomicSoundComponent) object;
+			ats.getFloatProperties().put("SomeValue",
+					Float.parseFloat(this.getValue())); // Verdammt, das
+														// funktioniert!
+
+		} catch (Exception e) {
+
 		}
 		super.okPressed();
 	}
-	
+
 }
