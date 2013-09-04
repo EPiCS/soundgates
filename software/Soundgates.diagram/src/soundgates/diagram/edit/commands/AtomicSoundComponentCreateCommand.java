@@ -59,7 +59,6 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 
 		//MYTOOL TODO elemente aus XML lesen
 		Object concreteType = this.getRequest().getParameter("concreteType");
-		System.out.println(concreteType);
 		if (concreteType != null) {
 			newElement = AtomicSoundComponentLibrary.getInstance()
 					.createAtomicSoundComponentInstance((String) concreteType);

@@ -20,7 +20,8 @@ public class AtomicPropertiesPropertySource extends PropertySource {
 			IItemPropertyDescriptor itemPropertyDescriptor) {
 		SoundgatesPackage pkg = SoundgatesPackage.eINSTANCE;
 		Object feature = itemPropertyDescriptor.getFeature(object);
-		if (			 SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT__VALUE.equals(feature)) {
+		//TODO Int und Bool Properties hinzufügen
+		if (			 SoundgatesPackage.Literals.ESTRING_TO_EFLOAT_OBJECT__VALUE.equals(feature)) {
 			return new FloatPropertiesPropertyDescriptor(object,
 					itemPropertyDescriptor);
 		} else {

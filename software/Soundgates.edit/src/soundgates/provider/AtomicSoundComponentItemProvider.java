@@ -72,13 +72,14 @@ public class AtomicSoundComponentItemProvider
 	}
 	
 	protected void addPropertiesEntryPropertyDescriptor(Object object) {
+		//TODO Bool und Int properties hinzufügen
 		itemPropertyDescriptors.add
 		(createItemPropertyDescriptor
 			(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 			 getResourceLocator(),
-			 "Bool",
-			 "BoolDesc",
-			 SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT__VALUE,
+			 "FloatProps",
+			 "FloatDesc",
+			 SoundgatesPackage.Literals.ESTRING_TO_EFLOAT_OBJECT__VALUE,
 			 true,
 			 false,
 			 false,
