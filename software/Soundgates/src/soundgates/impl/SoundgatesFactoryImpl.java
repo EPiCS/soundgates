@@ -68,6 +68,7 @@ public class SoundgatesFactoryImpl extends EFactoryImpl implements SoundgatesFac
 			case SoundgatesPackage.ESTRING_TO_EFLOAT_OBJECT: return (EObject)createEStringToEFloatObject();
 			case SoundgatesPackage.ESTRING_TO_EINTEGER_OBJECT: return (EObject)createEStringToEIntegerObject();
 			case SoundgatesPackage.ESTRING_TO_EBOOLEAN_OBJECT: return (EObject)createEStringToEBooleanObject();
+			case SoundgatesPackage.ESTRING_TO_ESTRING: return (EObject)createEStringToEString();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -195,6 +196,16 @@ public class SoundgatesFactoryImpl extends EFactoryImpl implements SoundgatesFac
 	public Map.Entry<String, Boolean> createEStringToEBooleanObject() {
 		EStringToEBooleanObjectImpl eStringToEBooleanObject = new EStringToEBooleanObjectImpl();
 		return eStringToEBooleanObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, String> createEStringToEString() {
+		EStringToEStringImpl eStringToEString = new EStringToEStringImpl();
+		return eStringToEString;
 	}
 
 	/**

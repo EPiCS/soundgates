@@ -279,6 +279,29 @@ public class SoundgatesItemProviderAdapterFactory extends SoundgatesAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EStringToEStringItemProvider eStringToEStringItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEStringToEStringAdapter() {
+		if (eStringToEStringItemProvider == null) {
+			eStringToEStringItemProvider = new EStringToEStringItemProvider(this);
+		}
+
+		return eStringToEStringItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -386,6 +409,7 @@ public class SoundgatesItemProviderAdapterFactory extends SoundgatesAdapterFacto
 		if (eStringToEFloatObjectItemProvider != null) eStringToEFloatObjectItemProvider.dispose();
 		if (eStringToEIntegerObjectItemProvider != null) eStringToEIntegerObjectItemProvider.dispose();
 		if (eStringToEBooleanObjectItemProvider != null) eStringToEBooleanObjectItemProvider.dispose();
+		if (eStringToEStringItemProvider != null) eStringToEStringItemProvider.dispose();
 	}
 
 }

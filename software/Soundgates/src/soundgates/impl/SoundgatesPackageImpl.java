@@ -133,6 +133,13 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass eStringToEStringEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum directionEEnum = null;
 
 	/**
@@ -424,8 +431,17 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAtomicSoundComponent_StringProperties() {
+		return (EReference)atomicSoundComponentEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getAtomicSoundComponent_Type() {
-		return (EAttribute)atomicSoundComponentEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)atomicSoundComponentEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -568,6 +584,33 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getEStringToEString() {
+		return eStringToEStringEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEStringToEString_Key() {
+		return (EAttribute)eStringToEStringEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEStringToEString_Value() {
+		return (EAttribute)eStringToEStringEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -638,6 +681,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__FLOAT_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES);
+		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES);
 		createEAttribute(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__TYPE);
 
 		connectionEClass = createEClass(CONNECTION);
@@ -660,6 +704,10 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		eStringToEBooleanObjectEClass = createEClass(ESTRING_TO_EBOOLEAN_OBJECT);
 		createEAttribute(eStringToEBooleanObjectEClass, ESTRING_TO_EBOOLEAN_OBJECT__KEY);
 		createEAttribute(eStringToEBooleanObjectEClass, ESTRING_TO_EBOOLEAN_OBJECT__VALUE);
+
+		eStringToEStringEClass = createEClass(ESTRING_TO_ESTRING);
+		createEAttribute(eStringToEStringEClass, ESTRING_TO_ESTRING__KEY);
+		createEAttribute(eStringToEStringEClass, ESTRING_TO_ESTRING__VALUE);
 
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
@@ -733,6 +781,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEReference(getAtomicSoundComponent_FloatProperties(), this.getEStringToEFloatObject(), null, "floatProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_IntegerProperties(), this.getEStringToEIntegerObject(), null, "integerProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_BooleanProperties(), this.getEStringToEBooleanObject(), null, "booleanProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAtomicSoundComponent_StringProperties(), this.getEStringToEString(), null, "stringProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAtomicSoundComponent_Type(), ecorePackage.getEString(), "type", null, 1, 1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionEClass, Connection.class, "Connection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -755,6 +804,10 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEClass(eStringToEBooleanObjectEClass, Map.Entry.class, "EStringToEBooleanObject", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToEBooleanObject_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEStringToEBooleanObject_Value(), ecorePackage.getEBooleanObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(eStringToEStringEClass, Map.Entry.class, "EStringToEString", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToEString_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEStringToEString_Value(), ecorePackage.getEString(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

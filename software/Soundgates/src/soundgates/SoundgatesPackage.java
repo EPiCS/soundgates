@@ -398,13 +398,22 @@ public interface SoundgatesPackage extends EPackage {
 	int ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>String Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT__TYPE = SOUND_COMPONENT_FEATURE_COUNT + 3;
+	int ATOMIC_SOUND_COMPONENT__TYPE = SOUND_COMPONENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Atomic Sound Component</em>' class.
@@ -413,7 +422,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 4;
+	int ATOMIC_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.ConnectionImpl <em>Connection</em>}' class.
@@ -665,6 +674,43 @@ public interface SoundgatesPackage extends EPackage {
 	int ESTRING_TO_EBOOLEAN_OBJECT_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link soundgates.impl.EStringToEStringImpl <em>EString To EString</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see soundgates.impl.EStringToEStringImpl
+	 * @see soundgates.impl.SoundgatesPackageImpl#getEStringToEString()
+	 * @generated
+	 */
+	int ESTRING_TO_ESTRING = 13;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_ESTRING__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_ESTRING__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To EString</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_ESTRING_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link soundgates.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -672,7 +718,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @see soundgates.impl.SoundgatesPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 13;
+	int DIRECTION = 14;
 
 	/**
 	 * The meta object id for the '{@link soundgates.DataType <em>Data Type</em>}' enum.
@@ -682,7 +728,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @see soundgates.impl.SoundgatesPackageImpl#getDataType()
 	 * @generated
 	 */
-	int DATA_TYPE = 14;
+	int DATA_TYPE = 15;
 
 
 	/**
@@ -932,6 +978,17 @@ public interface SoundgatesPackage extends EPackage {
 	EReference getAtomicSoundComponent_BooleanProperties();
 
 	/**
+	 * Returns the meta object for the map '{@link soundgates.AtomicSoundComponent#getStringProperties <em>String Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>String Properties</em>'.
+	 * @see soundgates.AtomicSoundComponent#getStringProperties()
+	 * @see #getAtomicSoundComponent()
+	 * @generated
+	 */
+	EReference getAtomicSoundComponent_StringProperties();
+
+	/**
 	 * Returns the meta object for the attribute '{@link soundgates.AtomicSoundComponent#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1106,6 +1163,40 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEStringToEBooleanObject_Value();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To EString</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To EString</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueDataType="org.eclipse.emf.ecore.EString"
+	 * @generated
+	 */
+	EClass getEStringToEString();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToEString()
+	 * @generated
+	 */
+	EAttribute getEStringToEString_Key();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToEString()
+	 * @generated
+	 */
+	EAttribute getEStringToEString_Value();
 
 	/**
 	 * Returns the meta object for enum '{@link soundgates.Direction <em>Direction</em>}'.
@@ -1348,6 +1439,14 @@ public interface SoundgatesPackage extends EPackage {
 		EReference ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES = eINSTANCE.getAtomicSoundComponent_BooleanProperties();
 
 		/**
+		 * The meta object literal for the '<em><b>String Properties</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES = eINSTANCE.getAtomicSoundComponent_StringProperties();
+
+		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1486,6 +1585,32 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_EBOOLEAN_OBJECT__VALUE = eINSTANCE.getEStringToEBooleanObject_Value();
+
+		/**
+		 * The meta object literal for the '{@link soundgates.impl.EStringToEStringImpl <em>EString To EString</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see soundgates.impl.EStringToEStringImpl
+		 * @see soundgates.impl.SoundgatesPackageImpl#getEStringToEString()
+		 * @generated
+		 */
+		EClass ESTRING_TO_ESTRING = eINSTANCE.getEStringToEString();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_ESTRING__KEY = eINSTANCE.getEStringToEString_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_ESTRING__VALUE = eINSTANCE.getEStringToEString_Value();
 
 		/**
 		 * The meta object literal for the '{@link soundgates.Direction <em>Direction</em>}' enum.

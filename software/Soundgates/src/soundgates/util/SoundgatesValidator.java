@@ -113,6 +113,8 @@ public class SoundgatesValidator extends EObjectValidator {
 				return validateEStringToEIntegerObject((Map.Entry<?, ?>)value, diagnostics, context);
 			case SoundgatesPackage.ESTRING_TO_EBOOLEAN_OBJECT:
 				return validateEStringToEBooleanObject((Map.Entry<?, ?>)value, diagnostics, context);
+			case SoundgatesPackage.ESTRING_TO_ESTRING:
+				return validateEStringToEString((Map.Entry<?, ?>)value, diagnostics, context);
 			case SoundgatesPackage.DIRECTION:
 				return validateDirection((Direction)value, diagnostics, context);
 			case SoundgatesPackage.DATA_TYPE:
@@ -356,6 +358,15 @@ public class SoundgatesValidator extends EObjectValidator {
 	 */
 	public boolean validateEStringToEBooleanObject(Map.Entry<?, ?> eStringToEBooleanObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)eStringToEBooleanObject, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateEStringToEString(Map.Entry<?, ?> eStringToEString, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)eStringToEString, diagnostics, context);
 	}
 
 	/**

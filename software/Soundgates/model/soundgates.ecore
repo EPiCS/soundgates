@@ -75,6 +75,8 @@
         eType="#//EStringToEIntegerObject" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="booleanProperties" upperBound="-1"
         eType="#//EStringToEBooleanObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stringProperties" upperBound="-1"
+        eType="#//EStringToEString" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         changeable="false"/>
   </eClassifiers>
@@ -127,5 +129,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="EStringToEBooleanObject" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEString" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>
