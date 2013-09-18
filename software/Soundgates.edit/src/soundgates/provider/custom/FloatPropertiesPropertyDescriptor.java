@@ -1,21 +1,38 @@
 package soundgates.provider.custom;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.ui.celleditor.ExtendedDialogCellEditor;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.ui.provider.PropertyDescriptor;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
@@ -45,7 +62,7 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 
 			@Override
 			protected Object openDialogBox(Control cellEditorWindow) {
-				InputDialog dialog = new FloatPropertyInputDialog(PlatformUI
+				Dialog dialog = new FloatPropertyInputDialog(PlatformUI
 						.getWorkbench().getDisplay().getActiveShell(),
 						"dialogTitle", "dialogMessage", "initialValue", null,
 						object);
@@ -75,36 +92,74 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 	}
 }
 
-class FloatPropertyInputDialog extends InputDialog {
+class FloatPropertyInputDialog extends Dialog {
 	// TODO so bauen, dass für jede Property eine Zeile existiert
 	// TODO Label im Property Tab zeigt Blödsinn an
 	// TODO Wird aktuell nur im Tree Editor nicht im Diagramm Editor benutzt
 	// TODO Änderungen werden nicht registriert (kein speichern möglich)
 	// Funktioniert aber wenn man noch was anderes ändert
 
-	Object object;
+	Object atomicSoundComponentObject;
+	Map<String, Text> inputTexts;
 
 	public FloatPropertyInputDialog(Shell parentShell, String dialogTitle,
 			String dialogMessage, String initialValue,
 			IInputValidator validator, Object object) {
-		super(parentShell, dialogTitle, dialogMessage, initialValue, validator);
-		this.object = object;
+		super(parentShell);
+		this.atomicSoundComponentObject = object;
+		this.inputTexts = new HashMap<String, Text>();
 
+	}
+	
+	@Override
+	/**
+	 * Builds the component's input dialog
+	 */
+	protected Control createDialogArea(Composite parent) {
+		Composite composite = (Composite)super.createDialogArea(parent);
+		
+		Set<String> keys = getAtomicSoundComponent().getFloatProperties().keySet();
+		List<String> keysSorted = new ArrayList<String>();
+		keysSorted.addAll(keys);
+		Collections.sort(keysSorted);
+		Iterator<String> it = keysSorted.iterator();
+		while(it.hasNext()) {
+			String desc = it.next();
+			Label label = new Label(composite, SWT.WRAP);
+			label.setText(desc);
+			Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
+			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+			text.addModifyListener(new ModifyListener() {
+				public void modifyText(ModifyEvent e) {
+					// TODO validate
+				}
+			});
+			inputTexts.put(desc, text);
+		}
+		
+		
+		applyDialogFont(composite);
+		return composite;
 	}
 
 	@Override
 	protected void okPressed() {
-		System.out.println("Try to set \"SomeValue\" to " + this.getValue());
 		try {
-			AtomicSoundComponent ats = (AtomicSoundComponent) object;
-			ats.getFloatProperties().put("SomeValue",
-					Float.parseFloat(this.getValue())); // Verdammt, das
-														// funktioniert!
-
+			Set<String> keys = getAtomicSoundComponent().getFloatProperties().keySet();
+			Iterator<String> it = keys.iterator();
+			while(it.hasNext()) {
+				String desc = it.next();
+				Float value = Float.parseFloat(inputTexts.get(desc).getText());
+				getAtomicSoundComponent().getFloatProperties().put(desc, value);
+			}
 		} catch (Exception e) {
 
 		}
 		super.okPressed();
+	}
+	
+	private AtomicSoundComponent getAtomicSoundComponent() {
+		return (AtomicSoundComponent) atomicSoundComponentObject;
 	}
 
 }
