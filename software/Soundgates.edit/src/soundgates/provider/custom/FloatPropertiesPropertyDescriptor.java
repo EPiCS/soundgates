@@ -66,6 +66,7 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 			public String getText(Object object) {
 				List<String> keys = new ArrayList<String>();
 				keys.addAll(ats.getFloatProperties().keySet());
+				Collections.sort(keys);
 				Iterator<String> it = keys.iterator();
 				String result = "";
 				while (it.hasNext()) {
@@ -102,8 +103,6 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 
 			@Override
 			protected Object openDialogBox(Control cellEditorWindow) {
-				System.out.println(getDefaultLabel().getText());
-				System.out.println(getLabelProvider().getText(object));
 				Dialog dialog = new FloatPropertyInputDialog(PlatformUI
 						.getWorkbench().getDisplay().getActiveShell(),
 						"dialogTitle", "dialogMessage", "initialValue", null,
@@ -136,8 +135,7 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 
 class FloatPropertyInputDialog extends Dialog {
 	// TODO so bauen, dass für jede Property eine Zeile existiert
-	// TODO Label im Property Tab zeigt Blödsinn an
-	// TODO Wird aktuell nur im Tree Editor nicht im Diagramm Editor benutzt
+	// TODO Funktioniert im Diagramm Editor noch nicht korrekt (ändert nicht alle Werte)
 	// TODO Änderungen werden nicht registriert (kein speichern möglich)
 	// Funktioniert aber wenn man noch was anderes ändert
 
@@ -193,11 +191,12 @@ class FloatPropertyInputDialog extends Dialog {
 			Iterator<String> it = keys.iterator();
 			while (it.hasNext()) {
 				String desc = it.next();
+				System.out.println(desc);
 				Float value = Float.parseFloat(inputTexts.get(desc).getText());
-				getAtomicSoundComponent().getFloatProperties().put(desc, value);
+				getAtomicSoundComponent().getFloatProperties().put(desc, value); //TODO hier wird eine exception im Diagram Editor geworfen
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		super.okPressed();
 	}
