@@ -11,7 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.ui.celleditor.ExtendedDialogCellEditor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
@@ -51,6 +54,7 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 	@Override
 	public String getDisplayName() {
 		return super.getDisplayName();
+
 	}
 
 	@Override
@@ -135,7 +139,8 @@ public class FloatPropertiesPropertyDescriptor extends PropertyDescriptor {
 
 class FloatPropertyInputDialog extends Dialog {
 	// TODO so bauen, dass für jede Property eine Zeile existiert
-	// TODO Funktioniert im Diagramm Editor noch nicht korrekt (ändert nicht alle Werte)
+	// TODO Funktioniert im Diagramm Editor noch nicht korrekt (schmeißt
+	// exception)
 	// TODO Änderungen werden nicht registriert (kein speichern möglich)
 	// Funktioniert aber wenn man noch was anderes ändert
 
@@ -189,11 +194,19 @@ class FloatPropertyInputDialog extends Dialog {
 			Set<String> keys = getAtomicSoundComponent().getFloatProperties()
 					.keySet();
 			Iterator<String> it = keys.iterator();
+
 			while (it.hasNext()) {
 				String desc = it.next();
-				System.out.println(desc);
 				Float value = Float.parseFloat(inputTexts.get(desc).getText());
-				getAtomicSoundComponent().getFloatProperties().put(desc, value); //TODO hier wird eine exception im Diagram Editor geworfen
+				try {
+					getAtomicSoundComponent().getFloatProperties().put(desc,
+							value);
+					// TODO hier wird eine exception im Diagram Editor geworfen.
+					// Funktioniert durch Abfangen der Exception so, ist aber
+					// ein dreckicker Hack. Man sollte hier ein GMF Command
+					// absetzen
+				} catch (IllegalStateException e) {
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
