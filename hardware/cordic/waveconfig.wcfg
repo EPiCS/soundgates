@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="F:/bastelbox/fpga/cordic/cordic_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="cordic_tb" />
+            <top_module name="math_real" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="3" />
+   <wvobject fp_name="/cordic_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="group18" type="group">
+      <obj_property name="label">Stage 0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(0)\/PIPELINE_STAGE/x" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">x[31:0]</obj_property>
+         <obj_property name="ObjectShortName">x[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(0)\/PIPELINE_STAGE/y" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">y[31:0]</obj_property>
+         <obj_property name="ObjectShortName">y[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(0)\/PIPELINE_STAGE/z" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">z[31:0]</obj_property>
+         <obj_property name="ObjectShortName">z[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(0)\/PIPELINE_STAGE/x_n" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">x_n[31:0]</obj_property>
+         <obj_property name="ObjectShortName">x_n[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(0)\/PIPELINE_STAGE/y_n" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">y_n[31:0]</obj_property>
+         <obj_property name="ObjectShortName">y_n[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(0)\/PIPELINE_STAGE/z_n" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">z_n[31:0]</obj_property>
+         <obj_property name="ObjectShortName">z_n[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group19" type="group">
+      <obj_property name="label">Stage 2</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(1)\/PIPELINE_STAGE/x" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">x[31:0]</obj_property>
+         <obj_property name="ObjectShortName">x[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(1)\/PIPELINE_STAGE/y" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">y[31:0]</obj_property>
+         <obj_property name="ObjectShortName">y[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(1)\/PIPELINE_STAGE/z" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">z[31:0]</obj_property>
+         <obj_property name="ObjectShortName">z[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(1)\/PIPELINE_STAGE/x_n" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">x_n[31:0]</obj_property>
+         <obj_property name="ObjectShortName">x_n[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(1)\/PIPELINE_STAGE/y_n" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">y_n[31:0]</obj_property>
+         <obj_property name="ObjectShortName">y_n[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/cordic_tb/uut/\cordic_pipeline(1)\/PIPELINE_STAGE/z_n" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">z_n[31:0]</obj_property>
+         <obj_property name="ObjectShortName">z_n[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>
