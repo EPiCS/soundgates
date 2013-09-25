@@ -14,6 +14,7 @@ import soundgates.Direction;
 import soundgates.Port;
 import soundgates.SoundgatesFactory;
 
+//TODO needs to check whether there are duplicate keys in the boolean/float/integer properties
 public class AtomicSoundComponentLibrary {
 
 	private static AtomicSoundComponentLibrary instance;
@@ -22,7 +23,7 @@ public class AtomicSoundComponentLibrary {
 	public static AtomicSoundComponentLibrary getInstance() {
 		if (instance == null) {
 			instance = new AtomicSoundComponentLibrary();
-			// TODO weg
+			// TODO weg sobald XML einlesen funktioniert
 			createDummyLibrary();
 		}
 		return instance;
@@ -51,8 +52,17 @@ public class AtomicSoundComponentLibrary {
 
 		c.getFloatProperties().put("SomeValue", 1.0f);
 		c.getFloatProperties().put("AnotherValue", 3.14f);
+		c.getIntegerProperties().put("IntProp", 33);
+		c.getBooleanProperties().put("BoolProp", true);
 		instance.components.put(c.getType(), c);
 
+		
+		AtomicSoundComponent c2 = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
+		c2.setName("Boolean dummy");
+		c2.setType("BoolDummy");
+		c2.getBooleanProperties().put("pommes", false);
+		instance.components.put(c2.getType(), c2);
+		
 		return instance;
 	}
 
