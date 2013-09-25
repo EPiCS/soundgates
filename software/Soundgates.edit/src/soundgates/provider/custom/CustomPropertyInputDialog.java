@@ -14,8 +14,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -25,12 +28,14 @@ import soundgates.AtomicSoundComponent;
 public class CustomPropertyInputDialog extends Dialog {
 	// TODO Funktioniert im Diagramm Editor noch nicht korrekt (schmeißt
 	// exception)
-	// TODO Änderungen werden in EMF nicht registriert (kein speichern möglich)
+	// TODO Änderungen werden in EMF nicht registriert (kein speichern
+	// möglich)
 	// Funktioniert aber wenn man noch was anderes ändert
 
 	Object atomicSoundComponentObject;
 	Map<String, Text> inputTexts;
-	Map<String, String> errorMessages = new HashMap<String,String>();
+	Map<String, Button> boolButtons;
+	Map<String, String> errorMessages = new HashMap<String, String>();
 
 	public CustomPropertyInputDialog(Shell parentShell, String dialogTitle,
 			String dialogMessage, String initialValue,
@@ -38,7 +43,7 @@ public class CustomPropertyInputDialog extends Dialog {
 		super(parentShell);
 		this.atomicSoundComponentObject = object;
 		this.inputTexts = new HashMap<String, Text>();
-
+		this.boolButtons = new HashMap<String, Button>();
 	}
 
 	@Override
@@ -69,32 +74,49 @@ public class CustomPropertyInputDialog extends Dialog {
 					.containsKey(key);
 
 			Label label = new Label(composite, SWT.WRAP);
-			Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
 
 			if (b) {
-				text.setText(getAtomicSoundComponent().getBooleanProperties()
-						.get(key).toString());
+				Composite radioGroup = (Composite) super
+						.createDialogArea(composite);
+				radioGroup.setLayout(new RowLayout());
+				Button buttonTrue = new Button(radioGroup, SWT.RADIO);
+				buttonTrue.setText("True");
+				Button buttonFalse = new Button(radioGroup, SWT.RADIO);
+				buttonFalse.setText("False");
+
+				if (getAtomicSoundComponent().getBooleanProperties().get(key)) {
+					buttonTrue.setSelection(true);
+				} else {
+					buttonFalse.setSelection(true);
+				}
+
+				boolButtons.put(key, buttonTrue);
+
 				desc = desc + " (Bool)";
-			} else if (i) {
-				text.setText(getAtomicSoundComponent().getIntegerProperties()
-						.get(key).toString());
-				desc = desc + " (Int)";
-			} else if (f) {
-				text.setText(getAtomicSoundComponent().getFloatProperties()
-						.get(key).toString());
-				desc = desc + " (Float)";
+			} else {
+				Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
+
+				if (i) {
+					text.setText(getAtomicSoundComponent()
+							.getIntegerProperties().get(key).toString());
+					desc = desc + " (Int)";
+				} else if (f) {
+					text.setText(getAtomicSoundComponent().getFloatProperties()
+							.get(key).toString());
+					desc = desc + " (Float)";
+				}
+				
+				text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+						| GridData.HORIZONTAL_ALIGN_FILL));
+				text.addModifyListener(new ModifyListener() {
+					public void modifyText(ModifyEvent e) {
+						validateInput(key, b, i, f);
+
+					}
+				});
+				inputTexts.put(key, text);
 			}
 			label.setText(desc);
-
-			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-					| GridData.HORIZONTAL_ALIGN_FILL));
-			text.addModifyListener(new ModifyListener() {
-				public void modifyText(ModifyEvent e) {
-					validateInput(key, b, i, f);
-
-				}
-			});
-			inputTexts.put(key, text);
 		}
 
 		applyDialogFont(composite);
@@ -117,10 +139,11 @@ public class CustomPropertyInputDialog extends Dialog {
 				try {
 					if (getAtomicSoundComponent().getBooleanProperties()
 							.containsKey(desc)) {
-						Boolean value = Boolean.parseBoolean(inputTexts.get(
-								desc).getText());
+
+						Boolean value = boolButtons.get(desc).getSelection();
 						getAtomicSoundComponent().getBooleanProperties().put(
 								desc, value);
+
 						// TODO hier wird eine exception im Diagram Editor
 						// geworfen.
 						// Funktioniert durch Abfangen der Exception so, ist
