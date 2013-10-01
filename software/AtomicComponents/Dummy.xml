@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
-	<Type>Sine generator</Type>
+	<Type>Dummy</Type>
 	<Ports>
-		<Port Name="Frequency" Direction="IN" DataType="INT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port Name="Sound_In" Direction="IN" DataType="SOUND"/>
+		<Port Name="Sound_Out" Direction="OUT" DataType="SOUND"/>
 	</Ports>
 	<Properties>
-		<FloatProperty Name="Frequency" InitialValue="440.0"/>
+		<FloatProperty Name="FloatProp"/>
+		<IntProperty Name="IntProp1" InitialValue="30"/>
+		<IntProperty Name="IntProp2"/>
+		<BoolProperty Name="BoolProp" InitialValue="True"/>
 	</Properties>
 	<Code>
 		<Simulation>
