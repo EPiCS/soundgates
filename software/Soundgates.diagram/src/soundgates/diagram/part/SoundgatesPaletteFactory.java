@@ -41,7 +41,8 @@ public class SoundgatesPaletteFactory {
 		PaletteGroup paletteContainer = new PaletteGroup(
 				Messages.Components1Group_title);
 		paletteContainer.setId("createComponents1Group"); //$NON-NLS-1$
-		paletteContainer.add(createAtomicSoundComponent1CreationTool());
+		// We don't want to create untyped AtomicSoundComponents
+		// paletteContainer.add(createAtomicSoundComponent1CreationTool());
 		List<String> availableTypes = AtomicSoundComponentLibrary.getInstance()
 				.getAvailableTypes();
 		for (int i = 0; i < availableTypes.size(); i++) {
@@ -203,8 +204,8 @@ public class SoundgatesPaletteFactory {
 	private static class ConcreteAtomicNodeToolEntry extends NodeToolEntry {
 		private String atomicType;
 
-		protected ConcreteAtomicNodeToolEntry(String title,
-				String description, List<IElementType> elementTypes) {
+		protected ConcreteAtomicNodeToolEntry(String title, String description,
+				List<IElementType> elementTypes) {
 			super(title, description, elementTypes);
 			this.atomicType = title;
 		}
