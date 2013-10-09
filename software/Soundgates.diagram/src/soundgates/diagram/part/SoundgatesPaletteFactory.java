@@ -9,6 +9,7 @@ import org.eclipse.gef.Tool;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.palette.PaletteToolbar;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateUnspecifiedTypeRequest;
 import org.eclipse.gmf.runtime.diagram.ui.tools.UnspecifiedTypeConnectionTool;
@@ -27,6 +28,7 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	public void fillPalette(PaletteRoot paletteRoot) {
+		PaletteToolbar standardGroup = ((PaletteToolbar)paletteRoot.getChildren().get(0));
 		paletteRoot.add(createComponents1Group());
 		paletteRoot.add(createPorts2Group());
 		paletteRoot.add(createConnections3Group());
