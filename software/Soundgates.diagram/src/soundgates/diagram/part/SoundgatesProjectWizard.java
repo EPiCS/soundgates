@@ -39,6 +39,8 @@ public class SoundgatesProjectWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		IRunnableWithProgress op = new WorkspaceModifyOperation(null) {
 			
+			
+			//TODO: Default Komponenten im soundcomponents ordner abspeichern
 			@Override
 			protected void execute(IProgressMonitor monitor) throws CoreException, InvocationTargetException,
 					InterruptedException {

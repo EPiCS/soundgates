@@ -1,27 +1,12 @@
 package soundgates.diagram.soundcomponents;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.common.util.EMap;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import soundgates.AtomicSoundComponent;
 import soundgates.DataType;
 import soundgates.Direction;
@@ -33,13 +18,13 @@ public class AtomicSoundComponentLibrary {
 
 	private static AtomicSoundComponentLibrary instance;
 	private TreeMap<String, AtomicSoundComponent> components;
+	private static IFolder xmlfolder;
 
 	public static AtomicSoundComponentLibrary getInstance() {
 		if (instance == null) {
 			instance = new AtomicSoundComponentLibrary();
-			// createDummyLibrary();			
-			// TODO set the path from within the runtime eclipse and make the palette changeable
-			createFromXML("D:/Users/gwue/Documents/GitHub/pg-soundgates/software/AtomicComponents/");
+			String path = xmlfolder.getRawLocation().toString()+"/";
+			createFromXML(path);
 		}
 		return instance;
 	}
@@ -158,6 +143,16 @@ public class AtomicSoundComponentLibrary {
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(components.keySet());
 		return list;
+	}
+
+	/**
+	 * Set's the xml library to a given folder
+	 * This requires the library to be reconstructed, so the instance is dereferenced
+	 * @param folder
+	 */
+	public static void setXMLFolder(IFolder folder) {
+		instance = null;
+		xmlfolder = folder;
 	}
 }
 
