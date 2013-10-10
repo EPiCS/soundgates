@@ -57,16 +57,10 @@ public class AtomicSoundComponentItemProvider
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-		// Reset the itemProperty Descriptors, else the are loaded only upon starting the editor for each class
-		// Since instances of AtomicSoundComponent may have different sets of properties, they need to be rebuilt
-		// If possible build a generic PropertyEntry Descriptor that handles this
-		itemPropertyDescriptors = null;
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
 			addTypePropertyDescriptor(object);
-			
-			addPropertiesEntryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

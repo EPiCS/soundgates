@@ -15,8 +15,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
 import soundgates.SoundgatesPackage;
+import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
 import soundgates.diagram.edit.parts.PatchEditPart;
 import soundgates.diagram.edit.parts.PortEditPart;
@@ -69,7 +73,27 @@ public class SoundgatesElementTypes {
 	/**
 	 * @generated
 	 */
+	public static final IElementType AtomicSoundComponent_3002 = getElementType("Soundgates.diagram.AtomicSoundComponent_3002"); //$NON-NLS-1$
+
+	/**
+	 * @generated
+	 */
+	public static final IElementType CompositeSoundComponent_3003 = getElementType("Soundgates.diagram.CompositeSoundComponent_3003"); //$NON-NLS-1$
+
+	/**
+	 * @generated
+	 */
 	public static final IElementType Link_4001 = getElementType("Soundgates.diagram.Link_4001"); //$NON-NLS-1$
+
+	/**
+	 * @generated
+	 */
+	public static final IElementType Link_4002 = getElementType("Soundgates.diagram.Link_4002"); //$NON-NLS-1$
+
+	/**
+	 * @generated
+	 */
+	public static final IElementType Delegation_4003 = getElementType("Soundgates.diagram.Delegation_4003"); //$NON-NLS-1$
 
 	/**
 	 * @generated
@@ -119,7 +143,18 @@ public class SoundgatesElementTypes {
 
 			elements.put(Port_3001, SoundgatesPackage.eINSTANCE.getPort());
 
+			elements.put(AtomicSoundComponent_3002,
+					SoundgatesPackage.eINSTANCE.getAtomicSoundComponent());
+
+			elements.put(CompositeSoundComponent_3003,
+					SoundgatesPackage.eINSTANCE.getCompositeSoundComponent());
+
 			elements.put(Link_4001, SoundgatesPackage.eINSTANCE.getLink());
+
+			elements.put(Link_4002, SoundgatesPackage.eINSTANCE.getLink());
+
+			elements.put(Delegation_4003,
+					SoundgatesPackage.eINSTANCE.getDelegation());
 		}
 		return (ENamedElement) elements.get(type);
 	}
@@ -141,7 +176,11 @@ public class SoundgatesElementTypes {
 			KNOWN_ELEMENT_TYPES.add(AtomicSoundComponent_2001);
 			KNOWN_ELEMENT_TYPES.add(CompositeSoundComponent_2002);
 			KNOWN_ELEMENT_TYPES.add(Port_3001);
+			KNOWN_ELEMENT_TYPES.add(AtomicSoundComponent_3002);
+			KNOWN_ELEMENT_TYPES.add(CompositeSoundComponent_3003);
 			KNOWN_ELEMENT_TYPES.add(Link_4001);
+			KNOWN_ELEMENT_TYPES.add(Link_4002);
+			KNOWN_ELEMENT_TYPES.add(Delegation_4003);
 		}
 		return KNOWN_ELEMENT_TYPES.contains(elementType);
 	}
@@ -159,8 +198,16 @@ public class SoundgatesElementTypes {
 			return CompositeSoundComponent_2002;
 		case PortEditPart.VISUAL_ID:
 			return Port_3001;
+		case AtomicSoundComponent2EditPart.VISUAL_ID:
+			return AtomicSoundComponent_3002;
+		case CompositeSoundComponent2EditPart.VISUAL_ID:
+			return CompositeSoundComponent_3003;
 		case LinkEditPart.VISUAL_ID:
 			return Link_4001;
+		case Link2EditPart.VISUAL_ID:
+			return Link_4002;
+		case DelegationEditPart.VISUAL_ID:
+			return Delegation_4003;
 		}
 		return null;
 	}

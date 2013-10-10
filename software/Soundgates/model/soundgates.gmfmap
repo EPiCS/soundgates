@@ -70,11 +70,31 @@
         <containmentFeature
             href="soundgates.ecore#//SoundComponent/ports"/>
       </children>
+      <children
+          compartment="//@nodes.1/@ownedChild/@compartments.0"
+          referencedChild="//@nodes.0/@ownedChild">
+        <containmentFeature
+            href="soundgates.ecore#//CompositeSoundComponent/embeddedComponents"/>
+      </children>
+      <children
+          compartment="//@nodes.1/@ownedChild/@compartments.0"
+          referencedChild="//@nodes.1/@ownedChild">
+        <containmentFeature
+            href="soundgates.ecore#//CompositeSoundComponent/embeddedComponents"/>
+      </children>
+      <compartments
+          children="//@nodes.1/@ownedChild/@children.1 //@nodes.1/@ownedChild/@children.2">
+        <compartment
+            href="soundgates.gmfgraph#ComponentCompartment"/>
+      </compartments>
     </ownedChild>
   </nodes>
   <links>
     <domainMetaElement
         href="soundgates.ecore#//Link"/>
+    <domainSpecialization
+        body="return domainElement.eContainingFeature().getName().equals(&quot;elements&quot;);"
+        language="java"/>
     <containmentFeature
         href="soundgates.ecore#//Patch/elements"/>
     <tool
@@ -82,6 +102,46 @@
         href="soundgates.gmftool#//@palette/@tools.2/@tools.0"/>
     <diagramLink
         href="soundgates.gmfgraph#Link"/>
+    <sourceMetaFeature
+        xsi:type="ecore:EReference"
+        href="soundgates.ecore#//Connection/source"/>
+    <linkMetaFeature
+        xsi:type="ecore:EReference"
+        href="soundgates.ecore#//Connection/target"/>
+  </links>
+  <links>
+    <domainMetaElement
+        href="soundgates.ecore#//Link"/>
+    <domainSpecialization
+        body="return (domainElement.eContainingFeature().getName().equals(&quot;links&quot;));"
+        language="java"/>
+    <containmentFeature
+        href="soundgates.ecore#//CompositeSoundComponent/links"/>
+    <tool
+        xsi:type="gmftool:CreationTool"
+        href="soundgates.gmftool#//@palette/@tools.2/@tools.0"/>
+    <diagramLink
+        href="soundgates.gmfgraph#CompositeSoundComponentLinks"/>
+    <sourceMetaFeature
+        xsi:type="ecore:EReference"
+        href="soundgates.ecore#//Connection/source"/>
+    <linkMetaFeature
+        xsi:type="ecore:EReference"
+        href="soundgates.ecore#//Connection/target"/>
+  </links>
+  <links>
+    <domainMetaElement
+        href="soundgates.ecore#//Delegation"/>
+    <domainSpecialization
+        body="return domainElement.eContainingFeature().getName().equals(&quot;delegations&quot;);"
+        language="java"/>
+    <containmentFeature
+        href="soundgates.ecore#//CompositeSoundComponent/delegations"/>
+    <tool
+        xsi:type="gmftool:CreationTool"
+        href="soundgates.gmftool#//@palette/@tools.2/@tools.1"/>
+    <diagramLink
+        href="soundgates.gmfgraph#Delegation"/>
     <sourceMetaFeature
         xsi:type="ecore:EReference"
         href="soundgates.ecore#//Connection/source"/>

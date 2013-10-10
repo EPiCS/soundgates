@@ -21,7 +21,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
+import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartment2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartmentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
 import soundgates.diagram.edit.parts.PatchEditPart;
 import soundgates.diagram.edit.parts.PortEditPart;
@@ -54,6 +58,28 @@ public class SoundgatesModelingAssistantProvider extends
 		if (editPart instanceof CompositeSoundComponentEditPart) {
 			ArrayList<IElementType> types = new ArrayList<IElementType>(1);
 			types.add(SoundgatesElementTypes.Port_3001);
+			return types;
+		}
+		if (editPart instanceof AtomicSoundComponent2EditPart) {
+			ArrayList<IElementType> types = new ArrayList<IElementType>(1);
+			types.add(SoundgatesElementTypes.Port_3001);
+			return types;
+		}
+		if (editPart instanceof CompositeSoundComponent2EditPart) {
+			ArrayList<IElementType> types = new ArrayList<IElementType>(1);
+			types.add(SoundgatesElementTypes.Port_3001);
+			return types;
+		}
+		if (editPart instanceof CompositeSoundComponentComponentCompartmentEditPart) {
+			ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+			types.add(SoundgatesElementTypes.AtomicSoundComponent_3002);
+			types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
+			return types;
+		}
+		if (editPart instanceof CompositeSoundComponentComponentCompartment2EditPart) {
+			ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+			types.add(SoundgatesElementTypes.AtomicSoundComponent_3002);
+			types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
 			return types;
 		}
 		return Collections.EMPTY_LIST;

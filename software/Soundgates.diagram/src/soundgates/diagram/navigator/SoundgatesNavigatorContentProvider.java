@@ -23,8 +23,14 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
 
+import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartment2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartmentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
 import soundgates.diagram.edit.parts.PatchEditPart;
 import soundgates.diagram.edit.parts.PortEditPart;
@@ -242,6 +248,13 @@ public class SoundgatesNavigatorContentProvider implements
 			connectedViews = getDiagramLinksByType(Collections.singleton(sv),
 					SoundgatesVisualIDRegistry.getType(LinkEditPart.VISUAL_ID));
 			links.addChildren(createNavigatorItems(connectedViews, links, false));
+			connectedViews = getDiagramLinksByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(Link2EditPart.VISUAL_ID));
+			links.addChildren(createNavigatorItems(connectedViews, links, false));
+			connectedViews = getDiagramLinksByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(DelegationEditPart.VISUAL_ID));
+			links.addChildren(createNavigatorItems(connectedViews, links, false));
 			if (!links.isEmpty()) {
 				result.add(links);
 			}
@@ -267,6 +280,25 @@ public class SoundgatesNavigatorContentProvider implements
 					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
 			result.addAll(createNavigatorItems(connectedViews, parentElement,
 					false));
+			connectedViews = getChildrenByType(
+					Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID));
+			connectedViews = getChildrenByType(connectedViews,
+					SoundgatesVisualIDRegistry
+							.getType(AtomicSoundComponent2EditPart.VISUAL_ID));
+			result.addAll(createNavigatorItems(connectedViews, parentElement,
+					false));
+			connectedViews = getChildrenByType(
+					Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID));
+			connectedViews = getChildrenByType(
+					connectedViews,
+					SoundgatesVisualIDRegistry
+							.getType(CompositeSoundComponent2EditPart.VISUAL_ID));
+			result.addAll(createNavigatorItems(connectedViews, parentElement,
+					false));
 			return result.toArray();
 		}
 
@@ -288,12 +320,71 @@ public class SoundgatesNavigatorContentProvider implements
 					SoundgatesVisualIDRegistry.getType(LinkEditPart.VISUAL_ID));
 			outgoinglinks.addChildren(createNavigatorItems(connectedViews,
 					outgoinglinks, true));
+			connectedViews = getIncomingLinksByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(Link2EditPart.VISUAL_ID));
+			incominglinks.addChildren(createNavigatorItems(connectedViews,
+					incominglinks, true));
+			connectedViews = getOutgoingLinksByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(Link2EditPart.VISUAL_ID));
+			outgoinglinks.addChildren(createNavigatorItems(connectedViews,
+					outgoinglinks, true));
+			connectedViews = getIncomingLinksByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(DelegationEditPart.VISUAL_ID));
+			incominglinks.addChildren(createNavigatorItems(connectedViews,
+					incominglinks, true));
+			connectedViews = getOutgoingLinksByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(DelegationEditPart.VISUAL_ID));
+			outgoinglinks.addChildren(createNavigatorItems(connectedViews,
+					outgoinglinks, true));
 			if (!incominglinks.isEmpty()) {
 				result.add(incominglinks);
 			}
 			if (!outgoinglinks.isEmpty()) {
 				result.add(outgoinglinks);
 			}
+			return result.toArray();
+		}
+
+		case AtomicSoundComponent2EditPart.VISUAL_ID: {
+			LinkedList<SoundgatesAbstractNavigatorItem> result = new LinkedList<SoundgatesAbstractNavigatorItem>();
+			Node sv = (Node) view;
+			Collection<View> connectedViews;
+			connectedViews = getChildrenByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
+			result.addAll(createNavigatorItems(connectedViews, parentElement,
+					false));
+			return result.toArray();
+		}
+
+		case CompositeSoundComponent2EditPart.VISUAL_ID: {
+			LinkedList<SoundgatesAbstractNavigatorItem> result = new LinkedList<SoundgatesAbstractNavigatorItem>();
+			Node sv = (Node) view;
+			Collection<View> connectedViews;
+			connectedViews = getChildrenByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
+			result.addAll(createNavigatorItems(connectedViews, parentElement,
+					false));
+			connectedViews = getChildrenByType(
+					Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID));
+			connectedViews = getChildrenByType(connectedViews,
+					SoundgatesVisualIDRegistry
+							.getType(AtomicSoundComponent2EditPart.VISUAL_ID));
+			result.addAll(createNavigatorItems(connectedViews, parentElement,
+					false));
+			connectedViews = getChildrenByType(
+					Collections.singleton(sv),
+					SoundgatesVisualIDRegistry
+							.getType(CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID));
+			connectedViews = getChildrenByType(
+					connectedViews,
+					SoundgatesVisualIDRegistry
+							.getType(CompositeSoundComponent2EditPart.VISUAL_ID));
+			result.addAll(createNavigatorItems(connectedViews, parentElement,
+					false));
 			return result.toArray();
 		}
 
@@ -305,6 +396,60 @@ public class SoundgatesNavigatorContentProvider implements
 					"icons/linkTargetNavigatorGroup.gif", parentElement); //$NON-NLS-1$
 			SoundgatesNavigatorGroup source = new SoundgatesNavigatorGroup(
 					Messages.NavigatorGroupName_Link_4001_source,
+					"icons/linkSourceNavigatorGroup.gif", parentElement); //$NON-NLS-1$
+			Collection<View> connectedViews;
+			connectedViews = getLinksTargetByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
+			target.addChildren(createNavigatorItems(connectedViews, target,
+					true));
+			connectedViews = getLinksSourceByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
+			source.addChildren(createNavigatorItems(connectedViews, source,
+					true));
+			if (!target.isEmpty()) {
+				result.add(target);
+			}
+			if (!source.isEmpty()) {
+				result.add(source);
+			}
+			return result.toArray();
+		}
+
+		case Link2EditPart.VISUAL_ID: {
+			LinkedList<SoundgatesAbstractNavigatorItem> result = new LinkedList<SoundgatesAbstractNavigatorItem>();
+			Edge sv = (Edge) view;
+			SoundgatesNavigatorGroup target = new SoundgatesNavigatorGroup(
+					Messages.NavigatorGroupName_Link_4002_target,
+					"icons/linkTargetNavigatorGroup.gif", parentElement); //$NON-NLS-1$
+			SoundgatesNavigatorGroup source = new SoundgatesNavigatorGroup(
+					Messages.NavigatorGroupName_Link_4002_source,
+					"icons/linkSourceNavigatorGroup.gif", parentElement); //$NON-NLS-1$
+			Collection<View> connectedViews;
+			connectedViews = getLinksTargetByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
+			target.addChildren(createNavigatorItems(connectedViews, target,
+					true));
+			connectedViews = getLinksSourceByType(Collections.singleton(sv),
+					SoundgatesVisualIDRegistry.getType(PortEditPart.VISUAL_ID));
+			source.addChildren(createNavigatorItems(connectedViews, source,
+					true));
+			if (!target.isEmpty()) {
+				result.add(target);
+			}
+			if (!source.isEmpty()) {
+				result.add(source);
+			}
+			return result.toArray();
+		}
+
+		case DelegationEditPart.VISUAL_ID: {
+			LinkedList<SoundgatesAbstractNavigatorItem> result = new LinkedList<SoundgatesAbstractNavigatorItem>();
+			Edge sv = (Edge) view;
+			SoundgatesNavigatorGroup target = new SoundgatesNavigatorGroup(
+					Messages.NavigatorGroupName_Delegation_4003_target,
+					"icons/linkTargetNavigatorGroup.gif", parentElement); //$NON-NLS-1$
+			SoundgatesNavigatorGroup source = new SoundgatesNavigatorGroup(
+					Messages.NavigatorGroupName_Delegation_4003_source,
 					"icons/linkSourceNavigatorGroup.gif", parentElement); //$NON-NLS-1$
 			Collection<View> connectedViews;
 			connectedViews = getLinksTargetByType(Collections.singleton(sv),

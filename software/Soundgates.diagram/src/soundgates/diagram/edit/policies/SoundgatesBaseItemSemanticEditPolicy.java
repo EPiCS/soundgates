@@ -32,6 +32,8 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.helpers.GeneratedEditHelperBase;
 
+import soundgates.CompositeSoundComponent;
+import soundgates.Delegation;
 import soundgates.Link;
 import soundgates.Patch;
 import soundgates.Port;
@@ -333,7 +335,40 @@ public class SoundgatesBaseItemSemanticEditPolicy extends SemanticEditPolicy {
 		/**
 		 * @generated
 		 */
+		public boolean canCreateLink_4002(CompositeSoundComponent container,
+				Port source, Port target) {
+			return canExistLink_4002(container, null, source, target);
+		}
+
+		/**
+		 * @generated
+		 */
+		public boolean canCreateDelegation_4003(
+				CompositeSoundComponent container, Port source, Port target) {
+			return canExistDelegation_4003(container, null, source, target);
+		}
+
+		/**
+		 * @generated
+		 */
 		public boolean canExistLink_4001(Patch container, Link linkInstance,
+				Port source, Port target) {
+			return true;
+		}
+
+		/**
+		 * @generated
+		 */
+		public boolean canExistLink_4002(CompositeSoundComponent container,
+				Link linkInstance, Port source, Port target) {
+			return true;
+		}
+
+		/**
+		 * @generated
+		 */
+		public boolean canExistDelegation_4003(
+				CompositeSoundComponent container, Delegation linkInstance,
 				Port source, Port target) {
 			return true;
 		}

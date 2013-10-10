@@ -246,8 +246,10 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	 * @generated
 	 */
 	public List<IElementType> getMARelTypesOnSource() {
-		ArrayList<IElementType> types = new ArrayList<IElementType>(1);
+		ArrayList<IElementType> types = new ArrayList<IElementType>(3);
 		types.add(SoundgatesElementTypes.Link_4001);
+		types.add(SoundgatesElementTypes.Link_4002);
+		types.add(SoundgatesElementTypes.Delegation_4003);
 		return types;
 	}
 
@@ -260,6 +262,12 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		if (targetEditPart instanceof soundgates.diagram.edit.parts.PortEditPart) {
 			types.add(SoundgatesElementTypes.Link_4001);
 		}
+		if (targetEditPart instanceof soundgates.diagram.edit.parts.PortEditPart) {
+			types.add(SoundgatesElementTypes.Link_4002);
+		}
+		if (targetEditPart instanceof soundgates.diagram.edit.parts.PortEditPart) {
+			types.add(SoundgatesElementTypes.Delegation_4003);
+		}
 		return types;
 	}
 
@@ -270,6 +278,10 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		LinkedList<IElementType> types = new LinkedList<IElementType>();
 		if (relationshipType == SoundgatesElementTypes.Link_4001) {
 			types.add(SoundgatesElementTypes.Port_3001);
+		} else if (relationshipType == SoundgatesElementTypes.Link_4002) {
+			types.add(SoundgatesElementTypes.Port_3001);
+		} else if (relationshipType == SoundgatesElementTypes.Delegation_4003) {
+			types.add(SoundgatesElementTypes.Port_3001);
 		}
 		return types;
 	}
@@ -278,8 +290,10 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	 * @generated
 	 */
 	public List<IElementType> getMARelTypesOnTarget() {
-		ArrayList<IElementType> types = new ArrayList<IElementType>(1);
+		ArrayList<IElementType> types = new ArrayList<IElementType>(3);
 		types.add(SoundgatesElementTypes.Link_4001);
+		types.add(SoundgatesElementTypes.Link_4002);
+		types.add(SoundgatesElementTypes.Delegation_4003);
 		return types;
 	}
 
@@ -289,6 +303,10 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	public List<IElementType> getMATypesForSource(IElementType relationshipType) {
 		LinkedList<IElementType> types = new LinkedList<IElementType>();
 		if (relationshipType == SoundgatesElementTypes.Link_4001) {
+			types.add(SoundgatesElementTypes.Port_3001);
+		} else if (relationshipType == SoundgatesElementTypes.Link_4002) {
+			types.add(SoundgatesElementTypes.Port_3001);
+		} else if (relationshipType == SoundgatesElementTypes.Delegation_4003) {
 			types.add(SoundgatesElementTypes.Port_3001);
 		}
 		return types;

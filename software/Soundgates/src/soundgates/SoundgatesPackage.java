@@ -316,22 +316,13 @@ public interface SoundgatesPackage extends EPackage {
 	int COMPOSITE_SOUND_COMPONENT__DELEGATIONS = SOUND_COMPONENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPOSITE_SOUND_COMPONENT__CONNECTIONS = SOUND_COMPONENT_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Composite Sound Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 4;
+	int COMPOSITE_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.AtomicSoundComponentImpl <em>Atomic Sound Component</em>}' class.
@@ -453,22 +444,13 @@ public interface SoundgatesPackage extends EPackage {
 	int CONNECTION__TARGET = 1;
 
 	/**
-	 * The feature id for the '<em><b>Parent Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTION__PARENT_COMPONENT = 2;
-
-	/**
 	 * The number of structural features of the '<em>Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION_FEATURE_COUNT = 3;
+	int CONNECTION_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.DelegationImpl <em>Delegation</em>}' class.
@@ -497,15 +479,6 @@ public interface SoundgatesPackage extends EPackage {
 	 * @ordered
 	 */
 	int DELEGATION__TARGET = CONNECTION__TARGET;
-
-	/**
-	 * The feature id for the '<em><b>Parent Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DELEGATION__PARENT_COMPONENT = CONNECTION__PARENT_COMPONENT;
 
 	/**
 	 * The number of structural features of the '<em>Delegation</em>' class.
@@ -543,15 +516,6 @@ public interface SoundgatesPackage extends EPackage {
 	 * @ordered
 	 */
 	int LINK__TARGET = CONNECTION__TARGET;
-
-	/**
-	 * The feature id for the '<em><b>Parent Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LINK__PARENT_COMPONENT = CONNECTION__PARENT_COMPONENT;
 
 	/**
 	 * The number of structural features of the '<em>Link</em>' class.
@@ -924,17 +888,6 @@ public interface SoundgatesPackage extends EPackage {
 	EReference getCompositeSoundComponent_Delegations();
 
 	/**
-	 * Returns the meta object for the reference list '{@link soundgates.CompositeSoundComponent#getConnections <em>Connections</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Connections</em>'.
-	 * @see soundgates.CompositeSoundComponent#getConnections()
-	 * @see #getCompositeSoundComponent()
-	 * @generated
-	 */
-	EReference getCompositeSoundComponent_Connections();
-
-	/**
 	 * Returns the meta object for class '{@link soundgates.AtomicSoundComponent <em>Atomic Sound Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1030,17 +983,6 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getConnection_Target();
-
-	/**
-	 * Returns the meta object for the reference '{@link soundgates.Connection#getParentComponent <em>Parent Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Parent Component</em>'.
-	 * @see soundgates.Connection#getParentComponent()
-	 * @see #getConnection()
-	 * @generated
-	 */
-	EReference getConnection_ParentComponent();
 
 	/**
 	 * Returns the meta object for class '{@link soundgates.Delegation <em>Delegation</em>}'.
@@ -1397,14 +1339,6 @@ public interface SoundgatesPackage extends EPackage {
 		EReference COMPOSITE_SOUND_COMPONENT__DELEGATIONS = eINSTANCE.getCompositeSoundComponent_Delegations();
 
 		/**
-		 * The meta object literal for the '<em><b>Connections</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMPOSITE_SOUND_COMPONENT__CONNECTIONS = eINSTANCE.getCompositeSoundComponent_Connections();
-
-		/**
 		 * The meta object literal for the '{@link soundgates.impl.AtomicSoundComponentImpl <em>Atomic Sound Component</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1479,14 +1413,6 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONNECTION__TARGET = eINSTANCE.getConnection_Target();
-
-		/**
-		 * The meta object literal for the '<em><b>Parent Component</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONNECTION__PARENT_COMPONENT = eINSTANCE.getConnection_ParentComponent();
 
 		/**
 		 * The meta object literal for the '{@link soundgates.impl.DelegationImpl <em>Delegation</em>}' class.

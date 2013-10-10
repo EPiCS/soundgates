@@ -43,8 +43,34 @@ public class SoundgatesEditPartFactory implements EditPartFactory {
 			case PortNameEditPart.VISUAL_ID:
 				return new PortNameEditPart(view);
 
+			case AtomicSoundComponent2EditPart.VISUAL_ID:
+				return new AtomicSoundComponent2EditPart(view);
+
+			case AtomicSoundComponentName2EditPart.VISUAL_ID:
+				return new AtomicSoundComponentName2EditPart(view);
+
+			case CompositeSoundComponent2EditPart.VISUAL_ID:
+				return new CompositeSoundComponent2EditPart(view);
+
+			case CompositeSoundComponentName2EditPart.VISUAL_ID:
+				return new CompositeSoundComponentName2EditPart(view);
+
+			case CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID:
+				return new CompositeSoundComponentComponentCompartmentEditPart(
+						view);
+
+			case CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID:
+				return new CompositeSoundComponentComponentCompartment2EditPart(
+						view);
+
 			case LinkEditPart.VISUAL_ID:
 				return new LinkEditPart(view);
+
+			case Link2EditPart.VISUAL_ID:
+				return new Link2EditPart(view);
+
+			case DelegationEditPart.VISUAL_ID:
+				return new DelegationEditPart(view);
 
 			}
 		}

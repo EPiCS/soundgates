@@ -42,6 +42,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/floatProperties"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/integerProperties"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/booleanProperties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/stringProperties"/>
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//AtomicSoundComponent/type"/>
     </genClasses>
     <genClasses image="false" ecoreClass="soundgates.ecore#//Connection">
@@ -62,6 +63,10 @@
     <genClasses ecoreClass="soundgates.ecore#//EStringToEBooleanObject">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEBooleanObject/key"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEBooleanObject/value"/>
+    </genClasses>
+    <genClasses ecoreClass="soundgates.ecore#//EStringToEString">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEString/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEString/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

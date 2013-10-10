@@ -16,12 +16,7 @@
       <tools
           xsi:type="gmftool:CreationTool"
           title="CompositeSoundComponent"
-          description="Create new CompositeSoundComponent">
-        <smallIcon
-            xsi:type="gmftool:DefaultImage"/>
-        <largeIcon
-            xsi:type="gmftool:DefaultImage"/>
-      </tools>
+          description="Create new CompositeSoundComponent"/>
     </tools>
     <tools
         xsi:type="gmftool:ToolGroup"
@@ -43,21 +38,11 @@
       <tools
           xsi:type="gmftool:CreationTool"
           title="Link"
-          description="Create new Link">
-        <smallIcon
-            xsi:type="gmftool:DefaultImage"/>
-        <largeIcon
-            xsi:type="gmftool:DefaultImage"/>
-      </tools>
+          description="Create new Link"/>
       <tools
           xsi:type="gmftool:CreationTool"
           title="Delegation"
-          description="Create new Delegation">
-        <smallIcon
-            xsi:type="gmftool:DefaultImage"/>
-        <largeIcon
-            xsi:type="gmftool:DefaultImage"/>
-      </tools>
+          description="Create new Delegation"/>
     </tools>
   </palette>
 </gmftool:ToolRegistry>

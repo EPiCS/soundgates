@@ -313,6 +313,16 @@ public class Messages extends NLS {
 	/**
 	 * @generated
 	 */
+	public static String CompositeSoundComponentComponentCompartmentEditPart_title;
+
+	/**
+	 * @generated
+	 */
+	public static String CompositeSoundComponentComponentCompartment2EditPart_title;
+
+	/**
+	 * @generated
+	 */
 	public static String CommandName_OpenDiagram;
 
 	/**
@@ -339,6 +349,26 @@ public class Messages extends NLS {
 	 * @generated
 	 */
 	public static String NavigatorGroupName_Link_4001_source;
+
+	/**
+	 * @generated
+	 */
+	public static String NavigatorGroupName_Link_4002_target;
+
+	/**
+	 * @generated
+	 */
+	public static String NavigatorGroupName_Link_4002_source;
+
+	/**
+	 * @generated
+	 */
+	public static String NavigatorGroupName_Delegation_4003_target;
+
+	/**
+	 * @generated
+	 */
+	public static String NavigatorGroupName_Delegation_4003_source;
 
 	/**
 	 * @generated

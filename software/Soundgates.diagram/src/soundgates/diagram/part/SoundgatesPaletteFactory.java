@@ -1,5 +1,6 @@
 package soundgates.diagram.part;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -86,11 +87,12 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	private ToolEntry createCompositeSoundComponent2CreationTool() {
+		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
+		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
 		NodeToolEntry entry = new NodeToolEntry(
 				Messages.CompositeSoundComponent2CreationTool_title,
-				Messages.CompositeSoundComponent2CreationTool_desc,
-				Collections
-						.singletonList(SoundgatesElementTypes.CompositeSoundComponent_2002));
+				Messages.CompositeSoundComponent2CreationTool_desc, types);
 		entry.setId("createCompositeSoundComponent2CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.CompositeSoundComponent_2002));
@@ -117,10 +119,12 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	private ToolEntry createLink1CreationTool() {
+		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+		types.add(SoundgatesElementTypes.Link_4001);
+		types.add(SoundgatesElementTypes.Link_4002);
 		LinkToolEntry entry = new LinkToolEntry(
 				Messages.Link1CreationTool_title,
-				Messages.Link1CreationTool_desc,
-				Collections.singletonList(SoundgatesElementTypes.Link_4001));
+				Messages.Link1CreationTool_desc, types);
 		entry.setId("createLink1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.Link_4001));
@@ -132,10 +136,15 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	private ToolEntry createDelegation2CreationTool() {
-		ToolEntry entry = new ToolEntry(Messages.Delegation2CreationTool_title,
-				Messages.Delegation2CreationTool_desc, null, null) {
-		};
+		LinkToolEntry entry = new LinkToolEntry(
+				Messages.Delegation2CreationTool_title,
+				Messages.Delegation2CreationTool_desc,
+				Collections
+						.singletonList(SoundgatesElementTypes.Delegation_4003));
 		entry.setId("createDelegation2CreationTool"); //$NON-NLS-1$
+		entry.setSmallIcon(SoundgatesElementTypes
+				.getImageDescriptor(SoundgatesElementTypes.Delegation_4003));
+		entry.setLargeIcon(entry.getSmallIcon());
 		return entry;
 	}
 
@@ -143,11 +152,12 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	private ToolEntry createAtomicSoundComponent1CreationTool() {
+		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+		types.add(SoundgatesElementTypes.AtomicSoundComponent_2001);
+		types.add(SoundgatesElementTypes.AtomicSoundComponent_3002);
 		NodeToolEntry entry = new NodeToolEntry(
 				Messages.AtomicSoundComponent1CreationTool_title,
-				Messages.AtomicSoundComponent1CreationTool_desc,
-				Collections
-						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+				Messages.AtomicSoundComponent1CreationTool_desc, types);
 		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));

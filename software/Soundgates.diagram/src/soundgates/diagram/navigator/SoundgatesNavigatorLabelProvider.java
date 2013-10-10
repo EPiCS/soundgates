@@ -16,10 +16,16 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonLabelProvider;
 
+import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
+import soundgates.diagram.edit.parts.AtomicSoundComponentName2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentNameEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentName2EditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentNameEditPart;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
 import soundgates.diagram.edit.parts.PatchEditPart;
 import soundgates.diagram.edit.parts.PortEditPart;
@@ -100,9 +106,21 @@ public class SoundgatesNavigatorLabelProvider extends LabelProvider implements
 		case PortEditPart.VISUAL_ID:
 			return getImage(
 					"Navigator?Node?soundgates?Port", SoundgatesElementTypes.Port_3001); //$NON-NLS-1$
+		case AtomicSoundComponent2EditPart.VISUAL_ID:
+			return getImage(
+					"Navigator?Node?soundgates?AtomicSoundComponent", SoundgatesElementTypes.AtomicSoundComponent_3002); //$NON-NLS-1$
+		case CompositeSoundComponent2EditPart.VISUAL_ID:
+			return getImage(
+					"Navigator?Node?soundgates?CompositeSoundComponent", SoundgatesElementTypes.CompositeSoundComponent_3003); //$NON-NLS-1$
 		case LinkEditPart.VISUAL_ID:
 			return getImage(
 					"Navigator?Link?soundgates?Link", SoundgatesElementTypes.Link_4001); //$NON-NLS-1$
+		case Link2EditPart.VISUAL_ID:
+			return getImage(
+					"Navigator?Link?soundgates?Link", SoundgatesElementTypes.Link_4002); //$NON-NLS-1$
+		case DelegationEditPart.VISUAL_ID:
+			return getImage(
+					"Navigator?Link?soundgates?Delegation", SoundgatesElementTypes.Delegation_4003); //$NON-NLS-1$
 		}
 		return getImage("Navigator?UnknownElement", null); //$NON-NLS-1$
 	}
@@ -163,8 +181,16 @@ public class SoundgatesNavigatorLabelProvider extends LabelProvider implements
 			return getCompositeSoundComponent_2002Text(view);
 		case PortEditPart.VISUAL_ID:
 			return getPort_3001Text(view);
+		case AtomicSoundComponent2EditPart.VISUAL_ID:
+			return getAtomicSoundComponent_3002Text(view);
+		case CompositeSoundComponent2EditPart.VISUAL_ID:
+			return getCompositeSoundComponent_3003Text(view);
 		case LinkEditPart.VISUAL_ID:
 			return getLink_4001Text(view);
+		case Link2EditPart.VISUAL_ID:
+			return getLink_4002Text(view);
+		case DelegationEditPart.VISUAL_ID:
+			return getDelegation_4003Text(view);
 		}
 		return getUnknownElementText(view);
 	}
@@ -239,7 +265,62 @@ public class SoundgatesNavigatorLabelProvider extends LabelProvider implements
 	/**
 	 * @generated
 	 */
+	private String getAtomicSoundComponent_3002Text(View view) {
+		IParser parser = SoundgatesParserProvider.getParser(
+				SoundgatesElementTypes.AtomicSoundComponent_3002, view
+						.getElement() != null ? view.getElement() : view,
+				SoundgatesVisualIDRegistry
+						.getType(AtomicSoundComponentName2EditPart.VISUAL_ID));
+		if (parser != null) {
+			return parser.getPrintString(new EObjectAdapter(
+					view.getElement() != null ? view.getElement() : view),
+					ParserOptions.NONE.intValue());
+		} else {
+			SoundgatesDiagramEditorPlugin.getInstance().logError(
+					"Parser was not found for label " + 5004); //$NON-NLS-1$
+			return ""; //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * @generated
+	 */
+	private String getCompositeSoundComponent_3003Text(View view) {
+		IParser parser = SoundgatesParserProvider
+				.getParser(
+						SoundgatesElementTypes.CompositeSoundComponent_3003,
+						view.getElement() != null ? view.getElement() : view,
+						SoundgatesVisualIDRegistry
+								.getType(CompositeSoundComponentName2EditPart.VISUAL_ID));
+		if (parser != null) {
+			return parser.getPrintString(new EObjectAdapter(
+					view.getElement() != null ? view.getElement() : view),
+					ParserOptions.NONE.intValue());
+		} else {
+			SoundgatesDiagramEditorPlugin.getInstance().logError(
+					"Parser was not found for label " + 5005); //$NON-NLS-1$
+			return ""; //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * @generated
+	 */
 	private String getLink_4001Text(View view) {
+		return ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * @generated
+	 */
+	private String getLink_4002Text(View view) {
+		return ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * @generated
+	 */
+	private String getDelegation_4003Text(View view) {
 		return ""; //$NON-NLS-1$
 	}
 

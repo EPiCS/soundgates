@@ -14,7 +14,9 @@ import org.eclipse.gmf.runtime.emf.ui.services.parser.ParserHintAdapter;
 import org.eclipse.gmf.runtime.notation.View;
 
 import soundgates.SoundgatesPackage;
+import soundgates.diagram.edit.parts.AtomicSoundComponentName2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentNameEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentName2EditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentNameEditPart;
 import soundgates.diagram.edit.parts.PortNameEditPart;
 import soundgates.diagram.parsers.MessageFormatParser;
@@ -83,6 +85,42 @@ public class SoundgatesParserProvider extends AbstractProvider implements
 	/**
 	 * @generated
 	 */
+	private IParser atomicSoundComponentName_5004Parser;
+
+	/**
+	 * @generated
+	 */
+	private IParser getAtomicSoundComponentName_5004Parser() {
+		if (atomicSoundComponentName_5004Parser == null) {
+			EAttribute[] features = new EAttribute[] { SoundgatesPackage.eINSTANCE
+					.getNamedElement_Name() };
+			MessageFormatParser parser = new MessageFormatParser(features);
+			atomicSoundComponentName_5004Parser = parser;
+		}
+		return atomicSoundComponentName_5004Parser;
+	}
+
+	/**
+	 * @generated
+	 */
+	private IParser compositeSoundComponentName_5005Parser;
+
+	/**
+	 * @generated
+	 */
+	private IParser getCompositeSoundComponentName_5005Parser() {
+		if (compositeSoundComponentName_5005Parser == null) {
+			EAttribute[] features = new EAttribute[] { SoundgatesPackage.eINSTANCE
+					.getNamedElement_Name() };
+			MessageFormatParser parser = new MessageFormatParser(features);
+			compositeSoundComponentName_5005Parser = parser;
+		}
+		return compositeSoundComponentName_5005Parser;
+	}
+
+	/**
+	 * @generated
+	 */
 	protected IParser getParser(int visualID) {
 		switch (visualID) {
 		case AtomicSoundComponentNameEditPart.VISUAL_ID:
@@ -91,6 +129,10 @@ public class SoundgatesParserProvider extends AbstractProvider implements
 			return getCompositeSoundComponentName_5003Parser();
 		case PortNameEditPart.VISUAL_ID:
 			return getPortName_5001Parser();
+		case AtomicSoundComponentName2EditPart.VISUAL_ID:
+			return getAtomicSoundComponentName_5004Parser();
+		case CompositeSoundComponentName2EditPart.VISUAL_ID:
+			return getCompositeSoundComponentName_5005Parser();
 		}
 		return null;
 	}

@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link soundgates.Connection#getSource <em>Source</em>}</li>
  *   <li>{@link soundgates.Connection#getTarget <em>Target</em>}</li>
- *   <li>{@link soundgates.Connection#getParentComponent <em>Parent Component</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,31 +83,5 @@ public interface Connection extends EObject {
 	 * @generated
 	 */
 	void setTarget(Port value);
-
-	/**
-	 * Returns the value of the '<em><b>Parent Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Parent Component</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Parent Component</em>' reference.
-	 * @see #setParentComponent(CompositeSoundComponent)
-	 * @see soundgates.SoundgatesPackage#getConnection_ParentComponent()
-	 * @model
-	 * @generated
-	 */
-	CompositeSoundComponent getParentComponent();
-
-	/**
-	 * Sets the value of the '{@link soundgates.Connection#getParentComponent <em>Parent Component</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Parent Component</em>' reference.
-	 * @see #getParentComponent()
-	 * @generated
-	 */
-	void setParentComponent(CompositeSoundComponent value);
 
 } // Connection

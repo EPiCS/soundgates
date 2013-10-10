@@ -1373,8 +1373,7 @@ public class SoundgatesEditor
 					getActionBarContributor().shareGlobalActions(this, actionBars);
 				}
 			};
-//		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
-		propertySheetPage.setPropertySourceProvider(new AtomicPropertiesPropertySourceProvider(adapterFactory));
+		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 		propertySheetPages.add(propertySheetPage);
 
 		return propertySheetPage;

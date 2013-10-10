@@ -7,12 +7,24 @@ import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.structure.DiagramStructure;
 
+import soundgates.AtomicSoundComponent;
+import soundgates.CompositeSoundComponent;
+import soundgates.Delegation;
+import soundgates.Link;
 import soundgates.Patch;
 import soundgates.SoundgatesPackage;
+import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
+import soundgates.diagram.edit.parts.AtomicSoundComponentName2EditPart;
 import soundgates.diagram.edit.parts.AtomicSoundComponentNameEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartment2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartmentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentName2EditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentNameEditPart;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
 import soundgates.diagram.edit.parts.PatchEditPart;
 import soundgates.diagram.edit.parts.PortEditPart;
@@ -147,6 +159,38 @@ public class SoundgatesVisualIDRegistry {
 				return PortEditPart.VISUAL_ID;
 			}
 			break;
+		case AtomicSoundComponent2EditPart.VISUAL_ID:
+			if (SoundgatesPackage.eINSTANCE.getPort().isSuperTypeOf(
+					domainElement.eClass())) {
+				return PortEditPart.VISUAL_ID;
+			}
+			break;
+		case CompositeSoundComponent2EditPart.VISUAL_ID:
+			if (SoundgatesPackage.eINSTANCE.getPort().isSuperTypeOf(
+					domainElement.eClass())) {
+				return PortEditPart.VISUAL_ID;
+			}
+			break;
+		case CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID:
+			if (SoundgatesPackage.eINSTANCE.getAtomicSoundComponent()
+					.isSuperTypeOf(domainElement.eClass())) {
+				return AtomicSoundComponent2EditPart.VISUAL_ID;
+			}
+			if (SoundgatesPackage.eINSTANCE.getCompositeSoundComponent()
+					.isSuperTypeOf(domainElement.eClass())) {
+				return CompositeSoundComponent2EditPart.VISUAL_ID;
+			}
+			break;
+		case CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID:
+			if (SoundgatesPackage.eINSTANCE.getAtomicSoundComponent()
+					.isSuperTypeOf(domainElement.eClass())) {
+				return AtomicSoundComponent2EditPart.VISUAL_ID;
+			}
+			if (SoundgatesPackage.eINSTANCE.getCompositeSoundComponent()
+					.isSuperTypeOf(domainElement.eClass())) {
+				return CompositeSoundComponent2EditPart.VISUAL_ID;
+			}
+			break;
 		}
 		return -1;
 	}
@@ -192,12 +236,50 @@ public class SoundgatesVisualIDRegistry {
 			if (CompositeSoundComponentNameEditPart.VISUAL_ID == nodeVisualID) {
 				return true;
 			}
+			if (CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
 			if (PortEditPart.VISUAL_ID == nodeVisualID) {
 				return true;
 			}
 			break;
 		case PortEditPart.VISUAL_ID:
 			if (PortNameEditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			break;
+		case AtomicSoundComponent2EditPart.VISUAL_ID:
+			if (AtomicSoundComponentName2EditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			if (PortEditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			break;
+		case CompositeSoundComponent2EditPart.VISUAL_ID:
+			if (CompositeSoundComponentName2EditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			if (CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			if (PortEditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			break;
+		case CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID:
+			if (AtomicSoundComponent2EditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			if (CompositeSoundComponent2EditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			break;
+		case CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID:
+			if (AtomicSoundComponent2EditPart.VISUAL_ID == nodeVisualID) {
+				return true;
+			}
+			if (CompositeSoundComponent2EditPart.VISUAL_ID == nodeVisualID) {
 				return true;
 			}
 			break;
@@ -213,8 +295,19 @@ public class SoundgatesVisualIDRegistry {
 			return -1;
 		}
 		if (SoundgatesPackage.eINSTANCE.getLink().isSuperTypeOf(
-				domainElement.eClass())) {
+				domainElement.eClass())
+				&& isLink_4001((Link) domainElement)) {
 			return LinkEditPart.VISUAL_ID;
+		}
+		if (SoundgatesPackage.eINSTANCE.getLink().isSuperTypeOf(
+				domainElement.eClass())
+				&& isLink_4002((Link) domainElement)) {
+			return Link2EditPart.VISUAL_ID;
+		}
+		if (SoundgatesPackage.eINSTANCE.getDelegation().isSuperTypeOf(
+				domainElement.eClass())
+				&& isDelegation_4003((Delegation) domainElement)) {
+			return DelegationEditPart.VISUAL_ID;
 		}
 		return -1;
 	}
@@ -227,6 +320,28 @@ public class SoundgatesVisualIDRegistry {
 	 */
 	private static boolean isDiagram(Patch element) {
 		return true;
+	}
+
+	/**
+	 * @generated
+	 */
+	private static boolean isLink_4001(Link domainElement) {
+		return domainElement.eContainingFeature().getName().equals("elements");
+	}
+
+	/**
+	 * @generated
+	 */
+	private static boolean isLink_4002(Link domainElement) {
+		return (domainElement.eContainingFeature().getName().equals("links"));
+	}
+
+	/**
+	 * @generated
+	 */
+	private static boolean isDelegation_4003(Delegation domainElement) {
+		return domainElement.eContainingFeature().getName()
+				.equals("delegations");
 	}
 
 	/**
@@ -246,6 +361,13 @@ public class SoundgatesVisualIDRegistry {
 	 * @generated
 	 */
 	public static boolean isCompartmentVisualID(int visualID) {
+		switch (visualID) {
+		case CompositeSoundComponentComponentCompartmentEditPart.VISUAL_ID:
+		case CompositeSoundComponentComponentCompartment2EditPart.VISUAL_ID:
+			return true;
+		default:
+			break;
+		}
 		return false;
 	}
 

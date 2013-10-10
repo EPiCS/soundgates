@@ -1,5 +1,6 @@
 package soundgates.diagram.edit.parts;
 
+import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -8,8 +9,10 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
+import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
@@ -83,8 +86,7 @@ public class CompositeSoundComponentEditPart extends
 	 * @generated
 	 */
 	protected LayoutEditPolicy createLayoutEditPolicy() {
-
-		FlowLayoutEditPolicy lep = new FlowLayoutEditPolicy() {
+		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
 				View childView = (View) child.getModel();
@@ -92,15 +94,15 @@ public class CompositeSoundComponentEditPart extends
 				case PortEditPart.VISUAL_ID:
 					return new BorderItemSelectionEditPolicy();
 				}
-				return super.createChildEditPolicy(child);
+				EditPolicy result = child
+						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				if (result == null) {
+					result = new NonResizableEditPolicy();
+				}
+				return result;
 			}
 
-			protected Command createAddCommand(EditPart child, EditPart after) {
-				return null;
-			}
-
-			protected Command createMoveChildCommand(EditPart child,
-					EditPart after) {
+			protected Command getMoveChildrenCommand(Request request) {
 				return null;
 			}
 
@@ -135,6 +137,14 @@ public class CompositeSoundComponentEditPart extends
 							.getFigureCompositeSoundComponentNameFigure());
 			return true;
 		}
+		if (childEditPart instanceof CompositeSoundComponentComponentCompartmentEditPart) {
+			IFigure pane = getPrimaryShape()
+					.getFigureComponentCompartmentFigure();
+			setupContentPane(pane); // FIXME each comparment should handle his content pane in his own way 
+			pane.add(((CompositeSoundComponentComponentCompartmentEditPart) childEditPart)
+					.getFigure());
+			return true;
+		}
 		if (childEditPart instanceof PortEditPart) {
 			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
 					PositionConstants.SOUTH);
@@ -150,6 +160,13 @@ public class CompositeSoundComponentEditPart extends
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof CompositeSoundComponentNameEditPart) {
+			return true;
+		}
+		if (childEditPart instanceof CompositeSoundComponentComponentCompartmentEditPart) {
+			IFigure pane = getPrimaryShape()
+					.getFigureComponentCompartmentFigure();
+			pane.remove(((CompositeSoundComponentComponentCompartmentEditPart) childEditPart)
+					.getFigure());
 			return true;
 		}
 		if (childEditPart instanceof PortEditPart) {
@@ -184,6 +201,9 @@ public class CompositeSoundComponentEditPart extends
 	 * @generated
 	 */
 	protected IFigure getContentPaneFor(IGraphicalEditPart editPart) {
+		if (editPart instanceof CompositeSoundComponentComponentCompartmentEditPart) {
+			return getPrimaryShape().getFigureComponentCompartmentFigure();
+		}
 		if (editPart instanceof IBorderItemEditPart) {
 			return getBorderedFigure().getBorderItemContainer();
 		}
@@ -297,17 +317,14 @@ public class CompositeSoundComponentEditPart extends
 		/**
 		 * @generated
 		 */
+		private RectangleFigure fFigureComponentCompartmentFigure;
+
+		/**
+		 * @generated
+		 */
 		public CompositeSoundComponentFigure() {
 
-			FlowLayout layoutThis = new FlowLayout();
-			layoutThis.setStretchMinorAxis(false);
-			layoutThis.setMinorAlignment(FlowLayout.ALIGN_LEFTTOP);
-
-			layoutThis.setMajorAlignment(FlowLayout.ALIGN_LEFTTOP);
-			layoutThis.setMajorSpacing(5);
-			layoutThis.setMinorSpacing(5);
-			layoutThis.setHorizontal(true);
-
+			BorderLayout layoutThis = new BorderLayout();
 			this.setLayoutManager(layoutThis);
 
 			createContents();
@@ -323,7 +340,11 @@ public class CompositeSoundComponentEditPart extends
 			fFigureCompositeSoundComponentNameFigure
 					.setText("Composite Sound Component");
 
-			this.add(fFigureCompositeSoundComponentNameFigure);
+			this.add(fFigureCompositeSoundComponentNameFigure, BorderLayout.TOP);
+
+			fFigureComponentCompartmentFigure = new RectangleFigure();
+
+			this.add(fFigureComponentCompartmentFigure, BorderLayout.CENTER);
 
 		}
 
@@ -332,6 +353,13 @@ public class CompositeSoundComponentEditPart extends
 		 */
 		public WrappingLabel getFigureCompositeSoundComponentNameFigure() {
 			return fFigureCompositeSoundComponentNameFigure;
+		}
+
+		/**
+		 * @generated
+		 */
+		public RectangleFigure getFigureComponentCompartmentFigure() {
+			return fFigureComponentCompartmentFigure;
 		}
 
 	}

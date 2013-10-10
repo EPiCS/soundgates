@@ -386,15 +386,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCompositeSoundComponent_Connections() {
-		return (EReference)compositeSoundComponentEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getAtomicSoundComponent() {
 		return atomicSoundComponentEClass;
 	}
@@ -469,15 +460,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 */
 	public EReference getConnection_Target() {
 		return (EReference)connectionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getConnection_ParentComponent() {
-		return (EReference)connectionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -675,7 +657,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		createEReference(compositeSoundComponentEClass, COMPOSITE_SOUND_COMPONENT__EMBEDDED_COMPONENTS);
 		createEReference(compositeSoundComponentEClass, COMPOSITE_SOUND_COMPONENT__LINKS);
 		createEReference(compositeSoundComponentEClass, COMPOSITE_SOUND_COMPONENT__DELEGATIONS);
-		createEReference(compositeSoundComponentEClass, COMPOSITE_SOUND_COMPONENT__CONNECTIONS);
 
 		atomicSoundComponentEClass = createEClass(ATOMIC_SOUND_COMPONENT);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__FLOAT_PROPERTIES);
@@ -687,7 +668,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		connectionEClass = createEClass(CONNECTION);
 		createEReference(connectionEClass, CONNECTION__SOURCE);
 		createEReference(connectionEClass, CONNECTION__TARGET);
-		createEReference(connectionEClass, CONNECTION__PARENT_COMPONENT);
 
 		delegationEClass = createEClass(DELEGATION);
 
@@ -775,7 +755,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEReference(getCompositeSoundComponent_EmbeddedComponents(), this.getSoundComponent(), this.getSoundComponent_ParentComponent(), "embeddedComponents", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCompositeSoundComponent_Links(), this.getLink(), null, "links", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCompositeSoundComponent_Delegations(), this.getDelegation(), null, "delegations", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCompositeSoundComponent_Connections(), this.getConnection(), null, "connections", null, 0, -1, CompositeSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(atomicSoundComponentEClass, AtomicSoundComponent.class, "AtomicSoundComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAtomicSoundComponent_FloatProperties(), this.getEStringToEFloatObject(), null, "floatProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -787,7 +766,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEClass(connectionEClass, Connection.class, "Connection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConnection_Source(), this.getPort(), this.getPort_OutgoingConnection(), "source", null, 1, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConnection_Target(), this.getPort(), this.getPort_IncomingConnection(), "target", null, 1, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getConnection_ParentComponent(), this.getCompositeSoundComponent(), null, "parentComponent", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(delegationEClass, Delegation.class, "Delegation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

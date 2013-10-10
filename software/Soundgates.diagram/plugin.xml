@@ -217,8 +217,8 @@
       <viewProvider class="soundgates.diagram.providers.SoundgatesViewProvider">
          <Priority name="Lowest"/>
          <context viewClass="org.eclipse.gmf.runtime.notation.Diagram" semanticHints="Soundgates"/>
-         <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints="2001,2002,3001"/>
-         <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints="4001"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints="2001,2002,3001,3002,3003"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints="4001,4002,4003"/>
       </viewProvider>
    </extension>
 
@@ -230,16 +230,16 @@
             <method name="getType()" value="Soundgates"/>
          </object>
          <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-nodes">
-            <method name="getType()" value="2001,2002,3001"/>
+            <method name="getType()" value="2001,2002,3001,3002,3003"/>
          </object>
          <object class="org.eclipse.gmf.runtime.notation.Edge" id="generated-links">
-            <method name="getType()" value="4001"/>
+            <method name="getType()" value="4001,4002,4003"/>
          </object>
          <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-labels">
-            <method name="getType()" value="5002,5003,5001"/>
+            <method name="getType()" value="5002,5003,5001,5004,5005"/>
          </object>
          <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-compartments">
-            <method name="getType()" value=""/>
+            <method name="getType()" value="7001,7002"/>
          </object>
          <context views="generated-diagram,generated-nodes,generated-links,generated-labels,generated-compartments"/>
       </editpartProvider>
@@ -253,7 +253,9 @@
          <object class="soundgates.diagram.edit.parts.AtomicSoundComponentEditPart" id="AtomicSoundComponent_2001"/>
          <object class="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart" id="CompositeSoundComponent_2002"/>
          <object class="soundgates.diagram.edit.parts.PortEditPart" id="Port_3001"/>
-         <context elements="Patch_1000,AtomicSoundComponent_2001,CompositeSoundComponent_2002,Port_3001"/>
+         <object class="soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart" id="AtomicSoundComponent_3002"/>
+         <object class="soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart" id="CompositeSoundComponent_3003"/>
+         <context elements="Patch_1000,AtomicSoundComponent_2001,CompositeSoundComponent_2002,Port_3001,AtomicSoundComponent_3002,CompositeSoundComponent_3003"/>
       </modelingAssistantProvider>
    </extension>
 
@@ -314,6 +316,24 @@
          </metamodelType>
       </metamodel>
       <metamodel nsURI="soundgates">
+         <specializationType
+               id="Soundgates.diagram.AtomicSoundComponent_3002"
+               name="%metatype.name.AtomicSoundComponent_3002"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="Soundgates.diagram.AtomicSoundComponent_2001"/>
+            <param name="semanticHint" value="3002"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="soundgates">
+         <specializationType
+               id="Soundgates.diagram.CompositeSoundComponent_3003"
+               name="%metatype.name.CompositeSoundComponent_3003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="Soundgates.diagram.CompositeSoundComponent_2002"/>
+            <param name="semanticHint" value="3003"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="soundgates">
          <metamodelType
                id="Soundgates.diagram.Link_4001"
                name="%metatype.name.Link_4001"
@@ -321,6 +341,25 @@
                eclass="Link"
                edithelper="soundgates.diagram.edit.helpers.LinkEditHelper">
             <param name="semanticHint" value="4001"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="soundgates">
+         <specializationType
+               id="Soundgates.diagram.Link_4002"
+               name="%metatype.name.Link_4002"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="Soundgates.diagram.Link_4001"/>
+            <param name="semanticHint" value="4002"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="soundgates">
+         <metamodelType
+               id="Soundgates.diagram.Delegation_4003"
+               name="%metatype.name.Delegation_4003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Delegation"
+               edithelper="soundgates.diagram.edit.helpers.DelegationEditHelper">
+            <param name="semanticHint" value="4003"/>
          </metamodelType>
       </metamodel>
    </extension>
@@ -339,7 +378,11 @@
          <elementType ref="Soundgates.diagram.AtomicSoundComponent_2001"/>
          <elementType ref="Soundgates.diagram.CompositeSoundComponent_2002"/>
          <elementType ref="Soundgates.diagram.Port_3001"/>
+         <elementType ref="Soundgates.diagram.AtomicSoundComponent_3002"/>
+         <elementType ref="Soundgates.diagram.CompositeSoundComponent_3003"/>
          <elementType ref="Soundgates.diagram.Link_4001"/>
+         <elementType ref="Soundgates.diagram.Link_4002"/>
+         <elementType ref="Soundgates.diagram.Delegation_4003"/>
          <advice ref="org.eclipse.gmf.runtime.diagram.core.advice.notationDepdendents"/>
       </binding>
    </extension>

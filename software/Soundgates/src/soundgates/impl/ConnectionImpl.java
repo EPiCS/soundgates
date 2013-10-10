@@ -25,7 +25,6 @@ import soundgates.SoundgatesPackage;
  * <ul>
  *   <li>{@link soundgates.impl.ConnectionImpl#getSource <em>Source</em>}</li>
  *   <li>{@link soundgates.impl.ConnectionImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link soundgates.impl.ConnectionImpl#getParentComponent <em>Parent Component</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,16 +50,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 * @ordered
 	 */
 	protected Port target;
-
-	/**
-	 * The cached value of the '{@link #getParentComponent() <em>Parent Component</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getParentComponent()
-	 * @generated
-	 * @ordered
-	 */
-	protected CompositeSoundComponent parentComponent;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -206,44 +195,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CompositeSoundComponent getParentComponent() {
-		if (parentComponent != null && parentComponent.eIsProxy()) {
-			InternalEObject oldParentComponent = (InternalEObject)parentComponent;
-			parentComponent = (CompositeSoundComponent)eResolveProxy(oldParentComponent);
-			if (parentComponent != oldParentComponent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SoundgatesPackage.CONNECTION__PARENT_COMPONENT, oldParentComponent, parentComponent));
-			}
-		}
-		return parentComponent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CompositeSoundComponent basicGetParentComponent() {
-		return parentComponent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setParentComponent(CompositeSoundComponent newParentComponent) {
-		CompositeSoundComponent oldParentComponent = parentComponent;
-		parentComponent = newParentComponent;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.CONNECTION__PARENT_COMPONENT, oldParentComponent, parentComponent));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -289,9 +240,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			case SoundgatesPackage.CONNECTION__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
-			case SoundgatesPackage.CONNECTION__PARENT_COMPONENT:
-				if (resolve) return getParentComponent();
-				return basicGetParentComponent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -309,9 +257,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return;
 			case SoundgatesPackage.CONNECTION__TARGET:
 				setTarget((Port)newValue);
-				return;
-			case SoundgatesPackage.CONNECTION__PARENT_COMPONENT:
-				setParentComponent((CompositeSoundComponent)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -331,9 +276,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			case SoundgatesPackage.CONNECTION__TARGET:
 				setTarget((Port)null);
 				return;
-			case SoundgatesPackage.CONNECTION__PARENT_COMPONENT:
-				setParentComponent((CompositeSoundComponent)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -350,8 +292,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return source != null;
 			case SoundgatesPackage.CONNECTION__TARGET:
 				return target != null;
-			case SoundgatesPackage.CONNECTION__PARENT_COMPONENT:
-				return parentComponent != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -33,7 +33,6 @@ import soundgates.SoundgatesPackage;
  *   <li>{@link soundgates.impl.CompositeSoundComponentImpl#getEmbeddedComponents <em>Embedded Components</em>}</li>
  *   <li>{@link soundgates.impl.CompositeSoundComponentImpl#getLinks <em>Links</em>}</li>
  *   <li>{@link soundgates.impl.CompositeSoundComponentImpl#getDelegations <em>Delegations</em>}</li>
- *   <li>{@link soundgates.impl.CompositeSoundComponentImpl#getConnections <em>Connections</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,16 +68,6 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 	 * @ordered
 	 */
 	protected EList<Delegation> delegations;
-
-	/**
-	 * The cached value of the '{@link #getConnections() <em>Connections</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getConnections()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Connection> connections;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -140,18 +129,6 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Connection> getConnections() {
-		if (connections == null) {
-			connections = new EObjectResolvingEList<Connection>(Connection.class, this, SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__CONNECTIONS);
-		}
-		return connections;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -194,8 +171,6 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 				return getLinks();
 			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__DELEGATIONS:
 				return getDelegations();
-			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__CONNECTIONS:
-				return getConnections();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -221,10 +196,6 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 				getDelegations().clear();
 				getDelegations().addAll((Collection<? extends Delegation>)newValue);
 				return;
-			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__CONNECTIONS:
-				getConnections().clear();
-				getConnections().addAll((Collection<? extends Connection>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -246,9 +217,6 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__DELEGATIONS:
 				getDelegations().clear();
 				return;
-			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__CONNECTIONS:
-				getConnections().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -267,8 +235,6 @@ public class CompositeSoundComponentImpl extends SoundComponentImpl implements C
 				return links != null && !links.isEmpty();
 			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__DELEGATIONS:
 				return delegations != null && !delegations.isEmpty();
-			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__CONNECTIONS:
-				return connections != null && !connections.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

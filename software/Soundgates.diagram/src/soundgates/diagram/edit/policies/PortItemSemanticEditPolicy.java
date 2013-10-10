@@ -3,6 +3,7 @@ package soundgates.diagram.edit.policies;
 import java.util.Iterator;
 
 import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.diagram.core.commands.DeleteCommand;
 import org.eclipse.gmf.runtime.emf.commands.core.command.CompositeTransactionalCommand;
@@ -13,11 +14,18 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipReques
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
+import soundgates.diagram.edit.commands.DelegationCreateCommand;
+import soundgates.diagram.edit.commands.DelegationReorientCommand;
+import soundgates.diagram.edit.commands.Link2CreateCommand;
+import soundgates.diagram.edit.commands.Link2ReorientCommand;
 import soundgates.diagram.edit.commands.LinkCreateCommand;
 import soundgates.diagram.edit.commands.LinkReorientCommand;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
+import soundgates.impl.PatchImpl;
 
 /**
  * @generated
@@ -49,10 +57,38 @@ public class PortItemSemanticEditPolicy extends
 				cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
 				continue;
 			}
+			if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == Link2EditPart.VISUAL_ID) {
+				DestroyElementRequest r = new DestroyElementRequest(
+						incomingLink.getElement(), false);
+				cmd.add(new DestroyElementCommand(r));
+				cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
+				continue;
+			}
+			if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == DelegationEditPart.VISUAL_ID) {
+				DestroyElementRequest r = new DestroyElementRequest(
+						incomingLink.getElement(), false);
+				cmd.add(new DestroyElementCommand(r));
+				cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
+				continue;
+			}
 		}
 		for (Iterator<?> it = view.getSourceEdges().iterator(); it.hasNext();) {
 			Edge outgoingLink = (Edge) it.next();
 			if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == LinkEditPart.VISUAL_ID) {
+				DestroyElementRequest r = new DestroyElementRequest(
+						outgoingLink.getElement(), false);
+				cmd.add(new DestroyElementCommand(r));
+				cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
+				continue;
+			}
+			if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == Link2EditPart.VISUAL_ID) {
+				DestroyElementRequest r = new DestroyElementRequest(
+						outgoingLink.getElement(), false);
+				cmd.add(new DestroyElementCommand(r));
+				cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
+				continue;
+			}
+			if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == DelegationEditPart.VISUAL_ID) {
 				DestroyElementRequest r = new DestroyElementRequest(
 						outgoingLink.getElement(), false);
 				cmd.add(new DestroyElementCommand(r));
@@ -91,6 +127,14 @@ public class PortItemSemanticEditPolicy extends
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
+		if (SoundgatesElementTypes.Link_4002 == req.getElementType()) {
+			return getGEFWrapper(new Link2CreateCommand(req, req.getSource(),
+					req.getTarget()));
+		}
+		if (SoundgatesElementTypes.Delegation_4003 == req.getElementType()) {
+			return getGEFWrapper(new DelegationCreateCommand(req,
+					req.getSource(), req.getTarget()));
+		}
 		return null;
 	}
 
@@ -99,9 +143,38 @@ public class PortItemSemanticEditPolicy extends
 	 */
 	protected Command getCompleteCreateRelationshipCommand(
 			CreateRelationshipRequest req) {
-		if (SoundgatesElementTypes.Link_4001 == req.getElementType()) {
+		
+		boolean patch;
+		boolean linkAllowed;
+		boolean delegationAllowed;
+
+		//             port          component    container
+		patch = (req.getContainer().eContainer().eContainer() instanceof PatchImpl);
+
+		EObject sourceContainer = req.getSource().eContainer().eContainer();
+		EObject targetContainer = req.getTarget().eContainer().eContainer();
+		linkAllowed = (sourceContainer == targetContainer);
+		if(sourceContainer instanceof PatchImpl){
+			delegationAllowed = sourceContainer.eContents().contains(targetContainer);
+		}
+		else if(targetContainer instanceof PatchImpl){
+			delegationAllowed = targetContainer.eContents().contains(sourceContainer);
+		}
+		else {
+			delegationAllowed = (sourceContainer.eContents().contains(targetContainer) || targetContainer.eContents().contains(sourceContainer));
+		}
+		
+		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch && linkAllowed) {
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
+		}
+		if (SoundgatesElementTypes.Link_4002 == req.getElementType() && !patch && linkAllowed) {
+			return getGEFWrapper(new Link2CreateCommand(req, req.getSource(),
+					req.getTarget()));
+		}
+		if (SoundgatesElementTypes.Delegation_4003 == req.getElementType() && delegationAllowed) {
+			return getGEFWrapper(new DelegationCreateCommand(req,
+					req.getSource(), req.getTarget()));
 		}
 		return null;
 	}
@@ -117,6 +190,10 @@ public class PortItemSemanticEditPolicy extends
 		switch (getVisualID(req)) {
 		case LinkEditPart.VISUAL_ID:
 			return getGEFWrapper(new LinkReorientCommand(req));
+		case Link2EditPart.VISUAL_ID:
+			return getGEFWrapper(new Link2ReorientCommand(req));
+		case DelegationEditPart.VISUAL_ID:
+			return getGEFWrapper(new DelegationReorientCommand(req));
 		}
 		return super.getReorientRelationshipCommand(req);
 	}

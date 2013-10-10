@@ -19,7 +19,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link soundgates.CompositeSoundComponent#getEmbeddedComponents <em>Embedded Components</em>}</li>
  *   <li>{@link soundgates.CompositeSoundComponent#getLinks <em>Links</em>}</li>
  *   <li>{@link soundgates.CompositeSoundComponent#getDelegations <em>Delegations</em>}</li>
- *   <li>{@link soundgates.CompositeSoundComponent#getConnections <em>Connections</em>}</li>
  * </ul>
  * </p>
  *
@@ -77,21 +76,5 @@ public interface CompositeSoundComponent extends SoundComponent {
 	 * @generated
 	 */
 	EList<Delegation> getDelegations();
-
-	/**
-	 * Returns the value of the '<em><b>Connections</b></em>' reference list.
-	 * The list contents are of type {@link soundgates.Connection}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Connections</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Connections</em>' reference list.
-	 * @see soundgates.SoundgatesPackage#getCompositeSoundComponent_Connections()
-	 * @model
-	 * @generated
-	 */
-	EList<Connection> getConnections();
 
 } // CompositeSoundComponent
