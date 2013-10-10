@@ -40,6 +40,9 @@
    </extension>
 
    <extension point="org.eclipse.ui.newWizards" id="creation-wizard">
+      <primaryWizard
+            id="soundgates.diagram.part.SoundgatesProjectCreationWizardID">
+      </primaryWizard>
       <?gmfgen generated="true"?>
   	  <wizard
   	     name="%newWizardName"
@@ -49,6 +52,15 @@
   	     id="soundgates.diagram.part.SoundgatesCreationWizardID">
   	  	 <description>%newWizardDesc</description>  
       </wizard>
+     <primaryWizard
+           id="soundgates.diagram.part.SoundgatesCreationWizardID">
+     </primaryWizard>
+     <wizard
+           class="soundgates.diagram.part.SoundgatesProjectWizard"
+           id="soundgates.diagram.part.SoundgatesProjectCreationWizardID"
+           name="Soundgates Project"
+           project="true">
+     </wizard>
    </extension>
 
    <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
