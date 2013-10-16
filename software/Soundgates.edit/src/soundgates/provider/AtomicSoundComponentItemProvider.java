@@ -53,14 +53,20 @@ public class AtomicSoundComponentItemProvider
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
+	 * @author gwue
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+		// Reset the itemProperty descriptors, else they are loaded only once upon starting the edtior for each class
+		// Since instances of AtomicSoundComponents have different sets of properties, each component basically needs it's own provider
+		// As of yet I don't think this is possible, therefore we reset the itemPropertyDescriptor and generate a new one everytime for the selected object
+		itemPropertyDescriptors = null;
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
 			addTypePropertyDescriptor(object);
+			addPropertiesEntryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
