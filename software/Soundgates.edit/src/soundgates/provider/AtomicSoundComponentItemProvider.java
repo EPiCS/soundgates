@@ -61,6 +61,7 @@ public class AtomicSoundComponentItemProvider
 		// Reset the itemProperty descriptors, else they are loaded only once upon starting the edtior for each class
 		// Since instances of AtomicSoundComponents have different sets of properties, each component basically needs it's own provider
 		// As of yet I don't think this is possible, therefore we reset the itemPropertyDescriptor and generate a new one everytime for the selected object
+		// A generic PropertyEntry descriptor might be able to handle this
 		itemPropertyDescriptors = null;
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
