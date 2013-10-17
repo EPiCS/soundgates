@@ -11,9 +11,14 @@ import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
+import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
+import soundgates.AtomicSoundComponent;
+import soundgates.CompositeSoundComponent;
+import soundgates.Direction;
+import soundgates.Port;
 import soundgates.diagram.edit.commands.DelegationCreateCommand;
 import soundgates.diagram.edit.commands.DelegationReorientCommand;
 import soundgates.diagram.edit.commands.Link2CreateCommand;
@@ -153,7 +158,7 @@ public class PortItemSemanticEditPolicy extends
 
 		EObject sourceContainer = req.getSource().eContainer().eContainer();
 		EObject targetContainer = req.getTarget().eContainer().eContainer();
-		linkAllowed = (sourceContainer == targetContainer);
+		linkAllowed = (sourceContainer == targetContainer) && ((Port) req.getTarget()).getDirection()==Direction.IN && ((Port) req.getTarget()).getIncomingConnection()==null; 
 		if(sourceContainer instanceof PatchImpl){
 			delegationAllowed = sourceContainer.eContents().contains(targetContainer);
 		}
@@ -163,6 +168,13 @@ public class PortItemSemanticEditPolicy extends
 		else {
 			delegationAllowed = (sourceContainer.eContents().contains(targetContainer) || targetContainer.eContents().contains(sourceContainer));
 		}
+		
+		if (req.getTarget().eContainer() instanceof CompositeSoundComponent){		
+			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.OUT && ((Port) req.getTarget()).getIncomingConnection()==null;
+		}
+		else if (req.getTarget().eContainer() instanceof AtomicSoundComponent){
+			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.IN && ((Port) req.getTarget()).getIncomingConnection()==null;
+		}	
 		
 		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch && linkAllowed) {
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),

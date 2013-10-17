@@ -12,8 +12,10 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 
+import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
 import soundgates.Delegation;
+import soundgates.Direction;
 import soundgates.Port;
 import soundgates.SoundgatesFactory;
 import soundgates.diagram.edit.policies.SoundgatesBaseItemSemanticEditPolicy;
@@ -69,6 +71,16 @@ public class DelegationCreateCommand extends EditElementCommand {
 		if (getContainer() == null) {
 			return false;
 		}
+		if(source instanceof Port){
+			if (((Port) source).getOutgoingConnection()!=null)
+				return false;
+			
+			if( (source.eContainer() instanceof CompositeSoundComponent) &&	((Port) source).getDirection()==Direction.OUT )
+				return false;
+			
+			if( (source.eContainer() instanceof AtomicSoundComponent) && ((Port) source).getDirection()==Direction.IN )
+				return false;		
+		}	
 		return SoundgatesBaseItemSemanticEditPolicy.getLinkConstraints()
 				.canCreateDelegation_4003(getContainer(), getSource(),
 						getTarget());

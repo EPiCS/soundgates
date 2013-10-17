@@ -12,6 +12,7 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.notation.View;
 
+import soundgates.CompositeSoundComponent;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesFactory;
@@ -45,8 +46,10 @@ public class PortCreateCommand extends EditElementCommand {
 	 * @generated
 	 */
 	public boolean canExecute() {
-		return true;
-
+		
+		if(getElementToEdit() instanceof CompositeSoundComponent)
+			return true;
+		else return false;
 	}
 
 	/**

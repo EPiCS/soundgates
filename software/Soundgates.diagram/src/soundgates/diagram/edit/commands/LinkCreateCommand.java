@@ -12,6 +12,7 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 
+import soundgates.Direction;
 import soundgates.Link;
 import soundgates.Patch;
 import soundgates.Port;
@@ -68,6 +69,10 @@ public class LinkCreateCommand extends EditElementCommand {
 		// target may be null here but it's possible to check constraint
 		if (getContainer() == null) {
 			return false;
+		}
+		if(source instanceof Port){
+			if ( ((Port) source).getDirection()==Direction.IN ||  ((Port) source).getOutgoingConnection()!=null)
+				return false;				
 		}
 		return SoundgatesBaseItemSemanticEditPolicy.getLinkConstraints()
 				.canCreateLink_4001(getContainer(), getSource(), getTarget());
