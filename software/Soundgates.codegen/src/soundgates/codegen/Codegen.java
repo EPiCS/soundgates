@@ -1,11 +1,8 @@
 package soundgates.codegen;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,20 +18,17 @@ import soundgates.Element;
 import soundgates.Link;
 import soundgates.Patch;
 import soundgates.SoundComponent;
-import soundgates.SoundgatesFactory;
 import soundgates.SoundgatesPackage;
 
 public class Codegen {
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-
-		Codegen codegen = new Codegen();
-		Patch patch = codegen.getPatch();
-		codegen.generateCodeForPatch(patch);
+	private String folder;
+	
+	public void setFolder(String folder){
+		this.folder=folder;
 	}
-
-	public Patch getPatch(){
+	
+	public Patch getPatch(String path){
 	    SoundgatesPackage.eINSTANCE.eClass();
 	    
 	    // Register the XMI resource factory for the .website extension
@@ -48,15 +42,14 @@ public class Codegen {
 
 	    // Get the resource
 	    Resource resource = resSet.getResource(URI
-	        .createURI("test/Patch.xmi"), true);
+	        .createURI(path), true);
 	    // Get the first model element and cast it to the right type, in my
 	    // example everything is hierarchical included in this first node
 	    Patch patch = (Patch) resource.getContents().get(0);
-	    return patch;
-		
+	    return patch;		
 	}
 	
-	private void generateCodeForPatch(Patch patch) throws IOException {
+	public void generateCodeForPatch(Patch patch) throws IOException {
 		
 		List<SoundComponent> componentList = new ArrayList<SoundComponent>();
 		List<Link> linkList = new ArrayList<Link>();
@@ -80,7 +73,7 @@ public class Codegen {
 	
 	private void writePDForPatch(List<SoundComponent> componentList, List<Link> linkList) throws IOException{
 		
-		FileWriter writer =  new FileWriter(new File("test/patch.pd"));
+		FileWriter writer =  new FileWriter(new File(folder+ "patch.pd"));
 		writer.write("#N canvas 621 551 450 300 10; \n");		
 		
 		for (SoundComponent comp : componentList){
@@ -104,7 +97,7 @@ public class Codegen {
 	
 	private void handleAtomicComponent(AtomicSoundComponent acomp)  throws IOException {
 		String compName = acomp.getType();
-		String fileName = "test/"+ compName + ".pd";
+		String fileName = folder + compName + ".pd";
 		if ( acomp.getType().equals("SineGenerator")){			
 			
 			FileWriter writer =  new FileWriter(new File(fileName));
@@ -126,4 +119,6 @@ public class Codegen {
 			writer.close();
 		}
 	}
+	
+
 }
