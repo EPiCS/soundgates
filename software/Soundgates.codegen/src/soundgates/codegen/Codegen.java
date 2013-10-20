@@ -98,26 +98,18 @@ public class Codegen {
 	private void handleAtomicComponent(AtomicSoundComponent acomp)  throws IOException {
 		String compName = acomp.getType();
 		String fileName = folder + compName + ".pd";
-		if ( acomp.getType().equals("SineGenerator")){			
-			
-			FileWriter writer =  new FileWriter(new File(fileName));
-			writer.write("#N canvas 621 551 450 300 10; \n"
-					+ "#X obj 61 115 outlet~; \n" 
-					+ "#X obj 60 60 osc~; \n" 
-					+ "#X obj 60 15 inlet; \n" 
-					+ "#X connect 1 0 0 0; \n" 
-					+ "#X connect 2 0 1 0; \n");
-			writer.close();
+		FileWriter writer =  new FileWriter(new File(fileName));
+		if (acomp.getStringProperties() != null){
+
+			for(String key : acomp.getStringProperties().keySet()){
+				System.out.println(key);
+			}
+			if (acomp.getStringProperties().containsKey("codeGenProp_Simulation")){
+				writer.write(acomp.getStringProperties().get("codeGenProp_Simulation"));	
+				
+			}
 		}
-		if ( acomp.getType().equals("SoundOutput")){
-			
-			FileWriter writer =  new FileWriter(new File(fileName));
-			writer.write("#N canvas 616 163 450 300 10; \n"
-					+ "#X obj 47 28 inlet~; \n"
-					+ "#X obj 47 89 dac~; \n"
-					+ "#X connect 0 0 1 0; \n");
-			writer.close();
-		}
+		writer.close();
 	}
 	
 

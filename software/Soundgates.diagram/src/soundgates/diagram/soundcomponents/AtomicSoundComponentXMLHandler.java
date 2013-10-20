@@ -21,12 +21,16 @@ import soundgates.Direction;
 import soundgates.Port;
 import soundgates.SoundgatesFactory;
 
+
 /**
  * This class provides a single static method to parse an XML file into a SoundComponentLibrary
  * @author gwue
  *
  */
 public class AtomicSoundComponentXMLHandler {
+	
+
+	public static String CODEGEN_PREFIX = "codeGenProp_";
 	// private AtomicSoundComponentLibrary library;
 
 	public static void readFromXML(AtomicSoundComponentLibrary library, String libraryPath) {
@@ -128,7 +132,20 @@ public class AtomicSoundComponentXMLHandler {
 								soundComponent.getBooleanProperties().put(propertyName, propertyValue);
 							}
 						}
-
+						Element codeNode = (Element) element.getElementsByTagName("Code").item(0);
+						if (codeNode != null){
+							NodeList codeSubNodes = codeNode.getChildNodes();
+							for (int j = 0; j < codeSubNodes.getLength(); j++){
+								
+								Node currentSubNode = codeSubNodes.item(j);
+								if (currentSubNode.getNodeType() == Node.ELEMENT_NODE){
+									String propertyName = currentSubNode.getNodeName();
+									String propertyValue = currentSubNode.getTextContent();
+									soundComponent.getStringProperties().put(CODEGEN_PREFIX + propertyName, propertyValue);
+									
+								}
+							}
+						}
 						library.addComponent(soundComponent);
 					} catch (NullPointerException e) {
 						//TODO Differenziertere Exceptions
