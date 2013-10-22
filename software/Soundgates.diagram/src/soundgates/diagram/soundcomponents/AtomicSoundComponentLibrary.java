@@ -114,6 +114,7 @@ public class AtomicSoundComponentLibrary {
 		EMap<String, Float> floatProps = blueprint.getFloatProperties();
 		EMap<String, Boolean> boolProps = blueprint.getBooleanProperties();
 		EMap<String, Integer> intProps = blueprint.getIntegerProperties();
+		EMap<String, String> stringProps = blueprint.getStringProperties();
 		Iterator<String> it;
 
 		it = floatProps.keySet().iterator();
@@ -134,6 +135,13 @@ public class AtomicSoundComponentLibrary {
 			String key = it.next();
 			Integer value = new Integer(intProps.get(key));
 			copy.getIntegerProperties().put(key, value);
+		}
+		
+		it = stringProps.keySet().iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			String value = new String(stringProps.get(key));
+			copy.getStringProperties().put(key, value);
 		}
 
 		return copy;
