@@ -11,7 +11,12 @@
 	</Properties>
 	<Code>
 		<Simulation>
-			PD Code
+#N canvas 621 551 450 300 10;
+#X obj 61 115 outlet~;
+#X obj 60 15 inlet;
+#X obj 60 60 osc~;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
 		</Simulation>
 		<Hardware>
 			VHDL Stuff

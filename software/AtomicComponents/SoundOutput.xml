@@ -7,7 +7,11 @@
 	</Ports>
 	<Code>
 		<Simulation>
-			PD Code
+#N canvas 110 539 450 300 10;
+#X obj 47 28 inlet~;
+#X obj 47 89 dac~;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
 		</Simulation>
 		<Hardware>
 			VHDL Stuff
