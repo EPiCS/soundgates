@@ -30,7 +30,15 @@ import soundgates.SoundgatesFactory;
 public class AtomicSoundComponentXMLHandler {
 	
 
+	public static String NODENAME_SIMULATION = "Simulation";
+	public static String NODENAME_SIMULATION_PD = "PD";
+	public static String NODENAME_SIMULATION_PROP_MAPPING = "PropMapping";
+	public static String NODENAME_SIMULATION_PORT_MAPPING = "PortMapping";
 	public static String CODEGEN_PREFIX = "codeGenProp_";
+	public static String CODEGEN_PREFIX_PDCODE = CODEGEN_PREFIX + "_pdcode";
+	public static String CODEGEN_PREFIX_VHDL = CODEGEN_PREFIX + "_vhdl";
+	public static String CODEGEN_PREFIX_PROP_MAPPINGS = CODEGEN_PREFIX + "_propMappings";
+	public static String CODEGEN_PREFIX_PORT_MAPPINGS = CODEGEN_PREFIX + "_portMappings";
 	// private AtomicSoundComponentLibrary library;
 
 	public static void readFromXML(AtomicSoundComponentLibrary library, String libraryPath) {
@@ -140,8 +148,38 @@ public class AtomicSoundComponentXMLHandler {
 								Node currentSubNode = codeSubNodes.item(j);
 								if (currentSubNode.getNodeType() == Node.ELEMENT_NODE){
 									String propertyName = currentSubNode.getNodeName();
-									String propertyValue = currentSubNode.getTextContent();
-									soundComponent.getStringProperties().put(CODEGEN_PREFIX + propertyName, propertyValue);
+									if (propertyName.equals(NODENAME_SIMULATION)){
+
+										String code = "";
+										StringBuilder propMappings = new StringBuilder();
+										StringBuilder portMappings = new StringBuilder();
+										Node pdNode = currentSubNode.getFirstChild();
+										do {
+											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PD)){
+												code = currentSubNode.getTextContent();
+											}
+											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PORT_MAPPING)){
+												portMappings.append(currentSubNode.getAttributes().getNamedItem("PortName"));
+												portMappings.append("|");
+												portMappings.append(currentSubNode.getAttributes().getNamedItem("PortNumber"));
+												portMappings.append("||");
+											}
+											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PROP_MAPPING)){
+												propMappings.append(currentSubNode.getAttributes().getNamedItem("PropName"));
+												propMappings.append("|");
+												propMappings.append(currentSubNode.getAttributes().getNamedItem("Tag"));
+												propMappings.append("||");
+											}
+										} while ((pdNode = pdNode.getNextSibling()) != null);
+
+										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PDCODE , code);
+										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PORT_MAPPINGS , portMappings.toString());
+										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PROP_MAPPINGS , propMappings.toString());
+									} else {
+										String propertyValue = currentSubNode.getTextContent();
+										soundComponent.getStringProperties().put(CODEGEN_PREFIX + propertyName, propertyValue);
+									}
+									
 									
 								}
 							}

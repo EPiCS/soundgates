@@ -7,11 +7,14 @@
 	</Ports>
 	<Code>
 		<Simulation>
+			<PortMapping PortName="Sound" PortNumber="0" />
+			<PD>
 #N canvas 110 539 450 300 10;
 #X obj 47 28 inlet~;
 #X obj 47 89 dac~;
 #X connect 0 0 1 0;
 #X connect 0 0 1 1;
+			</PD>
 		</Simulation>
 		<Hardware>
 			VHDL Stuff

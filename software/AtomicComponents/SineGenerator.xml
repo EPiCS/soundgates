@@ -7,16 +7,18 @@
 		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
 	</Ports>
 	<Properties>
-		<FloatProperty Name="Frequency" InitialValue="440.0"/>
 	</Properties>
 	<Code>
 		<Simulation>
+			<PortMapping PortName="Frequency" PortNumber="0" />
+			<PD>
 #N canvas 621 551 450 300 10;
 #X obj 61 115 outlet~;
 #X obj 60 15 inlet;
 #X obj 60 60 osc~;
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
+			</PD>
 		</Simulation>
 		<Hardware>
 			VHDL Stuff

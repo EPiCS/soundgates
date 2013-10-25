@@ -10,15 +10,18 @@
 	</Properties>
 	<Code>
 		<Simulation>
+			<PropMapping PropName="Value" Tag="@value">
+			<PD>
 #N canvas 66 467 450 300 10;
 #X obj 39 152 outlet;
 #X floatatom 36 98 5 0 0 0 - - -;
-#X msg 34 64 set 440;
+#X msg 34 64 set @value;
 #X obj -16 33 loadbang;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
 #X connect 3 0 2 0;
 #X connect 3 0 1 0;
+			</PD>
 		</Simulation>
 		<Hardware>
 			VHDL Stuff

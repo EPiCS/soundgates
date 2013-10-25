@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import soundgates.AtomicSoundComponent;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 import soundgates.Element;
 import soundgates.Link;
 import soundgates.Patch;
@@ -60,7 +61,6 @@ public class Codegen {
 				AtomicSoundComponent acomp = ((AtomicSoundComponent) element); 
 				componentList.add(acomp);
 				handleAtomicComponent(acomp);
-
 			}
 			
 			else if(element instanceof Link){
@@ -100,12 +100,8 @@ public class Codegen {
 		String fileName = folder + compName + ".pd";
 		FileWriter writer =  new FileWriter(new File(fileName));
 		if (acomp.getStringProperties() != null){
-
-			for(String key : acomp.getStringProperties().keySet()){
-				System.out.println(key);
-			}
-			if (acomp.getStringProperties().containsKey("codeGenProp_Simulation")){
-				writer.write(acomp.getStringProperties().get("codeGenProp_Simulation"));	
+			if (acomp.getStringProperties().containsKey(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PDCODE)){
+				writer.write(acomp.getStringProperties().get("codeGenProp_Simulation"));
 				
 			}
 		}
