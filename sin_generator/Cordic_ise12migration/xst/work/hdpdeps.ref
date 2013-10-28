@@ -1,9 +1,0 @@
-V3 4
-FL /home/hendrik/Soundgates/Cordic/sin_generator.vhd 2013/05/23.15:54:50 M.70d
-EN work/sin_generator 1369317292 \
-      FL /home/hendrik/Soundgates/Cordic/sin_generator.vhd PB ieee/std_logic_1164 1284609568 \
-      PB ieee/std_logic_arith 1284609569 PB ieee/STD_LOGIC_UNSIGNED 1284609570 \
-      PB ieee/STD_LOGIC_SIGNED 1284609570 PB ieee/NUMERIC_STD 1284609569
-AR work/sin_generator/Behavioral 1369317293 \
-      FL /home/hendrik/Soundgates/Cordic/sin_generator.vhd EN work/sin_generator 1369317292 \
-      CP cordic_v4_0

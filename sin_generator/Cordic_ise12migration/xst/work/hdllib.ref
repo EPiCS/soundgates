@@ -1,3 +1,0 @@
-AR sin_generator behavioral /home/hendrik/Soundgates/Cordic/sin_generator.vhd sub00/vhpl01 1369317293
-MO cordic_v4_0 NULL cordic_v4_0.v vlg38/cordic__v4__0.bin 1369322109
-EN sin_generator NULL /home/hendrik/Soundgates/Cordic/sin_generator.vhd sub00/vhpl00 1369322109

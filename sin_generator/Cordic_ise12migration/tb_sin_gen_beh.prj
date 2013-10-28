@@ -1,4 +1,0 @@
-verilog work "cordic_v4_0.v"
-vhdl work "sin_generator.vhd"
-vhdl work "tb_sin_gen.vhd"
-verilog work "/opt/Xilinx/12.3/ISE_DS/ISE//verilog/src/glbl.v"

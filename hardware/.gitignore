@@ -70,6 +70,9 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+### MAC ###
+.DS_Store
+
 ### Linux ###
 .*
 !.gitignore
