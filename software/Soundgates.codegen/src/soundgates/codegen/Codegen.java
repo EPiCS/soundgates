@@ -106,23 +106,27 @@ public class Codegen {
 				String propMapping = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PROP_MAPPINGS);
 				
 				// parse properties
-				String[] entry = propMapping.split("\\|\\|");
-				String[] subEntry = entry[0].split("\\|");
-				String[] propNameEntry = subEntry[0].split("=");
-				String propName = propNameEntry[1].replace("\"", "");
-				String[] tagEntry = subEntry[1].split("=");
-				String tag = tagEntry[1].replace("\"", "");
+				String[] entries = propMapping.split("\\|\\|");
 				
-				// search for the property
-				String propValue;
-				try {
-					propValue = propertySearch(atomicSoundComponent, propName);
-					pdCodeText = pdCodeText.replaceAll(tag, propValue);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}			
-				
+				for(String entry : entries){
+					String[] subEntry = entry.split("\\|");
+					String[] propNameEntry = subEntry[0].split("=");
+					String propName = propNameEntry[1].replace("\"", "");
+					String[] tagEntry = subEntry[1].split("=");
+					String tag = tagEntry[1].replace("\"", "");
+					
+					// search for the property
+					String propValue;
+					try {
+						propValue = propertySearch(atomicSoundComponent, propName);
+						// replace all tags with the value of the property
+						pdCodeText = pdCodeText.replaceAll(" "+tag+" ", " "+propValue+" ");
+						pdCodeText = pdCodeText.replaceAll(" "+tag+";", " "+propValue+";");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}				
 			}
 			
 			writer.write(pdCodeText);
