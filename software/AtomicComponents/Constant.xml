@@ -10,7 +10,8 @@
 	</Properties>
 	<Code>
 		<Simulation>
-			<PropMapping PropName="Value" Tag="@value">
+			<PropMapping PropName="Value" Tag="@value" />
+			<PortMapping PortName="Value" PortNumber="0" />
 			<PD>
 #N canvas 66 467 450 300 10;
 #X obj 39 152 outlet;
