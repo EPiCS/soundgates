@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>NumericSineGenerator</Type>
+	<Ports>
+		<Port Name="RefreshRate" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Increment" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation>
+			<PortMapping PortName="RefreshRate" PortNumber="0" />
+			<PortMapping PortName="Increment" PortNumber="1" />
+			<PortMapping PortName="Output" PortNumber="0" />
+			<PD>
+#N canvas 864 244 450 300 10;
+#X obj 223 12 inlet;
+#X obj 168 257 outlet;
+#X obj 184 113 sin;
+#X obj 125 38 metro;
+#X obj 65 12 loadbang;
+#X floatatom 239 92 0 0 0 0 - - -;
+#X obj 182 68 float;
+#X floatatom 181 215 5 0 0 0 - - -;
+#X obj 185 144 / 2;
+#X obj 202 174 + 0.5;
+#X obj 294 12 inlet;
+#X obj 275 60 +;
+#X connect 0 0 3 1;
+#X connect 2 0 8 0;
+#X connect 3 0 6 0;
+#X connect 4 0 3 0;
+#X connect 5 0 2 0;
+#X connect 6 0 11 0;
+#X connect 7 0 1 0;
+#X connect 8 0 9 0;
+#X connect 9 0 7 0;
+#X connect 10 0 11 1;
+#X connect 11 0 5 0;
+#X connect 11 0 6 1;
+			</PD>
+		</Simulation>
+		<Hardware>
+			VHDL Stuff
+		</Hardware>
+	</Code>
+</AtomicSoundComponent>
