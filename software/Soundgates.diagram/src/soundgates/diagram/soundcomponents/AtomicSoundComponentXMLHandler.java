@@ -156,18 +156,18 @@ public class AtomicSoundComponentXMLHandler {
 										Node pdNode = currentSubNode.getFirstChild();
 										do {
 											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PD)){
-												code = currentSubNode.getTextContent();
+												code = pdNode.getTextContent();
 											}
 											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PORT_MAPPING)){
-												portMappings.append(currentSubNode.getAttributes().getNamedItem("PortName"));
+												portMappings.append(pdNode.getAttributes().getNamedItem("PortName"));
 												portMappings.append("|");
-												portMappings.append(currentSubNode.getAttributes().getNamedItem("PortNumber"));
+												portMappings.append(pdNode.getAttributes().getNamedItem("PortNumber"));
 												portMappings.append("||");
 											}
 											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PROP_MAPPING)){
-												propMappings.append(currentSubNode.getAttributes().getNamedItem("PropName"));
+												propMappings.append(pdNode.getAttributes().getNamedItem("PropName"));
 												propMappings.append("|");
-												propMappings.append(currentSubNode.getAttributes().getNamedItem("Tag"));
+												propMappings.append(pdNode.getAttributes().getNamedItem("Tag"));
 												propMappings.append("||");
 											}
 										} while ((pdNode = pdNode.getNextSibling()) != null);
