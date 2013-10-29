@@ -21,6 +21,7 @@ import soundgates.Delegation;
 import soundgates.Element;
 import soundgates.Link;
 import soundgates.Patch;
+import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesPackage;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
@@ -28,11 +29,8 @@ import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 public class Codegen {
 
 	private String folder;
-	private LinkedList<String> printedComponents;
-	private HashMap<String, Integer> portMappings;
 
 	public Codegen() {
-		printedComponents = new LinkedList<String>();
 	}
 	
 	public void setFolder(String folder){
@@ -67,8 +65,7 @@ public class Codegen {
 				componentList.add((SoundComponent) element);
 				
 				// if the atomic component type wasn't already printed as file				
-				if(element instanceof AtomicSoundComponent && 
-						!listContainsString(printedComponents, ((SoundComponent) element).getName()))
+				if(element instanceof AtomicSoundComponent)
 				{					
 					printAtomicComponent((AtomicSoundComponent) element);
 				}
@@ -81,12 +78,21 @@ public class Codegen {
 				linkList.add((Link) element);
 			}
 		}		
-		writePDForPatch(componentList, linkList);
+		printPatch(componentList, linkList);
+	}
+	
+	private HashMap<SoundComponent, Integer> componentId = new HashMap<SoundComponent, Integer>();
+	private Integer lastUsedId = 0;
+	
+	private String getUniqueName(SoundComponent soundComponent){
+		if (!componentId.containsKey(soundComponent)){
+			componentId.put(soundComponent, lastUsedId++);
+		}
+		return "component_" + componentId.get(soundComponent) + "_" + soundComponent.getName();
 	}
 	
 	private void printAtomicComponent(AtomicSoundComponent atomicSoundComponent)  throws IOException {
-		String compName = atomicSoundComponent.getType();		
-		String fileName = folder + compName + ".pd";
+		String fileName = folder + getUniqueName(atomicSoundComponent) + ".pd";
 		FileWriter writer =  new FileWriter(new File(fileName));	
 		
 		if (atomicSoundComponent.getStringProperties() != null){
@@ -106,31 +112,38 @@ public class Codegen {
 				String propMapping = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PROP_MAPPINGS);
 				
 				// parse properties
-				String[] entry = propMapping.split("\\|\\|");
-				String[] subEntry = entry[0].split("\\|");
-				String[] propNameEntry = subEntry[0].split("=");
-				String propName = propNameEntry[1].replace("\"", "");
-				String[] tagEntry = subEntry[1].split("=");
-				String tag = tagEntry[1].replace("\"", "");
+				String[] entries = propMapping.split("\\|\\|");
 				
-				// search for the property
-				String propValue;
-				try {
-					propValue = propertySearch(atomicSoundComponent, propName);
-					pdCodeText = pdCodeText.replaceAll(tag, propValue);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}			
-				
+				for (String entry : entries) {
+					if (entry.contains("|")) {
+						String[] subEntry = entry.split("\\|");
+						String[] propNameEntry = subEntry[0].split("=");
+						String propName = propNameEntry[1].replace("\"", "");
+						String[] tagEntry = subEntry[1].split("=");
+						String tag = tagEntry[1].replace("\"", "");
+
+						// search for the property
+						String propValue;
+						try {
+							propValue = propertySearch(atomicSoundComponent,
+									propName);
+							// replace all tags with the value of the property
+							pdCodeText = pdCodeText.replaceAll(" " + tag + " ",
+									" " + propValue + " ");
+							pdCodeText = pdCodeText.replaceAll(" " + tag + ";",
+									" " + propValue + ";");
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}				
 			}
+			
 			
 			writer.write(pdCodeText);
 		}	
 		writer.close();
-		
-		// mark the atomic component type as printed
-		printedComponents.add(compName);
 	}
 	
 	public void handleCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent) throws IOException {
@@ -144,9 +157,7 @@ public class Codegen {
 		for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
 			componentList.add(soundComponent);
 			
-			// if the atomic component type wasn't already printed as file	
-			if(soundComponent instanceof AtomicSoundComponent &&
-					!listContainsString(printedComponents, soundComponent.getName()))
+			if(soundComponent instanceof AtomicSoundComponent)
 			{				
 				printAtomicComponent((AtomicSoundComponent) soundComponent);
 			}
@@ -161,25 +172,66 @@ public class Codegen {
 		for(Delegation delegation : compositeSoundComponent.getDelegations())
 			delegationList.add(delegation);
 		
-		printCompositeSoundComponent(compositeSoundComponent.getName(), componentList, linkList, delegationList);
+		printCompositeSoundComponent(compositeSoundComponent, componentList, linkList, delegationList);
 	}
 	
-	private void writePDForPatch(List<SoundComponent> componentList, List<Link> linkList) throws IOException{		
-		FileWriter writer =  new FileWriter(new File(folder+ "patch.pd"));
+	private HashMap<Port, Integer> parsePortMappings(AtomicSoundComponent atomicSoundComponent){
+		HashMap<Port,Integer> resultingMapping = new HashMap<Port, Integer>();
+		// get port mapping
+		if (atomicSoundComponent.getStringProperties().
+				containsKey(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS)){
+		
+			//example: PortName="Value"|PortNumber="0"||...
+			String portMapping = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS);
+			
+			// parse ports
+			String[] entries = portMapping.split("\\|\\|");
+			
+			for (String entry : entries) {
+				if (entry.contains("|")) {
+					String[] subEntry = entry.split("\\|");
+					String[] portNameEntry = subEntry[0].split("=");
+					String portName = portNameEntry[1].replace("\"", "");
+					String[] portNumberEntry = subEntry[1].split("=");
+					Integer portNumber = Integer.parseInt(portNumberEntry[1].replace("\"", ""));
+
+					// search for the port
+					try {
+						Port port = portSearch(atomicSoundComponent, portName);
+						resultingMapping.put(port, portNumber);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return resultingMapping;
+	}
+	
+	private void printPatch(List<SoundComponent> componentList, List<Link> linkList) throws IOException{		
+		FileWriter writer =  new FileWriter(new File(folder + "patch.pd"));
 		writer.write("#N canvas 621 551 450 300 10; \n");
 		for (SoundComponent comp : componentList){
-			if(comp instanceof AtomicSoundComponent)
-				writer.write("#X obj 0 0 "+ ((AtomicSoundComponent)comp).getType() + ";\n");		
-			
-			else if (comp instanceof CompositeSoundComponent)
-				writer.write("#X obj 0 0 "+ ((CompositeSoundComponent)comp).getName() + ";\n");
+				writer.write("#X obj 0 0 "+ getUniqueName(comp) + ";\n");
 		}		
-		for (Link link : linkList){			
-			int source = componentList.indexOf(link.getSource().getComponent());
+		
+		for (Link link : linkList){
+			SoundComponent sourceComponent = link.getSource().getComponent();
+			SoundComponent targetComponent = link.getTarget().getComponent();
+			int source = componentList.indexOf(sourceComponent);
+			int sink = componentList.indexOf(targetComponent);
+			int sinkPort = 0;
 			int sourcePort = 0;
 			
-			int sink = componentList.indexOf(link.getTarget().getComponent());
-			int sinkPort = 0;
+			if (sourceComponent instanceof AtomicSoundComponent) {
+				HashMap<Port, Integer> sourcePortMapping = parsePortMappings((AtomicSoundComponent) sourceComponent);
+				sourcePort = sourcePortMapping.get(link.getSource());
+			}
+			if (targetComponent instanceof AtomicSoundComponent) {
+				HashMap<Port, Integer> targetPortMapping = parsePortMappings((AtomicSoundComponent) targetComponent);
+				sinkPort = targetPortMapping.get(link.getTarget());
+			}
 			
 			writer.write("#X connect " + source + " " + sourcePort + " " + sink + " " + sinkPort + ";\n");
 		}
@@ -187,16 +239,13 @@ public class Codegen {
 		writer.close();
 	}
 	
-	private void printCompositeSoundComponent(String name, List<SoundComponent> componentList, List<Link> linkList, List<Delegation> delegationList) throws IOException{
+	private void printCompositeSoundComponent(CompositeSoundComponent compositeComponent, List<SoundComponent> componentList, List<Link> linkList, List<Delegation> delegationList) throws IOException{
 		
-		FileWriter writer =  new FileWriter(new File(folder+ name +".pd"));
+		FileWriter writer =  new FileWriter(new File(folder+ getUniqueName(compositeComponent) +".pd"));
 		writer.write("#N canvas 621 551 450 300 10; \n");		
 		
 		for (SoundComponent comp : componentList){
-			if(comp instanceof AtomicSoundComponent)
-				writer.write("#X obj 0 0 "+ ((AtomicSoundComponent)comp).getType() + ";\n");
-			else if(comp instanceof CompositeSoundComponent)
-				writer.write("#X obj 0 0 "+ ((CompositeSoundComponent)comp).getName() + ";\n");
+				writer.write("#X obj 0 0 "+ getUniqueName(comp) + ";\n");
 		}
 		
 		for (Link link : linkList){
@@ -217,6 +266,15 @@ public class Codegen {
 			if (s.equals(string))
 				return true;
 		return false;
+	}
+	
+	private Port portSearch(AtomicSoundComponent atomicSoundComponent, String portName) throws Exception{
+		for (Port port : atomicSoundComponent.getPorts()){
+			if (port.getName().equals(portName)){
+				return port;
+			}
+		}
+		throw new Exception("Port not found in component");
 	}
 	
 	private String propertySearch(AtomicSoundComponent atomicSoundComponent, String propName) throws Exception{
