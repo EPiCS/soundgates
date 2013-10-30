@@ -3,43 +3,51 @@
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>NumericSineGenerator</Type>
 	<Ports>
-		<Port Name="RefreshRate" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Increment" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Resolution" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Frequency" Direction="IN" DataType="FLOAT"/>
 		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
 		<Simulation>
-			<PortMapping PortName="RefreshRate" PortNumber="0" />
-			<PortMapping PortName="Increment" PortNumber="1" />
+			<PortMapping PortName="Resolution" PortNumber="1" />
+			<PortMapping PortName="Frequency" PortNumber="0" />
 			<PortMapping PortName="Output" PortNumber="0" />
 			<PD>
-#N canvas 864 244 450 300 10;
-#X obj 223 12 inlet;
-#X obj 168 257 outlet;
-#X obj 184 113 sin;
-#X obj 125 38 metro;
-#X obj 65 12 loadbang;
-#X floatatom 239 92 0 0 0 0 - - -;
-#X obj 182 68 float;
-#X floatatom 181 215 5 0 0 0 - - -;
-#X obj 185 144 / 2;
-#X obj 202 174 + 0.5;
-#X obj 294 12 inlet;
-#X obj 275 60 +;
-#X connect 0 0 3 1;
+#N canvas 799 393 450 368 10;
+#X obj 27 8 inlet;
+#X obj 109 341 outlet;
+#X obj 279 215 metro;
+#X obj 148 12 inlet;
+#X obj 272 170 * 1000;
+#X obj 268 135 /;
+#X obj 114 65 trigger bang;
+#X obj 81 226 osc~;
+#X obj 75 282 snapshot~;
+#X floatatom 166 307 5 0 0 0 - - -;
+#X floatatom 54 108 5 0 0 0 - - -;
+#X floatatom 336 195 5 0 0 0 - - -;
+#X obj 293 270 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 305 95 float 1;
+#X connect 0 0 6 0;
+#X connect 0 0 10 0;
 #X connect 2 0 8 0;
+#X connect 2 0 12 0;
+#X connect 3 0 5 1;
 #X connect 3 0 6 0;
-#X connect 4 0 3 0;
-#X connect 5 0 2 0;
-#X connect 6 0 11 0;
-#X connect 7 0 1 0;
+#X connect 4 0 2 1;
+#X connect 4 0 11 0;
+#X connect 5 0 4 0;
+#X connect 6 0 2 0;
+#X connect 6 0 10 0;
+#X connect 6 0 13 0;
+#X connect 7 0 8 0;
+#X connect 8 0 1 0;
 #X connect 8 0 9 0;
-#X connect 9 0 7 0;
-#X connect 10 0 11 1;
-#X connect 11 0 5 0;
-#X connect 11 0 6 1;
+#X connect 10 0 7 0;
+#X connect 13 0 5 0;
 			</PD>
 		</Simulation>
 		<Hardware>
