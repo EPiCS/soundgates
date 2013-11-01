@@ -171,7 +171,7 @@ memif_setup(
                     memif_read_word(i_memif, o_memif, source_address + pSourceOffset, DATASIGNAL, done);
                     if(done) then
                         calc_state     := calc_state + 1;
-                        source_offset  := source_offset + 32;
+                        source_offset  := source_offset + 4;
                     end if;
                 
                     when 1 =>
@@ -183,7 +183,7 @@ memif_setup(
                     memif_write_word(i_memif, o_memif, target_address + target_offset, CALCLULATED_DATA, done);
                     if done then
                         calc_state    := 0;
-                        target_offset <= target_offset + 32;
+                        target_offset <= target_offset + 4;
                         state         <= STATE_CHECK;
                     end if;    
                 

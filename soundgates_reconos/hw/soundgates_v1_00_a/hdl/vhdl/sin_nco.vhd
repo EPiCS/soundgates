@@ -187,7 +187,7 @@ memif_setup(
                     memif_write_word(i_memif, o_memif, target_address + target_offset, data, done);
                     if done then
                         calc_state    := 0;
-                        target_offset <= target_offset + 32;
+                        target_offset <= target_offset + 4;
                         state         <= STATE_CHECK;
                     end if;    
                 
@@ -218,17 +218,6 @@ memif_setup(
 -- ====================================
 
 
-FREQ_REG_PROCESS : process(clk)
-	begin
-		if rising_edge(clk) then
-			
-			if frequency_current /= frequency then
-				cordic_phi_offset <= phi_offset(to_integer(frequency));
-				frequency_current <= frequency;
-			end if;
-		end if;
-	end process;
-	
 	SIN_GENERATOR : if WAVEFORM = SIN generate
 		
 			CORDIC_INSTA : cordic
