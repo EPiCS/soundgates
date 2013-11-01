@@ -27,7 +27,7 @@ constant MAX_NCO_FREQUNCY : integer := 16000;
 
 type Phase_Increment_Array is array(0 to MAX_NCO_FREQUNCY) of signed(31 downto 0);
 
-type WAVEFORM_TYPE is ( SIN, SQUARE, SAWTOOTH);
+type WAVEFORM_TYPE is ( SIN, SQUARE, SAWTOOTH, RAMP, TRIANGLE);
 
 
 -- Functions and Procedure declarations

@@ -170,7 +170,7 @@ memif_setup(
                 
             when STATE_REFRESH =>
                 -- Read your data
-                memif_read_word(i_memif, o_memif, header_address, TARGETSIGNAL, done);
+                memif_read_word(i_memif, o_memif, header_address, cordic_phi_offset, done);
                 if done then
                     state <= STATE_CALC;
                 end if;
