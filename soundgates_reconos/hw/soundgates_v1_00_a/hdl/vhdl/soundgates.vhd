@@ -1,211 +1,105 @@
-------------------------------------------------------------------------------
--- user_logic.vhd - entity/architecture pair
-------------------------------------------------------------------------------
+--
+--	Package File Template
+--
+--	Purpose: This package defines supplemental types, subtypes, 
+--		 constants, and functions 
+--
+--   To use any of the example code shown below, uncomment the lines and modify as necessary
+--
 
--- DO NOT EDIT BELOW THIS LINE --------------------
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD.ALL;
+use IEEE.MATH_REAL.ALL;
 
-library reconos_v3_00_b;
-use reconos_v3_00_b.reconos_pkg.all;
 
-library proc_common_v3_00_a;
-use proc_common_v3_00_a.proc_common_pkg.all;
+package soundcomponents is
 
-entity musicgenerator is
-  port
-  (
-	-- OSIF FSL
-	OSFSL_S_Read    : out std_logic;                 -- Read signal, requiring next available input to be read
-	OSFSL_S_Data    : in  std_logic_vector(0 to 31); -- Input data
-	OSFSL_S_Control : in  std_logic;                 -- Control Bit, indicating the input data are control word
-	OSFSL_S_Exists  : in  std_logic;                 -- Data Exist Bit, indicating data exist in the input FSL bus
 
-	OSFSL_M_Write   : out std_logic;                 -- Write signal, enabling writing to output FSL bus
-	OSFSL_M_Data    : out std_logic_vector(0 to 31); -- Output data
-	OSFSL_M_Control : out std_logic;                 -- Control Bit, indicating the output data are contol word
-	OSFSL_M_Full    : in  std_logic;                 -- Full Bit, indicating output FSL bus is full
-		
-	-- FIFO Interface
-	FIFO32_S_Data : in std_logic_vector(31 downto 0);
-	FIFO32_M_Data : out std_logic_vector(31 downto 0);
-	FIFO32_S_Fill : in std_logic_vector(15 downto 0);
-	FIFO32_M_Rem : in std_logic_vector(15 downto 0);
-	FIFO32_S_Rd : out std_logic;
-	FIFO32_M_Wr : out std_logic;
-		
-	-- HWT reset and clock
-	clk           : in std_logic;
-	rst           : in std_logic;	
-	
-	-- i2s
-	sd  	: out std_logic;
-	ws	: out std_logic;
-	mclk 	: out std_logic;
-	sck 	: out std_logic	
- );
+-- Constant declarations
 
---  attribute MAX_FANOUT : string;
---  attribute SIGIS : string;
+constant SOUNDGATE_FIX_PT_SCALING : real := 27.0;
 
-end entity musicgenerator;
+constant MAX_NCO_FREQUNCY : integer := 16000;
 
-------------------------------------------------------------------------------
--- Architecture section
-------------------------------------------------------------------------------
 
-architecture IMP of musicgenerator is
+-- Type declarations
 
-	--USER signal declarations added here, as needed for user logic
-	constant bps : integer := 24;
-	signal sample_in 	: std_logic_vector(bps - 1 downto 0);
-	signal sample_l_int	: std_logic_vector(bps - 1 downto 0);
-	signal sample_r_int	: std_logic_vector(bps - 1 downto 0);
-	signal word_select      : std_logic;
-	signal serial_clk 	: std_logic;
-	signal master_clk       : std_logic;
-	signal load_sample 	: std_logic;
-	signal serial_data      : std_logic;
-	signal freq_in		: std_logic_vector(31 downto 0);
-	--signal uclk : std_logic;
-	type STATE_TYPE is (STATE_GET_INIT, STATE_WRITE_MBOX, STATE_READ_MBOX, STATE_EXIT);
-	signal state    : STATE_TYPE;
-	-- ReconOS stuff
-	constant MBOX_READFREQ      : std_logic_vector(C_FSL_WIDTH-1 downto 0) := x"00000000";
-	constant MBOX_DEBUG         : std_logic_vector(C_FSL_WIDTH-1 downto 0) := x"00000001";
-	signal frequency        : std_logic_vector(C_FSL_WIDTH-1 downto 0);
-	signal i_osif   : i_osif_t;
-	signal o_osif   : o_osif_t;
-		signal ignore   : std_logic_vector(C_FSL_WIDTH-1 downto 0);
-	
-  COMPONENT i2s
-	 generic(
-		RefClkFrequency : integer;		-- clock frequency of the reference clock in hz
-		BitsPerSample   : integer;		-- 8/16/32
-		SampleRate      : integer;		-- in Hz
-		NumChannels     : integer		-- 1 = mono, 2 = stereo
-	);
-    PORT(
-         clk : in  std_logic;
-         rst : in  std_logic;
+type Phase_Increment_Array is array(0 to MAX_NCO_FREQUNCY) of signed(31 downto 0);
+
+type WAVEFORM_TYPE is ( SIN, SQUARE, SAWTOOTH, RAMP, TRIANGLE);
+
+
+-- Functions and Procedure declarations
+
+function Precalculate_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array;
+
+function Precalculate_Cordic_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array;
+
+
+end soundcomponents;
+
+package body soundcomponents is
+
+
+function Precalculate_Cordic_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array is
+	variable tmp 			: phase_increment_array;
+	variable stepsize 	: integer;
+	variable phi_offset 	: real;
+begin	
+	for i in 0 to MAX_NCO_FREQUNCY loop
+		if i > 0 then
+			stepsize :=	FPGA_FREQUENCY / i;
 			
-         sample_l_in : in  std_logic_vector(BitsPerSample - 1 downto 0);
-		 sample_r_in : in  std_logic_vector(BitsPerSample - 1 downto 0);
+			phi_offset := MATH_PI * 2.0 / real(stepsize);
 			
-		 -- i2s output
-		 sd 	: out  std_logic;
-         ws 	: out  std_logic;
-         sck 	: out  std_logic;
-		 mclk 	: out std_logic;
-         ------
-		 load_sample : out std_logic	
-        );
-    END COMPONENT;
-	
-	COMPONENT sin_generator
-    Port ( 
-		 sin 		  : in  STD_LOGIC;
-		 sample_req   : in  std_logic;
-         sfp_wave     : out STD_LOGIC_VECTOR(23 downto 0);
-		 uint_wave	  : out STD_LOGIC_VECTOR(23 downto 0);
-		 hertz	  	  : in  STD_LOGIC_VECTOR(15 downto 0);
-		clk	          : in  STD_LOGIC);
-	end component;	 
-  
-  
-
-begin
-
-	fsl_setup(
-		i_osif,
-		o_osif,
-		OSFSL_S_Data,
-		OSFSL_S_Exists,
-		OSFSL_M_Full,
-		OSFSL_M_Data,
-		OSFSL_S_Read,
-		OSFSL_M_Write,
-		OSFSL_M_Control
-	);
-  
-  	-- do not use memory interface (memif)
-	FIFO32_M_Data <= (others => '0');
-	FIFO32_S_Rd   <= '0';
-	FIFO32_M_Wr   <= '0';
-
-  --USER logic implementation added here
-	sin_gen_inst : sin_generator
-	Port map (sin 		  => '1',
-		  sample_req =>  load_sample,
-		  sfp_wave    => open,
-		  uint_wave	  => sample_in,
-		  hertz	  	  => freq_in (15 downto 0),
-		  clk		  => clk);
-
-	i2s_inst : i2s generic map(
-		RefClkFrequency 	=> 100_000_000,
-		BitsPerSample 		=> bps,
-		SampleRate    		=> 78125,
-		NumChannels   		=> 2)
-		port map(
-			clk => clk,
-			rst => rst,
-			sd => serial_data,
-			ws => word_select,
-			sck => serial_clk,
-			mclk => master_clk,
-			sample_l_in => sample_l_int,
-			sample_r_in => sample_r_int,
-			load_sample => load_sample 
-		);
-
--- os and memory synchronisation state machine
-	process (clk) is
-		variable done : boolean;
-	begin
-		if rst = '1' then
-			fsl_reset(o_osif);
-			state <= STATE_GET_INIT;
-			done := False;
-			frequency <= (others => '0');
-
-		elsif rising_edge(clk) then
-			case state is
-		 	
-			when STATE_GET_INIT =>
- 				osif_get_init_data(i_osif,o_osif,frequency,done);
-				if done then
-					state <= STATE_WRITE_MBOX;
-					--answer <= message;
-				end if;
-				
-   			when STATE_WRITE_MBOX =>		
-				osif_mbox_put(i_osif, o_osif, MBOX_DEBUG, frequency, ignore, done);
-  			  	if done then
-  			  		state <= STATE_READ_MBOX;
-  			  	end if;	
-  			  	
-  			when STATE_READ_MBOX =>	
-				osif_mbox_get(i_osif, o_osif, MBOX_READFREQ, frequency, done);
-  			  	if done then
-  			  		state <= STATE_WRITE_MBOX;
-  			  	end if;	
-					       
-			when STATE_EXIT =>
-	   			osif_thread_exit(i_osif,o_osif);
+			tmp(i) := to_signed(integer(real(phi_offset) * 2**SOUNDGATE_FIX_PT_SCALING), 32);
 			
-			end case;
-		end if;
-	end process;
-		
-sample_l_int <= sample_in;
-sample_r_int <= sample_in;
+		else
+			tmp(i) := to_signed(0, 32);
+		end if;		
+	end loop;
+	return tmp;
+end Precalculate_Cordic_Phase_Increments;
 
-freq_in <= frequency;
-mclk <= master_clk;
-ws <=  word_select;
-sck <= serial_clk;
-sd <= serial_data;		
 
-end IMP;
+function Precalculate_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array is
+	variable tmp : phase_increment_array;
+begin	
+	for i in 0 to MAX_NCO_FREQUNCY loop
+		if i > 0 then
+			tmp(i) := to_signed(FPGA_FREQUENCY / i, 32);
+		else
+			tmp(i) := to_signed(0, 32);
+		end if;		
+	end loop;
+	return tmp;
+end Precalculate_Phase_Increments;
+
+---- Example 1
+--  function <function_name>  (signal <signal_name> : in <type_declaration>  ) return <type_declaration> is
+--    variable <variable_name>     : <type_declaration>;
+--  begin
+--    <variable_name> := <signal_name> xor <signal_name>;
+--    return <variable_name>; 
+--  end <function_name>;
+
+---- Example 2
+--  function <function_name>  (signal <signal_name> : in <type_declaration>;
+--                         signal <signal_name>   : in <type_declaration>  ) return <type_declaration> is
+--  begin
+--    if (<signal_name> = '1') then
+--      return <signal_name>;
+--    else
+--      return 'Z';
+--    end if;
+--  end <function_name>;
+
+---- Procedure Example
+--  procedure <procedure_name>  (<type_declaration> <constant_name>  : in <type_declaration>) is
+--    
+--  begin
+--    
+--  end <procedure_name>;
+ 
+end soundcomponents;
