@@ -4,14 +4,12 @@ package soundgates.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import soundgates.AtomicSoundComponent;
 import soundgates.Connection;
 import soundgates.DataType;
 import soundgates.Direction;
@@ -292,10 +290,12 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @generated
 	 */
 	public void setDirection(Direction newDirection) {
-		Direction oldDirection = direction;
-		direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
+		if(!(this.eContainer() instanceof AtomicSoundComponent)){
+			Direction oldDirection = direction;
+			direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
+		}
 	}
 
 	/**
@@ -313,10 +313,12 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @generated
 	 */
 	public void setDataType(DataType newDataType) {
-		DataType oldDataType = dataType;
-		dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
+		if(!(this.eContainer() instanceof AtomicSoundComponent)){
+			DataType oldDataType = dataType;
+			dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
+		}
 	}
 
 	/**
@@ -491,6 +493,16 @@ public class PortImpl extends NamedElementImpl implements Port {
 		result.append(dataType);
 		result.append(')');
 		return result.toString();
+	}
+	
+	public void setName(String newName) {
+		if(!(this.eContainer() instanceof AtomicSoundComponent)){
+			String oldName = name;
+			name = newName;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.NAMED_ELEMENT__NAME, oldName, name));
+			
+		}
 	}
 
 } //PortImpl

@@ -48,69 +48,75 @@ public class PortItemSemanticEditPolicy extends
 	/**
 	 * @generated
 	 */
-	protected Command getDestroyElementCommand(DestroyElementRequest req) {
+	protected Command getDestroyElementCommand(DestroyElementRequest req) {		
+		
 		View view = (View) getHost().getModel();
-		CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
-				getEditingDomain(), null);
-		cmd.setTransactionNestingEnabled(false);
-		for (Iterator<?> it = view.getTargetEdges().iterator(); it.hasNext();) {
-			Edge incomingLink = (Edge) it.next();
-			if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == LinkEditPart.VISUAL_ID) {
-				DestroyElementRequest r = new DestroyElementRequest(
-						incomingLink.getElement(), false);
-				cmd.add(new DestroyElementCommand(r));
-				cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
-				continue;
+		
+		if (view.getElement().eContainer() instanceof AtomicSoundComponent)
+			return null;
+		else{
+			CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
+					getEditingDomain(), null);
+			cmd.setTransactionNestingEnabled(false);
+			for (Iterator<?> it = view.getTargetEdges().iterator(); it.hasNext();) {
+				Edge incomingLink = (Edge) it.next();
+				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == LinkEditPart.VISUAL_ID) {
+					DestroyElementRequest r = new DestroyElementRequest(
+							incomingLink.getElement(), false);
+					cmd.add(new DestroyElementCommand(r));
+					cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
+					continue;
+				}
+				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == Link2EditPart.VISUAL_ID) {
+					DestroyElementRequest r = new DestroyElementRequest(
+							incomingLink.getElement(), false);
+					cmd.add(new DestroyElementCommand(r));
+					cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
+					continue;
+				}
+				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == DelegationEditPart.VISUAL_ID) {
+					DestroyElementRequest r = new DestroyElementRequest(
+							incomingLink.getElement(), false);
+					cmd.add(new DestroyElementCommand(r));
+					cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
+					continue;
+				}
 			}
-			if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == Link2EditPart.VISUAL_ID) {
-				DestroyElementRequest r = new DestroyElementRequest(
-						incomingLink.getElement(), false);
-				cmd.add(new DestroyElementCommand(r));
-				cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
-				continue;
+			for (Iterator<?> it = view.getSourceEdges().iterator(); it.hasNext();) {
+				Edge outgoingLink = (Edge) it.next();
+				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == LinkEditPart.VISUAL_ID) {
+					DestroyElementRequest r = new DestroyElementRequest(
+							outgoingLink.getElement(), false);
+					cmd.add(new DestroyElementCommand(r));
+					cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
+					continue;
+				}
+				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == Link2EditPart.VISUAL_ID) {
+					DestroyElementRequest r = new DestroyElementRequest(
+							outgoingLink.getElement(), false);
+					cmd.add(new DestroyElementCommand(r));
+					cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
+					continue;
+				}
+				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == DelegationEditPart.VISUAL_ID) {
+					DestroyElementRequest r = new DestroyElementRequest(
+							outgoingLink.getElement(), false);
+					cmd.add(new DestroyElementCommand(r));
+					cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
+					continue;
+				}
 			}
-			if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == DelegationEditPart.VISUAL_ID) {
-				DestroyElementRequest r = new DestroyElementRequest(
-						incomingLink.getElement(), false);
-				cmd.add(new DestroyElementCommand(r));
-				cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
-				continue;
+			EAnnotation annotation = view.getEAnnotation("Shortcut"); //$NON-NLS-1$
+			if (annotation == null) {
+				// there are indirectly referenced children, need extra commands: false
+				addDestroyShortcutsCommand(cmd, view);
+				// delete host element
+				cmd.add(new DestroyElementCommand(req));
+			} else {
+				cmd.add(new DeleteCommand(getEditingDomain(), view));
 			}
+			return getGEFWrapper(cmd.reduce());
 		}
-		for (Iterator<?> it = view.getSourceEdges().iterator(); it.hasNext();) {
-			Edge outgoingLink = (Edge) it.next();
-			if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == LinkEditPart.VISUAL_ID) {
-				DestroyElementRequest r = new DestroyElementRequest(
-						outgoingLink.getElement(), false);
-				cmd.add(new DestroyElementCommand(r));
-				cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
-				continue;
-			}
-			if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == Link2EditPart.VISUAL_ID) {
-				DestroyElementRequest r = new DestroyElementRequest(
-						outgoingLink.getElement(), false);
-				cmd.add(new DestroyElementCommand(r));
-				cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
-				continue;
-			}
-			if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == DelegationEditPart.VISUAL_ID) {
-				DestroyElementRequest r = new DestroyElementRequest(
-						outgoingLink.getElement(), false);
-				cmd.add(new DestroyElementCommand(r));
-				cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
-				continue;
-			}
-		}
-		EAnnotation annotation = view.getEAnnotation("Shortcut"); //$NON-NLS-1$
-		if (annotation == null) {
-			// there are indirectly referenced children, need extra commands: false
-			addDestroyShortcutsCommand(cmd, view);
-			// delete host element
-			cmd.add(new DestroyElementCommand(req));
-		} else {
-			cmd.add(new DeleteCommand(getEditingDomain(), view));
-		}
-		return getGEFWrapper(cmd.reduce());
 	}
 
 	/**

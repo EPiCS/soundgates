@@ -148,14 +148,14 @@ public class AtomicSoundComponent2EditPart extends
 	 * @generated
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
-		if (childEditPart instanceof AtomicSoundComponentName2EditPart) {
-			return true;
-		}
-		if (childEditPart instanceof PortEditPart) {
-			getBorderedFigure().getBorderItemContainer().remove(
-					((PortEditPart) childEditPart).getFigure());
-			return true;
-		}
+//		if (childEditPart instanceof AtomicSoundComponentName2EditPart) {
+//			return true;
+//		}
+//		if (childEditPart instanceof PortEditPart) {
+//			getBorderedFigure().getBorderItemContainer().remove(
+//					((PortEditPart) childEditPart).getFigure());
+//			return true;
+//		}
 		return false;
 	}
 
@@ -173,10 +173,10 @@ public class AtomicSoundComponent2EditPart extends
 	 * @generated
 	 */
 	protected void removeChildVisual(EditPart childEditPart) {
-		if (removeFixedChild(childEditPart)) {
-			return;
-		}
-		super.removeChildVisual(childEditPart);
+//		if (removeFixedChild(childEditPart)) {
+//			return;
+//		}
+//		super.removeChildVisual(childEditPart);
 	}
 
 	/**
