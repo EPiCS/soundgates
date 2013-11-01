@@ -8,10 +8,32 @@ entity component_stub is
 		BitsPerSample 	 : integer 	:= 24;     -- 8/16/24
 		SampleCount      : integer  := 64
     );
+    
+    	port (
+		-- OSIF FIFO ports
+		OSIF_FIFO_Sw2Hw_Data    : in  std_logic_vector(31 downto 0);
+		OSIF_FIFO_Sw2Hw_Fill    : in  std_logic_vector(15 downto 0);
+		OSIF_FIFO_Sw2Hw_Empty   : in  std_logic;
+		OSIF_FIFO_Sw2Hw_RE      : out std_logic;
 
-    Port(
-        clk : in std_logic;
-        rst : in std_logic
+		OSIF_FIFO_Hw2Sw_Data    : out std_logic_vector(31 downto 0);
+		OSIF_FIFO_Hw2Sw_Rem     : in  std_logic_vector(15 downto 0);
+		OSIF_FIFO_Hw2Sw_Full    : in  std_logic;
+		OSIF_FIFO_Hw2Sw_WE      : out std_logic;
+
+		-- MEMIF FIFO ports
+		MEMIF_FIFO_Hwt2Mem_Data    : out std_logic_vector(31 downto 0);
+		MEMIF_FIFO_Hwt2Mem_Rem     : in  std_logic_vector(15 downto 0);
+		MEMIF_FIFO_Hwt2Mem_Full    : in  std_logic;
+		MEMIF_FIFO_Hwt2Mem_WE      : out std_logic;
+
+		MEMIF_FIFO_Mem2Hwt_Data    : in  std_logic_vector(31 downto 0);
+		MEMIF_FIFO_Mem2Hwt_Fill    : in  std_logic_vector(15 downto 0);
+		MEMIF_FIFO_Mem2Hwt_Empty   : in  std_logic;
+		MEMIF_FIFO_Mem2Hwt_RE      : out std_logic;
+
+		clk   : in  std_logic;
+		rst   : in  std_logic
     );
 end component_stub;
 
