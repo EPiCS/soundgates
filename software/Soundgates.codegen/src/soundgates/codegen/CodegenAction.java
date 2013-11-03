@@ -11,8 +11,6 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import soundgates.Patch;
-
 public class CodegenAction implements IObjectActionDelegate{
 	/**
 	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
@@ -32,11 +30,9 @@ public class CodegenAction implements IObjectActionDelegate{
 			IFile file = (IFile) files.next();		
 
 			Codegen codegen = new Codegen();
-			Patch patch = codegen.getPatch(file.getFullPath().toPortableString());
-			codegen.setFolder(file.getParent().getLocation().toPortableString() + "/");
 						
 			try {
-				codegen.generateCodeForPatch(patch);
+				codegen.generate(file);
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();
