@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use IEEE.numeric_std.ALL;
 
-entity component_stub is
+entity sin_nco is
     Generic(		
 		BitsPerSample 	 : integer 	:= 24;     -- 8/16/24
 		SampleCount      : integer  := 64
@@ -35,19 +35,23 @@ entity component_stub is
 		clk   : in  std_logic;
 		rst   : in  std_logic
     );
-end component_stub;
+end sin_nco;
 
-architecture Behavioral of component_stub is
+architecture Behavioral of sin_nco is
 
 -- ====================================
 -- = START: USER COMPONENT DECLARATIONS (OPT)
 -- ====================================
---    COMPONENT blub
---        PORT( clk : in std_logic;
---              signedFixed : in  std_logic_vector(23 downto 0);
---              signedInt   : out std_logic_vector(23 downto 0)
---        );
---     END COMPONENT;
+	component cordic
+		generic ( pipeline_stages : integer := 24	);
+		port ( clk : in std_logic;
+				x   : in  signed(31 downto 0);
+				y   : in  signed(31 downto 0);
+				phi : in  signed(31 downto 0);  -- 0 < phi < 2 * pi
+				sin : out signed(31 downto 0);
+				cos : out signed(31 downto 0)
+		);
+	end component cordic;
 -- ====================================
 -- = END: USER COMPONENT DECLARATION 
 -- ====================================
@@ -80,9 +84,22 @@ architecture Behavioral of component_stub is
 -- ====================================
 -- = START USER SIGNALS
 -- ====================================
-    --constant pi : std_logic_vector(15 downto 0) := "0110010010000000";
-    --constant clk_period  : integer := 2560;  -- 200MHz / 78.125KHz    
-    --constant t1 : unsigned(15 downto 0) := "1010100010011101"; --multiplikator ( 43165 ) --> 43165 / 32768
+	type FREQ_COMMIT_STATES is (s0, s1, s2, s3);
+	
+	signal fqcommit_cs : FREQ_COMMIT_STATES := s0;
+
+	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
+	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
+	
+	constant phi_offset : Phase_Increment_Array := Precalculate_Cordic_Phase_Increments(FPGA_FREQUENCY);
+	
+	signal cordic_phi_offset : signed(31 downto 0) := to_signed(0, 32);
+	signal cordic_phi_acc 	 : signed(31 downto 0) := to_signed(0, 32);
+	--------------------------------------------------------------------------------
+	
+	signal frequency_current : unsigned(15 downto 0) := (others => '0');
+    signal data : signed(31 downto 0);
+    signal calc : std_logic;
 -- ====================================
 -- = END USER SIGNALS 
 -- ====================================
@@ -91,12 +108,7 @@ begin
 -- ====================================
 -- = START USER COMPONENT INSTANTIATION (OPT)
 -- ====================================
-    --    blub_inst: blub PORT MAP (
-    --        phase_in => phase_in,
-    --        x_out    => x_out,
-    --        y_out    => y_out,
-    --        clk      => clk
-    --        );
+
 -- ====================================
 -- = END USER COMPONENT INSTANTIATION 
 -- ====================================
@@ -161,7 +173,7 @@ memif_setup(
 -- ====================================
 -- = START: RESET YOUR VARIABLES HERE
 -- ==================================== 
-
+            calc <= '0';
 -- ====================================
 -- = END: RESET YOUR VARIABLES HERE
 -- ==================================== 
@@ -180,29 +192,21 @@ memif_setup(
                 
             when STATE_REFRESH =>
                 -- Read your data
-                memif_read_word(i_memif, o_memif, header_address, TARGETSIGNAL, done);
+                memif_read_word(i_memif, o_memif, header_address, cordic_phi_offset, done);
                 if done then
                     state <= STATE_CALC;
                 end if;
 
             when STATE_CALC =>
                 case calc_state is
-                
+                                
                     when 0 =>
-                    -- Read your data i.e.
-                    memif_read_word(i_memif, o_memif, source_address + pSourceOffset, DATASIGNAL, done);
-                    if(done) then
-                        calc_state     := calc_state + 1;
-                        source_offset  := source_offset + 4;
-                    end if;
-                
-                    when 1 =>
-                    -- Manipulate DATASIGNAL ie. CALCLULATED_DATA <= DATASIGNAL +1;
+                    calc <= '1';
                     calc_state := calc_state + 1;
                 
-                    when 2 =>
+                    when 1 =>
                     -- Write result
-                    memif_write_word(i_memif, o_memif, target_address + target_offset, CALCLULATED_DATA, done);
+                    memif_write_word(i_memif, o_memif, target_address + target_offset, data, done);
                     if done then
                         calc_state    := 0;
                         target_offset <= target_offset + 4;
@@ -235,6 +239,33 @@ memif_setup(
 -- = INSERT ADDITIONAL USER PROCESSES HERE
 -- ====================================
 
+
+	SIN_GENERATOR : if WAVEFORM = SIN generate
+		
+			CORDIC_INSTA : cordic
+			port map( clk 	=> clk,
+						 x 	=> cordic_x_init,
+						 y 	=> cordic_y_init,
+						 phi  => cordic_phi_acc,
+						 sin  => data,
+						 cos  => open );
+			
+			PHASE_STIMULIS_PROCESS : process(clk)		-- calculate one periode
+			begin
+				
+				if rising_edge(clk) then
+				    if calc = '1' then	
+					    cordic_phi_acc <= cordic_phi_acc + cordic_phi_offset;	
+					
+      					if cordic_phi_acc >= to_signed(integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING)), 32) then
+						    cordic_phi_acc <= (others => '0');						
+					    end if;
+                    end if;
+					
+				end if;				
+			end process;
+		
+	end generate SIN_GENERATOR;	
 
 end Behavioral;
 

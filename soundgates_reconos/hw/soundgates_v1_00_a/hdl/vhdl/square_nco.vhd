@@ -3,51 +3,24 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use IEEE.numeric_std.ALL;
 
-entity component_stub is
+entity ramp_nco is
     Generic(		
 		BitsPerSample 	 : integer 	:= 24;     -- 8/16/24
 		SampleCount      : integer  := 64
     );
-    
-    	port (
-		-- OSIF FIFO ports
-		OSIF_FIFO_Sw2Hw_Data    : in  std_logic_vector(31 downto 0);
-		OSIF_FIFO_Sw2Hw_Fill    : in  std_logic_vector(15 downto 0);
-		OSIF_FIFO_Sw2Hw_Empty   : in  std_logic;
-		OSIF_FIFO_Sw2Hw_RE      : out std_logic;
 
-		OSIF_FIFO_Hw2Sw_Data    : out std_logic_vector(31 downto 0);
-		OSIF_FIFO_Hw2Sw_Rem     : in  std_logic_vector(15 downto 0);
-		OSIF_FIFO_Hw2Sw_Full    : in  std_logic;
-		OSIF_FIFO_Hw2Sw_WE      : out std_logic;
-
-		-- MEMIF FIFO ports
-		MEMIF_FIFO_Hwt2Mem_Data    : out std_logic_vector(31 downto 0);
-		MEMIF_FIFO_Hwt2Mem_Rem     : in  std_logic_vector(15 downto 0);
-		MEMIF_FIFO_Hwt2Mem_Full    : in  std_logic;
-		MEMIF_FIFO_Hwt2Mem_WE      : out std_logic;
-
-		MEMIF_FIFO_Mem2Hwt_Data    : in  std_logic_vector(31 downto 0);
-		MEMIF_FIFO_Mem2Hwt_Fill    : in  std_logic_vector(15 downto 0);
-		MEMIF_FIFO_Mem2Hwt_Empty   : in  std_logic;
-		MEMIF_FIFO_Mem2Hwt_RE      : out std_logic;
-
-		clk   : in  std_logic;
-		rst   : in  std_logic
+    Port(
+        clk : in std_logic;
+        rst : in std_logic
     );
-end component_stub;
+end ramp_nco;
 
-architecture Behavioral of component_stub is
+architecture Behavioral of ramp_nco is
 
 -- ====================================
 -- = START: USER COMPONENT DECLARATIONS (OPT)
 -- ====================================
---    COMPONENT blub
---        PORT( clk : in std_logic;
---              signedFixed : in  std_logic_vector(23 downto 0);
---              signedInt   : out std_logic_vector(23 downto 0)
---        );
---     END COMPONENT;
+
 -- ====================================
 -- = END: USER COMPONENT DECLARATION 
 -- ====================================
@@ -80,9 +53,9 @@ architecture Behavioral of component_stub is
 -- ====================================
 -- = START USER SIGNALS
 -- ====================================
-    --constant pi : std_logic_vector(15 downto 0) := "0110010010000000";
-    --constant clk_period  : integer := 2560;  -- 200MHz / 78.125KHz    
-    --constant t1 : unsigned(15 downto 0) := "1010100010011101"; --multiplikator ( 43165 ) --> 43165 / 32768
+    signal offset       : std_logic_vector(31 downto 0);
+    signal count        : std_logic_vector(31 downto 0);
+    signal output       : std_logic_vector(31 downto 0);
 -- ====================================
 -- = END USER SIGNALS 
 -- ====================================
@@ -91,12 +64,7 @@ begin
 -- ====================================
 -- = START USER COMPONENT INSTANTIATION (OPT)
 -- ====================================
-    --    blub_inst: blub PORT MAP (
-    --        phase_in => phase_in,
-    --        x_out    => x_out,
-    --        y_out    => y_out,
-    --        clk      => clk
-    --        );
+
 -- ====================================
 -- = END USER COMPONENT INSTANTIATION 
 -- ====================================
@@ -104,8 +72,7 @@ begin
 -- ====================================
 -- = START USER HARD WIRINGS (OPT)
 -- ====================================
-    --    phase_in <= phase;
-    --    sfp_wave <= x_out when sin = '1' else y_out;
+
 -- ====================================
 -- = END USER HARD WIRINGS 
 -- ====================================
@@ -161,7 +128,8 @@ memif_setup(
 -- ====================================
 -- = START: RESET YOUR VARIABLES HERE
 -- ==================================== 
-
+            offset <= (others => '0');
+            output <= (others => '0');
 -- ====================================
 -- = END: RESET YOUR VARIABLES HERE
 -- ==================================== 
@@ -180,32 +148,28 @@ memif_setup(
                 
             when STATE_REFRESH =>
                 -- Read your data
-                memif_read_word(i_memif, o_memif, header_address, TARGETSIGNAL, done);
+                memif_read_word(i_memif, o_memif, header_address, offset, done);
                 if done then
                     state <= STATE_CALC;
                 end if;
 
             when STATE_CALC =>
                 case calc_state is
-                
+                                
                     when 0 =>
-                    -- Read your data i.e.
-                    memif_read_word(i_memif, o_memif, source_address + pSourceOffset, DATASIGNAL, done);
-                    if(done) then
-                        calc_state     := calc_state + 1;
-                        source_offset  := source_offset + 4;
+                    count <= count + '1';
+                    if count >= offset then
+                        output <= not output;
                     end if;
-                
-                    when 1 =>
-                    -- Manipulate DATASIGNAL ie. CALCLULATED_DATA <= DATASIGNAL +1;
+
                     calc_state := calc_state + 1;
-                
-                    when 2 =>
+                    
+                    when 1 =>
                     -- Write result
-                    memif_write_word(i_memif, o_memif, target_address + target_offset, CALCLULATED_DATA, done);
+                    memif_write_word(i_memif, o_memif, target_address + target_offset, output, done);
                     if done then
                         calc_state    := 0;
-                        target_offset <= target_offset + 4;
+                        target_offset <= target_offset + 32;
                         state         <= STATE_CHECK;
                     end if;    
                 
