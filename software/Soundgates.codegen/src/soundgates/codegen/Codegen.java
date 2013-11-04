@@ -1,14 +1,22 @@
 package soundgates.codegen;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.AbstractDocument.ElementEdit;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -17,7 +25,9 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
+import soundgates.DataType;
 import soundgates.Delegation;
+import soundgates.Direction;
 import soundgates.Element;
 import soundgates.Link;
 import soundgates.Patch;
@@ -28,13 +38,12 @@ import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 
 public class Codegen {
 
-	private String folder;
+	private final String pdcodeFolderName = "pdcode";
+	HashMap<Port, Integer> compositeComponentPortMappings;
 
-	public Codegen() {
-	}
+	IFolder pdCodeFolder = null;
 	
-	public void setFolder(String folder){
-		this.folder=folder;
+	public Codegen() {
 	}
 	
 	public Patch getPatch(String path){
@@ -57,21 +66,23 @@ public class Codegen {
 	    return patch;		
 	}
 	
-	public void generateCodeForPatch(Patch patch) throws IOException {		
+	public void generateCodeForPatch(Patch patch) throws IOException, CoreException {
+		compositeComponentPortMappings = new HashMap<Port, Integer>();
 		List<SoundComponent> componentList = new ArrayList<SoundComponent>();
 		List<Link> linkList = new ArrayList<Link>();		
+		
+		buildCompositeMappings(patch);
+		
 		for(Element element : patch.getElements()){
 			if(element instanceof SoundComponent){				 
 				componentList.add((SoundComponent) element);
-				
-				// if the atomic component type wasn't already printed as file				
-				if(element instanceof AtomicSoundComponent)
+
+				if(element instanceof CompositeSoundComponent){					
+					handleCompositeSoundComponent( (CompositeSoundComponent) element);
+				} else if(element instanceof AtomicSoundComponent)
 				{					
 					printAtomicComponent((AtomicSoundComponent) element);
-				}
-				else if(element instanceof CompositeSoundComponent){					
-					handleCompositeSoundComponent( (CompositeSoundComponent) element);
-				}			
+				}		
 				
 			}			
 			else if(element instanceof Link){
@@ -81,6 +92,39 @@ public class Codegen {
 		printPatch(componentList, linkList);
 	}
 	
+	private void buildCompositeMappings(Patch patch) {
+		
+		for(Element element : patch.getElements()){
+			if (element instanceof CompositeSoundComponent){
+				buildCompositeMappings((CompositeSoundComponent)element);
+			}
+		}
+	}
+
+	private void buildCompositeMappings(CompositeSoundComponent element) {
+		int inlets = 0;
+		int outlets = 0;
+		
+		for (SoundComponent component : element.getEmbeddedComponents()){
+			if (component instanceof CompositeSoundComponent){
+				buildCompositeMappings((CompositeSoundComponent) component);
+			}
+		}
+		
+		for (Delegation delegation : element.getDelegations()){
+			Port sourcePort = delegation.getSource();
+			Port targetPort = delegation.getTarget();
+			
+			if (sourcePort.getDirection().equals(Direction.IN)){
+				compositeComponentPortMappings.put(sourcePort, inlets++);
+			}
+			
+			if (targetPort.getDirection().equals(Direction.OUT)){
+				compositeComponentPortMappings.put(targetPort, outlets++);
+			}
+		}
+	}
+
 	private HashMap<SoundComponent, Integer> componentId = new HashMap<SoundComponent, Integer>();
 	private Integer lastUsedId = 0;
 	
@@ -91,10 +135,8 @@ public class Codegen {
 		return "component_" + componentId.get(soundComponent) + "_" + soundComponent.getName();
 	}
 	
-	private void printAtomicComponent(AtomicSoundComponent atomicSoundComponent)  throws IOException {
-		String fileName = folder + getUniqueName(atomicSoundComponent) + ".pd";
-		FileWriter writer =  new FileWriter(new File(fileName));	
-		
+	private void printAtomicComponent(AtomicSoundComponent atomicSoundComponent)  throws CoreException {
+		IFile file = pdCodeFolder.getFile(getUniqueName(atomicSoundComponent) + ".pd");
 		if (atomicSoundComponent.getStringProperties() != null){
 			
 			String pdCodeText = "";
@@ -139,14 +181,13 @@ public class Codegen {
 					}
 				}				
 			}
-			
-			
-			writer.write(pdCodeText);
-		}	
-		writer.close();
+
+			InputStream code = new ByteArrayInputStream(pdCodeText.getBytes());
+			file.create(code, IResource.FORCE, null);
+		}
 	}
 	
-	public void handleCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent) throws IOException {
+	public void handleCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent) throws IOException, CoreException {
 
 		// create lists
 		List<SoundComponent> componentList = new ArrayList<SoundComponent>();
@@ -209,13 +250,18 @@ public class Codegen {
 		return resultingMapping;
 	}
 	
-	private void printPatch(List<SoundComponent> componentList, List<Link> linkList) throws IOException{		
-		FileWriter writer =  new FileWriter(new File(folder + "patch.pd"));
-		writer.write("#N canvas 621 551 450 300 10; \n");
+	private void printPatch(List<SoundComponent> componentList, List<Link> linkList) throws CoreException{
+		IFile file = pdCodeFolder.getFile("patch.pd");
+		String result = "#N canvas 621 551 450 300 10; \n";
 		for (SoundComponent comp : componentList){
-				writer.write("#X obj 0 0 "+ getUniqueName(comp) + ";\n");
+				result += "#X obj 0 0 "+ getUniqueName(comp) + ";\n";
 		}		
-		
+		result += handleLinks(linkList, componentList);
+		file.create(new ByteArrayInputStream(result.getBytes()), IFile.FORCE, null);
+	}
+	
+	private String handleLinks(List<Link> linkList, List<SoundComponent> componentList){
+		StringBuilder pdcode = new StringBuilder();
 		for (Link link : linkList){
 			SoundComponent sourceComponent = link.getSource().getComponent();
 			SoundComponent targetComponent = link.getTarget().getComponent();
@@ -232,35 +278,87 @@ public class Codegen {
 				HashMap<Port, Integer> targetPortMapping = parsePortMappings((AtomicSoundComponent) targetComponent);
 				sinkPort = targetPortMapping.get(link.getTarget());
 			}
+			if (sourceComponent instanceof CompositeSoundComponent){
+				sourcePort = compositeComponentPortMappings.get(link.getSource());
+			}
+			if (targetComponent instanceof CompositeSoundComponent){
+				sinkPort = compositeComponentPortMappings.get(link.getTarget());
+			}
 			
-			writer.write("#X connect " + source + " " + sourcePort + " " + sink + " " + sinkPort + ";\n");
+			pdcode.append("#X connect " + source + " " + sourcePort + " " + sink + " " + sinkPort + ";\n");
 		}
-		
-		writer.close();
+		return pdcode.toString();
 	}
 	
-	private void printCompositeSoundComponent(CompositeSoundComponent compositeComponent, List<SoundComponent> componentList, List<Link> linkList, List<Delegation> delegationList) throws IOException{
-		
-		FileWriter writer =  new FileWriter(new File(folder+ getUniqueName(compositeComponent) +".pd"));
-		writer.write("#N canvas 621 551 450 300 10; \n");		
+	
+	private void printCompositeSoundComponent(CompositeSoundComponent compositeComponent, List<SoundComponent> componentList, List<Link> linkList, List<Delegation> delegationList) throws CoreException{
+		IFile file = pdCodeFolder.getFile(getUniqueName(compositeComponent) +".pd");
+		String result = "#N canvas 621 551 450 300 10; \n";		
 		
 		for (SoundComponent comp : componentList){
-				writer.write("#X obj 0 0 "+ getUniqueName(comp) + ";\n");
+				result += "#X obj " + componentList.indexOf(comp) + " 0 "+ getUniqueName(comp) + ";\n";
 		}
 		
-		for (Link link : linkList){
-			
-			int source = componentList.indexOf(link.getSource().getComponent());
-			int sourcePort = 0;
-			int sink = componentList.indexOf(link.getTarget().getComponent());
-			int sinkPort = 0;
-			
-			writer.write("#X connect " + source + " " + sourcePort + " " + sink + " " + sinkPort + ";\n");
-		}
+		result += handleLinks(linkList, componentList) + "\n";
+		result += handleDelegations(delegationList, componentList);
 		
-		writer.close();
+		file.create(new ByteArrayInputStream(result.getBytes()), IResource.FORCE, null);
+		
 	}		
 	
+	private String handleDelegations(List<Delegation> delegationList,
+			List<SoundComponent> componentList) {
+		String result = "";
+		
+		int createdObjects = 0;
+		
+		for (Delegation delegation : delegationList){
+			Port sourcePort = delegation.getSource();
+			Port targetPort = delegation.getTarget();
+			
+			if (sourcePort.getDirection().equals(Direction.IN)){
+				// use the port mapping as x coordinate to get puredate to use that number for the inlet
+				result += "#X obj " + compositeComponentPortMappings.get(sourcePort) + " 0 inlet";
+				createdObjects++;
+				if (sourcePort.getDataType().equals(DataType.SOUND)){
+					result += "~";
+				}
+				result += ";\n";
+				
+				SoundComponent targetComponent = targetPort.getComponent();
+				result += "#X connect " + (componentList.size() + createdObjects - 1) + " 0 ";
+				result += componentList.indexOf(targetPort.getComponent()) + " ";
+				if (targetComponent instanceof AtomicSoundComponent){
+					result += parsePortMappings((AtomicSoundComponent) targetComponent).get(targetPort);
+				} else if (targetComponent instanceof CompositeSoundComponent){
+					result += compositeComponentPortMappings.get(targetPort);
+				}
+				result += ";\n";
+			}
+			
+			if (targetPort.getDirection().equals(Direction.OUT)){
+				result += "#X obj " + createdObjects + " 0 outlet";
+				createdObjects++;
+				if (sourcePort.getDataType().equals(DataType.SOUND)){
+					result += "~";
+				}
+				result += ";\n";
+				
+				SoundComponent sourceComponent = sourcePort.getComponent();
+				result += "#X connect " + componentList.indexOf(sourcePort.getComponent()) + " ";
+				if (sourceComponent instanceof AtomicSoundComponent){
+					result += parsePortMappings((AtomicSoundComponent) sourceComponent).get(sourcePort);
+				} else if (sourceComponent instanceof CompositeSoundComponent){
+					result += compositeComponentPortMappings.get(sourcePort);
+				}
+				result += " " + (componentList.size() + createdObjects - 1) + " 0 ";
+
+				result += ";\n";
+			}
+		}
+		return result;
+	}
+
 	private boolean listContainsString(LinkedList<String> list, String string){
 		for(String s : list)
 			if (s.equals(string))
@@ -285,6 +383,17 @@ public class Codegen {
 		if (atomicSoundComponent.getFloatProperties().containsKey(propName))
 			return atomicSoundComponent.getFloatProperties().get(propName).toString();	
 		
-		throw new Exception("Propery name not in the list!");
+		throw new Exception("Property name not in the list!");
+	}
+
+	public void generate(IFile file) throws CoreException, IOException {
+		Patch patch = getPatch(file.getFullPath().toPortableString());
+
+		IProject project = file.getProject();
+		pdCodeFolder = project.getFolder(pdcodeFolderName);
+		if (pdCodeFolder.exists())
+			pdCodeFolder.delete(true, null);
+			pdCodeFolder.create(IResource.NONE, true, null);
+		generateCodeForPatch(patch);
 	}
 }
