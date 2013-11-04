@@ -36,13 +36,15 @@ entity cordic is
 generic (
 	pipeline_stages : integer := 24
 	);
-port (		
-		 clk : in std_logic;
-		 x   : in  signed(31 downto 0);
-		 y   : in  signed(31 downto 0);
-		 phi : in  signed(31 downto 0);  -- 0 < phi < 2 * pi
-		 sin : out signed(31 downto 0);
-		 cos : out signed(31 downto 0)
+port (	 
+        x       : in  signed(31 downto 0);
+        y       : in  signed(31 downto 0);
+        phi     : in  signed(31 downto 0);  -- 0 < phi < 2 * pi
+        sin     : out signed(31 downto 0);	
+        cos     : out signed(31 downto 0);
+        clk     : in std_logic;	-- clock
+        rst     : in std_logic;	-- reset
+        ce      : in std_logic 	-- enable
 		);
 
 end cordic;
@@ -71,6 +73,8 @@ architecture Behavioral of cordic is
 	signal phi_i : signed(31 downto 0) 	:= (others => '0');
 begin
 	
+   
+   -- rotates the vector (x,y) according to the quadrant in the unit circule
 	VEC_ROTATE_PROCESS : process(x, y, phi)
 	begin
 			if phi > q1 and phi < q2 then
@@ -96,6 +100,7 @@ begin
 	y_pipeline(0) <= y_i;
 	z_pipeline(0) <= phi_i;
 	
+   -- instantiate cordic pipeline   
 	CORDIC_PIPELINE : for i in 0 to pipeline_stages generate		
 		PIPELINE_STAGE : entity work.cordic_stage
 			generic map(
@@ -104,7 +109,9 @@ begin
 				)
 			port map(
 				clk => clk,
-
+				rst => rst,
+				ce  => ce,
+				
 				x => x_pipeline(i),
 				y => y_pipeline(i),
 				z => z_pipeline(i),
@@ -114,8 +121,7 @@ begin
 				z_n => z_pipeline(i + 1)
 			);		
 	end generate;
-	
-	
+		
 	sin_i <= shift_right(y_pipeline(pipeline_stages + 1) * to_signed(cordic_gain_scaled, 32), integer(SOUNDGATE_FIX_PT_SCALING));
 	cos_i <= shift_right(x_pipeline(pipeline_stages + 1) * to_signed(cordic_gain_scaled, 32), integer(SOUNDGATE_FIX_PT_SCALING));
 	

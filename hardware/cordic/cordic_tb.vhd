@@ -44,19 +44,29 @@ ARCHITECTURE behavior OF cordic_tb IS
     -- Component Declaration for the Unit Under Test (UUT)
  
     COMPONENT cordic
+    generic (
+         pipeline_stages : integer
+    );
     PORT(
-         clk : in std_logic;
+         
 			x   : in signed(31 downto 0);
 			y   : in signed(31 downto 0);
 			phi : in  signed(31 downto 0);  -- 0 <= phi <= pi/2
 			sin : out signed(31 downto 0);
-			cos : out signed(31 downto 0)
+			cos : out signed(31 downto 0);
+         
+     clk : in std_logic;
+     rst : in std_logic;
+     ce  : in std_logic
+         
         );
     END COMPONENT;
     
 
    --Inputs
    signal clk : std_logic := '0';
+   signal rst : std_logic;
+   signal ce  : std_logic;
 	
 	constant scaling : real := 27.0;
 	
@@ -73,15 +83,28 @@ ARCHITECTURE behavior OF cordic_tb IS
  	--Outputs
    signal sin : signed(31 downto 0);
    signal cos : signed(31 downto 0);
-
+  
    -- Clock period definitions
    constant clk_period : time := 10 ns;
+   
+   constant cordic_p_stages : integer := 24;
+
+   -- simulation related signals
+   
+   signal init_done : std_logic := '0';
+      
 	signal count : integer := 0;
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: cordic PORT MAP (
+   uut: cordic
+   generic map (
+      pipeline_stages => cordic_p_stages
+	)
+   PORT MAP (
           clk => clk,
+          rst => rst,
+          ce => ce,
           x => x,
           y => y,
           phi => phi,
@@ -97,8 +120,29 @@ BEGIN
 		clk <= '1';
 		wait for clk_period/2;
    end process;
- 
-
+   
+   
+   -- init process
+   
+   init_proc : process
+   
+   begin
+         
+         wait for clk_period;
+         
+         rst <= '1';      
+         
+         wait for cordic_p_stages * clk_period;
+         
+         rst <= '0';
+         ce  <= '1';
+         
+         init_done <= '1';
+                  
+         wait until true;
+         
+   end process;
+   
    -- Stimulus process
    stim_proc: process
 	
@@ -110,21 +154,17 @@ BEGIN
 		constant phi_offset : real := real(MATH_PI * 2.0 / real(stepsize) * 2 ** SOUNDGATE_FIX_PT_SCALING);
 		constant phi_offset_scaled : signed(31 downto 0) := to_signed(integer(phi_offset), 32);
 		
-   begin		
-
-			count <= count + 1;
-			
-			if count >= 0 and count < stepsize  then -- 0 to 2*pi
-			
-				phi <= phi + phi_offset_scaled;
-	
-			else
-				phi 	<= to_signed(0, 32);
-				count <= 0;
-			end if;
-			
-			wait for clk_period;
-			
+   begin         
+         count <= count + 1;
+         
+         if count >= 0 and count < stepsize  then -- 0 to 2*pi			
+            phi <= phi + phi_offset_scaled;
+         else
+            phi 	<= to_signed(0, 32);
+            count <= 0;
+         end if;			
+         
+         wait for clk_period;      
    end process;
 
 END;

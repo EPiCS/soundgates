@@ -27,7 +27,7 @@ constant MAX_NCO_FREQUNCY : integer := 16000;
 
 type Phase_Increment_Array is array(0 to MAX_NCO_FREQUNCY) of signed(31 downto 0);
 
-type WAVEFORM_TYPE is ( SIN, SQUARE, SAWTOOTH);
+type WAVEFORM_TYPE is ( SIN, SQUARE, SAWTOOTH, TRIANGLE);
 
 
 -- Functions and Procedure declarations
@@ -36,10 +36,29 @@ function Precalculate_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_I
 
 function Precalculate_Cordic_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array;
 
+function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) return signed;
 
 end soundcomponents;
 
 package body soundcomponents is
+
+
+function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) return signed is
+	
+	variable stepsize       : integer;
+	variable phi_incr_real   : real;
+   variable phi_incr_signed : signed(31 downto 0);
+begin	
+   if SIN_FREQUENCY > 0 then
+      stepsize        := FPGA_FREQUENCY / SIN_FREQUENCY;
+      phi_incr_real   := MATH_PI * 2.0 / real(stepsize);
+      phi_incr_signed := to_signed(integer(real(phi_incr_real) * 2**SOUNDGATE_FIX_PT_SCALING), 32);
+   else
+      phi_incr_signed := to_signed(0, 32);
+   end if;		
+	
+	return phi_incr_signed;
+end Get_Cordic_Phase_Increment;
 
 
 function Precalculate_Cordic_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array is

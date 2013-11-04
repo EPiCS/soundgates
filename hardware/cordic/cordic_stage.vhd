@@ -34,36 +34,40 @@ use soundgates.soundcomponents.all;
 
 entity cordic_stage is
 	 Generic(   stage : integer := 1;
-					alpha : real 	 := 0.5
-				);
-    Port ( clk 	: in  	STD_LOGIC;
-           x 		: in  	SIGNED (31 downto 0);
-           y 		: in  	SIGNED (31 downto 0);
-           z 		: in  	SIGNED (31 downto 0);
-			  
-			  x_n 	: out  	SIGNED (31 downto 0);
-           y_n 	: out  	SIGNED (31 downto 0);
-			  z_n		: out  	SIGNED (31 downto 0)
+               alpha : real 	 := 0.5
+        );
+    Port ( 
+         clk   : in  STD_LOGIC;
+         rst 	: in  STD_LOGIC;
+         ce    : in  STD_LOGIC;
+           
+         x  : in  SIGNED (31 downto 0);
+         y  : in  SIGNED (31 downto 0);
+         z  : in  SIGNED (31 downto 0);
+    	  
+         x_n   : out SIGNED (31 downto 0);
+         y_n   : out SIGNED (31 downto 0);
+         z_n   : out SIGNED (31 downto 0)
            );
 end cordic_stage;
 
 architecture Behavioral of cordic_stage is
 	
 	-- registers
-	signal x_next : signed(31 downto 0) := to_signed(0, 32);
-	signal y_next : signed(31 downto 0) := to_signed(0, 32);
-	signal z_next : signed(31 downto 0) := to_signed(0, 32);
-	
+   signal x_next : signed(31 downto 0) := (others => '0');
+   signal y_next : signed(31 downto 0) := (others => '0');
+   signal z_next : signed(31 downto 0) := (others => '0');
+
 	-- intermediate signals
-	signal x_next_i : signed(31 downto 0);
-	signal y_next_i : signed(31 downto 0);
-	signal z_next_i : signed(31 downto 0);
+   signal x_next_i : signed(31 downto 0);
+   signal y_next_i : signed(31 downto 0);
+   signal z_next_i : signed(31 downto 0);
 	
-	constant arctan_init	   : real 				    := ARCTAN(alpha) * 2**SOUNDGATE_FIX_PT_SCALING;
-	constant scaled_arctan	: signed(31 downto 0) := to_signed(integer(arctan_init), 32);
-	
-	signal y_shift : signed(31 downto 0);
-	signal x_shift : signed(31 downto 0);	
+   constant arctan_init	   : real                := ARCTAN(alpha) * 2**SOUNDGATE_FIX_PT_SCALING;
+   constant scaled_arctan	: signed(31 downto 0) := to_signed(integer(arctan_init), 32);
+
+   signal y_shift : signed(31 downto 0);
+   signal x_shift : signed(31 downto 0);	
 	
 begin
 
@@ -83,35 +87,38 @@ begin
 	begin
 			
 		if z > 0 then		--  sgn = + 1
-			x_next := x + (-y_shift);
-			y_next := x_shift + y;
-			z_next := z + (-scaled_arctan);
-		else					-- sgn = -1
-			x_next := x +  y_shift;
-			y_next := (-x_shift) + y;
-			z_next := z + scaled_arctan;
-		end if;
-				
-		x_next_i <= x_next;
-		y_next_i <= y_next;			
-		z_next_i <= z_next;
-		
+         x_next := x + (-y_shift);
+         y_next := x_shift + y;
+         z_next := z + (-scaled_arctan);
+      else					-- sgn = -1
+         x_next := x +  y_shift;
+         y_next := (-x_shift) + y;
+         z_next := z + scaled_arctan;
+      end if;
+      
+      x_next_i <= x_next;
+      y_next_i <= y_next;			
+      z_next_i <= z_next;
 	end process;
 	
 	REG_PROCESS : process(clk)
-	begin
-	
-		if rising_edge(clk) then
-			x_next <= x_next_i;
-			y_next <= y_next_i;
-			z_next <= z_next_i;
-		end if;
-	
+	begin	
+		if rising_edge(clk) then               
+         if rst = '1' then         
+            x_next <= (others => '0');
+            y_next <= (others => '0');
+            z_next <= (others => '0');            
+         elsif ce = '1' then
+            x_next <= x_next_i;
+            y_next <= y_next_i;
+            z_next <= z_next_i;
+         end if;
+    end if;
 	end process;
 	
-	x_n <= x_next;
-	y_n <= y_next;
-	z_n <= z_next;
+   x_n <= x_next;
+   y_n <= y_next;
+   z_n <= z_next;
 	
 end Behavioral;
 

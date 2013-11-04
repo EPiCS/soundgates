@@ -32,6 +32,9 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 USE ieee.numeric_std.ALL;
  
+library soundgates;
+use soundgates.soundcomponents.all;
+
 ENTITY nco_tb IS
 END nco_tb;
  
@@ -41,19 +44,27 @@ ARCHITECTURE behavior OF nco_tb IS
  
     COMPONENT nco
     PORT(
-         clk : IN  std_logic;
-			freq_wren : in 	std_logic;
-         freq_in : IN  unsigned(31 downto 0);
-         data : OUT  signed(31 downto 0)
+         clk          : in  std_logic;
+         rst          : in  std_logic;
+         ce           : in  std_logic;
+         phase_offset : in signed(31 downto 0);
+         phase_incr   : in signed(31 downto 0);
+         data         : out signed(31 downto 0)
         );
     END COMPONENT;
     
 
    --Inputs
    signal clk : std_logic := '0';
-	signal freq_wren : std_logic := '0';
-   signal freq : unsigned(31 downto 0) := (others => '0');
-
+   signal rst : std_logic := '0';
+   signal ce  : std_logic := '1';
+  
+   signal phase_offset : signed(31 downto 0) := (others => '0');
+   signal phase_incr : signed(31 downto 0) := (others => '0');
+   
+   
+   constant FPGA_FREQUENCY : integer := 100_000_000;
+   
  	--Outputs
    signal data : signed(31 downto 0);
 
@@ -65,8 +76,10 @@ BEGIN
 	-- Instantiate the Unit Under Test (UUT)
    uut: nco PORT MAP (
           clk => clk,
-          freq_in => freq,
-			 freq_wren => freq_wren,
+          rst => rst,
+          ce  => ce,
+          phase_offset => phase_offset,
+			 phase_incr   => phase_incr,
           data => data
         );
 
@@ -82,54 +95,51 @@ BEGIN
 
    -- Stimulus process
    stim_proc: process
+        
    begin		
       -- hold reset state for 100 ns.
+      rst <= '1';
       wait for 100 ns;	
-
+      rst <= '0';
       wait for clk_period*10;
 
-		freq <= to_unsigned(8000, 32);
-			
-		freq_wren <= '1';
+		-- freq <= to_unsigned(8000, 32);
+   
+		phase_incr <= Get_Cordic_Phase_Increment(FPGA_FREQUENCY, 8000);
+      
 		wait for clk_period;
-		freq_wren <= '0';
+		
 			
 		wait for 125 us;
 
-		freq <= to_unsigned(10000, 32);
+		-- freq <= to_unsigned(10000, 32);
 			
-		freq_wren <= '1';
+		
 		wait for clk_period;
-		freq_wren <= '0';
+		
 		
 		wait for 100 us;
 		
-		freq <= to_unsigned(12000, 32);
-			
-		freq_wren <= '1';
+		-- freq <= to_unsigned(12000, 32);
+				
 		wait for clk_period;
-		freq_wren <= '0';
-		
+				
 		
 		wait for 75 us;
 		
-		freq <= to_unsigned(14000, 32);
+		-- freq <= to_unsigned(14000, 32);
 			
-		freq_wren <= '1';
-		wait for clk_period;
-		freq_wren <= '0';
 		
+		wait for clk_period;
+				
 		wait for 50 us;
 		
-		freq <= to_unsigned(16000, 32);
+		--freq <= to_unsigned(16000, 32);
 			
-		freq_wren <= '1';
 		wait for clk_period;
-		freq_wren <= '0';
-		
+				
 		wait for 25 us;
-
-      -- insert stimulus here 
+      
 
       wait;
    end process;
