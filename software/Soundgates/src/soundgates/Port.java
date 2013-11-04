@@ -2,6 +2,8 @@
  */
 package soundgates;
 
+import org.eclipse.emf.common.util.EList;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,8 @@ package soundgates;
  */
 public interface Port extends NamedElement {
 	/**
-	 * Returns the value of the '<em><b>Outgoing Connection</b></em>' reference.
+	 * Returns the value of the '<em><b>Outgoing Connection</b></em>' reference list.
+	 * The list contents are of type {@link soundgates.Connection}.
 	 * It is bidirectional and its opposite is '{@link soundgates.Connection#getSource <em>Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -37,24 +40,13 @@ public interface Port extends NamedElement {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Outgoing Connection</em>' reference.
-	 * @see #setOutgoingConnection(Connection)
+	 * @return the value of the '<em>Outgoing Connection</em>' reference list.
 	 * @see soundgates.SoundgatesPackage#getPort_OutgoingConnection()
 	 * @see soundgates.Connection#getSource
 	 * @model opposite="source"
 	 * @generated
 	 */
-	Connection getOutgoingConnection();
-
-	/**
-	 * Sets the value of the '{@link soundgates.Port#getOutgoingConnection <em>Outgoing Connection</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Outgoing Connection</em>' reference.
-	 * @see #getOutgoingConnection()
-	 * @generated
-	 */
-	void setOutgoingConnection(Connection value);
+	EList<Connection> getOutgoingConnection();
 
 	/**
 	 * Returns the value of the '<em><b>Incoming Connection</b></em>' reference.

@@ -71,7 +71,7 @@ public class LinkCreateCommand extends EditElementCommand {
 			return false;
 		}
 		if(source instanceof Port){
-			if ( ((Port) source).getDirection()==Direction.IN ||  ((Port) source).getOutgoingConnection()!=null)
+			if ( ((Port) source).getDirection()==Direction.IN)
 				return false;				
 		}
 		return SoundgatesBaseItemSemanticEditPolicy.getLinkConstraints()

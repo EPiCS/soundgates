@@ -2,13 +2,17 @@
  */
 package soundgates.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.emf.ecore.util.InternalEList;
 import soundgates.AtomicSoundComponent;
 import soundgates.Connection;
 import soundgates.DataType;
@@ -36,14 +40,14 @@ import soundgates.SoundgatesPackage;
  */
 public class PortImpl extends NamedElementImpl implements Port {
 	/**
-	 * The cached value of the '{@link #getOutgoingConnection() <em>Outgoing Connection</em>}' reference.
+	 * The cached value of the '{@link #getOutgoingConnection() <em>Outgoing Connection</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getOutgoingConnection()
 	 * @generated
 	 * @ordered
 	 */
-	protected Connection outgoingConnection;
+	protected EList<Connection> outgoingConnection;
 
 	/**
 	 * The cached value of the '{@link #getIncomingConnection() <em>Incoming Connection</em>}' reference.
@@ -119,59 +123,11 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Connection getOutgoingConnection() {
-		if (outgoingConnection != null && outgoingConnection.eIsProxy()) {
-			InternalEObject oldOutgoingConnection = (InternalEObject)outgoingConnection;
-			outgoingConnection = (Connection)eResolveProxy(oldOutgoingConnection);
-			if (outgoingConnection != oldOutgoingConnection) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SoundgatesPackage.PORT__OUTGOING_CONNECTION, oldOutgoingConnection, outgoingConnection));
-			}
+	public EList<Connection> getOutgoingConnection() {
+		if (outgoingConnection == null) {
+			outgoingConnection = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, SoundgatesPackage.PORT__OUTGOING_CONNECTION, SoundgatesPackage.CONNECTION__SOURCE);
 		}
 		return outgoingConnection;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Connection basicGetOutgoingConnection() {
-		return outgoingConnection;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetOutgoingConnection(Connection newOutgoingConnection, NotificationChain msgs) {
-		Connection oldOutgoingConnection = outgoingConnection;
-		outgoingConnection = newOutgoingConnection;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__OUTGOING_CONNECTION, oldOutgoingConnection, newOutgoingConnection);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setOutgoingConnection(Connection newOutgoingConnection) {
-		if (newOutgoingConnection != outgoingConnection) {
-			NotificationChain msgs = null;
-			if (outgoingConnection != null)
-				msgs = ((InternalEObject)outgoingConnection).eInverseRemove(this, SoundgatesPackage.CONNECTION__SOURCE, Connection.class, msgs);
-			if (newOutgoingConnection != null)
-				msgs = ((InternalEObject)newOutgoingConnection).eInverseAdd(this, SoundgatesPackage.CONNECTION__SOURCE, Connection.class, msgs);
-			msgs = basicSetOutgoingConnection(newOutgoingConnection, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__OUTGOING_CONNECTION, newOutgoingConnection, newOutgoingConnection));
 	}
 
 	/**
@@ -290,12 +246,10 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @generated
 	 */
 	public void setDirection(Direction newDirection) {
-		if(!(this.eContainer() instanceof AtomicSoundComponent)){
-			Direction oldDirection = direction;
-			direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
-		}
+		Direction oldDirection = direction;
+		direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
 	}
 
 	/**
@@ -313,12 +267,10 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @generated
 	 */
 	public void setDataType(DataType newDataType) {
-		if(!(this.eContainer() instanceof AtomicSoundComponent)){
-			DataType oldDataType = dataType;
-			dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
-		}
+		DataType oldDataType = dataType;
+		dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
 	}
 
 	/**
@@ -326,13 +278,12 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SoundgatesPackage.PORT__OUTGOING_CONNECTION:
-				if (outgoingConnection != null)
-					msgs = ((InternalEObject)outgoingConnection).eInverseRemove(this, SoundgatesPackage.CONNECTION__SOURCE, Connection.class, msgs);
-				return basicSetOutgoingConnection((Connection)otherEnd, msgs);
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutgoingConnection()).basicAdd(otherEnd, msgs);
 			case SoundgatesPackage.PORT__INCOMING_CONNECTION:
 				if (incomingConnection != null)
 					msgs = ((InternalEObject)incomingConnection).eInverseRemove(this, SoundgatesPackage.CONNECTION__TARGET, Connection.class, msgs);
@@ -354,7 +305,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SoundgatesPackage.PORT__OUTGOING_CONNECTION:
-				return basicSetOutgoingConnection(null, msgs);
+				return ((InternalEList<?>)getOutgoingConnection()).basicRemove(otherEnd, msgs);
 			case SoundgatesPackage.PORT__INCOMING_CONNECTION:
 				return basicSetIncomingConnection(null, msgs);
 			case SoundgatesPackage.PORT__COMPONENT:
@@ -386,8 +337,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SoundgatesPackage.PORT__OUTGOING_CONNECTION:
-				if (resolve) return getOutgoingConnection();
-				return basicGetOutgoingConnection();
+				return getOutgoingConnection();
 			case SoundgatesPackage.PORT__INCOMING_CONNECTION:
 				if (resolve) return getIncomingConnection();
 				return basicGetIncomingConnection();
@@ -406,11 +356,13 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SoundgatesPackage.PORT__OUTGOING_CONNECTION:
-				setOutgoingConnection((Connection)newValue);
+				getOutgoingConnection().clear();
+				getOutgoingConnection().addAll((Collection<? extends Connection>)newValue);
 				return;
 			case SoundgatesPackage.PORT__INCOMING_CONNECTION:
 				setIncomingConnection((Connection)newValue);
@@ -437,7 +389,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case SoundgatesPackage.PORT__OUTGOING_CONNECTION:
-				setOutgoingConnection((Connection)null);
+				getOutgoingConnection().clear();
 				return;
 			case SoundgatesPackage.PORT__INCOMING_CONNECTION:
 				setIncomingConnection((Connection)null);
@@ -464,7 +416,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case SoundgatesPackage.PORT__OUTGOING_CONNECTION:
-				return outgoingConnection != null;
+				return outgoingConnection != null && !outgoingConnection.isEmpty();
 			case SoundgatesPackage.PORT__INCOMING_CONNECTION:
 				return incomingConnection != null;
 			case SoundgatesPackage.PORT__COMPONENT:

@@ -198,7 +198,7 @@ public interface SoundgatesPackage extends EPackage {
 	int PORT__NAME = NAMED_ELEMENT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Outgoing Connection</b></em>' reference.
+	 * The feature id for the '<em><b>Outgoing Connection</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -769,10 +769,10 @@ public interface SoundgatesPackage extends EPackage {
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the reference '{@link soundgates.Port#getOutgoingConnection <em>Outgoing Connection</em>}'.
+	 * Returns the meta object for the reference list '{@link soundgates.Port#getOutgoingConnection <em>Outgoing Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Outgoing Connection</em>'.
+	 * @return the meta object for the reference list '<em>Outgoing Connection</em>'.
 	 * @see soundgates.Port#getOutgoingConnection()
 	 * @see #getPort()
 	 * @generated
@@ -1247,7 +1247,7 @@ public interface SoundgatesPackage extends EPackage {
 		EClass PORT = eINSTANCE.getPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Outgoing Connection</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Outgoing Connection</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
