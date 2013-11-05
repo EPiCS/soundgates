@@ -71,9 +71,7 @@ public class DelegationCreateCommand extends EditElementCommand {
 		if (getContainer() == null) {
 			return false;
 		}
-		if(source instanceof Port){
-			if (((Port) source).getOutgoingConnection()!=null)
-				return false;
+		if(source instanceof Port){		
 			
 			if( (source.eContainer() instanceof CompositeSoundComponent) &&	((Port) source).getDirection()==Direction.OUT )
 				return false;

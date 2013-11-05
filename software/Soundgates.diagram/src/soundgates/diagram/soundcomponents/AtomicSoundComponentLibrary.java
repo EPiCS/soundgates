@@ -162,6 +162,10 @@ public class AtomicSoundComponentLibrary {
 		instance = null;
 		xmlfolder = folder;
 	}
+	
+	public static IFolder getXMLFolder() {
+		return xmlfolder;
+	}
 }
 
 class NoSuchAtomicSoundComponentException extends RuntimeException {

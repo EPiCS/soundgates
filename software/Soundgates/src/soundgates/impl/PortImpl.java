@@ -243,13 +243,15 @@ public class PortImpl extends NamedElementImpl implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public void setDirection(Direction newDirection) {
-		Direction oldDirection = direction;
-		direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
+		if(!(this.eContainer() instanceof AtomicSoundComponent)){
+			Direction oldDirection = direction;
+			direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
+		}
 	}
 
 	/**
@@ -264,13 +266,15 @@ public class PortImpl extends NamedElementImpl implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public void setDataType(DataType newDataType) {
-		DataType oldDataType = dataType;
-		dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
+		if(!(this.eContainer() instanceof AtomicSoundComponent)){
+			DataType oldDataType = dataType;
+			dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
+		}
 	}
 
 	/**

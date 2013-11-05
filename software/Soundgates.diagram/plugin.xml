@@ -77,6 +77,25 @@
                id="Soundgates.diagram.InitDiagramAction">
          </action>
       </objectContribution>
+      <objectContribution
+            id="Soundgates.diagram.export"
+            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart">
+         <menu
+               id="Soundgates.diagram.menu"
+               label="Soundgates"
+               path="additions">
+            <separator
+                  name="group">
+            </separator>
+         </menu>
+         <action
+               class="soundgates.diagram.actions.ExportCompositeSoundComponentAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action"
+               label="Export Composite Sound Component"
+               menubarPath="Soundgates.diagram.menu/group">
+         </action>
+      </objectContribution>
    </extension>
 	
    <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">
