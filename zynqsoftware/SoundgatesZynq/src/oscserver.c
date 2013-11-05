@@ -33,7 +33,7 @@ int foo_handler(const char *path, const char *types, lo_arg **argv, int argc,
 int quit_handler(const char *path, const char *types, lo_arg **argv, int argc,
 		 void *data, void *user_data);
 
-int main()
+int runOSCServer()
 {
 	printf("Server listening");
 	fflush(stdout);

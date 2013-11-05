@@ -5,7 +5,12 @@
  *      Author: gwue
  */
 
+#include <stdio.h>
+#include "Samplebuffer.h"
 
-int amain() {
+int main() {
+	soundbuffer* playback = buffer_initialize(44100,0);
+	buffer_test_playback(playback);
+	buffer_free(playback);
 	return 0;
 }
