@@ -1,4 +1,5 @@
 #include "Samplebuffer.h"
+#include <math.h>
 
 soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 	soundbuffer* buff = malloc(sizeof(soundbuffer));
@@ -37,7 +38,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 	}
 	//TODO parametrisierbar machen?
 	if ((err = snd_pcm_hw_params_set_format(buff->pcm_handle, buff->hw_params,
-			SND_PCM_FORMAT_S24_LE)) < 0) {
+			SND_PCM_FORMAT_U24)) < 0) {
 		fprintf(stderr, "cannot set sample format (%s)\n", snd_strerror(err));
 		erroroccured = 2;
 	}
