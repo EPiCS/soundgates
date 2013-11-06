@@ -31,6 +31,7 @@ architecture Behavioral of sawtooth is
     constant lower   : signed (31 downto 0) := to_signed(integer(real(-1 * 2**scaling)), 32);
 	
 	signal phase	 : signed (31 downto 0) := to_signed(integer(real(0)), 32);
+    signal temp	     : signed (31 downto 0);
 	
 	-- f(0) 	--> -1
 	-- f(pi) 	-->  0
