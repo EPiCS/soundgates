@@ -13,7 +13,7 @@ use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
 
-package soundcomponents is
+package soundgates_pkg is
 
 
 -- Constant declarations
@@ -121,4 +121,4 @@ end Precalculate_Phase_Increments;
 --    
 --  end <procedure_name>;
  
-end soundcomponents;
+end soundgates_pkg;
