@@ -43,8 +43,7 @@ public class AtomicSoundComponentXMLHandler {
 
 	public static void readFromXML(AtomicSoundComponentLibrary library, String libraryPath) {
 		try {
-			// String path =
-			// "D:\\Users\\gwue\\Documents\\GitHub\\pg-soundgates\\software\\AtomicComponents\\";
+
 			File directory = new File(libraryPath);
 			String[] files = directory.list();
 			for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {

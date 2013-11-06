@@ -8,6 +8,7 @@ import java.util.List;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.Tool;
 import org.eclipse.gef.palette.PaletteContainer;
+import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteToolbar;
@@ -31,18 +32,18 @@ public class SoundgatesPaletteFactory {
 	public void fillPalette(PaletteRoot paletteRoot) {
 		PaletteToolbar standardGroup = ((PaletteToolbar)paletteRoot.getChildren().get(0));
 		paletteRoot.add(createComponents1Group());
+		paletteRoot.add(createComponents2Group());
 		paletteRoot.add(createPorts2Group());
 		paletteRoot.add(createConnections3Group());
 	}
 
 	/**
-	 * Creates "Components" palette tool group
+	 * Creates "Atomic Components" palette tool group
 	 * 
 	 * @generated NOT
 	 */
 	private PaletteContainer createComponents1Group() {
-		PaletteGroup paletteContainer = new PaletteGroup(
-				Messages.Components1Group_title);
+		PaletteDrawer paletteContainer = new PaletteDrawer("Atomic sound components");
 		paletteContainer.setId("createComponents1Group"); //$NON-NLS-1$
 		// We don't want to create untyped AtomicSoundComponents
 		// paletteContainer.add(createAtomicSoundComponent1CreationTool());
@@ -53,6 +54,18 @@ public class SoundgatesPaletteFactory {
 					.add(createConcreteAtomicNodeCreationTool(availableTypes
 							.get(i))); // MYTOOL
 		}
+		return paletteContainer;
+	}
+	
+	/**
+	 * Creates "Composite Components" palette tool group
+	 * 
+	 * @generated NOT
+	 */
+	private PaletteContainer createComponents2Group() {
+		PaletteDrawer paletteContainer = new PaletteDrawer("Composite sound components");
+		paletteContainer.setId("createComponents2Group"); //$NON-NLS-1$
+
 		paletteContainer.add(createCompositeSoundComponent2CreationTool());
 		return paletteContainer;
 	}
@@ -63,8 +76,7 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	private PaletteContainer createPorts2Group() {
-		PaletteGroup paletteContainer = new PaletteGroup(
-				Messages.Ports2Group_title);
+		PaletteDrawer paletteContainer = new PaletteDrawer("Ports");
 		paletteContainer.setId("createPorts2Group"); //$NON-NLS-1$
 		paletteContainer.add(createPort1CreationTool());
 		return paletteContainer;
@@ -76,8 +88,7 @@ public class SoundgatesPaletteFactory {
 	 * @generated
 	 */
 	private PaletteContainer createConnections3Group() {
-		PaletteGroup paletteContainer = new PaletteGroup(
-				Messages.Connections3Group_title);
+		PaletteDrawer paletteContainer = new PaletteDrawer("Connections");
 		paletteContainer.setId("createConnections3Group"); //$NON-NLS-1$
 		paletteContainer.setDescription(Messages.Connections3Group_desc);
 		paletteContainer.add(createLink1CreationTool());
@@ -92,8 +103,7 @@ public class SoundgatesPaletteFactory {
 		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
-		NodeToolEntry entry = new NodeToolEntry(
-				Messages.CompositeSoundComponent2CreationTool_title,
+		NodeToolEntry entry = new NodeToolEntry("Create new composite sound component",
 				Messages.CompositeSoundComponent2CreationTool_desc, types);
 		entry.setId("createCompositeSoundComponent2CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
@@ -180,19 +190,6 @@ public class SoundgatesPaletteFactory {
 		entry.setLargeIcon(entry.getSmallIcon()); // TODO Icon anpassen?
 		return entry;
 	}
-
-	// private ToolEntry createSineGeneratorCreationTool() {
-	// NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
-	// "Sine",
-	// Messages.AtomicSoundComponent1CreationTool_desc,
-	// Collections
-	// .singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
-	//		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
-	// entry.setSmallIcon(SoundgatesElementTypes
-	// .getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
-	// entry.setLargeIcon(entry.getSmallIcon());
-	// return entry;
-	// }
 
 	private static class ConcreteAtomicTypeCreationTool extends
 			UnspecifiedTypeCreationTool {

@@ -22,7 +22,6 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -109,7 +108,7 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 					
 					//integer properties
 					for(int i=0; i<embAtomicComponent.getIntegerProperties().size(); i++){						
-						Element integerProperty = doc.createElement("IntegerProperty");						
+						Element integerProperty = doc.createElement("IntProperty");						
 						integerProperty.setAttribute("Name",embAtomicComponent.getIntegerProperties().get(i).getKey().toString());
 						integerProperty.setAttribute("Value",embAtomicComponent.getIntegerProperties().get(i).getValue().toString());						
 						embComponentElement.appendChild(integerProperty);
@@ -125,7 +124,7 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 					
 					//boolean properties
 					for(int i=0; i<embAtomicComponent.getBooleanProperties().size(); i++){						
-						Element booleanProperty = doc.createElement("BooleanProperty");						
+						Element booleanProperty = doc.createElement("BoolProperty");						
 						booleanProperty.setAttribute("Name",embAtomicComponent.getBooleanProperties().get(i).getKey().toString());
 						booleanProperty.setAttribute("Value",embAtomicComponent.getBooleanProperties().get(i).getValue().toString());						
 						embComponentElement.appendChild(booleanProperty);

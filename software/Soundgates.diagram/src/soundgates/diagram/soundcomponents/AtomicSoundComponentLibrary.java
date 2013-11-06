@@ -7,9 +7,8 @@ import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.common.util.EMap;
+
 import soundgates.AtomicSoundComponent;
-import soundgates.DataType;
-import soundgates.Direction;
 import soundgates.Port;
 import soundgates.SoundgatesFactory;
 
@@ -35,37 +34,6 @@ public class AtomicSoundComponentLibrary {
 
 	public void addComponent(AtomicSoundComponent component) {
 		this.components.put(component.getType(), component);
-	}
-
-	public static AtomicSoundComponentLibrary createDummyLibrary() {
-		instance = new AtomicSoundComponentLibrary();
-		AtomicSoundComponent c = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
-		c.setName("Dummy 1");
-		c.setType("d1");
-		Port in = SoundgatesFactory.eINSTANCE.createPort();
-		Port out = SoundgatesFactory.eINSTANCE.createPort();
-		in.setName("DummyBoolIn");
-		in.setDataType(DataType.BOOLEAN);
-		in.setDirection(Direction.IN);
-		out.setName("DummySoundOut");
-		out.setDataType(DataType.SOUND);
-		out.setDirection(Direction.OUT);
-		c.getPorts().add(in);
-		c.getPorts().add(out);
-
-		c.getFloatProperties().put("SomeValue", 1.0f);
-		c.getFloatProperties().put("AnotherValue", 3.14f);
-		c.getIntegerProperties().put("IntProp", 33);
-		c.getBooleanProperties().put("BoolProp", true);
-		instance.components.put(c.getType(), c);
-
-		AtomicSoundComponent c2 = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
-		c2.setName("Boolean dummy");
-		c2.setType("BoolDummy");
-		c2.getBooleanProperties().put("pommes", false);
-		instance.components.put(c2.getType(), c2);
-
-		return instance;
 	}
 
 	public static AtomicSoundComponentLibrary createFromXML(String libraryPath) {

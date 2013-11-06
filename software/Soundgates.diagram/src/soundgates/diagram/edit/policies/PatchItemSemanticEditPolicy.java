@@ -28,6 +28,7 @@ public class PatchItemSemanticEditPolicy extends
 	 * @generated
 	 */
 	protected Command getCreateCommand(CreateElementRequest req) {
+		
 		if (SoundgatesElementTypes.AtomicSoundComponent_2001 == req
 				.getElementType()) {
 			return getGEFWrapper(new AtomicSoundComponentCreateCommand(req));
