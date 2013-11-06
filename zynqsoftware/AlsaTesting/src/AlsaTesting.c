@@ -105,7 +105,7 @@ int main(void) {
 	int mychar;
 
 	int err;
-	int i, j, k;
+	int i, j;
 	snd_pcm_t* playback_handle = initDevice(0);
 	snd_pcm_t* record_handle = initDevice(1);
 	char buf[1024];
