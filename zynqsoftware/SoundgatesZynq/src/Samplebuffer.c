@@ -1,10 +1,31 @@
 #include "Samplebuffer.h"
 #include <math.h>
 
+void *buffer_run(void* buff) {
+	soundbuffer* buffer = ((soundbuffer*)buff);
+
+	while(buffer->running) {
+
+	}
+	return NULL;
+}
+
 soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 	soundbuffer* buff = malloc(sizeof(soundbuffer));
 	int err;
 	int erroroccured = 0;
+	buff->b1off = -1;
+	buff->b2off = -1;
+	buff->activeBuffer = 1;
+	buff->running = 0;
+
+	for (err = 0; err < 16384; err++) {
+		buff->buffer1[err] = 0;
+		buff->buffer2[err] = 0;
+	}
+
+
+	return buff;
 
 	snd_pcm_stream_t stream;
 	if (record) {
@@ -103,7 +124,7 @@ void buffer_test_playback(soundbuffer* buffer) {
 		for (i = 1; i < 100; i++) {
 			for (j = 1; j < 10; j++) {
 				for (k = 0; k < 16384; k++) {
-					buf[k] = i * j *k/300;
+					buf[k] = i * j * k / 300;
 				}
 
 				if ((err = snd_pcm_wait(buffer->pcm_handle, 1000)) < 0) {
@@ -127,11 +148,57 @@ void buffer_test_playback(soundbuffer* buffer) {
 	} else {
 		fprintf(stderr, "This is not a playback stream!\n");
 	}
+}
 
+buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size) {
+	int i;
+	if (size > 16384) {
+		return BUFFER_TOO_MANY_SAMPLES;
+	} else {
+		if (buffer->b1off < 0) {
+			for (i = 0; i < size; i++) {
+				buffer->buffer1[i] = samples[i];
+				buffer->b1off = 0;
+				buffer->b1size = size;
+			}
+		} else if (buffer->b2off < 0) {
+			for (i = 0; i < size; i++) {
+				buffer->buffer2[i] = samples[i];
+				buffer->b2off = 0;
+				buffer->b2size = size;
+			}
+		} else {
+			return BUFFER_NOT_READY;
+		}
+	}
+	return BUFFER_NO_ERROR;
+}
+
+int buffer_needsamples(soundbuffer* buffer) {
+	if (buffer->b1off < 0 || buffer->b2off < 0) {
+		return 1;
+	}
+	return 0;
 }
 
 void buffer_free(soundbuffer* buffer) {
-
 	snd_pcm_hw_params_free(buffer->hw_params);
 	snd_pcm_close(buffer->pcm_handle);
+	free(buffer);
+	//TODO Thread aufräumen
 }
+
+void buffer_start(soundbuffer* buffer, int continueOnError) {
+	if (!buffer->running) {
+		buffer->running = 1;
+		pthread_create(&buffer->bufferThread,NULL,buffer_run, (void*)buffer);
+	}
+}
+
+void buffer_stop(soundbuffer* buffer) {
+	if(buffer->running) {
+		buffer->running = 0;
+		pthread_join(buffer->bufferThread, NULL);
+	}
+}
+
