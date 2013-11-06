@@ -55,6 +55,7 @@ import org.eclipse.ui.part.ShowInContext;
 
 import soundgates.diagram.navigator.SoundgatesNavigatorItem;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
+import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 /**
  * @generated
@@ -103,6 +104,7 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		
 		// Tell the Component Library about the new path
 		AtomicSoundComponentLibrary.setXMLFolder(folder);
+		CompositeSoundComponentLibrary.setXMLFolder(folder);
 		
 		
 		PaletteRoot root = super.createPaletteRoot(existingPaletteRoot);

@@ -67,10 +67,16 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 	}
 
 	public void exportToXML(CompositeSoundComponent compositeSoundComponentToExport) {
-		if (compositeSoundComponentToExport.getName()==null || compositeSoundComponentToExport.getName().equals("")){
+		if (compositeSoundComponentToExport.getName()==null || "".equals(compositeSoundComponentToExport.getName())){
 			MessageDialog.openWarning(null, "Composite sound component has no name", "Please enter a name for the composite sound component.");
 			return;
 		}
+		for(Port port : compositeSoundComponentToExport.getPorts()){
+			if(port.getName()==null || "".equals(port.getName())){
+				MessageDialog.openWarning(null, "Not all ports have a name", "Please enter a name for each port of the composite sound component.");
+				return;
+			}
+		}		
 		try {
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -82,6 +88,7 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 			// root elements
 			Document doc = docBuilder.newDocument();
 			Element rootElement = doc.createElement("CompositeSoundComponent");
+			rootElement.setAttribute("Name", compositeSoundComponentToExport.getName());
 			doc.appendChild(rootElement);
 
 			// port elements

@@ -20,6 +20,7 @@ import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 
 import soundgates.diagram.providers.SoundgatesElementTypes;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
+import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 /**
  * @generated
@@ -67,6 +68,13 @@ public class SoundgatesPaletteFactory {
 		paletteContainer.setId("createComponents2Group"); //$NON-NLS-1$
 
 		paletteContainer.add(createCompositeSoundComponent2CreationTool());
+		
+		List<String> availableComponents = CompositeSoundComponentLibrary.getInstance().getAvailableComponents();
+		for (int i = 0; i < availableComponents.size(); i++) {
+			paletteContainer
+					.add(createConcreteCompositeNodeCreationTool(availableComponents.get(i))); // MYTOOL
+		}
+		
 		return paletteContainer;
 	}
 
@@ -103,7 +111,7 @@ public class SoundgatesPaletteFactory {
 		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
-		NodeToolEntry entry = new NodeToolEntry("Create new composite sound component",
+		NodeToolEntry entry = new NodeToolEntry("New composite sound component",
 				Messages.CompositeSoundComponent2CreationTool_desc, types);
 		entry.setId("createCompositeSoundComponent2CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
@@ -178,12 +186,15 @@ public class SoundgatesPaletteFactory {
 	}
 
 	// MYTOOL
+	
+	// atomic components
 	private ToolEntry createConcreteAtomicNodeCreationTool(String atomicType) {
-		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(
-				atomicType,
-				"Create " + atomicType,
-				Collections
-						.singletonList(SoundgatesElementTypes.AtomicSoundComponent_2001));
+		
+		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+		types.add(SoundgatesElementTypes.AtomicSoundComponent_2001);
+		types.add(SoundgatesElementTypes.AtomicSoundComponent_3002);
+		
+		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(atomicType,"Create " + atomicType,types);
 		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
@@ -222,6 +233,53 @@ public class SoundgatesPaletteFactory {
 		public Tool createTool() {
 			Tool tool = new ConcreteAtomicTypeCreationTool(elementTypes,
 					atomicType);
+			tool.setProperties(getToolProperties());
+			return tool;
+		}
+	}
+		
+	// composite components
+	private ToolEntry createConcreteCompositeNodeCreationTool(String name) {
+		
+		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
+		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
+		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
+		
+		NodeToolEntry entry = new ConcreteCompositeNodeToolEntry(name,"Create " + name,types);
+		entry.setId("createCompositeSoundComponent1CreationTool"); //$NON-NLS-1$
+		entry.setSmallIcon(SoundgatesElementTypes
+				.getImageDescriptor(SoundgatesElementTypes.CompositeSoundComponent_2002));
+		entry.setLargeIcon(entry.getSmallIcon()); // TODO Icon anpassen?
+		return entry;
+	}
+
+	private static class ConcreteCompositeCreationTool extends UnspecifiedTypeCreationTool {
+		private String name;
+
+		public ConcreteCompositeCreationTool(List names,String name) {
+			super(names);
+			this.name = name;
+		}
+
+		protected Request createTargetRequest() {
+			Request r = super.createTargetRequest();
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", this.name);
+			r.setExtendedData(map);
+			return r;
+		}
+	}
+
+	private static class ConcreteCompositeNodeToolEntry extends NodeToolEntry {
+		private String name;
+
+		protected ConcreteCompositeNodeToolEntry(String title, String description,List<IElementType> names) {
+			super(title, description, names);
+			this.name = title;
+		}
+
+		public Tool createTool() {
+			Tool tool = new ConcreteCompositeCreationTool(elementTypes,name);
 			tool.setProperties(getToolProperties());
 			return tool;
 		}

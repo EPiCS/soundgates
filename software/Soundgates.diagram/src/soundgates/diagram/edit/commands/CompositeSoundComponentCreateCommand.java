@@ -15,6 +15,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.CompositeSoundComponent;
 import soundgates.Patch;
 import soundgates.SoundgatesFactory;
+import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 /**
  * @generated
@@ -50,12 +51,19 @@ public class CompositeSoundComponentCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
-			IAdaptable info) throws ExecutionException {
-		CompositeSoundComponent newElement = SoundgatesFactory.eINSTANCE
-				.createCompositeSoundComponent();
+	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,IAdaptable info) throws ExecutionException {
+		CompositeSoundComponent newElement = null;
+
+		//MYTOOL TODO elemente aus XML lesen
+		Object name = this.getRequest().getParameter("name");
+		if (name != null) {
+			newElement = CompositeSoundComponentLibrary.getInstance().createCompositeSoundComponentInstance((String) name);
+		} else {
+			newElement = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
+		}
+		//---MYTOOL
 
 		Patch owner = (Patch) getElementToEdit();
 		owner.getElements().add(newElement);
@@ -63,9 +71,10 @@ public class CompositeSoundComponentCreateCommand extends EditElementCommand {
 		doConfigure(newElement, monitor, info);
 
 		((CreateElementRequest) getRequest()).setNewElement(newElement);
+
 		return CommandResult.newOKCommandResult(newElement);
 	}
-
+	
 	/**
 	 * @generated
 	 */

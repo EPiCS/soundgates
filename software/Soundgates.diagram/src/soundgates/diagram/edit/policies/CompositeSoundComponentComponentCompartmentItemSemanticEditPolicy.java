@@ -24,8 +24,7 @@ public class CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy
 	 * @generated
 	 */
 	protected Command getCreateCommand(CreateElementRequest req) {
-		if (SoundgatesElementTypes.AtomicSoundComponent_3002 == req
-				.getElementType()) {
+		if (SoundgatesElementTypes.AtomicSoundComponent_3002 == req.getElementType()) {
 			return getGEFWrapper(new AtomicSoundComponent2CreateCommand(req));
 		}
 		if (SoundgatesElementTypes.CompositeSoundComponent_3003 == req
