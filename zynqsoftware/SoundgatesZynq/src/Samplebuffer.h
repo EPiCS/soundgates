@@ -25,6 +25,7 @@ typedef struct {
 	int b1off, b2off, b1size, b2size, activeBuffer;
 	pthread_t bufferThread;
 	int running;
+	int continueOnError;
 	char buffer1[16384];
 	char buffer2[16384];
 	snd_pcm_t* pcm_handle;

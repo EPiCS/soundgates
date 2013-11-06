@@ -2,9 +2,63 @@
 #include <math.h>
 
 void *buffer_run(void* buff) {
-	soundbuffer* buffer = ((soundbuffer*)buff);
+	soundbuffer* buffer = ((soundbuffer*) buff);
+	char* bufferArray;
+	int bufferOffset;
+	int bufferSize;
+	int err;
+	int nframes;
 
-	while(buffer->running) {
+	while (buffer->running) {
+		nframes = 0;
+		if (buffer->activeBuffer == 1) {
+			bufferArray = buffer->buffer1;
+			bufferOffset = buffer->b1off;
+			bufferSize = buffer->b1size;
+		} else if (buffer->activeBuffer == 2) {
+			bufferArray = buffer->buffer2;
+			bufferOffset = buffer->b2off;
+			bufferSize = buffer->b2size;
+		}
+
+		if (bufferOffset < 0) {
+			//TODO Handling when the currently selected buffer is empty
+		}
+
+		if ((err = snd_pcm_wait(buffer->pcm_handle, 1000)) < 0) {
+			if (buffer->continueOnError) {
+				continue;
+			} else {
+				fprintf(stderr, "poll failed (%s)\n", strerror(err));
+				buffer->running = 0;
+				pthread_exit(NULL);
+			}
+		}
+		if ((nframes = snd_pcm_avail_update(buffer->pcm_handle)) < 0) {
+			if (buffer->continueOnError) {
+				continue;
+			} else {
+				fprintf(stderr, "unknown ALSA avail update return value (%d)\n",
+						nframes);
+				buffer->running = 0;
+				pthread_exit(NULL);
+			}
+		}
+
+		//nframes = 0; // TODO Anzahl Frames an Größe der verbleibenden Frames anpassen
+		// TODO Durch Buffer durchlaufen, dh Offset anpassen
+
+		if ((err = snd_pcm_writei(buffer->pcm_handle, bufferArray, nframes))
+				< 0) {
+			if (buffer->continueOnError) {
+				snd_pcm_prepare(buffer->pcm_handle);
+				continue;
+			} else {
+				fprintf(stderr, "write to audio interface failed (%s)\n",
+						snd_strerror(err));
+				pthread_exit(NULL);
+			}
+		}
 
 	}
 	return NULL;
@@ -14,7 +68,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 	soundbuffer* buff = malloc(sizeof(soundbuffer));
 	int err;
 	int erroroccured = 0;
-	buff->b1off = -1;
+	buff->b1off = 0; // Mark the first buffer as full -> will play a few empty samples at the start
 	buff->b2off = -1;
 	buff->activeBuffer = 1;
 	buff->running = 0;
@@ -23,9 +77,6 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 		buff->buffer1[err] = 0;
 		buff->buffer2[err] = 0;
 	}
-
-
-	return buff;
 
 	snd_pcm_stream_t stream;
 	if (record) {
@@ -191,12 +242,12 @@ void buffer_free(soundbuffer* buffer) {
 void buffer_start(soundbuffer* buffer, int continueOnError) {
 	if (!buffer->running) {
 		buffer->running = 1;
-		pthread_create(&buffer->bufferThread,NULL,buffer_run, (void*)buffer);
+		pthread_create(&buffer->bufferThread, NULL, buffer_run, (void*) buffer);
 	}
 }
 
 void buffer_stop(soundbuffer* buffer) {
-	if(buffer->running) {
+	if (buffer->running) {
 		buffer->running = 0;
 		pthread_join(buffer->bufferThread, NULL);
 	}
