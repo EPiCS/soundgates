@@ -23,3 +23,5 @@
 *.synctex.gz
 *.kilepr
 *.class
+.settings
+*~

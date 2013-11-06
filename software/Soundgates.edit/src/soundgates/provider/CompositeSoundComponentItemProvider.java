@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -76,6 +77,7 @@ public class CompositeSoundComponentItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SoundgatesPackage.Literals.COMPOSITE_SOUND_COMPONENT__EMBEDDED_COMPONENTS);
 			childrenFeatures.add(SoundgatesPackage.Literals.COMPOSITE_SOUND_COMPONENT__LINKS);
+			childrenFeatures.add(SoundgatesPackage.Literals.COMPOSITE_SOUND_COMPONENT__DELEGATIONS);
 		}
 		return childrenFeatures;
 	}
@@ -132,6 +134,7 @@ public class CompositeSoundComponentItemProvider
 		switch (notification.getFeatureID(CompositeSoundComponent.class)) {
 			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__EMBEDDED_COMPONENTS:
 			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__LINKS:
+			case SoundgatesPackage.COMPOSITE_SOUND_COMPONENT__DELEGATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -163,29 +166,11 @@ public class CompositeSoundComponentItemProvider
 			(createChildParameter
 				(SoundgatesPackage.Literals.COMPOSITE_SOUND_COMPONENT__LINKS,
 				 SoundgatesFactory.eINSTANCE.createLink()));
-	}
 
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == SoundgatesPackage.Literals.SOUND_COMPONENT__INPUT_PORTS ||
-			childFeature == SoundgatesPackage.Literals.SOUND_COMPONENT__OUTPUT_PORTS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+		newChildDescriptors.add
+			(createChildParameter
+				(SoundgatesPackage.Literals.COMPOSITE_SOUND_COMPONENT__DELEGATIONS,
+				 SoundgatesFactory.eINSTANCE.createDelegation()));
 	}
 
 }

@@ -1,0 +1,76 @@
+#N canvas 484 82 791 713 10;
+#X declare -lib mrpeach;
+#X obj 208 638 dac~;
+#X obj 46 18 import mrpeach;
+#X obj 149 101 unpackOSC;
+#X obj 148 66 udpreceive 57110;
+#X obj 95 135 routeOSC /synths;
+#X obj 274 187 routeOSC /synth1 /synth2 /synth3;
+#X obj 329 557 tabwrite~ array1;
+#X obj 438 441 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#N canvas 7 82 450 300 (subpatch) 0;
+#X array array1 150 float 5;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#X coords 0 1 149 -1 200 140 1;
+#X restore 528 10 graph;
+#X obj 434 513 metro 50;
+#X obj 121 390 print;
+#X obj 377 359 synth;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array array2 150 float 5;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#X coords 0 1 149 -1 200 140 1;
+#X restore 532 184 graph;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array array3 150 float 5;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#X coords 0 1 149 -1 200 140 1;
+#X restore 531 346 graph;
+#X obj 317 589 tabwrite~ array2;
+#X obj 315 631 tabwrite~ array3;
+#X obj 273 358 synth;
+#X obj 203 357 synth;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array gesamt 150 float 5;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#X coords 0 1 149 -1 200 140 1;
+#X restore 529 531 graph;
+#X obj 408 407 tabwrite~ gesamt;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 5 0;
+#X connect 4 0 10 0;
+#X connect 5 0 17 0;
+#X connect 5 1 16 0;
+#X connect 5 2 11 0;
+#X connect 7 0 9 0;
+#X connect 9 0 6 0;
+#X connect 9 0 14 0;
+#X connect 9 0 15 0;
+#X connect 9 0 19 0;
+#X connect 11 0 6 0;
+#X connect 11 0 0 0;
+#X connect 11 0 19 0;
+#X connect 16 0 14 0;
+#X connect 16 0 0 0;
+#X connect 16 0 19 0;
+#X connect 17 0 0 0;
+#X connect 17 0 15 0;
+#X connect 17 0 19 0;

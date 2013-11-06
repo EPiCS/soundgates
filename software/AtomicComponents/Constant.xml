@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Constant</Type>
+	<Ports>
+		<Port Name="Value" Direction="OUT" DataType="FLOAT"/>
+	</Ports>
+	<Properties>
+		<FloatProperty Name="Value" InitialValue="0"/>
+	</Properties>
+	<Code>
+		<Simulation>
+			<PropMapping PropName="Value" Tag="@value" />
+			<PortMapping PortName="Value" PortNumber="0" />
+			<PD>
+#N canvas 66 467 450 300 10;
+#X obj 39 152 outlet;
+#X floatatom 36 98 5 0 0 0 - - -;
+#X msg 34 64 set @value;
+#X obj -16 33 loadbang;
+#X connect 1 0 0 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 0;
+#X connect 3 0 1 0;
+			</PD>
+		</Simulation>
+		<Hardware>
+			VHDL Stuff
+		</Hardware>
+	</Code>
+</AtomicSoundComponent>

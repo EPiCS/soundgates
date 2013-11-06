@@ -31,15 +31,6 @@ public interface SoundgatesFactory extends EFactory {
 	Patch createPatch();
 
 	/**
-	 * Returns a new object of class '<em>Link</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Link</em>'.
-	 * @generated
-	 */
-	Link createLink();
-
-	/**
 	 * Returns a new object of class '<em>Port</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -65,6 +56,24 @@ public interface SoundgatesFactory extends EFactory {
 	 * @generated
 	 */
 	AtomicSoundComponent createAtomicSoundComponent();
+
+	/**
+	 * Returns a new object of class '<em>Delegation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Delegation</em>'.
+	 * @generated
+	 */
+	Delegation createDelegation();
+
+	/**
+	 * Returns a new object of class '<em>Link</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Link</em>'.
+	 * @generated
+	 */
+	Link createLink();
 
 	/**
 	 * Returns the package supported by this factory.

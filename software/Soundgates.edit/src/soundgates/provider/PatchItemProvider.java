@@ -150,17 +150,17 @@ public class PatchItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
-				 SoundgatesFactory.eINSTANCE.createLink()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
 				 SoundgatesFactory.eINSTANCE.createCompositeSoundComponent()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
 				 SoundgatesFactory.eINSTANCE.createAtomicSoundComponent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SoundgatesPackage.Literals.PATCH__ELEMENTS,
+				 SoundgatesFactory.eINSTANCE.createLink()));
 	}
 
 	/**

@@ -16,6 +16,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import soundgates.Port;
 import soundgates.SoundgatesPackage;
@@ -55,26 +57,28 @@ public class PortItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addOutgoingLinkPropertyDescriptor(object);
-			addIncomingLinkPropertyDescriptor(object);
+			addOutgoingConnectionPropertyDescriptor(object);
+			addIncomingConnectionPropertyDescriptor(object);
+			addDirectionPropertyDescriptor(object);
+			addDataTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Outgoing Link feature.
+	 * This adds a property descriptor for the Outgoing Connection feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addOutgoingLinkPropertyDescriptor(Object object) {
+	protected void addOutgoingConnectionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Port_outgoingLink_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_outgoingLink_feature", "_UI_Port_type"),
-				 SoundgatesPackage.Literals.PORT__OUTGOING_LINK,
+				 getString("_UI_Port_outgoingConnection_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_outgoingConnection_feature", "_UI_Port_type"),
+				 SoundgatesPackage.Literals.PORT__OUTGOING_CONNECTION,
 				 true,
 				 false,
 				 true,
@@ -84,23 +88,67 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Incoming Link feature.
+	 * This adds a property descriptor for the Incoming Connection feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIncomingLinkPropertyDescriptor(Object object) {
+	protected void addIncomingConnectionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Port_incomingLink_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_incomingLink_feature", "_UI_Port_type"),
-				 SoundgatesPackage.Literals.PORT__INCOMING_LINK,
+				 getString("_UI_Port_incomingConnection_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_incomingConnection_feature", "_UI_Port_type"),
+				 SoundgatesPackage.Literals.PORT__INCOMING_CONNECTION,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Direction feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDirectionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_direction_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_direction_feature", "_UI_Port_type"),
+				 SoundgatesPackage.Literals.PORT__DIRECTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Data Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDataTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_dataType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_dataType_feature", "_UI_Port_type"),
+				 SoundgatesPackage.Literals.PORT__DATA_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -140,6 +188,13 @@ public class PortItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(Port.class)) {
+			case SoundgatesPackage.PORT__DIRECTION:
+			case SoundgatesPackage.PORT__DATA_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

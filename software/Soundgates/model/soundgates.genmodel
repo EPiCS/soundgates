@@ -4,24 +4,30 @@
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false">
   <foreignModel>soundgates.ecore</foreignModel>
   <genPackages prefix="Soundgates" disposableProviderFactory="true" ecorePackage="soundgates.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="soundgates.ecore#//Direction">
+      <genEnumLiterals ecoreEnumLiteral="soundgates.ecore#//Direction/IN"/>
+      <genEnumLiterals ecoreEnumLiteral="soundgates.ecore#//Direction/OUT"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="soundgates.ecore#//DataType">
+      <genEnumLiterals ecoreEnumLiteral="soundgates.ecore#//DataType/FLOAT"/>
+      <genEnumLiterals ecoreEnumLiteral="soundgates.ecore#//DataType/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="soundgates.ecore#//DataType/BOOLEAN"/>
+      <genEnumLiterals ecoreEnumLiteral="soundgates.ecore#//DataType/SOUND"/>
+    </genEnums>
     <genClasses ecoreClass="soundgates.ecore#//Patch">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//Patch/elements"/>
     </genClasses>
     <genClasses image="false" ecoreClass="soundgates.ecore#//Element"/>
-    <genClasses ecoreClass="soundgates.ecore#//Link">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Link/source"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Link/target"/>
-    </genClasses>
     <genClasses image="false" ecoreClass="soundgates.ecore#//SoundComponent">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//SoundComponent/inputPorts"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//SoundComponent/outputPorts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//SoundComponent/ports"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference soundgates.ecore#//SoundComponent/parentComponent"/>
     </genClasses>
     <genClasses ecoreClass="soundgates.ecore#//Port">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Port/outgoingLink"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Port/incomingLink"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference soundgates.ecore#//Port/receivingComponent"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference soundgates.ecore#//Port/sendingComponent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Port/outgoingConnection"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Port/incomingConnection"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference soundgates.ecore#//Port/component"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//Port/direction"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//Port/dataType"/>
     </genClasses>
     <genClasses image="false" ecoreClass="soundgates.ecore#//NamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//NamedElement/name"/>
@@ -29,7 +35,38 @@
     <genClasses ecoreClass="soundgates.ecore#//CompositeSoundComponent">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//CompositeSoundComponent/embeddedComponents"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//CompositeSoundComponent/links"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//CompositeSoundComponent/delegations"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//CompositeSoundComponent/connections"/>
     </genClasses>
-    <genClasses ecoreClass="soundgates.ecore#//AtomicSoundComponent"/>
+    <genClasses ecoreClass="soundgates.ecore#//AtomicSoundComponent">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/floatProperties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/integerProperties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/booleanProperties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference soundgates.ecore#//AtomicSoundComponent/stringProperties"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//AtomicSoundComponent/type"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="soundgates.ecore#//Connection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Connection/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Connection/target"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference soundgates.ecore#//Connection/parentComponent"/>
+    </genClasses>
+    <genClasses ecoreClass="soundgates.ecore#//Delegation"/>
+    <genClasses ecoreClass="soundgates.ecore#//Link"/>
+    <genClasses ecoreClass="soundgates.ecore#//EStringToEFloatObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEFloatObject/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEFloatObject/value"/>
+    </genClasses>
+    <genClasses ecoreClass="soundgates.ecore#//EStringToEIntegerObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEIntegerObject/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEIntegerObject/value"/>
+    </genClasses>
+    <genClasses ecoreClass="soundgates.ecore#//EStringToEBooleanObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEBooleanObject/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEBooleanObject/value"/>
+    </genClasses>
+    <genClasses ecoreClass="soundgates.ecore#//EStringToEString">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEString/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute soundgates.ecore#//EStringToEString/value"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

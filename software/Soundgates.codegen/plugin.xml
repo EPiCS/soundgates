@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="Soundgates.codegen.wizard"
+            nameFilter="*.soundgates"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               id="Soundgates.codegen.menu"
+               label="Soundgates code generation"
+               path="additions">
+            <separator
+                  name="group">
+            </separator>
+         </menu>
+         <action
+               class="soundgates.codegen.CodegenAction"
+               enablesFor="1"
+               id="Soundgates.codegen.action"
+               label="Generate PureData code"
+               menubarPath="Soundgates.codegen.menu/group">
+         </action>
+         <action
+               class="soundgates.codegen.OSCgenAction"
+               enablesFor="1"
+               id="Soundgates.codegen.OSCaction"
+               label="Generate OSC code"
+               menubarPath="Soundgates.codegen.menu/group">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

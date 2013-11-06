@@ -2,6 +2,8 @@
  */
 package soundgates.util;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -78,13 +80,6 @@ public class SoundgatesSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SoundgatesPackage.LINK: {
-				Link link = (Link)theEObject;
-				T result = caseLink(link);
-				if (result == null) result = caseElement(link);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SoundgatesPackage.SOUND_COMPONENT: {
 				SoundComponent soundComponent = (SoundComponent)theEObject;
 				T result = caseSoundComponent(soundComponent);
@@ -124,6 +119,51 @@ public class SoundgatesSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SoundgatesPackage.CONNECTION: {
+				Connection connection = (Connection)theEObject;
+				T result = caseConnection(connection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SoundgatesPackage.DELEGATION: {
+				Delegation delegation = (Delegation)theEObject;
+				T result = caseDelegation(delegation);
+				if (result == null) result = caseConnection(delegation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SoundgatesPackage.LINK: {
+				Link link = (Link)theEObject;
+				T result = caseLink(link);
+				if (result == null) result = caseConnection(link);
+				if (result == null) result = caseElement(link);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SoundgatesPackage.ESTRING_TO_EFLOAT_OBJECT: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Float> eStringToEFloatObject = (Map.Entry<String, Float>)theEObject;
+				T result = caseEStringToEFloatObject(eStringToEFloatObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SoundgatesPackage.ESTRING_TO_EINTEGER_OBJECT: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Integer> eStringToEIntegerObject = (Map.Entry<String, Integer>)theEObject;
+				T result = caseEStringToEIntegerObject(eStringToEIntegerObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SoundgatesPackage.ESTRING_TO_EBOOLEAN_OBJECT: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Boolean> eStringToEBooleanObject = (Map.Entry<String, Boolean>)theEObject;
+				T result = caseEStringToEBooleanObject(eStringToEBooleanObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SoundgatesPackage.ESTRING_TO_ESTRING: {
+				@SuppressWarnings("unchecked") Map.Entry<String, String> eStringToEString = (Map.Entry<String, String>)theEObject;
+				T result = caseEStringToEString(eStringToEString);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -155,21 +195,6 @@ public class SoundgatesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseElement(Element object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Link</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Link</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLink(Link object) {
 		return null;
 	}
 
@@ -245,6 +270,111 @@ public class SoundgatesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAtomicSoundComponent(AtomicSoundComponent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Connection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConnection(Connection object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Delegation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Delegation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDelegation(Delegation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Link</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Link</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLink(Link object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To EFloat Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To EFloat Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToEFloatObject(Map.Entry<String, Float> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To EInteger Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To EInteger Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToEIntegerObject(Map.Entry<String, Integer> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To EBoolean Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To EBoolean Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToEBooleanObject(Map.Entry<String, Boolean> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To EString</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To EString</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToEString(Map.Entry<String, String> object) {
 		return null;
 	}
 

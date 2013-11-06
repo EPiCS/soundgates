@@ -95,29 +95,6 @@ public class SoundgatesItemProviderAdapterFactory extends SoundgatesAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link soundgates.Link} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LinkItemProvider linkItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link soundgates.Link}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLinkAdapter() {
-		if (linkItemProvider == null) {
-			linkItemProvider = new LinkItemProvider(this);
-		}
-
-		return linkItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link soundgates.Port} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -184,6 +161,144 @@ public class SoundgatesItemProviderAdapterFactory extends SoundgatesAdapterFacto
 		}
 
 		return atomicSoundComponentItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link soundgates.Delegation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DelegationItemProvider delegationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link soundgates.Delegation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDelegationAdapter() {
+		if (delegationItemProvider == null) {
+			delegationItemProvider = new DelegationItemProvider(this);
+		}
+
+		return delegationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link soundgates.Link} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LinkItemProvider linkItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link soundgates.Link}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLinkAdapter() {
+		if (linkItemProvider == null) {
+			linkItemProvider = new LinkItemProvider(this);
+		}
+
+		return linkItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EStringToEFloatObjectItemProvider eStringToEFloatObjectItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEStringToEFloatObjectAdapter() {
+		if (eStringToEFloatObjectItemProvider == null) {
+			eStringToEFloatObjectItemProvider = new EStringToEFloatObjectItemProvider(this);
+		}
+
+		return eStringToEFloatObjectItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EStringToEIntegerObjectItemProvider eStringToEIntegerObjectItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEStringToEIntegerObjectAdapter() {
+		if (eStringToEIntegerObjectItemProvider == null) {
+			eStringToEIntegerObjectItemProvider = new EStringToEIntegerObjectItemProvider(this);
+		}
+
+		return eStringToEIntegerObjectItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EStringToEBooleanObjectItemProvider eStringToEBooleanObjectItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEStringToEBooleanObjectAdapter() {
+		if (eStringToEBooleanObjectItemProvider == null) {
+			eStringToEBooleanObjectItemProvider = new EStringToEBooleanObjectItemProvider(this);
+		}
+
+		return eStringToEBooleanObjectItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EStringToEStringItemProvider eStringToEStringItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEStringToEStringAdapter() {
+		if (eStringToEStringItemProvider == null) {
+			eStringToEStringItemProvider = new EStringToEStringItemProvider(this);
+		}
+
+		return eStringToEStringItemProvider;
 	}
 
 	/**
@@ -286,10 +401,15 @@ public class SoundgatesItemProviderAdapterFactory extends SoundgatesAdapterFacto
 	 */
 	public void dispose() {
 		if (patchItemProvider != null) patchItemProvider.dispose();
-		if (linkItemProvider != null) linkItemProvider.dispose();
 		if (portItemProvider != null) portItemProvider.dispose();
 		if (compositeSoundComponentItemProvider != null) compositeSoundComponentItemProvider.dispose();
 		if (atomicSoundComponentItemProvider != null) atomicSoundComponentItemProvider.dispose();
+		if (delegationItemProvider != null) delegationItemProvider.dispose();
+		if (linkItemProvider != null) linkItemProvider.dispose();
+		if (eStringToEFloatObjectItemProvider != null) eStringToEFloatObjectItemProvider.dispose();
+		if (eStringToEIntegerObjectItemProvider != null) eStringToEIntegerObjectItemProvider.dispose();
+		if (eStringToEBooleanObjectItemProvider != null) eStringToEBooleanObjectItemProvider.dispose();
+		if (eStringToEStringItemProvider != null) eStringToEStringItemProvider.dispose();
 	}
 
 }

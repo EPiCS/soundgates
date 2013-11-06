@@ -74,8 +74,7 @@ public class SoundComponentItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SoundgatesPackage.Literals.SOUND_COMPONENT__INPUT_PORTS);
-			childrenFeatures.add(SoundgatesPackage.Literals.SOUND_COMPONENT__OUTPUT_PORTS);
+			childrenFeatures.add(SoundgatesPackage.Literals.SOUND_COMPONENT__PORTS);
 		}
 		return childrenFeatures;
 	}
@@ -119,8 +118,7 @@ public class SoundComponentItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SoundComponent.class)) {
-			case SoundgatesPackage.SOUND_COMPONENT__INPUT_PORTS:
-			case SoundgatesPackage.SOUND_COMPONENT__OUTPUT_PORTS:
+			case SoundgatesPackage.SOUND_COMPONENT__PORTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -140,36 +138,8 @@ public class SoundComponentItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SoundgatesPackage.Literals.SOUND_COMPONENT__INPUT_PORTS,
+				(SoundgatesPackage.Literals.SOUND_COMPONENT__PORTS,
 				 SoundgatesFactory.eINSTANCE.createPort()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SoundgatesPackage.Literals.SOUND_COMPONENT__OUTPUT_PORTS,
-				 SoundgatesFactory.eINSTANCE.createPort()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == SoundgatesPackage.Literals.SOUND_COMPONENT__INPUT_PORTS ||
-			childFeature == SoundgatesPackage.Literals.SOUND_COMPONENT__OUTPUT_PORTS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }
