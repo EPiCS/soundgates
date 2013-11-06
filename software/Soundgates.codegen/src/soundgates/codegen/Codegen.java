@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.text.AbstractDocument.ElementEdit;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -357,13 +353,6 @@ public class Codegen {
 			}
 		}
 		return result;
-	}
-
-	private boolean listContainsString(LinkedList<String> list, String string){
-		for(String s : list)
-			if (s.equals(string))
-				return true;
-		return false;
 	}
 	
 	private Port portSearch(AtomicSoundComponent atomicSoundComponent, String portName) throws Exception{

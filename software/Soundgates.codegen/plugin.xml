@@ -22,6 +22,13 @@
                label="Generate PureData code"
                menubarPath="Soundgates.codegen.menu/group">
          </action>
+         <action
+               class="soundgates.codegen.OSCgenAction"
+               enablesFor="1"
+               id="Soundgates.codegen.OSCaction"
+               label="Generate OSC code"
+               menubarPath="Soundgates.codegen.menu/group">
+         </action>
       </objectContribution>
    </extension>
 
