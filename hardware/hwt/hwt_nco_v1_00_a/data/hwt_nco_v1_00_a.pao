@@ -1,0 +1,18 @@
+##############################################################################
+## Filename:          hwt_nco_v1_00_a.pao
+## Description:       Peripheral Analysis Order
+## Date:              Mon Jun 10 12:27:04 2013 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib reconos_v3_00_c reconos_pkg vhdl
+lib proc_common_v3_00_a  all 
+lib hwt_nco_v1_00_a soundgates_pkg vhdl
+lib hwt_nco_v1_00_a cordic_stage vhdl
+lib hwt_nco_v1_00_a cordic vhdl
+lib hwt_nco_v1_00_a nco vhdl
+
+## Will be added later on
+
+## lib hwt_nco_v1_00_a sawtooth vhdl
+## lib hwt_nco_v1_00_a triangle vhdl
+## lib hwt_nco_v1_00_a square vhdl
