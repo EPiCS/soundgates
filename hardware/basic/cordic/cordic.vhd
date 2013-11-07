@@ -29,8 +29,7 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-library soundgates;
-use soundgates.soundcomponents.all;
+use work.soundgates_pkg.all;
 
 entity cordic is
 generic (

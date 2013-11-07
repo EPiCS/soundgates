@@ -45,6 +45,11 @@
 *_usage.xml
 *_xst.xrpt
 
+
+# post simulation 
+
+*.fdo
+
 # project-wide generated files
 *.gise
 par_usage_statistics.html

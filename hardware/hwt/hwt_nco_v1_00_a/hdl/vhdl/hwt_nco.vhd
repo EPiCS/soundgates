@@ -3,7 +3,13 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use IEEE.numeric_std.ALL;
 
-entity nco is
+library proc_common_v3_00_a;
+use proc_common_v3_00_a.proc_common_pkg.all;
+
+
+use work.soundgates_pkg.vhd
+
+entity hwt_nco is
    port (
 		-- OSIF FIFO ports
 		OSIF_FIFO_Sw2Hw_Data    : in  std_logic_vector(31 downto 0);
@@ -27,12 +33,16 @@ entity nco is
 		MEMIF_FIFO_Mem2Hwt_Empty   : in  std_logic;
 		MEMIF_FIFO_Mem2Hwt_RE      : out std_logic;
 
-		clk   : in  std_logic;
-		rst   : in  std_logic
+		HWT_Clk   : in  std_logic;
+		HWT_Rst   : in  std_logic
     );
-end component_stub;
+end hwt_nco;
 
-architecture Behavioral of component_stub is
+architecture Behavioral of hwt_nco is
+
+    signal clk   : std_logic;
+	signal rst   : std_logic;
+
 
 -- ====================================
 -- = START: USER COMPONENT DECLARATIONS (OPT)
@@ -104,7 +114,11 @@ begin
 -- ====================================
 -- = END USER HARD WIRINGS 
 -- ====================================
-
+    
+    clk <= HWT_Clk;
+	rst <= HWT_Rst;
+	
+    
 -- ReconOS Stuff
 fsl_setup(
         i_osif,

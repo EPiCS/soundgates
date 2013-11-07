@@ -1,0 +1,1 @@
+../../../../common/soundgates_pkg.vhd

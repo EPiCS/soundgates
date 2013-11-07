@@ -1,11 +1,20 @@
+--  ____                        _             _            
+-- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
+-- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
+--  ___) | (_) | |_| | | | | (_| | (_| | (_| | ||  __/\__ \
+-- |____/ \___/ \__,_|_| |_|\__,_|\__, |\__,_|\__\___||___/
+--                                |___/                    
+-- ======================================================================
 --
---	Package File Template
+--   title:        VHDL Package - soundgates_pkg
 --
---	Purpose: This package defines supplemental types, subtypes, 
---		 constants, and functions 
+--   project:      PG-Soundgates
+--   author:       Lukas Funke, University of Paderborn
 --
---   To use any of the example code shown below, uncomment the lines and modify as necessary
+--   description:  Common functions, declaration, constants for sound 
+--                 processing components
 --
+-- ======================================================================
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -29,8 +38,11 @@ type Phase_Increment_Array is array(0 to MAX_NCO_FREQUNCY) of signed(31 downto 0
 
 type WAVEFORM_TYPE is ( SIN, SQUARE, SAWTOOTH, TRIANGLE);
 
-
+------------------------------------------------------------
 -- Functions and Procedure declarations
+------------------------------------------------------------
+
+------------------------------------------------------------
 
 function Precalculate_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array;
 
@@ -38,16 +50,23 @@ function Precalculate_Cordic_Phase_Increments (FPGA_FREQUENCY : integer) return 
 
 function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) return signed;
 
-end soundcomponents;
+------------------------------------------------------------
 
-package body soundcomponents is
+procedure snd_comp_get_msg_header(...,src_addr,len,...)
+
+
+------------------------------------------------------------
+
+end soundgates_pkg;
+
+package body soundgates_pkg is
 
 
 function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) return signed is
 	
-	variable stepsize       : integer;
-	variable phi_incr_real   : real;
-   variable phi_incr_signed : signed(31 downto 0);
+    variable stepsize       : integer;
+    variable phi_incr_real   : real;
+    variable phi_incr_signed : signed(31 downto 0);
 begin	
    if SIN_FREQUENCY > 0 then
       stepsize        := FPGA_FREQUENCY / SIN_FREQUENCY;
@@ -95,30 +114,4 @@ begin
 	return tmp;
 end Precalculate_Phase_Increments;
 
----- Example 1
---  function <function_name>  (signal <signal_name> : in <type_declaration>  ) return <type_declaration> is
---    variable <variable_name>     : <type_declaration>;
---  begin
---    <variable_name> := <signal_name> xor <signal_name>;
---    return <variable_name>; 
---  end <function_name>;
-
----- Example 2
---  function <function_name>  (signal <signal_name> : in <type_declaration>;
---                         signal <signal_name>   : in <type_declaration>  ) return <type_declaration> is
---  begin
---    if (<signal_name> = '1') then
---      return <signal_name>;
---    else
---      return 'Z';
---    end if;
---  end <function_name>;
-
----- Procedure Example
---  procedure <procedure_name>  (<type_declaration> <constant_name>  : in <type_declaration>) is
---    
---  begin
---    
---  end <procedure_name>;
- 
 end soundgates_pkg;

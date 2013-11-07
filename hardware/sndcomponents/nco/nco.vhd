@@ -10,9 +10,7 @@ use IEEE.MATH_REAL.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-
-library soundgates;
-use soundgates.soundcomponents.all;
+use work.soundgates_pkg.all;
 
 entity nco is
 	 generic(

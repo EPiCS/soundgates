@@ -9,15 +9,15 @@
     <!-- along with the project source files, is sufficient to open and    -->
     <!-- implement in ISE Project Navigator.                               -->
     <!--                                                                   -->
-    <!-- Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved. -->
+    <!-- Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved. -->
   </header>
 
-  <version xil_pn:ise_version="14.4" xil_pn:schema_version="2"/>
+  <version xil_pn:ise_version="14.6" xil_pn:schema_version="2"/>
 
   <files>
     <file xil_pn:name="cordic.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="3"/>
     </file>
     <file xil_pn:name="cordic_stage.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="2"/>
@@ -35,10 +35,9 @@
       <association xil_pn:name="PostRouteSimulation" xil_pn:seqID="35"/>
       <association xil_pn:name="PostTranslateSimulation" xil_pn:seqID="35"/>
     </file>
-    <file xil_pn:name="soundgates.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="1"/>
+    <file xil_pn:name="soundgates_pkg.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="13"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
-      <library xil_pn:name="soundgates"/>
     </file>
   </files>
 
@@ -74,7 +73,7 @@
     <property xil_pn:name="Compile UNISIM (Functional) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Compile XilinxCoreLib (CORE Generator) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Compile for HDL Debugging" xil_pn:value="true" xil_pn:valueState="default"/>
-    <property xil_pn:name="Compiled Library Directory" xil_pn:value="E:/Xilinx/14.4/ISE_DS/ISE/vhdl/mti_pe/" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Compiled Library Directory" xil_pn:value="/Xilinx/14.4/ISE_DS/ISE/vhdl/mti_pe/" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Configuration Clk (Configuration Pins)" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Name" xil_pn:value="Default" xil_pn:valueState="default"/>
     <property xil_pn:name="Configuration Pin Busy" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
