@@ -1,13 +1,13 @@
 library ieee;
-use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use IEEE.numeric_std.ALL;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 library proc_common_v3_00_a;
 use proc_common_v3_00_a.proc_common_pkg.all;
 
-
-use work.soundgates_pkg.vhd
+library work;
+use soundgates_pkg.all
+use soundgates_reconos_pkg.all
 
 entity hwt_nco is
    port (
@@ -44,19 +44,6 @@ architecture Behavioral of hwt_nco is
 	signal rst   : std_logic;
 
 
--- ====================================
--- = START: USER COMPONENT DECLARATIONS (OPT)
--- ====================================
---    COMPONENT blub
---        PORT( clk : in std_logic;
---              signedFixed : in  std_logic_vector(23 downto 0);
---              signedInt   : out std_logic_vector(23 downto 0)
---        );
---     END COMPONENT;
--- ====================================
--- = END: USER COMPONENT DECLARATION 
--- ====================================
-
 -- ReconOS Stuff
     signal i_osif   : i_osif_t;
     signal o_osif   : o_osif_t;
@@ -66,58 +53,33 @@ architecture Behavioral of hwt_nco is
     signal o_ram    : o_ram_t;
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT,  STATE_REFRESH, STATE_CALC, STATE_CHECK, STATE_WAIT);
+    type STATE_TYPE is (STATE_INIT, STATE_REFRESH_INPUTS, STATE_PROCESS, STATE_WAIT);
     signal state    : STATE_TYPE;
     
-    -- points to the header struct
-    signal header_address   : std_logic_vector(31 downto 0);
-    -- points to outgoing buffer
-    signal target_address   : std_logic_vector(31 downto 0);
-    -- used to point to data inside of the target_address buffer
-    signal target_offset    : std_logic_vector(31 downto 0);
     
+    signal snd_com_header : snd_comp_header_msg_t;
+    
+    signal sample_size        : unsigned(15 downto 0);
+    
+    signal arg_check_interval : unsigned(15 downto 0);  -- TODO: define what that means
+    signal arg_check_interval_acc : unsigned(15 downto 0);  -- TODO: define what that means
+    ----------------------------------------------------------------
     -- Component dependent signals
-    -- points to incoming data buffer
-    signal source_address   : std_logic_vector(31 downto 0); 
-    -- used to point to data inside of the source_address buffer
-    signal source_offset    : std_logic_vector(31 downto 0);
+    ----------------------------------------------------------------
 
--- ====================================
--- = START USER SIGNALS
--- ====================================
-    --constant pi : std_logic_vector(15 downto 0) := "0110010010000000";
-    --constant clk_period  : integer := 2560;  -- 200MHz / 78.125KHz    
-    --constant t1 : unsigned(15 downto 0) := "1010100010011101"; --multiplikator ( 43165 ) --> 43165 / 32768
--- ====================================
--- = END USER SIGNALS 
--- ====================================
+    -- points to incoming data buffer
+    signal phase_offset  : signed(31 downto 0); 
+    -- used to point to data inside of the source_address buffer
+    signal phase_incr    : signed(31 downto 0);   
     
 begin
--- ====================================
--- = START USER COMPONENT INSTANTIATION (OPT)
--- ====================================
-    --    blub_inst: blub PORT MAP (
-    --        phase_in => phase_in,
-    --        x_out    => x_out,
-    --        y_out    => y_out,
-    --        clk      => clk
-    --        );
--- ====================================
--- = END USER COMPONENT INSTANTIATION 
--- ====================================
-
--- ====================================
--- = START USER HARD WIRINGS (OPT)
--- ====================================
-    --    phase_in <= phase;
-    --    sfp_wave <= x_out when sin = '1' else y_out;
--- ====================================
--- = END USER HARD WIRINGS 
--- ====================================
     
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-	
+
+-- Initialized sound component header	
+snc_com_init_header(snd_com_header);
+
     
 -- ReconOS Stuff
 fsl_setup(
@@ -146,92 +108,88 @@ memif_setup(
 
     process (clk) is
         variable done : boolean;
-        variable calc_state : integer range 0 to 16;
-        variable calc_count : integer range 0 to SampleCount;
--- ====================================
--- = START USER PROCESS VARIABLES (OPT)
--- ====================================
 
--- ====================================
--- = END USER PROCESS VARIABLES
--- ====================================
     begin
         if rst = '1' then
+        
+            -- TODO: fsl_reset up to date?
             fsl_reset(o_osif);
-            state <= STATE_INIT;
+            
+            snc_com_init_header(snd_com_header);
+            
+            state       <= STATE_INIT;
+            sample_size <= unsigned(0, 16);
+            
             done := False;
-            header_address <= (others => '0');
-            target_address <= (others => '0');
-            target_offset  <= (others => '0');
-            calc_state     := 0;
-            calc_count     := 0;
-            source_address <= (others => '0');
-            source_offset  <= (others => '0');
--- ====================================
--- = START: RESET YOUR VARIABLES HERE
--- ==================================== 
-
--- ====================================
--- = END: RESET YOUR VARIABLES HERE
--- ==================================== 
+              
         elsif rising_edge(clk) then
             case state is
             
             -- INIT State gets the address of the header struct
             when STATE_INIT =>
-                osif_get_init_data(i_osif,o_osif,header_address,done);
+                
+                -- init data is fine, but can only be one word?
+                snd_comp_get_header(i_osif, o_osif, C_MBOX_RECV, snd_com_header, done);
+                
                 if done then
                     -- Initialize your signals
                     state <= STATE_REFRESH;
-                    target_offset <= (others => '0');
-                    calc_state    := 0;
+                    sample_size <= unsigned(0, 16);
+
                 end if;
                 
-            when STATE_REFRESH =>
-                -- Read your data
+            when STATE_REFRESH_INPUTS =>
+                -- Read and assign optional arguments
+                
                 memif_read_word(i_memif, o_memif, header_address, TARGETSIGNAL, done);
                 if done then
-                    state <= STATE_CALC;
+                    state <= STATE_PROCESS;
                 end if;
 
-            when STATE_CALC =>
-                case calc_state is
-                
-                    when 0 =>
-                    -- Read your data i.e.
-                    memif_read_word(i_memif, o_memif, source_address + pSourceOffset, DATASIGNAL, done);
-                    if(done) then
-                        calc_state     := calc_state + 1;
-                        source_offset  := source_offset + 4;
-                    end if;
-                
-                    when 1 =>
-                    -- Manipulate DATASIGNAL ie. CALCLULATED_DATA <= DATASIGNAL +1;
-                    calc_state := calc_state + 1;
-                
-                    when 2 =>
-                    -- Write result
-                    memif_write_word(i_memif, o_memif, target_address + target_offset, CALCLULATED_DATA, done);
-                    if done then
-                        calc_state    := 0;
-                        target_offset <= target_offset + 4;
-                        state         <= STATE_CHECK;
-                    end if;    
-                
-                end case;
+            when STATE_PROCESS =>
+                if sample_size > 0 then
+                    state <= STATE_PROCESS;
                     
-            when STATE_CHECK =>    
-                if (calc_count < sample_count) then
-                    state <= STATE_CALC;
+                    if sample_size = arg_check_interval_acc then                        
+                        state <= STATE_REFRESH_INPUTS                    
+                    end if;
+                    
                 else
-                    state <= STATE_WAIT;
+                    state <= STATE_EXIT;
                 end if;
+                arg_check_interval_acc  <= arg_check_interval_acc + arg_check_interval;
+                sample_size             <= sample_size - 1;
+                
+                
+                -- case calc_state is
+                
+                    -- when 0 =>
+                    -- -- Read your data i.e.
+                    -- memif_read_word(i_memif, o_memif, source_address + pSourceOffset, DATASIGNAL, done);
+                    -- if(done) then
+                        -- calc_state     := calc_state + 1;
+                        -- source_offset  := source_offset + 4;
+                    -- end if;
+                
+                    -- when 1 =>
+                    -- -- Manipulate DATASIGNAL ie. CALCLULATED_DATA <= DATASIGNAL +1;
+                    -- calc_state := calc_state + 1;
+                
+                    -- when 2 =>
+                    -- -- Write result
+                    -- memif_write_word(i_memif, o_memif, target_address + target_offset, CALCLULATED_DATA, done);
+                    -- if done then
+                        -- calc_state    := 0;
+                        -- target_offset <= target_offset + 4;
+                        -- state         <= STATE_CHECK;
+                    -- end if;    
+                
+                -- end case;
             
-            when STATE_WAIT =>    
-                -- EXIT OR WAIT FOR RESTART?
-                target_offset <= 0;
-                source_offset <= 0; 
-            
+            --when STATE_WAIT =>    
+            -- EXIT OR WAIT FOR RESTART?
+            --    target_offset <= 0;
+            --    source_offset <= 0;           
             
             when STATE_EXIT =>
                    osif_thread_exit(i_osif,o_osif);
