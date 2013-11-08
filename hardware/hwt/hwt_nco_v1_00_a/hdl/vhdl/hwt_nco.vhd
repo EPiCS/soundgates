@@ -10,6 +10,10 @@ use soundgates_pkg.all
 use soundgates_reconos_pkg.all
 
 entity hwt_nco is
+    generic(
+		SND_COMP_CLK_FREQ : integer := 100_000_000;
+		SND_COMP_NCO_TPYE : integer := 0
+	);
    port (
 		-- OSIF FIFO ports
 		OSIF_FIFO_Sw2Hw_Data    : in  std_logic_vector(31 downto 0);
@@ -40,15 +44,38 @@ end hwt_nco;
 
 architecture Behavioral of hwt_nco is
 
+    ----------------------------------------------------------------
+    -- Subcomponent declarations
+    ----------------------------------------------------------------
+    
+    component nco is
+	generic(
+		FPGA_FREQUENCY  : integer       := 100_000_000;
+		WAVEFORM        : WAVEFORM_TYPE := SIN
+	);
+    Port ( 
+            clk          : in  std_logic;           
+            rst          : in  std_logic;
+            ce           : in  std_logic;
+            phase_offset : in  signed(31 downto 0);
+            phase_incr   : in  signed(31 downto 0);
+            data         : out signed(31 downto 0)
+           );
+    end component nco;
+
+
+
+
+
     signal clk   : std_logic;
 	signal rst   : std_logic;
-
 
 -- ReconOS Stuff
     signal i_osif   : i_osif_t;
     signal o_osif   : o_osif_t;
     signal i_memif  : i_memif_t;
     signal o_memif  : o_memif_t;
+    
     signal i_ram    : i_ram_t;
     signal o_ram    : o_ram_t;
 -- /ReconOS Stuff
@@ -56,22 +83,27 @@ architecture Behavioral of hwt_nco is
     type STATE_TYPE is (STATE_INIT, STATE_REFRESH_INPUTS, STATE_PROCESS, STATE_WAIT);
     signal state    : STATE_TYPE;
     
-    
+    ----------------------------------------------------------------
+    -- Common sound component signals
+    ----------------------------------------------------------------
     signal snd_com_header : snd_comp_header_msg_t;
     
     signal sample_size        : unsigned(15 downto 0);
     
-    signal arg_check_interval : unsigned(15 downto 0);  -- TODO: define what that means
+    signal arg_check_interval : unsigned(15 downto 0);      -- TODO: define what that means
     signal arg_check_interval_acc : unsigned(15 downto 0);  -- TODO: define what that means
+    
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
+    signal nco_ce        : std_logic;
 
-    -- points to incoming data buffer
+
     signal phase_offset  : signed(31 downto 0); 
-    -- used to point to data inside of the source_address buffer
+
     signal phase_incr    : signed(31 downto 0);   
-    
+
+    signal nco_data      : signed(31 downto 0);
 begin
     
     clk <= HWT_Clk;
@@ -106,14 +138,30 @@ memif_setup(
         );
 -- /ReconOS Stuff
 
+
+    nco_inst : nco
+    generic map(
+		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ
+		WAVEFORM        => WAVEFORM_TYPE'val(SND_COMP_NCO_TPYE)
+	);
+    Port map( 
+            clk          => clk,
+            rst          => rst,
+            ce           => nco_ce,
+            phase_offset => phase_offset,
+            phase_incr   => phase_incr,
+            data         => nco_data
+            );
+           
     process (clk) is
         variable done : boolean;
 
     begin
         if rst = '1' then
-        
-            -- TODO: fsl_reset up to date?
-            fsl_reset(o_osif);
+                    
+            osif_reset(o_osif);
+			memif_reset(o_memif);
+
             
             snc_com_init_header(snd_com_header);
             
@@ -157,6 +205,7 @@ memif_setup(
                 else
                     state <= STATE_EXIT;
                 end if;
+                
                 arg_check_interval_acc  <= arg_check_interval_acc + arg_check_interval;
                 sample_size             <= sample_size - 1;
                 

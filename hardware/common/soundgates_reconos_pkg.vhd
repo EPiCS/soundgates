@@ -34,7 +34,7 @@ package soundgates_reconos_pkg is
 type snd_comp_header_msg_t is record
         
         source_addr     : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- memory address of the data source buffer
-        src_len         : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- memory address of optional arguments   -- data length of the source buffer
+        src_len         : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- data length of the source buffer
         dest_addr       : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- memory address destination buffer
        
         opt_arg_addr    : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- memory address of optional arguments

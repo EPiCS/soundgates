@@ -14,8 +14,8 @@ use work.soundgates_pkg.all;
 
 entity nco is
 	 generic(
-		FPGA_FREQUENCY : integer := 100_000_000;
-		WAVEFORM : WAVEFORM_TYPE := SIN
+		FPGA_FREQUENCY  : integer := 100_000_000;
+		WAVEFORM        : WAVEFORM_TYPE := SIN
 	 );
     Port ( 
             clk    : in  std_logic;           
