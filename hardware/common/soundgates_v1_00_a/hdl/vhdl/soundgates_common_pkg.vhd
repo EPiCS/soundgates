@@ -6,7 +6,7 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL Package - soundgates_pkg
+--   title:        VHDL Package - soundgates_common_pkg
 --
 --   project:      PG-Soundgates
 --   author:       Lukas Funke, University of Paderborn
@@ -22,7 +22,7 @@ use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
 
-package soundgates_pkg is
+package soundgates_common_pkg is
 
 
 -- Constant declarations
@@ -52,14 +52,9 @@ function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) re
 
 ------------------------------------------------------------
 
-procedure snd_comp_get_msg_header(...,src_addr,len,...)
+end package soundgates_common_pkg;
 
-
-------------------------------------------------------------
-
-end soundgates_pkg;
-
-package body soundgates_pkg is
+package body soundgates_common_pkg is
 
 
 function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) return signed is
@@ -81,9 +76,9 @@ end Get_Cordic_Phase_Increment;
 
 
 function Precalculate_Cordic_Phase_Increments (FPGA_FREQUENCY : integer) return Phase_Increment_Array is
-	variable tmp 			: phase_increment_array;
+	variable tmp 		: phase_increment_array;
 	variable stepsize 	: integer;
-	variable phi_offset 	: real;
+	variable phi_offset : real;
 begin	
 	for i in 0 to MAX_NCO_FREQUNCY loop
 		if i > 0 then
@@ -114,4 +109,4 @@ begin
 	return tmp;
 end Precalculate_Phase_Increments;
 
-end soundgates_pkg;
+end package body soundgates_common_pkg;

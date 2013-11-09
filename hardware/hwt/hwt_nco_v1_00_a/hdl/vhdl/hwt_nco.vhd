@@ -1,3 +1,20 @@
+--  ____                        _             _            
+-- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
+-- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
+--  ___) | (_) | |_| | | | | (_| | (_| | (_| | ||  __/\__ \
+-- |____/ \___/ \__,_|_| |_|\__,_|\__, |\__,_|\__\___||___/
+--                                |___/                    
+-- ======================================================================
+--
+--   title:        VHDL module - hwt_nco
+--
+--   project:      PG-Soundgates
+--   author:       Lukas Funke, University of Paderborn
+--
+--   description:  Hardware thread for a numeric controlled oscillator
+--
+-- ======================================================================
+
 library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -5,9 +22,12 @@ use IEEE.NUMERIC_STD.ALL;
 library proc_common_v3_00_a;
 use proc_common_v3_00_a.proc_common_pkg.all;
 
-library work;
-use soundgates_pkg.all
-use soundgates_reconos_pkg.all
+library reconos_v3_00_c;
+use reconos_v3_00_c.reconos_pkg.all;
+
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
+use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
 entity hwt_nco is
     generic(
@@ -62,11 +82,7 @@ architecture Behavioral of hwt_nco is
             data         : out signed(31 downto 0)
            );
     end component nco;
-
-
-
-
-
+ 
     signal clk   : std_logic;
 	signal rst   : std_logic;
 
@@ -78,179 +94,234 @@ architecture Behavioral of hwt_nco is
     
     signal i_ram    : i_ram_t;
     signal o_ram    : o_ram_t;
+    
+    constant MBOX_RECV  : std_logic_vector(31 downto 0) := x"00000000";
+    
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_REFRESH_INPUTS, STATE_PROCESS, STATE_WAIT);
+    type STATE_TYPE is (STATE_INIT, STATE_REFRESH_INPUT_PHASE_OFFSET, STATE_REFRESH_INPUT_PHASE_INCR, STATE_PROCESS, STATE_WRITE_MEM, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
-    -- Common sound component signals
+    -- Common sound component signals, constants and types
     ----------------------------------------------------------------
-    signal snd_com_header : snd_comp_header_msg_t;
     
-    signal sample_size        : unsigned(15 downto 0);
+    constant C_MAX_SAMPLE_SIZE : integer := 1024;
     
-    signal arg_check_interval : unsigned(15 downto 0);      -- TODO: define what that means
-    signal arg_check_interval_acc : unsigned(15 downto 0);  -- TODO: define what that means
+   	-- define size of local RAM here
+	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_SIZE;
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
+
+    type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
+        
+    signal o_RAMAddr_nco : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_nco : std_logic_vector(0 to 31);   -- nco to local ram
+	signal i_RAMData_nco : std_logic_vector(0 to 31);   -- local ram to nco
+    signal o_RAMWE_nco   : std_logic;
+	
+  	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
+	signal o_RAMData_reconos   : std_logic_vector(0 to 31);
+	signal o_RAMWE_reconos     : std_logic;
+	signal i_RAMData_reconos   : std_logic_vector(0 to 31);
+
+    constant o_RAMAddr_max : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) := (others=>'1');
+
+	shared variable local_ram : LOCAL_MEMORY_T;
+    
+    signal snd_comp_header : snd_comp_header_msg_t;  -- common sound component header
+       
+    signal sample_size            : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_SIZE, 16);
+-- TODO:  signal arg_check_interval     : unsigned(15 downto 0);
+-- TODO:  signal arg_check_interval_acc : unsigned(15 downto 0);
     
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal nco_ce        : std_logic;
+    signal nco_ce            : std_logic;           -- nco clock enable (like a start/stop signal)
 
-
-    signal phase_offset  : signed(31 downto 0); 
-
-    signal phase_incr    : signed(31 downto 0);   
-
-    signal nco_data      : signed(31 downto 0);
-begin
+    signal phase_offset_addr : std_logic_vector(31 downto 0);
+    signal phase_incr_addr   : std_logic_vector(31 downto 0);
+   
+    signal phase_offset  : std_logic_vector(31 downto 0);
+    signal phase_incr    : std_logic_vector(31 downto 0);
     
+    signal nco_data      : signed(31 downto 0);
+    
+begin
+    -----------------------------------
+    -- Hard wirings
+    -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-
--- Initialized sound component header	
-snc_com_init_header(snd_com_header);
-
+    o_RAMData_nco <= std_logic_vector(nco_data);
     
--- ReconOS Stuff
-fsl_setup(
-        i_osif,
-        o_osif,
-        OSFSL_S_Data,
-        OSFSL_S_Exists,
-        OSFSL_M_Full,
-        OSFSL_M_Data,
-        OSFSL_S_Read,
-        OSFSL_M_Write,
-        OSFSL_M_Control
+    o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
+    
+    -- Initialized sound component header	
+--    snd_comp_init_header(snd_comp_header);
+        
+    -- ReconOS Stuff
+    osif_setup (
+            i_osif,
+            o_osif,
+            OSIF_FIFO_Sw2Hw_Data,
+            OSIF_FIFO_Sw2Hw_Fill,
+            OSIF_FIFO_Sw2Hw_Empty,
+            OSIF_FIFO_Hw2Sw_Rem,
+            OSIF_FIFO_Hw2Sw_Full,
+            OSIF_FIFO_Sw2Hw_RE,
+            OSIF_FIFO_Hw2Sw_Data,
+            OSIF_FIFO_Hw2Sw_WE
         );
-                
-memif_setup(
-        i_memif,
-        o_memif,
-        FIFO32_S_Data,
-        FIFO32_S_Fill,
-        FIFO32_S_Rd,
-        FIFO32_M_Data,
-        FIFO32_M_Rem,
-        FIFO32_M_Wr
+                    
+    memif_setup (
+            i_memif,
+            o_memif,
+            MEMIF_FIFO_Mem2Hwt_Data,
+            MEMIF_FIFO_Mem2Hwt_Fill,
+            MEMIF_FIFO_Mem2Hwt_Empty,
+            MEMIF_FIFO_Hwt2Mem_Rem,
+            MEMIF_FIFO_Hwt2Mem_Full,
+            MEMIF_FIFO_Mem2Hwt_RE,
+            MEMIF_FIFO_Hwt2Mem_Data,
+            MEMIF_FIFO_Hwt2Mem_WE
         );
--- /ReconOS Stuff
 
-
+    ram_setup (
+		i_ram,
+		o_ram,
+		o_RAMAddr_reconos_2,
+		o_RAMWE_reconos,
+		o_RAMData_reconos,
+		i_RAMData_reconos
+	);
+            
+    -- /ReconOS Stuff
     nco_inst : nco
     generic map(
-		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ
+		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ,
 		WAVEFORM        => WAVEFORM_TYPE'val(SND_COMP_NCO_TPYE)
-	);
-    Port map( 
+	 )
+    port map( 
             clk          => clk,
             rst          => rst,
             ce           => nco_ce,
-            phase_offset => phase_offset,
-            phase_incr   => phase_incr,
+            phase_offset => signed(phase_offset),
+            phase_incr   => signed(phase_incr),
             data         => nco_data
             );
-           
-    process (clk) is
-        variable done : boolean;
-
+            
+    local_ram_ctrl_1 : process (clk) is
+	begin
+		if (rising_edge(clk)) then
+			if (o_RAMWE_reconos = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_reconos))) := o_RAMData_reconos;
+			else
+				i_RAMData_reconos <= local_ram(to_integer(unsigned(o_RAMAddr_reconos)));
+			end if;
+		end if;
+	end process;
+    
+    local_ram_ctrl_2 : process (clk) is
+	begin
+		if (rising_edge(clk)) then		
+			if (o_RAMWE_nco = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_nco))) := o_RAMData_nco;
+            --else      -- else not needed, because nco is not consuming any samples
+			--	i_RAMData_nco <= local_ram(conv_integer(unsigned(o_RAMAddr_nco)));
+			end if;
+		end if;
+	end process;
+    
+    
+    NCO_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
+            variable done : boolean;
     begin
         if rst = '1' then
                     
             osif_reset(o_osif);
-			memif_reset(o_memif);
-
-            
-            snc_com_init_header(snd_com_header);
+			memif_reset(o_memif);           
             
             state       <= STATE_INIT;
-            sample_size <= unsigned(0, 16);
+            sample_size <= to_unsigned(C_MAX_SAMPLE_SIZE, 16);
+            
+            nco_ce      <= '0';
+            o_RAMWE_nco <= '0';
             
             done := False;
               
         elsif rising_edge(clk) then
-            case state is
             
+            nco_ce      <= '0';
+            o_RAMWE_nco <= '0';
+            
+            case state is            
             -- INIT State gets the address of the header struct
-            when STATE_INIT =>
+            when STATE_INIT =>               
                 
                 -- init data is fine, but can only be one word?
-                snd_comp_get_header(i_osif, o_osif, C_MBOX_RECV, snd_com_header, done);
+                snd_comp_get_header(i_osif, o_osif, MBOX_RECV, snd_comp_header, done);
+                
+                
+                sample_size       <= to_unsigned(C_MAX_SAMPLE_SIZE, 16);
+                phase_offset_addr <= snd_comp_header.opt_arg_addr;
+                phase_incr_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
                 
                 if done then
                     -- Initialize your signals
-                    state <= STATE_REFRESH;
-                    sample_size <= unsigned(0, 16);
-
+                    state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+                    sample_size <= to_unsigned(0, 16);
+                end if;
+            
+            when STATE_REFRESH_INPUT_PHASE_OFFSET =>
+                
+                memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);
+                
+                if done then
+                    state <= STATE_REFRESH_INPUT_PHASE_INCR;
                 end if;
                 
-            when STATE_REFRESH_INPUTS =>
-                -- Read and assign optional arguments
-                
-                memif_read_word(i_memif, o_memif, header_address, TARGETSIGNAL, done);
+            when STATE_REFRESH_INPUT_PHASE_INCR =>
+            
+                memif_read_word(i_memif, o_memif, phase_incr_addr , phase_incr, done);
                 if done then
                     state <= STATE_PROCESS;
                 end if;
-
+                
             when STATE_PROCESS =>
                 if sample_size > 0 then
-                    state <= STATE_PROCESS;
+                    state   <= STATE_PROCESS;
                     
-                    if sample_size = arg_check_interval_acc then                        
-                        state <= STATE_REFRESH_INPUTS                    
-                    end if;
+                    nco_ce        <= '1';
+                    o_RAMWE_nco   <= '1';
+                    o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
                     
+--                  if sample_size = arg_check_interval_acc then                        
+--                      state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+--                  end if;                    
                 else
                     state <= STATE_EXIT;
                 end if;
                 
-                arg_check_interval_acc  <= arg_check_interval_acc + arg_check_interval;
-                sample_size             <= sample_size - 1;
-                
-                
-                -- case calc_state is
-                
-                    -- when 0 =>
-                    -- -- Read your data i.e.
-                    -- memif_read_word(i_memif, o_memif, source_address + pSourceOffset, DATASIGNAL, done);
-                    -- if(done) then
-                        -- calc_state     := calc_state + 1;
-                        -- source_offset  := source_offset + 4;
-                    -- end if;
-                
-                    -- when 1 =>
-                    -- -- Manipulate DATASIGNAL ie. CALCLULATED_DATA <= DATASIGNAL +1;
-                    -- calc_state := calc_state + 1;
-                
-                    -- when 2 =>
-                    -- -- Write result
-                    -- memif_write_word(i_memif, o_memif, target_address + target_offset, CALCLULATED_DATA, done);
-                    -- if done then
-                        -- calc_state    := 0;
-                        -- target_offset <= target_offset + 4;
-                        -- state         <= STATE_CHECK;
-                    -- end if;    
-                
-                -- end case;
-            
-            --when STATE_WAIT =>    
-            -- EXIT OR WAIT FOR RESTART?
-            --    target_offset <= 0;
-            --    source_offset <= 0;           
-            
+--              arg_check_interval_acc  <= arg_check_interval_acc + arg_check_interval;
+                sample_size <= sample_size - 1;
+
+             when STATE_WRITE_MEM =>
+
+                memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
+
+                if done then
+                    state <= STATE_EXIT;
+				end if;
+                        
             when STATE_EXIT =>
                    osif_thread_exit(i_osif,o_osif);
             
             end case;
         end if;
     end process;
-
--- ====================================
--- = INSERT ADDITIONAL USER PROCESSES HERE
--- ====================================
-
 
 end Behavioral;
 

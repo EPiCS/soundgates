@@ -58,14 +58,16 @@ procedure snd_comp_get_header(
 		variable done   : out boolean
 		);
 
-procedure snc_com_init_header ( signal snd_comp_header : in snd_comp_header_msg_t );
+procedure snd_comp_init_header ( signal snd_comp_header : out snd_comp_header_msg_t );
         
 ------------------------------------------------------------
 
 end soundgates_reconos_pkg;
 
+package body soundgates_reconos_pkg is
 
-procedure snc_com_init_header ( signal snd_comp_header : in snd_comp_header_msg_t ) is 
+
+procedure snd_comp_init_header ( signal snd_comp_header : out snd_comp_header_msg_t ) is 
 begin
     snd_comp_header.source_addr  <= (others => '0');
     snd_comp_header.src_len      <= (others => '0');
@@ -73,8 +75,8 @@ begin
     snd_comp_header.opt_arg_addr <= (others => '0');
     snd_comp_header.opt_arg_len  <= (others => '0');
     
-    f_step <= 0;
-end procedure snc_com_init_header;
+    snd_comp_header.f_step <= 0;
+end procedure snd_comp_init_header;
 
 procedure snd_comp_get_header(
     signal i_osif   : in  i_osif_t;
@@ -89,31 +91,31 @@ procedure snd_comp_get_header(
     begin
         case snd_comp_header.f_step is
             when 0 => 
-                osif_mbox_get(i_osif, o_osif, C_MBOX_RECV, snd_comp_header.source_addr, patially_done);
+                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.source_addr, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 1;
                 end if;
             when 1 =>
-                osif_mbox_get(i_osif, o_osif, C_MBOX_RECV, snd_comp_header.src_len, patially_done);
+                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.src_len, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 2;
                 end if;
             when 2 =>
-                osif_mbox_get(i_osif, o_osif, C_MBOX_RECV, snd_comp_header.dest_addr, patially_done);
+                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.dest_addr, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 3;
                 end if;
             when 3 =>
-                osif_mbox_get(i_osif, o_osif, C_MBOX_RECV, snd_comp_header.opt_arg_addr, patially_done);
+                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.opt_arg_addr, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 4;
                 end if;
             when 4 =>
-                osif_mbox_get(i_osif, o_osif, C_MBOX_RECV, snd_comp_header.opt_arg_len, patially_done);
+                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.opt_arg_len, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 5;
@@ -124,9 +126,5 @@ procedure snd_comp_get_header(
          end case;
          
     end procedure snd_comp_get_header;
-
-package body soundgates_reconos_pkg is
-
-
  
-end soundgates_reconos_pkg;
+end package body soundgates_reconos_pkg;

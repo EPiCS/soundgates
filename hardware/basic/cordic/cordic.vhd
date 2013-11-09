@@ -1,35 +1,27 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    13:32:15 09/04/2013 
--- Design Name: 
--- Module Name:    cordic - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+--  ____                        _             _            
+-- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
+-- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
+--  ___) | (_) | |_| | | | | (_| | (_| | (_| | ||  __/\__ \
+-- |____/ \___/ \__,_|_| |_|\__,_|\__, |\__,_|\__\___||___/
+--                                |___/                    
+-- ======================================================================
 --
--- Dependencies: 
+--   title:        VHDL module - cordic.vhd
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
+--   project:      PG-Soundgates
+--   author:       Lukas Funke, University of Paderborn
 --
-----------------------------------------------------------------------------------
+--   description:  Cordic top level entity
+--
+-- ======================================================================
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.math_real.all;
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
-use work.soundgates_pkg.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity cordic is
 generic (

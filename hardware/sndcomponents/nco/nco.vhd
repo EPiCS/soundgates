@@ -10,7 +10,8 @@ use IEEE.MATH_REAL.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-use work.soundgates_pkg.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity nco is
 	 generic(
@@ -23,7 +24,7 @@ entity nco is
             ce     : in  std_logic;
             phase_offset : in signed(31 downto 0);
             phase_incr   : in signed(31 downto 0);
-            data   : out signed(31 downto 0)
+            data         : out signed(31 downto 0)
            );
 end nco;
 
@@ -54,18 +55,16 @@ architecture Behavioral of nco is
    constant cordic_pipeline_stages : integer := 16;    -- lower resolution (but high enough)
 -- constant cordic_pipeline_stages : integer := 32;    -- very high resolution
    
-   constant standard_cordic_offset : integer := integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING));
+    constant standard_cordic_offset : integer := integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING));
    
 	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
 	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
-	
-	constant phi_offset : Phase_Increment_Array := Precalculate_Cordic_Phase_Increments(FPGA_FREQUENCY);
-	
-	signal cordic_phi_offset : signed(31 downto 0) := (others => '0'); 
-   signal cordic_phi_incr   : signed(31 downto 0) := (others => '0'); 
+
+    signal cordic_phi_offset : signed(31 downto 0) := (others => '0'); 
+    signal cordic_phi_incr   : signed(31 downto 0) := (others => '0'); 
 	signal cordic_phi_acc 	 : signed(31 downto 0) := (others => '0'); 
 	
-   signal cordic_threshold  : signed(31 downto 0);
+    signal cordic_threshold  : signed(31 downto 0);
    --------------------------------------------------------------------------------
    --------------------------------------------------------------------------------
 	
@@ -81,14 +80,15 @@ begin
          generic map( 
             pipeline_stages => cordic_pipeline_stages
            )
-			port map( clk 	=> clk,
-                   rst  => rst,
-                   ce   => ce,
-						 x    => cordic_x_init,
-						 y    => cordic_y_init,
-						 phi  => cordic_phi_acc,
-						 sin  => data,
-						 cos  => open );
+			port map(
+                    clk  => clk,
+                    rst  => rst,
+                    ce   => ce,
+                    x    => cordic_x_init,
+                    y    => cordic_y_init,
+                    phi  => cordic_phi_acc,
+                    sin  => data,
+                    cos  => open );
          
          
          THRESHOLD_PROC_GEN_16 : if cordic_pipeline_stages = 16 generate
@@ -109,20 +109,22 @@ begin
          end generate THRESHOLD_PROC_GEN_32;      
          
          
-			PHASE_STIMULIS_PROCESS : process(clk)                  
-			begin
-				if rising_edge(clk) then
-               if cordic_phi_offset /= phase_offset then -- only update on change               
-                  cordic_phi_acc <= phase_offset;
-               end if;
-					cordic_phi_acc <= cordic_phi_acc + phase_incr;
+		PHASE_STIMULIS_PROCESS : process(clk)                  
+        begin
+            if rising_edge(clk) then
+            
+               cordic_phi_acc <= cordic_phi_acc + phase_incr;
                
-                             
+               if cordic_phi_offset /= phase_offset then -- only update on change               
+                    cordic_phi_acc      <= phase_offset;
+                    cordic_phi_offset   <= phase_offset;
+               end if;
+                                          
                if cordic_phi_acc >= cordic_threshold then
                   cordic_phi_acc <= (others => '0');
-					end if;
+               end if;
             end if;
-			end process;
+		end process;
 	end generate SIN_GENERATOR;
    
    --------------------------------------------------------------------------------	
