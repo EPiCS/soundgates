@@ -9,14 +9,18 @@
 #include "Samplebuffer.h"
 
 int main() {
+
+
 	soundbuffer* playback = buffer_initialize(44100,0);
 	//buffer_test_playback(playback);
 
-	char mydata[16384];
+
 
 	printf("Start\n");
 	buffer_start(playback,1);
-	int buffersFilled;
+/*	// Fill the buffer thread with random data
+  	char mydata[16384];
+  	int buffersFilled;
 	int i;
 	for (buffersFilled =0; playback->running && buffersFilled < 1000;buffersFilled++) {
 		for (i= 0; i < 1024*4; i++) {
@@ -28,8 +32,12 @@ int main() {
 		}
 		buffer_fillbuffer(playback,mydata,1024*4);
 	}
+*/
 
-	sleep(1);
+	// Synthesizer Test
+	initializeComponentsTest();
+	runSyntheziserTest(playback);
+
 	buffer_stop(playback);
 	printf("Stop\n");
 
