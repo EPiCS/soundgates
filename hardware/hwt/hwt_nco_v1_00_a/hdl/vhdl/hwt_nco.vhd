@@ -95,21 +95,21 @@ architecture Behavioral of hwt_nco is
     signal i_ram    : i_ram_t;
     signal o_ram    : o_ram_t;
     
-    constant MBOX_RECV  : std_logic_vector(31 downto 0) := x"00000000";
-    
+    constant MBOX_START   : std_logic_vector(31 downto 0) := x"00000000";
+    constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_REFRESH_INPUT_PHASE_OFFSET, STATE_REFRESH_INPUT_PHASE_INCR, STATE_PROCESS, STATE_WRITE_MEM, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_REFRESH_INPUT_PHASE_OFFSET, STATE_REFRESH_INPUT_PHASE_INCR, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_SIZE : integer := 1024;
+    constant C_MAX_SAMPLE_COUNT : integer := 1024;
     
    	-- define size of local RAM here
-	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_SIZE;
+	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
 	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
@@ -132,7 +132,7 @@ architecture Behavioral of hwt_nco is
     
     signal snd_comp_header : snd_comp_header_msg_t;  -- common sound component header
        
-    signal sample_size            : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_SIZE, 16);
+    signal sample_count            : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_COUNT, 16);
 -- TODO:  signal arg_check_interval     : unsigned(15 downto 0);
 -- TODO:  signal arg_check_interval_acc : unsigned(15 downto 0);
     
@@ -238,6 +238,7 @@ begin
     
     NCO_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
             variable done : boolean;
+            signal   start_signal : std_logic_vector(C_FSL_WIDTH-1 downto 0);
     begin
         if rst = '1' then
                     
@@ -245,7 +246,7 @@ begin
 			memif_reset(o_memif);           
             
             state       <= STATE_INIT;
-            sample_size <= to_unsigned(C_MAX_SAMPLE_SIZE, 16);
+            sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
             
             nco_ce      <= '0';
             o_RAMWE_nco <= '0';
@@ -260,21 +261,28 @@ begin
             case state is            
             -- INIT State gets the address of the header struct
             when STATE_INIT =>               
-                
-                -- init data is fine, but can only be one word?
-                snd_comp_get_header(i_osif, o_osif, MBOX_RECV, snd_comp_header, done);
-                
-                
-                sample_size       <= to_unsigned(C_MAX_SAMPLE_SIZE, 16);
-                phase_offset_addr <= snd_comp_header.opt_arg_addr;
-                phase_incr_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
+                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);
                 
                 if done then
                     -- Initialize your signals
-                    state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
-                    sample_size <= to_unsigned(0, 16);
+                    phase_offset_addr <= snd_comp_header.opt_arg_addr;
+                    phase_incr_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
                 end if;
             
+            
+            when STATE_WAITING =>
+                -- Software process "Synthesizer" sends the start signal via mbox_start
+                osif_mbox_get(i_osif, o_osif, MBOX_START, start_signal, done);
+
+                if done then
+                    if (! start_signal = X"FFFFFFFF") then
+                        sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+                        state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+                    else
+                        state <= STATE_EXIT;
+                    end if;    
+                end if;
+                 
             when STATE_REFRESH_INPUT_PHASE_OFFSET =>
                 
                 memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);
@@ -291,30 +299,37 @@ begin
                 end if;
                 
             when STATE_PROCESS =>
-                if sample_size > 0 then
-                    state   <= STATE_PROCESS;
+                if sample_count > 0 then
                     
                     nco_ce        <= '1';
                     o_RAMWE_nco   <= '1';
                     o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
-                    
---                  if sample_size = arg_check_interval_acc then                        
+
+--                  if sample_count = arg_check_interval_acc then                        
 --                      state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
 --                  end if;                    
                 else
-                    state <= STATE_EXIT;
+                    -- Samples have been generated
+                    state <= STATE_WRITE_MEM;
                 end if;
                 
 --              arg_check_interval_acc  <= arg_check_interval_acc + arg_check_interval;
-                sample_size <= sample_size - 1;
+                sample_count <= sample_count - 1;
+
 
              when STATE_WRITE_MEM =>
-
+                -- Ist size nicht eigentlich abhängig von (sample_count * sample_size)?
                 memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
 
                 if done then
-                    state <= STATE_EXIT;
+                    state <= STATE_NOTIFY;
 				end if;
+				
+		    when STATE_NOTIFY =>
+                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, X"00000001", ignore, done);
+                if done then
+                    state <= STATE_WAITING;
+				end if;		    
                         
             when STATE_EXIT =>
                    osif_thread_exit(i_osif,o_osif);
