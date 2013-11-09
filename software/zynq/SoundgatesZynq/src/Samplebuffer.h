@@ -5,32 +5,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <alsa/asoundlib.h>
-
-//TODO: ContinueOnUnderrun -> einfach neuinitialisieren, oder beenden
-//TODO: In Thread auslagern: ALSA Puffer mit eigenen Daten füttern, Double Buffering
-//TODO: DoubleBuffering?
-//TODO: Dem Synthesizer sagen: Ich bin voll, ich brauch nichts
-typedef enum {
-	BUFFER_NO_ERROR = 0, BUFFER_TOO_MANY_SAMPLES = 1, BUFFER_NOT_READY = 2
-} buffer_error;
-
-typedef struct {
-	/**
-	 * Alsa might not be able to accept all frames currently stored in a buffer.
-	 * Therefore we can't just always copy the whole buffer, but maybe only a fraction.
-	 * So we need to remember where we are in our buffers
-	 * -1 means the buffer is empty (i.e. has been transferred to alsa completey
-	 * and is ready to be overwritten)
-	 */
-	int b1off, b2off, b1size, b2size, activeBuffer;
-	pthread_t bufferThread;
-	int running;
-	int continueOnError;
-	char buffer1[16384];
-	char buffer2[16384];
-	snd_pcm_t* pcm_handle;
-	snd_pcm_hw_params_t* hw_params;
-} soundbuffer;
+#include <math.h>
+#include "Samplebuffer_getset.h"
+#include "Samplebuffer_typedefs.h"
 
 soundbuffer* buffer_initialize(unsigned int samplerate, int record);
 
@@ -71,6 +48,11 @@ void buffer_stop(soundbuffer* buffer);
  *  - 0 if the buffer is completely filled at the moment
  */
 int buffer_needsamples();
+
+/**
+ * Returns the size of a frame (Encoding * number of channels) in bytes
+ */
+int buffer_getFrameSize();
 
 /**
  *	Copies the content of an array to the internal buffer

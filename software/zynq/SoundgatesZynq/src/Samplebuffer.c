@@ -1,5 +1,4 @@
 #include "Samplebuffer.h"
-#include <math.h>
 
 void *buffer_run(void* buff) {
 	soundbuffer* buffer = ((soundbuffer*) buff);
@@ -21,10 +20,25 @@ void *buffer_run(void* buff) {
 			bufferSize = buffer->b2size;
 		}
 
+		// Switch when the currently selected buffer is empty
 		if (bufferOffset < 0) {
-			//TODO Handling when the currently selected buffer is empty
+			if (buffer->b1off >= 0) {
+				buffer->activeBuffer = 1;
+				bufferArray = buffer->buffer1;
+				bufferOffset = buffer->b1off;
+				bufferSize = buffer->b1size;
+			} else if (buffer->b2off >= 0) {
+				bufferArray = buffer->buffer2;
+				bufferOffset = buffer->b2off;
+				bufferSize = buffer->b2size;
+				buffer->activeBuffer = 2;
+			} else {
+				printf("Both buffers empty\n");
+				// both buffers empty. TODO Do we need to do something?
+			}
 		}
 
+		// Wait for the audio device to become ready (or timeout after a second)
 		if ((err = snd_pcm_wait(buffer->pcm_handle, 1000)) < 0) {
 			if (buffer->continueOnError) {
 				continue;
@@ -34,6 +48,8 @@ void *buffer_run(void* buff) {
 				pthread_exit(NULL);
 			}
 		}
+
+		// Ask the audio device how many frames it can accept
 		if ((nframes = snd_pcm_avail_update(buffer->pcm_handle)) < 0) {
 			if (buffer->continueOnError) {
 				continue;
@@ -45,21 +61,44 @@ void *buffer_run(void* buff) {
 			}
 		}
 
-		//nframes = 0; // TODO Anzahl Frames an Größe der verbleibenden Frames anpassen
-		// TODO Durch Buffer durchlaufen, dh Offset anpassen
+		// Only try writing to the soundcard if there is any data in the buffer
+		if (bufferOffset >= 0) {
+			int availableBytes = bufferSize - bufferOffset;
 
-		if ((err = snd_pcm_writei(buffer->pcm_handle, bufferArray, nframes))
-				< 0) {
-			if (buffer->continueOnError) {
-				snd_pcm_prepare(buffer->pcm_handle);
-				continue;
-			} else {
-				fprintf(stderr, "write to audio interface failed (%s)\n",
-						snd_strerror(err));
-				pthread_exit(NULL);
+			// Frame = FrameSize (U32 = 4 Byte) * numChannels (1)
+			int frameSize = 4;
+			int availableFrames = availableBytes / frameSize;
+
+			if (nframes > availableFrames) {
+				nframes = availableFrames;
+			}
+
+			printf("Buffer: %i  -  Offset: %i  -  Frames: %i\n",buffer->activeBuffer, bufferOffset, nframes);
+
+			//nframes = 0; // TODO Anzahl Frames an Größe der verbleibenden Frames anpassen
+			// TODO Durch Buffer durchlaufen, dh Offset anpassen
+
+			if ((err = snd_pcm_writei(buffer->pcm_handle, bufferArray+bufferOffset, nframes))
+					< 0) {
+				if (buffer->continueOnError) {
+					// Reinitialize the device
+					snd_pcm_prepare(buffer->pcm_handle);
+					continue;
+				} else {
+					fprintf(stderr, "write to audio interface failed (%s)\n",
+							snd_strerror(err));
+					pthread_exit(NULL);
+				}
+			}
+
+			// Advance the buffer offset
+			bufferOffset += nframes * frameSize;
+
+			//Whole buffer data has been played, switch to the other buffer
+			if (bufferOffset >= bufferSize) {
+				switchAndClearBuffer(buffer);
 			}
 		}
-
 	}
 	return NULL;
 }
@@ -110,7 +149,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 	}
 	//TODO parametrisierbar machen?
 	if ((err = snd_pcm_hw_params_set_format(buff->pcm_handle, buff->hw_params,
-			SND_PCM_FORMAT_U24)) < 0) {
+			SND_PCM_FORMAT_U32)) < 0) {
 		fprintf(stderr, "cannot set sample format (%s)\n", snd_strerror(err));
 		erroroccured = 2;
 	}
@@ -131,8 +170,9 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 		printf("Rate %i not supported, set to %i \n", samplerate, exact_rate);
 	}
 
+	// TODO For now, only one channel. Increase this to two channels in the future
 	if ((err = snd_pcm_hw_params_set_channels(buff->pcm_handle, buff->hw_params,
-			2)) < 0) {
+			1)) < 0) {
 		fprintf(stderr, "cannot set channel count (%s)\n", snd_strerror(err));
 		erroroccured = 2;
 	}
