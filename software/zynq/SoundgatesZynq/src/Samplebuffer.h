@@ -47,7 +47,7 @@ void buffer_stop(soundbuffer* buffer);
  *  - 1 if the buffer can accept new samples from the synthesizer
  *  - 0 if the buffer is completely filled at the moment
  */
-int buffer_needsamples();
+int buffer_needsamples(soundbuffer* buffer);
 
 /**
  * Returns the size of a frame (Encoding * number of channels) in bytes

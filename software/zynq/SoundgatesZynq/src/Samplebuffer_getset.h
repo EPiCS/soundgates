@@ -11,18 +11,20 @@
 
 #include "Samplebuffer_typedefs.h"
 
-void switchAndClearBuffer(soundbuffer* buffer);
+inline void switchAndClearBuffer(soundbuffer* buffer);
 
-void setBufferOffset(soundbuffer* buffer, int offset);
+inline void setBufferOffset(soundbuffer* buffer, int offset);
 
-int getBufferOffset(soundbuffer* buffer);
+inline int getBufferOffset(soundbuffer* buffer);
 
-void setBufferSize(soundbuffer* buffer, int size);
+inline void setBufferSize(soundbuffer* buffer, int size);
 
-int getBufferSize(soundbuffer* buffer);
+inline int getBufferSize(soundbuffer* buffer);
 
-void setActiveBuffer(soundbuffer* buffer, int number);
+inline void setActiveBuffer(soundbuffer* buffer, int number);
 
-int getActiveBuffer(soundbuffer* buffer);
+inline int getActiveBuffer(soundbuffer* buffer);
+
+inline char* getBufferArray(soundbuffer* buffer);
 
 #endif /* SAMPLEBUFFER_GETSET_H_ */

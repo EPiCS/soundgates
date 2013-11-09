@@ -2,38 +2,21 @@
 
 void *buffer_run(void* buff) {
 	soundbuffer* buffer = ((soundbuffer*) buff);
-	char* bufferArray;
-	int bufferOffset;
-	int bufferSize;
-	int err;
+	int err = 0;
 	int nframes;
 
 	while (buffer->running) {
-		nframes = 0;
-		if (buffer->activeBuffer == 1) {
-			bufferArray = buffer->buffer1;
-			bufferOffset = buffer->b1off;
-			bufferSize = buffer->b1size;
-		} else if (buffer->activeBuffer == 2) {
-			bufferArray = buffer->buffer2;
-			bufferOffset = buffer->b2off;
-			bufferSize = buffer->b2size;
+		if (err < 0 && buffer->continueOnError) {
+			// Reinitialize the device
+			snd_pcm_prepare(buffer->pcm_handle);
 		}
 
+		nframes = 0;
+
 		// Switch when the currently selected buffer is empty
-		if (bufferOffset < 0) {
-			if (buffer->b1off >= 0) {
-				buffer->activeBuffer = 1;
-				bufferArray = buffer->buffer1;
-				bufferOffset = buffer->b1off;
-				bufferSize = buffer->b1size;
-			} else if (buffer->b2off >= 0) {
-				bufferArray = buffer->buffer2;
-				bufferOffset = buffer->b2off;
-				bufferSize = buffer->b2size;
-				buffer->activeBuffer = 2;
-			} else {
-				printf("Both buffers empty\n");
+		if (getBufferOffset(buffer) < 0) {
+			switchAndClearBuffer(buffer);
+			if (getBufferOffset(buffer) < 0) {
 				// both buffers empty. TODO Do we need to do something?
 			}
 		}
@@ -62,27 +45,25 @@ void *buffer_run(void* buff) {
 		}
 
 		// Only try writing to the soundcard if there is any data in the buffer
-		if (bufferOffset >= 0) {
-			int availableBytes = bufferSize - bufferOffset;
+		if (getBufferOffset(buffer) >= 0) {
+			int availableBytes = getBufferSize(buffer)
+					- getBufferOffset(buffer);
 
 			// Frame = FrameSize (U32 = 4 Byte) * numChannels (1)
-			int frameSize = 4;
+			int frameSize = buffer_getFrameSize();
 			int availableFrames = availableBytes / frameSize;
 
+			// Don't try to give more frames to the buffer as available
 			if (nframes > availableFrames) {
 				nframes = availableFrames;
 			}
 
-			printf("Buffer: %i  -  Offset: %i  -  Frames: %i\n",buffer->activeBuffer, bufferOffset, nframes);
+//			printf("Buffer: %i  -  Offset: %i  -  Frames: %i\n", getActiveBuffer(buffer), getBufferOffset(buffer), nframes);
 
-			//nframes = 0; // TODO Anzahl Frames an Größe der verbleibenden Frames anpassen
-			// TODO Durch Buffer durchlaufen, dh Offset anpassen
-
-			if ((err = snd_pcm_writei(buffer->pcm_handle, bufferArray+bufferOffset, nframes))
-					< 0) {
+			// Add current offset to the beginning of the buffer array
+			char* arr = getBufferArray(buffer) + getBufferOffset(buffer);
+			if ((err = snd_pcm_writei(buffer->pcm_handle, arr, nframes)) < 0) {
 				if (buffer->continueOnError) {
-					// Reinitialize the device
-					snd_pcm_prepare(buffer->pcm_handle);
 					continue;
 				} else {
 					fprintf(stderr, "write to audio interface failed (%s)\n",
@@ -92,10 +73,11 @@ void *buffer_run(void* buff) {
 			}
 
 			// Advance the buffer offset
-			bufferOffset += nframes * frameSize;
+			setBufferOffset(buffer,
+					getBufferOffset(buffer) + nframes * buffer_getFrameSize());
 
 			//Whole buffer data has been played, switch to the other buffer
-			if (bufferOffset >= bufferSize) {
+			if (getBufferOffset(buffer) >= getBufferSize(buffer)) {
 				switchAndClearBuffer(buffer);
 			}
 		}
@@ -108,7 +90,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record) {
 	int err;
 	int erroroccured = 0;
 	buff->b1off = 0; // Mark the first buffer as full -> will play a few empty samples at the start
-	buff->b2off = -1;
+	buff->b2off = 0;
 	buff->activeBuffer = 1;
 	buff->running = 0;
 
@@ -246,6 +228,7 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size) {
 	if (size > 16384) {
 		return BUFFER_TOO_MANY_SAMPLES;
 	} else {
+		//TODO Replace this by using the getters and setters
 		if (buffer->b1off < 0) {
 			for (i = 0; i < size; i++) {
 				buffer->buffer1[i] = samples[i];
@@ -282,6 +265,7 @@ void buffer_free(soundbuffer* buffer) {
 void buffer_start(soundbuffer* buffer, int continueOnError) {
 	if (!buffer->running) {
 		buffer->running = 1;
+		buffer->continueOnError = continueOnError;
 		pthread_create(&buffer->bufferThread, NULL, buffer_run, (void*) buffer);
 	}
 }
@@ -291,5 +275,9 @@ void buffer_stop(soundbuffer* buffer) {
 		buffer->running = 0;
 		pthread_join(buffer->bufferThread, NULL);
 	}
+}
+
+int buffer_getFrameSize() {
+	return 4; //TODO calculate this from the acutal settings
 }
 

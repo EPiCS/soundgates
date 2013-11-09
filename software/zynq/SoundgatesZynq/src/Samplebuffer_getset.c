@@ -7,8 +7,7 @@
 
 #include "Samplebuffer_getset.h"
 
-
-void switchAndClearBuffer(soundbuffer* buffer) {
+inline void switchAndClearBuffer(soundbuffer* buffer) {
 	if (buffer->activeBuffer == 1) {
 		buffer->b1off = -1;
 		buffer->activeBuffer = 2;
@@ -18,7 +17,7 @@ void switchAndClearBuffer(soundbuffer* buffer) {
 	}
 }
 
-void setBufferOffset(soundbuffer* buffer, int offset) {
+inline void setBufferOffset(soundbuffer* buffer, int offset) {
 	if (buffer->activeBuffer == 1) {
 		buffer->b1off = offset;
 	} else if (buffer->activeBuffer == 2) {
@@ -26,7 +25,7 @@ void setBufferOffset(soundbuffer* buffer, int offset) {
 	}
 }
 
-int getBufferOffset(soundbuffer* buffer) {
+inline int getBufferOffset(soundbuffer* buffer) {
 	if (buffer->activeBuffer == 1) {
 		return buffer->b1off;
 	} else if (buffer->activeBuffer == 2) {
@@ -35,7 +34,7 @@ int getBufferOffset(soundbuffer* buffer) {
 	return -1;
 }
 
-void setBufferSize(soundbuffer* buffer, int size) {
+inline void setBufferSize(soundbuffer* buffer, int size) {
 	if (buffer->activeBuffer == 1) {
 		buffer->b1size = size;
 	} else if (buffer->activeBuffer == 2) {
@@ -43,7 +42,7 @@ void setBufferSize(soundbuffer* buffer, int size) {
 	}
 }
 
-int getBufferSize(soundbuffer* buffer) {
+inline int getBufferSize(soundbuffer* buffer) {
 	if (buffer->activeBuffer == 1) {
 		return buffer->b1size;
 	} else if (buffer->activeBuffer == 2) {
@@ -52,13 +51,22 @@ int getBufferSize(soundbuffer* buffer) {
 	return -1;
 }
 
-void setActiveBuffer(soundbuffer* buffer, int number) {
+inline char* getBufferArray(soundbuffer* buffer) {
+	if (buffer->activeBuffer == 1) {
+		return buffer->buffer1;
+	} else if (buffer->activeBuffer == 2) {
+		return buffer->buffer2;
+	}
+	return NULL;
+}
+
+inline void setActiveBuffer(soundbuffer* buffer, int number) {
 	if (number >= 1 && number <= 2) {
 		buffer->activeBuffer = number;
 	}
 }
 
-int getActiveBuffer(soundbuffer* buffer) {
+inline int getActiveBuffer(soundbuffer* buffer) {
 	return buffer->activeBuffer;
 }
 

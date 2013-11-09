@@ -13,26 +13,20 @@ int main() {
 	//buffer_test_playback(playback);
 
 	char mydata[16384];
-	int frames;
 
 	printf("Start\n");
-	buffer_start(playback,0);
+	buffer_start(playback,1);
 	int buffersFilled;
 	int i;
-	for (buffersFilled =0; buffersFilled < 1000;buffersFilled++) {
-		printf("Buffer number %i\n",buffersFilled);
-		for (i= 0; i < 16384; i++) {
+	for (buffersFilled =0; playback->running && buffersFilled < 1000;buffersFilled++) {
+		for (i= 0; i < 1024*4; i++) {
 			mydata[i] = rand();
 		}
 
-		int x = 0;
-		while(!buffer_needsamples(playback)) {
-			if(!x) {
-				x = 1;
-				printf("Buffers full, wait a moment\n");
-			}
+		while(!buffer_needsamples(playback) && playback->running) {
+
 		}
-		buffer_fillbuffer(playback,mydata,16384);
+		buffer_fillbuffer(playback,mydata,1024*4);
 	}
 
 	sleep(1);
