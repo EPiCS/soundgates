@@ -81,45 +81,56 @@ end procedure snd_comp_init_header;
 procedure snd_comp_get_header(
     signal i_osif   : in  i_osif_t;
     signal o_osif   : out o_osif_t;
-    handle          : in  std_logic_vector(C_OSIF_WIDTH - 1 downto 0);
+    signal i_memif  : in  i_memif_t;
+    signal o_memif  : out o_memif_t;
     signal snd_comp_header : inout snd_comp_header_msg_t;
     variable done   : out boolean
     ) is 
     
     variable patially_done : boolean := False;
+    signal   header_addr   : std_logic_vector(31 downto 0) <= ( others => '0'); 
         
     begin
         case snd_comp_header.f_step is
             when 0 => 
-                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.source_addr, patially_done);
+                -- get header address
+                osif_get_init_data(i_osif,o_osif,header_addr,patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 1;
                 end if;
             when 1 =>
-                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.src_len, patially_done);
+                memif_read_word(i_memif, o_memif, header_addr, snd_comp_header.source_addr, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 2;
                 end if;
             when 2 =>
-                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.dest_addr, patially_done);
+                memif_read_word(i_memif, o_memif, std_logic_vector(unsigned(header_addr)+4), snd_comp_header.src_len, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 3;
                 end if;
             when 3 =>
-                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.opt_arg_addr, patially_done);
+                memif_read_word(i_memif, o_memif, std_logic_vector(unsigned(header_addr)+8), snd_comp_header.dest_addr, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 4;
                 end if;
             when 4 =>
-                osif_mbox_get(i_osif, o_osif, handle, snd_comp_header.opt_arg_len, patially_done);
+                memif_read_word(i_memif, o_memif, std_logic_vector(unsigned(header_addr)+12), snd_comp_header.opt_arg_addr, patially_done);
                 
                 if(patially_done) then
                     snd_comp_header.f_step <= 5;
                 end if;
+            
+            when 5 =>
+                memif_read_word(i_memif, o_memif, std_logic_vector(unsigned(header_addr)+16), snd_comp_header.opt_arg_len, patially_done);
+
+                if(patially_done) then
+                    snd_comp_header.f_step <= 6;
+                end if;
+                
             when others =>            
                 done := True;
                 snd_comp_header.f_step <= 0;
