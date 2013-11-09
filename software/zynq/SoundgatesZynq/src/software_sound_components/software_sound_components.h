@@ -12,6 +12,6 @@
 #include <reconos.h>
 #include <pthread.h>
 
-void* create_dummy_swt_thread(void* data);
+pthread_t* create_dummy_swt_thread();
 
 #endif /* SOFTWARE_SOUND_COMPONENTS_H_ */

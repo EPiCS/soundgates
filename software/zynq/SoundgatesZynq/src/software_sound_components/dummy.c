@@ -9,17 +9,6 @@
 #include "software_sound_components.h"
 
 
-pthread_t* create_dummy_swt_thread() {
-	pthread_t* thread;
-	struct reconos_resource* res; //
-
-	//instead of NULL, the second argument might be some pthread_attr_t
-	pthread_create(thread,NULL,dummy_swt_thread,res); // ??
-
-	return thread;
-}
-
-
 void* dummy_swt_thread(void* data) {
 
 	struct reconos_resource* res = (struct reconos_resource*) data;
@@ -36,3 +25,14 @@ void* dummy_swt_thread(void* data) {
 	}
 	return (void*) 0;
 }
+
+pthread_t* create_dummy_swt_thread() {
+	pthread_t* thread;
+	struct reconos_resource* res; //
+
+	//instead of NULL, the second argument might be some pthread_attr_t
+	pthread_create(thread,NULL,dummy_swt_thread,res); // ??
+
+	return thread;
+}
+
