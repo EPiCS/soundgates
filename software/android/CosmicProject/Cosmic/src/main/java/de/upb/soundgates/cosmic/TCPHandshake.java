@@ -13,64 +13,77 @@ import java.net.UnknownHostException;
 /**
  * Created by posewsky on 08.11.13.
  */
-public class TCPHandshake extends AsyncTask<Void, Void, String> {
+public class TCPHandshake extends AsyncTask<Void, Void, Void> {
     protected String host;
     protected int port;
-    protected String[] components;
+
+    protected AsyncTaskListener<String> listener;
+
+    protected String result;
     protected String error;
 
-    public TCPHandshake(String host, int port) {
+    protected Socket s;
+
+    public TCPHandshake(String host, int port, AsyncTaskListener<String> listener) {
+        super();
+
         this.host = host;
         this.port = port;
-        components= null;
+
+        this.listener = listener;
+
+        result    = null;
         error     = null;
+        s         = null;
     }
 
-    public String[] getInteractiveComponents()
-    {
-        return components;
+    protected void cleanup() {
+        if(s != null) {
+            try {
+                s.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
-    protected String getError()
-    {
-        return error;
-    }
-
-    protected String doInBackground(Void... voids) {
+    protected Void doInBackground(Void... voids) {
         try {
-            Socket s = new Socket(host, port);
+            s = new Socket(host, port);
             PrintWriter out = new PrintWriter(s.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-            out.println("getInteractiveComponents");
+            out.println("getInteractiveComponents" + "\r\n");
+            out.flush();
 
-            String recvString;
-            String components = "";
+            result = in.readLine();
+            Log.d(MainActivity.LOG_TAG, "empfangen: " + result);
 
-            while((recvString = in.readLine()) != null) {
-                components += recvString;
-            }
-
-            s.close();
-
-           return components;
+            return null;
         } catch (UnknownHostException e) {
             error = "Don't know about host " + host + ":" + port;
             Log.e(MainActivity.LOG_TAG, error);
-            cancel(true);
+            listener.onAsyncTaskFailure(error);
             return null;
         } catch (IOException e) {
             error = "Couldn't get I/O for the connection to " + host + ":" + port;
             Log.e(MainActivity.LOG_TAG, error);
-            cancel(true);
+            listener.onAsyncTaskFailure(error);
             return null;
+        } finally {
+            cleanup();
         }
     }
 
-    protected void onPostExecute(String result) {
-        if(result != null)
-        {
+    @Override
+    protected void onCancelled() {
+        error = "I/O for the connection to " + host + ":" + port + " took too long";
+        Log.e(MainActivity.LOG_TAG, error);
+        cleanup();
+    }
 
-        }
+    @Override
+    protected void onPostExecute(Void result) {
+        Log.d(MainActivity.LOG_TAG, "onPostExecute result: " + this.result);
+        listener.onAsyncTaskCompletion(this.result);
     }
 }

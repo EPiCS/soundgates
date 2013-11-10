@@ -3,7 +3,7 @@ package de.upb.soundgates.cosmic;
 import java.util.Locale;
 
 import android.app.AlertDialog;
-import android.os.AsyncTask;
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +20,7 @@ import android.view.View.*;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
@@ -156,10 +156,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    public static class ConnectFragment extends Fragment implements OnClickListener
+    public static class ConnectFragment extends Fragment implements OnClickListener, AsyncTaskListener<String>
     {
         private TextView ipTextView;
         private TextView portTextView;
+        private TCPHandshake hs;
 
         public static ConnectFragment newInstance() {
             ConnectFragment fragment = new ConnectFragment();
@@ -198,12 +199,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 return;
             }
 
-            TCPHandshake hs = new TCPHandshake(host, port);
+            hs = new TCPHandshake(host, port, this);
             hs.execute();
 
             // TODO: Inform user about progress
-            while(hs.getStatus() != AsyncTask.Status.FINISHED)
+            /*long time = System.currentTimeMillis();
+            while(System.currentTimeMillis() < (time + 10 * 1000))
             {
+                //Log.i(LOG_TAG, hs.getStatus().toString());
                 if(hs.isCancelled())
                 {
                     AlertDialog connectionAlert = new AlertDialog.Builder(getActivity()).create();
@@ -212,6 +215,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     connectionAlert.show();
                     return;
                 }
+            }
+
+            if(hs.getStatus() != AsyncTask.Status.FINISHED)
+            {
+                hs.cancel(true);
+                AlertDialog connectionAlert = new AlertDialog.Builder(getActivity()).create();
+                connectionAlert.setTitle("Connection timed out");
+                connectionAlert.setMessage(hs.getError() + " \"" + hs.getInteractiveComponents() + "\"");
+                connectionAlert.show();
+                return;
             }
 
             String[] components = hs.getInteractiveComponents();
@@ -223,7 +236,27 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 connectionAlert.setMessage("Unknown error");
                 connectionAlert.show();
                 return;
-            }
+            }*/
+        }
+
+        @Override
+        public void onAsyncTaskCompletion(String result) {
+            Context context = getActivity();
+            CharSequence text = result;
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+        @Override
+        public void onAsyncTaskFailure(String error) {
+            Context context = getActivity();
+            CharSequence text = error;
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     }
 
