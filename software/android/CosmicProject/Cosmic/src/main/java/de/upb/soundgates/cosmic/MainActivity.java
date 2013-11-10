@@ -203,60 +203,36 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             hs.execute();
 
             // TODO: Inform user about progress
-            /*long time = System.currentTimeMillis();
-            while(System.currentTimeMillis() < (time + 10 * 1000))
-            {
-                //Log.i(LOG_TAG, hs.getStatus().toString());
-                if(hs.isCancelled())
-                {
-                    AlertDialog connectionAlert = new AlertDialog.Builder(getActivity()).create();
-                    connectionAlert.setTitle("Connection failed");
-                    connectionAlert.setMessage(hs.getError());
-                    connectionAlert.show();
-                    return;
-                }
-            }
-
-            if(hs.getStatus() != AsyncTask.Status.FINISHED)
-            {
-                hs.cancel(true);
-                AlertDialog connectionAlert = new AlertDialog.Builder(getActivity()).create();
-                connectionAlert.setTitle("Connection timed out");
-                connectionAlert.setMessage(hs.getError() + " \"" + hs.getInteractiveComponents() + "\"");
-                connectionAlert.show();
-                return;
-            }
-
-            String[] components = hs.getInteractiveComponents();
-
-            if(components == null)
-            {
-                AlertDialog connectionAlert = new AlertDialog.Builder(getActivity()).create();
-                connectionAlert.setTitle("Handshake failed");
-                connectionAlert.setMessage("Unknown error");
-                connectionAlert.show();
-                return;
-            }*/
         }
 
         @Override
         public void onAsyncTaskCompletion(String result) {
-            Context context = getActivity();
-            CharSequence text = result;
-            int duration = Toast.LENGTH_SHORT;
+            final String msg = result;
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Context context = getActivity();
+                    CharSequence text = "Received: " + msg.replaceAll("\n", "");
+                    int duration = Toast.LENGTH_SHORT;
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
         }
 
         @Override
         public void onAsyncTaskFailure(String error) {
-            Context context = getActivity();
-            CharSequence text = error;
-            int duration = Toast.LENGTH_SHORT;
+            final String msg = error;
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Context context = getActivity();
+                    CharSequence text = "Error: " + msg.replaceAll("\n", "");
+                    int duration = Toast.LENGTH_SHORT;
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
         }
     }
 

@@ -10,9 +10,23 @@
 
 #include "lo/lo.h"
 
-#define PORT        50050
-#define MAXPENDING  5
-#define RCVBUFSIZE  50
+#define PORT                50050
+#define MAXPENDING          5
+#define BUFSIZE             200
+#define OSC_MSG_DELIMITER   "||"
+
+char* interactiveComponents[] = {
+    "/component1 \"f\"",
+    "/component2 \"i\"",
+    "/quit"
+};
+    
+// TODO: Pack array of components and #components into struct?!
+char** getInteractiveComponents(unsigned int *numInteractiveComponents)
+{
+    *numInteractiveComponents = 3;
+    return interactiveComponents;
+} 
 
 void error_handler(const char *msg)
 {
@@ -32,75 +46,111 @@ void error_handler(const char *msg)
     exit(-1);
 }
 
-void client_handler(int clntSocket)
+void send_all(int clientSock, void *buf, size_t length)
 {
-    char echoBuffer[RCVBUFSIZE+1];        /* Buffer for echo string */
-    int recvMsgSize;                    /* Size of received message */
+    size_t i = 0;
+    while(i < length)
+        i += send(clientSock, buf + 0, length - i, 0);
+}
+
+void tcp_client_handler(int clientSock)
+{
+    char* recvMsgBuf = malloc((BUFSIZE+1) * sizeof(char));
+    char* sendMsgBuf;
+    int recvMsgSize;
     int sendMsgSize;
 
     /* Receive message from client */
-    if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE-1, 0)) < 0)
+    if ((recvMsgSize = recv(clientSock, recvMsgBuf, BUFSIZE, 0)) < 0)
         error_handler("recv() failed");
-        
-    printf("\"%s\"(%d) empfangen\n", echoBuffer, recvMsgSize);
-    /* Send received string and receive again until end of transmission */
-    if (recvMsgSize > 0)      /* zero indicates end of transmission */
+    
+    /* Terminate received message  */
+    recvMsgBuf[recvMsgSize] = '\0';
+    
+    printf("Received: \"%s\" (%d bytes)\n", recvMsgBuf, recvMsgSize);    
+    
+    if (recvMsgSize > 0)
     {
-        echoBuffer[recvMsgSize] = '\n';
-        echoBuffer[recvMsgSize+1] = '\0';
-        /* Echo message back to client */
-        sendMsgSize = send(clntSocket, echoBuffer, recvMsgSize+1, 0);
-        if (sendMsgSize != recvMsgSize+1)
-            error_handler("send() failed");
-        printf("\"%s\"(%d) gesendet\n", echoBuffer, sendMsgSize);
-        /* See if there is more data to receive */
-        //if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 0)) < 0)
-        //    error_handler("recv() failed");
+        if(strncmp("getInteractiveComponents", recvMsgBuf, strlen("getInteractiveComponents")) == 0)
+        {
+            unsigned int numInteractiveComponents, i;
+            char **components = getInteractiveComponents(&numInteractiveComponents);
+            
+            /* sum up the length of the OSC component descriptions */
+            for(i = 0, sendMsgSize = 0; i < numInteractiveComponents; ++i)
+                sendMsgSize += strlen(components[i]);
+            
+            /* add the length of n-1 delimiters */
+            sendMsgSize += (numInteractiveComponents-1) * strlen(OSC_MSG_DELIMITER);
+            
+            /* add 1 for the trailing '\n' */
+            sendMsgSize += 1;
+            
+            sendMsgBuf = malloc(sendMsgSize * sizeof(char) + 1);
+            
+            for(i = 0; i < numInteractiveComponents; ++i)
+            {
+                strncat(sendMsgBuf, components[i], strlen(components[i]));
+                if(i != numInteractiveComponents-1)
+                    strncat(sendMsgBuf, OSC_MSG_DELIMITER, strlen(OSC_MSG_DELIMITER));
+                else
+                    strncat(sendMsgBuf, "\n", 1);
+            }
+            
+            fprintf(stdout, "Sending: \"%s\"\n", sendMsgBuf);
+            send_all(clientSock, sendMsgBuf, sendMsgSize);
+            
+        }
+        else
+        {
+            sendMsgBuf = malloc(BUFSIZE * sizeof(char));
+            sendMsgSize = snprintf(sendMsgBuf, BUFSIZE, "Unknown command:\"%s\"\n", recvMsgBuf);
+            fprintf(stderr, "%s", sendMsgBuf);
+            send_all(clientSock, sendMsgBuf, sendMsgSize);
+        }
     }
 
-    close(clntSocket);    /* Close client socket */
+    close(clientSock);
 }
 
 void *tcp_handshake_thread(void *args)
 {
-    int servSock;                    /* Socket descriptor for server */
-    int clntSock;                    /* Socket descriptor for client */
-    struct sockaddr_in echoServAddr; /* Server/Local address */
-    struct sockaddr_in echoClntAddr; /* Client/Remote address */
-    unsigned int clntLen;            /* Length of client address data structure */
+    int serverSock;                 /* Socket descriptor for server            */
+    int clientSock;                 /* Socket descriptor for client            */
+    struct sockaddr_in serverAddr;  /* Server/Local  address                   */
+    struct sockaddr_in clientAddr;  /* Client/Remote address                   */
+    unsigned int clientAddrLen;     /* Length of client address data structure */
 
     /* Create socket for incoming connections */
-    if ((servSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
+    if ((serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
         error_handler("socket() failed");
       
     /* Construct local address structure */
-    memset(&echoServAddr, 0, sizeof(echoServAddr));         /* Zero out structure */
-    echoServAddr.sin_family         = AF_INET;              /* Internet address family */
-    echoServAddr.sin_addr.s_addr    = htonl(INADDR_ANY);    /* Any incoming interface */
-    echoServAddr.sin_port           = htons(PORT);          /* Local port */
+    memset(&serverAddr, 0, sizeof(serverAddr));           /* Zero out structure */
+    serverAddr.sin_family         = AF_INET;              /* Internet address family */
+    serverAddr.sin_addr.s_addr    = htonl(INADDR_ANY);    /* Any incoming interface */
+    serverAddr.sin_port           = htons(PORT);          /* Local port */
 
     /* Bind to the local address */
-    if (bind(servSock, (struct sockaddr *) &echoServAddr, sizeof(echoServAddr)) < 0)
+    if (bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0)
         error_handler("bind() failed");
 
     /* Mark the socket so it will listen for incoming connections */
-    if (listen(servSock, MAXPENDING) < 0)
+    if (listen(serverSock, MAXPENDING) < 0)
         error_handler("listen() failed");
 
     for (;;) /* Run forever */
     {
         /* Set the size of the in-out parameter */
-        clntLen = sizeof(echoClntAddr);
+        clientAddrLen = sizeof(clientAddr);
 
         /* Wait for a client to connect */
-        if ((clntSock = accept(servSock, (struct sockaddr *) &echoClntAddr, &clntLen)) < 0)
+        if ((clientSock = accept(serverSock, (struct sockaddr *) &clientAddr, &clientAddrLen)) < 0)
             error_handler("accept() failed");
 
-        /* clntSock is connected to a client! */
+        printf("Handling client %s\n", inet_ntoa(clientAddr.sin_addr));
 
-        printf("Handling client %s\n", inet_ntoa(echoClntAddr.sin_addr));
-
-        client_handler(clntSock);
+        tcp_client_handler(clientSock);
     }
     /* NOT REACHED */
 }
@@ -112,11 +162,14 @@ int main()
     
     iret = pthread_create(&pthread_t_tcp_handshake, NULL, tcp_handshake_thread, (void*)NULL);
     
+    /* wait for tcp handshake thread before return */
     pthread_join(pthread_t_tcp_handshake, NULL);
     
     printf("TCP Handshake thread returns: %d\n",iret);
     return 0;
 }
+
+
 
 int done = 0;
 
