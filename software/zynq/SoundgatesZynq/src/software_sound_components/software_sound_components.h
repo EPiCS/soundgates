@@ -12,6 +12,8 @@
 #include <reconos.h>
 #include <pthread.h>
 
+#include "wavefileplayer.h"
+
 pthread_t* create_dummy_swt_thread();
 
 #endif /* SOFTWARE_SOUND_COMPONENTS_H_ */
