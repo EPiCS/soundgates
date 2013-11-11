@@ -24,8 +24,8 @@
 //#include </home/soundgates/zynq/reconos_zynq/lib/include/reconos.h>
 //#include </home/soundgates/zynq/reconos_zynq/lib/include/mbox.h>
 
-// #include <reconos.h>
-// #include <mbox.h>
+//#include <reconos.h>
+//#include <mbox.h>
 #include "/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/arm-xilinx-linux-gnueabi/libc/usr/include/reconos.h"
 #include "/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/arm-xilinx-linux-gnueabi/libc/usr/include/mbox.h"
 
@@ -76,12 +76,12 @@ void initializeComponentsTest() {
 	component_lvl1_sine_targetbufer = malloc(
 			sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
 	component_lvl1_sine_offset = 20; // Start offset
-	sBase sine_base = { SAMPLE_COUNT, component_lvl1_sine_targetbufer };
-	sHeaderSine component_lvl1_sine_header = { sine_base,
-			&component_lvl1_sine_offset };
+	sHeader sine_header = { 0, 0,
+							SAMPLE_COUNT, component_lvl1_sine_targetbufer,
+							&component_lvl1_sine_offset, &component_lvl1_sine_increment  };
+			 };
 
-	reconos_hwt_setinitdata(&hwt[0], (void *) &component_lvl1_sine_header);
-//	reconos_hwt_setinitdata(&hwt[1], (void *)&component_lvl1_sawtooth_header);
+	reconos_hwt_setinitdata(&hwt[0], (void *) &sine_header);
 
 	// Create HW Threads
 	for (i = 0; i < HW_THREADS; i++) {
