@@ -151,6 +151,13 @@ architecture Behavioral of hwt_nco is
     
     signal nco_data      : signed(31 downto 0);
     
+    ----------------------------------------------------------------
+    -- OS Communication
+    ----------------------------------------------------------------
+    
+    constant NCO_START : std_logic_vector(31 downto 0) := x"0000000A";
+    constant NCO_STOP  : std_logic_vector(31 downto 0) := x"0000000F";
+     
 begin
     -----------------------------------
     -- Hard wirings
@@ -277,9 +284,14 @@ begin
                 osif_mbox_get(i_osif, o_osif, MBOX_START, start_signal, done);
 
                 if done then
-                    if (start_signal = X"FFFFFFFF") then
+                    if (start_signal = NCO_START) then
+                        
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-                        state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+                        state        <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+                        
+                        -- reset start signal
+                        start_signal <= ( others => '0');                        
+                        
                     else
                         state <= STATE_EXIT;
                     end if;    
@@ -323,7 +335,7 @@ begin
 				end if;
 				
 		    when STATE_NOTIFY =>
-                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, X"00000001", ignore, done);
+                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, NCO_STOP, ignore, done);
                 if done then
                     state <= STATE_WAITING;
 				end if;		    

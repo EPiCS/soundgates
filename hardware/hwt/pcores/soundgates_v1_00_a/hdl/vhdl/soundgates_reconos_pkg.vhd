@@ -74,7 +74,6 @@ begin
     snd_comp_header.src_len      <= (others => '0');
     snd_comp_header.dest_addr    <= (others => '0');
     snd_comp_header.opt_arg_addr <= (others => '0');
-    snd_comp_header.opt_arg_len  <= (others => '0');
     
     snd_comp_header.f_step <= 0;
 end procedure snd_comp_init_header;
@@ -125,12 +124,11 @@ procedure snd_comp_get_header(
                     snd_comp_header.f_step <= 5;
                 end if;
             
-            when 5 =>
-                memif_read_word(i_memif, o_memif, std_logic_vector(unsigned(snd_comp_header.base_addr)+16), snd_comp_header.opt_arg_len, patially_done);
-
-                if(patially_done) then
-                    snd_comp_header.f_step <= 6;
-                end if;
+--          when 5 =>
+--              memif_read_word(i_memif, o_memif, std_logic_vector(unsigned(snd_comp_header.base_addr)+16), snd_comp_header.opt_arg_len, patially_done);
+--                if(patially_done) then
+--                    snd_comp_header.f_step <= 6;
+--                end if;
                 
             when others =>            
                 done := True;
