@@ -41,7 +41,6 @@ void buffer_start(soundbuffer* buffer, int continueOnError);
  */
 void buffer_stop(soundbuffer* buffer);
 
-
 /**
  * Returns
  *  - 1 if the buffer can accept new samples from the synthesizer

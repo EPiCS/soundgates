@@ -16,23 +16,22 @@ int main()
 	//buffer_test_playback(playback);
 
 	printf("Start\n");
-	wavefileplayer* wfp = wavefileplayer_create_from_path("/tmp/test.wav", 1);
-	char* wavesamples = malloc(sizeof(char) * 2048);
-
-	buffer_start(playback, 1);
+	wavefileplayer* wfp = wavefileplayer_create_from_path("/tmp/test.raw", 0);
+	char wavesamples[4096];
 
 	int i;
-	for (i = 0; i < 1000; i++)
-	{
+	buffer_start(playback, 0);
 
+	for (i = 0; i < 500; i++)
+	{
+		wavefileplayer_getSamples(wfp, 4096, wavesamples);
 		while (!buffer_needsamples(playback) && playback->running)
 		{
-
+			usleep(100); // Buffer is full at the moment, go to sleep for a while
 		}
-		wavefileplayer_getSamples(wfp, 2048, wavesamples); //TODO doesnt work as intended yet
-		buffer_fillbuffer(playback, wavesamples, 2048);
-
+		buffer_fillbuffer(playback, wavesamples, 4096);
 	}
+
 	/*	// Fill the buffer thread with random data
 	 char mydata[16384];
 	 int buffersFilled;

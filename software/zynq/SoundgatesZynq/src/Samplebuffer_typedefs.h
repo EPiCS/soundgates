@@ -28,6 +28,7 @@ typedef struct {
 	 */
 	int b1off, b2off, b1size, b2size, activeBuffer;
 	pthread_t bufferThread;
+	pthread_mutex_t mutex;
 	int running;
 	int continueOnError;
 	char buffer1[16384];

@@ -10,19 +10,20 @@
 wavefileplayer* wavefileplayer_create_from_file(FILE* fp, int loop)
 {
 	wavefileplayer* wfp = malloc(sizeof(wavefileplayer));
-	char mychar = fgetc(fp);
+
 	fseek(fp, 0l, SEEK_END);
 	wfp->arraysize = ftell(fp);
-	fseek(fp,0L, SEEK_SET);
+	fseek(fp, 0l, SEEK_SET);
+
 	wfp->data = malloc(wfp->arraysize);
 	wfp->loop = loop;
 	wfp->offset = 0;
-	int i = 0;
-	while (mychar != EOF)
+	long int i = 0;
+	while (i < wfp->arraysize)
 	{
+		unsigned char mychar = fgetc(fp);
 		wfp->data[i] = mychar;
 		i++;
-		mychar = fgetc(fp);
 	}
 	//TODO Strip the WAVE Header
 	//TODO Maybe check the Header if it is encoded in the way we want it (or maybe even transform it into 44100 Hz, 32 Bit unsigned int)
@@ -38,9 +39,11 @@ wavefileplayer* wavefileplayer_create_from_path(char* path, int loop)
 	return wfp;
 }
 
-void wavefileplayer_getSamples(wavefileplayer* wfp, int targetSize, char* target)
+void wavefileplayer_getSamples(wavefileplayer* wfp, int targetSize,
+		char* target)
 {
 	int i;
+
 	for (i = 0; i < targetSize; i++)
 	{
 		if (wfp->offset >= wfp->arraysize)
