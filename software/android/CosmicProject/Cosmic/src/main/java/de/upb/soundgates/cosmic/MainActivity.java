@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,18 +13,28 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
+
+    public static OSCMessageStore msg_store;
+    public static final String OSC_MSG_DELIMITER = "\\|\\|"; // always as regex!
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -129,10 +140,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             if(position == 0)
                 return ConnectFragment.newInstance();
-            return PlaceholderFragment.newInstance(position + 1);
+            else if(position == 1)
+                return SelectFragment.newInstance();
+            else if(position == 2)
+                return BindFragment.newInstance();
+            else
+                return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return (long)position;
         }
 
         @Override
@@ -148,16 +168,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 case 0:
                     return getString(R.string.title_connect).toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return getString(R.string.title_select).toUpperCase(l);
                 case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+                    return getString(R.string.title_bind).toUpperCase(l);
             }
             return null;
         }
     }
 
-    public static class ConnectFragment extends Fragment implements OnClickListener, AsyncTaskListener<String>
-    {
+    public static class ConnectFragment extends Fragment implements OnClickListener, AsyncTaskListener<String> {
         private TextView ipTextView;
         private TextView portTextView;
         private TCPHandshake hs;
@@ -207,17 +226,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public void onAsyncTaskCompletion(String result) {
-            final String msg = result;
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    Context context = getActivity();
-                    CharSequence text = "Received: " + msg.replaceAll("\n", "");
-                    int duration = Toast.LENGTH_SHORT;
+            msg_store = new OSCMessageStore();
+            for(String msg : result.split(OSC_MSG_DELIMITER)) {
+                msg_store.addOSCMessage(msg);
+                Log.d(MainActivity.LOG_TAG, "Message " + msg);
+            }
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-            });
+            for(Fragment f : getFragmentManager().getFragments()) {
+                if(f instanceof SelectFragment)
+                    ((SelectFragment)f).updateList();
+            }
+
+            ((MainActivity)getActivity()).mViewPager.setCurrentItem(1);
         }
 
         @Override
@@ -236,37 +256,72 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    public static class SelectFragment extends ListFragment {
+        private Button selectButton;
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
+        public static SelectFragment newInstance() {
+            SelectFragment fragment = new SelectFragment();
             return fragment;
         }
 
-        public PlaceholderFragment() {
+        public SelectFragment() {}
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.select_main, container, false);
+
+            selectButton = (Button) rootView.findViewById(R.id.select_button);
+
+            selectButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((MainActivity)getActivity()).mViewPager.setCurrentItem(2);
+                }
+            });
+
+            return rootView;
         }
+
+        public void updateList()
+        {
+            if(msg_store != null)
+            {
+                ArrayAdapter<OSCMessage> adapter =
+                        new ArrayAdapter<OSCMessage>(
+                                getActivity(),
+                                android.R.layout.simple_list_item_multiple_choice,
+                                msg_store.getOSCMessageAsList()
+                        );
+                setListAdapter(adapter);
+
+                getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                        // AdapterView is the parent class of ListView
+                        ListView lv = (ListView) arg0;
+                        msg_store.markOSCMessage(position, lv.isItemChecked(position));
+                        Log.d(MainActivity.LOG_TAG, msg_store.toString());
+                    }
+                });
+            }
+        }
+    }
+
+    public static class BindFragment extends Fragment {
+        public static BindFragment newInstance() {
+            BindFragment fragment = new BindFragment();
+
+            return fragment;
+        }
+
+        public BindFragment() {}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+            View rootView = inflater.inflate(R.layout.bind_main, container, false);
+
             return rootView;
         }
     }
