@@ -20,8 +20,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
---library soundgates_v1_00_a;
---use soundgates_v1_00_a.soundgates_common_pkg.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity square is
 port(                
@@ -36,16 +36,15 @@ end square;
 
 architecture Behavioral of square is
 
-    constant scaling  : real := 27.0;
-    constant last_int : integer := integer(scaling) + 1;
+    constant last_int : integer := integer(SOUNDGATE_FIX_PT_SCALING) + 1;
 
-    constant pi     : signed (31 downto 0) := to_signed(integer(real(MATH_PI     * 2**scaling)), 32);
-    constant two_pi : signed (31 downto 0) := to_signed(integer(real(2.0*MATH_PI * 2**scaling)), 32);
-    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0        * 2**scaling)), 32);
-    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0        * 2**scaling)), 32);
-	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01         * 2**scaling)), 32);
+    constant pi     : signed (31 downto 0) := to_signed(integer(real(MATH_PI     * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant two_pi : signed (31 downto 0) := to_signed(integer(real(2.0*MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01         * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**scaling)), 32);
+    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     signal square   : signed (31 downto 0) := upper;
         
 		  
@@ -60,7 +59,7 @@ architecture Behavioral of square is
                     x <= x + add + incr;
                     if x >= pi then
                         square (31 downto last_int) <= not square (31 downto last_int);
-						x <= to_signed(integer(real(0.0 * 2**scaling)), 32);
+						x <= to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
                     end if;
                     
                 end if;

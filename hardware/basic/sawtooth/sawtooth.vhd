@@ -34,15 +34,13 @@ port(
 
 end sawtooth;
 
-architecture Behavioral of sawtooth is
+architecture Behavioral of sawtooth is 
 
-    constant scaling : real := 27.0;        
+    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**scaling)), 32);
-
-    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**scaling)), 32);
-    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**scaling)), 32);
-	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01 * 2**scaling)), 32);
+    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
         
 		  
 	begin

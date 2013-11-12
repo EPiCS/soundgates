@@ -20,8 +20,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
---library soundgates_v1_00_a;
---use soundgates_v1_00_a.soundgates_common_pkg.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity triangle is
 port(                
@@ -35,15 +35,14 @@ port(
 end triangle;
 
 architecture Behavioral of triangle is
-
-    constant scaling : real := 27.0;      
+  
     signal direction : std_logic := '0';
 
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**scaling)), 32);
+    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 
-    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**scaling)), 32);
-    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**scaling)), 32);
-	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01 * 2**scaling)), 32);
+    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
         
 		  
 	begin
