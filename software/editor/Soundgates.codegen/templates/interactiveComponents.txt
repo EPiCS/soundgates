@@ -1,0 +1,11 @@
+#include "interactiveComponents.h"
+
+char* oscMessages[] = {@array};
+
+components* getInteractiveComponents(void){  
+  components *newComponents;
+  newComponents = (components*)malloc(sizeof(components));
+  newComponents->numOscMsg = @number;
+  newComponents->oscMsg = oscMessages;  
+  return newComponents;
+}
