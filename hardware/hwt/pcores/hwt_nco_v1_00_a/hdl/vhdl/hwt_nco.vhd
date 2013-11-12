@@ -125,7 +125,11 @@ architecture Behavioral of hwt_nco is
 	signal o_RAMData_reconos   : std_logic_vector(0 to 31);
 	signal o_RAMWE_reconos     : std_logic;
 	signal i_RAMData_reconos   : std_logic_vector(0 to 31);
-
+    
+    signal start_signal : std_logic_vector(31 downto 0);
+    signal ignore : std_logic_vector(31 downto 0);
+    
+    
     constant o_RAMAddr_max : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) := (others=>'1');
 
 	shared variable local_ram : LOCAL_MEMORY_T;
@@ -133,8 +137,6 @@ architecture Behavioral of hwt_nco is
     signal snd_comp_header : snd_comp_header_msg_t;  -- common sound component header
        
     signal sample_count            : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_COUNT, 16);
--- TODO:  signal arg_check_interval     : unsigned(15 downto 0);
--- TODO:  signal arg_check_interval_acc : unsigned(15 downto 0);
     
     ----------------------------------------------------------------
     -- Component dependent signals
@@ -238,18 +240,18 @@ begin
     
     NCO_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
             variable done : boolean;
-            signal   start_signal : std_logic_vector(C_FSL_WIDTH-1 downto 0);
+            
     begin
         if rst = '1' then
                     
             osif_reset(o_osif);
 			memif_reset(o_memif);           
             
-            state       <= STATE_INIT;
+            state        <= STATE_INIT;
             sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-            
-            nco_ce      <= '0';
-            o_RAMWE_nco <= '0';
+            start_signal <= (others => '0');
+            nco_ce       <= '0';
+            o_RAMWE_nco  <= '0';
             
             done := False;
               
@@ -275,7 +277,7 @@ begin
                 osif_mbox_get(i_osif, o_osif, MBOX_START, start_signal, done);
 
                 if done then
-                    if (! start_signal = X"FFFFFFFF") then
+                    if (start_signal = X"FFFFFFFF") then
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
                         state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
                     else
@@ -304,21 +306,16 @@ begin
                     nco_ce        <= '1';
                     o_RAMWE_nco   <= '1';
                     o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
-
---                  if sample_count = arg_check_interval_acc then                        
---                      state <= STATE_REFRESH_INPUT_PHASE_OFFSET;
---                  end if;                    
                 else
                     -- Samples have been generated
                     state <= STATE_WRITE_MEM;
                 end if;
-                
---              arg_check_interval_acc  <= arg_check_interval_acc + arg_check_interval;
-                sample_count <= sample_count - 1;
 
+                sample_count <= sample_count - 1;
 
              when STATE_WRITE_MEM =>
                 -- Ist size nicht eigentlich abhängig von (sample_count * sample_size)?
+                -- Nein, da ein sample 32 bit breit ist
                 memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
 
                 if done then

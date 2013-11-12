@@ -15,9 +15,3 @@ lib hwt_nco_v1_00_a nco vhdl
 lib hwt_nco_v1_00_a cordic vhdl
 lib hwt_nco_v1_00_a cordic_stage vhdl
 
-
-## Will be added later on
-
-## lib hwt_nco_v1_00_a sawtooth vhdl
-## lib hwt_nco_v1_00_a triangle vhdl
-## lib hwt_nco_v1_00_a square vhdl
