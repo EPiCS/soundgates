@@ -34,7 +34,7 @@ port(
 
 end sawtooth;
 
-architecture Behavioral of sawtooth is 
+architecture Behavioral of sawtooth is  
 
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 
