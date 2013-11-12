@@ -6,6 +6,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
@@ -19,8 +20,8 @@ public class StartSimulationHandler extends AbstractHandler {
 			Iterator it = structuredSelection.iterator();
 			while (it.hasNext()){
 				Object next = it.next();
-				if (next instanceof IProject){
-					IProject project = (IProject)next;
+				if (next instanceof IResource){
+					IProject project = ((IResource)next).getProject();
 					IFile pdFile= project.getFolder("pdcode").getFile("patch.pd");
 					if (ProcessStore.currentPureDataProcess == null) {
 						ProcessBuilder pb = new ProcessBuilder(
