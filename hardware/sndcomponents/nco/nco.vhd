@@ -131,21 +131,42 @@ begin
    
    SQUARE_GENERATOR  : if WAVEFORM = SQUARE generate
    
-   
+   			SQUARE_INSTA : square
+         	port map(                
+                    clk     => clk, 
+                    ce      => ce,
+                    incr    => phase_incr, 
+                    offset  => phase_offset,
+                    sq      => data );   
+ 
    end generate SQUARE_GENERATOR;
    
    --------------------------------------------------------------------------------	
    
    TRIANGLE_GENERATOR  : if WAVEFORM = TRIANGLE generate
    
-   
+   			TRIANGLE_INSTA : square
+         	port map(                
+                    clk     => clk, 
+                    ce      => ce,
+                    incr    => phase_incr, 
+                    offset  => phase_offset,
+                    tri     => data );   
+ 
    end generate TRIANGLE_GENERATOR;
       
    --------------------------------------------------------------------------------	
    
    SAWTOOTH_GENERATOR  : if WAVEFORM = SAWTOOTH generate
-   
-   
+      
+   			SAWTOOTH_INSTA : square
+         	port map(                
+                    clk     => clk, 
+                    ce      => ce,
+                    incr    => phase_incr, 
+                    offset  => phase_offset,
+                    saw     => data );   
+ 
    end generate SAWTOOTH_GENERATOR;
 
    --------------------------------------------------------------------------------   
