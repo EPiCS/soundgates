@@ -3,7 +3,6 @@ package de.upb.soundgates.atomicbuilder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -91,7 +89,6 @@ public class AtomicBuilder {
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(templateDoc);
 		StreamResult result = new StreamResult(destination);
-		//StreamResult result = new StreamResult(System.out);
 		transformer.transform(source, result);
 	}
 
