@@ -1,6 +1,6 @@
 #N canvas 219 586 450 300 10;
 #X text 0 0 inports Waveform1 Bias Waveform2
-#X text 0 0 outports Outport
+#X text 0 0 outports Output
 #X obj 34 15 inlet~;
 #X obj 178 17 inlet~;
 #X obj 79 183 outlet~;
