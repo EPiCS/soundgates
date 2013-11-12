@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Mixer</Type>
+	<Ports>
+		<Port Name="Waveform1" Direction="IN" DataType="SOUND"/>
+		<Port Name="Waveform2" Direction="IN" DataType="SOUND"/>
+		<Port Name="Bias" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation>
+		</Simulation>
+		<Hardware>
+			VHDL Stuff
+		</Hardware>
+	</Code>
+</AtomicSoundComponent>
