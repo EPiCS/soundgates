@@ -23,7 +23,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Application {
+public class AtomicBuilder {
 
 	static boolean folder = false;
 	public static void main(String[] args) {
