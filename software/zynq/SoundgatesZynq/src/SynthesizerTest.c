@@ -36,6 +36,7 @@
 #define SAMPLE_COUNT 64
 #define SAMPLE_SIZE  sizeof(int)
 #define MBOX_SIZE 1
+
 // One Array for every SW thread
 //pthread_t swt[SW_THREADS];
 //pthread_attr_t swt_attr[SW_THREADS];
@@ -65,28 +66,18 @@ void initializeComponentsTest() {
 	hw_res[1].type = RECONOS_TYPE_MBOX;
 	hw_res[1].ptr = &mb_stop;
 
-	int i;
-	// Set resources (MBOX)
-	for (i = 0; i < HW_THREADS; i++) {
-		reconos_hwt_setresources(&(hwt[i]), hw_res, 2);
-	}
+	reconos_hwt_setresources(&(hwt[0]), hw_res, 2);
 
 	// Define structs, variables & allocate memory
 	// i.e. sine_component
-	component_lvl1_sine_targetbufer = malloc(
-			sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
+	component_lvl1_sine_targetbufer = malloc(sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
 	component_lvl1_sine_offset = 20; // Start offset
-	sHeader sine_header = { 0, 0,
-							SAMPLE_COUNT, component_lvl1_sine_targetbufer,
-							&component_lvl1_sine_offset, &component_lvl1_sine_increment  };
-			 };
+	
+	// source_addr, src_len, dest_addr, opt_arg_addr, opt_arg_len
+	sHeader sine_header = { 0, 0, component_lvl1_sine_targetbufer, &component_lvl1_sine_offset, &component_lvl1_sine_increment  };
 
 	reconos_hwt_setinitdata(&hwt[0], (void *) &sine_header);
-
-	// Create HW Threads
-	for (i = 0; i < HW_THREADS; i++) {
-		reconos_hwt_create(&hwt[i], i, NULL);
-	}
+	reconos_hwt_create(&hwt[0], 0, NULL);
 
 //	// init software threads
 //	printf("Creating %i sw-threads: ",sw_threads);
