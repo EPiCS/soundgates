@@ -11,25 +11,42 @@
 
 int main()
 {
+	int i;
 
 	soundbuffer* playback = buffer_initialize(44100, 0);
 	//buffer_test_playback(playback);
 
 	printf("Start\n");
-	wavefileplayer* wfp = wavefileplayer_create_from_path("/tmp/test.raw", 0);
-	char wavesamples[4096];
 
-	int i;
+	// Load two wave files which are to be mixed
+	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/test.wav", 1);
+	wavefileplayer* wfp_sine = wavefileplayer_create_from_path("Waves/sine.raw", 1);
+
+	// These files are stored in 32 signed. We need to convert them
+	wavefileplayer_32S_to_32U(wfp);
+	wavefileplayer_32S_to_32U(wfp_sine);
+
+	char wavesamples[4096];
+	char wavesamples_sine[4096];
+	char wavesamples_mixed[4096];
+
 	buffer_start(playback, 0);
 
-	for (i = 0; i < 500; i++)
+	double bias = 0;
+
+	for (i = 0; i < 1500; i++)
 	{
 		wavefileplayer_getSamples(wfp, 4096, wavesamples);
+		wavefileplayer_getSamples(wfp_sine, 4096, wavesamples_sine);
+
+		mixer_mix(wavesamples_sine,wavesamples,wavesamples_mixed,4096,bias);
+		bias += 0.001;
+
 		while (!buffer_needsamples(playback) && playback->running)
 		{
 			usleep(100); // Buffer is full at the moment, go to sleep for a while
 		}
-		buffer_fillbuffer(playback, wavesamples, 4096);
+		buffer_fillbuffer(playback, wavesamples_mixed, 4096);
 	}
 
 	/*	// Fill the buffer thread with random data

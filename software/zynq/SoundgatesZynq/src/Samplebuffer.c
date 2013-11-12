@@ -163,7 +163,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record)
 	}
 	//TODO only one format supported right now. should be made selectable
 	if ((err = snd_pcm_hw_params_set_format(buff->pcm_handle, buff->hw_params,
-			SND_PCM_FORMAT_U32)) < 0)
+			SND_PCM_FORMAT_U32_LE)) < 0)
 	{
 		fprintf(stderr, "cannot set sample format (%s)\n", snd_strerror(err));
 		erroroccured = 2;

@@ -17,6 +17,7 @@
 #include "software_sound_components.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -45,5 +46,10 @@ void wavefileplayer_getSamples(wavefileplayer* wfp, int targetSize,
  * Frees the space associated with a given wavefileplayer
  */
 void wavefileplayer_destroy(wavefileplayer* player);
+
+/**
+ * Converts the data stored in a wfp from 32 Bit Signed Integer to 32 Bit Unsigned Integer
+ */
+void wavefileplayer_32S_to_32U(wavefileplayer* player);
 
 #endif /* WAVEFILEPLAYER_H_ */

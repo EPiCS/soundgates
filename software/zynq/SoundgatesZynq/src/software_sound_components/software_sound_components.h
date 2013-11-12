@@ -13,6 +13,7 @@
 #include <pthread.h>
 
 #include "wavefileplayer.h"
+#include "mixer.h"
 
 pthread_t* create_dummy_swt_thread();
 

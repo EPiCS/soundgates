@@ -72,5 +72,28 @@ void wavefileplayer_destroy(wavefileplayer* player)
 	free(player);
 }
 
+void wavefileplayer_32S_to_32U(wavefileplayer* wfp)
+{
+	long i;
+	for (i = 0; i < wfp->arraysize / 4; i++)
+	{
+		int value = ((int*) wfp->data)[i];
+		unsigned int conversion;
+
+		if (value < 0)
+		{
+			conversion = INT_MAX - (value * -1);
+		}
+		else
+		{
+			conversion = INT_MAX + value;
+		}
+
+	//	printf("%li / %li: Convert %i \t to \t %u\n", i * 4, wfp->arraysize,value, conversion);
+
+		((unsigned int*) wfp->data)[i] = conversion;
+	}
+}
+
 //TODO put into softwarethread
 
