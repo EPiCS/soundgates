@@ -126,7 +126,7 @@ architecture Behavioral of hwt_nco is
 	signal o_RAMWE_reconos     : std_logic;
 	signal i_RAMData_reconos   : std_logic_vector(0 to 31);
     
-    signal start_signal : std_logic_vector(31 downto 0);
+    signal osif_ctrl_signal : std_logic_vector(31 downto 0);
     signal ignore : std_logic_vector(31 downto 0);
     
     
@@ -155,9 +155,9 @@ architecture Behavioral of hwt_nco is
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant NCO_START : std_logic_vector(31 downto 0) := x"0000000A";
-    constant NCO_STOP  : std_logic_vector(31 downto 0) := x"0000000F";
-     
+    constant NCO_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant NCO_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+
 begin
     -----------------------------------
     -- Hard wirings
@@ -168,8 +168,6 @@ begin
     
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
-    -- Initialized sound component header	
---    snd_comp_init_header(snd_comp_header);
         
     -- ReconOS Stuff
     osif_setup (
@@ -246,8 +244,7 @@ begin
     
     
     NCO_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
-            variable done : boolean;
-            
+        variable done : boolean;            
     begin
         if rst = '1' then
                     
@@ -256,7 +253,7 @@ begin
             
             state        <= STATE_INIT;
             sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-            start_signal <= (others => '0');
+            osif_ctrl_signal <= (others => '0');
             nco_ce       <= '0';
             o_RAMWE_nco  <= '0';
             
@@ -266,48 +263,49 @@ begin
             
             nco_ce      <= '0';
             o_RAMWE_nco <= '0';
+            osif_ctrl_signal <= ( others => '0');
             
             case state is            
             -- INIT State gets the address of the header struct
             when STATE_INIT =>               
-                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);
-                
+
+                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);                
                 if done then
                     -- Initialize your signals
                     phase_offset_addr <= snd_comp_header.opt_arg_addr;
                     phase_incr_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
-                end if;
-            
+
+                    state <= STATE_WAITING;
+                end if;            
             
             when STATE_WAITING =>
-                -- Software process "Synthesizer" sends the start signal via mbox_start
-                osif_mbox_get(i_osif, o_osif, MBOX_START, start_signal, done);
 
+                -- Software process "Synthesizer" sends the start signal via mbox_start
+                osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
                 if done then
-                    if (start_signal = NCO_START) then
+                    if osif_ctrl_signal = NCO_START then
                         
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+
                         state        <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+
+                    elsif osif_ctrl_signal = NCO_EXIT then
                         
-                        -- reset start signal
-                        start_signal <= ( others => '0');                        
-                        
-                    else
-                        state <= STATE_EXIT;
+                        state   <= STATE_EXIT;
+
                     end if;    
                 end if;
                  
             when STATE_REFRESH_INPUT_PHASE_OFFSET =>
                 
-                memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);
-                
+                memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);                
                 if done then
                     state <= STATE_REFRESH_INPUT_PHASE_INCR;
                 end if;
                 
             when STATE_REFRESH_INPUT_PHASE_INCR =>
             
-                memif_read_word(i_memif, o_memif, phase_incr_addr , phase_incr, done);
+                memif_read_word(i_memif, o_memif, phase_incr_addr, phase_incr, done);
                 if done then
                     state <= STATE_PROCESS;
                 end if;
@@ -318,31 +316,30 @@ begin
                     nco_ce        <= '1';
                     o_RAMWE_nco   <= '1';
                     o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
+                    sample_count <= sample_count - 1;
+
                 else
                     -- Samples have been generated
                     state <= STATE_WRITE_MEM;
                 end if;
 
-                sample_count <= sample_count - 1;
-
              when STATE_WRITE_MEM =>
-                -- Ist size nicht eigentlich abhängig von (sample_count * sample_size)?
-                -- Nein, da ein sample 32 bit breit ist
-                memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
-
+        
+                memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done);
                 if done then
                     state <= STATE_NOTIFY;
 				end if;
 				
 		    when STATE_NOTIFY =>
+
                 osif_mbox_put(i_osif, o_osif, MBOX_FINISH, NCO_STOP, ignore, done);
                 if done then
                     state <= STATE_WAITING;
-				end if;		    
+				end if;
                         
             when STATE_EXIT =>
-                   osif_thread_exit(i_osif,o_osif);
-            
+
+                   osif_thread_exit(i_osif,o_osif);            
             end case;
         end if;
     end process;
