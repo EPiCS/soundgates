@@ -1,4 +1,5 @@
 #N canvas 66 467 450 300 10;
+#X text 0 0 outports Value
 #X obj 39 152 outlet;
 #X floatatom 36 98 5 0 0 0 - - -;
 #X text 0 0 replace 4 Value;

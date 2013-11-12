@@ -13,8 +13,7 @@
 #X floatatom 166 307 5 0 0 0 - - -;
 #X floatatom 54 108 5 0 0 0 - - -;
 #X floatatom 336 195 5 0 0 0 - - -;
-#X obj 293 270 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 293 270 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1;
 #X msg 305 95 float 1;
 #X connect 0 0 6 0;
 #X connect 0 0 10 0;
