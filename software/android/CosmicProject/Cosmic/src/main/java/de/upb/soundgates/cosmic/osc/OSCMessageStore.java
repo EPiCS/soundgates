@@ -17,6 +17,14 @@ public class OSCMessageStore {
         return store;
     }
 
+    public List<OSCMessage> getSelectedOSCMessageAsList() {
+        List<OSCMessage> selected_store = new LinkedList<OSCMessage>();
+        for(OSCMessage msg : store)
+            if (msg.isSelected())
+                selected_store.add(msg);
+        return selected_store;
+    }
+
     public void addOSCMessage(String msg) {
         store.add(new OSCMessage(msg));
     }

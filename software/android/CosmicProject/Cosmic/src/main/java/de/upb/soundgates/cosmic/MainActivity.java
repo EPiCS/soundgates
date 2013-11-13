@@ -233,8 +233,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             }
 
             for(Fragment f : getFragmentManager().getFragments()) {
-                if(f instanceof SelectFragment)
+                if(f instanceof SelectFragment) {
                     ((SelectFragment)f).updateList();
+                    break;
+                }
             }
 
             ((MainActivity)getActivity()).mViewPager.setCurrentItem(1);
@@ -276,6 +278,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             selectButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    for(Fragment f : getFragmentManager().getFragments()) {
+                        if(f instanceof BindFragment) {
+                            ((BindFragment)f).updateList();
+                            break;
+                        }
+                    }
+
                     ((MainActivity)getActivity()).mViewPager.setCurrentItem(2);
                 }
             });
@@ -308,7 +317,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    public static class BindFragment extends Fragment {
+    public static class BindFragment extends ListFragment {
         public static BindFragment newInstance() {
             BindFragment fragment = new BindFragment();
 
@@ -323,6 +332,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             View rootView = inflater.inflate(R.layout.bind_main, container, false);
 
             return rootView;
+        }
+
+        public void updateList()
+        {
+            if(msg_store != null)
+            {
+                BindArrayAdapter adapter = new BindArrayAdapter(getActivity(), msg_store.getSelectedOSCMessageAsList());
+                setListAdapter(adapter);
+            }
         }
     }
 
