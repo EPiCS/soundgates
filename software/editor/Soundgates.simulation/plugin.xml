@@ -39,6 +39,14 @@
             name="Stop Simulation">
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="soundgates.simulation.PdPreferencePage"
+            id="Soundgates.simulation.PdPreferencePage"
+            name="Pure Data">
+      </page>
+   </extension>
 
 
 </plugin>
