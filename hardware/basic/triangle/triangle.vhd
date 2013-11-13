@@ -26,6 +26,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 entity triangle is
 port(                
         clk     : in  std_logic;
+        rst     : in  std_logic;
         ce      : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
@@ -53,8 +54,11 @@ architecture Behavioral of triangle is
 		  
         tri <= x;
           
-        CALC_TRI : process (i_clk, x, incr)
+        CALC_TRI : process (i_clk, x, incr, rst)
         begin
+            if rst = '1' then
+                x <= offset;
+            end if;
             if rising_edge(i_clk) then
                 if ce = '1' then
                     if direction = '0' then

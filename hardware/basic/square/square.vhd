@@ -26,6 +26,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 entity square is
 port(                
         clk     : in  std_logic;
+        rst     : in  std_logic;
         ce      : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
