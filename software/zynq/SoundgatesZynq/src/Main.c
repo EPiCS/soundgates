@@ -53,6 +53,7 @@ int main()
 		// Mix the two sine waves
 		mixer_mix(samples_220, samples_440, samples_220x440, 4096, 0.5);
 		// Load samples from a wavefile
+		// holt die nächsten 1024 Samples (1 Sample = 4 Byte) vom Wavefile ab und schreibt sie ins Zielarray wavesamples
 		wavefileplayer_getSamples(wfp, 4096, wavesamples);
 		// Mix wavefile and sine waves
 		mixer_mix(samples_220x440, wavesamples, wavesamples_mixed, 4096, 0.5);
