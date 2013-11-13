@@ -18,6 +18,22 @@ wave_generator* wave_generator_create(double frequency,
 	return wg;
 }
 
+double cosinus(double x, double prec)
+{
+	double t, s;
+	int p;
+	p = 0;
+	s = 1.0;
+	t = 1.0;
+	while (fabs(t / s) > prec)
+	{
+		p++;
+		t = (-t * x * x) / ((2 * p - 1) * (2 * p));
+		s += t;
+	}
+	return s;
+}
+
 void wave_generator_generate(wave_generator* wg, char* target, int target_size)
 {
 	int i;
@@ -42,7 +58,18 @@ void wave_generator_generate(wave_generator* wg, char* target, int target_size)
 		}
 		else if (wg->type == WAVE_GENERATOR_SINE)
 		{
-			value = (UINT_MAX / 2) * (1 + sin(wg->phase));
+
+			unsigned int maxhalf = UINT_MAX / 2;
+			//TODO On the Zynq, sin(x) always returns zero.
+			// Therefore we use our own implementation here. If possible, try to get the sin(x) function to work
+			// This Implementation is rather poor in performance
+			double sine = cosinus(wg->phase, 0.01);
+			double sine1 = sine + 1.0;
+
+			value = (unsigned int) ((double) (maxhalf) * sine1);
+			//value = (unsigned int) ((double) (UINT_MAX / 2)	* (1.0 + sin(wg->phase)));
+			//printf("MAX: %u HALF: %u PHASE: %f SINE: %f SINE1: %f |\n", UINT_MAX, maxhalf, wg->phase, sine);
+
 		}
 		else if (wg->type == WAVE_GENERATOR_SAWTOOTH)
 		{
@@ -58,6 +85,8 @@ void wave_generator_generate(wave_generator* wg, char* target, int target_size)
 		{
 			wg->phase -= M_PI * 2;
 		}
+
 	}
+	printf("\n");
 
 }
