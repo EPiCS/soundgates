@@ -158,23 +158,22 @@ public class AtomicBuilder {
 			}
 			if (read.contains("#X text")){
 				String [] splitLine = read.split(" ");
-				if (splitLine[4].equals("replace")){
+				if (splitLine.length >= 6 && splitLine[4].equals("replace")){
 					manipulateNextLine = true;
 					manipulationIndex = Integer.parseInt(splitLine[5]) + 1;
 					manipulationValue = splitLine[6];
 					result.addProperty(manipulationValue);
-				} else if (splitLine[4].equals("inports")){
+				} else if (splitLine.length >= 5 && splitLine[4].equals("inports")){
 					for (int i = 5; i < splitLine.length; i++){
 						result.addInputDefinition(splitLine[i]);
 					}
-				} else if (splitLine[4].equals("outports")){
+				} else if (splitLine.length >= 5 && splitLine[4].equals("outports")){
 					for (int i = 5; i < splitLine.length; i++){
 						result.addOutputDefinition(splitLine[i]);
 					}
 				}
-			} else {
-				code.append(read + ";" + System.lineSeparator());
 			}
+			code.append(read + ";" + System.lineSeparator());
 		}
 		bufferedReader.close();
 		result.setCode(code.toString());
