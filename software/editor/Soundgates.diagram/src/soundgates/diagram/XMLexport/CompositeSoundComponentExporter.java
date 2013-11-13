@@ -121,7 +121,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 			
 			String filePath = AtomicSoundComponentLibrary.getXMLFolder().getRawLocation().toString()+"/"+compositeSoundComponentToExport.getName()+".xml";
 			StreamResult result = new StreamResult(new File(filePath));
-
+			
 			transformer.transform(source, result);
 
 		} catch (ParserConfigurationException pce) {

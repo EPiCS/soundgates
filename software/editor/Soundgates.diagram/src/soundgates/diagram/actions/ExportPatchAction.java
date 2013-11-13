@@ -28,7 +28,12 @@ public class ExportPatchAction implements IObjectActionDelegate{
 			PatchExporter patchExporter = new PatchExporter();
 						
 			try {
-				patchExporter.exportToXML(patchExporter.getPatch(file.getFullPath().toPortableString()), file.getName());
+				
+				patchExporter.exportToXML(
+						file.getParent().getLocation().toPortableString(), 				// folder						
+						patchExporter.getPatch(file.getFullPath().toPortableString()),	// patch
+						file.getName().replace(".soundgates",""));						// name
+				
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();

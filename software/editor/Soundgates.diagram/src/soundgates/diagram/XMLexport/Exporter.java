@@ -46,11 +46,13 @@ public class Exporter {
 	}
 		
 	public Element getLinkElement(Document doc, Link link, HashMap<SoundComponent,Integer> componentsHashMap){
-		Element linkElement = doc.createElement("Link");		
-		linkElement.setAttribute("TargetPort", link.getTarget().getName());
-		linkElement.setAttribute("TargetComponent", Integer.toString(componentsHashMap.get(link.getTarget().getComponent())));
+		Element linkElement = doc.createElement("Link");
+	
+		linkElement.setAttribute("SourceComponent", Integer.toString(componentsHashMap.get(link.getSource().getComponent())));
 		linkElement.setAttribute("SourcePort", link.getSource().getName());
-		linkElement.setAttribute("SourceComponent", Integer.toString(componentsHashMap.get(link.getSource().getComponent())));	
+		linkElement.setAttribute("TargetComponent", Integer.toString(componentsHashMap.get(link.getTarget().getComponent())));
+		linkElement.setAttribute("TargetPort", link.getTarget().getName());		
+		
 		return linkElement;
 	}
 }

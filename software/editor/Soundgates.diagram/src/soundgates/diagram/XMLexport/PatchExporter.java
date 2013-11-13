@@ -27,11 +27,10 @@ import soundgates.Link;
 import soundgates.Patch;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesPackage;
-import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 public class PatchExporter extends Exporter{
 
-	public void exportToXML(Patch patchToExport, String patchName) {
+	public void exportToXML(String location, Patch patchToExport, String patchName) {
 	
 		try {
 
@@ -65,9 +64,8 @@ public class PatchExporter extends Exporter{
 			}		
 			
 			// links
-			Element linksElement = doc.createElement("Links");
 			for(Link link : links){
-				linksElement.appendChild(getLinkElement(doc, link, componentsHashMap));
+				elements.appendChild(getLinkElement(doc, link, componentsHashMap));
 			}	
 			
 			rootElement.appendChild(elements);
@@ -77,9 +75,9 @@ public class PatchExporter extends Exporter{
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			
-			String filePath = AtomicSoundComponentLibrary.getXMLFolder().getRawLocation().toString()+"/"+patchName+".xml";
+			String filePath = location +"/"+patchName+".xml";
 			StreamResult result = new StreamResult(new File(filePath));
-
+			
 			transformer.transform(source, result);
 
 		} catch (ParserConfigurationException pce) {
