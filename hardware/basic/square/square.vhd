@@ -29,7 +29,8 @@ port(
         ce      : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
-        duty    : in  signed(31 downto 0); -- On-Off-Ratio, standard = 1
+        duty_on : in  signed(31 downto 0);  
+        duty_off: in  signed(31 downto 0);
         sq      : out signed(31 downto 0)
     );
 
@@ -62,11 +63,11 @@ architecture Behavioral of square is
             if rising_edge(i_clk) then
                 if ce = '1' then
                     x <= x + incr;
-                    if x >= to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
+                    if    x >= to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square <= upper;
-                    elsif x >= to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) * duty then
+                    elsif x >= duty_on;  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square <= lower;
-                    elsif x >= to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
+                    elsif x >= duty_off; --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
 				        square <= upper;
                         x <= to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
                     end if;
