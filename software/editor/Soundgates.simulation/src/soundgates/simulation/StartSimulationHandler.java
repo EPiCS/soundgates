@@ -26,8 +26,7 @@ public class StartSimulationHandler extends AbstractHandler {
 					if (ProcessStore.currentPureDataProcess == null) {
 						ProcessBuilder pb = new ProcessBuilder(
 								new String[] {
-										"puredata",
-										"-jack",
+										"D:\\Program Files (x86)\\pd\\bin\\pd.exe",
 										"-nogui",
 										"-send",
 										"pd dsp 1",

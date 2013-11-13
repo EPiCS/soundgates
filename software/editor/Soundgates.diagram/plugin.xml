@@ -78,22 +78,27 @@
          </action>
       </objectContribution>
       <objectContribution
-            id="Soundgates.diagram.export"
+            id="Soundgates.diagram.export.ExportCompositeSoundComponent"
             objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart">
-         <menu
-               id="Soundgates.diagram.menu"
-               label="Soundgates"
-               path="additions">
-            <separator
-                  name="group">
-            </separator>
-         </menu>
          <action
                class="soundgates.diagram.actions.ExportCompositeSoundComponentAction"
                enablesFor="1"
-               id="Soundgates.diagram.action"
+               id="Soundgates.diagram.action.ExportCompositeSoundComponentAction"
                label="Export Composite Sound Component"
-               menubarPath="Soundgates.diagram.menu/group">
+               menubarPath="Soundgates.codegen.menu/group">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="Soundgates.diagram.export.ExportPatch"
+            nameFilter="*.soundgates"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="soundgates.diagram.actions.ExportPatchAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.ExportPatchAction"
+               label="Export Patch"
+               menubarPath="Soundgates.codegen.menu/group">
          </action>
       </objectContribution>
    </extension>
