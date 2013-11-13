@@ -39,32 +39,48 @@ architecture Behavioral of square is
     constant last_int : integer := integer(SOUNDGATE_FIX_PT_SCALING) + 1;
 
     constant pi     : signed (31 downto 0) := to_signed(integer(real(MATH_PI     * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-    constant two_pi : signed (31 downto 0) := to_signed(integer(real(2.0*MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant two_pi : signed (31 downto 0) := to_signed(integer(real(2.0 *MATH_PI* 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01         * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+	constant add    : signed (31 downto 0) := to_signed(integer(real(0.01        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     signal square   : signed (31 downto 0) := upper;
-        
+ 
+    constant divider: integer   := 100_000;
+    signal count    : integer   := 0;
+
+    signal i_clk    : std_logic := '0';       
 		  
 	begin
 		  
         sq <= square;
-		  
-        CALC_SQ : process (clk, x, incr)
+          
+        CALC_SQ : process (i_clk, x, incr)
         begin
-            if rising_edge(clk) then
+            if rising_edge(i_clk) then
                 if ce = '1' then
                     x <= x + add + incr;
-                    if x >= pi then
+                    if x >= to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square (31 downto last_int) <= not square (31 downto last_int);
-						x <= to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+				        x <= to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
                     end if;
                     
                 end if;
             end if;
-      end process;  
+        end process;  
+
+        -- generates 1000Hz
+        INTERN_CLK: process (clk)
+            begin
+                if rising_edge(clk) then
+                    count <= count + 1;
+                    if count >= divider then
+                        count <= 0;
+                        i_clk <= not i_clk;
+                    end if;
+                end if;
+          end process; 
 		  
         
 end Behavioral;
