@@ -61,6 +61,9 @@ architecture Behavioral of square is
           
         CALC_SQ : process (i_clk, x, incr)
         begin
+            if rst = '1' then
+                x <= offset;
+            end if;
             if rising_edge(i_clk) then
                 if ce = '1' then
                     x <= x + incr;
