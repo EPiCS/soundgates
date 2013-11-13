@@ -20,33 +20,45 @@ int main()
 
 	// Load two wave files which are to be mixed
 	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/test.wav", 1);
-	wavefileplayer* wfp_sine = wavefileplayer_create_from_path("Waves/sine.raw", 1);
+	wavefileplayer* wfp_sine = wavefileplayer_create_from_path("Waves/sine.raw",
+			1);
+	wave_generator* wave_generator_440 = wave_generator_create(440,
+			WAVE_GENERATOR_SINE);
+	wave_generator* wave_generator_220 = wave_generator_create(220,
+			WAVE_GENERATOR_SINE);
 
 	// These files are stored in 32 signed. We need to convert them
 	wavefileplayer_32S_to_32U(wfp);
 	wavefileplayer_32S_to_32U(wfp_sine);
 
 	char wavesamples[4096];
-	char wavesamples_sine[4096];
 	char wavesamples_mixed[4096];
+	char samples_440[4096];
+	char samples_220[4096];
+	char samples_220x440[4096];
 
 	buffer_start(playback, 0);
 
-	double bias = 0;
-
-	for (i = 0; i < 1500; i++)
+	for (i = 0; i < 400; i++)
 	{
-		wavefileplayer_getSamples(wfp, 4096, wavesamples);
-		wavefileplayer_getSamples(wfp_sine, 4096, wavesamples_sine);
-
-		mixer_mix(wavesamples_sine,wavesamples,wavesamples_mixed,4096,bias);
-		bias += 0.001;
+		// Generate a 220 Hz and a 440 Hz sine wave
+		wave_generator_generate(wave_generator_440, samples_440, 4096);
+		wave_generator_generate(wave_generator_220, samples_220, 4096);
 
 		while (!buffer_needsamples(playback) && playback->running)
 		{
 			usleep(100); // Buffer is full at the moment, go to sleep for a while
 		}
+
+		// Mix the two sine waves
+		mixer_mix(samples_220, samples_440, samples_220x440, 4096, 0.5);
+		// Load samples from a wavefile
+		wavefileplayer_getSamples(wfp, 4096, wavesamples);
+		// Mix wavefile and sine waves
+		mixer_mix(samples_220x440, wavesamples, wavesamples_mixed, 4096, 0.5);
+		// Play it!
 		buffer_fillbuffer(playback, wavesamples_mixed, 4096);
+
 	}
 
 	/*	// Fill the buffer thread with random data
