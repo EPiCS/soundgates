@@ -42,7 +42,7 @@ architecture Behavioral of triangle is
 
     constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-	constant add    : signed (31 downto 0) := to_signed(integer(real(0.02 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+--	constant add    : signed (31 downto 0) := to_signed(integer(real(0.02 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
         
     constant divider: integer   := 100_000;
     signal count    : integer   := 0;
@@ -58,7 +58,7 @@ architecture Behavioral of triangle is
             if rising_edge(i_clk) then
                 if ce = '1' then
                     if direction = '0' then
-                        x <= x + add + incr;
+                        x <= x + incr;
                         if x > upper then
                             direction <= '1';
                         end if;
