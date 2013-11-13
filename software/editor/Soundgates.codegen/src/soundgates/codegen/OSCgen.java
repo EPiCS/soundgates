@@ -1,7 +1,11 @@
 package soundgates.codegen;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -9,6 +13,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -27,8 +32,6 @@ public class OSCgen {
 
 	private final String oscFolderName = "OSCcode";
 
-	private final String getter = "char** getInteractiveComponents(){ return interactiveComponents; } \n";
-	private final String arrayDecl = "char* interactiveComponents[] =";
 	private LinkedList<AtomicSoundComponent> ioComponents;
 	private LinkedList<String> ioComponentNames;
 	
@@ -62,7 +65,6 @@ public class OSCgen {
 	public String getOSCArrayForPatch(Patch patch) throws IOException, CoreException {
 		
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append("{");
 		
 		for(AtomicSoundComponent atomicSoundComponent : ioComponents){
 			// "/frequenz \"f\" "
@@ -83,8 +85,6 @@ public class OSCgen {
 		// delete the last comma
 		stringBuffer.deleteCharAt(stringBuffer.length()-1);
 		
-		stringBuffer.append("}; \n");
-		
 		return stringBuffer.toString();
 	}	
 
@@ -94,8 +94,11 @@ public class OSCgen {
 		if(!test(patch)){
 			return;
 		}
-
-		String text = arrayDecl + getOSCArrayForPatch(patch) + getter;
+		
+		String text = getTemplate("templates/interactiveComponents.txt");
+		
+		text = text.replace("@array", getOSCArrayForPatch(patch));
+		text = text.replace("@number", Integer.toString(ioComponentNames.size()));
 				
 		IProject project = file.getProject();
 		oscFolder = project.getFolder(oscFolderName);
@@ -103,7 +106,7 @@ public class OSCgen {
 			oscFolder.delete(true, null);
 			oscFolder.create(IResource.NONE, true, null);
 		
-		IFile newFile = oscFolder.getFile("osc.c");
+		IFile newFile = oscFolder.getFile("interactiveComponents.c");
 		newFile.create(new ByteArrayInputStream(text.getBytes()), IFile.FORCE, null);
 	}
 	
@@ -136,5 +139,17 @@ public class OSCgen {
 			if (s.equals(string))
 				return true;
 		return false;
+	}
+	
+	public String getTemplate(String fileName) throws IOException{
+		InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+		 BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		 StringBuffer template = new StringBuffer();
+		 String line;
+		 while((line = br.readLine()) != null){
+		    template.append(line);
+		    template.append("\n");
+		 }
+		 return template.toString();	
 	}
 }

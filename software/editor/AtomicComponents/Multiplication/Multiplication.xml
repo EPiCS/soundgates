@@ -11,19 +11,6 @@
 	</Properties>
 	<Code>
 		<Simulation>
-			<PortMapping PortName="SoundIn" PortNumber="0" />
-			<PortMapping PortName="Multiplier" PortNumber="1" />
-			<PortMapping PortName="SoundOut" PortNumber="0" />
-			<PD>
-#N canvas 0 0 450 300 10;
-#X obj 62 19 inlet;
-#X obj 69 85 outlet;
-#X obj 120 18 inlet;
-#X obj 77 53 *;
-#X connect 0 0 3 0;
-#X connect 2 0 3 1;
-#X connect 3 0 1 0;
-			</PD>
 		</Simulation>
 		<Hardware>
 			VHDL Stuff

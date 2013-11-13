@@ -1,0 +1,24 @@
+#N canvas 219 586 450 300 10;
+#X text 0 0 inports Waveform1 Bias Waveform2
+#X text 0 0 outports Output
+#X obj 34 15 inlet~;
+#X obj 178 17 inlet~;
+#X obj 79 183 outlet~;
+#X obj 81 138 +~;
+#X obj 111 16 inlet;
+#X obj 92 103 *~;
+#X obj 132 119 *~;
+#X obj 185 88 * -1;
+#X obj 193 112 + 1;
+#X obj 191 45 trigger bang;
+#X connect 0 0 5 0;
+#X connect 1 0 6 0;
+#X connect 3 0 2 0;
+#X connect 4 0 5 1;
+#X connect 4 0 7 0;
+#X connect 4 0 9 0;
+#X connect 5 0 3 0;
+#X connect 6 0 3 1;
+#X connect 7 0 8 0;
+#X connect 8 0 6 1;
+#X connect 9 0 5 0;
