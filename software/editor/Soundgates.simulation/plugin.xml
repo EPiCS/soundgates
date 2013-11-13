@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="Soundgates.simulation.toolbar"
+               label="Simulation toolbar">
+            <command
+                  commandId="Soundgates.simulation.StartSimulation"
+                  icon="symbols/media-playback-start.png"
+                  label="Start Simulation"
+                  style="push"
+                  tooltip="Start the simulation">
+            </command>
+            <command
+                  commandId="Soundgates.simulation.StopSimulation"
+                  icon="symbols/media-playback-stop.png"
+                  label="Stop Simulation"
+                  style="push"
+                  tooltip="Stop the simulation">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="soundgates.simulation.StartSimulationHandler"
+            id="Soundgates.simulation.StartSimulation"
+            name="Start Simulation">
+      </command>
+      <command
+            defaultHandler="soundgates.simulation.StopSimulationHandler"
+            id="Soundgates.simulation.StopSimulation"
+            name="Stop Simulation">
+      </command>
+   </extension>
+
+
+</plugin>
