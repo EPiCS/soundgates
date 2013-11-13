@@ -26,10 +26,18 @@ public class StartSimulationHandler extends AbstractHandler {
 				if (next instanceof IResource){
 					IProject project = ((IResource)next).getProject();
 					String pdexecutable = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, PdPreferencePage.PD_EXECUTABLE, "", null);
+					
 					String [] pdArguments = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, PdPreferencePage.PD_ARGUMENTS, "", null).split("%");
+					
 					List<String> executionArguments = new LinkedList<String>();
 					executionArguments.add(pdexecutable);
-					executionArguments.addAll(Arrays.asList(pdArguments));
+					
+					if (pdArguments.length > 0){
+						for (int i = 0; i < pdArguments.length; i++) {
+							if (pdArguments[i].length() > 0) executionArguments.add(pdArguments[i]);
+						}
+					}
+					
 					executionArguments.add("-nogui");
 					executionArguments.add("-send");
 					executionArguments.add("pd dsp 1");
