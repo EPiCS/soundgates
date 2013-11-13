@@ -97,7 +97,7 @@ void initializeComponents()
 
 }
 
-int main(int argc, char ** argv)
+int definitely_not_main(int argc, char ** argv)
 {
     void initializeComponents();
 
