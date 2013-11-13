@@ -87,6 +87,5 @@ void wave_generator_generate(wave_generator* wg, char* target, int target_size)
 		}
 
 	}
-	printf("\n");
 
 }
