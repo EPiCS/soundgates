@@ -9,6 +9,10 @@
 #include "Samplebuffer_getset.h"
 #include "Samplebuffer_typedefs.h"
 
+/**
+ * Initializes the soundbuffer
+ * TODO samplerate should be 44100 Hz right now
+ */
 soundbuffer* buffer_initialize(unsigned int samplerate, int record);
 
 /**
