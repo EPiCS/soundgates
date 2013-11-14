@@ -20,8 +20,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
---library soundgates_v1_00_a;
---use soundgates_v1_00_a.soundgates_common_pkg.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity adsr is
 port(
@@ -45,7 +45,7 @@ architecture Behavioral of adsr is
 
     type   adsr_states is (s_attack, s_decay, s_sustain, s_release, s_exit);
     signal state  : adsr_states;
-    signal count  : signed (31 downto 0);
+    signal count  : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     signal i_wave : signed (31 downto 0);
 
     begin
@@ -72,8 +72,8 @@ architecture Behavioral of adsr is
                             state <= s_sustain;
                         end if;
                     when s_sustain  =>
-                        count <= count + to_signed(integer(real( 0.1 * 2**27)), 32);
-                        if count >= to_signed(integer(real( 15.0 * 2**27)), 32) then
+                        count <= count + to_signed(integer(real( 0.1 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+                        if count >= to_signed(integer(real( 15.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                             state <= s_release;
                         end if;
                     when s_release  =>
