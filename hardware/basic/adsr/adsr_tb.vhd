@@ -34,7 +34,7 @@ ARCHITECTURE behavior OF adsr_tb IS
 
    --Inputs
    signal clk : std_logic := '0';
-   signal rst : std_logic := '0';
+   signal rst : std_logic := '1';
    signal ce : std_logic := '0';
    signal attack : signed(31 downto 0) := to_signed(integer(real( 0.1 * 2**27)), 32);
    signal decay : signed(31 downto 0) := to_signed(integer(real( 0.1 * 2**27)), 32);
@@ -76,6 +76,7 @@ BEGIN
 		wait for clk_period/2;
 		clk <= '1';
 		wait for clk_period/2;
+		rst <= '0';
    end process;
  
 
@@ -83,13 +84,7 @@ BEGIN
    stim_proc: process
    begin		
 	
-		case state is
-		when s_reset => 
-			rst<='1';
-			state <= s_calc;
-		when s_calc =>
-			rst<='0';
-		end case;
+		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
 

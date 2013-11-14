@@ -69,7 +69,7 @@ architecture Behavioral of adsr is
                     when s_decay    =>
                         i_wave <= i_wave - decay;
                         if i_wave <= sustain_amp then
-                            state <= s_decay;
+                            state <= s_sustain;
                         end if;
                     when s_sustain  =>
                         count <= count + to_signed(integer(real( 0.1 * 2**27)), 32);
