@@ -36,7 +36,7 @@ port(
 end sawtooth;
 
 architecture Behavioral of sawtooth is  
-
+    
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 
     constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
@@ -57,7 +57,7 @@ architecture Behavioral of sawtooth is
         begin
             if rst = '1' then
                 x <= offset;
-            end if;
+            else
             if rising_edge(i_clk) then
                 if ce = '1' then
                     x <= x + incr;
@@ -66,6 +66,7 @@ architecture Behavioral of sawtooth is
                     end if;
                 end if;
             end if;
+				end if;
         end process;  
 
         -- generates 1000Hz

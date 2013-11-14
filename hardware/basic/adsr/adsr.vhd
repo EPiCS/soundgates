@@ -20,8 +20,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
-library soundgates_v1_00_a;
-use soundgates_v1_00_a.soundgates_common_pkg.all;
+--library soundgates_v1_00_a;
+--use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity adsr is
 port(
@@ -44,42 +44,50 @@ end adsr;
 architecture Behavioral of adsr is
 
     type   adsr_states is (s_attack, s_decay, s_sustain, s_release, s_exit);
-    signal state : adsr_states;
+    signal state  : adsr_states;
+    signal count  : signed (31 downto 0);
+    signal i_wave : signed (31 downto 0);
 
-	begin
+    begin
+	
+        wave <= i_wave;
         
-        ADSR_PROC : process (clk, res)
+        ADSR_PROC : process (clk, rst)
 
         begin
-            if res = '1' then
-                wave <= start_amp
-            end if;
+            if rst = '1' then
+                i_wave <= start_amp;
+            else
             
             if rising_edge(clk) then
-                case adsr_states is
+                case state is
                     when s_attack   =>
-                        wave <= wave + attack;
-                        if wave >= attack_amp then
+                        i_wave <= i_wave + attack;
+                        if i_wave >= attack_amp then
                             state <= s_decay;
                         end if;
                     when s_decay    =>
-                        wave <= wave - decay;
-                        if wave <= sustain_amp then
+                        i_wave <= i_wave - decay;
+                        if i_wave <= sustain_amp then
                             state <= s_decay;
                         end if;
                     when s_sustain  =>
-                        -- wait sustain time
-                        state <= s_release;
+                        count <= count + to_signed(integer(real( 0.1 * 2**27)), 32);
+                        if count >= to_signed(integer(real( 15.0 * 2**27)), 32) then
+                            state <= s_release;
+                        end if;
                     when s_release  =>
-                        wave <= wave - release;
-                        if wave <= release_amp then
+                        i_wave <= i_wave - release;
+                        if i_wave <= release_amp then
                             state <= s_exit;
                         end if;
+							when s_exit		=>
+								--state <= s_exit;
                 end case;                        
             end if;
+				end if;
         end process;
 
-
-
+        
         
 end Behavioral;

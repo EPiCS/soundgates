@@ -36,7 +36,7 @@ port(
 end triangle;
 
 architecture Behavioral of triangle is
-  
+
     signal direction : std_logic := '0';
 
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
@@ -58,7 +58,7 @@ architecture Behavioral of triangle is
         begin
             if rst = '1' then
                 x <= offset;
-            end if;
+            else
             if rising_edge(i_clk) then
                 if ce = '1' then
                     if direction = '0' then
@@ -67,13 +67,14 @@ architecture Behavioral of triangle is
                             direction <= '1';
                         end if;
                     elsif direction = '1' then
-                       x <= x - add - incr;
+                       x <= x - incr;
                         if x < lower then
                             direction <= '0';
                         end if; 
                     end if;
                 end if;
             end if;
+				end if;
         end process;  
 
         -- generates 1000Hz
