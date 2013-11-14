@@ -76,7 +76,7 @@ begin
 		variable z_next : signed(31 downto 0);
 	begin
 			
-		if z > 0 then		--  sgn = + 1
+		if z(31) = '0' then		--  sgn = + 1
          x_next := x + (-y_shift);
          y_next := x_shift + y;
          z_next := z + (-scaled_arctan);
