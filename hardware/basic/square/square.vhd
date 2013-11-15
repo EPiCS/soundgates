@@ -27,6 +27,7 @@ entity square is
 port(                
         clk     : in  std_logic;
         ce      : in  std_logic;
+        rst     : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
         duty_on : in  signed(31 downto 0);  
@@ -48,26 +49,24 @@ architecture Behavioral of square is
 	
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0        * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     signal square   : signed (31 downto 0) := upper;
- 
-    constant divider: integer   := 100_000;
-    signal count    : integer   := 0;
-
-    signal i_clk    : std_logic := '0';       
 		  
 	begin
 		  
         sq <= square;
           
-        CALC_SQ : process (i_clk, x, incr)
+        CALC_SQ : process (clk, x, incr, rst)
         begin
-            if rising_edge(i_clk) then
+            if rst = '1' then
+                x <= offset;
+            end if;
+            if rising_edge(clk) then
                 if ce = '1' then
                     x <= x + incr;
                     if    x >= to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square <= upper;
-                    elsif x >= duty_on;  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
+                    elsif x >= duty_on then  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square <= lower;
-                    elsif x >= duty_off; --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
+                    elsif x >= duty_off then --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
 				        square <= upper;
                         x <= to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
                     end if;
@@ -75,18 +74,5 @@ architecture Behavioral of square is
                 end if;
             end if;
         end process;  
-
-        -- generates 1000Hz
-        INTERN_CLK: process (clk)
-            begin
-                if rising_edge(clk) then
-                    count <= count + 1;
-                    if count >= divider then
-                        count <= 0;
-                        i_clk <= not i_clk;
-                    end if;
-                end if;
-          end process; 
-		  
         
 end Behavioral;

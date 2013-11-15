@@ -27,6 +27,7 @@ entity triangle is
 port(                
         clk     : in  std_logic;
         ce      : in  std_logic;
+        rst     : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
         tri     : out signed(31 downto 0)
@@ -42,20 +43,19 @@ architecture Behavioral of triangle is
 
     constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
---	constant add    : signed (31 downto 0) := to_signed(integer(real(0.02 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-        
-    constant divider: integer   := 100_000;
-    signal count    : integer   := 0;
-
-    signal i_clk    : std_logic := '0';
-		  
+        		  
 	begin
 		  
         tri <= x;
           
-        CALC_TRI : process (i_clk, x, incr)
+        CALC_TRI : process (clk, x, incr, rst)
         begin
-            if rising_edge(i_clk) then
+        
+            if rst = '1' then
+                x <= offset;
+            end if;
+        
+            if rising_edge(clk) then
                 if ce = '1' then
                     if direction = '0' then
                         x <= x + incr;
@@ -63,7 +63,7 @@ architecture Behavioral of triangle is
                             direction <= '1';
                         end if;
                     elsif direction = '1' then
-                       x <= x - add - incr;
+                       x <= x - incr;
                         if x < lower then
                             direction <= '0';
                         end if; 
@@ -72,17 +72,4 @@ architecture Behavioral of triangle is
             end if;
         end process;  
 
-        -- generates 1000Hz
-        INTERN_CLK: process (clk)
-            begin
-                if rising_edge(clk) then
-                    count <= count + 1;
-                    if count >= divider then
-                        count <= 0;
-                        i_clk <= not i_clk;
-                    end if;
-                end if;
-          end process; 
-		  
-        
 end Behavioral;
