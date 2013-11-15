@@ -250,9 +250,10 @@ begin
                     
             osif_reset(o_osif);
 			memif_reset(o_memif);           
+            ram_reset(o_ram);
             
-            state        <= STATE_INIT;
-            sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+            state           <= STATE_INIT;
+            sample_count    <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
             osif_ctrl_signal <= (others => '0');
             nco_ce       <= '0';
             o_RAMWE_nco  <= '0';
@@ -316,8 +317,7 @@ begin
                     nco_ce        <= '1';
                     o_RAMWE_nco   <= '1';
                     o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
-                    sample_count <= sample_count - 1;
-
+                    sample_count  <= sample_count - 1;
                 else
                     -- Samples have been generated
                     state <= STATE_WRITE_MEM;

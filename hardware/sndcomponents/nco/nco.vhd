@@ -62,9 +62,9 @@ architecture Behavioral of nco is
 	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
 	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
 
-	 signal cordic_phi_offset : signed(31 downto 0) := (others => '0'); 
+	signal cordic_phi_offset : signed(31 downto 0) := (others => '0'); 
     signal cordic_phi_incr   : signed(31 downto 0) := (others => '0'); 
-    signal cordic_phi_acc 	 : signed(31 downto 0) := (others => '0'); 
+    signal cordic_phi_acc 	 : signed(31 downto 0) := (others => '0');
 	
     signal cordic_threshold  : signed(31 downto 0);
    --------------------------------------------------------------------------------
@@ -114,20 +114,21 @@ begin
 		PHASE_STIMULIS_PROCESS : process(clk)                  
         begin
             if rising_edge(clk) then
-            
-               cordic_phi_acc <= cordic_phi_acc + phase_incr;
+               if rst = '1' then
+                
+                cordic_phi_acc <= (others => '0');
+                
+               elsif ce = '1' then
                
-               --if cordic_phi_offset /= phase_offset then -- only update on change               
-               --     cordic_phi_acc      <= phase_offset;
-               --     cordic_phi_offset   <= phase_offset;
-               --end if;
-                                          
-               if cordic_phi_acc > cordic_threshold then
-                  cordic_phi_acc <= cordic_phi_acc - standard_cordic_offset;
+                cordic_phi_acc <= cordic_phi_acc + phase_incr;
+                         
+                if cordic_phi_acc > cordic_threshold then
+                    cordic_phi_acc <= (others => '0'); -- cordic_phi_acc - standard_cordic_offset;
+                end if;
+                
                end if;
             end if;
 		end process;
-
 		
 	end generate SIN_GENERATOR;
    

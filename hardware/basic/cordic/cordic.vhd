@@ -48,7 +48,7 @@ architecture Behavioral of cordic is
 	signal y_pipeline : pipeline_array;
 	signal z_pipeline : pipeline_array;
 	
-	constant cordic_gain 		 : real 		:= 0.60725293500888;
+	constant cordic_gain        : real := 0.60725293500888;
 	constant cordic_gain_scaled : signed(31 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	
 	constant q1 : signed(31 downto 0) := to_signed(integer(real(MATH_PI / 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
@@ -72,23 +72,32 @@ begin
 	VEC_ROTATE_PROCESS : process(clk)
 	begin        
         if rising_edge(clk) then
-			if phi > q1 and phi < q2 then
-				phi_i <= phi + (-q1);
-				x_i 	<= (y);
-				y_i 	<= (x);
-			elsif phi > q2 and phi < q3 then
-				x_i 	<= (-x);
-				y_i 	<= (-y);
-				phi_i <= phi + (-q2);
-			elsif phi > q3 and phi < q4 then
-				x_i 	<= (-y);
-				y_i 	<= (-x);
-				phi_i <= phi + (-q3);
-			else
-				x_i 	<= x;
-				y_i 	<= y;
-				phi_i <= phi;
-			end if;
+            if rst = '1' then
+            
+            x_i   <= (others => '0');
+            y_i   <= (others => '0');
+            phi_i <= (others => '0');        
+            
+            elsif ce = '1' then
+                if phi < q1 then
+                    x_i <= x;
+                    y_i <= y;
+                    phi_i <= phi;                
+                elsif phi < q2 then
+                    phi_i <= phi + (-q1);
+                    x_i 	<= (y);
+                    y_i 	<= (x);
+                elsif phi < q3 then
+                    x_i 	<= (-x);
+                    y_i 	<= (-y);
+                    phi_i <= phi + (-q2);
+                elsif phi < q4 then
+                    x_i 	<= (-y);
+                    y_i 	<= (-x);
+                    phi_i <= phi + (-q3);                
+                end if;
+            end if; 
+            
          end if;
 	end process;
 	
@@ -121,7 +130,10 @@ begin
 	REGISTER_OUT_PROCESS : process(clk)
 	begin
 		if rising_edge(clk) then
-            if ce = '1' then 
+            if rst = '1' then
+                cordic_out_x <= (others => '0');
+                cordic_out_y <= (others => '0');
+            elsif ce = '1' then 
                 cordic_out_x <= x_pipeline(pipeline_stages + 1);
                 cordic_out_y <= y_pipeline(pipeline_stages + 1);
             end if;
@@ -129,19 +141,18 @@ begin
 	
 	end process;
 	
-	GAIN_PROCESS : process (clk)
-	
-	begin
-			
-		if rising_edge(clk) then
-            if ce = '1' then 
+	GAIN_PROCESS : process (clk)	
+	begin			
+        if rising_edge(clk) then
+            if rst = '1' then
+                sin_i <= ( others => '0');
+                cos_i <= ( others => '0');
+            elsif ce = '1' then 
                 sin_i <= shift_right(cordic_out_y * cordic_gain_scaled, integer(SOUNDGATE_FIX_PT_SCALING));
                 cos_i <= shift_right(cordic_out_x * cordic_gain_scaled, integer(SOUNDGATE_FIX_PT_SCALING));
             end if;
 		end if;
-	end process;
-	
-	
+	end process;	
 	sin <= RESIZE(sin_i,32);
 	cos <= RESIZE(cos_i,32);
 	
