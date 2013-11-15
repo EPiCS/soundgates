@@ -28,7 +28,6 @@ import soundgates.Link;
 import soundgates.Patch;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesPackage;
-import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class PatchExporter extends Exporter{
 
@@ -41,8 +40,6 @@ public class PatchExporter extends Exporter{
 
 			HashMap<SoundComponent,Integer> componentsHashMap = new HashMap<SoundComponent, Integer>();
 			LinkedList<Link> links = new LinkedList<>();
-			CompositeSoundComponentExporter compositeSoundComponentExporter = 
-					new CompositeSoundComponentExporter();
 			int componentCounter = 0;
 			
 			// root element
@@ -52,6 +49,10 @@ public class PatchExporter extends Exporter{
 			
 			// elements
 			Element elements = doc.createElement("Elements");
+			
+			// test and export of composite components
+			Tester patchTester = new Tester();
+			CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
 			
 			for(soundgates.Element element : patchToExport.getElements()){
 				
@@ -70,12 +71,8 @@ public class PatchExporter extends Exporter{
 							(CompositeSoundComponent) element;
 					
 					// if the composite sound component is not exported
-					if (!CompositeSoundComponentLibrary.
-							compositeSoundComponentIsInLibrary(
-									compositeSoundComponent.getName()
-							))
-					{
-						compositeSoundComponentExporter.exportToXML(compositeSoundComponent);
+					if(patchTester.shouldWriteFileForCompositeSoundComponent(compositeSoundComponent.getName())){						
+						exporter.exportToXML(compositeSoundComponent);	
 					}
 					
 					elements.appendChild(

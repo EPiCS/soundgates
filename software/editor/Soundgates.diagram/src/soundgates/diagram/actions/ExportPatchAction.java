@@ -11,7 +11,9 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import soundgates.Patch;
 import soundgates.diagram.XMLexport.PatchExporter;
+import soundgates.diagram.XMLexport.Tester;
 
 
 
@@ -26,13 +28,18 @@ public class ExportPatchAction implements IObjectActionDelegate{
 			IFile file = (IFile) files.next();		
 
 			PatchExporter patchExporter = new PatchExporter();
-						
+			Patch patch = patchExporter.getPatch(file.getFullPath().toPortableString());
+			Tester tester = new Tester();
+			
+			if(tester.testPatch(patch) == false)
+				return;
+			
 			try {
 				
 				patchExporter.exportToXML(
-						file.getParent().getLocation().toPortableString(), 				// folder						
-						patchExporter.getPatch(file.getFullPath().toPortableString()),	// patch
-						file.getName().replace(".soundgates",""));						// name
+						file.getParent().getLocation().toPortableString(), 	// folder						
+						patch,												// patch
+						file.getName().replace(".soundgates",""));			// name
 				
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				

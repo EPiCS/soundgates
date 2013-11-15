@@ -1,5 +1,6 @@
 package soundgates.diagram.soundcomponents;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -83,6 +84,15 @@ public class CompositeSoundComponentLibrary {
 	public static boolean compositeSoundComponentIsInLibrary(String name){
 		for(String libComponent : components.keySet()){
 			if(libComponent.equals(name))
+				return true;
+		}
+		return false;
+	}
+	
+	public static boolean componentsFolderContaintsFile(String fileName){
+		File folder = new File(xmlfolder.getRawLocation().toString());
+		for(File file : folder.listFiles()){
+			if(file.getName().equals(fileName))
 				return true;
 		}
 		return false;

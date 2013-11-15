@@ -12,7 +12,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -22,21 +21,13 @@ import soundgates.Delegation;
 import soundgates.Link;
 import soundgates.Port;
 import soundgates.SoundComponent;
+import soundgates.diagram.messageDialogs.MessageDialogs;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 public class CompositeSoundComponentExporter extends Exporter {
 
 	public void exportToXML(CompositeSoundComponent compositeSoundComponentToExport) {
-		if (compositeSoundComponentToExport.getName()==null || "".equals(compositeSoundComponentToExport.getName())){
-			MessageDialog.openWarning(null, "Composite sound component has no name", "Please enter a name for the composite sound component.");
-			return;
-		}
-		for(Port port : compositeSoundComponentToExport.getPorts()){
-			if(port.getName()==null || "".equals(port.getName())){
-				MessageDialog.openWarning(null, "Not all ports have a name", "Please enter a name for each port of the composite sound component.");
-				return;
-			}
-		}		
+	
 		try {
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -65,6 +56,10 @@ public class CompositeSoundComponentExporter extends Exporter {
 			
 			// embedded components elements
 			Element embeddedComponentsElement = doc.createElement("EmbeddedSoundComponents");
+			
+			Tester patchTester = new Tester();
+			CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
+			
 			for(SoundComponent embComponent : compositeSoundComponentToExport.getEmbeddedComponents()){
 					
 				if(embComponent instanceof AtomicSoundComponent){					
@@ -85,9 +80,10 @@ public class CompositeSoundComponentExporter extends Exporter {
 									"EmbeddedCompositeSoundComponent", 
 									componentCounter)
 							);
-					
-					//create xml for the embedded composite component
-					exportToXML((CompositeSoundComponent) embComponent);
+				 	
+					if(patchTester.shouldWriteFileForCompositeSoundComponent(embComponent.getName())){						
+						exporter.exportToXML((CompositeSoundComponent) embComponent);	
+					}
 				}
 				
 				embeddedComponentsHashMap.put(embComponent, componentCounter);
@@ -133,6 +129,8 @@ public class CompositeSoundComponentExporter extends Exporter {
 			StreamResult result = new StreamResult(new File(filePath));
 			
 			transformer.transform(source, result);
+			
+			MessageDialogs.compositeSoundComponentWasExported(compositeSoundComponentToExport.getName());
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
@@ -140,5 +138,4 @@ public class CompositeSoundComponentExporter extends Exporter {
 			tfe.printStackTrace();
 		}
 	}
-
 }

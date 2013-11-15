@@ -13,6 +13,7 @@ import org.eclipse.ui.PlatformUI;
 
 import soundgates.CompositeSoundComponent;
 import soundgates.diagram.XMLexport.CompositeSoundComponentExporter;
+import soundgates.diagram.XMLexport.Tester;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
 
 
@@ -26,10 +27,17 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 		while (files.hasNext()) {			
 			 Object selectedObject = files.next(); 
 			 if (selectedObject instanceof CompositeSoundComponentEditPart){
-				 CompositeSoundComponentEditPart editPart = (CompositeSoundComponentEditPart) selectedObject;
-				 CompositeSoundComponent compositeSoundComponent =  (CompositeSoundComponent) ((Shape) editPart.getModel()).getElement();
-				 CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
-				 exporter.exportToXML(compositeSoundComponent);				 
+				CompositeSoundComponentEditPart editPart = (CompositeSoundComponentEditPart) selectedObject;				 
+				CompositeSoundComponent compositeSoundComponent =  (CompositeSoundComponent) ((Shape) editPart.getModel()).getElement();
+				 
+			 	Tester patchTester = new Tester();
+			 	boolean accepted = patchTester.testCompositeSoundComponent(compositeSoundComponent);
+			 	if(!accepted) return;
+			 	
+				if(patchTester.shouldWriteFileForCompositeSoundComponent(compositeSoundComponent.getName())){
+					CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
+					exporter.exportToXML(compositeSoundComponent);	
+				}
 			 }
 		}
 	}
@@ -45,6 +53,4 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 	 */
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {		
 	}
-
-
 }
