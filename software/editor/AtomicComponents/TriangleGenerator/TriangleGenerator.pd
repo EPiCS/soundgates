@@ -1,4 +1,4 @@
-#N canvas 757 152 681 618 12;
+#N canvas 594 175 681 618 12;
 #X obj 116 116 * -1;
 #X msg 190 115 0;
 #X obj 58 159 phasor~;
@@ -10,11 +10,11 @@
 #X obj 158 229 -~ 1;
 #X obj 157 257 clip~ 0 1;
 #X obj 105 308 +~;
-#X obj 105 357 dac~;
-#X text 0 0 inports Frequency;
-#X text 0 0 outports Output;
-#X text 76 12;
+#X text 32 23 inports Frequency;
+#X text 20 3 outports Output;
 #X obj 71 58 inlet;
+#X obj 219 78 loadbang;
+#X obj 105 357 outlet~;
 #X connect 0 0 3 0;
 #X connect 1 0 3 1;
 #X connect 1 0 2 1;
@@ -26,6 +26,7 @@
 #X connect 7 0 8 0;
 #X connect 8 0 9 0;
 #X connect 9 0 10 1;
-#X connect 10 0 11 0;
-#X connect 15 0 0 0;
-#X connect 15 0 2 0;
+#X connect 10 0 15 0;
+#X connect 13 0 0 0;
+#X connect 13 0 2 0;
+#X connect 14 0 1 0;

@@ -1,6 +1,4 @@
 #N canvas 0 0 450 300 10;
-#X text 0 0 inports Dividend Divisor;
-#X text 0 0 outports Quotient;
 #X obj 62 19 inlet;
 #X obj 69 85 outlet;
 #X obj 120 18 inlet;
@@ -8,3 +6,5 @@
 #X connect 0 0 3 0;
 #X connect 2 0 3 1;
 #X connect 3 0 1 0;
+#X text 0 0 inports Dividend Divisor;
+#X text 0 0 outports Quotient;
