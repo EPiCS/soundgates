@@ -176,7 +176,7 @@ public class PortItemSemanticEditPolicy extends
 		}
 		
 		if (req.getTarget().eContainer() instanceof CompositeSoundComponent){		
-			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.OUT && ((Port) req.getTarget()).getIncomingConnection()==null;
+			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==((Port) req.getSource()).getDirection() && ((Port) req.getTarget()).getIncomingConnection()==null;
 		}
 		else if (req.getTarget().eContainer() instanceof AtomicSoundComponent){
 			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.IN && ((Port) req.getTarget()).getIncomingConnection()==null;
