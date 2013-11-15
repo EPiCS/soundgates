@@ -3,6 +3,9 @@ package de.upb.soundgates.cosmic;
 /**
  * Created by posewsky on 13.11.13.
  */
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,16 +19,21 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.osc.OSCSender;
 
 public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
 
     private final List<OSCMessage> list;
     private final Activity context;
+    private String host;
+    private int port;
 
-    public BindArrayAdapter(Activity context, List<OSCMessage> list) {
+    public BindArrayAdapter(Activity context, List<OSCMessage> list, String host, int port) {
         super(context, R.layout.bind_row, list);
         this.context = context;
         this.list = list;
+        this.host = host;
+        this.port = port;
     }
 
     static class ViewHolder {
@@ -41,25 +49,37 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
     }
 
     class BindOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+        boolean inTrackingTouch;
         final ViewHolder viewHolder;
 
         public BindOnSeekBarChangeListener(final ViewHolder viewHolder){
             this.viewHolder = viewHolder;
+            this.inTrackingTouch = true;
         }
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-            onStopTrackingTouch(seekBar);
+            if(!inTrackingTouch)
+                onStopTrackingTouch(seekBar);
         }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
+            inTrackingTouch = true;
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            Log.d(MainActivity.LOG_TAG, viewHolder.text.getText() + ": " + seekBar.getProgress());
+            inTrackingTouch = false;
+            String msg = viewHolder.text.getText() + " " + seekBar.getProgress();
+            Log.d(MainActivity.LOG_TAG, msg);
+
+            com.illposed.osc.OSCMessage oscmsg = new com.illposed.osc.OSCMessage(viewHolder.text.getText().toString().split(" ")[0]);
+            Object args[] = new Object[1];
+            args[0] = new Float(seekBar.getProgress());
+            oscmsg.addArgument(args);
+
+            new OSCSender(host, port, oscmsg).execute();
         }
     }
 

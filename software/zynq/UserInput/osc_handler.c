@@ -2,36 +2,6 @@
 
 int done = 0;
 
-int lo_main()
-{
-    /* start a new server on port 7770 */
-    lo_server_thread st = lo_server_thread_new("7770", error);
-
-    /* add method that will match any path and args */
-    lo_server_thread_add_method(st, NULL, NULL, generic_handler, NULL);
-
-    /* add method that will match the path /foo/bar, with two numbers, coerced
-     * to float and int */
-    lo_server_thread_add_method(st, "/foo/bar", "fi", foo_handler, NULL);
-
-    /* add method that will match the path /quit with no args */
-    lo_server_thread_add_method(st, "/quit", "", quit_handler, NULL);
-
-    lo_server_thread_start(st);
-
-    while (!done) {
-#ifdef WIN32
-        Sleep(1);
-#else
-        usleep(1000);
-#endif
-    }
-
-    lo_server_thread_free(st);
-
-    return 0;
-}
-
 void error(int num, const char *msg, const char *path)
 {
     printf("liblo server error %d in path %s: %s\n", num, path, msg);
@@ -74,6 +44,38 @@ int quit_handler(const char *path, const char *types, lo_arg ** argv,
     printf("quiting\n\n");
     fflush(stdout);
 
+    return 0;
+}
+
+void* osc_handler_thread(void *args)
+{
+    char port[6];
+    sprintf(port, "%d", PORT);
+    
+    /* create new server thread that listens on PORT (UDP) */
+    lo_server_thread st = lo_server_thread_new(port, error);
+
+    /* add method that will match any path and args */
+    lo_server_thread_add_method(st, NULL, NULL, generic_handler, NULL);
+    
+    lo_server_thread_add_method(st, "/component", "f", foo_handler, NULL);
+    
+    /* add method that will match the path /quit with no args */
+    lo_server_thread_add_method(st, "/quit", "", quit_handler, NULL);
+    
+    /* start the server thread */
+    lo_server_thread_start(st);
+
+    while (!done) {
+#ifdef WIN32
+        Sleep(1);
+#else
+        usleep(1000);
+#endif
+    }
+
+    lo_server_thread_free(st);
+    
     return 0;
 }
 

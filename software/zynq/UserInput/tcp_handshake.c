@@ -1,10 +1,5 @@
 #include "tcp_handshake.h"
 
-#define PORT                50050
-#define MAXPENDING          5
-#define BUFSIZE             200
-#define OSC_MSG_DELIMITER   "||"
-
 char* interactiveComponents[] = {
     "/component1 \"f\"",
     "/component2 \"i\"",
@@ -103,7 +98,7 @@ void tcp_client_handler(int clientSock)
     close(clientSock);
 }
 
-void *tcp_handshake_thread(void *args)
+void* tcp_handshake_thread(void *args)
 {
     int serverSock;                 /* Socket descriptor for server            */
     int clientSock;                 /* Socket descriptor for client            */
@@ -143,5 +138,6 @@ void *tcp_handshake_thread(void *args)
         tcp_client_handler(clientSock);
     }
     /* NOT REACHED */
+    return 0;
 }
 

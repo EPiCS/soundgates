@@ -36,6 +36,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public static OSCMessageStore msg_store;
     public static final String OSC_MSG_DELIMITER = "\\|\\|"; // always as regex!
 
+    private static String host;
+    private static int port;
+
+    public static String getHost() { return host; }
+    public static void setHost(String h) { host = h; }
+    public static int getPort() { return port; }
+    public static void setPort(int p) { port = p; }
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -179,6 +187,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public static class ConnectFragment extends Fragment implements OnClickListener, AsyncTaskListener<String> {
         private TextView ipTextView;
         private TextView portTextView;
+
+        String host;
+        int port;
+
         private TCPHandshake hs;
 
         public static ConnectFragment newInstance() {
@@ -205,8 +217,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public void onClick(View view) {
-            String host = ipTextView.getText().toString();
-            int port = -1;
+            host = ipTextView.getText().toString();
 
             try {
                 port = Integer.parseInt(portTextView.getText().toString());
@@ -226,11 +237,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public void onAsyncTaskCompletion(String result) {
+
             msg_store = new OSCMessageStore();
             for(String msg : result.split(OSC_MSG_DELIMITER)) {
                 msg_store.addOSCMessage(msg);
                 Log.d(MainActivity.LOG_TAG, "Message " + msg);
             }
+
+            setHost(host);
+            setPort(port);
 
             for(Fragment f : getFragmentManager().getFragments()) {
                 if(f instanceof SelectFragment) {
@@ -338,7 +353,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         {
             if(msg_store != null)
             {
-                BindArrayAdapter adapter = new BindArrayAdapter(getActivity(), msg_store.getSelectedOSCMessageAsList());
+                BindArrayAdapter adapter = new BindArrayAdapter(getActivity(), msg_store.getSelectedOSCMessageAsList(), getHost(), getPort());
                 setListAdapter(adapter);
             }
         }

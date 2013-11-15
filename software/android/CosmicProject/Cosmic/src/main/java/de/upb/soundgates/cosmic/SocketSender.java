@@ -9,35 +9,44 @@ import java.net.UnknownHostException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
-/**
- * Created by posewsky on 13.11.13.
- */
 public class SocketSender extends AsyncTask<String, Void, Void> {
-    private String ip;
+    private static final String TAG = "SocketSender";
+
+    private String host;
     private int port;
 
-    public SocketSender(String ip, int port) {
-        this.ip     = ip;
-        this.port   = port;
+
+    public SocketSender(String host, int port) {
+        this.host = host;
+        this.port = port;
     }
+
 
     private void sendMessage(String message)
     {
+        DatagramSocket s = null;
         try{
-            Log.i(MainActivity.LOG_TAG, "Sending " + message + " to " + ip + ":" + port);
+
+            Log.i(TAG, "Sending "+ message+" to " + host + ":" + port);
 
 
-            DatagramSocket s = new DatagramSocket();
-            InetAddress local = InetAddress.getByName(ip);
+            s = new DatagramSocket();
+            InetAddress local = InetAddress.getByName(host);
             int msg_length = message.length();
             byte[] messageb = message.getBytes();
             DatagramPacket p = new DatagramPacket(messageb, msg_length, local, port);
             s.send(p);
+            //printWriter.print(message);
+            //printWriter.flush();
+
         } catch(UnknownHostException e) {
-            Log.e(MainActivity.LOG_TAG, "Unknown host: " + ip);
+            System.out.println("Unknown host: " + host);
+
         } catch(IOException e) {
-            Log.e(MainActivity.LOG_TAG, "No I/O");
+            System.out.println("No I/O");
+        } finally {
+            if(s != null)
+                s.close();
         }
     }
 
@@ -48,7 +57,7 @@ public class SocketSender extends AsyncTask<String, Void, Void> {
         int count = messages.length;
         if(count != 1)
         {
-            Log.e(MainActivity.LOG_TAG, "More than one String is illegal");
+            Log.e(TAG, "More than one String is illegal");
             return null;
         }
         sendMessage(messages[0]);
@@ -56,8 +65,6 @@ public class SocketSender extends AsyncTask<String, Void, Void> {
     }
 
     protected void onPostExecute() {
-        Log.i(MainActivity.LOG_TAG, "message has been send");
+        Log.i("TAG", "message has been send");
     }
-
-
 }

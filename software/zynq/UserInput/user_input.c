@@ -2,15 +2,18 @@
 
 int main()
 {
-    pthread_t pthread_t_tcp_handshake;
-    int iret;
+    pthread_t pthread_t_tcp_handshake, pthread_t_osc_handler;
+    int tcp_ret, osc_ret;
     
-    iret = pthread_create(&pthread_t_tcp_handshake, NULL, tcp_handshake_thread, (void*)NULL);
+    tcp_ret = pthread_create(&pthread_t_tcp_handshake, NULL, tcp_handshake_thread, (void*)NULL);
+    osc_ret = pthread_create(&pthread_t_osc_handler, NULL, osc_handler_thread, (void*)NULL);
     
-    /* wait for tcp handshake thread before return */
+    /* wait for threads before return */
     pthread_join(pthread_t_tcp_handshake, NULL);
+    pthread_join(pthread_t_osc_handler, NULL);
     
-    printf("TCP Handshake thread returns: %d\n",iret);
+    printf("TCP Handshake thread returns: %d\n",tcp_ret);
+    printf("OSC Handler thread returns: %d\n",osc_ret);
     return 0;
 }
 
