@@ -60,6 +60,7 @@ architecture Behavioral of adsr is
             else
             
             if rising_edge(clk) then
+                if ce = '1' then
                 case state is
                     when s_attack   =>
                         i_wave <= i_wave + attack;
@@ -83,9 +84,10 @@ architecture Behavioral of adsr is
                         end if;
 							when s_exit		=>
 								--state <= s_exit;
-                end case;                        
+                end case; 
+                end if;                       
             end if;
-				end if;
+		end if;
         end process;
 
         

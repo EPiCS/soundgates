@@ -35,7 +35,7 @@ ARCHITECTURE behavior OF adsr_tb IS
    --Inputs
    signal clk : std_logic := '0';
    signal rst : std_logic := '1';
-   signal ce : std_logic := '0';
+   signal ce : std_logic := '1';
    signal attack : signed(31 downto 0) := to_signed(integer(real( 0.1 * 2**27)), 32);
    signal decay : signed(31 downto 0) := to_signed(integer(real( 0.1 * 2**27)), 32);
    signal sustain : signed(31 downto 0) := to_signed(integer(real( 2 * 2**27)), 32);
