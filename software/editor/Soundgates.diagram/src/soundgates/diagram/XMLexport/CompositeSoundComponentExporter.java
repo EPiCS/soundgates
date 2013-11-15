@@ -68,13 +68,23 @@ public class CompositeSoundComponentExporter extends Exporter {
 			for(SoundComponent embComponent : compositeSoundComponentToExport.getEmbeddedComponents()){
 					
 				if(embComponent instanceof AtomicSoundComponent){					
-					embeddedComponentsElement.appendChild(getAtomicSoundComponentElement(doc, (AtomicSoundComponent) embComponent, componentCounter));
+					embeddedComponentsElement.appendChild(
+							getAtomicSoundComponentElement(
+									doc, 
+									(AtomicSoundComponent) embComponent, 
+									"EmbeddedAtomicSoundComponent", 
+									componentCounter)
+							);
 				}
 				else if(embComponent instanceof CompositeSoundComponent){
-					Element embComponentElement = doc.createElement("EmbeddedCompositeSoundComponent");
-					embComponentElement.setAttribute("Name", embComponent.getName());
-					embComponentElement.setAttribute("Id", Integer.toString(componentCounter));
-					embeddedComponentsElement.appendChild(embComponentElement);
+
+					embeddedComponentsElement.appendChild(
+							getCompositeSoundComponentElement(
+									doc, 
+									(CompositeSoundComponent) embComponent, 
+									"EmbeddedCompositeSoundComponent", 
+									componentCounter)
+							);
 					
 					//create xml for the embedded composite component
 					exportToXML((CompositeSoundComponent) embComponent);

@@ -6,14 +6,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import soundgates.AtomicSoundComponent;
+import soundgates.CompositeSoundComponent;
 import soundgates.Link;
 import soundgates.SoundComponent;
 
 public class Exporter {
 	
-	public Element getAtomicSoundComponentElement(Document doc, AtomicSoundComponent atomicSoundComponent, int componentCounter){	
+	public Element getAtomicSoundComponentElement(Document doc, AtomicSoundComponent atomicSoundComponent, String elementName, int componentCounter){	
 		
-		Element atomicSoundComponentElement = doc.createElement("AtomicSoundComponent");				
+		Element atomicSoundComponentElement = doc.createElement(elementName);				
 		atomicSoundComponentElement.setAttribute("Type", atomicSoundComponent.getType());
 		atomicSoundComponentElement.setAttribute("Name", atomicSoundComponent.getName());
 		atomicSoundComponentElement.setAttribute("Id", Integer.toString(componentCounter));					
@@ -44,7 +45,15 @@ public class Exporter {
 		
 		return atomicSoundComponentElement;
 	}
-		
+	
+	public Element getCompositeSoundComponentElement(Document doc, CompositeSoundComponent compositeSoundComponent, String elementName, int componentCounter){	
+
+		Element compositeSoundComponentElement = doc.createElement(elementName);		
+		compositeSoundComponentElement.setAttribute("Name", compositeSoundComponent.getName());
+		compositeSoundComponentElement.setAttribute("Id", Integer.toString(componentCounter));
+		return compositeSoundComponentElement;
+	}
+	
 	public Element getLinkElement(Document doc, Link link, HashMap<SoundComponent,Integer> componentsHashMap){
 		Element linkElement = doc.createElement("Link");
 	

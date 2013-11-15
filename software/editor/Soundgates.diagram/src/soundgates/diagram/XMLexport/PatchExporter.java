@@ -23,10 +23,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import soundgates.AtomicSoundComponent;
+import soundgates.CompositeSoundComponent;
 import soundgates.Link;
 import soundgates.Patch;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesPackage;
+import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class PatchExporter extends Exporter{
 
@@ -39,6 +41,8 @@ public class PatchExporter extends Exporter{
 
 			HashMap<SoundComponent,Integer> componentsHashMap = new HashMap<SoundComponent, Integer>();
 			LinkedList<Link> links = new LinkedList<>();
+			CompositeSoundComponentExporter compositeSoundComponentExporter = 
+					new CompositeSoundComponentExporter();
 			int componentCounter = 0;
 			
 			// root element
@@ -53,10 +57,34 @@ public class PatchExporter extends Exporter{
 				
 				// atomic components
 				if(element instanceof AtomicSoundComponent){					
-					elements.appendChild(getAtomicSoundComponentElement(doc, (AtomicSoundComponent)element, componentCounter));					
+					elements.appendChild(
+							getAtomicSoundComponentElement(doc, (AtomicSoundComponent)element, "AtomicSoundComponent", componentCounter)
+							);					
 					componentsHashMap.put((SoundComponent) element, componentCounter);
 					componentCounter++;
 				}
+				// composite components
+				else if(element instanceof CompositeSoundComponent){
+					
+					CompositeSoundComponent compositeSoundComponent =
+							(CompositeSoundComponent) element;
+					
+					// if the composite sound component is not exported
+					if (!CompositeSoundComponentLibrary.
+							compositeSoundComponentIsInLibrary(
+									compositeSoundComponent.getName()
+							))
+					{
+						compositeSoundComponentExporter.exportToXML(compositeSoundComponent);
+					}
+					
+					elements.appendChild(
+							getCompositeSoundComponentElement(doc, (CompositeSoundComponent)element, "CompositeSoundComponent", componentCounter)
+							);						
+					componentsHashMap.put((SoundComponent) element, componentCounter);
+					componentCounter++;					
+				}
+				
 				// collect links
 				else if(element instanceof Link){
 					links.add((Link) element);
