@@ -332,7 +332,7 @@ begin
 				
 		    when STATE_NOTIFY =>
 
-                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, NCO_STOP, ignore, done);
+                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, snd_comp_header.dest_addr, ignore, done);
                 if done then
                     state <= STATE_WAITING;
 				end if;
