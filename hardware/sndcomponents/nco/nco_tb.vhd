@@ -31,9 +31,11 @@ USE ieee.std_logic_1164.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 USE ieee.numeric_std.ALL;
- 
-library soundgates;
-use soundgates.soundcomponents.all;
+use STD.textio.all;
+
+
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 ENTITY nco_tb IS
 END nco_tb;
@@ -59,8 +61,8 @@ ARCHITECTURE behavior OF nco_tb IS
    signal rst : std_logic := '0';
    signal ce  : std_logic := '1';
   
-   signal phase_offset : signed(31 downto 0) := (others => '0');
-   signal phase_incr : signed(31 downto 0) := (others => '0');
+   signal phase_offset  : signed(31 downto 0) := (others => '0');
+   signal phase_incr    : signed(31 downto 0) := (others => '0');
    
    
    constant FPGA_FREQUENCY : integer := 100_000_000;
@@ -72,14 +74,14 @@ ARCHITECTURE behavior OF nco_tb IS
    constant clk_period : time := 10 ns;
  
 BEGIN
- 
-	-- Instantiate the Unit Under Test (UUT)
+   phase_incr <=  Get_Cordic_Phase_Increment(FPGA_FREQUENCY, 2000);
+    -- Instantiate the Unit Under Test (UUT)
    uut: nco PORT MAP (
           clk => clk,
           rst => rst,
           ce  => ce,
           phase_offset => phase_offset,
-			 phase_incr   => phase_incr,
+	      phase_incr   => phase_incr,
           data => data
         );
 
@@ -101,47 +103,19 @@ BEGIN
       rst <= '1';
       wait for 100 ns;	
       rst <= '0';
-      wait for clk_period*10;
-
-		-- freq <= to_unsigned(8000, 32);
-   
-		phase_incr <= Get_Cordic_Phase_Increment(FPGA_FREQUENCY, 8000);
-      
-		wait for clk_period;
-		
-			
-		wait for 125 us;
-
-		-- freq <= to_unsigned(10000, 32);
-			
-		
-		wait for clk_period;
-		
-		
-		wait for 100 us;
-		
-		-- freq <= to_unsigned(12000, 32);
-				
-		wait for clk_period;
-				
-		
-		wait for 75 us;
-		
-		-- freq <= to_unsigned(14000, 32);
-			
-		
-		wait for clk_period;
-				
-		wait for 50 us;
-		
-		--freq <= to_unsigned(16000, 32);
-			
-		wait for clk_period;
-				
-		wait for 25 us;
-      
-
+      wait for clk_period*10;  
+	  
       wait;
    end process;
+   
+   write_data_proc : process
+    file sine_file : TEXT open WRITE_MODE is "sine.out";
+    variable wline : line;
+   begin
+    write(wline, to_integer(data));
+	writeline(sine_file, wline);			
+    wait for clk_period; 
+   end process;
+   
 
 END;

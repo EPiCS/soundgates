@@ -1,1 +1,0 @@
-../../common/soundgates_v1_00_a/hdl/vhdl/soundgates_common_pkg.vhd

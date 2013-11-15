@@ -31,10 +31,10 @@ use ieee.math_real.all;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 USE ieee.numeric_std.ALL;
+use STD.textio.all;
  
- 
-library soundgates;
-use soundgates.soundcomponents.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 ENTITY cordic_tb IS
 END cordic_tb;
@@ -67,8 +67,6 @@ ARCHITECTURE behavior OF cordic_tb IS
    signal clk : std_logic := '0';
    signal rst : std_logic;
    signal ce  : std_logic;
-	
-	constant scaling : real := 27.0;
 	
 	constant x_init : integer := integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING));
 	constant y_init : integer := integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING));
@@ -139,14 +137,14 @@ BEGIN
          
          init_done <= '1';
                   
-         wait until true;
+         wait;
          
    end process;
    
    -- Stimulus process
    stim_proc: process
 	
-		constant f_sin  : real := 440.0; 	   -- in Hz
+		constant f_sin  : real := 8000.0; 	   -- in Hz
 		constant f_fpga : real := 100000000.0; -- in Hz;
 		
 		constant stepsize : integer := integer(f_fpga / f_sin);
@@ -154,6 +152,8 @@ BEGIN
 		constant phi_offset : real := real(MATH_PI * 2.0 / real(stepsize) * 2 ** SOUNDGATE_FIX_PT_SCALING);
 		constant phi_offset_scaled : signed(31 downto 0) := to_signed(integer(phi_offset), 32);
 		
+		--file sine_file : TEXT open WRITE_MODE is "sine.out";
+		--variable wline : line;
    begin         
          count <= count + 1;
          
@@ -162,9 +162,12 @@ BEGIN
          else
             phi 	<= to_signed(0, 32);
             count <= 0;
-         end if;			
-         
-         wait for clk_period;      
+         end if;
+         --write(wline, to_integer(sin));
+			
+         wait for clk_period;
+			
+			--writeline(sine_file, wline);
    end process;
 
 END;

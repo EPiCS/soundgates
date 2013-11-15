@@ -59,13 +59,16 @@ package body soundgates_common_pkg is
 
 function Get_Cordic_Phase_Increment (FPGA_FREQUENCY, SIN_FREQUENCY : integer) return signed is
 	
-    variable stepsize       : integer;
+    variable stepsize        : integer;
     variable phi_incr_real   : real;
     variable phi_incr_signed : signed(31 downto 0);
 begin	
    if SIN_FREQUENCY > 0 then
-      stepsize        := FPGA_FREQUENCY / SIN_FREQUENCY;
-      phi_incr_real   := MATH_PI * 2.0 / real(stepsize);
+      --stepsize        := FPGA_FREQUENCY / SIN_FREQUENCY;
+      --phi_incr_real   := MATH_PI * 2.0 / real(stepsize);
+      --phi_incr_signed := to_signed(integer(real(phi_incr_real) * 2**SOUNDGATE_FIX_PT_SCALING), 32);
+      
+      phi_incr_real   := MATH_PI * 2.0 * real(SIN_FREQUENCY)  / 96000.0;
       phi_incr_signed := to_signed(integer(real(phi_incr_real) * 2**SOUNDGATE_FIX_PT_SCALING), 32);
    else
       phi_incr_signed := to_signed(0, 32);
