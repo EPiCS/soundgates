@@ -16,12 +16,10 @@ void error(int, const char *, const char *);
 
 int generic_handler(const char *, const char *, lo_arg **, int, void *, void *);
 
-int sin_handler(const char *, const char *, lo_arg ** ,  int, void *, void *);
-
-int tri_handler(const char *, const char *, lo_arg ** ,  int, void *, void *);
-
-int bias_handler(const char *, const char *, lo_arg ** ,  int, void *, void *);
+int soundgates_handler(const char *, const char *, lo_arg ** ,  int, void *, void *);
 
 int quit_handler(const char *, const char *, lo_arg **, int, void *, void *);
+
+void* osc_handler_thread(void *);
 
 #endif
