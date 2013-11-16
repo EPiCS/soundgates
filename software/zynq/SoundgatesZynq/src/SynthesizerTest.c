@@ -24,6 +24,7 @@
 #include <mbox.h>
 
 // Soundgates imports
+#include "SynthesizerTest.h"
 #include "ComponentStructs.h"
 #include "Samplebuffer.h"
 #include "Inputconverter.h"
