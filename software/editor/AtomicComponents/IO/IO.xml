@@ -5,6 +5,10 @@
 	<Ports>
 		<Port Name="Value" Direction="OUT" DataType="INTEGER"/>
 	</Ports>
+	<Properties>
+		<FloatProperty Name="MinValue" InitialValue="0"/>
+		<FloatProperty Name="MaxValue" InitialValue="0"/>
+	</Properties>
 	<Code>
 		<Simulation>
 			<PortMapping PortName="Value" PortNumber="0" />

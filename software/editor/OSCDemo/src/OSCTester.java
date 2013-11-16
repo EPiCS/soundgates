@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortOut;
@@ -19,7 +16,7 @@ public class OSCTester {
 		printHelp();
 		String prompt = "OSCTester> ";
 
-		OSCPortOut sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);;
+		OSCPortOut sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
 		do {
 			System.out.print(prompt);
 			line = console.readLine();
