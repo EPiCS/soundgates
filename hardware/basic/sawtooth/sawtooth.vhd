@@ -26,6 +26,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 entity sawtooth is
 port(                
         clk     : in  std_logic;
+        rst     : in  std_logic;
         ce      : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
@@ -35,26 +36,23 @@ port(
 end sawtooth;
 
 architecture Behavioral of sawtooth is  
-
+    
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 
-    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant upper  : signed (31 downto 0) := to_signed(integer(real(1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-    --constant add    : signed (31 downto 0) := to_signed(integer(real(1 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-
-    constant divider: integer   := 100_000;
-    signal count    : integer   := 0;
-
-    signal i_clk    : std_logic := '0';
-        
 		  
 	begin
 		  
         saw <= x;
           
-        CALC_SAW : process (i_clk, x, incr)
+
+        CALC_SAW : process (clk, rst)
         begin
-            if rising_edge(i_clk) then
+            if rst = '1' then
+                x <= offset;
+            else
+            if rising_edge(clk) then
                 if ce = '1' then
                     x <= x + incr;
                     if x > upper then
@@ -62,19 +60,8 @@ architecture Behavioral of sawtooth is
                     end if;
                 end if;
             end if;
+				end if;
         end process;  
-
-        -- generates 1000Hz
-        INTERN_CLK: process (clk)
-            begin
-                if rising_edge(clk) then
-                    count <= count + 1;
-                    if count >= divider then
-                        count <= 0;
-                        i_clk <= not i_clk;
-                    end if;
-                end if;
-          end process; 
-		  
+	  
         
 end Behavioral;

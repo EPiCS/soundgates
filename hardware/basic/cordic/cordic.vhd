@@ -97,8 +97,6 @@ begin
             end if;
          end if;
 	end process;
-    
-
 	
 	x_pipeline(0) <= x_i;
 	y_pipeline(0) <= y_i;

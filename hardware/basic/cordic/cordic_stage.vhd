@@ -76,7 +76,7 @@ begin
 		variable z_next : signed(31 downto 0);
 	begin
 			
-		if z(31) = '0' then		--  sgn = + 1
+      if z(31) = '0' then		--  sgn = + 1
          x_next := x + (-y_shift);
          y_next := x_shift + y;
          z_next := z + (-scaled_arctan);
@@ -94,7 +94,7 @@ begin
 	REG_PROCESS : process(clk)
 	begin	
 		if rising_edge(clk) then               
-         if rst = '1' then         
+         if rst = '1' then
             x_next <= (others => '0');
             y_next <= (others => '0');
             z_next <= (others => '0');
@@ -111,4 +111,3 @@ begin
    z_n <= z_next;
 	
 end Behavioral;
-

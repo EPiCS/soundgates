@@ -6,12 +6,12 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - hwt_nco
+--   title:        VHDL module - hwt_noise
 --
 --   project:      PG-Soundgates
---   author:       Lukas Funke, University of Paderborn
+--   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Hardware thread for a numeric controlled oscillator
+--   description:  Hardware thread for generating noise
 --
 -- ======================================================================
 
@@ -29,10 +29,10 @@ library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
-entity hwt_nco is
+entity hwt_noise is
     generic(
-		SND_COMP_CLK_FREQ : integer := 100_000_000;
-		SND_COMP_NCO_TPYE : integer := 0
+    	SND_COMP_CLK_FREQ   : integer := 100_000_000;
+		SND_COMP_NOISE_TPYE : integer := 0
 	);
    port (
 		-- OSIF FIFO ports
@@ -60,28 +60,26 @@ entity hwt_nco is
 		HWT_Clk   : in  std_logic;
 		HWT_Rst   : in  std_logic
     );
-end hwt_nco;
+end hwt_noise;
 
-architecture Behavioral of hwt_nco is
+architecture Behavioral of hwt_noise is
 
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
     
-    component nco is
+    component noise is
 	generic(
 		FPGA_FREQUENCY  : integer       := 100_000_000;
-		WAVEFORM        : WAVEFORM_TYPE := SIN
+		NOISE           : NOISE_TYPE    := WHITE
 	);
     Port ( 
             clk          : in  std_logic;           
             rst          : in  std_logic;
             ce           : in  std_logic;
-            phase_offset : in  signed(31 downto 0);
-            phase_incr   : in  signed(31 downto 0);
             data         : out signed(31 downto 0)
            );
-    end component nco;
+    end component noise;
  
     signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -115,10 +113,10 @@ architecture Behavioral of hwt_nco is
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
-    signal o_RAMAddr_nco : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
-	signal o_RAMData_nco : std_logic_vector(0 to 31);   -- nco to local ram
-	signal i_RAMData_nco : std_logic_vector(0 to 31);   -- local ram to nco
-    signal o_RAMWE_nco   : std_logic;
+    signal o_RAMAddr_noise : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_noise : std_logic_vector(0 to 31);   -- nco to local ram
+	signal i_RAMData_noise : std_logic_vector(0 to 31);   -- local ram to nco
+    signal o_RAMWE_noise   : std_logic;
 	
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
@@ -141,22 +139,16 @@ architecture Behavioral of hwt_nco is
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal nco_ce            : std_logic;           -- nco clock enable (like a start/stop signal)
-
-    signal phase_offset_addr : std_logic_vector(31 downto 0);
-    signal phase_incr_addr   : std_logic_vector(31 downto 0);
-   
-    signal phase_offset  : std_logic_vector(31 downto 0);
-    signal phase_incr    : std_logic_vector(31 downto 0);
+    signal noise_ce            : std_logic;           -- noise clock enable (like a start/stop signal)
     
-    signal nco_data      : signed(31 downto 0);
+    signal noise_data      : signed(31 downto 0);
     
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant NCO_START : std_logic_vector(31 downto 0) := x"0000000F";
-    constant NCO_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    constant NOISE_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant NOISE_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
 
 begin
     -----------------------------------
@@ -164,7 +156,7 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_nco <= std_logic_vector(nco_data);
+    o_RAMData_noise <= std_logic_vector(nco_data);
     
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
@@ -206,18 +198,16 @@ begin
 	);
             
     -- /ReconOS Stuff
-    nco_inst : nco
+    NOISE_INST : noise
     generic map(
 		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ,
-		WAVEFORM        => WAVEFORM_TYPE'val(SND_COMP_NCO_TPYE)
+		NOISE        => WAVEFORM_TYPE'val(SND_COMP_NOISE_TPYE)
 	 )
     port map( 
             clk          => clk,
             rst          => rst,
-            ce           => nco_ce,
-            phase_offset => signed(phase_offset),
-            phase_incr   => signed(phase_incr),
-            data         => nco_data
+            ce           => noise_ce,
+            data         => noise_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -234,10 +224,10 @@ begin
     local_ram_ctrl_2 : process (clk) is
 	begin
 		if (rising_edge(clk)) then		
-			if (o_RAMWE_nco = '1') then
-				local_ram(to_integer(unsigned(o_RAMAddr_nco))) := o_RAMData_nco;
-            --else      -- else not needed, because nco is not consuming any samples
-			--	i_RAMData_nco <= local_ram(conv_integer(unsigned(o_RAMAddr_nco)));
+			if (o_RAMWE_noise = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_noise))) := o_RAMData_noise;
+            --else      -- else not needed, because noise is not consuming any samples
+			--	i_RAMData_noise <= local_ram(conv_integer(unsigned(o_RAMAddr_noise)));
 			end if;
 		end if;
 	end process;
@@ -255,36 +245,30 @@ begin
             state           <= STATE_INIT;
             sample_count    <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
             osif_ctrl_signal <= (others => '0');
-            nco_ce       <= '0';
-            o_RAMWE_nco  <= '0';
+            noise_ce       <= '0';
+            o_RAMWE_noise  <= '0';
             
             done := False;
               
         elsif rising_edge(clk) then
             
-            nco_ce      <= '0';
-            o_RAMWE_nco <= '0';
+            noise_ce      <= '0';
+            o_RAMWE_noise <= '0';
             osif_ctrl_signal <= ( others => '0');
             
             case state is            
-            -- INIT State gets the address of the header struct
-            when STATE_INIT =>               
+            when STATE_INIT =>
 
-                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);                
-                if done then
-                    -- Initialize your signals
-                    phase_offset_addr <= snd_comp_header.opt_arg_addr;
-                    phase_incr_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
+                -- Init not used
 
-                    state <= STATE_WAITING;
-                end if;            
+                state <= STATE_WAITING;           
             
             when STATE_WAITING =>
 
                 -- Software process "Synthesizer" sends the start signal via mbox_start
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
                 if done then
-                    if osif_ctrl_signal = NCO_START then
+                    if osif_ctrl_signal = NOISE_START then
                         
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
 
@@ -297,18 +281,11 @@ begin
                     end if;    
                 end if;
                  
-            when STATE_REFRESH_INPUT_PHASE_OFFSET =>
+            when STATE_REFRESH_INPUTS =>
                 
                 memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);                
                 if done then
                     state <= STATE_REFRESH_INPUT_PHASE_INCR;
-                end if;
-                
-            when STATE_REFRESH_INPUT_PHASE_INCR =>
-            
-                memif_read_word(i_memif, o_memif, phase_incr_addr, phase_incr, done);
-                if done then
-                    state <= STATE_PROCESS;
                 end if;
                 
             when STATE_PROCESS =>

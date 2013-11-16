@@ -47,6 +47,41 @@ architecture Behavioral of nco is
 		);
 	end component cordic;
     
+    component sawtooth
+    port(
+        clk     : in std_logic;
+        ce      : in std_logic;
+        rst     : in  std_logic;
+        incr    : in signed(31 downto 0);
+        offset  : in signed(31 downto 0);
+        saw     : out signed(31 downto 0)
+    );
+    end component sawtooth;
+    
+    component square 
+    port(                
+        clk     : in  std_logic;
+        ce      : in  std_logic;
+        rst     : in  std_logic;
+        incr    : in  signed(31 downto 0); 
+        offset  : in  signed(31 downto 0);  
+        duty_on : in  signed(31 downto 0);  
+        duty_off: in  signed(31 downto 0);
+        sq      : out signed(31 downto 0)
+    );
+    end component square;
+    
+    component triangle
+    port(                
+        clk     : in  std_logic;
+        ce      : in  std_logic;
+        rst     : in  std_logic;
+        incr    : in  signed(31 downto 0); 
+        offset  : in  signed(31 downto 0);  
+        tri     : out signed(31 downto 0)
+    );
+    end component triangle;
+    
 	
    -- Choose number of pipeline stages carefully:
    --  if number of pipeline stages is not power of 2 then an additional multiplier will be included
@@ -54,9 +89,9 @@ architecture Behavioral of nco is
    --  also its not implemented yet
    
    --constant cordic_pipeline_stages : integer := 16;    -- lower resolution (but high enough)
-   constant cordic_pipeline_stages : integer := 16;    -- very high resolution
+    constant cordic_pipeline_stages : integer := 16;    -- very high resolution
    
-   constant standard_cordic_offset : integer := integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING));
+    constant standard_cordic_offset : integer := integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING));
    
 	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
 	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
@@ -130,47 +165,51 @@ begin
    
    --------------------------------------------------------------------------------	
    
---   SQUARE_GENERATOR  : if WAVEFORM = SQUARE generate
+--   SQUARE_GENERATOR  : if WAVEFORM = SQU generate
 --   
 --   			SQUARE_INSTA : square
 --         	port map(                
 --                    clk     => clk, 
 --                    ce      => ce,
+--                    rst     => rst,
 --                    incr    => phase_incr, 
---                    offset  => phase_offset,
+--                    offset  => phase_offset,  
+--                    duty_on => duty_on,
+--                    duty_off=> duty_off,
 --                    sq      => data );
 -- 
 --   end generate SQUARE_GENERATOR;
---   
---   --------------------------------------------------------------------------------	
---   
---   TRIANGLE_GENERATOR  : if WAVEFORM = TRIANGLE generate
---   
---   			TRIANGLE_INSTA : square
---         	port map(                
---                    clk     => clk, 
---                    ce      => ce,
---                    incr    => phase_incr, 
---                    offset  => phase_offset,
---                    tri     => data );   
--- 
---   end generate TRIANGLE_GENERATOR;
---      
---   --------------------------------------------------------------------------------	
---   
---   SAWTOOTH_GENERATOR  : if WAVEFORM = SAWTOOTH generate
---      
---   			SAWTOOTH_INSTA : square
---         	port map(                
---                    clk     => clk, 
---                    ce      => ce,
---                    incr    => phase_incr, 
---                    offset  => phase_offset,
---                    saw     => data );   
--- 
---   end generate SAWTOOTH_GENERATOR;
+   
+   --------------------------------------------------------------------------------	
+   
+   TRIANGLE_GENERATOR  : if WAVEFORM = TRI generate
+   
+   			TRIANGLE_INSTA : triangle
+         	port map(                
+                    clk     => clk, 
+                    ce      => ce,
+                    rst     => rst,
+                    incr    => phase_incr, 
+                    offset  => phase_offset,
+                    tri     => data );   
+ 
+   end generate TRIANGLE_GENERATOR;
+      
+   --------------------------------------------------------------------------------	
+   
+   SAWTOOTH_GENERATOR  : if WAVEFORM = SAW generate
+      
+   			SAWTOOTH_INSTA : sawtooth
+         	port map(                
+                    clk     => clk, 
+                    ce      => ce,
+                    rst     => rst,
+                    incr    => phase_incr, 
+                    offset  => phase_offset,
+                    saw     => data );   
+ 
+   end generate SAWTOOTH_GENERATOR;
 
    --------------------------------------------------------------------------------   
    
 end Behavioral;
-
