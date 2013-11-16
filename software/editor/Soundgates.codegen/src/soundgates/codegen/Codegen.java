@@ -36,7 +36,8 @@ public class Codegen {
 
 	private final String pdcodeFolderName = "pdcode";
 	HashMap<Port, Integer> compositeComponentPortMappings;
-
+	List<AtomicSoundComponent> ioComponents;
+	
 	IFolder pdCodeFolder = null;
 	
 	public Codegen() {
@@ -140,6 +141,10 @@ public class Codegen {
 			// get pd code
 			if (atomicSoundComponent.getStringProperties().containsKey(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PDCODE)){
 				pdCodeText = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PDCODE);				
+			}
+			
+			if (atomicSoundComponent.getType().equals("IO")){
+				pdCodeText = pdCodeText.replaceAll("@ComponentName", atomicSoundComponent.getName());
 			}
 			
 			// get properties mapping
@@ -253,9 +258,50 @@ public class Codegen {
 				result += "#X obj 0 0 "+ getUniqueName(comp) + ";\n";
 		}		
 		result += handleLinks(linkList, componentList);
+		result += addControlLogic(componentList);
 		file.create(new ByteArrayInputStream(result.getBytes()), IFile.FORCE, null);
 	}
 	
+	private String addControlLogic(List<SoundComponent> componentList) {
+
+		
+		ioComponents = new ArrayList<AtomicSoundComponent>();
+		for(SoundComponent ioComponent : componentList){
+			if (ioComponent instanceof AtomicSoundComponent){
+				AtomicSoundComponent atomic = (AtomicSoundComponent) ioComponent;
+				if (atomic.getType().equals("IO")){
+					ioComponents.add(atomic);
+				}
+			}
+		}
+		int objNum = componentList.size();
+		StringBuilder result = new StringBuilder();
+		HashMap<AtomicSoundComponent, Integer> mapping = new HashMap<AtomicSoundComponent, Integer>(); 
+		result.append("#X obj 72 31 dumpOSC 50050;\n");
+		objNum += 1;
+		int oscroutenum = objNum;
+		result.append("#X obj 138 101 OSCroute ");
+		objNum += 1;
+		int counter = 0;
+		for (AtomicSoundComponent atomic : ioComponents){
+			result.append("/" + atomic.getName() + " ");
+			mapping.put(atomic, counter);
+			counter++;
+		}
+		result.append(";\n");
+
+		result.append("#X connect " + (objNum - 2) + " 0 " + (objNum - 1) + " 0;\n"); //connect dumpOSC with OSCroute
+		
+		for (AtomicSoundComponent atomic : ioComponents){
+			result.append("#X obj 192 154 unpack s f;\n");
+			result.append("#X obj 99 218 s " + atomic.getName() + ";\n");
+			objNum += 2;
+			result.append("#X connect " + oscroutenum + " " + mapping.get(atomic) + " " + (objNum - 2) + " 0;\n"); //connect OSCroute with unpack
+			result.append("#X connect " + (objNum - 2) + " 1 " + (objNum - 1) + " 0;\n"); //connect unpack with s
+		}
+		return result.toString();
+	}
+
 	private String handleLinks(List<Link> linkList, List<SoundComponent> componentList){
 		StringBuilder pdcode = new StringBuilder();
 		for (Link link : linkList){
@@ -384,5 +430,9 @@ public class Codegen {
 			pdCodeFolder.delete(true, null);
 			pdCodeFolder.create(IResource.NONE, true, null);
 		generateCodeForPatch(patch);
+	}
+
+	public List<AtomicSoundComponent> getIoComponents() {
+		return ioComponents;
 	}
 }

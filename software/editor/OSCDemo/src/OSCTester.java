@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortOut;
@@ -14,71 +11,47 @@ public class OSCTester {
 
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
-		//startPD();
-		makeMusic();
-	}
-	
-	private static void makeMusic() throws IOException, InterruptedException {
-		sendOff(sender, "synth1");
-		sendOff(sender, "synth2");
-		sendOff(sender, "synth3");
-		
-		new Beeper(70, 2000, 4000, "synth1", sender).start();
-		Thread.sleep(1000);
-		new Beeper(76, 2000, 4000, "synth2", sender).start();
-		Thread.sleep(1000);
-		new Beeper(82, 2000, 4000, "synth3", sender).start();
-	}
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+		String line = null;
+		printHelp();
+		String prompt = "OSCTester> ";
 
-	static {
-		try {
-			sender = new OSCPortOut(InetAddress.getByName("localhost"));
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
+		OSCPortOut sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
+		do {
+			System.out.print(prompt);
+			line = console.readLine();
+			if (line.startsWith("quit")){
+				break;
+			} else if (line.startsWith("net")){
+				String [] address = line.split(" ")[1].split(":");
+				String ip = address[0];
+				int port = Integer.parseInt(address[1]);
+				sender.close();
+				sender = new OSCPortOut(InetAddress.getByName(ip),port);
+			} else if (line.startsWith("help")){
+				printHelp();
+			} else if (line.startsWith("send")){
+			String [] command = line.split(" ");
+			try{
+				float value = Float.parseFloat(command[2]);
+				sendFloat(sender, command[1], value);
+				System.out.println("Value "+ value +" sent to component " + command[1]);
+			} catch (NumberFormatException | ArrayIndexOutOfBoundsException e){
+				System.out.println("Command string format not recognized. Hint: <componentName> <value>");
+			}}
+		} while (true);
 	}
 	
-	private static OSCPortOut sender;
-	
-	public static void sendOff(OSCPortOut sender, String synth) throws IOException{
-		sender.send(new OSCMessage("/synths/" + synth + "/off"));
+	private static void printHelp(){
+		System.out.println("Possible commands;");
+		System.out.println("\tnet <ip>:<port>");
+		System.out.println("\tsend <componentName> <value>");
+		System.out.println("\thelp");
 	}
 	
-	public static void sendOn(OSCPortOut sender, String synth, Integer frequency) throws IOException{
-		sender.send(new OSCMessage("/synths/" + synth + "/on", new Object [] {frequency}));
-	}
-	
-	private static void startPD() throws IOException {
-		String [] pd = new String [] {
-//				"bash",
-				"/usr/lib/pd-extended/bin/pdextended",
-//				"-nogui",
-				"-alsa",
-				"-alsaadd", "pulse",
-				"-open", "/home/olaf/Studium/Projektgruppe/OSCreceiver.pd",
-//				"-send", "\"pd dsp 1\""
-		};
-		
 
-		
-		ProcessBuilder builder = new ProcessBuilder(pd);
-		final Process process = builder.start();
-		
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-		    public void run() { process.destroy(); }
-		});
-		
-		InputStream is = process.getInputStream();
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-		String line;
-		
-		while ((line = br.readLine()) != null) {
-		  System.out.println(line);
-		}
+	
+	public static void sendFloat(OSCPortOut sender, String componentName, float value) throws IOException{
+		sender.send(new OSCMessage("/" + componentName, new Object [] { "f", value }));
 	}
 }

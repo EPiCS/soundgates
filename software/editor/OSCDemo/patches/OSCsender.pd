@@ -1,4 +1,4 @@
-#N canvas 661 571 584 298 10;
+#N canvas 253 723 584 298 10;
 #X declare -lib mrpeach;
 #X obj 110 34 import mrpeach;
 #X obj 80 245 udpsend;
@@ -7,7 +7,6 @@
 #X floatatom 323 113 5 0 0 0 - - -;
 #X obj 64 63 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X msg 116 87 connect localhost 9001;
 #X obj 322 32 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 277 88 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
@@ -17,14 +16,17 @@
 #X obj 464 104 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X obj 363 66 random;
+#X msg 116 87 connect localhost 50050;
+#X msg 459 181 send 1234;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
-#X connect 4 0 9 0;
-#X connect 5 0 6 0;
-#X connect 6 0 1 0;
-#X connect 7 0 12 0;
-#X connect 8 0 2 0;
+#X connect 4 0 8 0;
+#X connect 5 0 12 0;
+#X connect 6 0 11 0;
+#X connect 7 0 2 0;
+#X connect 8 0 3 0;
 #X connect 9 0 3 0;
-#X connect 10 0 3 0;
-#X connect 11 0 10 0;
-#X connect 12 0 4 0;
+#X connect 10 0 9 0;
+#X connect 11 0 4 0;
+#X connect 12 0 1 0;
+#X connect 13 0 3 0;
