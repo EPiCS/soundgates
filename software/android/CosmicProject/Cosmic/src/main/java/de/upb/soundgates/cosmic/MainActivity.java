@@ -240,8 +240,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             msg_store = new OSCMessageStore();
             for(String msg : result.split(OSC_MSG_DELIMITER)) {
-                msg_store.addOSCMessage(msg);
-                Log.d(MainActivity.LOG_TAG, "Message " + msg);
+                if(!msg_store.addOSCMessage(msg)) {
+                    Log.e(MainActivity.LOG_TAG, "Couldn't add Message:" + msg);
+                }
             }
 
             setHost(host);

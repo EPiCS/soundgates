@@ -25,8 +25,12 @@ public class OSCMessageStore {
         return selected_store;
     }
 
-    public void addOSCMessage(String msg) {
-        store.add(new OSCMessage(msg));
+    public boolean addOSCMessage(String msg) {
+        OSCMessage osc_msg = OSCMessage.newInstance(msg);
+        if(osc_msg == null)
+            return false;
+        store.add(osc_msg);
+        return true;
     }
 
     public boolean markOSCMessage(int position, boolean selected) {
@@ -41,7 +45,7 @@ public class OSCMessageStore {
     public String toString() {
         String ret = "";
         for(OSCMessage msg : store)
-            ret += msg + " (selected: " + msg.isSelected() + ")\n";
+            ret += msg + "\n";
         return ret;
     }
 }

@@ -74,10 +74,15 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
             String msg = viewHolder.text.getText() + " " + seekBar.getProgress();
             Log.d(MainActivity.LOG_TAG, msg);
 
-            com.illposed.osc.OSCMessage oscmsg = new com.illposed.osc.OSCMessage(viewHolder.text.getText().toString().split(" ")[0]);
-            Object args[] = new Object[1];
-            args[0] = new Float(seekBar.getProgress());
-            oscmsg.addArgument(args);
+            Object[] args =
+                    {
+                            new Float(seekBar.getProgress())
+                    };
+
+            com.illposed.osc.OSCMessage oscmsg = new com.illposed.osc.OSCMessage(viewHolder.text.getText().toString().split(" ")[0],args);
+            //Object args[] = new Object[1];
+            //args[0] = new Integer(seekBar.getProgress());
+            //oscmsg.addArgument(args);
 
             new OSCSender(host, port, oscmsg).execute();
         }
@@ -148,7 +153,7 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
         }
 
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.text.setText(list.get(position).toString());
+        holder.text.setText(list.get(position).getPath());
         //holder.checkbox.setChecked(list.get(position).isSelected());
         return view;
     }
