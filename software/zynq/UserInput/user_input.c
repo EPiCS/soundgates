@@ -23,7 +23,7 @@ int main()
     } else if (osc_ret[0] == TRIANGLE) {
         // send frequency
         set_frequency_tri(osc_ret[1], offset_tri);
-    } else if (osc_ret[0] == SINUS) {
+    } else if (osc_ret[0] == BIAS) {
         // TODO 
     }
 

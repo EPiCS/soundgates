@@ -40,9 +40,11 @@ int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
     {
         set_frequency_sin(output[1], 0 /*offset*/);
     } else if (!strcmp(path, "/tri")) {
-        set_frequency_sin(output[1], 0 /*offset*/);
-    } else if (!strcmp(path, "/bias")) {
-        // TODO: implement set_frequency_bias(output[1]);
+        set_frequency_tri(output[1], 0 /*offset*/);
+    } else if (!strcmp(path, "/bias_sample")) {
+        set_bias_sample(output[1]);
+    } else if (!strcmp(path, "/bias_waves")) {
+        set_bias_waves(output[1]);
     }
 
     fflush(stdout);
@@ -73,14 +75,15 @@ void* osc_handler_thread(void *args)
 
 
 
-    /* add handler for */
-    /* sinus,          */
+    /* add handler for  */
+    /* sinus,           */
     lo_server_thread_add_method(st, "/sin", "f", soundgates_handler, NULL);
-    /* triangle,       */
+    /* triangle,        */
     lo_server_thread_add_method(st, "/tri", "f", soundgates_handler, NULL);
-    /* bias            */
-    lo_server_thread_add_method(st, "/bias", "f", soundgates_handler, NULL);
-
+    /* bias for samples */
+    lo_server_thread_add_method(st, "/bias_sample", "f", soundgates_handler, NULL);
+    /* bias for 2 waves */
+    lo_server_thread_add_method(st, "/bias_waves", "f", soundgates_handler, NULL);
 
     
     /* add method that will match the path /quit with no args */
