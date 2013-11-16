@@ -26,6 +26,7 @@
 // Soundgates imports
 #include "ComponentStructs.h"
 #include "Samplebuffer.h"
+#include "Inputconverter.h"
 
 // Defines
 #define SAMPLE_COUNT       64
@@ -33,32 +34,54 @@
 #define MBOX_SIZE          1
 #define START_OPERATION    0x00F; //TODO: Die selbe Konstante wie im VHDL Code nehmen
 #define FINISH_OPERATION   0xFFF; //TODO: Die selbe Konstante wie im VHDL Code nehmen
-#define HW_THREADS 1
+#define HW_THREADS 2
 #define SW_THREADS 1
 
 // One Array for every SW thread
 pthread_t                 swt_threads[SW_THREADS];
 pthread_attr_t            swt_attr[SW_THREADS];
-struct reconos_resource   swt_res[2];
+struct reconos_resource   swt_res[HW_THREADS][2];
 
 // One array for every HW thread
 struct reconos_hwt        hwt_threads[HW_THREADS];
-struct reconos_resource   hwt_res[2];
+struct reconos_resource   hwt_res[SW_THREADS][2];
 
 // Communication
-struct mbox mb_start;
-struct mbox mb_stop;
+struct mbox mb_start[2];
+struct mbox mb_stop[2];
 
-struct mbox mb_sw_start;
-struct mbox mb_sw_stop;
+struct mbox mb_sw_start[2];
+struct mbox mb_sw_stop[2];
 
 // Define HW dependent variables -- Generate
 int  component_lvl1_sine_offset;
 int  component_lvl1_sine_increment;
 int* component_lvl1_sine_targetbufer;
 
+int  component_lvl1_triangle_offset;
+int  component_lvl1_triangle_increment;
+int* component_lvl1_triangle_targetbufer;
+
 // The buffer where the mixer takes its data from
 int* alsa_buffer;
+
+/*
+ * Writes the increment and offset of sinus
+ */
+void set_frequency_sin(float frequency, float offset)
+{
+    component_lvl1_sine_increment = freq_to_incr_sin(frequency);
+    omponent_lvl1_sine_offset     = offset;    
+}
+
+/*
+ * Writes the increment and offset of triangle
+ */
+void set_frequency_tri(float frequency, float offset)
+{
+    component_lvl1_triangle_increment = freq_to_incr(frequency);
+    omponent_lvl1_triangle_offset     = offset;    
+}
 
 /*
  * This sw thread writes pcm data into a buffer and is controlled like a HW thread.
@@ -102,41 +125,51 @@ void *play_wave(void* data)
 
 void initialize_system() {
 	// init mailboxes
-	mbox_init(&mb_start, MBOX_SIZE);
-	mbox_init(&mb_stop,  MBOX_SIZE);
-	mbox_init(&mb_sw_start, MBOX_SIZE);
-	mbox_init(&mb_sw_stop,  MBOX_SIZE);
+	mbox_init(&mb_start[0],    MBOX_SIZE);
+	mbox_init(&mb_stop[0],     MBOX_SIZE);
+	mbox_init(&mb_start[1],    MBOX_SIZE);
+	mbox_init(&mb_stop[1],     MBOX_SIZE);
+	mbox_init(&mb_sw_start[0], MBOX_SIZE);
+	mbox_init(&mb_sw_stop[0],  MBOX_SIZE);
 	// init reconos and communication resources
 	reconos_init();
-	hwt_res[0].type = RECONOS_TYPE_MBOX;
-	hwt_res[0].ptr  = &mb_start;
-	hwt_res[1].type = RECONOS_TYPE_MBOX;
-	hwt_res[1].ptr  = &mb_stop;
+	hwt_res[0][0].type = RECONOS_TYPE_MBOX;
+	hwt_res[0][0].ptr  = &mb_start[0];
+	hwt_res[0][1].type = RECONOS_TYPE_MBOX;
+	hwt_res[0][1].ptr  = &mb_stop[0];
 
-	swt_res[0].type  = RECONOS_TYPE_MBOX;
-	swt_res[0].ptr  = &mb_sw_start;
-	swt_res[1].type  = RECONOS_TYPE_MBOX;
-	swt_res[1].ptr  = &mb_sw_stop;
+	hwt_res[1][0].type = RECONOS_TYPE_MBOX;
+	hwt_res[1][0].ptr  = &mb_start[1];
+	hwt_res[1][1].type = RECONOS_TYPE_MBOX;
+	hwt_res[1][1].ptr  = &mb_stop[1];
+
+	swt_res[0][0].type  = RECONOS_TYPE_MBOX;
+	swt_res[0][0].ptr  = &mb_sw_start[0];
+	swt_res[0][1].type  = RECONOS_TYPE_MBOX;
+	swt_res[0][1].ptr  = &mb_sw_stop[0];
 
 	// Define structs, variables & allocate memory
-	// TODO: Use Frequency to increment / offset --> already implemented. Somewhere.
-	component_lvl1_sine_targetbufer = malloc(sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
-	component_lvl1_sine_increment   = 20;
-	component_lvl1_sine_offset      = 20;
+	component_lvl1_sine_targetbufer =     malloc(sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
+	component_lvl1_triangle_targetbufer = malloc(sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
 	
 	// TODO: Nochmal überprüfen ob das in HW wirklich so aussieht
 	// source_addr, src_len, dest_addr, opt_arg_addr, opt_arg_len
-	sHeader sine_header = { 0, 0, component_lvl1_sine_targetbufer, &component_lvl1_sine_offset, &component_lvl1_sine_increment  };
+	sHeader sine_header     = { 0, 0, component_lvl1_sine_targetbufer,     &component_lvl1_sine_offset,     &component_lvl1_sine_increment  };
+	sHeader triangle_header = { 0, 0, component_lvl1_triangle_targetbufer, &component_lvl1_triangle_offset, &component_lvl1_triangle_increment  };
 
 	// Init Hw threads
-    reconos_hwt_setresources(&(hwt_threads[0]), hw_res, 2);
+    reconos_hwt_setresources(&(hwt_threads[0]), hw_res[0][0], 2);
 	reconos_hwt_setinitdata(&hwt_threads[0], (void *) &sine_header);
 	reconos_hwt_create(&hwt_threads[0], 0, NULL);
+
+    reconos_hwt_setresources(&(hwt_threads[1]), hw_res[1][0], 2);
+	reconos_hwt_setinitdata(&hwt_threads[1], (void *) &triangle_header);
+	reconos_hwt_create(&hwt_threads[1], 0, NULL);
 
 	// Init software threads
 	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)swt_res[0]);
+	pthread_create(&swt_threads[0][0], &swt_attr[0], play_wave, (void*)swt_res[0][0]);
 
 }
 
@@ -150,11 +183,11 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 	 */
 	while (1) {
 		// Start Layer 1 components
-		mbox_put(&mb_start, START_OPERATION);
-		mbox_put(&mb_sw_start, START_OPERATION);
+		mbox_put(&mb_start[0], START_OPERATION);
+		mbox_put(&mb_sw_start[0], START_OPERATION);
 		// Wait for Layer 1 components
-		int ret_hw = mbox_get(&mb_stop);
-		int ret_sw = mbox_get(&mb_sw_stop);
+		int ret_hw = mbox_get(&mb_stop[0]);
+		int ret_sw = mbox_get(&mb_sw_stop[0]);
 
 		//Wait until the buffer needs samples
 		while (!buffer_needsamples(sound_buffer)) {
