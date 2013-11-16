@@ -20,4 +20,6 @@ int soundgates_handler(const char *, const char *, lo_arg ** ,  int, void *, voi
 
 int quit_handler(const char *, const char *, lo_arg **, int, void *, void *);
 
+void* osc_handler_thread(void *);
+
 #endif
