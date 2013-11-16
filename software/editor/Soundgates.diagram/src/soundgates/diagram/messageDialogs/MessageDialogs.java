@@ -24,6 +24,13 @@ public class MessageDialogs {
 		MessageDialog.openInformation(null, "Success", "The composite sound component \""+name+"\" was exported to file \""+name+".xml\"");
 	}
 	
+	public static void compositeSoundComponentValidationTrue(String name) {		
+		MessageDialog.openInformation(null, "Success", "Composite sound component \""+name+"\" is correct");		
+	}
+
+	public static void patchValidationTrue() {		
+		MessageDialog.openInformation(null, "Success", "The patch is correct");		
+	}
 	
 	// --WARNINGS--
 
@@ -77,5 +84,13 @@ public class MessageDialogs {
 	
 	public static void compositeSoundComponentHasNoEmbeddedComponents(String name) {		
 		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no embedded components", "Please add at least one embedded component to the composite sound component \""+name+"\"");		
+	}	
+	
+	public static void compositeSoundComponentContaintsIOBlock(String name) {		
+		MessageDialog.openWarning(null, "IO blocks in composite components are not allowed", "Please remove the IO block(s) from the composite sound component \""+name+"\"");		
+	}
+	
+	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		
+		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please remove the SoundOutput block(s) from the composite sound component \""+name+"\"");		
 	}
 }

@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.core.runtime.CoreException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -130,12 +131,16 @@ public class CompositeSoundComponentExporter extends Exporter {
 			
 			transformer.transform(source, result);
 			
-			MessageDialogs.compositeSoundComponentWasExported(compositeSoundComponentToExport.getName());
+			MessageDialogs.compositeSoundComponentWasExported(compositeSoundComponentToExport.getName());	
+			
+			AtomicSoundComponentLibrary.getXMLFolder().refreshLocal(1, null);
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		} catch (TransformerException tfe) {
 			tfe.printStackTrace();
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 	}
 }

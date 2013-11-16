@@ -1,5 +1,7 @@
 package soundgates.diagram.XMLexport;
 
+import org.eclipse.emf.common.util.EList;
+
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
 import soundgates.Delegation;
@@ -13,7 +15,7 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class Tester {
 	
-	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent){
+	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
 		
 		// test name
 		if (compositeSoundComponent.getName()==null || "".equals(compositeSoundComponent.getName())){
@@ -37,7 +39,7 @@ public class Tester {
 		boolean inport = false;
 		boolean outport = false;
 		for(Port port : compositeSoundComponent.getPorts()){			
-			if ( testCompositeSoundComponentPort(port, compositeSoundComponent) == false )
+			if ( testCompositeSoundComponentPort(port, compositeSoundComponent, testCurrentComponent) == false )
 				return false;
 			
 			if(port.getDirection()==Direction.IN) inport = true;
@@ -53,13 +55,14 @@ public class Tester {
 		}
 		
 		// test embedded components
-//		if(compositeSoundComponent.getEmbeddedComponents().size()==0){
-//			MessageDialogs.compositeSoundComponentHasNoEmbeddedComponents(compositeSoundComponent.getName());
-//		}			
+		if ( testEmbeddedSoundComponents(
+				compositeSoundComponent.getName(), 
+				compositeSoundComponent.getEmbeddedComponents()) == false)
+		return false;
 			
 		for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
 			if(soundComponent instanceof CompositeSoundComponent){
-				if (testCompositeSoundComponent((CompositeSoundComponent) soundComponent) == false)
+				if (testCompositeSoundComponent((CompositeSoundComponent) soundComponent, false) == false)
 					return false;
 			}
 			else if(soundComponent instanceof AtomicSoundComponent){
@@ -82,25 +85,27 @@ public class Tester {
 		return true;
 	}
 	
-	public boolean testCompositeSoundComponentPort(Port port, CompositeSoundComponent parentComponent){
+	public boolean testCompositeSoundComponentPort(Port port, CompositeSoundComponent parentComponent, boolean testCurrentComponent){
 		
 		if(port.getName()==null || "".equals(port.getName())){
 			MessageDialogs.notAllPortsHaveAName(parentComponent.getName());
 			return false;
 		}
 		
-		if(port.getDirection() == Direction.IN)
-		{
-			if (port.getIncomingConnection()==null){
-				MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}			
-		}
-		if(port.getDirection() == Direction.OUT)
-		{
-			if(port.getOutgoingConnection().size()==0){
-				MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
-				return false;
+		if(!testCurrentComponent){
+			if(port.getDirection() == Direction.IN)
+			{
+				if (port.getIncomingConnection()==null){
+					MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
+					return false;
+				}			
+			}
+			if(port.getDirection() == Direction.OUT)
+			{
+				if(port.getOutgoingConnection().size()==0){
+					MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
+					return false;
+				}
 			}
 		}
 		return true;
@@ -144,7 +149,7 @@ public class Tester {
 			
 			// composite components
 			else if(element instanceof CompositeSoundComponent){				
-				if( testCompositeSoundComponent((CompositeSoundComponent) element) == false)
+				if( testCompositeSoundComponent((CompositeSoundComponent) element, false) == false)
 					return false;
 			}
 			
@@ -204,6 +209,13 @@ public class Tester {
 			MessageDialogs.delegation2Error(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
 			return false;
 		}
+		// special case
+		if(parent.getPorts().contains(delegation.getSource()) && 
+				delegation.getTarget().getDirection()==Direction.OUT)
+		{
+			MessageDialogs.delegation2Error(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
+			return false;
+		}
 		
 		return true;
 	}
@@ -218,5 +230,28 @@ public class Tester {
 			return replace;
 		}
 		else return true;
+	}
+	
+	public boolean testEmbeddedSoundComponents(String name, EList<SoundComponent> components){
+		if(components.size()==0){
+			MessageDialogs.compositeSoundComponentHasNoEmbeddedComponents(name);
+			return false;
+		}
+		for(SoundComponent soundComponent : components){
+			if(soundComponent instanceof AtomicSoundComponent){
+				if(((AtomicSoundComponent) soundComponent).getType().equals("IO") )
+				{
+					MessageDialogs.compositeSoundComponentContaintsIOBlock(name);
+					return false;
+				}
+				else if(((AtomicSoundComponent) soundComponent).getType().equals("SoundOutput"))
+				{
+					MessageDialogs.compositeSoundComponentContaintsSoundOutputBlock(name);
+					return false;
+				}
+			}
+		}
+			
+		return true;
 	}
 }

@@ -14,10 +14,11 @@ import org.eclipse.ui.PlatformUI;
 import soundgates.Patch;
 import soundgates.diagram.XMLexport.PatchExporter;
 import soundgates.diagram.XMLexport.Tester;
+import soundgates.diagram.messageDialogs.MessageDialogs;
 
 
 
-public class ExportPatchAction implements IObjectActionDelegate{
+public class ValidatePatchAction implements IObjectActionDelegate{
 
 	@Override
 	public void run(IAction action) {		
@@ -31,20 +32,8 @@ public class ExportPatchAction implements IObjectActionDelegate{
 			Patch patch = patchExporter.getPatch(file.getFullPath().toPortableString());
 			Tester tester = new Tester();
 			
-			if(tester.testPatch(patch) == false)
-				return;
-			
-			try {
-				
-				patchExporter.exportToXML(
-						file.getParent().getLocation().toPortableString(), 	// folder						
-						patch,												// patch
-						file.getName().replace(".soundgates",""));			// name
-								
-				file.getParent().refreshLocal(1, null);
-			} catch (Exception e) {				
-				e.printStackTrace();
-			}
+			if(tester.testPatch(patch)) 
+				MessageDialogs.patchValidationTrue();
 		}
 	}
 
