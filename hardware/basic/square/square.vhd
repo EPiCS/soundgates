@@ -26,6 +26,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 entity square is
 port(                
         clk     : in  std_logic;
+        rst     : in  std_logic;
         ce      : in  std_logic;
         rst     : in  std_logic;
         incr    : in  signed(31 downto 0); 
@@ -58,7 +59,7 @@ architecture Behavioral of square is
         begin
             if rst = '1' then
                 x <= offset;
-            end if;
+            else
             if rising_edge(clk) then
                 if ce = '1' then
                     x <= x + incr;
@@ -73,6 +74,7 @@ architecture Behavioral of square is
                     
                 end if;
             end if;
+				end if;
         end process;  
         
 end Behavioral;
