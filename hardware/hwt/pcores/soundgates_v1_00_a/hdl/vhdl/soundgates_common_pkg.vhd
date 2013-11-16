@@ -38,6 +38,8 @@ type Phase_Increment_Array is array(0 to MAX_NCO_FREQUNCY) of signed(31 downto 0
 
 type WAVEFORM_TYPE is ( SIN, SQU, SAW, TRI);
 
+type NOISE_TYPE is ( WHITE, PINK, GREY );
+
 ------------------------------------------------------------
 -- Functions and Procedure declarations
 ------------------------------------------------------------

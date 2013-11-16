@@ -21,8 +21,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 
---library soundgates_v1_00_a;
---use soundgates_v1_00_a.soundgates_common_pkg.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity PRBS is
     Generic ( constant levels : integer := 16);
