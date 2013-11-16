@@ -8,6 +8,5 @@
 #include "tcp_handshake.h"
 #include "osc_handler.h"
 
-#include "SynthesizerTest.h"
 
 #endif

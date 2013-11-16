@@ -1,6 +1,14 @@
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include "osc_handler.h"
+#include "lo/lo.h"
+
+#include "ComponentStructs.h"
+#include "Inputconverter.h"
 
 int done = 0;
+sOSCComponent *components;
 
 void error(int num, const char *msg, const char *path)
 {
@@ -15,7 +23,7 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
 {
     int i;
 
-    printf("path: <%s>\n", path);
+    printf("Error: path: <%s> not found. \n", path);
     for (i = 0; i < argc; i++) {
         printf("arg %d '%c' ", i, types[i]);
         lo_arg_pp((lo_type)types[i], argv[i]);
@@ -27,28 +35,45 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
     return 1;
 }
 
+/**
+ *
+ * TODO: Replace types with structs. Some components need more than
+ * one value :(
+ */
+float resolveComponentId(int id, float value)
+{
+	switch(id)
+	{
+	case ID_SIN:
+		return freq_to_incr_sin(value);
+	case ID_TRI:
+		printf("Not implemented... \n");
+		return 0; //TODO
+	case ID_BIAS:
+		printf("Not implemented... \n");
+		return 0; //TODO
+	default: break;
+	}
+	return 0;
+}
+
 /* handle soundgates messages */
 int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
                 int argc, void *data, void *user_data)
 {
     /* example showing pulling the argument values out of the argv array */
-    int [2] output;
+    float output = argv[0]->f;
 
-    output[1] = argv[0];
-
-    if (!strcmp(path, "/sin"))
+    sOSCComponent *iterator = components;
+    while(iterator)
     {
-        set_frequency_sin(output[1], 0 /*offset*/);
-    } else if (!strcmp(path, "/tri")) {
-        set_frequency_tri(output[1], 0 /*offset*/);
-    } else if (!strcmp(path, "/bias_sample")) {
-        set_bias_sample(output[1]);
-    } else if (!strcmp(path, "/bias_waves")) {
-        set_bias_waves(output[1]);
+    	if(! strcmp(iterator->cmp_osc_name, path))
+		{
+    		float ret = resolveComponentId(iterator->cmp_id, output);
+    		*(iterator->cmp_addr) = ret;
+   		}
+    	iterator = iterator->next;
     }
-
-    fflush(stdout);
-
     return 0;
 }
 
@@ -64,27 +89,24 @@ int quit_handler(const char *path, const char *types, lo_arg ** argv,
 
 void* osc_handler_thread(void *args)
 {
+	printf("Creating osc_handler_thread");
+	fflush(stdout);
     char port[6];
     sprintf(port, "%d", PORT);
-    
+
     /* create new server thread that listens on PORT (UDP) */
     lo_server_thread st = lo_server_thread_new(port, error);
 
-    /* add method that will match any path and args */
+	components = (sOSCComponent*)args;
+	sOSCComponent *iterator = components;
+	while(iterator)
+	{
+		lo_server_thread_add_method(st, components->cmp_osc_name , "f", &soundgates_handler, NULL);
+		iterator = (sOSCComponent*) iterator->next;
+	}
+
+    //add method that will match any path and args
     lo_server_thread_add_method(st, NULL, NULL, generic_handler, NULL);
-
-
-
-    /* add handler for  */
-    /* sinus,           */
-    lo_server_thread_add_method(st, "/sin", "f", soundgates_handler, NULL);
-    /* triangle,        */
-    lo_server_thread_add_method(st, "/tri", "f", soundgates_handler, NULL);
-    /* bias for samples */
-    lo_server_thread_add_method(st, "/bias_sample", "f", soundgates_handler, NULL);
-    /* bias for 2 waves */
-    lo_server_thread_add_method(st, "/bias_waves", "f", soundgates_handler, NULL);
-
     
     /* add method that will match the path /quit with no args */
     lo_server_thread_add_method(st, "/quit", "", quit_handler, NULL);
@@ -99,6 +121,7 @@ void* osc_handler_thread(void *args)
         usleep(1000);
 #endif
     }
+    printf("I am done \n");
 
     lo_server_thread_free(st);
     
