@@ -1,20 +1,23 @@
 #include "user_input.h"
+#include "SynthesizerTest.h"
+
+float offset_sin;
+
+float offset_tri;
+
+int[2] osc_ret; // osc value
 
 int main()
 {
-    pthread_t pthread_t_tcp_handshake, pthread_t_osc_handler;
-    int tcp_ret, osc_ret;
+ 
+//----------------------  
+// TODO: TO SYNTHESIZER:
+    pthread_t pthread_t_osc_handler;
+    int osc_ret;
     
-    tcp_ret = pthread_create(&pthread_t_tcp_handshake, NULL, tcp_handshake_thread, (void*)NULL);
     osc_ret = pthread_create(&pthread_t_osc_handler, NULL, osc_handler_thread, (void*)NULL);
-    
-    /* wait for threads before return */
-    pthread_join(pthread_t_tcp_handshake, NULL);
-    pthread_join(pthread_t_osc_handler, NULL);
-    
-    printf("TCP Handshake thread returns: %d\n",tcp_ret);
-    printf("OSC Handler thread returns: %d\n",osc_ret);
-    return 0;
+// --------------------
+
 }
 
 
