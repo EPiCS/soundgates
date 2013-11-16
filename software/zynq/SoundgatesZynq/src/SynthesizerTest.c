@@ -5,6 +5,14 @@
  *      Author: Caius
  */
 
+/*
+ * pthread_t pthread_t_osc_handler;
+ * int osc_ret;
+ * osc_ret = pthread_create(&pthread_t_osc_handler, NULL, osc_handler_thread, (void*)NULL);
+ */
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
