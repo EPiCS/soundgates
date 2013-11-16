@@ -32,9 +32,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity noise is
 	 generic(
-		FPGA_FREQUENCY   : integer    := 100_000_000;
-		NOISE            : NOISE_TYPE := WHITE;
-		SAMPLE_FREQUENZY : integer    := 44100
+		NOISE            : NOISE_TYPE := WHITE
 	 );
     Port ( 
             clk    : in  std_logic;           
