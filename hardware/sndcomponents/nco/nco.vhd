@@ -16,8 +16,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 entity nco is
 	 generic(
 		FPGA_FREQUENCY   : integer := 100_000_000;
-		WAVEFORM         : WAVEFORM_TYPE := SIN;
-		SAMPLE_FREQUENZY : integer := 44100
+		WAVEFORM         : WAVEFORM_TYPE := SIN
 	 );
     Port ( 
             clk    : in  std_logic;           
@@ -62,7 +61,7 @@ architecture Behavioral of nco is
 	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
 	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING)),32);
 
-	 signal cordic_phi_offset : signed(31 downto 0) := (others => '0'); 
+	signal cordic_phi_offset : signed(31 downto 0) := (others => '0'); 
     signal cordic_phi_incr   : signed(31 downto 0) := (others => '0'); 
     signal cordic_phi_acc 	 : signed(31 downto 0) := (others => '0'); 
 	
@@ -111,19 +110,17 @@ begin
          end generate THRESHOLD_PROC_GEN_32;      
          
          
-		PHASE_STIMULIS_PROCESS : process(clk)                  
+		PHASE_STIMULIS_PROCESS : process(clk, rst)                  
         begin
-            if rising_edge(clk) then
-            
-               cordic_phi_acc <= cordic_phi_acc + phase_incr;
-               
-               --if cordic_phi_offset /= phase_offset then -- only update on change               
-               --     cordic_phi_acc      <= phase_offset;
-               --     cordic_phi_offset   <= phase_offset;
-               --end if;
-                                          
-               if cordic_phi_acc > cordic_threshold then
+            if rst = '1' then
+                cordic_phi_acc <= (others => '0');
+            elsif rising_edge(clk) then
+               if ce = '1' then
+                cordic_phi_acc <= cordic_phi_acc + phase_incr;
+                     
+                if cordic_phi_acc > cordic_threshold then
                   cordic_phi_acc <= cordic_phi_acc - standard_cordic_offset;
+                end if;
                end if;
             end if;
 		end process;

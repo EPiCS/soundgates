@@ -49,15 +49,15 @@ architecture Behavioral of cordic is
 	signal z_pipeline : pipeline_array;
 	
 	constant cordic_gain 		 : real 		:= 0.60725293500888;
-	constant cordic_gain_scaled : signed(31 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+	constant cordic_gain_scaled  : signed(15 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**14.0)), 16);
 	
 	constant q1 : signed(31 downto 0) := to_signed(integer(real(MATH_PI / 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q2 : signed(31 downto 0) := to_signed(integer(real(MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q3 : signed(31 downto 0) := to_signed(integer(real(3.0 * MATH_PI / 2.0* 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q4 : signed(31 downto 0) := to_signed(integer(real(2.0 * MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	
-	signal sin_i : signed(63 downto 0) := (others => '0');
-	signal cos_i : signed(63 downto 0) := (others => '0');
+	signal sin_i : signed(47 downto 0) := (others => '0');
+	signal cos_i : signed(47 downto 0) := (others => '0');
 	
 	signal cordic_out_x : signed(31 downto 0) := (others => '0');
 	signal cordic_out_y : signed(31 downto 0) := (others => '0');
@@ -69,28 +69,36 @@ begin
 	
    
    -- rotates the vector (x,y) according to the quadrant in the unit circule
-	VEC_ROTATE_PROCESS : process(clk)
-	begin        
-        if rising_edge(clk) then
-			if phi > q1 and phi < q2 then
-				phi_i <= phi + (-q1);
-				x_i 	<= (y);
-				y_i 	<= (x);
-			elsif phi > q2 and phi < q3 then
-				x_i 	<= (-x);
-				y_i 	<= (-y);
-				phi_i <= phi + (-q2);
-			elsif phi > q3 and phi < q4 then
-				x_i 	<= (-y);
-				y_i 	<= (-x);
-				phi_i <= phi + (-q3);
-			else
-				x_i 	<= x;
-				y_i 	<= y;
-				phi_i <= phi;
-			end if;
+	VEC_ROTATE_PROCESS : process(clk, rst)
+	begin
+        if rst = '1' then
+            x_i   <= x;
+            y_i   <= y;
+            phi_i <= (others => '0');
+        elsif rising_edge(clk) then
+            if ce = '1' then  
+                if phi < q1 then
+                    x_i   <= x;
+                    y_i   <= y;
+                    phi_i <= phi;
+                elsif  phi < q2 then
+                    phi_i <= phi + (-q1);
+                    x_i 	<= (y);
+                    y_i 	<= (x);
+                elsif phi < q3 then
+                    x_i 	<= (-x);
+                    y_i 	<= (-y);
+                    phi_i <= phi + (-q2);
+                elsif phi < q4 then
+                    x_i 	<= (-y);
+                    y_i 	<= (-x);
+                    phi_i <= phi + (-q3);
+                end if;
+            end if;
          end if;
 	end process;
+    
+
 	
 	x_pipeline(0) <= x_i;
 	y_pipeline(0) <= y_i;
@@ -118,9 +126,12 @@ begin
 			);		
 	end generate;
 	
-	REGISTER_OUT_PROCESS : process(clk)
+	REGISTER_OUT_PROCESS : process(clk, rst)
 	begin
-		if rising_edge(clk) then
+        if rst = '1' then
+            cordic_out_x <= (others => '0');
+            cordic_out_y <= (others => '0');
+		elsif rising_edge(clk) then
             if ce = '1' then 
                 cordic_out_x <= x_pipeline(pipeline_stages + 1);
                 cordic_out_y <= y_pipeline(pipeline_stages + 1);
@@ -129,11 +140,12 @@ begin
 	
 	end process;
 	
-	GAIN_PROCESS : process (clk)
-	
+	GAIN_PROCESS : process (clk, rst)
 	begin
-			
-		if rising_edge(clk) then
+		if rst = '1' then
+            sin_i <= (others => '0');
+            cos_i <= (others => '0');
+		elsif rising_edge(clk) then
             if ce = '1' then 
                 sin_i <= shift_right(cordic_out_y * cordic_gain_scaled, integer(SOUNDGATE_FIX_PT_SCALING));
                 cos_i <= shift_right(cordic_out_x * cordic_gain_scaled, integer(SOUNDGATE_FIX_PT_SCALING));
@@ -141,9 +153,8 @@ begin
 		end if;
 	end process;
 	
-	
-	sin <= RESIZE(sin_i,32);
-	cos <= RESIZE(cos_i,32);
+	sin <= RESIZE(sin_i, 32);
+	cos <= RESIZE(sin_i, 32);
 	
 end Behavioral;
 

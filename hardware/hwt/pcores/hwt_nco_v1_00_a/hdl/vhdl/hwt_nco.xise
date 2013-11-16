@@ -37,18 +37,12 @@
       <library xil_pn:name="proc_common_v3_00_a"/>
     </file>
     <file xil_pn:name="../../../../../../../zynq/reconos_zynq/pcores/reconos_v3_00_c/hdl/vhdl/reconos_pkg.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="20"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="3"/>
       <library xil_pn:name="reconos_v3_00_c"/>
     </file>
     <file xil_pn:name="../../../../common/soundgates_v1_00_a/hdl/vhdl/soundgates_common_pkg.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="27"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
       <library xil_pn:name="soundgates_v1_00_a"/>
     </file>
     <file xil_pn:name="../../../../common/soundgates_v1_00_a/hdl/vhdl/soundgates_reconos_pkg.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="28"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="7"/>
       <library xil_pn:name="soundgates_v1_00_a"/>
     </file>
   </files>

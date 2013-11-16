@@ -97,7 +97,7 @@ begin
          if rst = '1' then         
             x_next <= (others => '0');
             y_next <= (others => '0');
-            z_next <= (others => '0');            
+            z_next <= (others => '0');
          elsif ce = '1' then
             x_next <= x_next_i;
             y_next <= y_next_i;

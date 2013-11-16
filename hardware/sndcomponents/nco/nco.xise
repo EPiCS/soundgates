@@ -413,6 +413,7 @@
   <bindings/>
 
   <libraries>
+    <library xil_pn:name="proc_common_v3_00_a"/>
     <library xil_pn:name="soundgates_v1_00_a"/>
   </libraries>
 
