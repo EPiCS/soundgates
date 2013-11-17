@@ -48,8 +48,10 @@ architecture Behavioral of cordic is
 	signal y_pipeline : pipeline_array;
 	signal z_pipeline : pipeline_array;
 	
-	constant cordic_gain 		 : real 		:= 0.60725293500888;
-	constant cordic_gain_scaled  : signed(15 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**14.0)), 16);
+    constant cordic_scaling : real:= 14.0;
+    
+	constant cordic_gain 		 : real := 0.60725293500888;
+	constant cordic_gain_scaled  : signed(15 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**cordic_scaling)), 16);
 	
 	constant q1 : signed(31 downto 0) := to_signed(integer(real(MATH_PI / 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q2 : signed(31 downto 0) := to_signed(integer(real(MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
@@ -145,8 +147,8 @@ begin
             cos_i <= (others => '0');
 		elsif rising_edge(clk) then
             if ce = '1' then 
-                sin_i <= shift_right(cordic_out_y * cordic_gain_scaled, integer(SOUNDGATE_FIX_PT_SCALING));
-                cos_i <= shift_right(cordic_out_x * cordic_gain_scaled, integer(SOUNDGATE_FIX_PT_SCALING));
+                sin_i <= shift_right(cordic_out_y * cordic_gain_scaled, integer(cordic_scaling));
+                cos_i <= shift_right(cordic_out_x * cordic_gain_scaled, integer(cordic_scaling));
             end if;
 		end if;
 	end process;
