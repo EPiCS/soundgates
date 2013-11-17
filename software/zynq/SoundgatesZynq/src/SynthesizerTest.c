@@ -66,6 +66,12 @@ void*                 sin_dest_buffer;
 // Waveplayer target buffer
 char wavesamples[4096];
 
+// SW sine target buffer
+char sw_sine_buffer[4096];
+
+// Bias Waves control
+float bias_waves = 0;
+
 // Communication
 struct mbox mb_start;
 struct mbox mb_stop;
@@ -121,6 +127,36 @@ void *play_wave(void* data)
     return (void*)0;
 }
 
+void *play_sw_sine(void* data)
+{
+    // The thread gets its mbox via its parameter
+    struct reconos_resource *res  = (struct reconos_resource*) data;
+    struct mbox *mb_start = res[0].ptr;
+    struct mbox *mb_stop  = res[1].ptr;
+
+	wave_generator* wave_generator_440 = wave_generator_create(440,	WAVE_GENERATOR_SINE);
+
+    int code;
+    while (1)
+    {
+        code = mbox_get(mb_start);
+        if (code == NCO_START)
+        {
+        	// get 1024 Samples (1 Sample = 4 Byte) from Wavefile and write them into target buffer
+        	//wavefileplayer_getSamples(wfp, 4096, wavesamples);
+        	wave_generator_generate(wave_generator_440, sw_sine_buffer, 4096);
+            // Thread has finished
+            mbox_put(mb_stop, NCO_STOP);
+
+        } else
+        {
+            // Thread shall terminate
+            pthread_exit((void*)0);
+        }
+    }
+    return (void*)0;
+}
+
 
 void initialize_reconos() {
 	// init mailboxes
@@ -161,7 +197,8 @@ void initialize_reconos() {
 	// Init software threads
 	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);
+	//pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]); // Play Wave
+	pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]); // Play SW_SINE
 
 }
 
@@ -171,13 +208,18 @@ void initialize_reconos() {
 void initialize_user_input(pthread_t* user_input)
 {
 	// User input thread needs a list of sOSCComponent
-	int component_count = 1;
+	int component_count = 2;
 	sOSCComponent *components = malloc(sizeof(sOSCComponent)*component_count);
 
 	components[0].comp_osc_name = "/sin";
 	components[0].comp_id = ID_SIN;
 	components[0].comp_value_pointer = &nco_sine_header.phase_increment;
-	components[0].next = 0;
+	components[0].next = (sOSCComponent*) &components[1];
+
+	components[1].comp_osc_name = "/bias_waves";
+	components[1].comp_id = ID_BIAS;
+	components[1].comp_value_pointer = &bias_waves;
+	components[1].next = 0;
 
 //	components[1].cmp_osc_name = "/tri";
 //	components[0].cmp_id = ID_SIN;
@@ -214,7 +256,7 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		}
 
 		// Mix sine wave and wave
-		mixer_mix(comp_header.dest_addr, wavesamples, alsa_buffer, 4096, 0.5);
+		mixer_mix(comp_header.dest_addr, sw_sine_buffer, alsa_buffer, 4096, bias_waves);
 
 		// Write generated data to the sample buffer
 		int i=0;
