@@ -96,7 +96,8 @@ void print_mmu_stats()
 }
 
 /*
- * This sw thread writes pcm data into a buffer and is controlled like a HW thread.
+ * This sw thread writes data from a wavefile
+ * into a buffer and is controlled like a HW thread.
  */
 void *play_wave(void* data)
 {
@@ -127,6 +128,10 @@ void *play_wave(void* data)
     return (void*)0;
 }
 
+/*
+ * This sw thread generates a sine wave
+ * and is controlled like a HW thread.
+ */
 void *play_sw_sine(void* data)
 {
     // The thread gets its mbox via its parameter
@@ -197,18 +202,18 @@ void initialize_reconos() {
 	// Init software threads
 	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	//pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]); // Play Wave
+	//pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);  // Play Wave
 	pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]); // Play SW_SINE
 
 }
 
 /**
- * Create the user input thread
+ * Initializes the data structure and starts the user input thread
  */
 void initialize_user_input(pthread_t* user_input)
 {
 	// User input thread needs a list of sOSCComponent
-	int component_count = 2;
+	int component_count = 2; // MODIFY ME WHENEVER YOU ADD A NEW COMPONENT!
 	sOSCComponent *components = malloc(sizeof(sOSCComponent)*component_count);
 
 	components[0].comp_osc_name = "/sin";
@@ -229,6 +234,9 @@ void initialize_user_input(pthread_t* user_input)
 	pthread_create( user_input, NULL, &osc_handler_thread, (void*) components);
 }
 
+/**
+ * This method starts the components per layer and handles the alsa buffer
+ */
 void run_synthesizer(soundbuffer* sound_buffer) {
 	initialize_reconos();
 	// Create user input thread
@@ -258,7 +266,6 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		// Mix sine wave and wave
 		mixer_mix(comp_header.dest_addr, sw_sine_buffer, alsa_buffer, 4096, bias_waves);
 
-		// Write generated data to the sample buffer
 		int i=0;
 		int foo = 28;
 		float* floatbuf = calloc(sizeof(float), SAMPLE_COUNT);
@@ -274,12 +281,12 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 
 int main(){
 
+	// Initialize soundbuffer
 	soundbuffer* playback = buffer_initialize(44100, 0);
 	buffer_start(playback, 0);
-	// TODO: Receive kill signal and free buffers
-	printf("Running synth \n");
-	fflush(stdout);
+	// Start synthesizer
 	run_synthesizer(playback);
+	// TODO: Dead code.
 	buffer_stop(playback);
 	buffer_free(playback);
 	reconos_cleanup();
