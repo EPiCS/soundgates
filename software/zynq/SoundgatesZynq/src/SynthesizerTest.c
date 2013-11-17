@@ -64,13 +64,13 @@ sNcoComponentHeader   nco_sine_header;
 void*                 sin_dest_buffer;
 
 // Waveplayer target buffer
-char wavesamples[4096];
+char sw_wave_buffer[4096];
 
 // SW sine target buffer
 char sw_sine_buffer[4096];
 
 // Bias Waves control
-float bias_waves = 0;
+float bias_waves = 1;
 
 // Communication
 struct mbox mb_start;
@@ -106,7 +106,7 @@ void *play_wave(void* data)
     struct mbox *mb_start = res[0].ptr;
     struct mbox *mb_stop  = res[1].ptr;
 
-	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/test.wav", 1);
+	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/beat.wav", 1);
 
     int code;
     while (1)
@@ -115,7 +115,7 @@ void *play_wave(void* data)
         if (code == NCO_START)
         {
         	// get 1024 Samples (1 Sample = 4 Byte) from Wavefile and write them into target buffer
-        	wavefileplayer_getSamples(wfp, 4096, wavesamples);
+        	wavefileplayer_getSamples(wfp, 4096, sw_wave_buffer);
             // Thread has finished
             mbox_put(mb_stop, NCO_STOP);
 
@@ -202,8 +202,8 @@ void initialize_reconos() {
 	// Init software threads
 	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	//pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);  // Play Wave
-	pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]); // Play SW_SINE
+	pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);  // Play Wave
+	//pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]); // Play SW_SINE
 
 }
 
@@ -264,17 +264,11 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		}
 
 		// Mix sine wave and wave
-		mixer_mix(comp_header.dest_addr, sw_sine_buffer, alsa_buffer, 4096, bias_waves);
+		mixer_mix(comp_header.dest_addr, sw_wave_buffer , alsa_buffer, 4096, bias_waves);
 
-		int i=0;
-		int foo = 28;
-		float* floatbuf = calloc(sizeof(float), SAMPLE_COUNT);
-		for (i = 0; i < SAMPLE_COUNT ; i++)
-		{
-			floatbuf[i] = (float) ((int*) alsa_buffer)[i] / (1 << foo);
-		}
+
 		// Write generated data to the sample buffer
-		buffer_fillbuffer(sound_buffer, (char*) floatbuf, SAMPLE_SIZE * SAMPLE_COUNT);
+		buffer_fillbuffer(sound_buffer, (char*) alsa_buffer, SAMPLE_SIZE * SAMPLE_COUNT);
 
 	}
 }
