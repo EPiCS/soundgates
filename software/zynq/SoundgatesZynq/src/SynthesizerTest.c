@@ -61,8 +61,9 @@ struct reconos_resource   hwt_res[2];
 // Components
 sSoundComponentHeader comp_header;
 sNcoComponentHeader   nco_sine_header;
-void* sin_dest_buffer;
+void*                 sin_dest_buffer;
 
+// Waveplayer target buffer
 char wavesamples[4096];
 
 // Communication
@@ -72,7 +73,7 @@ struct mbox mb_sw_start;
 struct mbox mb_sw_stop;
 
 // The buffer where the mixer takes its data from
-int* alsa_buffer;
+char alsa_buffer[4096];
 
 unsigned int* malloc_page_aligned(unsigned int pages)
 {
@@ -207,20 +208,21 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		mbox_get(&mb_stop);
 		mbox_get(&mb_sw_stop);
 
-//		//Wait until the buffer needs samples
+		//Wait until the buffer needs samples
 		while (!buffer_needsamples(sound_buffer)) {
 			usleep(100);
 		}
 
-		// TODO: We need a mixer
+		// Mix sine wave and wave
+		mixer_mix(comp_header.dest_addr, wavesamples, alsa_buffer, 4096, 0.5);
+
 		// Write generated data to the sample buffer
 		int i=0;
 		int foo = 28;
 		float* floatbuf = calloc(sizeof(float), SAMPLE_COUNT);
 		for (i = 0; i < SAMPLE_COUNT ; i++)
 		{
-			//floatbuf[i] = (float) 10*((int*) comp_header.dest_addr)[i] / (1 << foo);
-			floatbuf[i] = (float) ((int*) wavesamples)[i] / (1 << foo);
+			floatbuf[i] = (float) ((int*) alsa_buffer)[i] / (1 << foo);
 		}
 		// Write generated data to the sample buffer
 		buffer_fillbuffer(sound_buffer, (char*) floatbuf, SAMPLE_SIZE * SAMPLE_COUNT);
