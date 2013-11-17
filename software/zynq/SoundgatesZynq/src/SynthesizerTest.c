@@ -63,6 +63,8 @@ sSoundComponentHeader comp_header;
 sNcoComponentHeader   nco_sine_header;
 void* sin_dest_buffer;
 
+char wavesamples[4096];
+
 // Communication
 struct mbox mb_start;
 struct mbox mb_stop;
@@ -96,7 +98,6 @@ void *play_wave(void* data)
     struct mbox *mb_start = res[0].ptr;
     struct mbox *mb_stop  = res[1].ptr;
 
-    char wavesamples[4096];
 	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/test.wav", 1);
 
     int code;
@@ -105,8 +106,7 @@ void *play_wave(void* data)
         code = mbox_get(mb_start);
         if (code == NCO_START)
         {
-            // Copy values into array
-        	// holt die nächsten 1024 Samples (1 Sample = 4 Byte) vom Wavefile ab und schreibt sie ins Zielarray wavesamples
+        	// get 1024 Samples (1 Sample = 4 Byte) from Wavefile and write them into target buffer
         	wavefileplayer_getSamples(wfp, 4096, wavesamples);
             // Thread has finished
             mbox_put(mb_stop, NCO_STOP);
@@ -125,8 +125,8 @@ void initialize_reconos() {
 	// init mailboxes
 	mbox_init(&mb_start, MBOX_SIZE);
 	mbox_init(&mb_stop,  MBOX_SIZE);
-//	mbox_init(&mb_sw_start, MBOX_SIZE);
-//	mbox_init(&mb_sw_stop,  MBOX_SIZE);
+	mbox_init(&mb_sw_start, MBOX_SIZE);
+	mbox_init(&mb_sw_stop,  MBOX_SIZE);
 	// init reconos and communication resources
 	reconos_init();
 	hwt_res[0].type = RECONOS_TYPE_MBOX;
@@ -134,10 +134,10 @@ void initialize_reconos() {
 	hwt_res[1].type = RECONOS_TYPE_MBOX;
 	hwt_res[1].ptr  = &mb_stop;
 
-//	swt_res[0].type  = RECONOS_TYPE_MBOX;
-//	swt_res[0].ptr  = &mb_sw_start;
-//	swt_res[1].type  = RECONOS_TYPE_MBOX;
-//	swt_res[1].ptr  = &mb_sw_stop;
+	swt_res[0].type  = RECONOS_TYPE_MBOX;
+	swt_res[0].ptr  = &mb_sw_start;
+	swt_res[1].type  = RECONOS_TYPE_MBOX;
+	swt_res[1].ptr  = &mb_sw_stop;
 
 	// Initialize components
 	int frequency = 440;
@@ -158,9 +158,9 @@ void initialize_reconos() {
 	reconos_hwt_create(&hwt_threads[0], 0, NULL);
 
 	// Init software threads
-	//pthread_attr_init(&swt_attr[0]);
+	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	//pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)swt_res[0]);
+	pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);
 
 }
 
@@ -201,11 +201,11 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 	while (1) {
 		// Start Layer 1 components
 		mbox_put(&mb_start, NCO_START);
-		//mbox_put(&mb_sw_start, START_OPERATION);
+		mbox_put(&mb_sw_start, NCO_START);
 
 		// Wait for Layer 1 components
 		mbox_get(&mb_stop);
-		//mbox_get(&mb_sw_stop);
+		mbox_get(&mb_sw_stop);
 
 //		//Wait until the buffer needs samples
 		while (!buffer_needsamples(sound_buffer)) {
@@ -219,9 +219,8 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		float* floatbuf = calloc(sizeof(float), SAMPLE_COUNT);
 		for (i = 0; i < SAMPLE_COUNT ; i++)
 		{
-
-			floatbuf[i] = (float) 10*((int*) comp_header.dest_addr)[i] / (1 << foo);
-
+			//floatbuf[i] = (float) 10*((int*) comp_header.dest_addr)[i] / (1 << foo);
+			floatbuf[i] = (float) ((int*) wavesamples)[i] / (1 << foo);
 		}
 		// Write generated data to the sample buffer
 		buffer_fillbuffer(sound_buffer, (char*) floatbuf, SAMPLE_SIZE * SAMPLE_COUNT);
