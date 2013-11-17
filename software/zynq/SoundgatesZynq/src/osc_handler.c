@@ -42,19 +42,7 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
  */
 float resolveComponentId(int id, float value)
 {
-	switch(id)
-	{
-	case ID_SIN:
-		return freq_to_incr_sin(value);
-	case ID_TRI:
-		printf("Not implemented... \n");
-		return 0; //TODO
-	case ID_BIAS:
-		printf("Not implemented... \n");
-		return 0; //TODO
-	default: break;
-	}
-	return 0;
+		return freq_to_incr(id, value);
 }
 
 /* handle soundgates messages */
