@@ -13,16 +13,16 @@ float freq_to_incr (int comp_id, float freq)
 {
     switch (comp_id)
     {
-        case 1: // Sinus
+        case ID_SIN: // Sinus
             return (freq * 2 * M_PI) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
             
-        case 2: // Sawtooth - correct calculation?
+        case ID_SAW: // Sawtooth - correct calculation?
             return (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
             
-        case 3: // Triangle - correct calculation?
+        case ID_TRI: // Triangle - correct calculation?
             return (freq * 4 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
             
-        case 4: // Square   - correct calculation?
+        case ID_SQR: // Square   - correct calculation?
             return (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;            // TODO: duty cycle
             
         default:
