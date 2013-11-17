@@ -1,3 +1,6 @@
+#ifndef COMPONENTSTRUCT_H
+#define COMPONENTSTRUCT_H
+
 // Sine component
 // source_addr : std_logic_vector(C_FIFO_WIDTH - 1 downto 0); -- memory address of the data source buffer
 //        src_len : std_logic_vector(C_FIFO_WIDTH - 1 downto 0); -- data length of the source buffer
@@ -14,6 +17,7 @@
 #define ID_PRB 7 // white noise
 #define ID_MIX 8
 #define ID_BIAS 9
+// ... to be continued
 
 typedef struct {
     int src_addr;
@@ -35,3 +39,4 @@ typedef struct{
 //    int *offset;
 //    int *increment;
 //} sHeaderSine;
+#endif

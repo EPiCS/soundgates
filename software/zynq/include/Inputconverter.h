@@ -1,24 +1,36 @@
+#ifndef INPUTCONVERTER_H
+#define INPUTCONVERTER_H
+
+#include <ComponentStruct.h>
 #include <math.h>
 
-float freq_to_incr_sin (float freq)
+#define SOUNDGATES_FIXED_PT_SCALE (1 << 27)
+#define FPGA_REFERENCE_FREQUENCY  100000000
+#define SAMPLE_RATE               44100
+
+// returns increment values for wave generators (id 1 to 4)
+float freq_to_incr (int comp_id, float freq)
 {
-    return (freq * 2 * M_PI) / 44100;
+    float incr;
+    switch (comp_id)
+    {
+        case 1: // Sinus
+            incr = (freq * 2 * M_PI) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
+            break;
+        case 2: // Sawtooth - correct calculation?
+            incr = (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
+            break;
+        case 3: // Triangle - correct calculation?
+            incr = (freq * 4 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
+            break;
+        case 4: // Square   - correct calculation?
+            incr = (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
+            // TODO: duty cycle
+            break;
+        default:
+            incr = 0; // error
+    }
+
 }
 
-// INCORRECT
-// calculates the frequency of sawtooth and triangle (not square and sinus!) into its phase increment value
-float freq_to_incr (float freq)
-{
-    return freq * 2.0f / 1000.0f;
-}
-
-// INCORRECT
-// calculates the frequency of square into its phase increment value, depending on duty cycle ratio
-// duty_cycle = signal_ON_time / signal_OFF_time
-// duty cycle standard = 1
-float freq_to_incr_sq (float freq, float duty_ratio)
-{
-    float duty_on  = duty_ratio;
-    float duty_off = duty_on + 1;
-    return freq * (duty_off) / 1000.0f;
-}
+#endif

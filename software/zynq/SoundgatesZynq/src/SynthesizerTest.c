@@ -101,6 +101,8 @@ void *play_wave(void* data)
     struct reconos_resource *res  = (struct reconos_resource*) data;
     struct mbox *mb_start = res[0].ptr;
     struct mbox *mb_stop  = res[1].ptr;
+    char wavesamples[4096];
+	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/test.wav", 1);
 
     // We need to specify a message header for the wave player (just like we did for the sine generator)
     // What does it need? Pointer to wave? i think so ...
@@ -115,9 +117,8 @@ void *play_wave(void* data)
         code = mbox_get(mb_start);
         if (code == 0x0F) // Todo: for some reason I cannot put START_OPERATION here
         {
-            // Copy values into array
-
-            // Needs a ring buffer for the wave to play an endless loop
+        	// holt die nächsten 1024 Samples (1 Sample = 4 Byte) vom Wavefile ab und schreibt sie ins Zielarray wavesamples
+			wavefileplayer_getSamples(wfp, 4096, wavesamples);
 
             // Thread has finished
             mbox_put(mb_stop, FINISH_OPERATION);
