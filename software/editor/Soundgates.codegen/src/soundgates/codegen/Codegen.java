@@ -293,11 +293,11 @@ public class Codegen {
 		result.append("#X connect " + (objNum - 2) + " 0 " + (objNum - 1) + " 0;\n"); //connect dumpOSC with OSCroute
 		
 		for (AtomicSoundComponent atomic : ioComponents){
-			result.append("#X obj 192 154 unpack s f;\n");
+			result.append("#X obj 192 154 unpack f;\n");
 			result.append("#X obj 99 218 s " + atomic.getName() + ";\n");
 			objNum += 2;
 			result.append("#X connect " + oscroutenum + " " + mapping.get(atomic) + " " + (objNum - 2) + " 0;\n"); //connect OSCroute with unpack
-			result.append("#X connect " + (objNum - 2) + " 1 " + (objNum - 1) + " 0;\n"); //connect unpack with s
+			result.append("#X connect " + (objNum - 2) + " 0 " + (objNum - 1) + " 0;\n"); //connect unpack with s
 		}
 		return result.toString();
 	}

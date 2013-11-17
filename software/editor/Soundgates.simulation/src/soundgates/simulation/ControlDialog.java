@@ -65,8 +65,8 @@ public class ControlDialog extends TitleAreaDialog {
 				float increment = (float)(max - min)/200;
 				final int incr = increment <= 1 ? 1 : Math.round(increment);
 				slider.setIncrement(incr);
-				slider.setMinimum(min);
 				slider.setMaximum(max);
+				slider.setMinimum(min);
 				slider.addListener(SWT.Selection, new Listener() {
 
 					@Override

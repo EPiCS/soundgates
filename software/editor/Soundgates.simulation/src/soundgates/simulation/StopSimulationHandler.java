@@ -10,6 +10,8 @@ public class StopSimulationHandler extends AbstractHandler {
 		if (ProcessStore.currentPureDataProcess != null){
 			ProcessStore.currentPureDataProcess.destroy();
 			ProcessStore.currentPureDataProcess = null;
+			ProcessStore.handShakeThread.stopMe();
+			ProcessStore.handShakeThread = null;
 		}
 		return null;
 	}
