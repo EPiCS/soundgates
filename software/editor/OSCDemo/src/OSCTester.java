@@ -52,6 +52,6 @@ public class OSCTester {
 
 	
 	public static void sendFloat(OSCPortOut sender, String componentName, float value) throws IOException{
-		sender.send(new OSCMessage("/" + componentName, new Object [] { "f", value }));
+		sender.send(new OSCMessage("/" + componentName, new Object [] { value }));
 	}
 }

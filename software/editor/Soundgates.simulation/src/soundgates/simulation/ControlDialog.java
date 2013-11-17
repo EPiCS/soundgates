@@ -74,7 +74,7 @@ public class ControlDialog extends TitleAreaDialog {
 						slider.getSelection();
 						try {
 							float value = (float)slider.getSelection() /10000;
-							sender.send(new OSCMessage("/" + comp.getName(), new Object[]{"f", value}));
+							sender.send(new OSCMessage("/" + comp.getName(), new Object[]{value}));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
