@@ -5,14 +5,6 @@
  *      Author: Caius
  */
 
-/*
- * pthread_t pthread_t_osc_handler;
- * int osc_ret;
- * osc_ret = pthread_create(&pthread_t_osc_handler, NULL, osc_handler_thread, (void*)NULL);
- */
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -27,69 +19,71 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include "software_sound_components/software_sound_components.h"
+
 // Reconos imports
 #include <reconos.h>
 #include <mbox.h>
 
 // Soundgates imports
-#include "SynthesizerTest.h"
 #include "ComponentStructs.h"
 #include "Samplebuffer.h"
-#include "Inputconverter.h"
+#include "osc_handler.h"
 
-// Defines
-#define SAMPLE_COUNT       64
+// Memory
+#define TO_WORDS(x) ((x)/4)
+#define TO_PAGES(x) ((x)/PAGE_SIZE)
+#define TO_BLOCKS(x) ((x)/(PAGE_SIZE*PAGES_PER_THREAD))
+#define PAGE_SIZE 4096
+
+// Soundgates Defines
+#define SAMPLE_COUNT       1024
 #define SAMPLE_SIZE        sizeof(int)
+#define SND_COMP_FREQUENZY 100000000
+#define SAMPLE_RATE        44100
 #define MBOX_SIZE          1
-#define START_OPERATION    0x00F; //TODO: Die selbe Konstante wie im VHDL Code nehmen
-#define FINISH_OPERATION   0xFFF; //TODO: Die selbe Konstante wie im VHDL Code nehmen
-#define HW_THREADS 2
-#define SW_THREADS 1
+#define NCO_START          0x00F
+#define NCO_STOP           0x0F0
+#define HW_THREADS         1
+#define SW_THREADS         1
+
+#define SOUNDGATES_FIXED_PT_SCALE (1 << 27)
 
 // One Array for every SW thread
 pthread_t                 swt_threads[SW_THREADS];
 pthread_attr_t            swt_attr[SW_THREADS];
-struct reconos_resource   swt_res[HW_THREADS][2];
+struct reconos_resource   swt_res[2];
 
 // One array for every HW thread
 struct reconos_hwt        hwt_threads[HW_THREADS];
-struct reconos_resource   hwt_res[SW_THREADS][2];
+struct reconos_resource   hwt_res[2];
+
+// Components
+sSoundComponentHeader comp_header;
+sNcoComponentHeader   nco_sine_header;
+void* sin_dest_buffer;
 
 // Communication
-struct mbox mb_start[2];
-struct mbox mb_stop[2];
-
-struct mbox mb_sw_start[2];
-struct mbox mb_sw_stop[2];
-
-// Define HW dependent variables -- Generate
-int  component_lvl1_sine_offset;
-int  component_lvl1_sine_increment;
-int* component_lvl1_sine_targetbufer;
-
-int  component_lvl1_triangle_offset;
-int  component_lvl1_triangle_increment;
-int* component_lvl1_triangle_targetbufer;
+struct mbox mb_start;
+struct mbox mb_stop;
+struct mbox mb_sw_start;
+struct mbox mb_sw_stop;
 
 // The buffer where the mixer takes its data from
 int* alsa_buffer;
 
-/*
- * Writes the increment and offset of sinus
- */
-void set_frequency_sin(float frequency, float offset)
+unsigned int* malloc_page_aligned(unsigned int pages)
 {
-    component_lvl1_sine_increment = freq_to_incr_sin(frequency);
-    omponent_lvl1_sine_offset     = offset;    
+	unsigned int * temp = malloc ((pages+1)*PAGE_SIZE);
+	unsigned int * data = (unsigned int*)(((unsigned int)temp / PAGE_SIZE + 1) * PAGE_SIZE);
+	return data;
 }
 
-/*
- * Writes the increment and offset of triangle
- */
-void set_frequency_tri(float frequency, float offset)
+void print_mmu_stats()
 {
-    component_lvl1_triangle_increment = freq_to_incr(frequency);
-    omponent_lvl1_triangle_offset     = offset;    
+	int hits,misses,pgfaults;
+	reconos_mmu_stats(&hits,&misses,&pgfaults);
+	printf("MMU stats: TLB hits: %d    TLB misses: %d    page faults: %d\n",hits,misses,pgfaults);
 }
 
 /*
@@ -101,27 +95,21 @@ void *play_wave(void* data)
     struct reconos_resource *res  = (struct reconos_resource*) data;
     struct mbox *mb_start = res[0].ptr;
     struct mbox *mb_stop  = res[1].ptr;
+
     char wavesamples[4096];
 	wavefileplayer* wfp = wavefileplayer_create_from_path("Waves/test.wav", 1);
 
-    // We need to specify a message header for the wave player (just like we did for the sine generator)
-    // What does it need? Pointer to wave? i think so ...
     int code;
     while (1)
     {
-        /**
-         * Note: Ich weiss nicht ob es busy waiting ist und ob es dadurch vielleicht unseren ARM verlangsamt.
-         * Alternativ muessen wir den thread killen wenn er fertig ist und jedesmal neu erstellen.
-         * Prinzipiell ist das kein Problem, jedoch widerspricht es dem Verhalten der HW threads.
-         */
         code = mbox_get(mb_start);
-        if (code == 0x0F) // Todo: for some reason I cannot put START_OPERATION here
+        if (code == NCO_START)
         {
+            // Copy values into array
         	// holt die nächsten 1024 Samples (1 Sample = 4 Byte) vom Wavefile ab und schreibt sie ins Zielarray wavesamples
-			wavefileplayer_getSamples(wfp, 4096, wavesamples);
-
+        	wavefileplayer_getSamples(wfp, 4096, wavesamples);
             // Thread has finished
-            mbox_put(mb_stop, FINISH_OPERATION);
+            mbox_put(mb_stop, NCO_STOP);
 
         } else
         {
@@ -133,58 +121,77 @@ void *play_wave(void* data)
 }
 
 
-void initialize_system() {
+void initialize_reconos() {
 	// init mailboxes
-	mbox_init(&mb_start[0],    MBOX_SIZE);
-	mbox_init(&mb_stop[0],     MBOX_SIZE);
-	mbox_init(&mb_start[1],    MBOX_SIZE);
-	mbox_init(&mb_stop[1],     MBOX_SIZE);
-	mbox_init(&mb_sw_start[0], MBOX_SIZE);
-	mbox_init(&mb_sw_stop[0],  MBOX_SIZE);
+	mbox_init(&mb_start, MBOX_SIZE);
+	mbox_init(&mb_stop,  MBOX_SIZE);
+//	mbox_init(&mb_sw_start, MBOX_SIZE);
+//	mbox_init(&mb_sw_stop,  MBOX_SIZE);
 	// init reconos and communication resources
 	reconos_init();
-	hwt_res[0][0].type = RECONOS_TYPE_MBOX;
-	hwt_res[0][0].ptr  = &mb_start[0];
-	hwt_res[0][1].type = RECONOS_TYPE_MBOX;
-	hwt_res[0][1].ptr  = &mb_stop[0];
+	hwt_res[0].type = RECONOS_TYPE_MBOX;
+	hwt_res[0].ptr  = &mb_start;
+	hwt_res[1].type = RECONOS_TYPE_MBOX;
+	hwt_res[1].ptr  = &mb_stop;
 
-	hwt_res[1][0].type = RECONOS_TYPE_MBOX;
-	hwt_res[1][0].ptr  = &mb_start[1];
-	hwt_res[1][1].type = RECONOS_TYPE_MBOX;
-	hwt_res[1][1].ptr  = &mb_stop[1];
+//	swt_res[0].type  = RECONOS_TYPE_MBOX;
+//	swt_res[0].ptr  = &mb_sw_start;
+//	swt_res[1].type  = RECONOS_TYPE_MBOX;
+//	swt_res[1].ptr  = &mb_sw_stop;
 
-	swt_res[0][0].type  = RECONOS_TYPE_MBOX;
-	swt_res[0][0].ptr  = &mb_sw_start[0];
-	swt_res[0][1].type  = RECONOS_TYPE_MBOX;
-	swt_res[0][1].ptr  = &mb_sw_stop[0];
+	// Initialize components
+	int frequency = 440;
+	int phase_incr =  ((M_PI * 2 * frequency) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;  // anders für saw, triangle und square
 
-	// Define structs, variables & allocate memory
-	component_lvl1_sine_targetbufer =     malloc(sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
-	component_lvl1_triangle_targetbufer = malloc(sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
-	
-	// TODO: Nochmal überprüfen ob das in HW wirklich so aussieht
-	// source_addr, src_len, dest_addr, opt_arg_addr, opt_arg_len
-	sHeader sine_header     = { 0, 0, component_lvl1_sine_targetbufer,     &component_lvl1_sine_offset,     &component_lvl1_sine_increment  };
-	sHeader triangle_header = { 0, 0, component_lvl1_triangle_targetbufer, &component_lvl1_triangle_offset, &component_lvl1_triangle_increment  };
+	sin_dest_buffer = malloc_page_aligned(PAGE_SIZE * 15);;
 
-	// Init Hw threads
-    reconos_hwt_setresources(&(hwt_threads[0]), hw_res[0][0], 2);
-	reconos_hwt_setinitdata(&hwt_threads[0], (void *) &sine_header);
+	nco_sine_header.phase_offset 	= 0;
+	nco_sine_header.phase_increment = phase_incr;
+
+	comp_header.src_addr = NULL;
+	comp_header.src_len = 0;
+	comp_header.dest_addr = sin_dest_buffer;
+	comp_header.opt_arg_addr = &nco_sine_header;
+
+    reconos_hwt_setresources(&(hwt_threads[0]), hwt_res, 2);
+    reconos_hwt_setinitdata(&hwt_threads[0], (void *) &comp_header);
 	reconos_hwt_create(&hwt_threads[0], 0, NULL);
 
-    reconos_hwt_setresources(&(hwt_threads[1]), hw_res[1][0], 2);
-	reconos_hwt_setinitdata(&hwt_threads[1], (void *) &triangle_header);
-	reconos_hwt_create(&hwt_threads[1], 0, NULL);
-
 	// Init software threads
-	pthread_attr_init(&swt_attr[0]);
+	//pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	pthread_create(&swt_threads[0][0], &swt_attr[0], play_wave, (void*)swt_res[0][0]);
+	//pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)swt_res[0]);
 
 }
 
+/**
+ * Create the user input thread
+ */
+void initialize_user_input(pthread_t* user_input)
+{
+	// User input thread needs a list of sOSCComponent
+	int component_count = 1;
+	sOSCComponent *components = malloc(sizeof(sOSCComponent)*component_count);
+
+	components[0].comp_osc_name = "/sin";
+	components[0].comp_id = ID_SIN;
+	components[0].comp_value_pointer = &nco_sine_header.phase_increment;
+	components[0].next = 0;
+
+//	components[1].cmp_osc_name = "/tri";
+//	components[0].cmp_id = ID_SIN;
+//	components[0].cmp_target_buffer = sin_dest_buffer;
+//	components[0].next = (sOSCComponent*) &components[1];
+
+	pthread_create( user_input, NULL, &osc_handler_thread, (void*) components);
+}
+
 void run_synthesizer(soundbuffer* sound_buffer) {
-	void initialize_system();
+	initialize_reconos();
+	// Create user input thread
+	pthread_t user_input;
+	pthread_t *pUser_input = &user_input;
+	initialize_user_input(pUser_input);
 
 	/**
 	 * The while loop controls every single component. It starts a new layer
@@ -193,24 +200,38 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 	 */
 	while (1) {
 		// Start Layer 1 components
-		mbox_put(&mb_start[0], START_OPERATION);
-		mbox_put(&mb_sw_start[0], START_OPERATION);
+		mbox_put(&mb_start, NCO_START);
+		//mbox_put(&mb_sw_start, START_OPERATION);
+
 		// Wait for Layer 1 components
-		int ret_hw = mbox_get(&mb_stop[0]);
-		int ret_sw = mbox_get(&mb_sw_stop[0]);
+		mbox_get(&mb_stop);
+		//mbox_get(&mb_sw_stop);
 
-		//Wait until the buffer needs samples
+//		//Wait until the buffer needs samples
 		while (!buffer_needsamples(sound_buffer)) {
-
+			usleep(100);
 		}
-		// TODO: Well .. what about a mixer? I'd like to mix the wave with the hwt thread
 
+		// TODO: We need a mixer
 		// Write generated data to the sample buffer
-		buffer_fillbuffer(sound_buffer, (char*) component_lvl1_sine_targetbufer,
-				           sizeof(SAMPLE_SIZE) * SAMPLE_COUNT);
+		buffer_fillbuffer(sound_buffer, (char*) comp_header.dest_addr, SAMPLE_SIZE * SAMPLE_COUNT);
 
-		// Get user input - async --> done by another thread
-		// write new values depending on user input into memory
 	}
 }
+
+int main(){
+
+	soundbuffer* playback = buffer_initialize(44100, 0);
+	buffer_start(playback, 0);
+	// TODO: Receive kill signal and free buffers
+	run_synthesizer(playback);
+	buffer_stop(playback);
+	buffer_free(playback);
+	reconos_cleanup();
+
+	return 0;
+}
+
+
+
 

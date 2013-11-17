@@ -69,10 +69,11 @@ int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
     {
     	if(! strcmp(iterator->cmp_osc_name, path))
 		{
+    		printf("Receiving: %s with value: %f \n", iterator->cmp_osc_name,output);
     		float ret = resolveComponentId(iterator->cmp_id, output);
-    		*(iterator->cmp_addr) = ret;
+    		*(float*)iterator->cmp_target_buffer = ret;
    		}
-    	iterator = iterator->next;
+    	iterator = (sOSCComponent*) iterator->next;
     }
     return 0;
 }
@@ -101,6 +102,7 @@ void* osc_handler_thread(void *args)
 	sOSCComponent *iterator = components;
 	while(iterator)
 	{
+		printf("Adding handler %s \n", components->cmp_osc_name);
 		lo_server_thread_add_method(st, components->cmp_osc_name , "f", &soundgates_handler, NULL);
 		iterator = (sOSCComponent*) iterator->next;
 	}
