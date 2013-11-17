@@ -1,15 +1,19 @@
 #include "tcp_handshake.h"
 
+extern int done;
+
 char* interactiveComponents[] = {
-    "/component1 \"f\"",
-    "/component2 \"i\"",
+    "/sinefreq \"i\" [0:880]",
+    "/trianglefreq \"i\" [0:880]",
+    "/mixer1bias \"f\" [0:1]",
+    "/mixer2bias \"f\" [0:1]",
     "/quit"
 };
     
 // TODO: Pack array of components and #components into struct?!
 char** getInteractiveComponents(unsigned int *numInteractiveComponents)
 {
-    *numInteractiveComponents = 3;
+    *numInteractiveComponents = 5;
     return interactiveComponents;
 } 
 
@@ -124,7 +128,7 @@ void* tcp_handshake_thread(void *args)
     if (listen(serverSock, MAXPENDING) < 0)
         error_handler("listen() failed");
 
-    for (;;) /* Run forever */
+    while (!done)
     {
         /* Set the size of the in-out parameter */
         clientAddrLen = sizeof(clientAddr);
@@ -137,7 +141,9 @@ void* tcp_handshake_thread(void *args)
 
         tcp_client_handler(clientSock);
     }
-    /* NOT REACHED */
+    
+    close(serverSock);
+    
     return 0;
 }
 

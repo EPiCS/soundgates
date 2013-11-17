@@ -71,6 +71,8 @@ public class OSCMessage {
     public String getPath() { return path; }
     public void setPath(String path) { this.path = path; }
 
+    public LinkedList<OSCType> getTypes() { return types; }
+
     public boolean isSelected() {
         return selected;
     }

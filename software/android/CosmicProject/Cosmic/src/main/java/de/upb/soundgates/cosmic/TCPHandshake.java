@@ -25,7 +25,7 @@ public class TCPHandshake extends AsyncTask<Void, Void, Boolean> {
 
     protected Socket s;
 
-    protected final int TIMEOUT_IN_SEC = 5;
+    protected final int TIMEOUT_IN_SEC = 10;
 
     public TCPHandshake(String host, int port, AsyncTaskListener<String> listener) {
         super();

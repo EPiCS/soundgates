@@ -6,6 +6,7 @@ package de.upb.soundgates.cosmic;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -20,8 +21,10 @@ import android.widget.TextView;
 
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCSender;
+import de.upb.soundgates.cosmic.osc.OSCType;
 
 public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
+    private final float SEEKBAR_MAX_VALUE = 880;
 
     private final List<OSCMessage> list;
     private final Activity context;
@@ -71,20 +74,46 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             inTrackingTouch = false;
-            String msg = viewHolder.text.getText() + " " + seekBar.getProgress();
-            Log.d(MainActivity.LOG_TAG, msg);
 
-            Object[] args =
-                    {
-                            new Float(seekBar.getProgress())
-                    };
+            OSCMessage osc_msg = (OSCMessage)viewHolder.seekbar.getTag();
+            LinkedList<OSCType> types = osc_msg.getTypes();
 
-            com.illposed.osc.OSCMessage oscmsg = new com.illposed.osc.OSCMessage(viewHolder.text.getText().toString().split(" ")[0],args);
-            //Object args[] = new Object[1];
-            //args[0] = new Integer(seekBar.getProgress());
-            //oscmsg.addArgument(args);
+            if(types.size() == 0) {
+                /* Just for demo: A seekBar change sends a normal OSC message */
+                com.illposed.osc.OSCMessage packed_msg = new com.illposed.osc.OSCMessage(osc_msg.getPath());
+                new OSCSender(host, port, packed_msg).execute();
+                return;
+            } else if(types.size() != 1) {
+                Log.e(MainActivity.LOG_TAG, "#Types wrong: " + types.size());
+                return;
+            }
 
-            new OSCSender(host, port, oscmsg).execute();
+            Object[] args = new Object[1];
+
+            switch(types.get(0).getTypeTag())
+            {
+                case 'i':
+                {
+                    OSCType<Integer> t = types.get(0);
+                    int i = (int)t.MIN_VALUE + (int)((int)t.MAX_VALUE * (seekBar.getProgress()/SEEKBAR_MAX_VALUE));
+                    args[0] = new Integer(i);
+                    break;
+                }
+                case 'f':
+                {
+                    OSCType<Float> t = types.get(0);
+                    float f = (float)t.MIN_VALUE + (float)t.MAX_VALUE * (seekBar.getProgress()/SEEKBAR_MAX_VALUE);
+                    args[0] = new Float(f);
+                    break;
+                }
+                default:
+                    Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
+                    return;
+            }
+
+            com.illposed.osc.OSCMessage packed_msg = new com.illposed.osc.OSCMessage(osc_msg.getPath(),args);
+
+            new OSCSender(host, port, packed_msg).execute();
         }
     }
 
@@ -100,7 +129,7 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
             viewHolder.text = (TextView) view.findViewById(R.id.bindrow_textView);
             viewHolder.seekbar = (SeekBar) view.findViewById(R.id.bindrow_seekBar);
             viewHolder.seekbar.setOnSeekBarChangeListener(new BindOnSeekBarChangeListener(viewHolder));
-            viewHolder.seekbar.setMax(880);
+            viewHolder.seekbar.setMax((int)SEEKBAR_MAX_VALUE);
 
             View.OnClickListener ocl = new View.OnClickListener() {
                 @Override

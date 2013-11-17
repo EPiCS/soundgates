@@ -1,6 +1,6 @@
 #include "osc_handler.h"
 
-int done = 0;
+extern int done;
 
 void error(int num, const char *msg, const char *path)
 {
@@ -9,7 +9,7 @@ void error(int num, const char *msg, const char *path)
 }
 
 /* catch any incoming messages and display them. returning 1 means that the
- * message has not been fully handled and the server should try other methods */
+* message has not been fully handled and the server should try other methods */
 int generic_handler(const char *path, const char *types, lo_arg ** argv,
                     int argc, void *data, void *user_data)
 {
@@ -27,26 +27,59 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
     return 1;
 }
 
-/* handle soundgates messages */
-int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
+int foo_handler(const char *path, const char *types, lo_arg ** argv,
                 int argc, void *data, void *user_data)
 {
     /* example showing pulling the argument values out of the argv array */
-    int [2] output;
+    printf("%s <- f:%f, i:%d\n\n", path, argv[0]->f, argv[1]->i);
+    fflush(stdout);
 
-    output[1] = argv[0];
+    return 0;
+}
 
-    if (!strcmp(path, "/sin"))
-    {
-        set_frequency_sin(output[1], 0 /*offset*/);
-    } else if (!strcmp(path, "/tri")) {
-        set_frequency_tri(output[1], 0 /*offset*/);
-    } else if (!strcmp(path, "/bias_sample")) {
-        set_bias_sample(output[1]);
-    } else if (!strcmp(path, "/bias_waves")) {
-        set_bias_waves(output[1]);
-    }
+int sinefreq_integer_handler(const char *path, const char *types, lo_arg ** argv,
+                int argc, void *data, void *user_data)
+{
+    int value = argv[0]->i;
+    // TODO: put value to sine generator
+    
+    printf("%s <- i:%d\n\n", path, value);
+    fflush(stdout);
 
+    return 0;
+}
+
+int trianglefreq_integer_handler(const char *path, const char *types, lo_arg ** argv,
+                int argc, void *data, void *user_data)
+{
+    int value = argv[0]->i;
+    // TODO: put value to triangle generator
+    
+    printf("%s <- i:%d\n\n", path, value);
+    fflush(stdout);
+
+    return 0;
+}
+
+int mixer1bias_float_handler(const char *path, const char *types, lo_arg ** argv,
+                int argc, void *data, void *user_data)
+{
+    float value = argv[0]->f;
+    // TODO: put value to sine generator
+    
+    printf("%s <- f:%f\n\n", path, value);
+    fflush(stdout);
+
+    return 0;
+}
+
+int mixer2bias_float_handler(const char *path, const char *types, lo_arg ** argv,
+                int argc, void *data, void *user_data)
+{
+    float value = argv[0]->f;
+    // TODO: put value to sine generator
+    
+    printf("%s <- f:%f\n\n", path, value);
     fflush(stdout);
 
     return 0;
@@ -71,20 +104,12 @@ void* osc_handler_thread(void *args)
     lo_server_thread st = lo_server_thread_new(port, error);
 
     /* add method that will match any path and args */
-    lo_server_thread_add_method(st, NULL, NULL, generic_handler, NULL);
-
-
-
-    /* add handler for  */
-    /* sinus,           */
-    lo_server_thread_add_method(st, "/sin", "f", soundgates_handler, NULL);
-    /* triangle,        */
-    lo_server_thread_add_method(st, "/tri", "f", soundgates_handler, NULL);
-    /* bias for samples */
-    lo_server_thread_add_method(st, "/bias_sample", "f", soundgates_handler, NULL);
-    /* bias for 2 waves */
-    lo_server_thread_add_method(st, "/bias_waves", "f", soundgates_handler, NULL);
-
+    //lo_server_thread_add_method(st, NULL, NULL, generic_handler, NULL);
+    
+    lo_server_thread_add_method(st, "/sinefreq", "i", sinefreq_integer_handler, NULL);
+    lo_server_thread_add_method(st, "/trianglefreq", "i", trianglefreq_integer_handler, NULL);
+    lo_server_thread_add_method(st, "/mixer1bias", "f", mixer1bias_float_handler, NULL);
+    lo_server_thread_add_method(st, "/mixer2bias", "f", mixer2bias_float_handler, NULL);
     
     /* add method that will match the path /quit with no args */
     lo_server_thread_add_method(st, "/quit", "", quit_handler, NULL);
@@ -104,4 +129,3 @@ void* osc_handler_thread(void *args)
     
     return 0;
 }
-
