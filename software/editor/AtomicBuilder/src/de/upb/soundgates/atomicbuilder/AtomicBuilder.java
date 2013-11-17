@@ -146,6 +146,9 @@ public class AtomicBuilder {
 		String manipulationValue = "";
 		PureDataInfo result = new PureDataInfo();
 		while((read = bufferedReader.readLine()) != null){
+			if (!read.contains(";")){
+				read += bufferedReader.readLine();
+			}
 			read = read.split(";")[0];
 			if (manipulateNextLine){
 				String [] splitLine = read.split(" ");
