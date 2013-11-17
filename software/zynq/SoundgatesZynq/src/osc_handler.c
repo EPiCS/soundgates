@@ -42,7 +42,10 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
  */
 float resolveComponentId(int id, float value)
 {
-		return freq_to_incr(id, value);
+		if(id == ID_BIAS)
+			return value;
+		else
+			return freq_to_incr(id, value);
 }
 
 /* handle soundgates messages */
@@ -78,7 +81,7 @@ int quit_handler(const char *path, const char *types, lo_arg ** argv,
 
 void* osc_handler_thread(void *args)
 {
-	printf("Creating osc_handler_thread");
+	printf("Creating osc_handler_thread...\n");
 	fflush(stdout);
     char port[6];
     sprintf(port, "%d", PORT);
@@ -90,9 +93,10 @@ void* osc_handler_thread(void *args)
 	sOSCComponent *iterator = components;
 	while(iterator)
 	{
-		printf("Adding handler %s \n", components->comp_osc_name);
-		lo_server_thread_add_method(st, components->comp_osc_name , "f", &soundgates_handler, NULL);
+		printf("Adding handler %s \n", iterator->comp_osc_name);
+		lo_server_thread_add_method(st, iterator->comp_osc_name , "f", &soundgates_handler, NULL);
 		iterator = (sOSCComponent*) iterator->next;
+		fflush(stdout);
 	}
 
     //add method that will match any path and args
