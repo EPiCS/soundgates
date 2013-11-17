@@ -1,5 +1,10 @@
 package soundgates.simulation;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.file.WatchEvent.Kind;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,11 +16,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import soundgates.AtomicSoundComponent;
 import soundgates.codegen.Codegen;
 
 public class StartSimulationHandler extends AbstractHandler {
@@ -41,6 +46,7 @@ public class StartSimulationHandler extends AbstractHandler {
 
 						dialog.setIoComponents(codegen.getIoComponents());
 						dialog.create();
+						(ProcessStore.handShakeThread = new HandshakeThread(codegen.getIoComponents())).start();
 						simulate(project);
 						dialog.open();
 						return null;
@@ -57,6 +63,7 @@ public class StartSimulationHandler extends AbstractHandler {
 		}
 		return null;
 	}
+
 	
 	private void simulate(IProject project) throws IOException{
 		String pdexecutable = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, PdPreferencePage.PD_EXECUTABLE, "", null);
