@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "osc_handler.h"
 #include "lo/lo.h"
 
-#include "ComponentStructs.h"
-#include "Inputconverter.h"
+#include "../../include/osc_handler.h"
+#include "../../include/ComponentStructs.h"
+#include "../../include/Inputconverter.h"
 
 int done = 0;
 sOSCComponent *components;
@@ -55,11 +55,11 @@ int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
     sOSCComponent *iterator = components;
     while(iterator)
     {
-    	if(! strcmp(iterator->cmp_osc_name, path))
+    	if(! strcmp(iterator->comp_osc_name, path))
 		{
-    		printf("Receiving: %s with value: %f \n", iterator->cmp_osc_name,output);
-    		float ret = resolveComponentId(iterator->cmp_id, output);
-    		*(float*)iterator->cmp_target_buffer = ret;
+    		printf("Receiving: %s with value: %f \n", iterator->comp_osc_name,output);
+    		float ret = resolveComponentId(iterator->comp_id, output);
+    		*(float*)iterator->comp_value_pointer= ret;
    		}
     	iterator = (sOSCComponent*) iterator->next;
     }
@@ -90,8 +90,8 @@ void* osc_handler_thread(void *args)
 	sOSCComponent *iterator = components;
 	while(iterator)
 	{
-		printf("Adding handler %s \n", components->cmp_osc_name);
-		lo_server_thread_add_method(st, components->cmp_osc_name , "f", &soundgates_handler, NULL);
+		printf("Adding handler %s \n", components->comp_osc_name);
+		lo_server_thread_add_method(st, components->comp_osc_name , "f", &soundgates_handler, NULL);
 		iterator = (sOSCComponent*) iterator->next;
 	}
 

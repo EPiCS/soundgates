@@ -1,7 +1,7 @@
 #ifndef INPUTCONVERTER_H
 #define INPUTCONVERTER_H
 
-#include <ComponentStruct.h>
+#include "ComponentStructs.h"
 #include <math.h>
 
 #define SOUNDGATES_FIXED_PT_SCALE (1 << 27)

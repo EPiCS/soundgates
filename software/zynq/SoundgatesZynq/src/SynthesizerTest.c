@@ -22,13 +22,13 @@
 #include "software_sound_components/software_sound_components.h"
 
 // Reconos imports
-#include <reconos.h>
-#include <mbox.h>
+#include "../../lib/reconos/include/reconos.h"
+#include "../../lib/reconos/include/mbox.h"
 
 // Soundgates imports
-#include "ComponentStructs.h"
-#include "Samplebuffer.h"
-#include "osc_handler.h"
+#include "../../include/ComponentStructs.h"
+#include "../../include/Samplebuffer.h"
+#include "../../include/osc_handler.h"
 
 // Memory
 #define TO_WORDS(x) ((x)/4)
@@ -214,7 +214,17 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 
 		// TODO: We need a mixer
 		// Write generated data to the sample buffer
-		buffer_fillbuffer(sound_buffer, (char*) comp_header.dest_addr, SAMPLE_SIZE * SAMPLE_COUNT);
+		int i=0;
+		int foo = 28;
+		float* floatbuf = calloc(sizeof(float), SAMPLE_COUNT);
+		for (i = 0; i < SAMPLE_COUNT ; i++)
+		{
+
+			floatbuf[i] = (float) 10*((int*) comp_header.dest_addr)[i] / (1 << foo);
+
+		}
+		// Write generated data to the sample buffer
+		buffer_fillbuffer(sound_buffer, (char*) floatbuf, SAMPLE_SIZE * SAMPLE_COUNT);
 
 	}
 }
@@ -224,6 +234,8 @@ int main(){
 	soundbuffer* playback = buffer_initialize(44100, 0);
 	buffer_start(playback, 0);
 	// TODO: Receive kill signal and free buffers
+	printf("Running synth \n");
+	fflush(stdout);
 	run_synthesizer(playback);
 	buffer_stop(playback);
 	buffer_free(playback);
