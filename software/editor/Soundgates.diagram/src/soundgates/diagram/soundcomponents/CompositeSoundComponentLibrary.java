@@ -2,18 +2,18 @@ package soundgates.diagram.soundcomponents;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
-import soundgates.Port;
-import soundgates.SoundgatesFactory;
+import soundgates.SoundComponent;
 
 
-public class CompositeSoundComponentLibrary {
+public class CompositeSoundComponentLibrary{
 
 	private static CompositeSoundComponentLibrary instance;
 	private static TreeMap<String, CompositeSoundComponent> components;
@@ -43,22 +43,21 @@ public class CompositeSoundComponentLibrary {
 		return instance;
 	}
 
-	public CompositeSoundComponent createCompositeSoundComponentInstance(String name) {
-		CompositeSoundComponent blueprint = components.get(name);
+	public CompositeSoundComponent createCompositeSoundComponentInstance(String compositeSoundComponentName) {
+		CompositeSoundComponent blueprint = components.get(compositeSoundComponentName);
 
-		CompositeSoundComponent copy = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
-		copy.setName(blueprint.getName());
-		Iterator<Port> pi = blueprint.getPorts().iterator();
-		while (pi.hasNext()) {
-			Port portCopy = SoundgatesFactory.eINSTANCE.createPort();
-			Port portBlueprint = pi.next();
-			portCopy.setDataType(portBlueprint.getDataType());
-			portCopy.setDirection(portBlueprint.getDirection());
-			portCopy.setName(portBlueprint.getName());
-			copy.getPorts().add(portCopy);
+		CompositeSoundComponent compositeSoundComponentCopy = EcoreUtil.copy(blueprint);
+			
+		//walkaround
+		for(SoundComponent soundComponent : compositeSoundComponentCopy.getEmbeddedComponents()){
+			if(soundComponent instanceof AtomicSoundComponent){
+				AtomicSoundComponent atomicSoundComponent = (AtomicSoundComponent) soundComponent;
+				atomicSoundComponent.setType(atomicSoundComponent.getStringProperties().get("Type"));
+				atomicSoundComponent.getStringProperties().removeKey("Type");
+			}
 		}
 
-		return copy;
+		return compositeSoundComponentCopy;
 	}
 
 	public List<String> getAvailableComponents() {

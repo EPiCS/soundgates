@@ -19,12 +19,13 @@ public class Exporter {
 		atomicSoundComponentElement.setAttribute("Name", atomicSoundComponent.getName());
 		atomicSoundComponentElement.setAttribute("Id", Integer.toString(componentCounter));					
 		
+		Element properties = doc.createElement("Properties");		
 		//integer properties
 		for(int i=0; i<atomicSoundComponent.getIntegerProperties().size(); i++){						
 			Element integerProperty = doc.createElement("IntProperty");						
 			integerProperty.setAttribute("Name",atomicSoundComponent.getIntegerProperties().get(i).getKey().toString());
 			integerProperty.setAttribute("Value",atomicSoundComponent.getIntegerProperties().get(i).getValue().toString());						
-			atomicSoundComponentElement.appendChild(integerProperty);
+			properties.appendChild(integerProperty);
 		}
 
 		//float properties
@@ -32,7 +33,7 @@ public class Exporter {
 			Element floatProperty = doc.createElement("FloatProperty");
 			floatProperty.setAttribute("Name", atomicSoundComponent.getFloatProperties().get(i).getKey().toString());						
 			floatProperty.setAttribute("Value", atomicSoundComponent.getFloatProperties().get(i).getValue().toString());						
-			atomicSoundComponentElement.appendChild(floatProperty);
+			properties.appendChild(floatProperty);
 		}
 		
 		//boolean properties
@@ -40,8 +41,9 @@ public class Exporter {
 			Element booleanProperty = doc.createElement("BoolProperty");						
 			booleanProperty.setAttribute("Name",atomicSoundComponent.getBooleanProperties().get(i).getKey().toString());
 			booleanProperty.setAttribute("Value",atomicSoundComponent.getBooleanProperties().get(i).getValue().toString());						
-			atomicSoundComponentElement.appendChild(booleanProperty);
+			properties.appendChild(booleanProperty);
 		}
+		atomicSoundComponentElement.appendChild(properties);
 		
 		return atomicSoundComponentElement;
 	}
