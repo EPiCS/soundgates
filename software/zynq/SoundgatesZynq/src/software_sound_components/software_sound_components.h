@@ -14,6 +14,7 @@
 
 #include "wavefileplayer.h"
 #include "mixer.h"
+#include "amplifier.h"
 #include "wave_generator.h"
 
 pthread_t* create_dummy_swt_thread();
