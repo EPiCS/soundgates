@@ -3,9 +3,6 @@ package de.upb.soundgates.cosmic;
 /**
  * Created by posewsky on 13.11.13.
  */
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,8 +21,6 @@ import de.upb.soundgates.cosmic.osc.OSCSender;
 import de.upb.soundgates.cosmic.osc.OSCType;
 
 public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
-    private final float SEEKBAR_MAX_VALUE = 880;
-
     private final List<OSCMessage> list;
     private final Activity context;
     private String host;
@@ -41,7 +36,7 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
 
     static class ViewHolder {
         protected TextView text;
-        protected SeekBar seekbar;
+        protected MinMaxSeekBar seekbar;
         protected Button button_c;
         protected Button button_d;
         protected Button button_e;
@@ -52,29 +47,14 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
     }
 
     class BindOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
-        boolean inTrackingTouch;
         final ViewHolder viewHolder;
 
         public BindOnSeekBarChangeListener(final ViewHolder viewHolder){
             this.viewHolder = viewHolder;
-            this.inTrackingTouch = true;
         }
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-            if(!inTrackingTouch)
-                onStopTrackingTouch(seekBar);
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            inTrackingTouch = true;
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            inTrackingTouch = false;
-
             OSCMessage osc_msg = (OSCMessage)viewHolder.seekbar.getTag();
             LinkedList<OSCType> types = osc_msg.getTypes();
 
@@ -93,19 +73,11 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
             switch(types.get(0).getTypeTag())
             {
                 case 'i':
-                {
-                    OSCType<Integer> t = types.get(0);
-                    int i = (int)t.MIN_VALUE + (int)((int)t.MAX_VALUE * (seekBar.getProgress()/SEEKBAR_MAX_VALUE));
-                    args[0] = new Integer(i);
+                    args[0] = new Integer((int)((MinMaxSeekBar)seekBar).getFloatValue());
                     break;
-                }
                 case 'f':
-                {
-                    OSCType<Float> t = types.get(0);
-                    float f = (float)t.MIN_VALUE + (float)t.MAX_VALUE * (seekBar.getProgress()/SEEKBAR_MAX_VALUE);
-                    args[0] = new Float(f);
+                    args[0] = new Float(((MinMaxSeekBar)seekBar).getFloatValue());
                     break;
-                }
                 default:
                     Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
                     return;
@@ -114,6 +86,16 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
             com.illposed.osc.OSCMessage packed_msg = new com.illposed.osc.OSCMessage(osc_msg.getPath(),args);
 
             new OSCSender(host, port, packed_msg).execute();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
         }
     }
 
@@ -127,9 +109,32 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
 
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = (TextView) view.findViewById(R.id.bindrow_textView);
-            viewHolder.seekbar = (SeekBar) view.findViewById(R.id.bindrow_seekBar);
+            viewHolder.seekbar = (MinMaxSeekBar) view.findViewById(R.id.bindrow_seekBar);
             viewHolder.seekbar.setOnSeekBarChangeListener(new BindOnSeekBarChangeListener(viewHolder));
-            viewHolder.seekbar.setMax((int)SEEKBAR_MAX_VALUE);
+
+            if(list.get(position).getTypes().size() == 1)
+            {
+                switch(list.get(position).getTypes().get(0).getTypeTag())
+                {
+                    case 'i':
+                    {
+                        OSCType<Integer> t = list.get(position).getTypes().get(0);
+                        viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
+                        viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
+                        break;
+                    }
+                    case 'f':
+                    {
+                        OSCType<Float> t = list.get(position).getTypes().get(0);
+                        viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
+                        viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
+                        break;
+                    }
+                    default:
+                        Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
+                        return null;
+                }
+            }
 
             View.OnClickListener ocl = new View.OnClickListener() {
                 @Override
@@ -154,7 +159,7 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
                         default:
                             freq = 220;
                     }
-                    viewHolder.seekbar.setProgress(freq);
+                    viewHolder.seekbar.setFloatValue(freq);
                 }
             };
 
