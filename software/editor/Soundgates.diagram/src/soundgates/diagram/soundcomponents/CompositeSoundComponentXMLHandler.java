@@ -29,7 +29,7 @@ import soundgates.SoundgatesFactory;
  * @author gwue
  *
  */
-public class CompositeSoundComponentXMLHandler extends XMLHandler {
+public class CompositeSoundComponentXMLHandler {
 
 	// private AtomicSoundComponentLibrary library;
 
@@ -54,7 +54,7 @@ public class CompositeSoundComponentXMLHandler extends XMLHandler {
 						compositeSoundComponent.setName(element.getAttribute("Name"));			
 
 						NodeList portList = element.getElementsByTagName("Port");						
-						addPortsToSoundComponentFromPortList(compositeSoundComponent, portList);					
+						XMLHandler.addPortsToSoundComponentFromPortList(compositeSoundComponent, portList);					
 						
 						HashMap<Integer,SoundComponent> embeddedSoundComponentMapping = new HashMap<Integer,SoundComponent>();
 						
@@ -73,7 +73,7 @@ public class CompositeSoundComponentXMLHandler extends XMLHandler {
 							atomicSoundComponent.getStringProperties().put("Type", atomCompElement.getAttribute("Type"));							
 							
 							Element propertiesNode = (Element) atomCompElement.getElementsByTagName("Properties").item(0);							
-							addPropertiesToSoundComponentFromPropertiesElement(atomicSoundComponent, propertiesNode, "Value");
+							XMLHandler.addPropertiesToSoundComponentFromPropertiesElement(atomicSoundComponent, propertiesNode, "Value");
 							
 							compositeSoundComponent.getEmbeddedComponents().add(atomicSoundComponent);	
 							embeddedSoundComponentMapping.put(

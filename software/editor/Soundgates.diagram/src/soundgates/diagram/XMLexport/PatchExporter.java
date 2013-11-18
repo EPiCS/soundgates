@@ -44,7 +44,7 @@ public class PatchExporter extends Exporter{
 			
 			// root element
 			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement("Patch_"+patchName);
+			Element rootElement = doc.createElement("Patch");
 			doc.appendChild(rootElement);
 			
 			// elements

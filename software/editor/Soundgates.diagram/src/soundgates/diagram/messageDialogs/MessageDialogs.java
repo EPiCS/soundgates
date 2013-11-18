@@ -23,6 +23,10 @@ public class MessageDialogs {
 	public static void compositeSoundComponentWasExported(String name){		
 		MessageDialog.openInformation(null, "Success", "The composite sound component \""+name+"\" was exported to file \""+name+".xml\"");
 	}
+
+	public static void patchtWasExported(String name){		
+		MessageDialog.openInformation(null, "Success", "The patch was exported to file \""+name+"\"");	
+	}
 	
 	public static void compositeSoundComponentValidationTrue(String name) {		
 		MessageDialog.openInformation(null, "Success", "Composite sound component \""+name+"\" is correct");		

@@ -14,6 +14,7 @@ import org.eclipse.ui.PlatformUI;
 import soundgates.Patch;
 import soundgates.diagram.XMLexport.PatchExporter;
 import soundgates.diagram.XMLexport.Tester;
+import soundgates.diagram.messageDialogs.MessageDialogs;
 
 
 
@@ -41,6 +42,7 @@ public class ExportPatchAction implements IObjectActionDelegate{
 						patch,												// patch
 						file.getName().replace(".soundgates",""));			// name
 								
+				MessageDialogs.patchtWasExported(file.getName().replace(".soundgates",".xml"));
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();
