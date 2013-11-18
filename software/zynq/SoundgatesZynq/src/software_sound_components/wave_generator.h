@@ -40,4 +40,9 @@ void wave_generator_generate_s32(wave_generator* generator, char* target,int tar
  */
 void wave_generator_generate_u32(wave_generator* generator, char* target,int target_size);
 
+/**
+ * Change the frequency of a generator
+ */
+void wave_generator_set_frequency(wave_generator*, double frequency);
+
 #endif /* SQUARE_WAVE_GENERATOR_H_ */
