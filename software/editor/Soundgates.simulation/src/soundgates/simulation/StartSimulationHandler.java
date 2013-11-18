@@ -1,10 +1,5 @@
 package soundgates.simulation;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.file.WatchEvent.Kind;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +15,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import soundgates.AtomicSoundComponent;
 import soundgates.codegen.Codegen;
 
 public class StartSimulationHandler extends AbstractHandler {
