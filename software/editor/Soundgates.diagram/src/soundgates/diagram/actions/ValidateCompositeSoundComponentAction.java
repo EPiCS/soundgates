@@ -12,13 +12,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import soundgates.CompositeSoundComponent;
-import soundgates.diagram.XMLexport.CompositeSoundComponentExporter;
 import soundgates.diagram.XMLexport.Tester;
 import soundgates.diagram.edit.parts.CompositeSoundComponentAbstractEditPart;
+import soundgates.diagram.messageDialogs.MessageDialogs;
 
 
 
-public class ExportCompositeSoundComponentAction implements IObjectActionDelegate{
+public class ValidateCompositeSoundComponentAction implements IObjectActionDelegate{
 
 	@Override
 	public void run(IAction action) {
@@ -32,12 +32,8 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 				 
 			 	Tester patchTester = new Tester();
 			 	boolean accepted = patchTester.testCompositeSoundComponent(compositeSoundComponent, true);
-			 	if(!accepted) return;
+			 	if(accepted) MessageDialogs.compositeSoundComponentValidationTrue(compositeSoundComponent.getName());
 			 	
-				if(patchTester.shouldWriteFileForCompositeSoundComponent(compositeSoundComponent.getName())){
-					CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
-					exporter.exportToXML(compositeSoundComponent);	
-				}
 			 }
 		}
 	}
