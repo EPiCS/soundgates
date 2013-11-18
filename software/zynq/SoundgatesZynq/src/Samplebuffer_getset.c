@@ -5,7 +5,7 @@
  *      Author: gwue
  */
 
-#include "Samplebuffer_getset.h"
+#include "../../include/Samplebuffer_getset.h"
 
 inline void switchAndClearBuffer(soundbuffer* buffer) {
 	if (buffer->activeBuffer == 1) {

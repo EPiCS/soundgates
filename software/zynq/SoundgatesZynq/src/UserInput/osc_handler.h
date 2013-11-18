@@ -12,9 +12,7 @@
 
 void error(int, const char *, const char *);
 
-int generic_handler(const char *, const char *, lo_arg **, int, void *, void *);
-
-int foo_handler(const char *, const char *, lo_arg **, int, void *, void *);
+int soundgates_handler(const char *, const char *, lo_arg ** ,  int, void *, void *);
 
 int quit_handler(const char *, const char *, lo_arg **, int, void *, void *);
 

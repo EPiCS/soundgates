@@ -5,9 +5,6 @@
 
 #include <pthread.h>
 
-#include "tcp_handshake.h"
-#include "osc_handler.h"
-
 
 #define PORT 50050
 #define MAXPENDING 5

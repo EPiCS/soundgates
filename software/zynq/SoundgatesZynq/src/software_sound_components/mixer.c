@@ -19,14 +19,14 @@ void mixer_mix(char* stream1, char* stream2, char* output, int size,
 		bias = 1;
 	}
 
-	// We use 32 Bit Unsigned Integers
-	// -> advance 4 elements and interpret our array elements as unsigned int
+	// We use 32 Bit Signed Integers
+	// -> advance 4 elements and interpret our array elements as signed int
 	for (i = 0; i < size / 4; i++)
 	{
-		unsigned int v1 = ((unsigned int*) stream1)[i];
-		unsigned int v2 = ((unsigned int*) stream2)[i];
+		int v1 = ((int*) stream1)[i];
+		int v2 = ((int*) stream2)[i];
 
-		((unsigned int*) output)[i] = (1 - bias) * v1 + v2 * (bias);
+		((int*) output)[i] = (1 - bias) * v1 + v2 * (bias);
 	}
 
 }
