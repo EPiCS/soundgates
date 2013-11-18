@@ -26,7 +26,7 @@ void mixer_mix(char* stream1, char* stream2, char* output, int size,
 		unsigned int v1 = ((unsigned int*) stream1)[i];
 		unsigned int v2 = ((unsigned int*) stream2)[i];
 
-		((unsigned int*) output)[i] = (1 - bias) * v1 + v2 * (bias);
+		((unsigned int*) output)[i] = (1 - bias) * v1/2 + v2/2 * (bias);
 	}
 
 }
