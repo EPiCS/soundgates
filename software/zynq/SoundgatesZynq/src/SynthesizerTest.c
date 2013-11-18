@@ -26,7 +26,7 @@
 #include "../../lib/reconos/include/mbox.h"
 
 // Soundgates imports
-#include "../../include/ComponentStructs.h"
+#include "ComponentStructs.h"
 #include "../../include/Samplebuffer.h"
 #include "../../include/osc_handler.h"
 
@@ -70,7 +70,7 @@ char sw_wave_buffer[4096];
 char sw_sine_buffer[4096];
 
 // Bias Waves control
-float bias_waves = 1;
+float bias_waves = 0;
 
 // Communication
 struct mbox mb_start;
@@ -183,9 +183,10 @@ void initialize_reconos() {
 
 	// Initialize components
 	int frequency = 440;
+	// int phase_incr =((4 * frequency) * SOUNDGATES_FIXED_PT_SCALE/ SAMPLE_RATE) ; // TRIANGLE
 	int phase_incr =  ((M_PI * 2 * frequency) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;  // anders für saw, triangle und square
-
-	sin_dest_buffer = malloc_page_aligned(PAGE_SIZE * 15);;
+	//printf ("SOUNDGATES_FIXED_PT_SCALE: %d\nIncrement int:%i\nIncrement float:%f\n", SOUNDGATES_FIXED_PT_SCALE, phase_incr);
+	sin_dest_buffer = malloc_page_aligned(PAGE_SIZE * 15);
 
 	nco_sine_header.phase_offset 	= 0;
 	nco_sine_header.phase_increment = phase_incr;
@@ -242,7 +243,11 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 	// Create user input thread
 	pthread_t user_input;
 	pthread_t *pUser_input = &user_input;
+	printf("Creating user input thread \n");
+	fflush(stdout);
 	initialize_user_input(pUser_input);
+	printf("User input thread created \n");
+	fflush(stdout);
 
 	/**
 	 * The while loop controls every single component. It starts a new layer

@@ -4,8 +4,8 @@
 #include "lo/lo.h"
 
 #include "../../include/osc_handler.h"
-#include "../../include/ComponentStructs.h"
-#include "../../include/Inputconverter.h"
+#include "ComponentStructs.h"
+#include "Inputconverter.h"
 
 int done = 0;
 sOSCComponent *components;
@@ -43,9 +43,12 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
 void write_input_value(int id, float value, void* value_address)
 {
 		if(id == ID_BIAS)
-			*(float*)value_address= value;
+			*(float*)value_address = value;
 		else
-			*(int*)value_address=  freq_to_incr(id, value);
+		{
+			int increment = freq_to_incr(id, value);
+			*((int*)value_address) = increment;
+		}
 }
 
 /* handle soundgates messages */
@@ -54,7 +57,6 @@ int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
 {
     /* example showing pulling the argument values out of the argv array */
     float output = argv[0]->f;
-
     sOSCComponent *iterator = components;
     while(iterator)
     {
