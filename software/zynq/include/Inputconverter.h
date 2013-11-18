@@ -9,18 +9,18 @@
 #define SAMPLE_RATE               44100
 
 // returns increment values for wave generators (id 1 to 4)
-float freq_to_incr (int comp_id, float freq)
+int freq_to_incr (int comp_id, float freq)
 {
     switch (comp_id)
     {
         case ID_SIN: // Sinus
-            return (freq * 2 * M_PI) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
-            
+            //return ((M_PI * 2 * freq) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
+        	return ((4 * freq) * SOUNDGATES_FIXED_PT_SCALE/ SAMPLE_RATE) ;
         case ID_SAW: // Sawtooth - correct calculation?
             return (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
             
         case ID_TRI: // Triangle - correct calculation?
-            return (freq * 4 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
+            return ((4 * freq* SOUNDGATES_FIXED_PT_SCALE) / SAMPLE_RATE);
             
         case ID_SQR: // Square   - correct calculation?
             return (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;            // TODO: duty cycle

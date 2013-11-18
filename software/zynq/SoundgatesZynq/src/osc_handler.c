@@ -40,12 +40,12 @@ int generic_handler(const char *path, const char *types, lo_arg ** argv,
  * TODO: Replace types with structs. Some components need more than
  * one value :(
  */
-float resolveComponentId(int id, float value)
+void write_input_value(int id, float value, void* value_address)
 {
 		if(id == ID_BIAS)
-			return value;
+			*(float*)value_address= value;
 		else
-			return freq_to_incr(id, value);
+			*(int*)value_address=  freq_to_incr(id, value);
 }
 
 /* handle soundgates messages */
@@ -61,8 +61,7 @@ int soundgates_handler(const char *path, const char *types, lo_arg ** argv,
     	if(! strcmp(iterator->comp_osc_name, path))
 		{
     		printf("Receiving: %s with value: %f \n", iterator->comp_osc_name,output);
-    		float ret = resolveComponentId(iterator->comp_id, output);
-    		*(float*)iterator->comp_value_pointer= ret;
+    		write_input_value(iterator->comp_id, output, iterator->comp_value_pointer);
    		}
     	iterator = (sOSCComponent*) iterator->next;
     }
