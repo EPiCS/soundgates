@@ -9,7 +9,7 @@
 #include "Samplebuffer.h"
 #include "software_sound_components/software_sound_components.h"
 
-int main()
+int not_main()
 {
 	int i;
 

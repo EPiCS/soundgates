@@ -12,6 +12,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
+#include "user_input.h"
+
 
 char** getInteractiveComponents(unsigned int *); 
 
@@ -21,6 +23,6 @@ void send_all(int, void *, size_t);
 
 void tcp_client_handler(int);
 
-void *tcp_handshake_thread(void *);
+void* tcp_handshake_thread(void *);
 
 #endif

@@ -27,7 +27,22 @@ typedef struct
 
 wave_generator* wave_generator_create(double frequency,
 		wave_generator_type type);
-void wave_generator_generate(wave_generator* generator, char* target,
-		int target_size);
+/**
+ * Generate a waveform (default encoding --> S32)
+ */
+void wave_generator_generate(wave_generator* generator, char* target,int target_size);
+/**
+ * Generate a waveform with Signed Int 32 Encoding
+ */
+void wave_generator_generate_s32(wave_generator* generator, char* target,int target_size);
+/**
+ * Generate a waveform with Unsigned Tnt 32 Encoding
+ */
+void wave_generator_generate_u32(wave_generator* generator, char* target,int target_size);
+
+/**
+ * Change the frequency of a generator
+ */
+void wave_generator_set_frequency(wave_generator*, double frequency);
 
 #endif /* SQUARE_WAVE_GENERATOR_H_ */
