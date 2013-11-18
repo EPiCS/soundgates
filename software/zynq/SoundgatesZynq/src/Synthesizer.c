@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <pthread.h>
 
 //TODO: Remove unnecessary includes
@@ -19,14 +20,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+
 #include "software_sound_components/software_sound_components.h"
 
 // Reconos imports
-#include "../../lib/reconos/include/reconos.h"
-#include "../../lib/reconos/include/mbox.h"
+#include <reconos.h>
+#include <mbox.h>
 
 // Soundgates imports
+#include "Inputconverter.h"
 #include "ComponentStructs.h"
+#include "SynthesizerCommon.h"
 #include "../../include/Samplebuffer.h"
 #include "../../include/osc_handler.h"
 
@@ -36,18 +40,15 @@
 #define TO_BLOCKS(x) ((x)/(PAGE_SIZE*PAGES_PER_THREAD))
 #define PAGE_SIZE 4096
 
-// Soundgates Defines
-#define SAMPLE_COUNT       1024
-#define SAMPLE_SIZE        sizeof(int)
-#define SND_COMP_FREQUENZY 100000000
-#define SAMPLE_RATE        44100
 #define MBOX_SIZE          1
 #define NCO_START          0x00F
 #define NCO_STOP           0x0F0
-#define HW_THREADS         1
+#define HW_THREADS         2
 #define SW_THREADS         1
 
-#define SOUNDGATES_FIXED_PT_SCALE (1 << 27)
+
+#define HW_THREAD_SIN 0
+#define HW_THREAD_TRI 1
 
 // One Array for every SW thread
 pthread_t                 swt_threads[SW_THREADS];
@@ -56,25 +57,38 @@ struct reconos_resource   swt_res[2];
 
 // One array for every HW thread
 struct reconos_hwt        hwt_threads[HW_THREADS];
-struct reconos_resource   hwt_res[2];
+struct reconos_resource   hwt_res[HW_THREADS][2];
 
 // Components
-sSoundComponentHeader comp_header;
-sNcoComponentHeader   nco_sine_header;
-void*                 sin_dest_buffer;
+static sSoundComponentHeader sine_comp_header;
+static sNcoComponentHeader   nco_sine_header;
+
+static sSoundComponentHeader tri_comp_header;
+static sNcoComponentHeader   nco_tri_header;
+
+static sOSCComponentPtr components;
+
+soundbuffer* playback;
+
+char sin_dest_buffer[SAMPLE_COUNT * 4];
+char tri_dest_buffer[SAMPLE_COUNT * 4];
 
 // Waveplayer target buffer
-char sw_wave_buffer[4096];
+char sw_wave_buffer[SAMPLE_COUNT * 4];
 
 // SW sine target buffer
-char sw_sine_buffer[4096];
+char sw_sine_buffer[SAMPLE_COUNT * 4];
 
 // Bias Waves control
 float bias_waves = 0;
 
 // Communication
-struct mbox mb_start;
-struct mbox mb_stop;
+struct mbox mb_nco_sin_start;
+struct mbox mb_nco_sin_stop;
+
+struct mbox mb_nco_tri_start;
+struct mbox mb_nco_tri_stop;
+
 struct mbox mb_sw_start;
 struct mbox mb_sw_stop;
 
@@ -139,6 +153,8 @@ void *play_sw_sine(void* data)
     struct mbox *mb_start = res[0].ptr;
     struct mbox *mb_stop  = res[1].ptr;
 
+    printf("Starting sw sine generator \n");
+    fflush(stdout);
 	wave_generator* wave_generator_440 = wave_generator_create(440,	WAVE_GENERATOR_SINE);
 
     int code;
@@ -165,16 +181,30 @@ void *play_sw_sine(void* data)
 
 void initialize_reconos() {
 	// init mailboxes
-	mbox_init(&mb_start, MBOX_SIZE);
-	mbox_init(&mb_stop,  MBOX_SIZE);
+
+	mbox_init(&mb_nco_sin_start, MBOX_SIZE);
+	mbox_init(&mb_nco_sin_stop,  MBOX_SIZE);
+
+	mbox_init(&mb_nco_tri_start, MBOX_SIZE);
+	mbox_init(&mb_nco_tri_stop,  MBOX_SIZE);
+
 	mbox_init(&mb_sw_start, MBOX_SIZE);
 	mbox_init(&mb_sw_stop,  MBOX_SIZE);
+
 	// init reconos and communication resources
 	reconos_init();
-	hwt_res[0].type = RECONOS_TYPE_MBOX;
-	hwt_res[0].ptr  = &mb_start;
-	hwt_res[1].type = RECONOS_TYPE_MBOX;
-	hwt_res[1].ptr  = &mb_stop;
+
+
+	hwt_res[HW_THREAD_SIN][0].type = RECONOS_TYPE_MBOX;
+	hwt_res[HW_THREAD_SIN][0].ptr  = &mb_nco_sin_start;
+	hwt_res[HW_THREAD_SIN][1].type = RECONOS_TYPE_MBOX;
+	hwt_res[HW_THREAD_SIN][1].ptr  = &mb_nco_sin_stop;
+
+	hwt_res[HW_THREAD_TRI][0].type = RECONOS_TYPE_MBOX;
+	hwt_res[HW_THREAD_TRI][0].ptr  = &mb_nco_tri_start;
+	hwt_res[HW_THREAD_TRI][1].type = RECONOS_TYPE_MBOX;
+	hwt_res[HW_THREAD_TRI][1].ptr  = &mb_nco_tri_stop;
+
 
 	swt_res[0].type  = RECONOS_TYPE_MBOX;
 	swt_res[0].ptr  = &mb_sw_start;
@@ -182,28 +212,50 @@ void initialize_reconos() {
 	swt_res[1].ptr  = &mb_sw_stop;
 
 	// Initialize components
-	int frequency = 440;
-	// int phase_incr =((4 * frequency) * SOUNDGATES_FIXED_PT_SCALE/ SAMPLE_RATE) ; // TRIANGLE
-	int phase_incr =  ((M_PI * 2 * frequency) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;  // anders für saw, triangle und square
-	//printf ("SOUNDGATES_FIXED_PT_SCALE: %d\nIncrement int:%i\nIncrement float:%f\n", SOUNDGATES_FIXED_PT_SCALE, phase_incr);
-	sin_dest_buffer = malloc_page_aligned(PAGE_SIZE * 15);
+	/*******************************************************/
+
+	int phase_incr_sin =  freq_to_incr(ID_SIN, 440);
+
+	//sin_dest_buffer = calloc(sizeof(int), 1024);
 
 	nco_sine_header.phase_offset 	= 0;
-	nco_sine_header.phase_increment = phase_incr;
+	nco_sine_header.phase_increment = phase_incr_sin;
 
-	comp_header.src_addr = NULL;
-	comp_header.src_len = 0;
-	comp_header.dest_addr = sin_dest_buffer;
-	comp_header.opt_arg_addr = &nco_sine_header;
+	sine_comp_header.src_addr = NULL;
+	sine_comp_header.src_len = 0;
+	sine_comp_header.dest_addr = &sin_dest_buffer[0];
+	sine_comp_header.opt_arg_addr = &nco_sine_header;
 
-    reconos_hwt_setresources(&(hwt_threads[0]), hwt_res, 2);
-    reconos_hwt_setinitdata(&hwt_threads[0], (void *) &comp_header);
-	reconos_hwt_create(&hwt_threads[0], 0, NULL);
+    reconos_hwt_setresources(&(hwt_threads[HW_THREAD_SIN]), hwt_res[HW_THREAD_SIN], 2);
+    reconos_hwt_setinitdata(&hwt_threads[HW_THREAD_SIN], (void *) &sine_comp_header);
+	reconos_hwt_create(&hwt_threads[HW_THREAD_SIN], HW_THREAD_SIN, NULL);
+
+	/*******************************************************/
+
+	/*******************************************************/
+	int phase_incr_tri =  freq_to_incr(ID_TRI, 440);
+
+	//tri_dest_buffer = calloc(sizeof(int), 1024); //malloc_page_aligned(SAMPLE_COUNT * 10);
+
+	nco_tri_header.phase_offset 	= 0;
+	nco_tri_header.phase_increment 	= phase_incr_tri;
+
+	tri_comp_header.src_addr = NULL;
+	tri_comp_header.src_len = 0;
+	tri_comp_header.dest_addr = &tri_dest_buffer[0];
+	tri_comp_header.opt_arg_addr = &nco_tri_header;
+
+    reconos_hwt_setresources(&(hwt_threads[HW_THREAD_TRI]), hwt_res[HW_THREAD_TRI], 2);
+    reconos_hwt_setinitdata(&hwt_threads[HW_THREAD_TRI], (void *) &tri_comp_header);
+	reconos_hwt_create(&hwt_threads[HW_THREAD_TRI], HW_THREAD_TRI, NULL);
+
+	/*******************************************************/
+
 
 	// Init software threads
 	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);  // Play Wave
+	pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]);  // Play Wave
 	//pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]); // Play SW_SINE
 
 }
@@ -214,32 +266,57 @@ void initialize_reconos() {
 void initialize_user_input(pthread_t* user_input)
 {
 	// User input thread needs a list of sOSCComponent
-	int component_count = 2; // MODIFY ME WHENEVER YOU ADD A NEW COMPONENT!
-	sOSCComponent *components = malloc(sizeof(sOSCComponent)*component_count);
+	int component_count = 3; // MODIFY ME WHENEVER YOU ADD A NEW COMPONENT!
+	components = malloc(sizeof(sOSCComponent)*component_count);
 
 	components[0].comp_osc_name = "/sin";
 	components[0].comp_id = ID_SIN;
 	components[0].comp_value_pointer = &nco_sine_header.phase_increment;
-	components[0].next = (sOSCComponent*) &components[1];
+	components[0].next = &components[1];
 
 	components[1].comp_osc_name = "/bias_waves";
 	components[1].comp_id = ID_BIAS;
 	components[1].comp_value_pointer = &bias_waves;
-	components[1].next = 0;
+	components[1].next =  &(components[2]);
 
-//	components[1].cmp_osc_name = "/tri";
-//	components[0].cmp_id = ID_SIN;
-//	components[0].cmp_target_buffer = sin_dest_buffer;
-//	components[0].next = (sOSCComponent*) &components[1];
+	components[2].comp_osc_name = "/tri";
+	components[2].comp_id = ID_TRI;
+	components[2].comp_value_pointer = &nco_tri_header.phase_increment;
+	components[2].next = NULL;
 
 	pthread_create( user_input, NULL, &osc_handler_thread, (void*) components);
 }
+
+void synthesizer_exit_handler(int sigc){
+
+
+	printf("Synthesizer abort\n.");
+
+	free(components);
+
+	buffer_stop(playback);
+	buffer_free(playback);
+
+	reconos_cleanup();
+
+	fflush(stdout);
+
+	exit(EXIT_SUCCESS);
+}
+
 
 /**
  * This method starts the components per layer and handles the alsa buffer
  */
 void run_synthesizer(soundbuffer* sound_buffer) {
 	initialize_reconos();
+
+	if (signal(SIGINT, synthesizer_exit_handler) == SIG_ERR ) {
+		printf("Could not register SIGTERM handler\n");
+		exit(EXIT_FAILURE);
+	}
+
+
 	// Create user input thread
 	pthread_t user_input;
 	pthread_t *pUser_input = &user_input;
@@ -249,6 +326,8 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 	printf("User input thread created \n");
 	fflush(stdout);
 
+	int* bla = malloc(SAMPLE_SIZE * SAMPLE_COUNT);
+
 	/**
 	 * The while loop controls every single component. It starts a new layer
 	 * as soon as the currently running layers completes. Finally it writes
@@ -256,11 +335,13 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 	 */
 	while (1) {
 		// Start Layer 1 components
-		mbox_put(&mb_start, NCO_START);
+		mbox_put(&mb_nco_sin_start, NCO_START);
+		mbox_put(&mb_nco_tri_start, NCO_START);
 		mbox_put(&mb_sw_start, NCO_START);
 
 		// Wait for Layer 1 components
-		mbox_get(&mb_stop);
+		mbox_get(&mb_nco_tri_stop);
+		mbox_get(&mb_nco_sin_stop);
 		mbox_get(&mb_sw_stop);
 
 		//Wait until the buffer needs samples
@@ -269,8 +350,7 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		}
 
 		// Mix sine wave and wave
-		mixer_mix(comp_header.dest_addr, sw_wave_buffer , alsa_buffer, 4096, bias_waves);
-
+		mixer_mix(tri_comp_header.dest_addr, sine_comp_header.dest_addr, alsa_buffer, 4096, bias_waves);
 
 		// Write generated data to the sample buffer
 		buffer_fillbuffer(sound_buffer, (char*) alsa_buffer, SAMPLE_SIZE * SAMPLE_COUNT);
@@ -281,14 +361,11 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 int main(){
 
 	// Initialize soundbuffer
-	soundbuffer* playback = buffer_initialize(44100, 0);
+	playback = buffer_initialize(44100, 0);
 	buffer_start(playback, 0);
 	// Start synthesizer
 	run_synthesizer(playback);
-	// TODO: Dead code.
-	buffer_stop(playback);
-	buffer_free(playback);
-	reconos_cleanup();
+
 
 	return 0;
 }

@@ -1,15 +1,13 @@
-#include "ComponentStructs.h"
 #include <math.h>
-#include "Inputconverter.h"
 
-#define SOUNDGATES_FIXED_PT_SCALE (1 << 27)
-#define FPGA_REFERENCE_FREQUENCY  100000000
-#define SAMPLE_RATE               44100
+#include "Inputconverter.h"
+#include "ComponentStructs.h"
+#include "SynthesizerCommon.h"
 
 // returns increment values for wave generators (id 1 to 4)
 int freq_to_incr (int comp_id, float freq)
 {
-	float blah;
+
     switch (comp_id)
     {
         case ID_SIN: // Sinus

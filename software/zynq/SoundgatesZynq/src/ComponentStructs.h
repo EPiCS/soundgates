@@ -11,6 +11,12 @@
 #define ID_MIX   8
 #define ID_BIAS  9
 
+typedef struct OSCComponent_struct sOSCComponent;
+typedef struct OSCComponent_struct* sOSCComponentPtr;
+
+typedef struct sNCO_struct sSoundcomponent_NCO;
+typedef struct sNCO_struct* sSoundcomponent_NCOPtr;
+
 typedef struct {
     void* src_addr;
     int src_len;
@@ -23,12 +29,18 @@ typedef struct {
 	int phase_increment;
 } sNcoComponentHeader;
 
-typedef struct{
+struct sNCO_struct{
+
+
+};
+
+
+struct OSCComponent_struct{
     char                  *comp_osc_name;
     void    		      *comp_value_pointer;
     int                    comp_id;
-    struct sOSCComponent  *next;
-} sOSCComponent;
+    sOSCComponentPtr next;
+};
 
 //typedef struct {
 //    sBase base;
