@@ -8,6 +8,8 @@
 #ifndef AMPLIFIER_H_
 #define AMPLIFIER_H_
 
+#include <limits.h>
+
 /**
  * Amplifies an input audio stream (Signed Integer)
  * Only use sensible values for the amplification,
