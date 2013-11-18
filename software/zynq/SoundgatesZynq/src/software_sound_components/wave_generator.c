@@ -88,7 +88,7 @@ void wave_generator_generate_s32(wave_generator* wg, char* target,
 			// Therefore we use our own implementation here. If possible, try to get the sin(x) function to work
 			// This Implementation is rather poor in performance
 			value = (int) (my_sine(wg->phase) * INT_MAX);
-					value = (int)(sin(wg->phase) * INT_MAX);
+			// value = (int)(sin(wg->phase) * INT_MAX);
 		}
 		else if (wg->type == WAVE_GENERATOR_SAWTOOTH)
 		{
