@@ -173,13 +173,12 @@ public class PortItemSemanticEditPolicy extends
 		}
 		else {
 			delegationAllowed = (sourceContainer.eContents().contains(targetContainer) || targetContainer.eContents().contains(sourceContainer));
-		}
+		}		
 		
-		if (req.getTarget().eContainer() instanceof CompositeSoundComponent){		
-			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==((Port) req.getSource()).getDirection() && ((Port) req.getTarget()).getIncomingConnection()==null;
-		}
-		else if (req.getTarget().eContainer() instanceof AtomicSoundComponent){
-			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.IN && ((Port) req.getTarget()).getIncomingConnection()==null;
+		delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==((Port) req.getSource()).getDirection() && ((Port) req.getTarget()).getIncomingConnection()==null;
+		
+		if (req.getTarget().eContainer() instanceof AtomicSoundComponent){
+			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.IN;
 		}	
 		
 		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch && linkAllowed) {
