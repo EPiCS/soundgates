@@ -1,23 +1,22 @@
 package soundgates.diagram.soundcomponents;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
-import soundgates.Port;
-import soundgates.SoundgatesFactory;
+import soundgates.SoundComponent;
 
-//TODO needs to check whether there are duplicate keys in the boolean/float/integer properties
-public class CompositeSoundComponentLibrary {
+
+public class CompositeSoundComponentLibrary{
 
 	private static CompositeSoundComponentLibrary instance;
-	private TreeMap<String, CompositeSoundComponent> components;
+	private static TreeMap<String, CompositeSoundComponent> components;
 	private static IFolder xmlfolder;
 
 	public static CompositeSoundComponentLibrary getInstance() {
@@ -34,7 +33,7 @@ public class CompositeSoundComponentLibrary {
 	}
 
 	public void addComponent(CompositeSoundComponent component) {
-		this.components.put(component.getName(), component);
+		components.put(component.getName(), component);
 	}
 
 	public static CompositeSoundComponentLibrary createFromXML(String libraryPath) {
@@ -44,59 +43,21 @@ public class CompositeSoundComponentLibrary {
 		return instance;
 	}
 
-	public CompositeSoundComponent createCompositeSoundComponentInstance(String name) {
-		CompositeSoundComponent blueprint = components.get(name);
+	public CompositeSoundComponent createCompositeSoundComponentInstance(String compositeSoundComponentName) {
+		CompositeSoundComponent blueprint = components.get(compositeSoundComponentName);
 
-		CompositeSoundComponent copy = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
-		copy.setName(blueprint.getName());
-		Iterator<Port> pi = blueprint.getPorts().iterator();
-		while (pi.hasNext()) {
-			Port portCopy = SoundgatesFactory.eINSTANCE.createPort();
-			Port portBlueprint = pi.next();
-			portCopy.setDataType(portBlueprint.getDataType());
-			portCopy.setDirection(portBlueprint.getDirection());
-			portCopy.setName(portBlueprint.getName());
-			copy.getPorts().add(portCopy);
+		CompositeSoundComponent compositeSoundComponentCopy = EcoreUtil.copy(blueprint);
+			
+		//walkaround
+		for(SoundComponent soundComponent : compositeSoundComponentCopy.getEmbeddedComponents()){
+			if(soundComponent instanceof AtomicSoundComponent){
+				AtomicSoundComponent atomicSoundComponent = (AtomicSoundComponent) soundComponent;
+				atomicSoundComponent.setType(atomicSoundComponent.getStringProperties().get("Type"));
+				atomicSoundComponent.getStringProperties().removeKey("Type");
+			}
 		}
 
-//		// addAll somehow removes the properties from the blueprint
-//		// copy.getBooleanProperties().addAll(blueprint.getBooleanProperties());
-//		// copy.getIntegerProperties().addAll(blueprint.getIntegerProperties());
-//		// copy.getFloatProperties().addAll(blueprint.getFloatProperties());
-//		EMap<String, Float> floatProps = blueprint.getFloatProperties();
-//		EMap<String, Boolean> boolProps = blueprint.getBooleanProperties();
-//		EMap<String, Integer> intProps = blueprint.getIntegerProperties();
-//		EMap<String, String> stringProps = blueprint.getStringProperties();
-//		Iterator<String> it;
-//
-//		it = floatProps.keySet().iterator();
-//		while (it.hasNext()) {
-//			String key = it.next();
-//			// make sure to create a copy of the property value
-//			Float value = new Float(floatProps.get(key));
-//			copy.getFloatProperties().put(key, value);
-//		}
-//		it = boolProps.keySet().iterator();
-//		while (it.hasNext()) {
-//			String key = it.next();
-//			Boolean value = new Boolean(boolProps.get(key));
-//			copy.getBooleanProperties().put(key, value);
-//		}
-//		it = intProps.keySet().iterator();
-//		while (it.hasNext()) {
-//			String key = it.next();
-//			Integer value = new Integer(intProps.get(key));
-//			copy.getIntegerProperties().put(key, value);
-//		}
-//		
-//		it = stringProps.keySet().iterator();
-//		while (it.hasNext()) {
-//			String key = it.next();
-//			String value = new String(stringProps.get(key));
-//			copy.getStringProperties().put(key, value);
-//		}
-
-		return copy;
+		return compositeSoundComponentCopy;
 	}
 
 	public List<String> getAvailableComponents() {
@@ -117,5 +78,22 @@ public class CompositeSoundComponentLibrary {
 	
 	public static IFolder getXMLFolder() {
 		return xmlfolder;
+	}
+	
+	public static boolean compositeSoundComponentIsInLibrary(String name){
+		for(String libComponent : components.keySet()){
+			if(libComponent.equals(name))
+				return true;
+		}
+		return false;
+	}
+	
+	public static boolean componentsFolderContaintsFile(String fileName){
+		File folder = new File(xmlfolder.getRawLocation().toString());
+		for(File file : folder.listFiles()){
+			if(file.getName().equals(fileName))
+				return true;
+		}
+		return false;
 	}
 }
