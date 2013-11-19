@@ -3,10 +3,10 @@
 extern int done;
 
 char* interactiveComponents[] = {
-    "/sinefreq \"i\" [0:880]",
-    "/trianglefreq \"i\" [0:880]",
-    "/mixer1bias \"f\" [0:1]",
-    "/mixer2bias \"f\" [0:1]",
+    "/sin \"i\" [0:880]",
+    "/tri \"i\" [0:880]",
+    "/bias_waves \"f\" [0:1]",
+    "/bias_beat \"f\" [0:1]",
     "/quit"
 };
     

@@ -80,8 +80,8 @@ char sw_wave_buffer[SAMPLE_COUNT * 4];
 char sw_sine_buffer[SAMPLE_COUNT * 4];
 
 // Bias Waves control
-float bias_waves = 0;
-
+float bias_waves = 0.0;
+float bias_beat = 0.0;
 // Communication
 struct mbox mb_nco_sin_start;
 struct mbox mb_nco_sin_stop;
@@ -255,7 +255,7 @@ void initialize_reconos() {
 	// Init software threads
 	pthread_attr_init(&swt_attr[0]);
 	// TODO: The struct swt_res needs to know the path to the wave file
-	pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]);  // Play Wave
+	pthread_create(&swt_threads[0], &swt_attr[0], play_wave, (void*)&swt_res[0]);  // Play Wave
 	//pthread_create(&swt_threads[0], &swt_attr[0], play_sw_sine, (void*)&swt_res[0]); // Play SW_SINE
 
 }
@@ -266,7 +266,7 @@ void initialize_reconos() {
 void initialize_user_input(pthread_t* user_input)
 {
 	// User input thread needs a list of sOSCComponent
-	int component_count = 3; // MODIFY ME WHENEVER YOU ADD A NEW COMPONENT!
+	int component_count = 4; // MODIFY ME WHENEVER YOU ADD A NEW COMPONENT!
 	components = malloc(sizeof(sOSCComponent)*component_count);
 
 	components[0].comp_osc_name = "/sin";
@@ -282,7 +282,12 @@ void initialize_user_input(pthread_t* user_input)
 	components[2].comp_osc_name = "/tri";
 	components[2].comp_id = ID_TRI;
 	components[2].comp_value_pointer = &nco_tri_header.phase_increment;
-	components[2].next = NULL;
+	components[2].next = &(components[3]);
+
+	components[3].comp_osc_name = "/bias_beat";
+	components[3].comp_id = ID_BEAT;
+	components[3].comp_value_pointer = &bias_beat;
+	components[3].next = NULL;
 
 	pthread_create( user_input, NULL, &osc_handler_thread, (void*) components);
 
@@ -354,8 +359,9 @@ void run_synthesizer(soundbuffer* sound_buffer) {
 		}
 
 		// Mix sine wave and wave
-		mixer_mix(tri_comp_header.dest_addr, sine_comp_header.dest_addr, alsa_buffer, 4096, bias_waves);
+		mixer_mix(tri_comp_header.dest_addr, sine_comp_header.dest_addr, (char*)bla, 4096, bias_waves);
 
+		mixer_mix((char*)bla, sw_wave_buffer, alsa_buffer, 4096, bias_beat);
 		// Write generated data to the sample buffer
 		buffer_fillbuffer(sound_buffer, (char*) alsa_buffer, SAMPLE_SIZE * SAMPLE_COUNT);
 
