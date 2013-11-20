@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -28,26 +29,19 @@ public class ImportPatchAction implements IObjectActionDelegate{
 		Iterator<?> files = structuredSelection.iterator();
 		while (files.hasNext()) {			
 			 Object selectedObject = files.next(); 
-			 if (selectedObject instanceof IProject){
+			 if (selectedObject instanceof IResource){
 					PatchImporter importer = new PatchImporter();
-					IProject iProject = (IProject) selectedObject;
+					IResource xmlFile = (IResource) selectedObject;	
 					
-					File xmlFile = null;
-					File projectFolder = iProject.getLocation().toFile();
-					for(File f : projectFolder.listFiles()){
-						if (f.getName().endsWith(".xml"))
-							xmlFile = f;
-					}				
-					
-					if (xmlFile==null) return;
+					IProject iProject = xmlFile.getProject();		
 					
 					AtomicSoundComponentLibrary.setXMLFolder(iProject.getFolder("soundcomponents"));
 					CompositeSoundComponentLibrary.setXMLFolder(iProject.getFolder("soundcomponents"));				
 					
-					String newFileName = xmlFile.getParentFile().getAbsolutePath() + "/" + xmlFile.getName().replace(".xml", "") + ".soundgates";
+					String newFileName = iProject.getLocation() + "/" + xmlFile.getName().replace(".xml", "") + ".soundgates";
 					
 					try {
-						importer.createPatchFromXML(newFileName, xmlFile.getAbsolutePath());					
+						importer.createPatchFromXML(newFileName, xmlFile.getLocation().toPortableString());					
 						iProject.refreshLocal(1, null);
 						
 					} catch (IOException e) {

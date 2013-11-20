@@ -124,7 +124,8 @@
       </objectContribution>
       <objectContribution
             id="Soundgates.diagram.export.ImportPatch"
-            objectClass="org.eclipse.core.resources.IProject">
+            nameFilter="*.xml"
+            objectClass="org.eclipse.core.resources.IResource">
          <menu
                id="Soundgates.diagram.menu"
                label="Soundgates"
@@ -137,7 +138,7 @@
                class="soundgates.diagram.actions.ImportPatchAction"
                enablesFor="1"
                id="Soundgates.diagram.action.ImportPatchAction"
-               label="Import Patch from XML"
+               label="Create Patch from XML"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
       </objectContribution>
