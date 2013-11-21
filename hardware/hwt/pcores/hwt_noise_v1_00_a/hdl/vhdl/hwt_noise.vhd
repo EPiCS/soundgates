@@ -97,7 +97,7 @@ architecture Behavioral of hwt_noise is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_REFRESH_INPUT_PHASE_OFFSET, STATE_REFRESH_INPUT_PHASE_INCR, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
@@ -272,20 +272,13 @@ begin
                         
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
 
-                        state        <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+                        state        <= STATE_PROCESS;
 
                     elsif osif_ctrl_signal = NCO_EXIT then
                         
                         state   <= STATE_EXIT;
 
                     end if;    
-                end if;
-                 
-            when STATE_REFRESH_INPUTS =>
-                
-                memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);                
-                if done then
-                    state <= STATE_REFRESH_INPUT_PHASE_INCR;
                 end if;
                 
             when STATE_PROCESS =>
