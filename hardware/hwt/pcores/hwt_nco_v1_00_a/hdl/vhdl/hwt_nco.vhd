@@ -19,8 +19,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-library proc_common_v3_00_a;
-use proc_common_v3_00_a.proc_common_pkg.all;
+--library proc_common_v3_00_a;
+--use proc_common_v3_00_a.proc_common_pkg.all;
 
 library reconos_v3_00_c;
 use reconos_v3_00_c.reconos_pkg.all;
@@ -110,7 +110,7 @@ architecture Behavioral of hwt_nco is
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 10;--clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
@@ -270,7 +270,7 @@ begin
             -- INIT State gets the address of the header struct
             when STATE_INIT =>               
 
-                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);                
+                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);         
                 if done then
                     -- Initialize your signals
                     phase_offset_addr <= snd_comp_header.opt_arg_addr;
@@ -299,7 +299,7 @@ begin
                  
             when STATE_REFRESH_INPUT_PHASE_OFFSET =>
                 
-                memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);                
+                memif_read_word(i_memif, o_memif, phase_offset_addr, phase_offset, done);
                 if done then
                     state <= STATE_REFRESH_INPUT_PHASE_INCR;
                 end if;
@@ -314,12 +314,13 @@ begin
             when STATE_PROCESS =>
                 if sample_count > 0 then
                     
-                    nco_ce        <= '1';
+                    nco_ce        <= '1'; -- ein takt früher
                     o_RAMWE_nco   <= '1';
                     o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
                     sample_count  <= sample_count - 1;
                 else
                     -- Samples have been generated
+                    o_RAMAddr_nco <= (others => '0');
                     state <= STATE_WRITE_MEM;
                 end if;
 

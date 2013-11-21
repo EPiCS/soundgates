@@ -85,8 +85,7 @@ ARCHITECTURE behavior OF nco_tb IS
    signal o_RAMWE_nco   : std_logic := '0';   
       
 BEGIN
-   phase_incr <=  Get_Cordic_Phase_Increment(FPGA_FREQUENCY, 440);
-   
+   phase_incr <= Get_Cordic_Phase_Increment(FPGA_FREQUENCY, 440);
    
     -- Instantiate the Unit Under Test (UUT)
    uut: nco PORT MAP (

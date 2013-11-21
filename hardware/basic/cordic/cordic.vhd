@@ -27,9 +27,7 @@ entity cordic is
 generic (
 	pipeline_stages : integer := 24
 	);
-port (	 
-        x       : in  signed(31 downto 0);
-        y       : in  signed(31 downto 0);
+port (
         phi     : in  signed(31 downto 0);  -- 0 < phi < 2 * pi
         sin     : out signed(31 downto 0);	
         cos     : out signed(31 downto 0);
@@ -51,21 +49,24 @@ architecture Behavioral of cordic is
     constant cordic_scaling : real:= 14.0;
     
 	constant cordic_gain 		 : real := 0.60725293500888;
-	constant cordic_gain_scaled  : signed(15 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**cordic_scaling)), 16);
+	--constant cordic_gain_scaled  : signed(15 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**cordic_scaling)), 16);
 	
 	constant q1 : signed(31 downto 0) := to_signed(integer(real(MATH_PI / 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q2 : signed(31 downto 0) := to_signed(integer(real(MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q3 : signed(31 downto 0) := to_signed(integer(real(3.0 * MATH_PI / 2.0* 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q4 : signed(31 downto 0) := to_signed(integer(real(2.0 * MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	
+	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0 * cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING)),32);
+	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0 * cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING)),32);
+    
 	signal sin_i : signed(47 downto 0) := (others => '0');
 	signal cos_i : signed(47 downto 0) := (others => '0');
 	
 	signal cordic_out_x : signed(31 downto 0) := (others => '0');
 	signal cordic_out_y : signed(31 downto 0) := (others => '0');
 	
-	signal x_i : signed(31 downto 0) 	:= (others => '0');
-	signal y_i : signed(31 downto 0) 	:= (others => '0');
+	signal x_i : signed(31 downto 0) 	:= cordic_x_init;
+	signal y_i : signed(31 downto 0) 	:= cordic_y_init;
 	signal phi_i : signed(31 downto 0) 	:= (others => '0');
 begin
 	
@@ -74,26 +75,26 @@ begin
 	VEC_ROTATE_PROCESS : process(clk, rst)
 	begin
         if rst = '1' then
-            x_i   <= x;
-            y_i   <= y;
+            x_i   <= cordic_x_init;
+            y_i   <= cordic_y_init;
             phi_i <= (others => '0');
         elsif rising_edge(clk) then
             if ce = '1' then  
                 if phi < q1 then
-                    x_i   <= x;
-                    y_i   <= y;
+                    x_i   <= cordic_x_init;
+                    y_i   <= cordic_y_init;
                     phi_i <= phi;
                 elsif  phi < q2 then
                     phi_i <= phi + (-q1);
-                    x_i 	<= (y);
-                    y_i 	<= (x);
+                    x_i 	<= -cordic_y_init;
+                    y_i 	<= cordic_x_init;
                 elsif phi < q3 then
-                    x_i 	<= (-x);
-                    y_i 	<= (-y);
+                    x_i 	<= (-cordic_x_init);
+                    y_i 	<= (-cordic_y_init);
                     phi_i <= phi + (-q2);
                 elsif phi < q4 then
-                    x_i 	<= (-y);
-                    y_i 	<= (-x);
+                    x_i 	<= (-cordic_y_init);
+                    y_i 	<= (-cordic_x_init);
                     phi_i <= phi + (-q3);
                 end if;
             end if;
@@ -126,35 +127,11 @@ begin
 			);		
 	end generate;
 	
-	REGISTER_OUT_PROCESS : process(clk, rst)
-	begin
-        if rst = '1' then
-            cordic_out_x <= (others => '0');
-            cordic_out_y <= (others => '0');
-		elsif rising_edge(clk) then
-            if ce = '1' then 
-                cordic_out_x <= x_pipeline(pipeline_stages + 1);
-                cordic_out_y <= y_pipeline(pipeline_stages + 1);
-            end if;
-		end if;
-	
-	end process;
-	
-	GAIN_PROCESS : process (clk, rst)
-	begin
-		if rst = '1' then
-            sin_i <= (others => '0');
-            cos_i <= (others => '0');
-		elsif rising_edge(clk) then
-            if ce = '1' then 
-                sin_i <= shift_right(cordic_out_y * cordic_gain_scaled, integer(cordic_scaling));
-                cos_i <= shift_right(cordic_out_x * cordic_gain_scaled, integer(cordic_scaling));
-            end if;
-		end if;
-	end process;
-	
-	sin <= RESIZE(sin_i, 32);
-	cos <= RESIZE(sin_i, 32);
+    cordic_out_x <= x_pipeline(pipeline_stages + 1);
+    cordic_out_y <= y_pipeline(pipeline_stages + 1);
+    
+    sin <= cordic_out_y;
+	cos <= cordic_out_x;
 	
 end Behavioral;
 
