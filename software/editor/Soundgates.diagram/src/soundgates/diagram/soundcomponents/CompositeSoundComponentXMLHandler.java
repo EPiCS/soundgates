@@ -22,6 +22,7 @@ import soundgates.Link;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesFactory;
+import soundgates.diagram.messageDialogs.MessageDialogs;
 
 
 /**
@@ -62,9 +63,17 @@ public class CompositeSoundComponentXMLHandler {
 						for (int atomComp = 0; atomComp < atomicComponentList.getLength(); atomComp++) {							
 							Element atomCompElement = (Element) atomicComponentList.item(atomComp);		
 							
-							AtomicSoundComponent atomicSoundComponent = 
-									AtomicSoundComponentLibrary.getInstance().createAtomicSoundComponentInstance(
-											atomCompElement.getAttribute("Type"));								
+							AtomicSoundComponent atomicSoundComponent = null;
+							try{
+								atomicSoundComponent = AtomicSoundComponentLibrary.getInstance().
+										createAtomicSoundComponentInstance(atomCompElement.getAttribute("Type"));
+							}
+							catch(Exception e){
+								MessageDialogs.atomicComponentInCompositeComponentMissing(
+										atomCompElement.getAttribute("Type"),
+										element.getAttribute("Name"));											   
+								return;
+							}
 														
 							atomicSoundComponent.setName(atomCompElement.getAttribute("Name"));
 //							atomicSoundComponent.setType(atomCompElement.getAttribute("Type"));	
@@ -83,11 +92,19 @@ public class CompositeSoundComponentXMLHandler {
 						
 						NodeList compositeComponentList = element.getElementsByTagName("EmbeddedCompositeSoundComponent");
 						for (int compositeComp = 0; compositeComp < compositeComponentList.getLength(); compositeComp++) {							
-							Element compositeCompElement = (Element) compositeComponentList.item(compositeComp);	
+							Element compositeCompElement = (Element) compositeComponentList.item(compositeComp);										
 							
-							CompositeSoundComponent embeddedCompositeSoundComponent = 
-									CompositeSoundComponentLibrary.getInstance().createCompositeSoundComponentInstance(
-											compositeCompElement.getAttribute("Name"));				
+							CompositeSoundComponent embeddedCompositeSoundComponent = null;
+							try{
+								embeddedCompositeSoundComponent = CompositeSoundComponentLibrary.getInstance().
+										createCompositeSoundComponentInstance(compositeCompElement.getAttribute("Name"));
+							}
+							catch(Exception e){
+								MessageDialogs.compositeComponentInCompositeComponentMissing(
+										compositeCompElement.getAttribute("Name"),
+										element.getAttribute("Name"));
+								return;
+							}
 							
 							embeddedCompositeSoundComponent.setName(compositeCompElement.getAttribute("Name"));		
 							

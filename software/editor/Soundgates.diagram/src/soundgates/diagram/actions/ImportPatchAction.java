@@ -1,6 +1,5 @@
 package soundgates.diagram.actions;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -16,6 +15,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import soundgates.diagram.XMLexport.PatchImporter;
+import soundgates.diagram.messageDialogs.MessageDialogs;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
@@ -33,16 +33,30 @@ public class ImportPatchAction implements IObjectActionDelegate{
 					PatchImporter importer = new PatchImporter();
 					IResource xmlFile = (IResource) selectedObject;	
 					
+					String newFileName = xmlFile.getName().replace(".xml", ".soundgates");
+					
 					IProject iProject = xmlFile.getProject();		
+					
+					
+					if(iProject.getFile(newFileName).exists()){
+						if (!MessageDialogs.replaceExistingEMFFile(newFileName))
+							return;
+					}
+					
+					if(!iProject.getFolder("soundcomponents").exists())
+					{
+						MessageDialogs.soundcomponentsFolderMissing(iProject.getName());
+						return;
+					}
 					
 					AtomicSoundComponentLibrary.setXMLFolder(iProject.getFolder("soundcomponents"));
 					CompositeSoundComponentLibrary.setXMLFolder(iProject.getFolder("soundcomponents"));				
 					
-					String newFileName = iProject.getLocation() + "/" + xmlFile.getName().replace(".xml", "") + ".soundgates";
+					String newFilePath = iProject.getLocation() + "/" + xmlFile.getName().replace(".xml", ".soundgates");
 					
 					try {
-						importer.createPatchFromXML(newFileName, xmlFile.getLocation().toPortableString());					
-						iProject.refreshLocal(1, null);
+						importer.createPatchFromXML(newFilePath, xmlFile.getLocation().toPortableString(), newFileName);					
+						iProject.refreshLocal(1, null);			
 						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
