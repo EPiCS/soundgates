@@ -6,6 +6,8 @@
  *
  */
 
+#if _TARGET_ZYNQ
+
 #include "software_sound_components.h"
 
 
@@ -36,3 +38,4 @@ pthread_t* create_dummy_swt_thread() {
 	return thread;
 }
 
+#endif
