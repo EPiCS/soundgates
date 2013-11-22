@@ -8,10 +8,12 @@
 #ifndef SOFTWARE_SOUND_COMPONENTS_H_
 #define SOFTWARE_SOUND_COMPONENTS_H_
 
+#if _TARGET_ZYNQ
 #include <mbox.h>
 #include <reconos.h>
-#include <pthread.h>
+#endif
 
+#include <pthread.h>
 #include "wavefileplayer.h"
 #include "mixer.h"
 #include "amplifier.h"
