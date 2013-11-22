@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>NumericDivision</Type>
+	<Ports>
+		<Port Name="Dividend" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Divisor" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Quotient" Direction="OUT" DataType="FLOAT"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation>
+		</Simulation>
+		<Hardware>
+			VHDL Stuff
+		</Hardware>
+	</Code>
+</AtomicSoundComponent>

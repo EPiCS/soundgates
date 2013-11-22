@@ -10,6 +10,7 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 public class CodegenAction implements IObjectActionDelegate{
 	/**
@@ -22,8 +23,7 @@ public class CodegenAction implements IObjectActionDelegate{
 	/**
 	 * @see IActionDelegate#run(IAction)
 	 */
-	public void run(IAction action) {		
-		
+	public void run(IAction action) {	
 		IStructuredSelection structuredSelection = (IStructuredSelection) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 		Iterator<?> files = structuredSelection.iterator();
 		while (files.hasNext()) {

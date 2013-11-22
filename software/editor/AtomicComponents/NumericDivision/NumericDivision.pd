@@ -1,0 +1,14 @@
+#N canvas 2 79 450 300 10;
+#X obj 62 19 inlet;
+#X obj 65 103 outlet;
+#X obj 120 18 inlet;
+#X obj 74 76 /;
+#X text 0 0 inports Dividend Divisor;
+#X text 0 0 outports Quotient;
+#X obj 133 43 trigger bang;
+#X connect 0 0 3 0;
+#X connect 0 0 6 0;
+#X connect 2 0 3 1;
+#X connect 2 0 6 0;
+#X connect 3 0 1 0;
+#X connect 6 0 3 0;

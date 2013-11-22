@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--android:layout_centerInParent="true"-->
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/connect_description"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:id="@+id/connect_textview_description" />
+
+    <TableLayout
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="8"
+                android:hint="@string/ip_hint"
+                android:textAlignment="center"
+                android:ellipsize="start"
+                android:gravity="center"
+                android:id="@+id/ip_edittext"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:id="@+id/textView" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:numeric="decimal"
+                android:ems="4"
+                android:hint="@string/port_hint"
+                android:textAlignment="center"
+                android:ellipsize="start"
+                android:gravity="center"
+                android:id="@+id/port_edittext" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="60dp">
+            </View>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connect_button_text"
+                android:layout_span="3"
+                android:layout_gravity="center"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:id="@+id/connect_button" />
+        </TableRow>
+    </TableLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </View>
+
+</LinearLayout>

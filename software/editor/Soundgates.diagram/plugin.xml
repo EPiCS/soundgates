@@ -78,8 +78,8 @@
          </action>
       </objectContribution>
       <objectContribution
-            id="Soundgates.diagram.export"
-            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart">
+            id="Soundgates.diagram.export.composite"
+            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentAbstractEditPart">
          <menu
                id="Soundgates.diagram.menu"
                label="Soundgates"
@@ -91,8 +91,53 @@
          <action
                class="soundgates.diagram.actions.ExportCompositeSoundComponentAction"
                enablesFor="1"
-               id="Soundgates.diagram.action"
+               id="Soundgates.diagram.action.ExportCompositeAction"
                label="Export Composite Sound Component"
+               menubarPath="Soundgates.diagram.menu/group">
+         </action>
+         <action
+               class="soundgates.diagram.actions.ValidateCompositeSoundComponentAction"
+               id="Soundgates.diagram.action.ValidateCompositeAction"
+               label="Validate Composite Sound Component"
+               menubarPath="Soundgates.diagram.menu/group">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="Soundgates.diagram.export.Patch"
+            nameFilter="*.soundgates"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="soundgates.diagram.actions.ExportPatchAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.ExportPatchAction"
+               label="Export Patch"
+               menubarPath="Soundgates.codegen.menu/group">
+         </action>
+         <action
+               class="soundgates.diagram.actions.ValidatePatchAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.ValidatePatch"
+               label="Validate Patch"
+               menubarPath="Soundgates.codegen.menu/group">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="Soundgates.diagram.export.ImportPatch"
+            objectClass="org.eclipse.core.resources.IProject">
+         <menu
+               id="Soundgates.diagram.menu"
+               label="Soundgates"
+               path="additions">
+            <separator
+                  name="group">
+            </separator>
+         </menu>
+         <action
+               class="soundgates.diagram.actions.ImportPatchAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.ImportPatchAction"
+               label="Import Patch from XML"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
       </objectContribution>
