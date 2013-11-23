@@ -90,7 +90,7 @@ architecture Behavioral of nco is
     );
     end component triangle;
     
-    constant cordic_pipeline_stages : integer := 10;
+    constant cordic_pipeline_stages : integer := 16;
    
     constant standard_cordic_offset : integer := integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING));
   
