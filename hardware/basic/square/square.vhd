@@ -28,7 +28,6 @@ port(
         clk     : in  std_logic;
         rst     : in  std_logic;
         ce      : in  std_logic;
-        rst     : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
         duty_on : in  signed(31 downto 0);  
@@ -55,7 +54,7 @@ architecture Behavioral of square is
 		  
         sq <= square;
           
-        CALC_SQ : process (clk, x, incr, rst)
+        CALC_SQ : process (clk, rst)
         begin
             if rst = '1' then
                 x <= offset;
