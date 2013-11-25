@@ -1,22 +1,32 @@
+--  ____                        _             _            
+-- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
+-- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
+--  ___) | (_) | |_| | | | | (_| | (_| | (_| | ||  __/\__ \
+-- |____/ \___/ \__,_|_| |_|\__,_|\__, |\__,_|\__\___||___/
+--                                |___/                    
+-- ======================================================================
+--
+--   title:        VHDL module - nco.vhd
+--
+--   project:      PG-Soundgates
+--   author:       Lukas Funke, University of Paderborn
+--
+--   description:  Numeric controlled oscillator top level entity
+--
+-- ======================================================================
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity nco is
 	 generic(
-		FPGA_FREQUENCY   : integer := 100_000_000;
-		WAVEFORM         : WAVEFORM_TYPE := SIN
+		FPGA_FREQUENCY : integer := 100_000_000;
+		WAVEFORM       : WAVEFORM_TYPE := SIN
 	 );
     Port ( 
             clk    : in  std_logic;           
@@ -100,17 +110,17 @@ begin
 		
 	SIN_GENERATOR : if WAVEFORM = SIN generate
 		
-			CORDIC_INSTA : cordic
-         generic map( 
+		CORDIC_INSTA : cordic
+            generic map( 
             pipeline_stages => cordic_pipeline_stages
-           )
+            )
 			port map(
-                    clk  => clk,
-                    rst  => rst,
-                    ce   => ce,
-                    phi  => cordic_phi_acc,
-                    sin  => data,
-                    cos  => open );
+            clk  => clk,
+            rst  => rst,
+            ce   => ce,
+            phi  => cordic_phi_acc,
+            sin  => data,
+            cos  => open );
          
 		PHASE_STIMULIS_PROCESS : process(clk, rst)                  
         begin
@@ -118,13 +128,11 @@ begin
                 cordic_phi_acc <= (others => '0');
             elsif rising_edge(clk) then
                if ce = '1' then
-               
-                if cordic_phi_acc > standard_cordic_offset - phase_incr then
-                    cordic_phi_acc <= phase_incr;
+                if (cordic_phi_acc + phase_incr) > standard_cordic_offset then
+                    cordic_phi_acc <=  phase_incr - (standard_cordic_offset - cordic_phi_acc);
                 else
                     cordic_phi_acc <= cordic_phi_acc + phase_incr;
                 end if;
-                
                end if;
             end if;
 		end process;

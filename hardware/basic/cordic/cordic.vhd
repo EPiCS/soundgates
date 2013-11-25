@@ -45,12 +45,9 @@ architecture Behavioral of cordic is
 	signal x_pipeline : pipeline_array;
 	signal y_pipeline : pipeline_array;
 	signal z_pipeline : pipeline_array;
-	
-    constant cordic_scaling : real:= 14.0;
     
 	constant cordic_gain 		 : real := 0.60725293500888;
-	--constant cordic_gain_scaled  : signed(15 downto 0) 	:= to_signed(integer(real(cordic_gain * 2**cordic_scaling)), 16);
-	
+
 	constant q1 : signed(31 downto 0) := to_signed(integer(real(MATH_PI / 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q2 : signed(31 downto 0) := to_signed(integer(real(MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q3 : signed(31 downto 0) := to_signed(integer(real(3.0 * MATH_PI / 2.0* 2**SOUNDGATE_FIX_PT_SCALING)), 32);
@@ -130,8 +127,8 @@ begin
     cordic_out_x <= x_pipeline(pipeline_stages + 1);
     cordic_out_y <= y_pipeline(pipeline_stages + 1);
     
-    sin <= cordic_out_y;
-	cos <= cordic_out_x;
+    sin <= cordic_out_y(31) & cordic_out_y(29 downto 0) & "0";
+	cos <= cordic_out_x(31) & cordic_out_x(29 downto 0) & "0";
 	
 end Behavioral;
 
