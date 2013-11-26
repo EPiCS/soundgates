@@ -10,10 +10,22 @@
 
 #include <stdlib.h>
 #include "SynthesizerStructDefs.h"
+#include "SoundLink.h"
+#include "../SoundComponents/CommonComponent.h"
 
-SoundComponentNode* scnode_create(/* stuff */);
+/**
+ * Creates a node of a given type
+ */
+SoundComponentNode* scnode_create(ComponentType type /*, stuff */);
 
+/**
+ * Connect two nodes
+ */
 SoundLink* scnode_connectComponents(SoundComponentNode* producer, int outLinkIndex, SoundComponentNode* consumer, int inLinkIndex);
 
+/**
+ * Tell the node, that everything is set up, such that reconos can initialize remaining stuff
+ */
+void scnode_finalize(SoundComponentNode* node);
 
 #endif /* SOUNDCOMPONENTNODE_H_ */

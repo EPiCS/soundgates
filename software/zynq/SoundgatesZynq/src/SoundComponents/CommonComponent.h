@@ -20,8 +20,8 @@
 #endif
 
 typedef enum {
-	NCO, GENERIC
-} ComponentTypes;
+	NCO, GENERIC_HWT
+} ComponentType;
 
 typedef enum SndHWCompnentState_enum eSndHWComponent_State;
 enum SndHWCompnentState_enum {
