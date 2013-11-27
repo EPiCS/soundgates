@@ -12,13 +12,13 @@ int freq_to_incr (int comp_id, float freq)
         case ID_SIN: // Sinus
             return ((M_PI * 2 * freq) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
         	//return ((4 * freq) * SOUNDGATES_FIXED_PT_SCALE/ SAMPLE_RATE) ; // TRIANGLE!
-        case ID_SAW: // Sawtooth - correct calculation?
+        case ID_SAW: // Sawtooth
             return (int) (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;
             
-        case ID_TRI: // Triangle - correct calculation?
+        case ID_TRI: // Triangle
             return (int) ((4 * freq* SOUNDGATES_FIXED_PT_SCALE) / SAMPLE_RATE);
             
-        case ID_SQR: // Square   - correct calculation?
+        case ID_SQR: // Square
             return (int) (freq * 2 ) / SAMPLE_RATE * SOUNDGATES_FIXED_PT_SCALE;            // TODO: duty cycle
             
         default:
