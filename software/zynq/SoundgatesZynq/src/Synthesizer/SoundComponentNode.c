@@ -8,10 +8,12 @@
 #include "SoundComponentNode.h"
 #include "../SoundComponents/hardware/GenericHWT.h"
 
-SoundComponentNode* scnode_create(ComponentType ctype) {
+SoundComponentNode* scnode_create(ComponentType ctype)
+{
 	SoundComponentNode* scn = malloc(sizeof(SoundComponentNode));
 
-	switch (ctype) {
+	switch (ctype)
+	{
 	case NCO:
 		// Use methods defined in their respective class
 		break;
@@ -49,7 +51,8 @@ SoundComponentNode* scnode_create(ComponentType ctype) {
 }
 
 SoundLink* scnode_connectComponents(SoundComponentNode* producer,
-		int outLinkIndex, SoundComponentNode* consumer, int inLinkIndex) {
+		int outLinkIndex, SoundComponentNode* consumer, int inLinkIndex)
+{
 	SoundLink* link = slink_createLink();
 
 	link->incomingNode = producer;
@@ -62,14 +65,58 @@ SoundLink* scnode_connectComponents(SoundComponentNode* producer,
 
 }
 
-void scnode_finalize(SoundComponentNode* node) {
+void scnode_finalize(SoundComponentNode* node)
+{
 	int i;
-	for (i = 0; i < node->num_incomingLinks; i++) {
+	for (i = 0; i < node->num_incomingLinks; i++)
+	{
 		node->header.src_addr = node->incomingLinks[i]->readbuffer; //TODO Multiple links?
 	}
-	for (i = 0; i < node->num_outgoingLinks; i++) {
+	for (i = 0; i < node->num_outgoingLinks; i++)
+	{
 		node->header.dest_addr = node->outgoingLinks[i]->writebuffer; //TODO Multiple links?
 	}
 
 	reconos_hwt_setinitdata(&(node->reconos.thread), (void*) &(node->header));
+}
+
+void scnode_run(SoundComponentNode* node)
+{
+	if (node->state == HWT_INIT)
+	{
+		reconos_hwt_create(&(node->reconos.thread), node->reconos.slot, NULL);
+	}
+	node->state = HWT_RUNNING;
+
+	mbox_put(&(node->reconos.ctrl[MBOX_CTRL_START]), 0x0F); //NCO_START); //TODO NCO_START? See NumCtrlOsc.c
+
+}
+void scnode_join(SoundComponentNode* node)
+{
+	if (node->state == HWT_RUNNING)
+	{
+		mbox_get(&(node->reconos.ctrl[MBOX_CTRL_STOP]));
+	}
+	//TODO What if called when not in running?
+}
+void scnode_terminate(SoundComponentNode* node)
+{
+	if (node->state == HWT_RUNNING)
+	{
+		mbox_put(&(node->reconos.ctrl[MBOX_CTRL_START]), 0xF0); // TODO NCO_STOP?
+		pthread_join(node->reconos.thread.delegate, NULL); //TODO .delegate not defined?
+	}
+	node->state = HWT_TERMINATED;
+}
+void scnode_destroy(SoundComponentNode* node)
+{
+	if (node->state = HWT_RUNNING)
+	{
+		scnode_terminate(node);
+	}
+
+	mbox_destroy(&(node->reconos.ctrl[MBOX_CTRL_START]));
+	mbox_destroy(&(node->reconos.ctrl[MBOX_CTRL_STOP]));
+
+	free(node);
 }

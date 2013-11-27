@@ -23,6 +23,12 @@ SoundComponentNode* scnode_create(ComponentType type /*, stuff */);
  */
 SoundLink* scnode_connectComponents(SoundComponentNode* producer, int outLinkIndex, SoundComponentNode* consumer, int inLinkIndex);
 
+void scnode_run(SoundComponentNode*);
+void scnode_join(SoundComponentNode*);
+void scnode_terminate(SoundComponentNode*);
+void scnode_destroy(SoundComponentNode*);
+
+
 /**
  * Tell the node, that everything is set up, such that reconos can initialize remaining stuff
  */
