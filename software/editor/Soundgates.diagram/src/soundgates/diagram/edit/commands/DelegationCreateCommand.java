@@ -73,9 +73,6 @@ public class DelegationCreateCommand extends EditElementCommand {
 		}
 		if(source instanceof Port){		
 			
-			if( (source.eContainer() instanceof CompositeSoundComponent) &&	((Port) source).getDirection()==Direction.OUT )
-				return false;
-			
 			if( (source.eContainer() instanceof AtomicSoundComponent) && ((Port) source).getDirection()==Direction.IN )
 				return false;		
 		}	
@@ -94,8 +91,15 @@ public class DelegationCreateCommand extends EditElementCommand {
 					"Invalid arguments in create link command"); //$NON-NLS-1$
 		}
 
-		Delegation newElement = SoundgatesFactory.eINSTANCE.createDelegation();
-		getContainer().getDelegations().add(newElement);
+		Delegation newElement = SoundgatesFactory.eINSTANCE.createDelegation();		
+		
+//		getContainer().getDelegations().add(newElement);
+		
+		if (getSource().eContainer().eContents().contains(getTarget().eContainer()))
+			((CompositeSoundComponent) getSource().eContainer()).getDelegations().add(newElement);
+		else
+			((CompositeSoundComponent) getTarget().eContainer()).getDelegations().add(newElement);
+		
 		newElement.setSource(getSource());
 		newElement.setTarget(getTarget());
 		doConfigure(newElement, monitor, info);

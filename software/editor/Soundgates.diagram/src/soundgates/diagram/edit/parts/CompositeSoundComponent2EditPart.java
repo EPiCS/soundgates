@@ -13,7 +13,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
@@ -36,7 +35,7 @@ import soundgates.diagram.part.SoundgatesVisualIDRegistry;
  * @generated
  */
 public class CompositeSoundComponent2EditPart extends
-		AbstractBorderedShapeEditPart {
+CompositeSoundComponentAbstractEditPart {
 
 	/**
 	 * @generated

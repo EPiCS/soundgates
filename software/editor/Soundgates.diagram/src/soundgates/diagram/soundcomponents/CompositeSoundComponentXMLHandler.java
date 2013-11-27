@@ -2,24 +2,25 @@ package soundgates.diagram.soundcomponents;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.emf.common.util.EList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
-import soundgates.DataType;
-import soundgates.Direction;
+import soundgates.Delegation;
+import soundgates.Link;
 import soundgates.Port;
+import soundgates.SoundComponent;
 import soundgates.SoundgatesFactory;
 
 
@@ -49,130 +50,94 @@ public class CompositeSoundComponentXMLHandler {
 					Node nNode = nList.item(i);
 					Element element = (Element) nNode;
 					try {
-						CompositeSoundComponent soundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();						
-						soundComponent.setName(element.getAttribute("Name"));			
+						CompositeSoundComponent compositeSoundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();						
+						compositeSoundComponent.setName(element.getAttribute("Name"));			
 
-						NodeList portList = element.getElementsByTagName("Port");
-						for (int port = 0; port < portList.getLength(); port++) {
-							Port soundComponentPort = SoundgatesFactory.eINSTANCE.createPort();
-							Element portElement = (Element) portList.item(port);
-							String portDirection = portElement.getAttribute("Direction");
-							String portType = portElement.getAttribute("DataType");
-							String portName = portElement.getAttribute("Name");
-							if (portDirection.toUpperCase().contentEquals("IN")) {
-								soundComponentPort.setDirection(Direction.IN);
-							} else if (portDirection.toUpperCase().contentEquals("OUT")) {
-								soundComponentPort.setDirection(Direction.OUT);
-							} else {
-								throw new NullPointerException("Port Direction invalid! " + portDirection.toUpperCase());
-							}
+						NodeList portList = element.getElementsByTagName("Port");						
+						XMLHandler.addPortsToSoundComponentFromPortList(compositeSoundComponent, portList);					
+						
+						HashMap<Integer,SoundComponent> embeddedSoundComponentMapping = new HashMap<Integer,SoundComponent>();
+						
+						NodeList atomicComponentList = element.getElementsByTagName("EmbeddedAtomicSoundComponent");
+						for (int atomComp = 0; atomComp < atomicComponentList.getLength(); atomComp++) {							
+							Element atomCompElement = (Element) atomicComponentList.item(atomComp);		
+							
+							AtomicSoundComponent atomicSoundComponent = 
+									AtomicSoundComponentLibrary.getInstance().createAtomicSoundComponentInstance(
+											atomCompElement.getAttribute("Type"));								
+														
+							atomicSoundComponent.setName(atomCompElement.getAttribute("Name"));
+//							atomicSoundComponent.setType(atomCompElement.getAttribute("Type"));	
+							
+							//walkaround
+							atomicSoundComponent.getStringProperties().put("Type", atomCompElement.getAttribute("Type"));							
+							
+							Element propertiesNode = (Element) atomCompElement.getElementsByTagName("Properties").item(0);							
+							XMLHandler.addPropertiesToSoundComponentFromPropertiesElement(atomicSoundComponent, propertiesNode, "Value");
+							
+							compositeSoundComponent.getEmbeddedComponents().add(atomicSoundComponent);	
+							embeddedSoundComponentMapping.put(
+									Integer.parseInt(atomCompElement.getAttribute("Id")), atomicSoundComponent);
 
-							if (portType.toUpperCase().contentEquals("INT")
-									|| portType.toUpperCase().contentEquals("INTEGER")) {
-								soundComponentPort.setDataType(DataType.INTEGER);
-							} else if (portType.toUpperCase().contentEquals("FLOAT")) {
-								soundComponentPort.setDataType(DataType.FLOAT);
-							} else if (portType.toUpperCase().contentEquals("SOUND")) {
-								soundComponentPort.setDataType(DataType.SOUND);
-							} else if (portType.toUpperCase().contentEquals("BOOL")
-									|| portType.toUpperCase().contentEquals("BOOLEAN")) {
-								soundComponentPort.setDataType(DataType.BOOLEAN);
-							} else {
-								throw new NullPointerException("Port DataType invalid! " + portType.toUpperCase());
-							}
-
-							if (portName.length() > 0) {
-								soundComponentPort.setName(portName);
-							} else {
-								throw new NullPointerException("Port Name not specified");
-							}
-
-							soundComponent.getPorts().add(soundComponentPort);
+						}
+						
+						NodeList compositeComponentList = element.getElementsByTagName("EmbeddedCompositeSoundComponent");
+						for (int compositeComp = 0; compositeComp < compositeComponentList.getLength(); compositeComp++) {							
+							Element compositeCompElement = (Element) compositeComponentList.item(compositeComp);	
+							
+							CompositeSoundComponent embeddedCompositeSoundComponent = 
+									CompositeSoundComponentLibrary.getInstance().createCompositeSoundComponentInstance(
+											compositeCompElement.getAttribute("Name"));				
+							
+							embeddedCompositeSoundComponent.setName(compositeCompElement.getAttribute("Name"));		
+							
+							compositeSoundComponent.getEmbeddedComponents().add(embeddedCompositeSoundComponent);
+							embeddedSoundComponentMapping.put(
+									Integer.parseInt(compositeCompElement.getAttribute("Id")), embeddedCompositeSoundComponent);
+						}
+						
+						NodeList linkList = element.getElementsByTagName("Link");
+						for (int linkIndex = 0; linkIndex < linkList.getLength(); linkIndex++) {							
+							Element linkElement = (Element) linkList.item(linkIndex);	
+							
+							Link link = SoundgatesFactory.eINSTANCE.createLink();							
+							SoundComponent sourceComponent = embeddedSoundComponentMapping.get(
+									Integer.parseInt(linkElement.getAttribute("SourceComponent")));
+							SoundComponent targetComponent = embeddedSoundComponentMapping.get(
+									Integer.parseInt(linkElement.getAttribute("TargetComponent")));		
+							Port sourcePort = findPort(sourceComponent.getPorts(), linkElement.getAttribute("SourcePort"));
+							Port targetPort = findPort(targetComponent.getPorts(), linkElement.getAttribute("TargetPort"));
+							link.setSource(sourcePort);
+							link.setTarget(targetPort);
+							compositeSoundComponent.getLinks().add(link);
+						}
+						
+						NodeList delegationList = element.getElementsByTagName("Delegation");
+						for (int delegationIndex = 0; delegationIndex < delegationList.getLength(); delegationIndex++) {							
+							Element delegationElement = (Element) delegationList.item(delegationIndex);	
+							
+							Delegation delegation = SoundgatesFactory.eINSTANCE.createDelegation();		
+							
+							String sourceID = delegationElement.getAttribute("SourceComponent");
+							String targetID = delegationElement.getAttribute("TargetComponent");
+							
+							SoundComponent sourceComponent;
+							if(sourceID.equals("this")) sourceComponent = compositeSoundComponent;
+							else sourceComponent = embeddedSoundComponentMapping.get(Integer.parseInt(sourceID));
+									
+							SoundComponent targetComponent;
+							if(targetID.equals("this")) targetComponent = compositeSoundComponent;
+							else targetComponent = embeddedSoundComponentMapping.get(Integer.parseInt(targetID));							
+	
+							Port sourcePort = findPort(sourceComponent.getPorts(), delegationElement.getAttribute("SourcePort"));
+							Port targetPort = findPort(targetComponent.getPorts(), delegationElement.getAttribute("TargetPort"));
+							delegation.setSource(sourcePort);
+							delegation.setTarget(targetPort);
+							compositeSoundComponent.getDelegations().add(delegation);
 						}
 
-//						Element propertiesNode = (Element) element.getElementsByTagName("Properties").item(0);
-//						if (propertiesNode != null) {
-//							NodeList properties = propertiesNode.getElementsByTagName("FloatProperty");
-//							for (int property = 0; property < properties.getLength(); property++) {
-//								String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
-//										.getTextContent();
-//								Float propertyValue = 0f;
-//								if (properties.item(property).getAttributes().getNamedItem("InitialValue") != null) {
-//									propertyValue = Float.parseFloat(properties.item(property).getAttributes()
-//											.getNamedItem("InitialValue").getNodeValue());
-//								}
-//								soundComponent.getFloatProperties().put(propertyName, propertyValue);
-//							}
-//
-//							properties = propertiesNode.getElementsByTagName("IntProperty");
-//							for (int property = 0; property < properties.getLength(); property++) {
-//								String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
-//										.getTextContent();
-//								Integer propertyValue = 0;
-//								if (properties.item(property).getAttributes().getNamedItem("InitialValue") != null) {
-//									propertyValue = Integer.parseInt(properties.item(property).getAttributes()
-//											.getNamedItem("InitialValue").getNodeValue());
-//								}
-//								soundComponent.getIntegerProperties().put(propertyName, propertyValue);
-//							}
-//
-//							properties = propertiesNode.getElementsByTagName("BoolProperty");
-//							for (int property = 0; property < properties.getLength(); property++) {
-//								String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
-//										.getTextContent();
-//								Boolean propertyValue = Boolean.FALSE;
-//								if (properties.item(property).getAttributes().getNamedItem("InitialValue") != null) {
-//									propertyValue = Boolean.parseBoolean(properties.item(property).getAttributes()
-//											.getNamedItem("InitialValue").getNodeValue());
-//								}
-//								soundComponent.getBooleanProperties().put(propertyName, propertyValue);
-//							}
-//						}
-//						Element codeNode = (Element) element.getElementsByTagName("Code").item(0);
-//						if (codeNode != null){
-//							NodeList codeSubNodes = codeNode.getChildNodes();
-//							for (int j = 0; j < codeSubNodes.getLength(); j++){
-//								
-//								Node currentSubNode = codeSubNodes.item(j);
-//								if (currentSubNode.getNodeType() == Node.ELEMENT_NODE){
-//									String propertyName = currentSubNode.getNodeName();
-//									if (propertyName.equals(NODENAME_SIMULATION)){
-//
-//										String code = "";
-//										StringBuilder propMappings = new StringBuilder();
-//										StringBuilder portMappings = new StringBuilder();
-//										Node pdNode = currentSubNode.getFirstChild();
-//										do {
-//											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PD)){
-//												code = pdNode.getTextContent();
-//											}
-//											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PORT_MAPPING)){
-//												portMappings.append(pdNode.getAttributes().getNamedItem("PortName"));
-//												portMappings.append("|");
-//												portMappings.append(pdNode.getAttributes().getNamedItem("PortNumber"));
-//												portMappings.append("||");
-//											}
-//											if (pdNode.getNodeName().equals(NODENAME_SIMULATION_PROP_MAPPING)){
-//												propMappings.append(pdNode.getAttributes().getNamedItem("PropName"));
-//												propMappings.append("|");
-//												propMappings.append(pdNode.getAttributes().getNamedItem("Tag"));
-//												propMappings.append("||");
-//											}
-//										} while ((pdNode = pdNode.getNextSibling()) != null);
-//
-//										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PDCODE , code);
-//										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PORT_MAPPINGS , portMappings.toString());
-//										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PROP_MAPPINGS , propMappings.toString());
-//									} else {
-//										String propertyValue = currentSubNode.getTextContent();
-//										soundComponent.getStringProperties().put(CODEGEN_PREFIX + propertyName, propertyValue);
-//									}
-//									
-//									
-//								}
-//							}
-//						}
-						library.addComponent(soundComponent);
+						library.addComponent(compositeSoundComponent);
+						
 					} catch (NullPointerException e) {
 						//TODO Differenziertere Exceptions
 						System.out.println("Malformed XML Document!");
@@ -188,6 +153,13 @@ public class CompositeSoundComponentXMLHandler {
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Port findPort(EList<Port> ports, String portName){
+		for(Port port : ports)
+			if (port.getName().equals(portName))
+				return port;
+		return null;
 	}
 
 }

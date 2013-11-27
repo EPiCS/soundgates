@@ -10,6 +10,7 @@
 #define ID_PRB   7 // white noise
 #define ID_MIX   8
 #define ID_BIAS  9
+#define ID_BEAT 10
 
 typedef struct OSCComponent_struct sOSCComponent;
 typedef struct OSCComponent_struct* sOSCComponentPtr;

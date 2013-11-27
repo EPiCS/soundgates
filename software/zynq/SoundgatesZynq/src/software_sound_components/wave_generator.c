@@ -87,8 +87,13 @@ void wave_generator_generate_s32(wave_generator* wg, char* target,
 			//TODO On the Zynq, sin(x) always returns zero.
 			// Therefore we use our own implementation here. If possible, try to get the sin(x) function to work
 			// This Implementation is rather poor in performance
+#if _TARGET_ZYNQ==1
 			value = (int) (my_sine(wg->phase) * INT_MAX);
+#else
+			value = (int) (sin(wg->phase) * INT_MAX);
+#endif
 			// value = (int)(sin(wg->phase) * INT_MAX);
+			//	 printf("%i\n",value);
 		}
 		else if (wg->type == WAVE_GENERATOR_SAWTOOTH)
 		{
@@ -164,6 +169,7 @@ void wave_generator_generate_u32(wave_generator* wg, char* target,
 	}
 }
 
-void wave_generator_set_frequency(wave_generator* wg, double frequency) {
+void wave_generator_set_frequency(wave_generator* wg, double frequency)
+{
 	wg->frequency = frequency;
 }

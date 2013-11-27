@@ -23,7 +23,7 @@ void error(int num, const char *msg, const char *path)
  */
 void write_input_value(int id, float value, void* value_address)
 {
-		if(id == ID_BIAS)
+		if(id == ID_BIAS || id == ID_BEAT)
 			*(float*)value_address = value;
 		else
 		{
