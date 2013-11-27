@@ -12,7 +12,8 @@ SoundComponentNode* scnode_create(ComponentType ctype)
 {
 	SoundComponentNode* scn = malloc(sizeof(SoundComponentNode));
 
-	switch (ctype)
+	// TODO instead of switching try to make this generic!
+	switch (ctype) //TODO remember if we are a software or a hardware component
 	{
 	case NCO:
 		// Use methods defined in their respective class

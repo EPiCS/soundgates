@@ -33,6 +33,7 @@ struct SoundComponentNode_struct {
 	int num_incomingLinks;
 	int num_outgoingLinks;
 
+	//TODO Notion of Control links
 
 	/*-- Common ReconOS data, should be the same for every component //TODO how about multiple inputs/outputs? --*/
 

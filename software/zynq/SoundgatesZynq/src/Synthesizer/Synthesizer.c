@@ -24,6 +24,8 @@ void doStuff() {
 	 * 	while(1)
 	 * 		foreach component
  	 *			run()
+ 	 *		foreach component
+ 	 *			join()
  	 *			updateParameters()
  	 *		foreach link
  	 *			switchbuffers()

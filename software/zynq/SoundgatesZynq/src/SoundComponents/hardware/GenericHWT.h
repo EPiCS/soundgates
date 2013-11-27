@@ -15,6 +15,7 @@
 typedef struct GenericHWT_struct sSndComponent_GENERIC_HWT;
 
 struct GenericHWT_struct {
+
 	int intArg1;
 	int intArg2;
 	int intArg3;
