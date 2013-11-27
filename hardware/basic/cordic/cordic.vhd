@@ -1,44 +1,33 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    13:32:15 09/04/2013 
--- Design Name: 
--- Module Name:    cordic - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+--  ____                        _             _            
+-- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
+-- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
+--  ___) | (_) | |_| | | | | (_| | (_| | (_| | ||  __/\__ \
+-- |____/ \___/ \__,_|_| |_|\__,_|\__, |\__,_|\__\___||___/
+--                                |___/                    
+-- ======================================================================
 --
--- Dependencies: 
+--   title:        VHDL module - cordic.vhd
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
+--   project:      PG-Soundgates
+--   author:       Lukas Funke, University of Paderborn
 --
-----------------------------------------------------------------------------------
+--   description:  Cordic top level entity
+--
+-- ======================================================================
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.math_real.all;
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
-library soundgates;
-use soundgates.soundcomponents.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity cordic is
 generic (
 	pipeline_stages : integer := 24
 	);
-port (	 
-        x       : in  signed(31 downto 0);
-        y       : in  signed(31 downto 0);
+port (
         phi     : in  signed(31 downto 0);  -- 0 < phi < 2 * pi
         sin     : out signed(31 downto 0);	
         cos     : out signed(31 downto 0);
@@ -56,44 +45,57 @@ architecture Behavioral of cordic is
 	signal x_pipeline : pipeline_array;
 	signal y_pipeline : pipeline_array;
 	signal z_pipeline : pipeline_array;
-	
-	constant cordic_gain 		 : real 		:= 0.60725293500888;
-	constant cordic_gain_scaled : integer 	:= integer(real(cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING));
-	
+    
+	constant cordic_gain 		 : real := 0.60725293500888;
+
 	constant q1 : signed(31 downto 0) := to_signed(integer(real(MATH_PI / 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q2 : signed(31 downto 0) := to_signed(integer(real(MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q3 : signed(31 downto 0) := to_signed(integer(real(3.0 * MATH_PI / 2.0* 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	constant q4 : signed(31 downto 0) := to_signed(integer(real(2.0 * MATH_PI * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 	
-	signal sin_i : signed(63 downto 0);
-	signal cos_i : signed(63 downto 0);
+	constant cordic_x_init : signed(31 downto 0) := to_signed(integer(real(1.0 * cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING)),32);
+	constant cordic_y_init : signed(31 downto 0) := to_signed(integer(real(0.0 * cordic_gain * 2**SOUNDGATE_FIX_PT_SCALING)),32);
+    
+	signal sin_i : signed(47 downto 0) := (others => '0');
+	signal cos_i : signed(47 downto 0) := (others => '0');
 	
-	signal x_i : signed(31 downto 0) 	:= (others => '0');
-	signal y_i : signed(31 downto 0) 	:= (others => '0');
+	signal cordic_out_x : signed(31 downto 0) := (others => '0');
+	signal cordic_out_y : signed(31 downto 0) := (others => '0');
+	
+	signal x_i : signed(31 downto 0) 	:= cordic_x_init;
+	signal y_i : signed(31 downto 0) 	:= cordic_y_init;
 	signal phi_i : signed(31 downto 0) 	:= (others => '0');
 begin
 	
    
    -- rotates the vector (x,y) according to the quadrant in the unit circule
-	VEC_ROTATE_PROCESS : process(x, y, phi)
+	VEC_ROTATE_PROCESS : process(clk, rst)
 	begin
-			if phi > q1 and phi < q2 then
-				phi_i <= phi + (-q1);
-				x_i 	<= (y);
-				y_i 	<= (x);
-			elsif phi > q2 and phi < q3 then
-				x_i 	<= (-x);
-				y_i 	<= (-y);
-				phi_i <= phi + (-q2);
-			elsif phi > q3 and phi < q4 then
-				x_i 	<= (-y);
-				y_i 	<= (-x);
-				phi_i <= phi + (-q3);
-			else
-				x_i 	<= x;
-				y_i 	<= y;
-				phi_i <= phi;
-			end if;
+        if rst = '1' then
+            x_i   <= cordic_x_init;
+            y_i   <= cordic_y_init;
+            phi_i <= (others => '0');
+        elsif rising_edge(clk) then
+            if ce = '1' then  
+                if phi < q1 then
+                    x_i   <= cordic_x_init;
+                    y_i   <= cordic_y_init;
+                    phi_i <= phi;
+                elsif  phi < q2 then
+                    phi_i <= phi + (-q1);
+                    x_i 	<= -cordic_y_init;
+                    y_i 	<= cordic_x_init;
+                elsif phi < q3 then
+                    x_i 	<= (-cordic_x_init);
+                    y_i 	<= (-cordic_y_init);
+                    phi_i <= phi + (-q2);
+                elsif phi < q4 then
+                    x_i 	<= (-cordic_y_init);
+                    y_i 	<= (-cordic_x_init);
+                    phi_i <= phi + (-q3);
+                end if;
+            end if;
+         end if;
 	end process;
 	
 	x_pipeline(0) <= x_i;
@@ -121,13 +123,12 @@ begin
 				z_n => z_pipeline(i + 1)
 			);		
 	end generate;
-		
-	sin_i <= shift_right(y_pipeline(pipeline_stages + 1) * to_signed(cordic_gain_scaled, 32), integer(SOUNDGATE_FIX_PT_SCALING));
-	cos_i <= shift_right(x_pipeline(pipeline_stages + 1) * to_signed(cordic_gain_scaled, 32), integer(SOUNDGATE_FIX_PT_SCALING));
 	
-	sin <= RESIZE(sin_i, 32);
-	cos <= RESIZE(cos_i, 32);
-	
+    cordic_out_x <= x_pipeline(pipeline_stages + 1);
+    cordic_out_y <= y_pipeline(pipeline_stages + 1);
+    
+    sin <= cordic_out_y(31) & cordic_out_y(29 downto 0) & "0";
+	cos <= cordic_out_x(31) & cordic_out_x(29 downto 0) & "0";
 	
 end Behavioral;
 

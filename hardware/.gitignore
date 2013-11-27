@@ -45,6 +45,17 @@
 *_usage.xml
 *_xst.xrpt
 
+# simulation
+fuse.xmsgs
+fuseRelaunch.cmd
+isim.cmd
+*.udo
+xilinxsim.ini
+vsim.wlf
+# post simulation 
+
+*.fdo
+*.wdb
 # project-wide generated files
 *.gise
 par_usage_statistics.html

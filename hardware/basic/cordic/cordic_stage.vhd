@@ -1,36 +1,26 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    14:10:27 09/04/2013 
--- Design Name: 
--- Module Name:    cordic_stage - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+--  ____                        _             _            
+-- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
+-- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
+--  ___) | (_) | |_| | | | | (_| | (_| | (_| | ||  __/\__ \
+-- |____/ \___/ \__,_|_| |_|\__,_|\__, |\__,_|\__\___||___/
+--                                |___/                    
+-- ======================================================================
 --
--- Dependencies: 
+--   title:        VHDL module - cordic_stage.vhd
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
+--   project:      PG-Soundgates
+--   author:       Lukas Funke, University of Paderborn
 --
-----------------------------------------------------------------------------------
+--   description:  Part of the cordic implementation
+--
+-- ======================================================================
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.all;
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
-library soundgates;
-use soundgates.soundcomponents.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity cordic_stage is
 	 Generic(   stage : integer := 1;
@@ -40,7 +30,7 @@ entity cordic_stage is
          clk   : in  STD_LOGIC;
          rst 	: in  STD_LOGIC;
          ce    : in  STD_LOGIC;
-           
+
          x  : in  SIGNED (31 downto 0);
          y  : in  SIGNED (31 downto 0);
          z  : in  SIGNED (31 downto 0);
@@ -86,7 +76,7 @@ begin
 		variable z_next : signed(31 downto 0);
 	begin
 			
-		if z > 0 then		--  sgn = + 1
+      if z(31) = '0' then		--  sgn = + 1
          x_next := x + (-y_shift);
          y_next := x_shift + y;
          z_next := z + (-scaled_arctan);
@@ -104,10 +94,10 @@ begin
 	REG_PROCESS : process(clk)
 	begin	
 		if rising_edge(clk) then               
-         if rst = '1' then         
+         if rst = '1' then
             x_next <= (others => '0');
             y_next <= (others => '0');
-            z_next <= (others => '0');            
+            z_next <= (others => '0');
          elsif ce = '1' then
             x_next <= x_next_i;
             y_next <= y_next_i;
@@ -121,4 +111,3 @@ begin
    z_n <= z_next;
 	
 end Behavioral;
-
