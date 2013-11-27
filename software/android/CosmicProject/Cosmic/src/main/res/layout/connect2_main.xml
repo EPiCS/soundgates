@@ -3,11 +3,14 @@
     <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true">
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_gravity="center">
 
             <View
                 android:layout_width="1dp"
@@ -27,7 +30,6 @@
                 android:hint="@string/ip_hint"
                 android:textAlignment="center"
                 android:ellipsize="start"
-                android:gravity="center"
                 android:id="@+id/ip_edittext"/>
 
             <TextView
@@ -45,7 +47,6 @@
                 android:hint="@string/port_hint"
                 android:textAlignment="center"
                 android:ellipsize="start"
-                android:gravity="center"
                 android:id="@+id/port_edittext" />
         </TableRow>
 
