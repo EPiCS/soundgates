@@ -25,7 +25,7 @@ struct SoundLink_struct {
 
 struct SoundComponentNode_struct {
 	// Contained Component. Need to be cast according to the given type
-	void* component;
+	void* parameters;
 	ComponentType componentType;
 
 	SoundLink** incomingLinks;

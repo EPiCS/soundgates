@@ -17,7 +17,7 @@ SoundComponentNode* scnode_create(ComponentType ctype) {
 		break;
 	case GENERIC_HWT:
 		scn->componentType = GENERIC_HWT;
-		scn->component = calloc(1, sizeof(sSndComponent_GENERIC_HWT));
+		scn->parameters = calloc(1, sizeof(sSndComponent_GENERIC_HWT));
 
 		//TODO if null -> error
 
@@ -35,7 +35,7 @@ SoundComponentNode* scnode_create(ComponentType ctype) {
 		MBOX_CTRL_COUNT);
 		// Don't set the addresses for the buffers yet, components will be connected later.
 
-		scn->header.opt_arg_addr = &(scn->component);
+		scn->header.opt_arg_addr = &(scn->parameters);
 		scn->state = HWT_INIT;
 		break;
 	default:
