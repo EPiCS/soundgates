@@ -8,3 +8,11 @@
 
 #include "Patch.h"
 
+
+void addSoundComponent(SoundComponent*);
+void connectSoundComponent(SoundComponent*, Port*, SoundComponent*, Port*);
+
+void Patch::createFromFile(std::string filename){
+
+
+}

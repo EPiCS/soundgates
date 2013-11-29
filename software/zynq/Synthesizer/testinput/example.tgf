@@ -1,0 +1,26 @@
+1 const/sw/'3.0'
+2 sin/sw  
+3 sin/hw(0)
+4 adsr/sw
+5 mixer/hw(1)  
+6 waveplayer/sw
+7 input/sw/'/BeatLevel \"f\"'
+8 const/sw/'/Trigger \"i\"'
+9 const/sw/'0.1'
+10 const/sw/'0.1'
+11 const/sw/'0.7'
+12 const/sw/'0.1'
+13 output/sw/'left' 
+#  
+1 2 '1,1' 
+2 3 '1,1' 
+3 4 '1,1' 
+8 4 '1,1' 
+9 4 '1,2'
+10 4 '1,3'
+11 4 '1,4'
+12 4 '1,5'
+4 5 '1,1'
+6 5 '1,2'
+7 5 '1,3'
+5 13 '1,1'

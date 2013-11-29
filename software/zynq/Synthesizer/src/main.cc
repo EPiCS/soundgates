@@ -2,17 +2,20 @@
  * Empty C++ Application
  */
 
-
-#include "soundcomponents/software/SineSWSoundComponent.h"
+#include "TGFReader.h"
 
 int main()
 {
+//
+//	SineSWSoundComponent sine;
+//
+//	sine.run();
+//
+//	sine.join();
 
-	SineSWSoundComponent sine;
+	TGFReader bla;
 
-	sine.run();
-
-	sine.join();
+	bla.read(NULL, "testinput/example.tgf");
 
 	return 0;
 }

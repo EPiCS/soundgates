@@ -12,9 +12,13 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <boost/thread.hpp>
 
-#include "Node.h"
-#include "Port.h"
+
+#include "../Node.h"
+#include "../Port.h"
+#include "SoundComponentImpl.h"
+
 
 
 class SoundComponent : public Node{
@@ -23,20 +27,22 @@ private:
 	std::vector<Port> incomingPorts;
 	std::vector<Port> outgoingPorts;
 
+	boost::thread m_thread;
+
+	SoundComponentImpl* delegate;
+
 public:
 
-	Port* getIncomingPort(unsigned int);
-	Port* getOutgoingPort(unsigned int);
-
-	std::vector<Port>* getInPorts();
-	std::vector<Port>* getOutPorts();
+	SoundComponent();
+	SoundComponent(SoundComponentImpl*);
+	~SoundComponent();
 
 	/* Virtual methods */
-	virtual void run() = 0;
-	virtual void join() = 0;
+	void run();
+	void join();
 
-	virtual void init() = 0;
-	virtual void process(void) = 0;
+	void init();
+	void process(void);
 
 };
 

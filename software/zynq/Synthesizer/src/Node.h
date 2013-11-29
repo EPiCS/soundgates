@@ -18,10 +18,17 @@ private:
 	std::list<Link> incomingLinks;
 	std::list<Link> outgoingLinks;
 
+	int uid;
+
 public:
 
 	Node();
+	Node(int uid);
 	~Node();
+
+	int getUid();
+
+	bool operator==(const Node& other) const;
 
 };
 
