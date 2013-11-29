@@ -9,10 +9,10 @@
 #define PATCH_H_
 
 #include <string>
-
+#include <iostream>
 #include "Port.h"
 #include "soundcomponents/SoundComponent.h"
-
+#include "Synthesizer.h"
 
 class Patch {
 
@@ -23,8 +23,8 @@ private:
 public:
 	void createFromFile(std::string filename);
 
-	void createSoundComponent(int uid, std::string type, std::string im);
-
+	void createSoundComponent(int uid, std::string type, std::string parameters);
+	void createSoundComponent(int uid, std::string type, int slot, std::string parameters);
 };
 
 #endif /* PATCH_H_ */

@@ -13,7 +13,7 @@
 
 Node::Node(void){ }
 
-Node::Node(int uid) : Node(){
+Node::Node(int uid){
 
 	this->uid = uid;
 }

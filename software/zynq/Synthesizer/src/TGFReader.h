@@ -14,10 +14,10 @@
 #include <string>
 
 #include <boost/regex.hpp>
-
+#include <boost/lexical_cast.hpp>
 
 #include "Patch.h"
-
+#include "Synthesizer.h"
 
 class TGFReader {
 
