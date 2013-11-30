@@ -22,10 +22,7 @@ SoundComponent::SoundComponent(SoundComponentImpl* delegate){
 	this->delegate = delegate;
 }
 
-SoundComponent::~SoundComponent(){
-
-
-}
+SoundComponent::~SoundComponent(){ }
 
 void SoundComponent::run(){
 

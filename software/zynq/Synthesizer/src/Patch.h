@@ -23,7 +23,6 @@ private:
 	void connectSoundComponent(SoundComponent&, Port&, SoundComponent&, Port&);
 
 public:
-	void createFromFile(std::string filename);
 
 	void createSoundComponent(int uid, std::string type, std::vector<std::string>);
 	void createSoundComponent(int uid, std::string type, int slot, std::vector<std::string>);

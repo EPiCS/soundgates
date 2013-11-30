@@ -21,10 +21,8 @@ void TGFReader::read(Patch* patch, std::string filename){
 	std::ifstream sgfile(filename.c_str());
 
 	if(!sgfile.good()){
-
-		std::cout << "ERROR: input file does not exist" << std::endl;
+		BOOST_LOG_TRIVIAL(error) << "input file does not exist";
 		return;
-
 	}
 
 	boost::regex nodexpr("([0-9]+) ([a-z]+)/([a-z]+)(\\(([0-9]+)\\))?(/('.*',?)+)? *");
@@ -68,7 +66,7 @@ void TGFReader::read(Patch* patch, std::string filename){
 
 			}else{
 
-				std::cout << "Error: unknown implementation type" << std::endl;
+				BOOST_LOG_TRIVIAL(error) << "unknown implementation type";
 			}
 		}
 

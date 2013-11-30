@@ -19,8 +19,6 @@
 #include "../Port.h"
 #include "SoundComponentImpl.h"
 
-
-
 class SoundComponent : public Node{
 
 private:
@@ -40,9 +38,6 @@ public:
 	/* Virtual methods */
 	void run();
 	void join();
-
-	void init();
-	void process(void);
 
 };
 

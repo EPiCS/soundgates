@@ -9,16 +9,6 @@
 #include "Patch.h"
 
 
-void addSoundComponent(SoundComponent*);
-void connectSoundComponent(SoundComponent*, Port*, SoundComponent*, Port*);
-
-void Patch::createFromFile(std::string filename){
-
-
-}
-
-
-
 void Patch::createSoundComponent(int uid, std::string type, std::vector<std::string> parameters){
 
 	std::cout << "Creating software component." << std::endl;

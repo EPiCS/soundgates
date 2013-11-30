@@ -22,8 +22,9 @@
 
 #include "Patch.h"
 #include "Synthesizer.h"
+#include "SynthesizerFileReader.h"
 
-class TGFReader {
+class TGFReader : public SynthesizerFileReader {
 
 public:
 

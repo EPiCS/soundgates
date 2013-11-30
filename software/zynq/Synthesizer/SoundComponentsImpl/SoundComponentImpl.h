@@ -12,7 +12,7 @@
 #include <string.h>
 #include <iostream>
 
-#include "../Port.h"
+#include "Port.h"
 
 
 class SoundComponentImpl {
