@@ -44,34 +44,32 @@ void TGFReader::read(Patch* patch, std::string filename){
 			std::string type = match[2];
 			std::string impltype = match[3];
 			std::string params = match[7];
+			std::vector<std::string> paramtokens;
+			boost::split(paramtokens, params, boost::is_any_of(","));
 
-			std::vector<std::string>
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " << "1: " << match[1];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " << "2: " << match[2];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " << "3: " << match[3];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "4: " << match[4];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "5: " << match[5];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "6: " << match[6];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "7: " << match[7];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "8: " << match[8];
 
-//#ifdef DEBUG
-			std::cout << "1: " << match[1] << std::endl;
-			std::cout << "2: " << match[2] << std::endl;
-			std::cout << "3: " << match[3] << std::endl;
-			std::cout << "4: " << match[4] << std::endl;
-			std::cout << "5: " << match[5] << std::endl;
-			std::cout << "6: " << match[6] << std::endl;
-			std::cout << "7: " << match[7] << std::endl;
-			std::cout << "8: " << match[8] << std::endl;
-			std::cout << "----------------------------" << std::endl;
-//#endif
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
 
-				patch->createSoundComponent(uid, type, slot, params);
+				patch->createSoundComponent(uid, type, slot, paramtokens);
 
 			}else if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::SW])){
 
-				patch->createSoundComponent(uid, type, params);
+				patch->createSoundComponent(uid, type, paramtokens);
+
 			}else{
 
 				std::cout << "Error: unknown implementation type" << std::endl;
 			}
-
 		}
 
 		// match edge

@@ -25,8 +25,8 @@ private:
 public:
 	void createFromFile(std::string filename);
 
-	void createSoundComponent(int uid, std::string type, std::string parameters);
-	void createSoundComponent(int uid, std::string type, int slot, std::string parameters);
+	void createSoundComponent(int uid, std::string type, std::vector<std::string>);
+	void createSoundComponent(int uid, std::string type, int slot, std::vector<std::string>);
 };
 
 #endif /* PATCH_H_ */
