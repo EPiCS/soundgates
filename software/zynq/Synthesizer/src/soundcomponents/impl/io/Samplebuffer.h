@@ -47,8 +47,10 @@ void buffer_stop(soundbuffer* buffer);
 
 /**
  * Returns
- *  - 1 if the buffer can accept new samples from the synthesizer
+ *  - >= 1 number of new samples that can be accepted from the synthesizer
  *  - 0 if the buffer is completely filled at the moment
+ *
+ *  Is called internally from buffer_fillbuffer as of 30.11.13 - gwue
  */
 int buffer_needsamples(soundbuffer* buffer);
 
@@ -59,6 +61,8 @@ int buffer_getFrameSize();
 
 /**
  *	Copies the content of an array to the internal buffer
+ *	If the internal buffer is completely filled, this function will sleep until
+ *	space is available again.
  */
 buffer_error buffer_fillbuffer(soundbuffer* buffer, char*, int size);
 
