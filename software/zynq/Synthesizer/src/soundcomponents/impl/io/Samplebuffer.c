@@ -290,7 +290,7 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 	}
 	if ((size & (size - 1)) != 0 || size == 0)
 	{
-		// We need the number of samples to be a power of two. Otherwise some logic here might not work as intended //TODO true?.
+		// We need the number of samples to be a power of two. Otherwise buffer_fillbuffer might exceed the buffersize //TODO true?.
 		return BUFFER_NO_POWER_OF_TWO;
 	}
 
