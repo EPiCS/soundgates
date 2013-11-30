@@ -9,10 +9,10 @@
 
 inline void switchAndClearBuffer(soundbuffer* buffer) {
 	if (buffer->activeBuffer == 1) {
-		buffer->b1off = 0;
+		buffer->b1off = -1;
 		buffer->activeBuffer = 2;
 	} else if (buffer->activeBuffer == 2) {
-		buffer->b2off = 0;
+		buffer->b2off = -1;
 		buffer->activeBuffer = 1;
 	}
 }

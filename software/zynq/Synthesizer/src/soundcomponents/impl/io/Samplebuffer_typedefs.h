@@ -26,13 +26,14 @@ typedef struct {
 	 * -1 means the buffer is empty (i.e. has been transferred to alsa completey
 	 * and is ready to be overwritten)
 	 */
-	int b1off, b2off, b1size, b2size, activeBuffer;
+	int b1off, b2off, b1size, b2size, activeBuffer, abOff;
 	pthread_t bufferThread;
 	pthread_mutex_t mutex;
 	int running;
 	int continueOnError;
 	char buffer1[16384];
 	char buffer2[16384];
+	char accumulationBuffer[16384];
 	snd_pcm_t* pcm_handle;
 	snd_pcm_hw_params_t* hw_params;
 } soundbuffer;

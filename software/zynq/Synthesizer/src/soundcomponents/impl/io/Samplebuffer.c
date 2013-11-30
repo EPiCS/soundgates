@@ -116,6 +116,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record)
 	int erroroccured = 0;
 	buff->b1off = 0; // Mark both buffers as full -> will play a few empty samples at the start such that the application has time to generate initial samples
 	buff->b2off = 0;
+	buff->abOff = 0;
 	buff->activeBuffer = 1;
 	buff->running = 0;
 
@@ -280,7 +281,8 @@ void buffer_test_playback(soundbuffer* buffer)
 	}
 }
 
-buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
+buffer_error buffer_fillbuffer_internal(soundbuffer* buffer, char* samples,
+		int size)
 {
 	pthread_mutex_lock(&buffer->mutex);
 	int i;
@@ -288,69 +290,72 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 	{
 		return BUFFER_TOO_MANY_SAMPLES;
 	}
-	if ((size & (size - 1)) != 0 || size == 0)
+	else
 	{
-		// We need the number of samples to be a power of two. Otherwise buffer_fillbuffer might exceed the buffersize //TODO true?.
-		return BUFFER_NO_POWER_OF_TWO;
-	}
-
-	// Fill the currently not active buffer.
-	if (getActiveBuffer(buffer) == 1)
-	{
-		for (i = 0; i < size; i++)
+		//TODO Replace this by using the getters and setters
+		if (buffer->b1off < 0)
 		{
-			int bufferOffset = i + buffer->b2off;
-			// Don't fill the buffer, if it is already full
-			if (bufferOffset >= 16384)
+			for (i = 0; i < size; i++)
 			{
-				buffer->b2off = 16384;
-				pthread_mutex_unlock(&buffer->mutex);
-				return BUFFER_NOT_READY;
+				buffer->buffer1[i] = samples[i];
+				buffer->b1off = 0;
+				buffer->b1size = size;
 			}
-			buffer->buffer2[i + buffer->b2off] = samples[i];
 		}
-		buffer->b2off += size;
-		buffer->b2size += size;
-	}
-	else if (getActiveBuffer(buffer) == 2)
-	{
-		for (i = 0; i < size; i++)
+		else if (buffer->b2off < 0)
 		{
-			int bufferOffset = i + buffer->b1off;
-			if (bufferOffset >= 16384)
+			for (i = 0; i < size; i++)
 			{
-				buffer->b1off = 16384;
-				pthread_mutex_unlock(&buffer->mutex);
-				return BUFFER_NOT_READY;
+				buffer->buffer2[i] = samples[i];
+				buffer->b2off = 0;
+				buffer->b2size = size;
 			}
-			buffer->buffer1[i + buffer->b1off] = samples[i];
 		}
-		buffer->b1off += size;
-		buffer->b1size += size;
+		else
+		{
+			pthread_mutex_unlock(&buffer->mutex);
+			return BUFFER_NOT_READY;
+		}
 	}
 	pthread_mutex_unlock(&buffer->mutex);
 	return BUFFER_NO_ERROR;
 }
 
+buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
+{
+	buffer_error e = BUFFER_NO_ERROR;
+
+	if ((size & (size - 1)) != 0 && size != 0)
+	{
+		// TODO Must currently be a power of two and always the same, such that we reach 16384 precisely
+		return BUFFER_NO_POWER_OF_TWO;
+	}
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		buffer->accumulationBuffer[buffer->abOff + i] = samples[i];
+	}
+	buffer->abOff += size;
+	if (buffer->abOff >= 16384)
+	{
+		// Block as long as the buffer does not need new samples
+		while (!buffer_needsamples(buffer))
+		{
+			usleep(100);
+		}
+		buffer->abOff = 0;
+		e = buffer_fillbuffer_internal(buffer, buffer->accumulationBuffer, 16384);
+	}
+	return e;
+}
+
 int buffer_needsamples(soundbuffer* buffer)
 {
-	//Check whether the other buffer isn't completely full yet
 	pthread_mutex_lock(&buffer->mutex);
-	if (getActiveBuffer(buffer) == 1)
+	if (buffer->b1off < 0 || buffer->b2off < 0)
 	{
-		if (buffer->b2size < 16384)
-		{
-			pthread_mutex_unlock(&buffer->mutex);
-			return 16384 - buffer->b2size;
-		}
-	}
-	else
-	{
-		if (buffer->b1size < 16384)
-		{
-			pthread_mutex_unlock(&buffer->mutex);
-			return 16384 - buffer->b1size;
-		}
+		pthread_mutex_unlock(&buffer->mutex);
+		return 1;
 	}
 	pthread_mutex_unlock(&buffer->mutex);
 	return 0;
