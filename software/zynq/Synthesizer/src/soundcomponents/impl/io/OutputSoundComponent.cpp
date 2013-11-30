@@ -9,6 +9,26 @@
 
 int OutputSoundComponent::soundInPort = 1;
 
+const char* OutputSoundComponent::name = "dac";
+
+extern "C"
+{
+	OutputSoundComponent* create()// TODO create(SoundComponents::ImplType impltype)
+	{
+		return new OutputSoundComponent();
+	}
+
+	void destroy(OutputSoundComponent* cmp)
+	{
+		delete cmp;
+	}
+
+	const char* getComponentName()
+	{
+		return OutputSoundComponent::name;
+	}
+}
+
 OutputSoundComponent::OutputSoundComponent()
 {
 	buffer = buffer_initialize(44100, 0);

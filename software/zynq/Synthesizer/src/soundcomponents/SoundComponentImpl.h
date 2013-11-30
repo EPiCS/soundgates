@@ -23,7 +23,7 @@ private:
 public:
 
 	SoundComponentImpl();
-	~SoundComponentImpl();
+	virtual ~SoundComponentImpl();
 
 	std::vector<Port>& getInports();
 	std::vector<Port>& getOutports();

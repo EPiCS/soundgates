@@ -37,9 +37,9 @@ class OutputSoundComponent: public SoundComponentImpl {
 
 private:
 	soundbuffer* buffer;
-
 public:
 	static int soundInPort;
+	static const char* name;
 
 	OutputSoundComponent();
 	~OutputSoundComponent();
