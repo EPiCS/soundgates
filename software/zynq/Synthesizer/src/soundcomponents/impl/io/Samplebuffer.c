@@ -120,7 +120,7 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record)
 	buff->activeBuffer = 1;
 	buff->running = 0;
 
-	for (err = 0; err < 16384; err++)
+	for (err = 0; err < SOUNDBUFFERSIZE; err++)
 	{
 		buff->buffer1[err] = 0;
 		buff->buffer2[err] = 0;
@@ -239,7 +239,7 @@ void buffer_test_playback(soundbuffer* buffer)
 	printf("Starting test playback!\n");
 	int err;
 	int nframes = 0;
-	char buf[16384];
+	char buf[SOUNDBUFFERSIZE];
 	int i, j, k;
 	if (buffer_isPlaybackStream(buffer))
 	{
@@ -247,7 +247,7 @@ void buffer_test_playback(soundbuffer* buffer)
 		{
 			for (j = 1; j < 10; j++)
 			{
-				for (k = 0; k < 16384; k++)
+				for (k = 0; k < SOUNDBUFFERSIZE; k++)
 				{
 					buf[k] = i * j * k / 300;
 				}
@@ -286,7 +286,7 @@ buffer_error buffer_fillbuffer_internal(soundbuffer* buffer, char* samples,
 {
 	pthread_mutex_lock(&buffer->mutex);
 	int i;
-	if (size > 16384)
+	if (size > SOUNDBUFFERSIZE)
 	{
 		return BUFFER_TOO_MANY_SAMPLES;
 	}
@@ -327,7 +327,7 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 
 	if ((size & (size - 1)) != 0 && size != 0)
 	{
-		// TODO Must currently be a power of two and always the same, such that we reach 16384 precisely
+		// TODO Must currently be a power of two and always the same, such that we reach SOUNDBUFFERSIZE precisely
 		return BUFFER_NO_POWER_OF_TWO;
 	}
 	int i;
@@ -336,7 +336,7 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 		buffer->accumulationBuffer[buffer->abOff + i] = samples[i];
 	}
 	buffer->abOff += size;
-	if (buffer->abOff >= 16384)
+	if (buffer->abOff >= SOUNDBUFFERSIZE)
 	{
 		// Block as long as the buffer does not need new samples
 		while (!buffer_needsamples(buffer))
@@ -344,7 +344,7 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 			usleep(100);
 		}
 		buffer->abOff = 0;
-		e = buffer_fillbuffer_internal(buffer, buffer->accumulationBuffer, 16384);
+		e = buffer_fillbuffer_internal(buffer, buffer->accumulationBuffer, SOUNDBUFFERSIZE);
 	}
 	return e;
 }
