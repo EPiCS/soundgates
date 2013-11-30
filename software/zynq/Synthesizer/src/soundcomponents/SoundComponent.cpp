@@ -39,3 +39,6 @@ void SoundComponent::join(){
 	m_thread.join();
 }
 
+void SoundComponent::init() {
+	this->delegate->init();
+}
