@@ -10,7 +10,7 @@
 10 const/sw/'0.1'
 11 const/sw/'0.7'
 12 const/sw/'0.1'
-13 output/sw/'left'
+13 output/sw/'left','right'
 #  
 1 2 '1,1' 
 2 3 '1,1' 

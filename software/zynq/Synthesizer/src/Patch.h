@@ -10,9 +10,11 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+
 #include "Port.h"
-#include "soundcomponents/SoundComponent.h"
 #include "Synthesizer.h"
+#include "soundcomponents/SoundComponent.h"
 
 class Patch {
 

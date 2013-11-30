@@ -15,6 +15,8 @@
 
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/split.hpp>
+
 
 #include "Patch.h"
 #include "Synthesizer.h"

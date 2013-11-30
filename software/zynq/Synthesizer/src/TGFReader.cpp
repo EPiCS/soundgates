@@ -43,9 +43,11 @@ void TGFReader::read(Patch* patch, std::string filename){
 			int uid = boost::lexical_cast<int>(match[1]);
 			std::string type = match[2];
 			std::string impltype = match[3];
-			std::string params = match[8];
+			std::string params = match[7];
 
-#ifdef DEBUG
+			std::vector<std::string>
+
+//#ifdef DEBUG
 			std::cout << "1: " << match[1] << std::endl;
 			std::cout << "2: " << match[2] << std::endl;
 			std::cout << "3: " << match[3] << std::endl;
@@ -55,7 +57,7 @@ void TGFReader::read(Patch* patch, std::string filename){
 			std::cout << "7: " << match[7] << std::endl;
 			std::cout << "8: " << match[8] << std::endl;
 			std::cout << "----------------------------" << std::endl;
-#endif
+//#endif
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
