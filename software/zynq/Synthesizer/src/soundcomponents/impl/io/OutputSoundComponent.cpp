@@ -32,3 +32,7 @@ void OutputSoundComponent::process() {
 
 	buffer_fillbuffer(this->buffer, bufferArray, bufferSize);
 }
+
+void OutputSoundComponent::init() {
+
+}

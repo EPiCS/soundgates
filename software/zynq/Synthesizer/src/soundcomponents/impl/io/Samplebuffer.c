@@ -288,32 +288,45 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 	{
 		return BUFFER_TOO_MANY_SAMPLES;
 	}
-	else
+	if ((size & (size - 1)) != 0 || size == 0)
 	{
-		//TODO Replace this by using the getters and setters
-		if (buffer->b1off < 0)
+		// We need the number of samples to be a power of two. Otherwise some logic here might not work as intended //TODO true?.
+		return BUFFER_NO_POWER_OF_TWO;
+	}
+
+	// Fill the currently not active buffer.
+	if (getActiveBuffer(buffer) == 1)
+	{
+		for (i = 0; i < size; i++)
 		{
-			for (i = 0; i < size; i++)
+			int bufferOffset = i + buffer->b2off;
+			// Don't fill the buffer, if it is already full
+			if (bufferOffset >= 16384)
 			{
-				buffer->buffer1[i] = samples[i];
-				buffer->b1off = 0;
-				buffer->b1size = size;
+				buffer->b2off = 16384;
+				pthread_mutex_unlock(&buffer->mutex);
+				return BUFFER_NOT_READY;
 			}
+			buffer->buffer2[i + buffer->b2off] = samples[i];
 		}
-		else if (buffer->b2off < 0)
+		buffer->b2off += size;
+		buffer->b2size += size;
+	}
+	else if (getActiveBuffer(buffer) == 2)
+	{
+		for (i = 0; i < size; i++)
 		{
-			for (i = 0; i < size; i++)
+			int bufferOffset = i + buffer->b1off;
+			if (bufferOffset >= 16384)
 			{
-				buffer->buffer2[i] = samples[i];
-				buffer->b2off = 0;
-				buffer->b2size = size;
+				buffer->b1off = 16384;
+				pthread_mutex_unlock(&buffer->mutex);
+				return BUFFER_NOT_READY;
 			}
+			buffer->buffer1[i + buffer->b1off] = samples[i];
 		}
-		else
-		{
-			pthread_mutex_unlock(&buffer->mutex);
-			return BUFFER_NOT_READY;
-		}
+		buffer->b1off += size;
+		buffer->b1size += size;
 	}
 	pthread_mutex_unlock(&buffer->mutex);
 	return BUFFER_NO_ERROR;
@@ -321,11 +334,23 @@ buffer_error buffer_fillbuffer(soundbuffer* buffer, char* samples, int size)
 
 int buffer_needsamples(soundbuffer* buffer)
 {
+	//Check whether the other buffer isn't completely full yet
 	pthread_mutex_lock(&buffer->mutex);
-	if (buffer->b1off < 0 || buffer->b2off < 0)
+	if (getActiveBuffer(buffer) == 1)
 	{
-		pthread_mutex_unlock(&buffer->mutex);
-		return 1;
+		if (buffer->b2size < 16384)
+		{
+			pthread_mutex_unlock(&buffer->mutex);
+			return 16384 - buffer->b2size;
+		}
+	}
+	else
+	{
+		if (buffer->b1size < 16384)
+		{
+			pthread_mutex_unlock(&buffer->mutex);
+			return 16384 - buffer->b1size;
+		}
 	}
 	pthread_mutex_unlock(&buffer->mutex);
 	return 0;

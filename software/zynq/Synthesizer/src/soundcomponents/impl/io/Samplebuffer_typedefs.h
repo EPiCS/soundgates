@@ -15,7 +15,7 @@
 //TODO: DoubleBuffering?
 //TODO: Dem Synthesizer sagen: Ich bin voll, ich brauch nichts
 typedef enum {
-	BUFFER_NO_ERROR = 0, BUFFER_TOO_MANY_SAMPLES = 1, BUFFER_NOT_READY = 2
+	BUFFER_NO_ERROR = 0, BUFFER_TOO_MANY_SAMPLES = 1, BUFFER_NOT_READY = 2, BUFFER_NO_POWER_OF_TWO = 3
 } buffer_error;
 
 typedef struct {

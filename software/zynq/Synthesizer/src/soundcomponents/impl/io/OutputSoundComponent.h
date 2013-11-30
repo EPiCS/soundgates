@@ -44,7 +44,7 @@ public:
 	OutputSoundComponent();
 	~OutputSoundComponent();
 
-	virtual void init(void) = 0;
+	void init(void);
 	void process(void);
 
 };
