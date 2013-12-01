@@ -49,7 +49,7 @@ private:
 	std::map<std::string, void*, std::less<std::string> > factory;
 
 	/* keeps track of all created instances */
-	std::vector<SoundComponentLoader*> instances;
+	std::vector<SoundComponentImpl*> instances;
 
 public:
 	static SoundComponentLoader& getInstance(){

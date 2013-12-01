@@ -40,9 +40,9 @@ extern "C"{
 	}
 }
 
-SineSoundComponent::SineSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params){ }
+SineSoundComponent::SineSoundComponent(){ }
 
-SineSoundComponent::SineSoundComponent(){
+SineSoundComponent::SineSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params){
 
 	std::vector<Port>& inports = getInports();
 	std::vector<Port>& outports = getOutports();
@@ -55,6 +55,7 @@ SineSoundComponent::SineSoundComponent(){
 	inports.push_back(frequency);
 	outports.push_back(value);
 }
+
 
 
 SineSoundComponent::~SineSoundComponent(){}

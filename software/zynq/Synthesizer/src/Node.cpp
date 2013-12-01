@@ -28,8 +28,5 @@ int Node::getUid(){
 
 bool Node::operator==(const Node& other) const{
 
-	if(other.uid == uid){
-		return true;
-	}
-	return false;
+	return other.uid == uid;
 }

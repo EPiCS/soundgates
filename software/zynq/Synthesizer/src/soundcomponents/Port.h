@@ -26,6 +26,7 @@ public:
 	BufferedLink* getBufferedLink();
 	void setBufferedLink(BufferedLink*);
 
+	bool operator==(const Port& other) const;
 };
 
 

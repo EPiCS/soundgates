@@ -21,11 +21,9 @@ typedef SoundComponentImpl* createfn_t(SoundComponents::ImplType, std::vector<st
 typedef void destroyfn_t(SoundComponentImpl*);
 
 
-
 SoundComponentLoader::SoundComponentLoader(){
 
 	isInitialized = false;
-
 }
 
 
@@ -60,24 +58,37 @@ void SoundComponentLoader::initialize(std::string repository){
 
 void SoundComponentLoader::finailize(){
 
-	BOOST_LOG_TRIVIAL(debug) << "Closing library components";
 
-	for(std::map<std::string, void*>::iterator iter =factory.begin(), end = factory.end();
-			iter != end; ++iter){
+	if(isInitialized){
 
-		BOOST_LOG_TRIVIAL(debug) << "Closing library of component type " << iter->first;
-		std::string type(iter->first);
-		void *libhndl = iter->second;
+	BOOST_LOG_TRIVIAL(debug)<< "Closing library components";
 
+		/* Free components */
+		for(std::vector<SoundComponentImpl*>::iterator iter = instances.begin(); iter != instances.end();) {
 
-		if(libhndl != NULL){
+			BOOST_LOG_TRIVIAL(debug) << "Cleaning up soundcomponent: " << *iter;
 
-			dlclose(libhndl);
+			delete (*iter);
+
+			iter = instances.erase(iter);
+		}
+
+		/* Clean library handles */
+
+		for(std::map<std::string, void*>::iterator iter =factory.begin(), end = factory.end();
+				iter != end; ++iter) {
+
+			BOOST_LOG_TRIVIAL(debug) << "Closing library of component type " << iter->first;
+			std::string type(iter->first);
+			void *libhndl = iter->second;
+
+			if(libhndl != NULL) {
+
+				dlclose(libhndl);
+			}
 		}
 	}
-
 }
-
 
 void SoundComponentLoader::loadLibrary(std::string filename){
 
@@ -86,6 +97,7 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 	void* libhndl = dlopen(filename.c_str(), RTLD_LAZY);
 
 	if(NULL == libhndl){
+
 		BOOST_LOG_TRIVIAL(error) << "Could not load library " << filename;
 
 	}else{
@@ -105,6 +117,8 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 		BOOST_LOG_TRIVIAL(debug) << "Library handle " << libhndl << " successfully stored";
 	}
 }
+
+
 
 SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params){
 
@@ -129,5 +143,13 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 		BOOST_LOG_TRIVIAL(error) << "Could not resolve library symbol \"" << SoundComponentLoader::createFcnSymbol << "\" in library of type " << type;
 	}
 
-	return createfn(impltype, params);
+	if(NULL == createfn){
+		BOOST_LOG_TRIVIAL(error) << "Create function is null";
+	}
+
+	SoundComponentImpl* component = createfn(impltype, params);
+
+	instances.push_back(component);
+
+	return component;
 }

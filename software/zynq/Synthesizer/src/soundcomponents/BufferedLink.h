@@ -8,8 +8,11 @@
 #ifndef BUFFEREDLINK_H_
 #define BUFFEREDLINK_H_
 
+#if defined(APPLICATION_CONTEXT)
+#include "../Link.h"
+#else
 #include "Link.h"
-
+#endif
 
 class BufferedLink : public Link {
 
@@ -17,7 +20,7 @@ private:
 
 	char* readbuffer;
 	char* writebuffer;
-	int bufferdepth;
+	int   bufferdepth;
 
 public:
 

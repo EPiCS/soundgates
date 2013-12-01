@@ -3,7 +3,7 @@
  */
 
 #include "TGFReader.h"
-
+#include "Patch.h"
 #include "soundcomponents/utils/SoundComponenLoader.h"
 
 #include <string>
@@ -17,7 +17,13 @@ namespace logging = boost::log;
 
 int main( int argc, const char* argv[])
 {
-	if(argc > 1){
+
+	SynthesizerFileReader* foo = new TGFReader;
+	SoundComponentLoader* loader;
+
+	Patch patch = Patch();
+
+	if(argc > 2){
 
 		std::string loglevel = std::string(argv[1]);
 
@@ -33,24 +39,23 @@ int main( int argc, const char* argv[])
 
 			logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::debug);
 		}
+
+
+		loader = &(SoundComponentLoader::getInstance());
+
+		loader->initialize(argv[2]);
+
+		foo->read(&patch, argv[3]);
+
+		delete foo;
 	}
 
-//	SynthesizerFileReader* foo = new TGFReader;
-//
-//	foo->read(NULL, "testinput/example.tgf");
-//
-//	delete foo;
+	patch.initialize();
 
-	SoundComponentLoader& loader = SoundComponentLoader::getInstance();
-
-	loader.initialize(std::string("./testinput/soundcomponents"));
+	patch.run();
 
 
-	SoundComponentImpl* sine = loader.createFromString(std::string("sine"), SoundComponents::SW, std::vector<std::string>());
-
-	sine->process();
-
-	loader.finailize();
+	loader->finailize();
 
 	return 0;
 }

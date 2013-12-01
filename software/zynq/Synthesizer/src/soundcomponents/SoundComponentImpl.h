@@ -12,34 +12,32 @@
 #include <string.h>
 #include <iostream>
 
-#include "../Port.h"
+#include "Port.h"
 
+using namespace std;
 
 class SoundComponentImpl {
 
 private:
-	std::vector<Port>* inports;
-	std::vector<Port>* outports;
+	vector<Port> inports;
+	vector<Port> outports;
 
-	std::vector<std::string> params;
+	vector<string> parameters;
 
 public:
 	SoundComponentImpl();
-	SoundComponentImpl(std::vector<std::string> params);
+	SoundComponentImpl(vector<string> parameters);
 
-	~SoundComponentImpl();
-
-	std::vector<Port>& getInports();
-	std::vector<Port>& getOutports();
-
-	void setInports(std::vector<Port>&);
-	void setOutports(std::vector<Port>&);
+	virtual ~SoundComponentImpl();
 
 	Port* getInport(unsigned int);
+
 	Port* getOutport(unsigned int);
 
-	std::vector<std::string>& getParameters();
 
+	vector<Port>& getInports(){ return inports; }
+	vector<Port>& getOutports(){ return outports;}
+	vector<string>& getParameters(){ return parameters;}
 
 	virtual void init() = 0;
 	virtual void process() = 0;

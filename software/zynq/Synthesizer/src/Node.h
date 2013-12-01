@@ -12,11 +12,13 @@
 
 #include "Link.h"
 
+using namespace std;
+
 class Node {
 
 private:
-	std::list<Link> incomingLinks;
-	std::list<Link> outgoingLinks;
+	list<Link> incomingLinks;
+	list<Link> outgoingLinks;
 
 	int uid;
 
@@ -26,8 +28,10 @@ public:
 	Node(int uid);
 	~Node();
 
-	int getUid();
+	list<Link>& getIncomingLinks(){ return incomingLinks; }
+	list<Link>& getOutgoingLinks(){ return outgoingLinks; }
 
+	int getUid();
 	bool operator==(const Node& other) const;
 
 };

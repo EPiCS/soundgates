@@ -12,20 +12,36 @@
 #include <iostream>
 #include <vector>
 
-#include "Port.h"
 #include "Synthesizer.h"
+
+#include <boost/log/trivial.hpp>
+
 #include "soundcomponents/SoundComponent.h"
+#include "soundcomponents/utils/SoundComponenLoader.h"
+
+
+using namespace std;
 
 class Patch {
 
 private:
-	void addSoundComponent(SoundComponent&);
-	void connectSoundComponent(SoundComponent&, Port&, SoundComponent&, Port&);
+
+	vector<SoundComponent*> components;
+	vector<Link*> links;
 
 public:
 
-	void createSoundComponent(int uid, std::string type, std::vector<std::string>);
-	void createSoundComponent(int uid, std::string type, int slot, std::vector<std::string>);
+	Patch();
+	~Patch();
+
+	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
+	void createSoundLink(int sourceid, int srcport, int destid, int destport);
+
+
+	void initialize(void);
+
+	void run(void);
+	void stop(void);
 };
 
 #endif /* PATCH_H_ */

@@ -12,13 +12,26 @@ TGFReader::TGFReader(){ }
 
 TGFReader::~TGFReader(){ }
 
-void TGFReader::read(Patch* patch, std::string filename){
 
-	std::string line;
+void TGFReader::normalize(vector<string>& params){
 
-	std::vector<std::string> linetokens;
 
-	std::ifstream sgfile(filename.c_str());
+	for(vector<string>::iterator iter = params.begin(); iter != params.end(); ++iter ){
+
+		boost::algorithm::erase_first((*iter), "'");
+		boost::algorithm::erase_last((*iter),  "'");
+
+		BOOST_LOG_TRIVIAL(debug) << "Normalizing token " << *iter;
+	}
+}
+
+void TGFReader::read(Patch* patch, string filename){
+
+	string line;
+
+	vector<string> linetokens;
+
+	ifstream sgfile(filename.c_str());
 
 	if(!sgfile.good()){
 		BOOST_LOG_TRIVIAL(error) << "input file does not exist";
@@ -39,26 +52,30 @@ void TGFReader::read(Patch* patch, std::string filename){
 		if (boost::regex_match(line, match, nodexpr)){
 
 			int uid = boost::lexical_cast<int>(match[1]);
-			std::string type = match[2];
-			std::string impltype = match[3];
-			std::string params = match[7];
-			std::vector<std::string> paramtokens;
+			string type = match[2];
+			string impltype = match[3];
+			string params = match[7];
+
+			vector<string> paramtokens;
 			boost::split(paramtokens, params, boost::is_any_of(","));
 
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " << "1: " << match[1];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " << "2: " << match[2];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " << "3: " << match[3];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "4: " << match[4];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "5: " << match[5];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "6: " << match[6];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "7: " << match[7];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match " <<  "8: " << match[8];
+			normalize(paramtokens);
+
+
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "1: "  << match[1];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "2: "  << match[2];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "3: "  << match[3];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "4: " << match[4];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "5: " << match[5];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "6: " << match[6];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "7: " << match[7];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "8: " << match[8];
 
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
 
-				patch->createSoundComponent(uid, type, slot, paramtokens);
+				patch->createSoundComponent(uid, type, paramtokens, slot);
 
 			}else if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::SW])){
 
@@ -73,9 +90,21 @@ void TGFReader::read(Patch* patch, std::string filename){
 		// match edge
 		if (boost::regex_match(line, match, edgeexpr)){
 
-			//std::cout << "Source: " << match[1] << " Dest: " << match[2] << " SourcePort: " << match[3] << " DestPort: " << match[4] << std::endl;
+			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "1: " << match[1];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "2: " << match[2];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "3: " << match[3];
+			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "4: " << match[4];
+
+			int source_uid  = boost::lexical_cast<int>(match[1]);
+			int dest_uid    = boost::lexical_cast<int>(match[2]);
+			int source_port = boost::lexical_cast<int>(match[3]);
+			int dest_port   = boost::lexical_cast<int>(match[4]);
+
+			patch->createSoundLink(source_uid, source_port, dest_uid, dest_port);
 		}
 	}
+
+
 }
 
 

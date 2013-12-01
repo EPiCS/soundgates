@@ -14,13 +14,9 @@
 Port::Port(int number){
 
 	this->number = number;
-
 }
 
-Port::~Port(){
-
-
-}
+Port::~Port(){ }
 
 int Port::getPortNumber(){
 
@@ -36,5 +32,10 @@ BufferedLink* Port::getBufferedLink(){
 void Port::setBufferedLink(BufferedLink* link){
 
 	this->link = link;
+}
 
+
+bool Port::operator==(const Port& other) const{
+
+	return this->number == other.number;
 }
