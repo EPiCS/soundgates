@@ -43,25 +43,7 @@ public class Codegen {
 	public Codegen() {
 	}
 	
-	public Patch getPatch(String path){
-	    SoundgatesPackage.eINSTANCE.eClass();
-	    
-	    // Register the XMI resource factory for the .xmi extension
 
-	    Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-	    Map<String, Object> m = reg.getExtensionToFactoryMap();
-	    m.put("xmi", new XMIResourceFactoryImpl());
-
-	    // Obtain a new resource set
-	    ResourceSet resSet = new ResourceSetImpl();
-
-	    // Get the resource
-	    Resource resource = resSet.getResource(URI.createURI(path), true);
-	    // Get the first model element and cast it to the right type, in my
-	    // example everything is hierarchical included in this first node
-	    Patch patch = (Patch) resource.getContents().get(0);
-	    return patch;		
-	}
 	
 	public void generateCodeForPatch(Patch patch) throws IOException, CoreException {
 		compositeComponentPortMappings = new HashMap<Port, Integer>();
@@ -424,7 +406,7 @@ public class Codegen {
 	}
 
 	public void generate(IFile file) throws CoreException, IOException {
-		Patch patch = getPatch(file.getFullPath().toPortableString());
+		Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
 
 		IProject project = file.getProject();
 		pdCodeFolder = project.getFolder(pdcodeFolderName);
