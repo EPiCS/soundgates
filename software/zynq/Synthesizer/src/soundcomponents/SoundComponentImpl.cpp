@@ -32,7 +32,7 @@ Port* SoundComponentImpl::getInport(unsigned int number){
 
 Port* SoundComponentImpl::getOutport(unsigned int number){
 
-	vector<Port>& outgoing = getInports();
+	vector<Port>& outgoing = getOutports();
 
 	if(outgoing.size() < number){
 
