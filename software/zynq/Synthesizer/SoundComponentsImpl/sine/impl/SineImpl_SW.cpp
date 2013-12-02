@@ -15,13 +15,14 @@ void SineImpl_SW::init() { }
 
 void SineImpl_SW::process() {
 
-	std::cout << "Processing sine sw sound component" << std::endl;
+	Port* valuePort = getOutport(SineSoundComponent::sineValueOutPort);
+	Port* frequencyPort = getInport(SineSoundComponent::frequencyInPort);
 
-	BufferedLink* valueLink = getOutport(SineSoundComponent::sineValueOutPort)->getBufferedLink();
-	BufferedLink* frequencyLink = getInport(SineSoundComponent::frequencyInPort)->getBufferedLink();
+	BufferedLink* valueLink = valuePort->getBufferedLink();
+	BufferedLink* frequencyLink = frequencyPort->getBufferedLink();
 
 	int* targetBuffer = (int*) valueLink->getWriteBuffer();
-	float* sourceBuffer = (float*) frequencyLink->getReadBuffer();
+//	float* sourceBuffer = (float*) frequencyLink->getReadBuffer();
 
 	int targetBufferSize = valueLink->getBufferDepth();
 
@@ -29,7 +30,8 @@ void SineImpl_SW::process() {
 
 	for (int i = 0; i < targetBufferSize / 4; i++) {
 
-		phase_incr = getPhaseIncrement(sourceBuffer[i]);
+//		phase_incr = getPhaseIncrement(sourceBuffer[i]);
+		phase_incr = getPhaseIncrement(220.0);
 
 		targetBuffer[i] = sin(phase) * INT_MAX;
 
@@ -39,7 +41,7 @@ void SineImpl_SW::process() {
 			phase -= M_PI * 2;
 		}
 
-		std::cout << targetBuffer[i];
+//		std::cout << targetBuffer[i];
 	}
 
 }

@@ -31,7 +31,7 @@ public:
 	virtual void init(void) = 0;
 	virtual void process(void) = 0;
 
-	int getPhaseIncrement(float frequency);
+	float getPhaseIncrement(float frequency);
 
 };
 

@@ -35,6 +35,7 @@ void buffer_free(soundbuffer* buffer);
 
 /**
  * Starts a Thread that feeds the buffer's data to ALSA.
+ * Does not start playback but only creates the thread
  * If continueOnError is 1, will ignore errors (like buffer underrun) and try to
  * continue it's work. Otherwise, the thread will stop
  */
@@ -44,6 +45,11 @@ void buffer_start(soundbuffer* buffer, int continueOnError);
  * Stops the buffer thread, if it is running
  */
 void buffer_stop(soundbuffer* buffer);
+
+/**
+ * Finally starts playback, if not already running.
+ */
+void buffer_startPlayback(soundbuffer* buffer);
 
 /**
  * Returns

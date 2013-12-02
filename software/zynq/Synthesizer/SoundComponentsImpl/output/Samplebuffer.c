@@ -10,6 +10,12 @@ void *buffer_run(void* buff)
 	int err = 0;
 	int nframes;
 
+
+	while(!buffer->playing) {
+		usleep(10000);
+	}
+	snd_pcm_prepare(buffer->pcm_handle);
+
 	while (buffer->running)
 	{
 		if (err < 0 && buffer->continueOnError)
@@ -78,7 +84,8 @@ void *buffer_run(void* buff)
 			}
 
 			// Add current offset to the beginning of the buffer array
-			char* arr = getBufferArray(buffer) + getBufferOffset(buffer);
+			int bufferOffset = getBufferOffset(buffer);
+			char* arr = getBufferArray(buffer) + bufferOffset;
 			if ((err = snd_pcm_writei(buffer->pcm_handle, arr, nframes)) < 0)
 			{
 				if (buffer->continueOnError)
@@ -117,9 +124,12 @@ soundbuffer* buffer_initialize(unsigned int samplerate, int record)
 	int erroroccured = 0;
 	buff->b1off = 0; // Mark both buffers as full -> will play a few empty samples at the start such that the application has time to generate initial samples
 	buff->b2off = 0;
+	buff->b1size = SOUNDBUFFERSIZE;
+	buff->b2size = SOUNDBUFFERSIZE;
 	buff->abOff = 0;
 	buff->activeBuffer = 1;
 	buff->running = 0;
+	buff->playing = 0;
 
 	for (err = 0; err < SOUNDBUFFERSIZE; err++)
 	{
@@ -369,6 +379,10 @@ void buffer_free(soundbuffer* buffer)
 	pthread_detach(buffer->bufferThread);
 	free(buffer);
 	//TODO Thread aufräumen
+}
+
+void buffer_startPlayback(soundbuffer* buffer) {
+	buffer->playing = 1;
 }
 
 void buffer_start(soundbuffer* buffer, int continueOnError)

@@ -35,6 +35,7 @@ typedef struct {
 	pthread_t bufferThread;
 	pthread_mutex_t mutex;
 	int running;
+	int playing;
 	int continueOnError;
 	char buffer1[SOUNDBUFFERSIZE];
 	char buffer2[SOUNDBUFFERSIZE];

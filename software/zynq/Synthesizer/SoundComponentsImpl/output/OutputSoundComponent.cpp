@@ -13,32 +13,38 @@ const char* OutputSoundComponent::name = "dac";
 
 extern "C"
 {
-	OutputSoundComponent* create(SoundComponents::ImplType impltype, std::vector<std::string> params)
-	{
-		return new OutputSoundComponent(params);
-	}
-
-	void destroy(OutputSoundComponent* cmp)
-	{
-		delete cmp;
-	}
-
-	const char* getComponentName()
-	{
-		return OutputSoundComponent::name;
-	}
+OutputSoundComponent* create(SoundComponents::ImplType impltype,
+		std::vector<std::string> params)
+{
+	return new OutputSoundComponent(params);
 }
 
-OutputSoundComponent::OutputSoundComponent() { }
+void destroy(OutputSoundComponent* cmp)
+{
+	delete cmp;
+}
 
-OutputSoundComponent::OutputSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params){
+const char* getComponentName()
+{
+	return OutputSoundComponent::name;
+}
+}
+
+OutputSoundComponent::OutputSoundComponent()
+{
+}
+
+OutputSoundComponent::OutputSoundComponent(std::vector<std::string> params) :
+		SoundComponentImpl(params)
+{
 
 	std::vector<Port>& inports = getInports();
 	Port soundInPort = Port(OutputSoundComponent::soundInPort);
 	inports.push_back(soundInPort);
 }
 
-OutputSoundComponent::~OutputSoundComponent(){
+OutputSoundComponent::~OutputSoundComponent()
+{
 
 	buffer_stop(this->buffer);
 
@@ -47,12 +53,19 @@ OutputSoundComponent::~OutputSoundComponent(){
 
 void OutputSoundComponent::process()
 {
-	Port* soundInPort = SoundComponentImpl::getInport(OutputSoundComponent::soundInPort);
+	Port* soundInPort = SoundComponentImpl::getInport(
+			OutputSoundComponent::soundInPort);
 
-	char* bufferArray = soundInPort->getBufferedLink()->getReadBuffer();
+	BufferedLink* soundLink = soundInPort->getBufferedLink();
+
+	char* bufferArray = soundLink->getReadBuffer();
 	int bufferSize = soundInPort->getBufferedLink()->getBufferDepth();
 
+//	std::cout << "Processing" << endl;
+
 	buffer_fillbuffer(this->buffer, bufferArray, bufferSize);
+	buffer_startPlayback(this->buffer);
+
 }
 
 void OutputSoundComponent::init()

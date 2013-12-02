@@ -52,9 +52,9 @@ int main( int argc, const char* argv[])
 
 	patch.initialize();
 
-	patch.run();
-
-
+	while(true) {
+		patch.run();
+	}
 	loader->finailize();
 
 	return 0;

@@ -87,10 +87,10 @@ void Patch::run(){
 		(*iter)->join();
 	}
 
-//	for(vector<Link*>::iterator iter = links.begin(); iter != links.end(); ++iter ){
-//
-//		static_cast<BufferedLink*>((*iter))->switchBuffers();
-//	}
+	for(vector<Link*>::iterator iter = links.begin(); iter != links.end(); ++iter ){
+
+		static_cast<BufferedLink*>((*iter))->switchBuffers();
+	}
 }
 
 void Patch::stop(){
