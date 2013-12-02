@@ -28,6 +28,7 @@ port(
         clk         : in  std_logic;
         rst         : in  std_logic;
         ce          : in  std_logic;
+        input_wave  : in  signed(31 downto 0);
         start       : in  signed(31 downto 0);
         stop        : in  signed(31 downto 0);
         attack      : in  signed(31 downto 0); 
@@ -50,7 +51,7 @@ architecture Behavioral of adsr is
 
     begin
 	
-        wave <= i_wave;
+        wave <= i_wave * input_wave;
         
         ADSR_PROC : process (clk, rst)
 

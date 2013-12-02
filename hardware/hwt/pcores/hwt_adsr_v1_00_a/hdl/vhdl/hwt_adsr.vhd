@@ -6,12 +6,12 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - hwt_noise
+--   title:        VHDL module - hwt_adsr
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Hardware thread for generating noise
+--   description:  Hardware thread for generating adsr
 --
 -- ======================================================================
 
@@ -29,10 +29,10 @@ library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
-entity hwt_noise is
+entity hwt_adsr is
     generic(
     	SND_COMP_CLK_FREQ   : integer := 100_000_000;
-		SND_COMP_NOISE_TPYE : integer := 0
+		SND_COMP_adsr_TPYE : integer := 0
 	);
    port (
 		-- OSIF FIFO ports
@@ -60,26 +60,32 @@ entity hwt_noise is
 		HWT_Clk   : in  std_logic;
 		HWT_Rst   : in  std_logic
     );
-end hwt_noise;
+end hwt_adsr;
 
-architecture Behavioral of hwt_noise is
+architecture Behavioral of hwt_adsr is
 
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
     
-    component noise is
-	generic(
-		FPGA_FREQUENCY  : integer       := 100_000_000;
-		NOISE           : NOISE_TYPE    := WHITE
-	);
+    component adsr is
     Port ( 
-            clk          : in  std_logic;           
-            rst          : in  std_logic;
-            ce           : in  std_logic;
-            data         : out signed(31 downto 0)
+            clk         : in  std_logic;
+            rst         : in  std_logic;
+            ce          : in  std_logic;
+            input_wave  : in  signed(31 downto 0);
+            start       : in  signed(31 downto 0);
+            stop        : in  signed(31 downto 0);
+            attack      : in  signed(31 downto 0); 
+            decay       : in  signed(31 downto 0);  
+            release     : in  signed(31 downto 0);
+            start_amp   : in  signed(31 downto 0);
+            attack_amp  : in  signed(31 downto 0);
+            sustain_amp : in  signed(31 downto 0);
+            release_amp : in  signed(31 downto 0);
+            wave        : out signed(31 downto 0)
            );
-    end component noise;
+    end component adsr;
  
     signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -113,10 +119,10 @@ architecture Behavioral of hwt_noise is
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
-    signal o_RAMAddr_noise : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
-	signal o_RAMData_noise : std_logic_vector(0 to 31);   -- noise to local ram
-	signal i_RAMData_noise : std_logic_vector(0 to 31);   -- local ram to noise
-    signal o_RAMWE_noise   : std_logic;
+    signal o_RAMAddr_adsr : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_adsr : std_logic_vector(0 to 31);   -- adsr to local ram
+	signal i_RAMData_adsr : std_logic_vector(0 to 31);   -- local ram to adsr
+    signal o_RAMWE_adsr   : std_logic;
 	
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
@@ -139,16 +145,16 @@ architecture Behavioral of hwt_noise is
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal noise_ce            : std_logic;           -- noise clock enable (like a start/stop signal)
+    signal adsr_ce            : std_logic;           -- adsr clock enable (like a start/stop signal)
     
-    signal noise_data      : signed(31 downto 0);
+    signal adsr_data      : signed(31 downto 0);
     
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant NOISE_START : std_logic_vector(31 downto 0) := x"0000000F";
-    constant NOISE_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    constant ADSR_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant ADSR_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
 
 begin
     -----------------------------------
@@ -156,7 +162,7 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_noise <= std_logic_vector(noise_data);
+    o_RAMData_adsr <= std_logic_vector(adsr_data);
     
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
@@ -198,16 +204,14 @@ begin
 	);
             
     -- /ReconOS Stuff
-    NOISE_INST : noise
+    adsr_INST : adsr
     generic map(
-		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ,
-		NOISE        => WAVEFORM_TYPE'val(SND_COMP_NOISE_TPYE)
 	 )
     port map( 
             clk          => clk,
             rst          => rst,
-            ce           => noise_ce,
-            data         => noise_data
+            ce           => adsr_ce,
+            data         => adsr_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -224,16 +228,16 @@ begin
     local_ram_ctrl_2 : process (clk) is
 	begin
 		if (rising_edge(clk)) then		
-			if (o_RAMWE_noise = '1') then
-				local_ram(to_integer(unsigned(o_RAMAddr_noise))) := o_RAMData_noise;
-            --else      -- else not needed, because noise is not consuming any samples
-			--	i_RAMData_noise <= local_ram(conv_integer(unsigned(o_RAMAddr_noise)));
+			if (o_RAMWE_adsr = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_adsr))) := o_RAMData_adsr;
+            --else      -- else not needed, because adsr is not consuming any samples
+			--	i_RAMData_adsr <= local_ram(conv_integer(unsigned(o_RAMAddr_adsr)));
 			end if;
 		end if;
 	end process;
     
     
-    NOISE_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
+    ADSR_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
         variable done : boolean;            
     begin
         if rst = '1' then
@@ -245,15 +249,15 @@ begin
             state           <= STATE_INIT;
             sample_count    <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
             osif_ctrl_signal <= (others => '0');
-            noise_ce       <= '0';
-            o_RAMWE_noise  <= '0';
+            adsr_ce       <= '0';
+            o_RAMWE_adsr  <= '0';
             
             done := False;
               
         elsif rising_edge(clk) then
             
-            noise_ce      <= '0';
-            o_RAMWE_noise <= '0';
+            adsr_ce      <= '0';
+            o_RAMWE_adsr <= '0';
             osif_ctrl_signal <= ( others => '0');
             
             case state is            
@@ -268,13 +272,13 @@ begin
                 -- Software process "Synthesizer" sends the start signal via mbox_start
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
                 if done then
-                    if osif_ctrl_signal = NOISE_START then
+                    if osif_ctrl_signal = ADSR_START then
                         
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
 
                         state        <= STATE_PROCESS;
 
-                    elsif osif_ctrl_signal = NOISE_EXIT then
+                    elsif osif_ctrl_signal = ADSR_EXIT then
                         
                         state   <= STATE_EXIT;
 
@@ -284,9 +288,9 @@ begin
             when STATE_PROCESS =>
                 if sample_count > 0 then
                     
-                    noise_ce        <= '1';
-                    o_RAMWE_noise   <= '1';
-                    o_RAMAddr_noise <= std_logic_vector(unsigned(o_RAMAddr_noise) + 1);
+                    adsr_ce        <= '1';
+                    o_RAMWE_adsr   <= '1';
+                    o_RAMAddr_adsr <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
                     sample_count  <= sample_count - 1;
                 else
                     -- Samples have been generated
