@@ -72,8 +72,9 @@
 		i2c@41600000 {
                         compatible = "xlnx,axi-iic-1.01.b", "xlnx,xps-iic-2.00.a";
                         interrupt-parent = <&ps7_scugic_0>;
-                        interrupts = <0 59 4>; // take IRQ from PS in XPS, take number in first column and substract 32
-			reg = <0x41600000 0x10000>;
+//                        interrupts = <0 59 4>; // take IRQ from PS in XPS, take number in first column and substract 32; for base design with audio
+                        interrupts = <0 57 4>; // take IRQ from PS in XPS, take number in first column and substract 32; for base design with audio and reconos
+            			reg = <0x41600000 0x10000>;
 
                         #size-cells = <0>;
                         #address-cells = <1>;
