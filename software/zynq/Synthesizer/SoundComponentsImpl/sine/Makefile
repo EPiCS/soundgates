@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS=-fPIC -shared
 
-SOURCES=impl/SineImpl_SW.cpp impl/SineImpl_HW.cpp SineSoundComponent.cpp ../SoundComponentImpl.cpp ../Port.cpp
-OBJECTS=SoundComponentImpl.o SineImpl_SW.o SineImpl_HW.o SineSoundComponent.o Port.o
+SOURCES=impl/SineImpl_SW.cpp impl/SineImpl_HW.cpp SineSoundComponent.cpp ../SoundComponentImpl.cpp ../Port.cpp ../BufferedLink.cpp
+OBJECTS=SoundComponentImpl.o SineImpl_SW.o SineImpl_HW.o SineSoundComponent.o Port.o BufferedLink.o
 
 all: compile libsine.so
 

@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS=-Wall -fPIC -O2 -c 
-SOURCES=OutputSoundComponent.cpp ../SoundComponentImpl.cpp ../Port.cpp
+SOURCES=OutputSoundComponent.cpp ../SoundComponentImpl.cpp ../Port.cpp ../BufferedLink.cpp
 LEGACY_SOURCES=Samplebuffer.c Samplebuffer_getset.c 
-OBJECTS=SoundComponentImpl.o Samplebuffer_getset.o Samplebuffer.o OutputSoundComponent.o Port.o
+OBJECTS=SoundComponentImpl.o Samplebuffer_getset.o Samplebuffer.o OutputSoundComponent.o Port.o BufferedLink.o
 
 all: compile liboutput.so
 

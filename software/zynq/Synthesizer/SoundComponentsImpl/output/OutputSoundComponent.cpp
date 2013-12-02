@@ -38,7 +38,12 @@ OutputSoundComponent::OutputSoundComponent(std::vector<std::string> params) : So
 	inports.push_back(soundInPort);
 }
 
-OutputSoundComponent::~OutputSoundComponent(){ }
+OutputSoundComponent::~OutputSoundComponent(){
+
+	buffer_stop(this->buffer);
+
+	buffer_free(this->buffer);
+}
 
 void OutputSoundComponent::process()
 {
@@ -54,6 +59,7 @@ void OutputSoundComponent::init()
 {
 
 	this->buffer = buffer_initialize(44100, 0);
-
 	buffer_start(buffer, 0);
+
+	std::cout << "Soundbuffer initialized" << std::endl;
 }

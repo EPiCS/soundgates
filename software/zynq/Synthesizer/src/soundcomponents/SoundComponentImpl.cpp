@@ -27,7 +27,7 @@ Port* SoundComponentImpl::getInport(unsigned int number){
 		return NULL;
 	}
 
-	return &(incoming.at(number));
+	return &(incoming.at(number - 1));
 }
 
 Port* SoundComponentImpl::getOutport(unsigned int number){
@@ -40,6 +40,6 @@ Port* SoundComponentImpl::getOutport(unsigned int number){
 		return NULL;
 	}
 
-	return &(outgoing.at(number));
+	return &(outgoing.at(number - 1));
 }
 
