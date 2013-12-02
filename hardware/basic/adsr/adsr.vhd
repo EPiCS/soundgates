@@ -29,15 +29,15 @@ port(
         rst         : in  std_logic;
         ce          : in  std_logic;
         input_wave  : in  signed(31 downto 0);
-        start       : in  signed(31 downto 0);
-        stop        : in  signed(31 downto 0);
-        attack      : in  signed(31 downto 0); 
-        decay       : in  signed(31 downto 0);  
-        release     : in  signed(31 downto 0);
-        start_amp   : in  signed(31 downto 0);
-        attack_amp  : in  signed(31 downto 0);
-        sustain_amp : in  signed(31 downto 0);
-        release_amp : in  signed(31 downto 0);
+        start       : in  std_logic;
+        stop        : in  std_logic;
+        attack      : in  unsigned(31 downto 0); 
+        decay       : in  unsigned(31 downto 0);  
+        release     : in  unsigned(31 downto 0);
+        start_amp   : in  unsigned(31 downto 0);
+        attack_amp  : in  unsigned(31 downto 0);
+        sustain_amp : in  unsigned(31 downto 0);
+        release_amp : in  unsigned(31 downto 0);
         wave        : out signed(31 downto 0)
     );
 
@@ -62,32 +62,33 @@ architecture Behavioral of adsr is
             else
             
             if rising_edge(clk) then
+                if stop = '1' then
+                    state <= s_release;
+                end if;
                 if ce = '1' then
-                    if start = '1' then
-                        case state is
-                            when s_attack   =>
+                    case state is
+                        when s_attack   =>
+                            if start = '1' then
                                 i_wave <= i_wave + attack;
                                 if i_wave >= attack_amp then
                                     state <= s_decay;
                                 end if;
-                            when s_decay    =>
-                                i_wave <= i_wave - decay;
-                                if i_wave <= sustain_amp then
-                                    state <= s_sustain;
-                                end if;
-                            when s_sustain  =>
-                                if stop = '1' then
-                                    state <= s_release;
-                                end if;
-                            when s_release  =>
-                                i_wave <= i_wave - release;
-                                if i_wave <= release_amp then
-                                    state <= s_exit;
-                                end if;
-					        when s_exit		=>
-						        state <= s_attack;
-                        end case;
-                    end if; 
+                            end if;
+                        when s_decay    =>
+                            i_wave <= i_wave - decay;
+                            if i_wave <= sustain_amp then
+                                state <= s_sustain;
+                            end if;
+                        when s_sustain  =>
+                            
+                        when s_release  =>
+                            i_wave <= i_wave - release;
+                            if i_wave <= release_amp then
+                                state <= s_exit;
+                            end if;
+				        when s_exit		=>
+					        state <= s_attack;
+                    end case;
                 end if;                       
             end if;
 		end if;

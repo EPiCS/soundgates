@@ -30,6 +30,17 @@ typedef struct {
 	int phase_increment;
 } sNcoComponentHeader;
 
+typedef struct {
+    int* bang;
+    int* atck_dura;
+    int* dcay_dura;
+    int* rlse_dura;
+    int* strt_amp;
+    int* atck_amp;
+    int* sust_amp;
+    int* rlse_amp;
+} sADSRComponentHeader;
+
 struct sNCO_struct{
 
 

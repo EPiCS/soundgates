@@ -74,15 +74,15 @@ architecture Behavioral of hwt_adsr is
             rst         : in  std_logic;
             ce          : in  std_logic;
             input_wave  : in  signed(31 downto 0);
-            start       : in  signed(31 downto 0);
-            stop        : in  signed(31 downto 0);
-            attack      : in  signed(31 downto 0); 
-            decay       : in  signed(31 downto 0);  
-            release     : in  signed(31 downto 0);
-            start_amp   : in  signed(31 downto 0);
-            attack_amp  : in  signed(31 downto 0);
-            sustain_amp : in  signed(31 downto 0);
-            release_amp : in  signed(31 downto 0);
+            start       : in  std_logic;
+            stop        : in  std_logic;
+            attack      : in  unsigned(31 downto 0); 
+            decay       : in  unsigned(31 downto 0);  
+            release     : in  unsigned(31 downto 0);
+            start_amp   : in  unsigned(31 downto 0);
+            attack_amp  : in  unsigned(31 downto 0);
+            sustain_amp : in  unsigned(31 downto 0);
+            release_amp : in  unsigned(31 downto 0);
             wave        : out signed(31 downto 0)
            );
     end component adsr;
@@ -145,9 +145,24 @@ architecture Behavioral of hwt_adsr is
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal adsr_ce            : std_logic;           -- adsr clock enable (like a start/stop signal)
+    signal adsr_ce          : std_logic;           -- adsr clock enable (like a start/stop signal)
     
-    signal adsr_data      : signed(31 downto 0);
+    signal input_data       : signed(31 downto 0);
+    signal adsr_data        : signed(31 downto 0);
+    signal start            : std_logic;
+    signal stop             : std_logic;
+    
+    signal refresh_state    : unsigned(2 downto 0);
+    
+    signal atck_dura        : unsigned(31 downto 0);
+    signal dcay_dura        : unsigned(31 downto 0);
+    signal rlse_dura        : unsigned(31 downto 0);
+    signal strt_amp         : unsigned(31 downto 0);
+    signal atck_amp         : unsigned(31 downto 0);
+    signal sust_amp         : unsigned(31 downto 0);
+    signal rlse_amp         : unsigned(31 downto 0);
+    
+    
     
     ----------------------------------------------------------------
     -- OS Communication
@@ -155,6 +170,10 @@ architecture Behavioral of hwt_adsr is
     
     constant ADSR_START : std_logic_vector(31 downto 0) := x"0000000F";
     constant ADSR_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    
+    constant START_BANG : std_logic_vector(31 downto 0) := x"00000001";
+    constant STOP_BANG  : std_logic_vector(31 downto 0) := x"FFFFFFFF";
+    constant WORKING    : std_logic_vector(31 downto 0) := x"00000000";
 
 begin
     -----------------------------------
@@ -163,6 +182,8 @@ begin
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
     o_RAMData_adsr <= std_logic_vector(adsr_data);
+    
+    
     
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
@@ -205,13 +226,21 @@ begin
             
     -- /ReconOS Stuff
     adsr_INST : adsr
-    generic map(
-	 )
     port map( 
-            clk          => clk,
-            rst          => rst,
-            ce           => adsr_ce,
-            data         => adsr_data
+            clk         => clk,
+            rst         => rst,
+            ce          => adsr_ce,
+            input_wave  => input_data,
+            start       => start,
+            stop        => stop,
+            attack      => atck_dura,
+            decay       => dcay_dura, 
+            release     => rlse_dura,
+            start_amp   => strt_amp,
+            attack_amp  => atck_amp,
+            sustain_amp => sust_amp,
+            release_amp => rlse_amp,
+            wave        => adsr_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -249,8 +278,21 @@ begin
             state           <= STATE_INIT;
             sample_count    <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
             osif_ctrl_signal <= (others => '0');
-            adsr_ce       <= '0';
-            o_RAMWE_adsr  <= '0';
+            
+            
+            adsr_ce     <= '0';
+            start       <= '0';
+            stop        <= '0';
+            attack      <= (others => '0');
+            decay       <= (others => '0');
+            release     <= (others => '0');
+            start_amp   <= (others => '0');
+            attack_amp  <= (others => '0');
+            sustain_amp <= (others => '0');
+            release_amp <= (others => '0');
+            o_RAMWE_adsr<= '0';
+            
+            refresh_state <= 0;
             
             done := False;
               
@@ -261,11 +303,14 @@ begin
             osif_ctrl_signal <= ( others => '0');
             
             case state is            
-            when STATE_INIT =>
+            -- INIT State gets the address of the header struct
+            when STATE_INIT =>               
 
-                -- Init not used
-
-                state <= STATE_WAITING;           
+                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);         
+                if done then
+                    struct_addr      <= snd_comp_header.opt_arg_addr;
+                    state <= STATE_REFRESH;
+                end if;            
             
             when STATE_WAITING =>
 
@@ -276,7 +321,7 @@ begin
                         
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
 
-                        state        <= STATE_PROCESS;
+                        state        <= STATE_REFRESH_INPUT_PHASE_OFFSET;
 
                     elsif osif_ctrl_signal = ADSR_EXIT then
                         
@@ -284,16 +329,65 @@ begin
 
                     end if;    
                 end if;
+                 
+            when STATE_REFRESH =>
+                
+                -- Refresh your signals
+                
+                case refresh_state is
+                when "0" => 
+                    memif_read_word(i_memif, o_memif, struct_addr + 4, atck_dura, done);
+                    if done then
+                        refresh_state <= "1";
+                    end if;
+                when "1" => 
+                    memif_read_word(i_memif, o_memif, struct_addr + 8, dcay_dura, done);
+                    if done then
+                        refresh_state <= "2";
+                    end if;
+                when "2" =>
+                    memif_read_word(i_memif, o_memif, struct_addr + 12, rlse_dura, done);
+                    if done then
+                        refresh_state <= "3";
+                    end if;
+                when "3" =>    
+                    memif_read_word(i_memif, o_memif, struct_addr + 16, strt_amp, done);
+                    if done then
+                        refresh_state <= "4";
+                    end if;
+                when "4" =>
+                    memif_read_word(i_memif, o_memif, struct_addr + 20, atck_amp, done);
+                    if done then
+                        refresh_state <= "5";
+                    end if;
+                when "5" => 
+                    memif_read_word(i_memif, o_memif, struct_addr + 24, sust_amp, done);
+                    if done then
+                        refresh_state <= "6";
+                    end if;
+                when "6" => 
+                    memif_read_word(i_memif, o_memif, struct_addr + 28, rlse_amp, done);
+                    if done then
+                        refresh_state <= "0";
+                        state <= STATE_CHECK_BANG;
+                    end if;
+                
+            when STATE_CHECK_BANG =>    
+                memif_read_word(i_memif, o_memif, struct_addr, atck_dura, done);
+                if done then
+                    state <= ;
+                end if;
                 
             when STATE_PROCESS =>
                 if sample_count > 0 then
                     
-                    adsr_ce        <= '1';
+                    adsr_ce        <= '1'; -- ein takt früher
                     o_RAMWE_adsr   <= '1';
                     o_RAMAddr_adsr <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
                     sample_count  <= sample_count - 1;
                 else
                     -- Samples have been generated
+                    o_RAMAddr_adsr <= (others => '0');
                     state <= STATE_WRITE_MEM;
                 end if;
 
@@ -317,6 +411,7 @@ begin
             end case;
         end if;
     end process;
+
 
 end Behavioral;
 
