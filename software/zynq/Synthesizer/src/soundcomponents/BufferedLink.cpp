@@ -12,7 +12,11 @@
 /*
  * bufferdepth in bytes
  */
+// TODO Setting source/dest and doing so on the links should be done in one single function. Right now the nodes on the link are set here in the constructor and the buffer later for the links
 BufferedLink::BufferedLink(Node *source, Node* dest, int bufferdepth) : Link(source, dest){
+	this->setSource(source);
+	this->setDestination(dest);
+
 	this->bufferdepth = bufferdepth;
 	this->readbuffer = new char[bufferdepth];
 	this->writebuffer = new char[bufferdepth];

@@ -10,9 +10,9 @@
 #include "Port.h"
 
 
-
 Port::Port(int number){
 
+	this->link = 0;
 	this->number = number;
 }
 
@@ -25,12 +25,10 @@ int Port::getPortNumber(){
 
 
 BufferedLink* Port::getBufferedLink(){
-
 	return this->link;
 }
 
 void Port::setBufferedLink(BufferedLink* link){
-
 	this->link = link;
 }
 
