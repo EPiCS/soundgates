@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link soundgates.AtomicSoundComponent#getIntegerProperties <em>Integer Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getBooleanProperties <em>Boolean Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getStringProperties <em>String Properties</em>}</li>
+ *   <li>{@link soundgates.AtomicSoundComponent#getUserStringProperties <em>User String Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getType <em>Type</em>}</li>
  * </ul>
  * </p>
@@ -96,6 +97,23 @@ public interface AtomicSoundComponent extends SoundComponent {
 	 * @generated
 	 */
 	EMap<String, String> getStringProperties();
+
+	/**
+	 * Returns the value of the '<em><b>User String Properties</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link java.lang.String},
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>User String Properties</em>' map isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>User String Properties</em>' map.
+	 * @see soundgates.SoundgatesPackage#getAtomicSoundComponent_UserStringProperties()
+	 * @model mapType="soundgates.EStringToEString<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
+	 * @generated
+	 */
+	EMap<String, String> getUserStringProperties();
 
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.

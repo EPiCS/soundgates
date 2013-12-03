@@ -43,6 +43,14 @@ public class Exporter {
 			booleanProperty.setAttribute("Value",atomicSoundComponent.getBooleanProperties().get(i).getValue().toString());						
 			properties.appendChild(booleanProperty);
 		}
+		
+		//user string properties
+		for(int i=0; i<atomicSoundComponent.getUserStringProperties().size(); i++){						
+			Element userStringProperty = doc.createElement("UserStringProperty");						
+			userStringProperty.setAttribute("Name",atomicSoundComponent.getUserStringProperties().get(i).getKey().toString());
+			userStringProperty.setAttribute("Value",atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());						
+			properties.appendChild(userStringProperty);
+		}
 		atomicSoundComponentElement.appendChild(properties);
 		
 		return atomicSoundComponentElement;

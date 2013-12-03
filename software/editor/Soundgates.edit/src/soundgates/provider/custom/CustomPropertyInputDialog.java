@@ -60,6 +60,8 @@ public class CustomPropertyInputDialog extends Dialog {
 				.keySet());
 		keysSorted.addAll(getAtomicSoundComponent().getFloatProperties()
 				.keySet());
+		keysSorted.addAll(getAtomicSoundComponent().getUserStringProperties()
+				.keySet());
 
 		Collections.sort(keysSorted);
 		Iterator<String> it = keysSorted.iterator();
@@ -71,6 +73,8 @@ public class CustomPropertyInputDialog extends Dialog {
 			final boolean b = getAtomicSoundComponent().getBooleanProperties()
 					.containsKey(key);
 			final boolean i = getAtomicSoundComponent().getIntegerProperties()
+					.containsKey(key);
+			final boolean s = getAtomicSoundComponent().getUserStringProperties()
 					.containsKey(key);
 
 			Label label = new Label(composite, SWT.WRAP);
@@ -104,6 +108,10 @@ public class CustomPropertyInputDialog extends Dialog {
 					text.setText(getAtomicSoundComponent().getFloatProperties()
 							.get(key).toString());
 					desc = desc + " (Float)";
+				} else if (s) {
+					text.setText(getAtomicSoundComponent().getUserStringProperties()
+							.get(key).toString());
+					desc = desc + " (String)";
 				}
 				
 				text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
@@ -131,7 +139,10 @@ public class CustomPropertyInputDialog extends Dialog {
 					.keySet());
 			keys.addAll(getAtomicSoundComponent().getIntegerProperties()
 					.keySet());
-			keys.addAll(getAtomicSoundComponent().getFloatProperties().keySet());
+			keys.addAll(getAtomicSoundComponent().getFloatProperties().
+					keySet());
+			keys.addAll(getAtomicSoundComponent().getUserStringProperties().
+					keySet());
 			Iterator<String> it = keys.iterator();
 
 			while (it.hasNext()) {
@@ -165,6 +176,14 @@ public class CustomPropertyInputDialog extends Dialog {
 						getAtomicSoundComponent().getFloatProperties().put(
 								desc, value);
 					}
+					
+					if (getAtomicSoundComponent().getUserStringProperties()
+							.containsKey(desc)) {
+						String value = inputTexts.get(desc).getText();
+						getAtomicSoundComponent().getUserStringProperties().put(
+								desc, value);
+					}
+					
 				} catch (IllegalStateException e) {
 				}
 			}

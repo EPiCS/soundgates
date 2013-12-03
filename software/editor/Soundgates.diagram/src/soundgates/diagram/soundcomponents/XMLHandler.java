@@ -64,9 +64,12 @@ public class XMLHandler {
 							.getNamedItem(valueString).getNodeValue());
 				}
 				soundComponent.getFloatProperties().put(propertyName, propertyValue);
-			}
-	
+			}	
+			
 			properties = propertiesNode.getElementsByTagName("IntProperty");
+			if(properties.getLength()==0)
+				properties = propertiesNode.getElementsByTagName("IntegerProperty");
+			
 			for (int property = 0; property < properties.getLength(); property++) {
 				String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
 						.getTextContent();
@@ -78,7 +81,10 @@ public class XMLHandler {
 				soundComponent.getIntegerProperties().put(propertyName, propertyValue);
 			}
 	
-			properties = propertiesNode.getElementsByTagName(valueString);
+			properties = propertiesNode.getElementsByTagName("BoolProperty");
+			if(properties.getLength()==0)
+				properties = propertiesNode.getElementsByTagName("BooleanProperty");
+			
 			for (int property = 0; property < properties.getLength(); property++) {
 				String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
 						.getTextContent();
@@ -88,6 +94,18 @@ public class XMLHandler {
 							.getNamedItem(valueString).getNodeValue());
 				}
 				soundComponent.getBooleanProperties().put(propertyName, propertyValue);
+			}
+			
+			properties = propertiesNode.getElementsByTagName("UserStringProperty");
+			for (int property = 0; property < properties.getLength(); property++) {
+				String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
+						.getTextContent();
+				String propertyValue = "";
+				if (properties.item(property).getAttributes().getNamedItem(valueString) != null) {
+					propertyValue = properties.item(property).getAttributes()
+							.getNamedItem(valueString).getNodeValue();
+				}
+				soundComponent.getUserStringProperties().put(propertyName, propertyValue);
 			}
 		}
 	}
