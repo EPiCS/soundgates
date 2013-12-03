@@ -28,10 +28,10 @@ void SineImpl_SW::process() {
 
 	float phase_incr = 0.0;
 
+	phase_incr = getPhaseIncrement(440.0);
 	for (int i = 0; i < targetBufferSize / 4; i++) {
 
 //		phase_incr = getPhaseIncrement(sourceBuffer[i]);
-		phase_incr = getPhaseIncrement(220.0);
 
 		targetBuffer[i] = sin(phase) * INT_MAX;
 

@@ -95,5 +95,8 @@ void Patch::run(){
 
 void Patch::stop(){
 
+	for(vector<SoundComponent*>::iterator iter = components.begin(); iter != components.end(); ++iter ){
 
+			(*iter)->join();
+	}
 }

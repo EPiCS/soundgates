@@ -12,7 +12,7 @@
 
 Port::Port(int number){
 
-	this->link = 0;
+	this->link = NULL;
 	this->number = number;
 }
 

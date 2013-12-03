@@ -8,7 +8,7 @@
 #ifndef PORT_H_
 #define PORT_H_
 
-
+#include <cstdlib>
 #include "BufferedLink.h"
 
 class Port {

@@ -13,7 +13,6 @@ namespace Synthesizer{
 
 }
 
-
 namespace SoundComponents{
 
 	enum ImplType { HW, SW, SIZE_OF_IMPLTYPES};
