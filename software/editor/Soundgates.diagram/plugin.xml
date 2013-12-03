@@ -122,6 +122,25 @@
                menubarPath="Soundgates.codegen.menu/group">
          </action>
       </objectContribution>
+      <objectContribution
+            id="Soundgates.diagram.export.ImportPatch"
+            objectClass="org.eclipse.core.resources.IProject">
+         <menu
+               id="Soundgates.diagram.menu"
+               label="Soundgates"
+               path="additions">
+            <separator
+                  name="group">
+            </separator>
+         </menu>
+         <action
+               class="soundgates.diagram.actions.ImportPatchAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.ImportPatchAction"
+               label="Import Patch from XML"
+               menubarPath="Soundgates.diagram.menu/group">
+         </action>
+      </objectContribution>
    </extension>
 	
    <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">

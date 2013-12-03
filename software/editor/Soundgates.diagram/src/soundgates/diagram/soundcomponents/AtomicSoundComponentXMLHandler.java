@@ -22,7 +22,7 @@ import soundgates.SoundgatesFactory;
  * @author gwue
  *
  */
-public class AtomicSoundComponentXMLHandler extends XMLHandler{
+public class AtomicSoundComponentXMLHandler{
 	
 
 	public static String NODENAME_SIMULATION = "Simulation";
@@ -59,10 +59,10 @@ public class AtomicSoundComponentXMLHandler extends XMLHandler{
 						soundComponent.setType(type);
 						
 						NodeList portList = element.getElementsByTagName("Port");						
-						addPortsToSoundComponentFromPortList(soundComponent, portList);
+						XMLHandler.addPortsToSoundComponentFromPortList(soundComponent, portList);
 
 						Element propertiesNode = (Element) element.getElementsByTagName("Properties").item(0);
-						addPropertiesToSoundComponentFromPropertiesElement(soundComponent, propertiesNode, "InitialValue");						
+						XMLHandler.addPropertiesToSoundComponentFromPropertiesElement(soundComponent, propertiesNode, "InitialValue");						
 						
 						Element codeNode = (Element) element.getElementsByTagName("Code").item(0);
 						if (codeNode != null){

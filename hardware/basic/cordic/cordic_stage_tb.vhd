@@ -32,8 +32,8 @@ use ieee.math_real.ALL;
 -- arithmetic functions with Signed or Unsigned values
 USE ieee.numeric_std.ALL;
  
-library soundgates;
-use soundgates.soundcomponents.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 ENTITY cordic_stage_tb IS
 END cordic_stage_tb;

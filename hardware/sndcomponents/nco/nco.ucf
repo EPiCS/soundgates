@@ -1,0 +1,4 @@
+
+#Created by Constraints Editor (xc7z020-clg484-1) - 2013/11/14
+NET "clk" TNM_NET = clk;
+TIMESPEC TS_clk = PERIOD "clk" 10 ns HIGH 50%;
