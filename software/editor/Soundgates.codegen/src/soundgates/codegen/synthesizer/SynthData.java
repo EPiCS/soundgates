@@ -6,11 +6,11 @@ import java.util.List;
 public class SynthData {
 	List<ComponentData> components = new LinkedList<ComponentData>();
 	List<LinkData> links = new LinkedList<LinkData>();
-	public void addComponent(){
-		components.add(new ComponentData());
+	public void addComponent(int id, String implementationType, String type, Object value, int hwSlot, String oscAddress, String oscDataType){
+		components.add(new ComponentData(id, type, implementationType, value, hwSlot, oscAddress, oscDataType));
 	}
-	public void addLink(){
-		links.add(new LinkData());
+	public void addLink(int sourcePort, int sinkPort, ComponentData source, ComponentData sink){
+		links.add(new LinkData(sourcePort, sinkPort, source, sink));
 	}
 	public List<ComponentData> getComponents(){
 		return components;		
