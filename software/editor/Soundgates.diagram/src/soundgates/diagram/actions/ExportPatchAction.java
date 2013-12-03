@@ -30,6 +30,14 @@ public class ExportPatchAction implements IObjectActionDelegate{
 
 			PatchExporter patchExporter = new PatchExporter();
 			Patch patch = patchExporter.getPatch(file.getFullPath().toPortableString());
+
+			String newFileName = file.getName().replace(".soundgates",".xml");
+			
+			if(file.getProject().getFile(newFileName).exists()){
+				if (!MessageDialogs.replaceExistingEMFFile(newFileName))
+					return;
+			}
+			
 			Tester tester = new Tester();
 			
 			if(tester.testPatch(patch) == false)

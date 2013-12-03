@@ -27,6 +27,7 @@ import soundgates.SoundgatesPackage;
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getIntegerProperties <em>Integer Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getBooleanProperties <em>Boolean Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getStringProperties <em>String Properties</em>}</li>
+ *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getUserStringProperties <em>User String Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getType <em>Type</em>}</li>
  * </ul>
  * </p>
@@ -73,6 +74,16 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	 * @ordered
 	 */
 	protected EMap<String, String> stringProperties;
+
+	/**
+	 * The cached value of the '{@link #getUserStringProperties() <em>User String Properties</em>}' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUserStringProperties()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<String, String> userStringProperties;
 
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
@@ -166,6 +177,18 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EMap<String, String> getUserStringProperties() {
+		if (userStringProperties == null) {
+			userStringProperties = new EcoreEMap<String,String>(SoundgatesPackage.Literals.ESTRING_TO_ESTRING, EStringToEStringImpl.class, this, SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES);
+		}
+		return userStringProperties;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getType() {
 		return type;
 	}
@@ -190,6 +213,8 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return ((InternalEList<?>)getBooleanProperties()).basicRemove(otherEnd, msgs);
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				return ((InternalEList<?>)getStringProperties()).basicRemove(otherEnd, msgs);
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
+				return ((InternalEList<?>)getUserStringProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -214,6 +239,9 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				if (coreType) return getStringProperties();
 				else return getStringProperties().map();
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
+				if (coreType) return getUserStringProperties();
+				else return getUserStringProperties().map();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__TYPE:
 				return getType();
 		}
@@ -264,6 +292,9 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				getStringProperties().clear();
 				return;
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
+				getUserStringProperties().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -284,6 +315,8 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return booleanProperties != null && !booleanProperties.isEmpty();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				return stringProperties != null && !stringProperties.isEmpty();
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
+				return userStringProperties != null && !userStringProperties.isEmpty();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__TYPE:
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 		}

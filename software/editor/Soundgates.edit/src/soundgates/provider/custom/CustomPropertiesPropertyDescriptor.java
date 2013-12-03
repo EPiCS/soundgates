@@ -74,6 +74,7 @@ public class CustomPropertiesPropertyDescriptor extends PropertyDescriptor {
 				keys.addAll(ats.getBooleanProperties().keySet());
 				keys.addAll(ats.getIntegerProperties().keySet());
 				keys.addAll(ats.getFloatProperties().keySet());
+				keys.addAll(ats.getUserStringProperties().keySet());
 				Collections.sort(keys);
 				Iterator<String> it = keys.iterator();
 				String result = "";
@@ -88,6 +89,9 @@ public class CustomPropertiesPropertyDescriptor extends PropertyDescriptor {
 					} else if (ats.getIntegerProperties().containsKey(s)) {
 						Integer value = ats.getIntegerProperties().get(s);
 						result = result + s + ": " + value + "; ";
+					} else if (ats.getUserStringProperties().containsKey(s)) {
+						String value = ats.getUserStringProperties().get(s);
+						result = result + s + ": \"" + value + "\"; ";
 					}
 				}
 
