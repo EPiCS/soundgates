@@ -1,40 +1,25 @@
 package de.upb.soundgates.cosmic;
 
-import java.util.Locale;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.support.v4.app.ListFragment;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.*;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import de.upb.soundgates.cosmic.osc.OSCMessage;
+import java.util.Locale;
+
+import de.upb.soundgates.cosmic.fragments.*;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
 
-    public static OSCMessageStore msg_store;
-    public static final String OSC_MSG_DELIMITER = "\\|\\|"; // always as regex!
+    /*public static OSCMessageStore msg_store;
 
     private static String host;
     private static int port;
@@ -42,7 +27,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public static String getHost() { return host; }
     public static void setHost(String h) { host = h; }
     public static int getPort() { return port; }
-    public static void setPort(int p) { port = p; }
+    public static void setPort(int p) { port = p; }*/
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -57,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    DisableSlidingViewPager mViewPager;
+    public DisableSlidingViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +82,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        CosmicPreferences prefs = new CosmicPreferences(this);
+        prefs.remove("current_host");
+        prefs.remove("current_port");
     }
 
 
@@ -183,181 +175,4 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return null;
         }
     }
-
-    public static class ConnectFragment extends Fragment implements OnClickListener, AsyncTaskListener<String> {
-        private TextView ipTextView;
-        private TextView portTextView;
-
-        String host;
-        int port;
-
-        private TCPHandshake hs;
-
-        public static ConnectFragment newInstance() {
-            ConnectFragment fragment = new ConnectFragment();
-            return fragment;
-        }
-
-        public ConnectFragment() {}
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.connect_main, container, false);
-
-            ipTextView = (TextView) rootView.findViewById(R.id.ip_edittext);
-
-            portTextView = (TextView) rootView.findViewById(R.id.port_edittext);
-
-            Button connectButton = (Button) rootView.findViewById(R.id.connect_button);
-            connectButton.setOnClickListener(this);
-
-            return rootView;
-        }
-
-        @Override
-        public void onClick(View view) {
-            host = ipTextView.getText().toString();
-
-            try {
-                port = Integer.parseInt(portTextView.getText().toString());
-            } catch(java.lang.NumberFormatException nfe) {
-                AlertDialog portAlert = new AlertDialog.Builder(getActivity()).create();
-                portAlert.setTitle("Port error");
-                portAlert.setMessage("Port \"" + portTextView.getText().toString() + "\" is not valid");
-                portAlert.show();
-                return;
-            }
-
-            hs = new TCPHandshake(host, port, this);
-            hs.execute();
-
-            // TODO: Inform user about progress
-        }
-
-        @Override
-        public void onAsyncTaskCompletion(String result) {
-
-            msg_store = new OSCMessageStore();
-            for(String msg : result.split(OSC_MSG_DELIMITER)) {
-                if(!msg_store.addOSCMessage(msg)) {
-                    Log.e(MainActivity.LOG_TAG, "Couldn't add Message:" + msg);
-                }
-            }
-
-            setHost(host);
-            setPort(port);
-
-            for(Fragment f : getFragmentManager().getFragments()) {
-                if(f instanceof SelectFragment) {
-                    ((SelectFragment)f).updateList();
-                    break;
-                }
-            }
-
-            ((MainActivity)getActivity()).mViewPager.setCurrentItem(1);
-        }
-
-        @Override
-        public void onAsyncTaskFailure(String error) {
-            final String msg = error;
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    Context context = getActivity();
-                    CharSequence text = "Error: " + msg.replaceAll("\n", "");
-                    int duration = Toast.LENGTH_SHORT;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-            });
-        }
-    }
-
-    public static class SelectFragment extends ListFragment {
-        private Button selectButton;
-
-        public static SelectFragment newInstance() {
-            SelectFragment fragment = new SelectFragment();
-            return fragment;
-        }
-
-        public SelectFragment() {}
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.select_main, container, false);
-
-            selectButton = (Button) rootView.findViewById(R.id.select_button);
-
-            selectButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    for(Fragment f : getFragmentManager().getFragments()) {
-                        if(f instanceof BindFragment) {
-                            ((BindFragment)f).updateList();
-                            break;
-                        }
-                    }
-
-                    ((MainActivity)getActivity()).mViewPager.setCurrentItem(2);
-                }
-            });
-
-            return rootView;
-        }
-
-        public void updateList()
-        {
-            if(msg_store != null)
-            {
-                ArrayAdapter<OSCMessage> adapter =
-                        new ArrayAdapter<OSCMessage>(
-                                getActivity(),
-                                android.R.layout.simple_list_item_multiple_choice,
-                                msg_store.getOSCMessageAsList()
-                        );
-                setListAdapter(adapter);
-
-                getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-                        // AdapterView is the parent class of ListView
-                        ListView lv = (ListView) arg0;
-                        msg_store.markOSCMessage(position, lv.isItemChecked(position));
-                        Log.d(MainActivity.LOG_TAG, msg_store.toString());
-                    }
-                });
-            }
-        }
-    }
-
-    public static class BindFragment extends ListFragment {
-        public static BindFragment newInstance() {
-            BindFragment fragment = new BindFragment();
-
-            return fragment;
-        }
-
-        public BindFragment() {}
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.bind_main, container, false);
-
-            return rootView;
-        }
-
-        public void updateList()
-        {
-            if(msg_store != null)
-            {
-                BindArrayAdapter adapter = new BindArrayAdapter(getActivity(), msg_store.getSelectedOSCMessageAsList(), getHost(), getPort());
-                setListAdapter(adapter);
-            }
-        }
-    }
-
 }

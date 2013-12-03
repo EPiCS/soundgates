@@ -9,8 +9,22 @@ import java.util.List;
 public class OSCMessageStore {
     List<OSCMessage> store;
 
-    public OSCMessageStore() {
+    private OSCMessageStore() {
         store = new LinkedList<OSCMessage>();
+    }
+
+    public static OSCMessageStore holder;
+    public static OSCMessageStore getInstance() {
+        if(holder == null) {
+            holder = new OSCMessageStore();
+        }
+        return holder;
+    }
+    public static OSCMessageStore hasInstance() {
+        return holder;
+    }
+    public void removeInstance() {
+        holder = null;
     }
 
     public List<OSCMessage> getOSCMessageAsList() {
