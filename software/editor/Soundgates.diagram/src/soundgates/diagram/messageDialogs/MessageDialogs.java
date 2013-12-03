@@ -4,6 +4,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 public class MessageDialogs {
 
+	
+	// --DIALOGS--
+	
 	public static boolean replaceExistingCompositeSoundComponentDialog(String name){	
 	
 	   MessageDialog dialog = new MessageDialog(
@@ -18,6 +21,20 @@ public class MessageDialogs {
 	   else return false;
 	}
 	
+	public static boolean replaceExistingEMFFile(String name){	
+		
+		   MessageDialog dialog = new MessageDialog(
+				      null, "File \""+name+"\" already exists", 
+				      null, "Do you want to replace the file \""+name+"\"?",
+				      MessageDialog.QUESTION,
+				      new String[] {"Yes", "No"},
+				      0); 
+		   
+		   int result =  dialog.open();
+		   if(result==0) return true;
+		   else return false;
+		}
+	
 	// --INFO--
 	
 	public static void compositeSoundComponentWasExported(String name){		
@@ -26,6 +43,10 @@ public class MessageDialogs {
 
 	public static void patchtWasExported(String name){		
 		MessageDialog.openInformation(null, "Success", "The patch was exported to file \""+name+"\"");	
+	}
+
+	public static void patchtWasImported(String name){		
+		MessageDialog.openInformation(null, "Success", "The patch was imported to file \""+name+"\"");	
 	}
 	
 	public static void compositeSoundComponentValidationTrue(String name) {		
@@ -97,4 +118,25 @@ public class MessageDialogs {
 	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		
 		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please remove the SoundOutput block(s) from the composite sound component \""+name+"\"");		
 	}
+	
+	public static void soundcomponentsFolderMissing(String projectName) {		
+		MessageDialog.openWarning(null, "No folder \"soundcomponents\" in the project", "Please add the folder \"soundcomponents\" to the project \""+projectName+"\"");		
+	}
+	
+	public static void atomicComponentMissing(String name) {		
+		MessageDialog.openWarning(null, "Missing atomic sound component", "The atomic sound component \""+name+"\" was not found in the folder \"soundcomponents\"");		
+	}
+	
+	public static void compositeComponentMissing(String name) {		
+		MessageDialog.openWarning(null, "Missing composite sound component", "The composite sound component \""+name+"\" was not found in the folder \"soundcomponents\" or its embedded component(s) are missing");		
+	}
+
+	public static void atomicComponentInCompositeComponentMissing(String name, String parentName) {		
+		MessageDialog.openWarning(null, "Missing atomic sound component", "The atomic sound component \""+name+"\" which is embedded in the composite sound component \""+parentName+"\" was not found in the folder \"soundcomponents\"");		
+	}
+	
+	public static void compositeComponentInCompositeComponentMissing(String name, String parentName) {		
+		MessageDialog.openWarning(null, "Missing composite sound component", "The composite sound component \""+name+"\" which is embedded in the composite sound component \""+parentName+"\" was not found in the folder \"soundcomponents\" or its embedded component(s) are missing");		
+	}
+
 }

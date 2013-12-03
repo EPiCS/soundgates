@@ -57,9 +57,16 @@ public class PatchImporter{
 
 				for (int i = 0; i < atomicSoundComponents.getLength(); i++) {					
 					Element atomicElement = (Element) atomicSoundComponents.item(i);
-					
-					AtomicSoundComponent atomicSoundComponent = 
-							AtomicSoundComponentLibrary.getInstance().createAtomicSoundComponentInstance(atomicElement.getAttribute("Type"));
+						
+					AtomicSoundComponent atomicSoundComponent = null;
+					try{
+						atomicSoundComponent = AtomicSoundComponentLibrary.getInstance().
+								createAtomicSoundComponentInstance(atomicElement.getAttribute("Type"));
+					}
+					catch(Exception e){
+						MessageDialogs.atomicComponentMissing(atomicElement.getAttribute("Type"));
+						return null;
+					}
 					
 					soundComponentsMapping.put(Integer.parseInt(atomicElement.getAttribute("Id")), atomicSoundComponent);
 					
@@ -77,8 +84,15 @@ public class PatchImporter{
 				for (int i = 0; i < compositeSoundComponents.getLength(); i++) {					
 					Element compositeElement = (Element) compositeSoundComponents.item(i);
 					
-					CompositeSoundComponent compositeSoundComponent = 
-							CompositeSoundComponentLibrary.getInstance().createCompositeSoundComponentInstance(compositeElement.getAttribute("Name"));
+					CompositeSoundComponent compositeSoundComponent = null;
+					try{
+						compositeSoundComponent = CompositeSoundComponentLibrary.getInstance().
+								createCompositeSoundComponentInstance(compositeElement.getAttribute("Name"));
+					}
+					catch(Exception e){
+						MessageDialogs.compositeComponentMissing(compositeElement.getAttribute("Name"));
+						return null;
+					}
 					
 					soundComponentsMapping.put(Integer.parseInt(compositeElement.getAttribute("Id")), compositeSoundComponent);
 					
@@ -130,17 +144,21 @@ public class PatchImporter{
 		return null;
 	}
 	
-	public void createPatchFromXML(String newFileName, String patchFile) throws IOException {  
+	public void createPatchFromXML(String newFilePath, String patchFile, String newFileName) throws IOException {  
 		  Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		  Map<String, Object> m = reg.getExtensionToFactoryMap();
 		  m.put(".soundgates", new SoundgatesFactoryImpl());
 
 		  Patch patch = getPatchXML(patchFile);
 		  
-		  ResourceSet resSet = new ResourceSetImpl();
-		  Resource resource = resSet.createResource(URI.createFileURI(newFileName));
-		  resource.getContents().add(patch);
-		  resource.save(Collections.EMPTY_MAP);
+		  if(patch!=null){
+			  ResourceSet resSet = new ResourceSetImpl();
+			  Resource resource = resSet.createResource(URI.createFileURI(newFilePath));
+			  resource.getContents().add(patch);
+			  resource.save(Collections.EMPTY_MAP);
+			  
+			  MessageDialogs.patchtWasImported(newFileName);
+		  }
 	}
 	
 }		
