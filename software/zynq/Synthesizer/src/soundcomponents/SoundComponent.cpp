@@ -12,10 +12,10 @@
 
 SoundComponent::SoundComponent(int uid, SoundComponentImpl* delegate) : Node(uid){
 
-	this->delegate = delegate;
+	this->m_pDelegate = delegate;
 
-	this->inports  = &(delegate->getInports());
-	this->outports = &(delegate->getOutports());
+	this->m_pInports  = &(delegate->getInports());
+	this->m_pOutports = &(delegate->getOutports());
 
 }
 
@@ -23,7 +23,7 @@ SoundComponent::~SoundComponent(){ }
 
 void SoundComponent::run(){
 
-	m_thread = boost::thread(&SoundComponentImpl::process, delegate);
+	m_thread = boost::thread(&SoundComponentImpl::process, m_pDelegate);
 }
 
 void SoundComponent::join(){
@@ -32,38 +32,46 @@ void SoundComponent::join(){
 }
 
 void SoundComponent::init() {
-	this->delegate->init();
+
+	this->m_pDelegate->init();
 }
 
 void SoundComponent::addOutgoingLink(Link& link, int port){
 
 	getOutgoingLinks().push_back(link);
 
-	if((int)this->outports->size() < port){
+	if((int)this->m_pOutports->size() < port){
 
 		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
 	}
-	this->outports->at(port - 1).setBufferedLink((BufferedLink*) &link);
+	this->m_pOutports->at(port - 1).setBufferedLink((BufferedLink*) &link);
 }
 
 void SoundComponent::addIncomingLink(Link& link, int port){
 
 	getIncomingLinks().push_back(link);
 
-	if((int)this->inports->size() < port){
+	if((int)this->m_pInports->size() < port){
 
 		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
 	}
 
-	this->inports->at(port - 1).setBufferedLink((BufferedLink*) &link);
+	this->m_pInports->at(port - 1).setBufferedLink((BufferedLink*) &link);
 }
 
 const vector<Port>& SoundComponent::getInports(){
 
-	return *inports;
+	return *m_pInports;
 }
 
 const vector<Port>& SoundComponent::getOutports(){
-	return *outports;
+	return *m_pOutports;
+}
+
+
+SoundComponentImpl* SoundComponent::getDelegate(){
+
+	return this->m_pDelegate;
+
 }
 

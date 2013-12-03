@@ -9,9 +9,13 @@
 #define IOSOUNDCOMPONENTNODE_H_
 
 #include <string>
+#include <stdint.h>
 #include <vector>
 
-#include "../../SoundComponentImpl.h"
+#include "SoundComponentImpl.h"
+
+
+using namespace std;
 
 /*
  * Multiport IO-Component
@@ -26,17 +30,19 @@ class InputSoundComponent : public SoundComponentImpl{
 
 private:
 
-	std::vector<std::string> oscAddresses;
+	vector<string> m_OSCAddresses;
 
 public:
 
-	InputSoundComponent(std::vector<std::string> oscaddresses);
+	InputSoundComponent() { }
+	InputSoundComponent(vector<string> oscaddresses);
 	~InputSoundComponent();
 
+	string getOscAddress(uint32_t port);
+	vector<string>& getOscAddresses();
 
-	std::string getOscAddress(int port);
-	std::vector<std::string>& getOscAddresses();
-
+	void init() { /* do not implement */ }
+	void process() { /* do not implement */ }
 };
 
 

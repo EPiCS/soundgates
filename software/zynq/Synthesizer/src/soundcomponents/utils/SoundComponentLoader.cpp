@@ -20,10 +20,17 @@ typedef const char* getComponentName_t(void);
 typedef SoundComponentImpl* createfn_t(SoundComponents::ImplType, std::vector<std::string>);
 typedef void destroyfn_t(SoundComponentImpl*);
 
+namespace sndc = SoundComponents;
+
 
 SoundComponentLoader::SoundComponentLoader(){
+	this->m_SndComponentRepository = NULL;
+	this->m_IsInitialized 		   = false;
 
-	isInitialized = false;
+	/* Register create function for predefined components */
+
+	m_PredefinedComponentsCreateFn[sndc::PredefinedComponentsNames[sndc::INPUT]] = &createInstance<InputSoundComponent>;
+
 }
 
 
@@ -31,9 +38,9 @@ SoundComponentLoader::~SoundComponentLoader(){ }
 
 void SoundComponentLoader::initialize(std::string repository){
 
-	this->repository = new std::string(repository);
+	this->m_SndComponentRepository = new std::string(repository);
 
-	if(!isInitialized){
+	if(!m_IsInitialized){
 
 		if(!fs::exists(repository)){
 
@@ -53,29 +60,29 @@ void SoundComponentLoader::initialize(std::string repository){
 		}
 	}
 
-	isInitialized = true;
+	m_IsInitialized = true;
 }
 
 void SoundComponentLoader::finailize(){
 
 
-	if(isInitialized){
+	if(m_IsInitialized){
 
 	BOOST_LOG_TRIVIAL(debug)<< "Closing library components";
 
 		/* Free components */
-		for(std::vector<SoundComponentImpl*>::iterator iter = instances.begin(); iter != instances.end();) {
+		for(std::vector<SoundComponentImpl*>::iterator iter = m_RegisteredSndInstances.begin(); iter != m_RegisteredSndInstances.end();) {
 
 			BOOST_LOG_TRIVIAL(debug) << "Cleaning up soundcomponent: " << *iter;
 
 			delete (*iter);
 
-			iter = instances.erase(iter);
+			iter = m_RegisteredSndInstances.erase(iter);
 		}
 
 		/* Clean library handles */
 
-		for(std::map<std::string, void*>::iterator iter =factory.begin(), end = factory.end();
+		for(std::map<std::string, void*>::iterator iter =m_Factory.begin(), end = m_Factory.end();
 				iter != end; ++iter) {
 
 			BOOST_LOG_TRIVIAL(debug) << "Closing library of component type " << iter->first;
@@ -112,7 +119,7 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 
 		BOOST_LOG_TRIVIAL(info) << "Loading sound component of type " << componenttype;
 
-		this->factory[componenttype] = libhndl;
+		this->m_Factory[componenttype] = libhndl;
 
 		BOOST_LOG_TRIVIAL(debug) << "Library handle " << libhndl << " successfully stored";
 	}
@@ -122,34 +129,59 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 
 SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params){
 
-	BOOST_LOG_TRIVIAL(debug) << "Creating component from library of type " << type;
+	SoundComponentImpl* component = NULL;
 
-	char *liberror;
-	void* libhndl;
+	/* Check if its a predefined component */
 
-	std::map<std::string, void*>::const_iterator it = factory.find(type);
+	bool ispredefined = false;
+	for(int i = 0; i < sndc::SIZE_OF_PREDEF_COMPONENTS; i++){
 
-	if(it == factory.end()){
-
-		BOOST_LOG_TRIVIAL(info) << "Cannot create component of type \"" << type << " \": library not present";
-		return NULL;
+		if(!type.compare(sndc::PredefinedComponentsNames[i])){
+			ispredefined = true;
+			break;
+		}
 	}
 
-	libhndl = it->second;
+	if(ispredefined){
 
-	createfn_t* createfn = (createfn_t*) dlsym(libhndl, SoundComponentLoader::createFcnSymbol);
+		BOOST_LOG_TRIVIAL(info) << "Creating predefined component of type " << type;
 
-	if ((liberror = dlerror()) != NULL) {
-		BOOST_LOG_TRIVIAL(error) << "Could not resolve library symbol \"" << SoundComponentLoader::createFcnSymbol << "\" in library of type " << type;
+		component = m_PredefinedComponentsCreateFn[type](params);
+
+	}else{
+
+
+		BOOST_LOG_TRIVIAL(debug) << "Creating component from library of type " << type;
+
+		char *liberror;
+		void* libhndl;
+
+		std::map<std::string, void*>::const_iterator it = m_Factory.find(type);
+
+		if(it == m_Factory.end()){
+
+			BOOST_LOG_TRIVIAL(info) << "Cannot create component of type \"" << type << " \": library not present";
+			return NULL;
+		}
+
+		libhndl = it->second;
+
+		createfn_t* createfn = (createfn_t*) dlsym(libhndl, SoundComponentLoader::createFcnSymbol);
+
+		if ((liberror = dlerror()) != NULL) {
+			BOOST_LOG_TRIVIAL(error) << "Could not resolve library symbol \"" << SoundComponentLoader::createFcnSymbol << "\" in library of type " << type;
+		}
+
+		if(NULL == createfn){
+			BOOST_LOG_TRIVIAL(error) << "Create function is null";
+		}
+
+		component = createfn(impltype, params);
 	}
 
-	if(NULL == createfn){
-		BOOST_LOG_TRIVIAL(error) << "Create function is null";
-	}
 
-	SoundComponentImpl* component = createfn(impltype, params);
 
-	instances.push_back(component);
+	m_RegisteredSndInstances.push_back(component);
 
 	return component;
 }

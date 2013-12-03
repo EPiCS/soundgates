@@ -11,27 +11,29 @@ namespace ui {
 
 void UIManager::startXMLRPCServer() {
 
-	if (!initialized) {
+	if (!m_initialized) {
 
 		BOOST_LOG_TRIVIAL(info) << "Starting rpc service";
 
 		xmlrpc_c::methodPtr const registerDeviceHandlePtr(new RegisterDeviceHandler);
-		rpcregistry.addMethod("synthesizer.registerDevice", registerDeviceHandlePtr);
+		xmlrpc_c::methodPtr const interactiveComponentsHandlerPtr(new InteractiveComponentHandler(m_pCurrentPatch));
 
-		rpcserver = new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryP(&rpcregistry).portNumber(50500));
+		m_rpcregistry.addMethod("synthesizer.registerDevice", registerDeviceHandlePtr);
+		m_rpcregistry.addMethod("synthesizer.getInputComponents", interactiveComponentsHandlerPtr);
 
-		initialized = true;
+		m_pRPCserver = new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryP(&m_rpcregistry).portNumber(50500));
 
-		m_rpcserver_thread = boost::thread(&xmlrpc_c::serverAbyss::run, rpcserver);
+		m_initialized = true;
+
+		m_rpcserver_thread = boost::thread(&xmlrpc_c::serverAbyss::run, m_pRPCserver);
 	}
 }
 
 void UIManager::stopXMLRPCServer() {
 
+	if(m_initialized){
 
-	if(initialized){
-
-		rpcserver->terminate();
+		m_pRPCserver->terminate();
 
 		m_rpcserver_thread.join();
 
@@ -40,7 +42,7 @@ void UIManager::stopXMLRPCServer() {
 
 const vector<SoundComponent*>& UIManager::getInteractiveComponents() {
 
-	return interactivecomponents;
+	return m_InteractiveComponents;
 }
 
 }

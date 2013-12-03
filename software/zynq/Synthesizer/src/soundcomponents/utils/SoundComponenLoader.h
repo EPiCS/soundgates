@@ -16,8 +16,11 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/algorithm/string/find.hpp>
 
-#include "../SoundComponentImpl.h"
+#include "../SoundComponent.h"
+#include "../InputSoundComponent.h"
+
 #include "../../Synthesizer.h"
 
 typedef SoundComponentImpl* createfcn();
@@ -41,15 +44,17 @@ private:
 
 	~SoundComponentLoader();
 
-	bool isInitialized;
+	bool 		 m_IsInitialized;
 
-	std::string* repository;
+	std::string* m_SndComponentRepository;
+
+	std::map<std::string, SoundComponentImpl*(*)(std::vector<std::string>)> 	  m_PredefinedComponentsCreateFn;
 
 	/* maps a sound component name to its library handle */
-	std::map<std::string, void*, std::less<std::string> > factory;
+	std::map<std::string, void*, std::less<std::string> > m_Factory;
 
 	/* keeps track of all created instances */
-	std::vector<SoundComponentImpl*> instances;
+	std::vector<SoundComponentImpl*> m_RegisteredSndInstances;
 
 public:
 	static SoundComponentLoader& getInstance(){

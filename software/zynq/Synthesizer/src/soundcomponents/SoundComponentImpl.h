@@ -25,6 +25,7 @@ private:
 	vector<string> parameters;
 
 public:
+
 	SoundComponentImpl();
 	SoundComponentImpl(vector<string> parameters);
 
@@ -44,5 +45,6 @@ public:
 
 };
 
+template<typename T> SoundComponentImpl * createInstance(vector<string> params) { return new T(params); }
 
 #endif /* SOUNDCOMPONENTIMPL_H_ */

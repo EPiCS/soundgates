@@ -64,16 +64,15 @@ int main( int argc, const char* argv[])
 
 		delete foo;
 	}
-
-
-	ui::UIManager::getInstance().startXMLRPCServer();
+	ui::UIManager& uimanagerinstance = ui::UIManager::getInstance();
+	uimanagerinstance.setCurrentPatch(patch);
+	uimanagerinstance.startXMLRPCServer();
 
 	patch->initialize();
 
 	while(true) {
 
 		patch->run();
-
 	}
 
 	return 0;

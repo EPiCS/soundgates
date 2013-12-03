@@ -18,9 +18,12 @@
 
 #include <boost/log/trivial.hpp>
 
+#include "../Synthesizer.h"
+#include "../Patch.h"
 
 #include "handler/RegisterDeviceHandler.h"
-#include "../soundcomponents/SoundComponent.h"
+#include "handler/InteractiveComponentHandler.h"
+
 
 namespace ui {
 
@@ -29,18 +32,28 @@ class UIManager {
 private:
 
 	UIManager(){
-		initialized = false;
+		m_pCurrentPatch = NULL;
+		m_pRPCserver  	= NULL;
+		m_initialized 	= false;
 	}
+
+	~UIManager(){
+
+		stopXMLRPCServer();
+	}
+
 	UIManager(UIManager const&);
 	void operator=(UIManager const&);
 
-	std::vector<SoundComponent*> interactivecomponents;
-	xmlrpc_c::registry rpcregistry;
-	xmlrpc_c::serverAbyss* rpcserver;
+	std::vector<SoundComponent*> 	m_InteractiveComponents;
+	xmlrpc_c::registry 				m_rpcregistry;
+	xmlrpc_c::serverAbyss* 			m_pRPCserver;
 
-	boost::thread m_rpcserver_thread;
+	boost::thread 					m_rpcserver_thread;
+	bool 							m_initialized;
 
-	bool initialized;
+	Patch*							m_pCurrentPatch;
+
 
 public:
 	static UIManager& getInstance() {
@@ -53,6 +66,8 @@ public:
 
 	void startXMLRPCServer();
 	void stopXMLRPCServer();
+
+	void setCurrentPatch(Patch* patch){ m_pCurrentPatch = patch;}
 
 };
 

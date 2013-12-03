@@ -11,12 +11,13 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <typeinfo>
 
 #include "Synthesizer.h"
 
 #include <boost/log/trivial.hpp>
-
 #include "soundcomponents/SoundComponent.h"
+#include "soundcomponents/InputSoundComponent.h"
 #include "soundcomponents/utils/SoundComponenLoader.h"
 
 
@@ -26,8 +27,10 @@ class Patch {
 
 private:
 
-	vector<SoundComponent*> components;
-	vector<Link*> links;
+
+	vector<SoundComponent*>*	m_InputComponents;
+	vector<SoundComponent*> 	m_ComponentsVector;
+	vector<Link*> 				m_LinksVector;
 
 public:
 
@@ -36,6 +39,8 @@ public:
 
 	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
 	void createSoundLink(int sourceid, int srcport, int destid, int destport);
+
+	const vector<SoundComponent*>& getInputSoundComponents();
 
 
 	void initialize(void);

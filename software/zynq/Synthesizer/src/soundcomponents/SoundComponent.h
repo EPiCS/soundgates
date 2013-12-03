@@ -27,12 +27,12 @@ class SoundComponent : public Node{
 
 private:
 
-	vector<Port>* inports;
-	vector<Port>* outports;
+	vector<Port>*		m_pInports;
+	vector<Port>* 		m_pOutports;
 
-	boost::thread m_thread;
+	boost::thread 		m_thread;
 
-	SoundComponentImpl* delegate;
+	SoundComponentImpl* m_pDelegate;
 
 public:
 
@@ -45,6 +45,8 @@ public:
 
 	const vector<Port>& getInports();
 	const vector<Port>& getOutports();
+
+	SoundComponentImpl* getDelegate();
 
 	void run();
 	void join();
