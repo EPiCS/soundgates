@@ -37,7 +37,7 @@ public class BindFragment extends ListFragment {
         {
             CosmicPreferences prefs = new CosmicPreferences(getActivity());
             String host = prefs.getString("current_host");
-            int port = Integer.parseInt(prefs.getString("current_port"));
+            int port = prefs.getInt("current_port");
 
             BindArrayAdapter adapter = new BindArrayAdapter(getActivity(), msg_store.getSelectedOSCMessageAsList(), host, port);
             setListAdapter(adapter);

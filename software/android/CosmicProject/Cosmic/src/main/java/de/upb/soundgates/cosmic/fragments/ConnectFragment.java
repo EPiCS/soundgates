@@ -79,7 +79,7 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
 
     @Override
     public void onAsyncTaskCompletion(String result) {
-
+        OSCMessageStore.removeInstance();
         OSCMessageStore msg_store = OSCMessageStore.getInstance();
         for(String msg : result.split(OSC_MSG_DELIMITER)) {
             if(!msg_store.addOSCMessage(msg)) {

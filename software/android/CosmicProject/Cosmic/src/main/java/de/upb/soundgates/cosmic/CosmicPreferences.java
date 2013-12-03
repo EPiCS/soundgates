@@ -26,7 +26,9 @@ public class CosmicPreferences {
 
     public String getString(String key) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-        return settings.getString(key, null);
+        String ret = settings.getString(key, "");
+        android.util.Log.e("Cosmic Pref", ret);
+        return (ret=="") ? null : ret;
     }
 
     public void putString(String key, String value) {

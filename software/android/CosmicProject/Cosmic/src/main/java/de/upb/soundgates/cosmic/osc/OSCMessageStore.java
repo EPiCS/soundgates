@@ -13,6 +13,7 @@ public class OSCMessageStore {
         store = new LinkedList<OSCMessage>();
     }
 
+
     public static OSCMessageStore holder;
     public static OSCMessageStore getInstance() {
         if(holder == null) {
@@ -23,9 +24,10 @@ public class OSCMessageStore {
     public static OSCMessageStore hasInstance() {
         return holder;
     }
-    public void removeInstance() {
+    public static void removeInstance() {
         holder = null;
     }
+
 
     public List<OSCMessage> getOSCMessageAsList() {
         return store;
