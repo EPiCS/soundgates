@@ -33,7 +33,9 @@ int main( int argc, const char* argv[])
 	patch = new Patch();
 
 
-	if(signal(SIGINT, SynthesizerTerminate) == NULL){
+	/* Register signal handler after starting rpc service, because
+	 * this service currently defines its own signal handler */
+	if(SIG_ERR == signal(SIGINT, SynthesizerTerminate)){
 		BOOST_LOG_TRIVIAL(error) << "Could not register termination handler";
 	}
 
@@ -64,9 +66,9 @@ int main( int argc, const char* argv[])
 
 		delete foo;
 	}
-	ui::UIManager& uimanagerinstance = ui::UIManager::getInstance();
-	uimanagerinstance.setCurrentPatch(patch);
-	uimanagerinstance.startXMLRPCServer();
+
+	ui::UIManager::getInstance().setCurrentPatch(patch);
+	ui::UIManager::getInstance().startXMLRPCServer();
 
 	patch->initialize();
 
@@ -82,6 +84,6 @@ void SynthesizerTerminate(int sig){
 
 	patch->stop();
 
-	SoundComponentLoader::getInstance().finailize();
 	ui::UIManager::getInstance().stopXMLRPCServer();
+	SoundComponentLoader::getInstance().finailize();
 }

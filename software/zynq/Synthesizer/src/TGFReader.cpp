@@ -15,7 +15,6 @@ TGFReader::~TGFReader(){ }
 
 void TGFReader::normalize(vector<string>& params){
 
-
 	for(vector<string>::iterator iter = params.begin(); iter != params.end(); ++iter ){
 
 		boost::algorithm::erase_first((*iter), "'");
@@ -70,7 +69,6 @@ void TGFReader::read(Patch* patch, string filename){
 			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "6: " << match[6];
 			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "7: " << match[7];
 			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "8: " << match[8];
-
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);

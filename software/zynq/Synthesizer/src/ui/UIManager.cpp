@@ -21,8 +21,9 @@ void UIManager::startXMLRPCServer() {
 		m_rpcregistry.addMethod("synthesizer.registerDevice", registerDeviceHandlePtr);
 		m_rpcregistry.addMethod("synthesizer.getInputComponents", interactiveComponentsHandlerPtr);
 
-		m_pRPCserver = new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryP(&m_rpcregistry).portNumber(50500));
-
+		m_pRPCserver = new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt()
+											.registryP(&m_rpcregistry)
+											.portNumber(50500));
 		m_initialized = true;
 
 		m_rpcserver_thread = boost::thread(&xmlrpc_c::serverAbyss::run, m_pRPCserver);

@@ -51,7 +51,6 @@ private:
 
 	boost::thread 					m_rpcserver_thread;
 	bool 							m_initialized;
-
 	Patch*							m_pCurrentPatch;
 
 
