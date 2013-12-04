@@ -106,7 +106,7 @@ architecture Behavioral of hwt_adsr is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_REFRESH, STATE_REFRESH_RELEASE, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
@@ -382,8 +382,8 @@ begin
                 when "4" =>
                     memif_read_word(i_memif, o_memif, sust_amp_addr, sust_amp, done);
                     if done then
-                        state <= STATE_REFRESH_RELEASE;
                         refresh_state <= "0";
+                        state <= STATE_PROCESS;
                     end if;
             end case;
             

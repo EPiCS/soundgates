@@ -93,7 +93,7 @@ architecture Behavioral of hwt_ramp is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_REFRESH_INPUT, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
@@ -290,16 +290,7 @@ end ramp;
             done := False;
               
         elsif rising_edge(clk) then
-             case refresh_state is
-                when "0" => 
-                    memif_read_word(i_memif, o_memif, incr_addr , incr, done);
-                    if done then
-                        refresh_state <= "1";
-                    end if;
-            ramp_ce      <= '0';
-            o_RAMWE_ramp <= '0';
-            osif_ctrl_signal <= ( others => '0');
-            
+
             case state is            
             -- INIT State gets the address of the header struct
             when STATE_INIT =>               
