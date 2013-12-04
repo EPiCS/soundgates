@@ -41,6 +41,13 @@ typedef struct {
     int* rlse_amp;
 } sADSRComponentHeader;
 
+typedef struct {
+    int incr;
+    int decr;
+    int upper_amp;
+    int lower_amp;
+} sRAMPComponentHeader;
+
 struct sNCO_struct{
 
 

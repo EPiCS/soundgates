@@ -26,19 +26,32 @@ int freq_to_incr (int comp_id, float freq)
     return 0;
 }
 
-// returns increment values for the adsr depending on height of attack, sustain and release phase
-int ms_to_attack (int ms, float attack_height)
+// returns increment values for the adsr depending on amplitudes of attack, sustain and release phase
+int ms_to_attack (int ms, float attack_amp)
 {
-    return ((attack_height * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
+    return ((attack_amp * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
 }
 
-int ms_to_sustain (int ms, float attack_height, float sustain_height)
+int ms_to_sustain (int ms, float attack_amp, float sustain_amp)
 {
-   return (((attack_height - sustain_height) * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
+   return (((attack_amp - sustain_amp) * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
 }
 
-int ms_to_release (int ms, float sustain_height, float release_height)
+int ms_to_release (int ms, float sustain_height, float release_amp)
 {
-    return (((sustain_height - release_height) * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
+    return (((sustain_amp - release_amp) * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
 }
+
+// returns increment values for ramp envelope depending on amplitudes
+
+int ms_to_incr ( int ms, float start_amp, float ramp_amp)
+{
+    return (((ramp_amp - start_amp) * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
+}
+
+int ms_to_incr ( int ms, float ramp_amp, float stop_amp)
+{
+    return (((ramp_amp - stop_amp) * (1 / (ms / 100))) / SAMPLE_RATE) * SOUNDGATES_FIXED_PT_SCALE;
+}
+
 
