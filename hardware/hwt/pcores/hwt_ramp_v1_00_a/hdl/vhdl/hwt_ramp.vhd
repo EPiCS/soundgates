@@ -367,24 +367,24 @@ end ramp;
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
                    
                     case process_state is
-                    when "0" =>                
+
+                    when "0" => 
+                        ramp_ce        <= '1';
                         process_state  <= "1";
 
                     when "1" => 
-                        process_state  <= "2";
-                        ramp_ce        <= '1';
-
-                    when "2" => 
                         o_RAMData_ramp <= std_logic_vector(resize(ramp_data * signed(i_RAMData_ramp), 32));
                         o_RAMWE_ramp   <= '1';
 
                         ramp_ce        <= '0';
-                        process_state  <= "3";       
+                        process_state  <= "2";       
 
-                    when "3" =>
+                    when "2" =>
                         o_RAMWE_ramp   <= '0';
                         o_RAMAddr_ramp <= std_logic_vector(unsigned(o_RAMAddr_ramp) + 1);
-                        sample_count  <= sample_count + 1;                        
+                        sample_count   <= sample_count + 1; 
+
+                        process_state  <= "0";                       
 
                     end case;
 

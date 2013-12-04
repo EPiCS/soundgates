@@ -67,7 +67,10 @@ architecture Behavioral of hwt_adsr is
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
-    
+     memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
+                    if done then
+                        refresh_state <= "0";
+                        state <= STATE_PROCESS;
     component adsr is
     Port ( 
             clk         : in  std_logic;
@@ -153,14 +156,28 @@ architecture Behavioral of hwt_adsr is
     signal stop             : std_logic;
     
     signal refresh_state    : unsigned(2 downto 0);
+    signal process_state    : unsigned(2 downto 0);
+    signal bang_state       : unsigned(2 downto 0);
     
-    signal atck_dura        : unsigned(31 downto 0);
-    signal dcay_dura        : unsigned(31 downto 0);
-    signal rlse_dura        : unsigned(31 downto 0);
-    signal strt_amp         : unsigned(31 downto 0);
-    signal atck_amp         : unsigned(31 downto 0);
-    signal sust_amp         : unsigned(31 downto 0);
-    signal rlse_amp         : unsigned(31 downto 0);
+    signal bang_addr             : std_logic_vector(31 downto 0);
+    signal bang_stop_addr        : std_logic_vector(31 downto 0);
+    signal atck_dura_addr        : std_logic_vector(31 downto 0);
+    signal dcay_dura_addr        : std_logic_vector(31 downto 0);
+    signal rlse_dura_addr        : std_logic_vector(31 downto 0);
+    signal strt_amp_addr         : std_logic_vector(31 downto 0);
+    signal atck_amp_addr         : std_logic_vector(31 downto 0);
+    signal sust_amp_addr         : std_logic_vector(31 downto 0);
+    signal rlse_amp_addr         : std_logic_vector(31 downto 0);
+
+    signal bang             : signed(31 downto 0);
+    signal bang_stop        : signed(31 downto 0);
+    signal atck_dura        : signed(31 downto 0);
+    signal dcay_dura        : signed(31 downto 0);
+    signal rlse_dura        : signed(31 downto 0);
+    signal strt_amp         : signed(31 downto 0);
+    signal atck_amp         : signed(31 downto 0);
+    signal sust_amp         : signed(31 downto 0);
+    signal rlse_amp         : signed(31 downto 0);
     
     
     
@@ -171,9 +188,8 @@ architecture Behavioral of hwt_adsr is
     constant ADSR_START : std_logic_vector(31 downto 0) := x"0000000F";
     constant ADSR_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
     
-    constant START_BANG : std_logic_vector(31 downto 0) := x"00000001";
-    constant STOP_BANG  : std_logic_vector(31 downto 0) := x"FFFFFFFF";
-    constant WORKING    : std_logic_vector(31 downto 0) := x"00000000";
+    constant C_START_BANG : std_logic_vector(31 downto 0) := x"00000001";
+    constant C_STOP_BANG  : std_logic_vector(31 downto 0) := x"FFFFFFFF";
 
 begin
     -----------------------------------
@@ -276,7 +292,7 @@ begin
             ram_reset(o_ram);
             
             state           <= STATE_INIT;
-            sample_count    <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+            sample_count    <= to_unsigned(0, 16);
             osif_ctrl_signal <= (others => '0');
             
             
@@ -291,8 +307,10 @@ begin
             sustain_amp <= (others => '0');
             release_amp <= (others => '0');
             o_RAMWE_adsr<= '0';
-            
+
             refresh_state <= 0;
+            process_state <= 0;
+            bang        <= (others => '0');
             
             done := False;
               
@@ -305,23 +323,30 @@ begin
             case state is            
             -- INIT State gets the address of the header struct
             when STATE_INIT =>               
-
                 snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);         
                 if done then
-                    struct_addr      <= snd_comp_header.opt_arg_addr;
-                    state <= STATE_REFRESH;
-                end if;            
-            
-            when STATE_WAITING =>
+                    -- Initialize your signals
+                        bang_addr      <= snd_comp_header.opt_arg_addr;
+                        stop_addr      <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
+                        atck_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 8);
+                        dcay_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 12);
+                        rlse_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 16);
+                        strt_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 20);
+                        atck_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 24);
+                        sust_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 28);
+                        rlse_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 32);
 
+                        state <= STATE_WAITING;
+                end if;    
+
+            when STATE_WAITING =>
                 -- Software process "Synthesizer" sends the start signal via mbox_start
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
                 if done then
                     if osif_ctrl_signal = ADSR_START then
                         
-                        sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-
-                        state        <= STATE_REFRESH_INPUT_PHASE_OFFSET;
+                        sample_count <= to_unsigned(0, 16);
+                        state        <= STATE_CHECK_BANG;
 
                     elsif osif_ctrl_signal = ADSR_EXIT then
                         
@@ -333,63 +358,107 @@ begin
             when STATE_REFRESH =>
                 
                 -- Refresh your signals
-                
                 case refresh_state is
-                when "0" => 
-                    memif_read_word(i_memif, o_memif, struct_addr + 4, atck_dura, done);
+                when "0" =>
+                    memif_read_word(i_memif, o_memif, atck_dura_addr, atck_dura, done);
                     if done then
                         refresh_state <= "1";
                     end if;
-                when "1" => 
-                    memif_read_word(i_memif, o_memif, struct_addr + 8, dcay_dura, done);
+                when "1" =>
+                    memif_read_word(i_memif, o_memif, dcay_dura_addr, dcay_dura, done);
                     if done then
                         refresh_state <= "2";
                     end if;
                 when "2" =>
-                    memif_read_word(i_memif, o_memif, struct_addr + 12, rlse_dura, done);
+                    memif_read_word(i_memif, o_memif, strt_amp_addr, strt_amp, done);
                     if done then
                         refresh_state <= "3";
                     end if;
-                when "3" =>    
-                    memif_read_word(i_memif, o_memif, struct_addr + 16, strt_amp, done);
+                when "3" =>
+                    memif_read_word(i_memif, o_memif, atck_amp_addr, atck_amp, done);
                     if done then
                         refresh_state <= "4";
                     end if;
                 when "4" =>
-                    memif_read_word(i_memif, o_memif, struct_addr + 20, atck_amp, done);
+                    memif_read_word(i_memif, o_memif, sust_amp_addr, sust_amp, done);
                     if done then
-                        refresh_state <= "5";
-                    end if;
-                when "5" => 
-                    memif_read_word(i_memif, o_memif, struct_addr + 24, sust_amp, done);
-                    if done then
-                        refresh_state <= "6";
-                    end if;
-                when "6" => 
-                    memif_read_word(i_memif, o_memif, struct_addr + 28, rlse_amp, done);
-                    if done then
+                        state <= STATE_REFRESH_RELEASE;
                         refresh_state <= "0";
-                        state <= STATE_CHECK_BANG;
                     end if;
-                
+            end case;
+            
+            when STATE_REFRESH_RELEASE => 
+                stop <= '0';   
+                case refresh_state is
+                    when => "0"
+                        memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
+                        if done then
+                            refresh_state <= "1";
+                        end if;
+                    when "1" =>
+                        memif_read_word(i_memif, o_memif, rlse_dura_addr, rlse_dura, done);
+                        if done then
+                            refresh_state <= "0";
+                            state <= STATE_PROCESS;
+                        end if;
+                end case;
+
             when STATE_CHECK_BANG =>    
-                memif_read_word(i_memif, o_memif, struct_addr, atck_dura, done);
-                if done then
-                    state <= ;
-                end if;
-                
+                case bang_state is                
+                    when "0" =>
+                        memif_read_word(i_memif, o_memif, bang_addr, bang, done);
+                        if done then
+                            if bang = C_START_BANG then
+                                bang_state <= "1";
+                                state <= STATE_REFRESH;
+                            else
+                                state <= STATE_WAITING;
+                            end if;
+                        end if;
+ 
+                    when "1" =>
+                        memif_read_word(i_memif, o_memif, bang_stop_addr, bang_stop, done);
+                        if done then
+                            if (bang_stop = C_STOP_BANG) then
+                                bang_state <= "0";
+                                stop <= '1';
+                                state <= STATE_REFRESH_RELEASE;
+                            else
+                                state <= STATE_REFRESH;
+                            end if;
+                        end if;
+
             when STATE_PROCESS =>
-                if sample_count > 0 then
-                    
-                    adsr_ce        <= '1'; -- ein takt früher
-                    o_RAMWE_adsr   <= '1';
-                    o_RAMAddr_adsr <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
-                    sample_count  <= sample_count - 1;
+                if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
+                   
+                    case process_state is
+
+                    when "0" => 
+                        adsr_ce        <= '1';
+                        process_state  <= "1";
+
+                    when "1" => 
+                        o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
+                        o_RAMWE_adsr   <= '1';
+
+                        adsr_ce        <= '0';
+                        process_state  <= "2";       
+
+                    when "2" =>
+                        o_RAMWE_adsr   <= '0';
+                        o_RAMAddr_adsr <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
+                        sample_count  <= sample_count + 1;
+
+                        process_state  <= "0";  
+                    end case;
+
                 else
                     -- Samples have been generated
-                    o_RAMAddr_adsr <= (others => '0');
+                    o_RAMAddr_adsr  <= (others => '0');
+                    sample_count    <= to_unsigned(0, 16);
                     state <= STATE_WRITE_MEM;
                 end if;
+
 
              when STATE_WRITE_MEM =>
         

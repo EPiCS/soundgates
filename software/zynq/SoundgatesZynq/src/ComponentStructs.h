@@ -31,14 +31,15 @@ typedef struct {
 } sNcoComponentHeader;
 
 typedef struct {
-    int* bang;
-    int* atck_dura;
-    int* dcay_dura;
-    int* rlse_dura;
-    int* strt_amp;
-    int* atck_amp;
-    int* sust_amp;
-    int* rlse_amp;
+    int bang;
+    int stop;
+    int atck_dura;
+    int dcay_dura;
+    int rlse_dura;
+    int strt_amp;
+    int atck_amp;
+    int sust_amp;
+    int rlse_amp;
 } sADSRComponentHeader;
 
 typedef struct {
