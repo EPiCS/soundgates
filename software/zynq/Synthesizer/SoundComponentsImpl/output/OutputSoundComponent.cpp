@@ -61,8 +61,11 @@ void OutputSoundComponent::process()
 
 //	std::cout << "Processing" << endl;
 
-	this->buffer->fillbuffer(bufferArray,bufferSize);
+	// Initializing all of the patch might take an arbitrary long time.
+	// The soundbuffer thread might already be running, but we don't want to start playback unless data starts flowing
+	// Therefore we call the start playback method here
 	this->buffer->startPlayback();
+	this->buffer->fillbuffer(bufferArray,bufferSize);
 
 }
 
