@@ -58,7 +58,7 @@ SineSoundComponent::SineSoundComponent(std::vector<std::string> params) : SoundC
 
 SineSoundComponent::~SineSoundComponent(){}
 
-float SineSoundComponent::getPhaseIncrement(float frequency){
+double SineSoundComponent::getPhaseIncrement(float frequency){
 
 	return  (2 * M_PI / 44100.0) * frequency;
 

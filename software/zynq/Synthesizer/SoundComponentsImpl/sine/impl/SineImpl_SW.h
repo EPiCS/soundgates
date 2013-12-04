@@ -18,7 +18,7 @@ class SineImpl_SW : public SineSoundComponent {
 
 private:
 
-	float phase;
+	double phase;
 
 public:
 

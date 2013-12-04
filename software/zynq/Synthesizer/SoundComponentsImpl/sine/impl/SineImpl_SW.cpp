@@ -26,7 +26,7 @@ void SineImpl_SW::process() {
 
 	int targetBufferSize = valueLink->getBufferDepth();
 
-	float phase_incr = 0.0;
+	double phase_incr = 0.0;
 
 	phase_incr = getPhaseIncrement(440.0);
 	for (int i = 0; i < targetBufferSize / 4; i++) {
