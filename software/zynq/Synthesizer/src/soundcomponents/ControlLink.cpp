@@ -7,17 +7,12 @@
 
 #include "ControlLink.h"
 
-ControlLink::ControlLink(Node* source, Node* destination) : Link(source, destination){
+ControlLink::ControlLink(Node* source, Node* destination) : Link(source, destination){ }
+
+ControlLink::~ControlLink() { }
 
 
-}
-
-ControlLink::~ControlLink() {
-
-}
-
-
-void ControlLink::pushControlData(uint32_t data){
+void ControlLink::pushControlData(float data){
 
 	m_mutex.lock();
 
@@ -26,20 +21,19 @@ void ControlLink::pushControlData(uint32_t data){
 	m_mutex.unlock();
 }
 
-uint32_t ControlLink::getNextControlData(){
+float ControlLink::getNextControlData(){
 
-	uint32_t data;
+	float data = 0.0;
 
 	m_mutex.lock();
 
-	data = *(m_ctrldata.begin());
+	if(m_ctrldata.size() > 0){
+		data = *(m_ctrldata.begin());
 
-	if(m_ctrldata.size() > 1){
-
-		m_ctrldata.erase(m_ctrldata.begin());
-
+		if(m_ctrldata.size() > 1){
+			m_ctrldata.erase(m_ctrldata.begin());
+		}
 	}
-
 	m_mutex.unlock();
 
 	return data;

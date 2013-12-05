@@ -20,6 +20,11 @@
 #include "soundcomponents/InputSoundComponent.h"
 #include "soundcomponents/utils/SoundComponenLoader.h"
 
+#include "soundcomponents/ControlLink.h"
+#include "soundcomponents/BufferedLink.h"
+
+#include "soundcomponents/ControlPort.h"
+#include "soundcomponents/SoundPort.h"
 
 using namespace std;
 
@@ -28,9 +33,10 @@ class Patch {
 private:
 
 
-	vector<SoundComponent*>*	m_InputComponents;
-	vector<SoundComponent*> 	m_ComponentsVector;
-	vector<Link*> 				m_LinksVector;
+	vector<InputSoundComponent*>*	m_InputComponents;
+	vector<SoundComponent*> 		m_ComponentsVector;
+	vector<Link*> 					m_LinksVector;
+	Synthesizer::state::ePatchState m_PatchState;
 
 public:
 
@@ -40,7 +46,7 @@ public:
 	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
 	void createSoundLink(int sourceid, int srcport, int destid, int destport);
 
-	const vector<SoundComponent*>& getInputSoundComponents();
+	const vector<InputSoundComponent*>& getInputSoundComponents();
 
 
 	void initialize(void);

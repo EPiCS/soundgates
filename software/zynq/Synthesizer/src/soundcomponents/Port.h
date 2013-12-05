@@ -9,22 +9,29 @@
 #define PORT_H_
 
 #include <cstdlib>
+#include <typeinfo>
+
 #include "BufferedLink.h"
 
 class Port {
 
 private:
-	int number;
-	BufferedLink* link;
+	int 	m_PortNumber;
+	Link* 	m_Link;
 
 public:
 
 	Port(int number);
-	~Port();
+	virtual ~Port();	/*< Virtual constructor makes this class polymorphic ? */
 
 	int getPortNumber();
-	BufferedLink* getBufferedLink();
-	void setBufferedLink(BufferedLink*);
+
+	Link* getLink();
+	void setLink(Link*);
+
+	virtual int doSomething() = 0;
+
+	bool acceptsLinkOfType(std::type_info);
 
 	bool operator==(const Port& other) const;
 };

@@ -16,6 +16,7 @@
 
 #include "../Synthesizer.h"
 #include "../SoundComponentImpl.h"
+#include "../SoundPort.h"
 
 #include "Soundbuffer.hpp"
 

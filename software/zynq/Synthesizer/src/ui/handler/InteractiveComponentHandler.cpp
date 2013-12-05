@@ -30,7 +30,6 @@ namespace ui {
 		this->_help = "Returns a list of osc conform addresses";
 
 		m_pPatch = patch;
-
 	}
 
 
@@ -38,25 +37,15 @@ namespace ui {
 
 		vector<xmlrpc_c::value> oscreturn;
 
-		if(m_pPatch != NULL){
+		if (m_pPatch != NULL) {
 
-			const vector<SoundComponent*>& sndcomponents = m_pPatch->getInputSoundComponents();
+			const vector<InputSoundComponent*>& sndcomponents =	m_pPatch->getInputSoundComponents();
 
-			for(vector<SoundComponent*>::const_iterator iter = sndcomponents.begin(); iter != sndcomponents.end(); ++iter){
+			for (vector<InputSoundComponent*>::const_iterator iter = sndcomponents.begin(); iter != sndcomponents.end(); ++iter) {
 
-				SoundComponentImpl* impl = (*iter)->getDelegate();
-
-				if(impl != NULL){
-
-					InputSoundComponent* input = dynamic_cast<InputSoundComponent*>(impl);
-
-					vector<string>& oscaddresses = input->getOscAddresses();
-
-					for(vector<string>::iterator osciter = oscaddresses.begin(); osciter != oscaddresses.end(); ++osciter){
-
-						oscreturn.push_back(xmlrpc_c::value_string(*osciter));
-					}
-				}
+				string msg = (*iter)->getOscAddress();
+				msg = msg + (*iter)->getOscTypeTag();
+				oscreturn.push_back(xmlrpc_c::value_string(msg));
 			}
 		}
 

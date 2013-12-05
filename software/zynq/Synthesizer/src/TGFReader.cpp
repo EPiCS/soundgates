@@ -39,7 +39,7 @@ void TGFReader::read(Patch* patch, string filename){
 
 	boost::regex nodexpr("([0-9]+) ([a-z]+)/([a-z]+)(\\(([0-9]+)\\))?(/('.*',?)+)? *");
 
-	boost::regex edgeexpr("([0-9]+) ([0-9]+) '([0-9]+),([0-9]+)'  *");
+	boost::regex edgeexpr("([0-9]+) ([0-9]+) '([0-9]+),([0-9]+)' *");
 
 	boost::smatch match;
 

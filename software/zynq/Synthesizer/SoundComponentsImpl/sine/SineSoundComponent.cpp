@@ -44,13 +44,13 @@ SineSoundComponent::SineSoundComponent(){ }
 
 SineSoundComponent::SineSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params){
 
-	std::vector<Port>& inports = getInports();
-	std::vector<Port>& outports = getOutports();
+	std::vector<Port*>& inports  = getInports();
+	std::vector<Port*>& outports = getOutports();
 
 	/* Create incoming frequency port */
-	Port frequency = Port(SineSoundComponent::frequencyInPort);
+	ControlPort* frequency = new ControlPort(SineSoundComponent::frequencyInPort);
 	/* Create outgoing value port */
-	Port value = Port(SineSoundComponent::sineValueOutPort);
+	SoundPort* value 	   = new SoundPort(SineSoundComponent::sineValueOutPort);
 
 	inports.push_back(frequency);
 	outports.push_back(value);

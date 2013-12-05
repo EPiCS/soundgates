@@ -1,4 +1,7 @@
-1 sine/sw
-2 dac/sw
+1 input/sw/'/sin f'
+2 sine/sw
+3 dac/sw
 #  
+
 1 2 '1,1' 
+2 3 '1,1' 

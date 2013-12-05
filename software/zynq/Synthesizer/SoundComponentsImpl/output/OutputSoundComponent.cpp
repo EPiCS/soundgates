@@ -32,14 +32,16 @@ const char* getComponentName()
 
 OutputSoundComponent::OutputSoundComponent()
 {
+	this->buffer = NULL;
 }
 
 OutputSoundComponent::OutputSoundComponent(std::vector<std::string> params) :
 		SoundComponentImpl(params)
 {
+	this->buffer = NULL;
 
-	std::vector<Port>& inports = getInports();
-	Port soundInPort = Port(OutputSoundComponent::soundInPort);
+	std::vector<Port*>& inports = getInports();
+	Port* soundInPort = new SoundPort(OutputSoundComponent::soundInPort);
 	inports.push_back(soundInPort);
 }
 
@@ -51,13 +53,12 @@ OutputSoundComponent::~OutputSoundComponent()
 
 void OutputSoundComponent::process()
 {
-	Port* soundInPort = SoundComponentImpl::getInport(
-			OutputSoundComponent::soundInPort);
+	Port* soundInPort = SoundComponentImpl::getInport(OutputSoundComponent::soundInPort);
 
-	BufferedLink* soundLink = soundInPort->getBufferedLink();
+	BufferedLink* soundLink = (BufferedLink*) soundInPort->getLink();
 
-	char* bufferArray = soundLink->getReadBuffer();
-	int bufferSize = soundInPort->getBufferedLink()->getBufferDepth();
+	char* bufferArray 	= soundLink->getReadBuffer();
+	int bufferSize 		= soundLink->getBufferDepth();
 
 //	std::cout << "Processing" << endl;
 

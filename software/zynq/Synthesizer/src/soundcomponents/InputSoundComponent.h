@@ -11,7 +11,15 @@
 #include <string>
 #include <stdint.h>
 #include <vector>
+#include <assert.h>
 
+#include <lo/lo.h>
+
+#include <boost/log/trivial.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "ControlPort.h"
+#include "ControlLink.h"
 #include "SoundComponentImpl.h"
 
 
@@ -26,20 +34,25 @@ using namespace std;
  * 1st address -> 1st port, 2nd address -> 2nd port, ...
  *
  */
+extern "C" int pushOSCMessageToInputsoundComponent(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *inputhndl);
+
 class InputSoundComponent : public SoundComponentImpl{
 
 private:
 
-	vector<string> m_OSCAddresses;
+	string m_OSCAddresses;
+	string m_OSCTypeTag;
+	void setup(string oscaddress);
 
 public:
 
 	InputSoundComponent() { }
-	InputSoundComponent(vector<string> oscaddresses);
+	InputSoundComponent(string oscaddresses);
+	InputSoundComponent(vector<string> parameters);
 	~InputSoundComponent();
 
-	string getOscAddress(uint32_t port);
-	vector<string>& getOscAddresses();
+	string& getOscAddress();
+	string& getOscTypeTag();
 
 	void init() { /* do not implement */ }
 	void process() { /* do not implement */ }

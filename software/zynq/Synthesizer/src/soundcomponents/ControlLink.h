@@ -12,19 +12,21 @@
 
 #include <boost/thread.hpp>
 
-
+#if defined(APPLICATION_CONTEXT)
 #include "../Link.h"
+#else
+#include "Link.h"
+#endif
 
 using namespace std;
 
 class ControlLink: public Link {
 
-
 private:
 
 	boost::mutex     m_mutex;
 
-	vector<uint32_t> m_ctrldata;
+	vector<float>  m_ctrldata;
 
 public:
 
@@ -32,9 +34,9 @@ public:
 
 	virtual ~ControlLink();
 
-	void pushControlData(uint32_t);
+	void pushControlData(float);
 
-	uint32_t getNextControlData();
+	float getNextControlData();
 
 };
 

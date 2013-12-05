@@ -5,7 +5,7 @@
 5 mixer/hw(1)
 6 waveplayer/sw
 7 input/sw/'/BeatLevel \"f\"'
-8 const/sw/'/Trigger \"i\"'
+8 input/sw/'/Trigger \"i\"'
 9 const/sw/'0.1'
 10 const/sw/'0.1'
 11 const/sw/'0.7'

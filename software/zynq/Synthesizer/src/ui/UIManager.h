@@ -9,21 +9,11 @@
 #define UIMANAGER_H_
 
 #include <vector>
-
-#include <xmlrpc-c/base.hpp>
-#include <xmlrpc-c/registry.hpp>
-#include <xmlrpc-c/server_abyss.hpp>
-
-#include <boost/thread.hpp>
-
 #include <boost/log/trivial.hpp>
 
-#include "../Synthesizer.h"
+#include "UIService.h"
 #include "../Patch.h"
-
-#include "handler/RegisterDeviceHandler.h"
-#include "handler/InteractiveComponentHandler.h"
-
+#include "../Synthesizer.h"
 
 namespace ui {
 
@@ -31,28 +21,14 @@ class UIManager {
 
 private:
 
-	UIManager(){
-		m_pCurrentPatch = NULL;
-		m_pRPCserver  	= NULL;
-		m_initialized 	= false;
-	}
-
-	~UIManager(){
-
-		stopXMLRPCServer();
-	}
+	UIManager(){}
+	~UIManager(){}
 
 	UIManager(UIManager const&);
 	void operator=(UIManager const&);
 
-	std::vector<SoundComponent*> 	m_InteractiveComponents;
-	xmlrpc_c::registry 				m_rpcregistry;
-	xmlrpc_c::serverAbyss* 			m_pRPCserver;
 
-	boost::thread 					m_rpcserver_thread;
-	bool 							m_initialized;
-	Patch*							m_pCurrentPatch;
-
+	map<string, UIService*> m_UIServices;
 
 public:
 	static UIManager& getInstance() {
@@ -61,12 +37,13 @@ public:
 		return instance;
 	}
 
-	const vector<SoundComponent*>& getInteractiveComponents();
+	void registerService(UIService*, string name, bool runOnRegister = false);
 
-	void startXMLRPCServer();
-	void stopXMLRPCServer();
+	void startService(string name);
+	void stopService(string name);
 
-	void setCurrentPatch(Patch* patch){ m_pCurrentPatch = patch;}
+	void stopAllServices();
+	void startAllServices();
 
 };
 

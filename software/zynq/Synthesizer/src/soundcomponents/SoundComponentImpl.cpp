@@ -19,7 +19,7 @@ SoundComponentImpl::~SoundComponentImpl(){ }
 
 Port* SoundComponentImpl::getInport(unsigned int number){
 
-	vector<Port>& incoming = getInports();
+	vector<Port*>& incoming = getInports();
 
 	if(incoming.size() < number){
 
@@ -27,12 +27,12 @@ Port* SoundComponentImpl::getInport(unsigned int number){
 		return NULL;
 	}
 
-	return &(incoming.at(number - 1));
+	return incoming.at(number - 1);
 }
 
 Port* SoundComponentImpl::getOutport(unsigned int number){
 
-	vector<Port>& outgoing = getOutports();
+	vector<Port*>& outgoing = getOutports();
 
 	if(outgoing.size() < number){
 
@@ -40,6 +40,6 @@ Port* SoundComponentImpl::getOutport(unsigned int number){
 		return NULL;
 	}
 
-	return &(outgoing.at(number - 1));
+	return outgoing.at(number - 1);
 }
 

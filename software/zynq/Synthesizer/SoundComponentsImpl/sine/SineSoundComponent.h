@@ -12,7 +12,13 @@
 #include <vector>
 #include <cmath>
 
+#include "../SoundPort.h"
 #include "../Synthesizer.h"
+#include "../ControlPort.h"
+
+#include "../ControlLink.h"
+#include "../BufferedLink.h"
+
 #include "../SoundComponentImpl.h"
 
 class SineSoundComponent : public SoundComponentImpl{

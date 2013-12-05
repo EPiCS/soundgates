@@ -12,17 +12,17 @@
 Patch::Patch(){
 
 	m_InputComponents = NULL;
-
+	m_PatchState  	  = Synthesizer::state::created;
 }
 
 Patch::~Patch(){ }
 
 
-const vector<SoundComponent*>& Patch::getInputSoundComponents(){
+const vector<InputSoundComponent*>& Patch::getInputSoundComponents(){
 
 	if(NULL == m_InputComponents){
 
-		m_InputComponents = new vector<SoundComponent*>;
+		m_InputComponents = new vector<InputSoundComponent*>;
 
 		for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter){
 
@@ -32,7 +32,7 @@ const vector<SoundComponent*>& Patch::getInputSoundComponents(){
 
 			if(typeid(*sndcomponent) == typeid(InputSoundComponent)){
 
-				m_InputComponents->push_back((*iter));
+				m_InputComponents->push_back(dynamic_cast<InputSoundComponent*>(sndcomponent));
 			}
 		}
 	}
@@ -81,14 +81,35 @@ void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport)
 
 	BOOST_LOG_TRIVIAL(debug) << "Source " << source << " Destination " << destination;
 
+	Port* srcPort  = source->getDelegate()->getOutport(srcport);
+    Port* destPort = destination->getDelegate()->getInport(destport);
 
-	BufferedLink* link = new BufferedLink(dynamic_cast<Node*>(source), dynamic_cast<Node*>(destination), 1024 * sizeof(int));
+    Link* link = NULL;
 
-	m_LinksVector.push_back(link);
+    if(typeid(*srcPort) != typeid(*destPort)){
+    	BOOST_LOG_TRIVIAL(error) << "Sourceport of type " << typeid(*srcPort).name() << " does not match destinationport of type " << typeid(*destPort).name();
+    }else{
 
-	source->addOutgoingLink(*link, srcport);
+    	BOOST_LOG_TRIVIAL(debug) << "Source port type" << typeid(*srcPort).name();
+    	BOOST_LOG_TRIVIAL(debug) << "Destination port type" << typeid(*destPort).name();
+    	if(typeid(*srcPort) == typeid(SoundPort)){
 
-	destination->addIncomingLink(*link, destport);
+    		BOOST_LOG_TRIVIAL(debug) << "Creating buffered link";
+    		link = new BufferedLink((Node*)source, (Node*)destination, 1024 * sizeof(int));
+
+    	}else if(typeid(*srcPort) == typeid(ControlPort)){
+
+    		BOOST_LOG_TRIVIAL(debug) << "Creating control link";
+    		link = new ControlLink((Node*)source, (Node*)destination);
+    	}
+
+    	m_LinksVector.push_back(link);
+
+    	source->addOutgoingLink(*link, srcport);
+    	destination->addIncomingLink(*link, destport);
+    }
+
+
 
 }
 
@@ -99,30 +120,53 @@ void Patch::initialize(void){
 
 		(*iter)->init();
 	}
+
+	this->m_PatchState = Synthesizer::state::initialized;
+
 }
 
 void Patch::run(){
 
-	for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter ){
 
-		(*iter)->run();
-	}
+	if(Synthesizer::state::initialized == m_PatchState){
 
-	for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter ){
+		m_PatchState = Synthesizer::state::running;
 
-		(*iter)->join();
-	}
+		while (m_PatchState == Synthesizer::state::running) {
+			for (vector<SoundComponent*>::iterator iter =
+					m_ComponentsVector.begin();
+					iter != m_ComponentsVector.end(); ++iter) {
 
-	for(vector<Link*>::iterator iter = m_LinksVector.begin(); iter != m_LinksVector.end(); ++iter ){
+				(*iter)->run();
+			}
 
-		static_cast<BufferedLink*>((*iter))->switchBuffers();
+			for (vector<SoundComponent*>::iterator iter =
+					m_ComponentsVector.begin();
+					iter != m_ComponentsVector.end(); ++iter) {
+
+				(*iter)->join();
+			}
+
+			for (vector<Link*>::iterator iter = m_LinksVector.begin();
+					iter != m_LinksVector.end(); ++iter) {
+
+				static_cast<BufferedLink*>((*iter))->switchBuffers();
+			}
+		}
 	}
 }
 
 void Patch::stop(){
 
-	for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter ){
+	if(Synthesizer::state::running == m_PatchState){
+
+		m_PatchState = Synthesizer::state::stopped;
+
+		for (vector<SoundComponent*>::iterator iter =
+				m_ComponentsVector.begin(); iter != m_ComponentsVector.end();
+				++iter) {
 
 			(*iter)->join();
+		}
 	}
 }

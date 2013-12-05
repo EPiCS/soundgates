@@ -10,6 +10,18 @@
 
 namespace Synthesizer{
 
+	namespace state{
+
+		enum ePatchState { created, initialized, running, paused, stopped};
+
+	}
+
+	namespace config{
+
+		static const char* port = "50500";
+
+	}
+
 }
 
 namespace SoundComponents{

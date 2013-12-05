@@ -44,7 +44,7 @@ void SoundComponent::addOutgoingLink(Link& link, int port){
 
 		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
 	}
-	this->m_pOutports->at(port - 1).setBufferedLink((BufferedLink*) &link);
+	this->m_pOutports->at(port - 1)->setLink(&link);
 }
 
 void SoundComponent::addIncomingLink(Link& link, int port){
@@ -56,15 +56,15 @@ void SoundComponent::addIncomingLink(Link& link, int port){
 		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
 	}
 
-	this->m_pInports->at(port - 1).setBufferedLink((BufferedLink*) &link);
+	this->m_pInports->at(port - 1)->setLink(&link);
 }
 
-const vector<Port>& SoundComponent::getInports(){
+const vector<Port*>& SoundComponent::getInports(){
 
 	return *m_pInports;
 }
 
-const vector<Port>& SoundComponent::getOutports(){
+const vector<Port*>& SoundComponent::getOutports(){
 	return *m_pOutports;
 }
 

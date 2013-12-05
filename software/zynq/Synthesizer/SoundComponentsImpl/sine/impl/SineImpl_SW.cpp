@@ -9,29 +9,29 @@
 
 
 
-SineImpl_SW::SineImpl_SW(std::vector<std::string> params) : SineSoundComponent(params){ }
+SineImpl_SW::SineImpl_SW(std::vector<std::string> params) : SineSoundComponent(params){
+
+	this->phase = 0.0;
+
+}
 
 void SineImpl_SW::init() { }
 
 void SineImpl_SW::process() {
 
-	Port* valuePort = getOutport(SineSoundComponent::sineValueOutPort);
 	Port* frequencyPort = getInport(SineSoundComponent::frequencyInPort);
+	Port* valuePort 	= getOutport(SineSoundComponent::sineValueOutPort);
 
-	BufferedLink* valueLink = valuePort->getBufferedLink();
-	BufferedLink* frequencyLink = frequencyPort->getBufferedLink();
+	ControlLink*  inlink  = (ControlLink*)(frequencyPort->getLink());
+	BufferedLink* outlink = (BufferedLink*)(valuePort->getLink());
 
-	int* targetBuffer = (int*) valueLink->getWriteBuffer();
-//	float* sourceBuffer = (float*) frequencyLink->getReadBuffer();
+	int* targetBuffer 	  = (int*) outlink->getWriteBuffer();
+	int  targetBufferSize = outlink->getBufferDepth();
 
-	int targetBufferSize = valueLink->getBufferDepth();
-
-	double phase_incr = 0.0;
-
-	phase_incr = getPhaseIncrement(440.0);
+	double phase_incr = getPhaseIncrement(440.0);
 	for (int i = 0; i < targetBufferSize / 4; i++) {
 
-//		phase_incr = getPhaseIncrement(sourceBuffer[i]);
+		phase_incr = getPhaseIncrement(inlink->getNextControlData());
 
 		targetBuffer[i] = sin(phase) * INT_MAX;
 
@@ -40,8 +40,6 @@ void SineImpl_SW::process() {
 		if (phase >= M_PI * 2) {
 			phase -= M_PI * 2;
 		}
-
-//		std::cout << targetBuffer[i];
 	}
 
 }

@@ -9,41 +9,73 @@
 
 namespace ui {
 
-void UIManager::startXMLRPCServer() {
+void UIManager::registerService(UIService* service, string name, bool runOnRegister){
 
-	if (!m_initialized) {
+	if(NULL == m_UIServices[name]){
 
-		BOOST_LOG_TRIVIAL(info) << "Starting rpc service";
+		m_UIServices[name] = service;
 
-		xmlrpc_c::methodPtr const registerDeviceHandlePtr(new RegisterDeviceHandler);
-		xmlrpc_c::methodPtr const interactiveComponentsHandlerPtr(new InteractiveComponentHandler(m_pCurrentPatch));
+		BOOST_LOG_TRIVIAL(debug) << "Registering service \"" << name << "\" on system";
 
-		m_rpcregistry.addMethod("synthesizer.registerDevice", registerDeviceHandlePtr);
-		m_rpcregistry.addMethod("synthesizer.getInputComponents", interactiveComponentsHandlerPtr);
+		if(runOnRegister){
+			service->startService();
+		}
 
-		m_pRPCserver = new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt()
-											.registryP(&m_rpcregistry)
-											.portNumber(50500));
-		m_initialized = true;
-
-		m_rpcserver_thread = boost::thread(&xmlrpc_c::serverAbyss::run, m_pRPCserver);
+	}else{
+		BOOST_LOG_TRIVIAL(error) << "Could not register service " << name << ": already registered";
 	}
 }
 
-void UIManager::stopXMLRPCServer() {
+void UIManager::startService(string name){
 
-	if(m_initialized){
+	UIService* service = m_UIServices[name];
 
-		m_pRPCserver->terminate();
+	if(service != NULL){
+		BOOST_LOG_TRIVIAL(error) << "Could start service " << name << ": service is not registered.";
+	}else{
 
-		m_rpcserver_thread.join();
+		eServiceState serviceState = service->getServiceState();
 
+		if(serviceState == CREATED ||  serviceState == STOPPED){
+
+			service->startService();
+		}
 	}
 }
 
-const vector<SoundComponent*>& UIManager::getInteractiveComponents() {
+void UIManager::stopService(string name){
 
-	return m_InteractiveComponents;
+	UIService* service = m_UIServices[name];
+
+	if(service != NULL){
+		BOOST_LOG_TRIVIAL(error) << "Could stop service " << name << ": service is not registered.";
+	}else{
+
+		eServiceState serviceState = service->getServiceState();
+
+		if(serviceState == RUNNING){
+
+			service->stopService();
+		}
+	}
 }
+
+void UIManager::stopAllServices(){
+
+
+	for(map<string, UIService*>::iterator iter = m_UIServices.begin(); iter != m_UIServices.end(); ++iter){
+
+		stopService(iter->first);
+	}
+}
+
+void UIManager::startAllServices(){
+
+	for(map<string, UIService*>::iterator iter = m_UIServices.begin(); iter != m_UIServices.end(); ++iter){
+
+		startService(iter->first);
+	}
+}
+
 
 }

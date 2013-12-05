@@ -2,12 +2,6 @@
  * Empty C++ Application
  */
 
-#include "TGFReader.h"
-#include "Patch.h"
-#include "ui/UIManager.h"
-
-#include "soundcomponents/utils/SoundComponenLoader.h"
-
 #include <string>
 #include <vector>
 #include <signal.h>
@@ -15,6 +9,15 @@
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
+
+#include "TGFReader.h"
+#include "Patch.h"
+#include "ui/UIManager.h"
+#include "soundcomponents/utils/SoundComponenLoader.h"
+
+#include "ui/UIService.h"
+#include "ui/service/RPCService.h"
+#include "ui/service/OSCService.h"
 
 namespace logging = boost::log;
 
@@ -66,16 +69,15 @@ int main( int argc, const char* argv[])
 
 		delete foo;
 	}
+	ui::UIService* xmlrpcservice = (ui::UIService*) new ui::RPCService(patch);
+	ui::UIService* oscservice = (ui::UIService*) new ui::OSCService(patch);
 
-	ui::UIManager::getInstance().setCurrentPatch(patch);
-	ui::UIManager::getInstance().startXMLRPCServer();
+	ui::UIManager::getInstance().registerService(xmlrpcservice, string("xmlrpc"), true);
+	ui::UIManager::getInstance().registerService(oscservice, string("oscservice"), true);
 
 	patch->initialize();
 
-	while(true) {
-
-		patch->run();
-	}
+	patch->run();
 
 	return 0;
 }
@@ -84,6 +86,6 @@ void SynthesizerTerminate(int sig){
 
 	patch->stop();
 
-	ui::UIManager::getInstance().stopXMLRPCServer();
+//	ui::UIManager::getInstance().stopXMLRPCServer();
 	SoundComponentLoader::getInstance().finailize();
 }
