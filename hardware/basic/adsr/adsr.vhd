@@ -82,6 +82,7 @@ architecture Behavioral of adsr is
                                 state <= s_sustain;
                             end if;
                         when s_sustain  =>
+                            i_wave <= sustain_amp;
                             if stop = '1' then
                                 state <= s_release;
                                 stop <= '0';
