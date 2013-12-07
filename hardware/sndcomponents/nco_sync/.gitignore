@@ -3,6 +3,7 @@ cordic_stage.vhd
 nco.vhd
 sawtooth.vhd
 square.vhd
+triangle.vhd
 ise/
 xst/
 _xmsgs/
