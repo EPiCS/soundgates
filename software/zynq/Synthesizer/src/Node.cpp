@@ -10,9 +10,6 @@
 #include "Node.h"
 
 
-
-Node::Node(void){ }
-
 Node::Node(int uid){
 
 	this->uid = uid;

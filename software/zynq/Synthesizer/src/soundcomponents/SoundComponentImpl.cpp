@@ -11,7 +11,7 @@ SoundComponentImpl::SoundComponentImpl(){ }
 
 SoundComponentImpl::SoundComponentImpl(vector<string> parameters){
 
-	this->parameters = parameters;
+	this->m_Parameters = parameters;
 }
 
 SoundComponentImpl::~SoundComponentImpl(){ }

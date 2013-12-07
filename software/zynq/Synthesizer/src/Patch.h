@@ -35,7 +35,8 @@ private:
 
 	vector<InputSoundComponent*>*	m_InputComponents;
 	vector<SoundComponent*> 		m_ComponentsVector;
-	vector<Link*> 					m_LinksVector;
+	vector<BufferedLink*>			m_BufferedLinksVector;
+	vector<ControlLink*>			m_ControlLinksVector;
 	Synthesizer::state::ePatchState m_PatchState;
 
 public:

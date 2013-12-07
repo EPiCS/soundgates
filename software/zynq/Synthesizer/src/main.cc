@@ -42,7 +42,6 @@ int main( int argc, const char* argv[])
 		BOOST_LOG_TRIVIAL(error) << "Could not register termination handler";
 	}
 
-
 	if(argc > 2){
 
 		std::string loglevel = std::string(argv[1]);

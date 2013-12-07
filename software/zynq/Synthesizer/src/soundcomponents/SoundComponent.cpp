@@ -38,8 +38,6 @@ void SoundComponent::init() {
 
 void SoundComponent::addOutgoingLink(Link& link, int port){
 
-	getOutgoingLinks().push_back(link);
-
 	if((int)this->m_pOutports->size() < port){
 
 		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
@@ -48,8 +46,6 @@ void SoundComponent::addOutgoingLink(Link& link, int port){
 }
 
 void SoundComponent::addIncomingLink(Link& link, int port){
-
-	getIncomingLinks().push_back(link);
 
 	if((int)this->m_pInports->size() < port){
 

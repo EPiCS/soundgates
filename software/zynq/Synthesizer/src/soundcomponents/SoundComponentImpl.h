@@ -19,10 +19,10 @@ using namespace std;
 class SoundComponentImpl {
 
 private:
-	vector<Port*> inports;
-	vector<Port*> outports;
+	vector<Port*> m_Inports;
+	vector<Port*> m_Outports;
 
-	vector<string> parameters;
+	vector<string> m_Parameters;
 
 public:
 
@@ -34,9 +34,9 @@ public:
 	Port* getInport(unsigned int);
 	Port* getOutport(unsigned int);
 
-	vector<Port*>& getInports(){ return inports; }
-	vector<Port*>& getOutports(){ return outports;}
-	vector<string>& getParameters(){ return parameters;}
+	vector<Port*>& getInports(){ return m_Inports; }
+	vector<Port*>& getOutports(){ return m_Outports;}
+	vector<string>& getParameters(){ return m_Parameters;}
 
 	virtual void init() = 0;
 	virtual void process() = 0;

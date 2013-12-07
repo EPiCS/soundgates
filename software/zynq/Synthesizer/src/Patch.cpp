@@ -71,10 +71,10 @@ void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport)
 
 	for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter){
 
-		if(dynamic_cast<Node*>(*iter)->getUid() == sourceid){
+		if( ((Node*)*iter)->getUid() == sourceid){
 			source = *iter;
 		}
-		if (dynamic_cast<Node*>(*iter)->getUid() == destid) {
+		if( ((Node*)*iter)->getUid() == destid) {
 			destination = *iter;
 		}
 	}
@@ -87,7 +87,9 @@ void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport)
     Link* link = NULL;
 
     if(typeid(*srcPort) != typeid(*destPort)){
+
     	BOOST_LOG_TRIVIAL(error) << "Sourceport of type " << typeid(*srcPort).name() << " does not match destinationport of type " << typeid(*destPort).name();
+
     }else{
 
     	BOOST_LOG_TRIVIAL(debug) << "Source port type" << typeid(*srcPort).name();
@@ -95,22 +97,28 @@ void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport)
     	if(typeid(*srcPort) == typeid(SoundPort)){
 
     		BOOST_LOG_TRIVIAL(debug) << "Creating buffered link";
-    		link = new BufferedLink((Node*)source, (Node*)destination, 1024 * sizeof(int));
+    		link = new BufferedLink((Node*)source, (Node*)destination, Synthesizer::config::blocksize * sizeof(int));
+
+    		m_BufferedLinksVector.push_back((BufferedLink*)link);
 
     	}else if(typeid(*srcPort) == typeid(ControlPort)){
 
     		BOOST_LOG_TRIVIAL(debug) << "Creating control link";
     		link = new ControlLink((Node*)source, (Node*)destination);
+
+    		m_ControlLinksVector.push_back((ControlLink*)link);
     	}
 
-    	m_LinksVector.push_back(link);
+		if(NULL == link) {
 
-    	source->addOutgoingLink(*link, srcport);
-    	destination->addIncomingLink(*link, destport);
+			BOOST_LOG_TRIVIAL(error) << "Could allocate create link object";
+		} else {
+
+			source->addOutgoingLink(*link, srcport);
+			destination->addIncomingLink(*link, destport);
+
+		}
     }
-
-
-
 }
 
 void Patch::initialize(void){
@@ -147,8 +155,8 @@ void Patch::run(){
 				(*iter)->join();
 			}
 
-			for (vector<Link*>::iterator iter = m_LinksVector.begin();
-					iter != m_LinksVector.end(); ++iter) {
+			for (vector<BufferedLink*>::iterator iter = m_BufferedLinksVector.begin();
+					iter != m_BufferedLinksVector.end(); ++iter) {
 
 				static_cast<BufferedLink*>((*iter))->switchBuffers();
 			}

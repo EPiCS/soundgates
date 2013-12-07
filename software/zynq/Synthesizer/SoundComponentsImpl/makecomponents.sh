@@ -1,7 +1,6 @@
 #!/bin/bash
 
 exit
-
 cd output
 make clean
 make all
