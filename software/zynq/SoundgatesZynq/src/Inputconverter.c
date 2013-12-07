@@ -60,6 +60,6 @@ int ms_to_incr ( int ms, float ramp_amp, float start_stop_amp)
 // 
 float wave_to_incr (int wave, int comp_id, min_freq, max_freq)
 {
-    return freq_to_incr(comp_id, (max-min)/2^28 *(wave*2) + min);
+    return freq_to_incr(comp_id, (max-min)/2^SOUNDGATES_FIXED_PT_SCALE *(wave*2) + min);
 }
 
