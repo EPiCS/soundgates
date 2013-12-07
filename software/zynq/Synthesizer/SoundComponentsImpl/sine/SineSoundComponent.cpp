@@ -13,9 +13,6 @@ int SineSoundComponent::frequencyInPort = 1;
 
 const char* SineSoundComponent::name = "sine";
 
-#include "impl/SineImpl_SW.h"
-#include "impl/SineImpl_HW.h"
-
 extern "C"{
 
 	SineSoundComponent* create(SoundComponents::ImplType impltype, std::vector<std::string> params){

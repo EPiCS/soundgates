@@ -15,7 +15,7 @@ class ControlPort : public Port{
 
 public:
 	ControlPort(int portnumber);
-	~ControlPort();
+	virtual ~ControlPort();
 
 	int doSomething(){ return 0;}
 };

@@ -28,7 +28,7 @@ private:
 public:
 
 	RegisterDeviceHandler();
-	~RegisterDeviceHandler();
+	virtual ~RegisterDeviceHandler();
 
 	 void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP);
 };

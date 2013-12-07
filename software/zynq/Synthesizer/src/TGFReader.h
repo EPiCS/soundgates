@@ -36,7 +36,7 @@ private:
 public:
 
 	TGFReader();
-	~TGFReader();
+	virtual ~TGFReader();
 
 	void read(Patch*, string);
 };

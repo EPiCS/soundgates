@@ -42,7 +42,7 @@ private:
 public:
 
 	Patch();
-	~Patch();
+	virtual ~Patch();
 
 	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
 	void createSoundLink(int sourceid, int srcport, int destid, int destport);

@@ -105,7 +105,7 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 
 	if(NULL == libhndl){
 
-		BOOST_LOG_TRIVIAL(error) << "Could not load library " << filename;
+		BOOST_LOG_TRIVIAL(error) << "Could not load library " << filename << ": "<< dlerror();
 
 	}else{
 

@@ -23,7 +23,7 @@ private:
 public:
 
 	Node(int uid);
-	~Node();
+	virtual ~Node();
 
 	int getUid();
 	bool operator==(const Node& other) const;

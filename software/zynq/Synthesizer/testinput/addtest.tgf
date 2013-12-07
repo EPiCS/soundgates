@@ -1,13 +1,19 @@
 1 input/sw/'/sin1 f'
 2 input/sw/'/sin2 f'
-3 sine/sw
+3 input/sw/'/sin3 f'
 4 sine/sw
-5 add/sw
-6 dac/sw
-#  
+5 sine/sw
+6 sine/sw
+7 add/sw
+8 add/sw
+9 dac/sw
 
-1 3 '1,1' 
-2 4 '1,1'
-3 5 '1,1'
-4 5 '1,2'
-5 6 '1,1' 
+#  
+1 4 '1,1' 
+2 5 '1,1' 
+3 6 '1,1' 
+4 7 '1,1' 
+5 7 '1,2' 
+7 8 '1,1'
+6 8 '1,2' 
+8 9 '1,1' 

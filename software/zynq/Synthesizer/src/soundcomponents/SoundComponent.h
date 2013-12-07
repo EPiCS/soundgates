@@ -37,7 +37,7 @@ private:
 public:
 
 	SoundComponent(int uid, SoundComponentImpl* impl);
-	~SoundComponent();
+	virtual ~SoundComponent();
 
 
 	void addOutgoingLink(Link& link, int port);

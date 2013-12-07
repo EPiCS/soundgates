@@ -77,8 +77,26 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="xilinx.gnu.armlinux.exe.debug.1457978997.1767493616" name="/" resourcePath="src">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.base.337545057" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1973771718" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.662981571"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1266257056" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.1142537419">
+								<option id="gnu.cpp.compiler.option.optimization.level.1557371340" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1869229342" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.689286896" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base.1599282583">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2047898548" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1414457629" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base.526117855"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.124805321" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base.213048276"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.base.307346652" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base.788704217">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.621236811" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry excluding="SoundComponentsImpl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -107,7 +125,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="SoundComponentsImpl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
