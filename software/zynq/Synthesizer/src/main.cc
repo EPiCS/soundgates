@@ -19,6 +19,8 @@
 #include "ui/service/RPCService.h"
 #include "ui/service/OSCService.h"
 
+#include "SoundgatesConfig.hpp"
+
 namespace logging = boost::log;
 
 /* Forward declaration */
@@ -29,6 +31,8 @@ Patch* patch;
 
 int main( int argc, const char* argv[])
 {
+	SoundgatesConfig* config = SoundgatesConfig::getInstance();
+	config->loadDefault();
 
 	SynthesizerFileReader* foo = new TGFReader;
 	SoundComponentLoader* loader;
