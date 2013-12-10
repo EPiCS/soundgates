@@ -15,7 +15,7 @@ using std::string;
 
 typedef enum
 {
-	ALSA_BUFFER_SIZE = 0, ALSA_SAMPLE_RATE, NUM_CONFIG_FIELDS
+	CFG_SOUND_BUFFER_SIZE = 0, CFG_ALSA_CHUNKS, CFG_SAMPLE_RATE, CFG_NUM_CONFIG_FIELDS
 } SoundgatesConfValue;
 
 class SoundgatesConfig
@@ -30,7 +30,7 @@ private:
 	SoundgatesConfig();
 	~SoundgatesConfig();
 
-	double configValues[NUM_CONFIG_FIELDS];
+	double configValues[CFG_NUM_CONFIG_FIELDS];
 	static SoundgatesConfig* instance;
 	bool initialized;
 	string cfgPath;

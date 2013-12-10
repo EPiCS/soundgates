@@ -14,9 +14,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <boost/thread.hpp>
-
-#define SOUNDBUFFERSIZE 16384
-#define ALSACHARS 1024
+#include "../SoundgatesConfig.hpp"
 
 class Soundbuffer
 {
@@ -26,10 +24,12 @@ private:
 
 	bool running, playing, sane;
 
-	char buffer[SOUNDBUFFERSIZE];
+	char* buffer;
 	int readoffset;
 	int writeoffset;
 	int alsaSamples;
+	int SOUNDBUFFERSIZE;
+	int ALSACHARS;
 
 	snd_pcm_t* pcm_handle;
 	snd_pcm_hw_params_t* hw_params;
@@ -40,7 +40,7 @@ private:
 	bool canAcceptData(int size);
 
 public:
-	Soundbuffer(unsigned int samplerate);
+	Soundbuffer();
 	~Soundbuffer();
 
 	void startPlayback();

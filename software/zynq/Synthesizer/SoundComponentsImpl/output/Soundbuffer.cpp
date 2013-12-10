@@ -7,8 +7,15 @@
 
 #include "Soundbuffer.hpp"
 
-Soundbuffer::Soundbuffer(unsigned int samplerate)
+Soundbuffer::Soundbuffer()
 {
+	SoundgatesConfig* cfg = SoundgatesConfig::getInstance();
+	this->SOUNDBUFFERSIZE = (int) (cfg->getConf(CFG_SOUND_BUFFER_SIZE));
+	this->ALSACHARS = (int) (cfg->getConf(CFG_ALSA_CHUNKS));
+	unsigned int samplerate = (unsigned int) (cfg->getConf(CFG_SAMPLE_RATE));
+
+	this->buffer = (char*) malloc(this->SOUNDBUFFERSIZE * sizeof(char));
+
 	int err;
 
 	// Always offer chunks of the same size to ALSA

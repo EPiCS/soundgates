@@ -25,7 +25,7 @@ SoundgatesConfig::SoundgatesConfig()
 
 }
 
-double SoundgatesConfig::getConf(SoundgatesConfValue)
+double SoundgatesConfig::getConf(SoundgatesConfValue v)
 {
 	if (!initialized)
 	{
@@ -33,7 +33,7 @@ double SoundgatesConfig::getConf(SoundgatesConfValue)
 				<< std::endl;
 	}
 
-	return 0;
+	return configValues[v];
 }
 
 void SoundgatesConfig::load(string path)
@@ -44,8 +44,15 @@ void SoundgatesConfig::load(string path)
 
 void SoundgatesConfig::loadDefault()
 {
-
-	configValues[ALSA_BUFFER_SIZE] = 16834;
-	configValues[ALSA_SAMPLE_RATE] = 44100;
+	// How large to create the ALSA Buffer.
+	// Adds slightly to latency but increases robustness against buffer underruns
+	// Non power of twos might lead to unexpected results!
+	configValues[CFG_SOUND_BUFFER_SIZE] = 16384;
+	// How many bytes need to be collected before sending data to ALSA
+	// To low values may lead to artifacts in the sound output
+	// Non power of twos might lead to unexpected results!
+	configValues[CFG_ALSA_CHUNKS] = 1024;
+	// Desired sample rate for the system. Not all rates might be supported
+	configValues[CFG_SAMPLE_RATE] = 44100;
 	initialized = true;
 }
