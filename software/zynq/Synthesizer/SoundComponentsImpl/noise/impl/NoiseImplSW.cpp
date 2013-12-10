@@ -24,7 +24,7 @@ void NoiseImplSW::process() {
 
 	char* writebuffer = soundoutlink->getWriteBuffer();
 
-	for(int i = 0; i < soundoutlink->getBufferDepth(); i++){
+	for(int i = 0; i < soundoutlink->getBufferDepth() / sizeof(int); i++){
 		((int*)writebuffer)[i] = (rand() - RAND_MAX) * 2;
 	}
 

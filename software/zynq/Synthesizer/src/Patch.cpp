@@ -8,11 +8,15 @@
 
 #include "Patch.h"
 
+extern Patch* patch;
+
+extern "C" void OnPatchCompletion(){ patch->switchBuffers(); }
 
 Patch::Patch(){
 
 	m_InputComponents = NULL;
 	m_PatchState  	  = Synthesizer::state::created;
+	m_SndComponentBarrier = NULL;
 }
 
 Patch::~Patch(){ }
@@ -140,27 +144,47 @@ void Patch::run(){
 
 		m_PatchState = Synthesizer::state::running;
 
-		while (m_PatchState == Synthesizer::state::running) {
-			for (vector<SoundComponent*>::iterator iter =
-					m_ComponentsVector.begin();
-					iter != m_ComponentsVector.end(); ++iter) {
+		//TODO: Make sure that processing time in both workers is nearly equal
 
-				(*iter)->run();
-			}
+		vector<SoundComponent*> split_lo(m_ComponentsVector.begin(), m_ComponentsVector.begin() + m_ComponentsVector.size() / 2);
 
-			for (vector<SoundComponent*>::iterator iter =
-					m_ComponentsVector.begin();
-					iter != m_ComponentsVector.end(); ++iter) {
+		vector<SoundComponent*> split_hi(m_ComponentsVector.begin() + m_ComponentsVector.size() / 2, m_ComponentsVector.end());
 
-				(*iter)->join();
-			}
+		boost::condition_variable_any* buffersync 	 = new boost::condition_variable_any;
+		boost::condition_variable_any* componentsync = new boost::condition_variable_any;
 
-			for (vector<BufferedLink*>::iterator iter = m_BufferedLinksVector.begin();
-					iter != m_BufferedLinksVector.end(); ++iter) {
+		boost::shared_mutex sync;
 
-				static_cast<BufferedLink*>((*iter))->switchBuffers();
-			}
+		boost::thread_attributes attrs;
+
+
+
+		SoundComponentWorker w1(m_ComponentsVector, &sync, buffersync, componentsync);
+
+		// TODO: Check why this leads to noise
+//		SoundComponentWorker w1(split_lo, &sync, buffersync, componentsync);
+//		SoundComponentWorker w2(split_hi, &sync, buffersync, componentsync);
+
+		SoundLinkWorker w3(m_BufferedLinksVector, &sync, componentsync, buffersync);
+
+		boost::thread componentworkerthread_t1(boost::ref(w1));
+		//boost::thread componentworkerthread_t2(boost::ref(w2));
+
+		boost::thread linkworkerthread_t1(boost::ref(w3));
+
+		while(1){
+			usleep(1000);
 		}
+	}
+}
+
+void Patch::switchBuffers(){
+//	BOOST_LOG_TRIVIAL(debug) << "Switching buffers";
+
+	for (vector<BufferedLink*>::iterator iter = m_BufferedLinksVector.begin();
+			iter != m_BufferedLinksVector.end(); ++iter) {
+
+		static_cast<BufferedLink*>((*iter))->switchBuffers();
 	}
 }
 
@@ -170,11 +194,6 @@ void Patch::stop(){
 
 		m_PatchState = Synthesizer::state::stopped;
 
-		for (vector<SoundComponent*>::iterator iter =
-				m_ComponentsVector.begin(); iter != m_ComponentsVector.end();
-				++iter) {
-
-			(*iter)->join();
-		}
+		//TODO: currently not implemented
 	}
 }

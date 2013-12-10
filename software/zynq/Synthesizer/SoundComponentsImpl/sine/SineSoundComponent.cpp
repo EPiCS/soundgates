@@ -7,6 +7,8 @@
 
 #include "SineSoundComponent.h"
 
+#include "impl/SineImpl_SW.h"
+#include "impl/SineImpl_HW.h"
 
 int SineSoundComponent::sineValueOutPort = 1;
 int SineSoundComponent::frequencyInPort = 1;

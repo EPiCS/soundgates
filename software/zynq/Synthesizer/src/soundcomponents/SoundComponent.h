@@ -13,8 +13,9 @@
 #include <algorithm>
 #include <iostream>
 
-#include <boost/log/trivial.hpp>
 #include <boost/thread.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/thread/barrier.hpp>
 
 #include "../Node.h"
 #include "Port.h"
@@ -29,9 +30,6 @@ private:
 
 	vector<Port*>*		m_pInports;
 	vector<Port*>* 		m_pOutports;
-
-	boost::thread 		m_thread;
-
 	SoundComponentImpl* m_pDelegate;
 
 public:
@@ -49,7 +47,6 @@ public:
 	SoundComponentImpl* getDelegate();
 
 	void run();
-	void join();
 	void init();
 
 };

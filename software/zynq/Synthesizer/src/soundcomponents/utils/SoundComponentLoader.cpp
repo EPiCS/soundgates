@@ -52,7 +52,8 @@ void SoundComponentLoader::initialize(std::string repository){
 
 		// Iterate through all files in the directory
 		for(fs::recursive_directory_iterator end, iter(repo); iter != end; ++iter){
-			if(!fs::is_directory(iter.status())){
+			if(!fs::is_directory(iter.status()) && !fs::extension(*iter).compare(".so")){
+
 				BOOST_LOG_TRIVIAL(debug) << "Found library: " << *iter;
 
 				loadLibrary(iter->path().string());

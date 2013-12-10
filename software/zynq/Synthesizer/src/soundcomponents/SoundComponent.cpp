@@ -13,7 +13,6 @@
 SoundComponent::SoundComponent(int uid, SoundComponentImpl* delegate) : Node(uid){
 
 	this->m_pDelegate = delegate;
-
 	this->m_pInports  = &(delegate->getInports());
 	this->m_pOutports = &(delegate->getOutports());
 
@@ -23,12 +22,7 @@ SoundComponent::~SoundComponent(){ }
 
 void SoundComponent::run(){
 
-	m_thread = boost::thread(&SoundComponentImpl::process, m_pDelegate);
-}
-
-void SoundComponent::join(){
-
-	m_thread.join();
+		m_pDelegate->process();
 }
 
 void SoundComponent::init() {
