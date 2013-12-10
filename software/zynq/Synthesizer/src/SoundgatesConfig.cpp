@@ -29,8 +29,9 @@ double SoundgatesConfig::getConf(SoundgatesConfValue v)
 {
 	if (!initialized)
 	{
-		std::cerr << "Configuration was not initialized before reading!"
+		std::cerr << "Configuration was not initialized before reading! Using defaults"
 				<< std::endl;
+		this->loadDefault();
 	}
 
 	return configValues[v];
