@@ -17,7 +17,7 @@ Soundbuffer::Soundbuffer(unsigned int samplerate)
 	this->running = true;
 	this->playing = false;
 	this->writeoffset = 0;
-	this->readoffset = ALSACHARS;
+	this->readoffset = 0;
 	for (int i = 0; i < SOUNDBUFFERSIZE; i++)
 	{
 		this->buffer[i] = 0;
@@ -165,24 +165,33 @@ Soundbuffer::~Soundbuffer()
 
 char* Soundbuffer::getNextFrames()
 {
-	char* buffer_ptr = this->buffer + this->readoffset;
+	bool ptr_return = false;
 
 	// Advance readbuffer by ALSACHUNKS
 	int nextReadOffset = this->readoffset + ALSACHARS;
+	// If we reached the end, restart from the beginning
 	if (nextReadOffset >= SOUNDBUFFERSIZE)
 	{
 		nextReadOffset = 0;
+		ptr_return = true;
 	}
-	if (nextReadOffset == this->writeoffset)
+	// We might read samples faster than we produce them.
+	// In that case we don't want to advance the readoffset past the writeoffset
+	// Write and read offset are allowed to be same. This would mean the buffer is completely filled.
+	// Therefore, don't check for equality here.
+	if ( 	(!ptr_return && (this->readoffset < this->writeoffset && nextReadOffset > this->writeoffset )) ||
+		 	(ptr_return  && (this->readoffset < this->writeoffset)))
 	{
 		std::cerr
-				<< "Buffer has run dry! This should not happen! Will now play previous samples again!"
+				<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:" << this->readoffset << "  WO:" << this->writeoffset
 				<< std::endl;
 	}
 	else
 	{
 		this->readoffset = nextReadOffset;
 	}
+
+	char* buffer_ptr = this->buffer + this->readoffset;
 	return buffer_ptr;
 }
 
