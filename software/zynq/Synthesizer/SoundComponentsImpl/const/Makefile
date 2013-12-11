@@ -1,18 +1,18 @@
 CC=g++
-CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 
+CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2
 
-SOURCES=SoundDelay.cpp 
-OBJECTS=SoundDelay.o
+SOURCES=ConstSoundComponent.cpp
+OBJECTS=ConstSoundComponent.o
 
 SOURCES+=../SoundComponentImpl.cpp ../Link.cpp ../Port.cpp ../BufferedLink.cpp ../ControlLink.cpp ../SoundPort.cpp ../ControlPort.cpp
 OBJECTS+=SoundComponentImpl.o Link.o ControlLink.o ControlPort.o Port.o SoundPort.o BufferedLink.o
 
-all: compile libdelay.so
+all: compile libconst.so
 
 compile:
 	$(CC) $(CFLAGS) -c $(SOURCES)
 	
-libdelay.so:
+libconst.so:
 	$(CC) -g3 -shared -o $@  $(OBJECTS)
 	
 clean:

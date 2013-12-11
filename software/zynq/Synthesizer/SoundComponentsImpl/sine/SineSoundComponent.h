@@ -18,7 +18,6 @@
 
 #include "../ControlLink.h"
 #include "../BufferedLink.h"
-
 #include "../SoundComponentImpl.h"
 
 class SineSoundComponent : public SoundComponentImpl{

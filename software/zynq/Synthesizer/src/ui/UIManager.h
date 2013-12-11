@@ -22,7 +22,7 @@ class UIManager {
 private:
 
 	UIManager(){}
-	~UIManager(){}
+	virtual ~UIManager(){}
 
 	UIManager(UIManager const&);
 	void operator=(UIManager const&);

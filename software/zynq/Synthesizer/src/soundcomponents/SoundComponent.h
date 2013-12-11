@@ -13,8 +13,9 @@
 #include <algorithm>
 #include <iostream>
 
-#include <boost/log/trivial.hpp>
 #include <boost/thread.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/thread/barrier.hpp>
 
 #include "../Node.h"
 #include "Port.h"
@@ -29,15 +30,12 @@ private:
 
 	vector<Port*>*		m_pInports;
 	vector<Port*>* 		m_pOutports;
-
-	boost::thread 		m_thread;
-
 	SoundComponentImpl* m_pDelegate;
 
 public:
 
 	SoundComponent(int uid, SoundComponentImpl* impl);
-	~SoundComponent();
+	virtual ~SoundComponent();
 
 
 	void addOutgoingLink(Link& link, int port);
@@ -49,7 +47,6 @@ public:
 	SoundComponentImpl* getDelegate();
 
 	void run();
-	void join();
 	void init();
 
 };

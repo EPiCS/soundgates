@@ -42,7 +42,7 @@ private:
 	SoundComponentLoader(SoundComponentLoader const&);
 	void operator=(SoundComponentLoader const&);
 
-	~SoundComponentLoader();
+	virtual ~SoundComponentLoader();
 
 	bool 		 m_IsInitialized;
 

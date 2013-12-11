@@ -19,7 +19,7 @@ private:
 
 public:
 	Link(Node* source, Node* destination);
-	~Link();
+	virtual ~Link();
 
 	void setSource(Node*);
 	Node* getSource();

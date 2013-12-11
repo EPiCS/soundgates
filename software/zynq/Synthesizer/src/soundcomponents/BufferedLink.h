@@ -25,7 +25,7 @@ private:
 public:
 
 	BufferedLink(Node *source, Node* dest, int bufferdepth);
-	~BufferedLink(void);
+	virtual ~BufferedLink(void);
 
 	void switchBuffers(void);
 

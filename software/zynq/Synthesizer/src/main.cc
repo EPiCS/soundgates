@@ -26,7 +26,7 @@ namespace logging = boost::log;
 /* Forward declaration */
 void SynthesizerTerminate(int);
 
-static Patch* patch;
+Patch* patch;
 
 
 int main( int argc, const char* argv[])

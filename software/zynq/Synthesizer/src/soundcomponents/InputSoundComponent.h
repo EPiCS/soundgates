@@ -49,7 +49,7 @@ public:
 	InputSoundComponent() { }
 	InputSoundComponent(string oscaddresses);
 	InputSoundComponent(vector<string> parameters);
-	~InputSoundComponent();
+	virtual ~InputSoundComponent();
 
 	string& getOscAddress();
 	string& getOscTypeTag();

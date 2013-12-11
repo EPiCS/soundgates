@@ -1,6 +1,5 @@
 #!/bin/bash
 
-exit
 cd output
 make clean
 make all
@@ -10,3 +9,14 @@ cd sine
 make clean
 make all
 cd ..
+
+cd add
+make clean
+make all
+cd ..
+
+cd delay
+make clean
+make all
+cd ..
+

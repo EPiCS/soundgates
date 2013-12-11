@@ -16,7 +16,7 @@ class SoundPort: public Port {
 
 public:
 	SoundPort(int portnumber);
-	~SoundPort();
+	virtual ~SoundPort();
 
 	int doSomething(){ return 0;}
 };
