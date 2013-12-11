@@ -77,20 +77,32 @@ architecture Behavioral of adsr is
                                 end if;
                             end if;
                         when s_decay    =>
-                            i_wave <= i_wave - decay;
-                            if i_wave <= sustain_amp then
-                                state <= s_sustain;
+                            if start = '1' then
+                                state <= s_attack;
+                            else
+                                i_wave <= i_wave - decay;
+                                if i_wave <= sustain_amp then
+                                    state <= s_sustain;
+                                end if;
                             end if;
                         when s_sustain  =>
-                            i_wave <= sustain_amp;
-                            if stop = '1' then
-                                state <= s_release;
-                                stop <= '0';
+                            if start = '1' then
+                                state <= s_attack;
+                            else
+                                i_wave <= sustain_amp;
+                                if stop = '1' then
+                                    state <= s_release;
+                                    stop <= '0';
+                                end if;
                             end if;
                         when s_release  =>
-                            i_wave <= i_wave - release;
-                            if i_wave <= release_amp then
-                                state <= s_exit;
+                            if start = '1' then
+                                state <= s_attack;
+                            else
+                                i_wave <= i_wave - release;
+                                if i_wave <= release_amp then
+                                    state <= s_exit;
+                                end if;
                             end if;
 				        when s_exit		=>
 					        state <= s_attack;
