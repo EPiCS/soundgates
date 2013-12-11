@@ -45,7 +45,7 @@ end adsr;
 
 architecture Behavioral of adsr is
 
-    type   adsr_states is (s_attack, s_decay, s_sustain, s_release, s_exit);
+    type   adsr_states is (s_idle, s_attack, s_decay, s_sustain, s_release, s_exit);
     signal state  : adsr_states;
     signal i_wave : signed (31 downto 0);
     signal stop : std_logic;
@@ -59,7 +59,7 @@ architecture Behavioral of adsr is
         begin
             if rst = '1' then
                 i_wave <= start_amp;
-                state <= s_attack;
+                state <= s_idle;
                 stop <= '0';
             else
             
@@ -68,44 +68,34 @@ architecture Behavioral of adsr is
                     stop <= '1'
                 end if;
                 if ce = '1' then
+                    if start = '1' then
+                        state <= s_attack;
+                    end if;
+
                     case state is
                         when s_attack   =>
-                            if start = '1' then
-                                i_wave <= i_wave + attack;
-                                if i_wave >= attack_amp then
-                                    state <= s_decay;
-                                end if;
+                            i_wave <= i_wave + attack;
+                            if i_wave >= attack_amp then
+                                state <= s_decay;
                             end if;
                         when s_decay    =>
-                            if start = '1' then
-                                state <= s_attack;
-                            else
-                                i_wave <= i_wave - decay;
-                                if i_wave <= sustain_amp then
-                                    state <= s_sustain;
-                                end if;
+                            i_wave <= i_wave - decay;
+                            if i_wave <= sustain_amp then
+                                state <= s_sustain;
                             end if;
                         when s_sustain  =>
-                            if start = '1' then
-                                state <= s_attack;
-                            else
-                                i_wave <= sustain_amp;
-                                if stop = '1' then
-                                    state <= s_release;
-                                    stop <= '0';
-                                end if;
+                            i_wave <= sustain_amp;
+                            if stop = '1' then
+                                state <= s_release;
+                                stop <= '0';
                             end if;
                         when s_release  =>
-                            if start = '1' then
-                                state <= s_attack;
-                            else
-                                i_wave <= i_wave - release;
-                                if i_wave <= release_amp then
-                                    state <= s_exit;
-                                end if;
+                            i_wave <= i_wave - release;
+                            if i_wave <= release_amp then
+                                state <= s_exit;
                             end if;
 				        when s_exit		=>
-					        state <= s_attack;
+					        state <= s_idle;
                     end case;
                 end if;                       
             end if;
