@@ -10,7 +10,7 @@
 
 namespace ui {
 
-enum eServiceState { CREATED, RUNNING, STOPPED};
+enum eServiceState {UNDEFINED, CREATED, RUNNING, STOPPED};
 
 
 class UIService {
@@ -30,9 +30,14 @@ protected:
 public:
 	UIService();
 	virtual ~UIService();
-
+	/*
+	 * Gets called when the UI-Manager attempts to start the service
+	 */
 	virtual void startService() = 0;
 
+	/*
+	 * Gets called when the UI-Manager attepmts to stop the service
+	 */
 	virtual void stopService()  = 0;
 
 	eServiceState getServiceState(){ return m_ServiceState; }

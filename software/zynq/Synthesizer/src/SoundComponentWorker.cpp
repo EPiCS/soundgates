@@ -16,8 +16,6 @@ void SoundComponentWorker::operator()() {
 		boost::shared_lock<boost::shared_mutex> lock(*m_Sync);
 		while (1) {
 
-			//BOOST_LOG_TRIVIAL(debug) << "Processing sound worker thread " << boost::this_thread::get_id();
-
 			for (vector<SoundComponent*>::iterator iter = m_SoundComponents.begin();
 					iter != m_SoundComponents.end(); ++iter) {
 
@@ -31,7 +29,7 @@ void SoundComponentWorker::operator()() {
 	}
 	catch( boost::thread_interrupted const& e )
 	{
-		BOOST_LOG_TRIVIAL(debug) <<  "Thread interrupted!";
+		//SYNTHESIZER_LOG(debug) <<  "Thread interrupted!";
 		return;
 	}
 }

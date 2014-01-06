@@ -15,14 +15,14 @@ void UIManager::registerService(UIService* service, string name, bool runOnRegis
 
 		m_UIServices[name] = service;
 
-		BOOST_LOG_TRIVIAL(debug) << "Registering service \"" << name << "\" on system";
+		SYNTHESIZER_LOG(debug) << "Registering service \"" << name << "\" on system";
 
 		if(runOnRegister){
 			service->startService();
 		}
 
 	}else{
-		BOOST_LOG_TRIVIAL(error) << "Could not register service " << name << ": already registered";
+		SYNTHESIZER_LOG(error) << "Could not register service " << name << ": already registered";
 	}
 }
 
@@ -31,7 +31,7 @@ void UIManager::startService(string name){
 	UIService* service = m_UIServices[name];
 
 	if(service != NULL){
-		BOOST_LOG_TRIVIAL(error) << "Could start service " << name << ": service is not registered.";
+		SYNTHESIZER_LOG(error) << "Could start service " << name << ": service is not registered.";
 	}else{
 
 		eServiceState serviceState = service->getServiceState();
@@ -48,7 +48,7 @@ void UIManager::stopService(string name){
 	UIService* service = m_UIServices[name];
 
 	if(service != NULL){
-		BOOST_LOG_TRIVIAL(error) << "Could stop service " << name << ": service is not registered.";
+		SYNTHESIZER_LOG(error) << "Could stop service " << name << ": service is not registered.";
 	}else{
 
 		eServiceState serviceState = service->getServiceState();

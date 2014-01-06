@@ -9,7 +9,6 @@
 #define UIMANAGER_H_
 
 #include <vector>
-#include <boost/log/trivial.hpp>
 
 #include "UIService.h"
 #include "../Patch.h"

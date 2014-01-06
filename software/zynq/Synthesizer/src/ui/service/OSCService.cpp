@@ -26,7 +26,7 @@ int genericOSCHandler(const char *path, const char *types, lo_arg ** argv, int a
 			msg = msg + " " + "?";
 		}
 	}
-	BOOST_LOG_TRIVIAL(debug) << path << " " << types << msg;
+	SYNTHESIZER_LOG(debug) << path << " " << types << msg;
 
 	return 1;
 }
@@ -45,7 +45,7 @@ OSCService::~OSCService() { }
 
 void OSCService::startService(){
 
-	BOOST_LOG_TRIVIAL(debug) << "Starting osc handler service";
+	SYNTHESIZER_LOG(debug) << "Starting osc handler service";
 
 	int err;
 
@@ -65,7 +65,7 @@ void OSCService::startService(){
 	}
 
 	if((err = lo_server_thread_start(m_LoServerThread)) > 0){
-		BOOST_LOG_TRIVIAL(error) << "Cound not start start osc service: " << err;
+		SYNTHESIZER_LOG(error) << "Cound not start start osc service: " << err;
 	}
 
 	setServiceState(RUNNING);
@@ -75,7 +75,7 @@ void OSCService::startService(){
 void OSCService::stopService(){
 
 
-	BOOST_LOG_TRIVIAL(debug) << "Stopping osc handler service";
+	SYNTHESIZER_LOG(debug) << "Stopping osc handler service";
 
 	lo_server_thread_free(m_LoServerThread);
 

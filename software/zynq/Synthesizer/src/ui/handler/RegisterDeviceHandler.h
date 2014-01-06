@@ -16,8 +16,7 @@
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/server_abyss.hpp>
 
-#include <boost/log/trivial.hpp>
-
+#include "../../Synthesizer.h"
 
 namespace ui {
 

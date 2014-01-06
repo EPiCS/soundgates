@@ -15,13 +15,13 @@
 
 #include <lo/lo.h>
 
-#include <boost/log/trivial.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include "ControlPort.h"
 #include "ControlLink.h"
 #include "SoundComponentImpl.h"
 
+#include "../Synthesizer.h"
 
 using namespace std;
 

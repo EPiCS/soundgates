@@ -34,7 +34,7 @@ void SoundComponent::addOutgoingLink(Link& link, int port){
 
 	if((int)this->m_pOutports->size() < port){
 
-		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
+		SYNTHESIZER_LOG(error) << "Portnumber is out of range";
 	}
 	this->m_pOutports->at(port - 1)->setLink(&link);
 }
@@ -43,7 +43,7 @@ void SoundComponent::addIncomingLink(Link& link, int port){
 
 	if((int)this->m_pInports->size() < port){
 
-		BOOST_LOG_TRIVIAL(error) << "Portnumber is out of range";
+		SYNTHESIZER_LOG(error) << "Portnumber is out of range";
 	}
 
 	this->m_pInports->at(port - 1)->setLink(&link);

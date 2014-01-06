@@ -9,7 +9,6 @@
 #define SOUNDLINKWORKER_H_
 
 #include <vector>
-#include <boost/log/trivial.hpp>
 #include <boost/thread/thread.hpp>
 
 #include "soundcomponents/BufferedLink.h"

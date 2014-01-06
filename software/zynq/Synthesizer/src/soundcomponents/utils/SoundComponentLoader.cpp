@@ -44,7 +44,7 @@ void SoundComponentLoader::initialize(std::string repository){
 
 		if(!fs::exists(repository)){
 
-			BOOST_LOG_TRIVIAL(error) << "Cannot open soundcomponent repository";
+			SYNTHESIZER_LOG(error) << "Cannot open soundcomponent repository";
 			return; // remain uninitialized
 		}
 
@@ -54,7 +54,7 @@ void SoundComponentLoader::initialize(std::string repository){
 		for(fs::recursive_directory_iterator end, iter(repo); iter != end; ++iter){
 			if(!fs::is_directory(iter.status()) && !fs::extension(*iter).compare(".so")){
 
-				BOOST_LOG_TRIVIAL(debug) << "Found library: " << *iter;
+				SYNTHESIZER_LOG(debug) << "Found library: " << *iter;
 
 				loadLibrary(iter->path().string());
 			}
@@ -69,12 +69,12 @@ void SoundComponentLoader::finailize(){
 
 	if(m_IsInitialized){
 
-	BOOST_LOG_TRIVIAL(debug)<< "Closing library components";
+		SYNTHESIZER_LOG(debug)<< "Closing library components";
 
 		/* Free components */
 		for(std::vector<SoundComponentImpl*>::iterator iter = m_RegisteredSndInstances.begin(); iter != m_RegisteredSndInstances.end();) {
 
-			BOOST_LOG_TRIVIAL(debug) << "Cleaning up soundcomponent: " << *iter;
+			SYNTHESIZER_LOG(debug) << "Cleaning up soundcomponent: " << *iter;
 
 			delete (*iter);
 
@@ -86,7 +86,7 @@ void SoundComponentLoader::finailize(){
 		for(std::map<std::string, void*>::iterator iter =m_Factory.begin(), end = m_Factory.end();
 				iter != end; ++iter) {
 
-			BOOST_LOG_TRIVIAL(debug) << "Closing library of component type " << iter->first;
+			SYNTHESIZER_LOG(debug) << "Closing library of component type " << iter->first;
 			std::string type(iter->first);
 			void *libhndl = iter->second;
 
@@ -106,23 +106,23 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 
 	if(NULL == libhndl){
 
-		BOOST_LOG_TRIVIAL(error) << "Could not load library " << filename << ": "<< dlerror();
+		SYNTHESIZER_LOG(error) << "Could not load library " << filename << ": "<< dlerror();
 
 	}else{
 
 		getComponentName_t* namefn = (getComponentName_t*) dlsym(libhndl, SoundComponentLoader::componentNameFcnSymbol);
 
 		if ((liberror = dlerror()) != NULL){
-			BOOST_LOG_TRIVIAL(error) << "Could not resolve library symbols in library" << filename;
+			SYNTHESIZER_LOG(error) << "Could not resolve library symbols in library " << filename;
 		}
 
 		std::string componenttype(namefn());
 
-		BOOST_LOG_TRIVIAL(info) << "Loading sound component of type " << componenttype;
+		SYNTHESIZER_LOG(info) << "Loading sound component of type " << componenttype;
 
 		this->m_Factory[componenttype] = libhndl;
 
-		BOOST_LOG_TRIVIAL(debug) << "Library handle " << libhndl << " successfully stored";
+		SYNTHESIZER_LOG(debug) << "Library handle " << libhndl << " successfully stored";
 	}
 }
 
@@ -145,14 +145,14 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 
 	if(ispredefined){
 
-		BOOST_LOG_TRIVIAL(info) << "Creating predefined component of type " << type;
+		SYNTHESIZER_LOG(info) << "Creating predefined component of type " << type;
 
 		component = m_PredefinedComponentsCreateFn[type](params);
 
 	}else{
 
 
-		BOOST_LOG_TRIVIAL(debug) << "Creating component from library of type " << type;
+		SYNTHESIZER_LOG(debug) << "Creating component from library of type " << type;
 
 		char *liberror;
 		void* libhndl;
@@ -161,7 +161,7 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 
 		if(it == m_Factory.end()){
 
-			BOOST_LOG_TRIVIAL(info) << "Cannot create component of type \"" << type << " \": library not present";
+			SYNTHESIZER_LOG(info) << "Cannot create component of type \"" << type << " \": library not present";
 			return NULL;
 		}
 
@@ -170,11 +170,11 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 		createfn_t* createfn = (createfn_t*) dlsym(libhndl, SoundComponentLoader::createFcnSymbol);
 
 		if ((liberror = dlerror()) != NULL) {
-			BOOST_LOG_TRIVIAL(error) << "Could not resolve library symbol \"" << SoundComponentLoader::createFcnSymbol << "\" in library of type " << type;
+			SYNTHESIZER_LOG(error) << "Could not resolve library symbol \"" << SoundComponentLoader::createFcnSymbol << "\" in library of type " << type;
 		}
 
 		if(NULL == createfn){
-			BOOST_LOG_TRIVIAL(error) << "Create function is null";
+			SYNTHESIZER_LOG(error) << "Create function is null";
 		}
 
 		component = createfn(impltype, params);

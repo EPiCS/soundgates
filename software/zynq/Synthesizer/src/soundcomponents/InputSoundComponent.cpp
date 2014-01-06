@@ -77,20 +77,20 @@ int pushOSCMessageToInputsoundComponent(const char *path, const char *types, lo_
 	const vector<Port*>& ports = input->getOutports();
 
 	if(argc != (int)ports.size()){
-		BOOST_LOG_TRIVIAL(warning) <<  "OSC message arguments does not match number of input components outports: " << argc << " != " << ports.size();
+		SYNTHESIZER_LOG(warning) <<  "OSC message arguments does not match number of input components outports: " << argc << " != " << ports.size();
 	}else{
 		for(int i = 0; i < argc; i++){
 
 			switch(types[i]){
 			case 'f':
-				BOOST_LOG_TRIVIAL(debug) << "Port " << i << " received data: " << argv[i]->f;
+				SYNTHESIZER_LOG(debug) << "Port " << i << " received data: " << argv[i]->f;
 				((ControlLink*)(input->getOutport(i + 1)->getLink()))->pushControlData(argv[i]->f);
 				break;
 			case 'i':
-				BOOST_LOG_TRIVIAL(debug) << "Port " << i << " received data: " << argv[i]->i;
+				SYNTHESIZER_LOG(debug) << "Port " << i << " received data: " << argv[i]->i;
 				break;
 			default:
-				BOOST_LOG_TRIVIAL(warning) <<  "OSC type is currently not supported";
+				SYNTHESIZER_LOG(warning) <<  "OSC type is currently not supported";
 			}
 		}
 	}

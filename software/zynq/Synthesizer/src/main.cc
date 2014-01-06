@@ -7,7 +7,6 @@
 #include <signal.h>
 
 #include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 
 #include "TGFReader.h"
@@ -21,13 +20,11 @@
 
 #include "SoundgatesConfig.hpp"
 
-namespace logging = boost::log;
 
 /* Forward declaration */
 void SynthesizerTerminate(int);
 
 Patch* patch;
-
 
 int main( int argc, const char* argv[])
 {
@@ -43,7 +40,8 @@ int main( int argc, const char* argv[])
 	/* Register signal handler after starting rpc service, because
 	 * this service currently defines its own signal handler */
 	if(SIG_ERR == signal(SIGINT, SynthesizerTerminate)){
-		BOOST_LOG_TRIVIAL(error) << "Could not register termination handler";
+
+		SYNTHESIZER_LOG(error) << "Could not register termination handler";
 	}
 
 	if(argc > 2){
@@ -53,14 +51,13 @@ int main( int argc, const char* argv[])
 		if(!std::string("info").compare(loglevel)){
 
 			std::cout << "Setting log level to " << loglevel << std::endl;
-
-			logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::info);
+			boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
 
 		}else if(!std::string("debug").compare(loglevel)){
 
 			std::cout << "Setting log level to " << loglevel << std::endl;
 
-			logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::debug);
+			boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
 		}
 
 

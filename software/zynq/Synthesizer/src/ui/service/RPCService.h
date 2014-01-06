@@ -18,7 +18,6 @@
 #include <xmlrpc-c/server_abyss.hpp>
 
 #include <boost/thread.hpp>
-#include <boost/log/trivial.hpp>
 
 #include "../handler/RegisterDeviceHandler.h"
 #include "../handler/InteractiveComponentHandler.h"

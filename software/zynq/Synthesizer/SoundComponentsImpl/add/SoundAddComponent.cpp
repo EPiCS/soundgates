@@ -62,8 +62,6 @@ void SoundAddComponent::process(void){
 	char* readbuffer_b  = soundInLink_b->getReadBuffer();
 
 	char* writebuffer   = soundOutLink->getWriteBuffer();
-
-
 	for(int i = 0; i < bufferdepth; i++){
 
 		((int*)writebuffer)[i] = ((int*)readbuffer_a)[i] / 2 + ((int*)readbuffer_b)[i] / 2;

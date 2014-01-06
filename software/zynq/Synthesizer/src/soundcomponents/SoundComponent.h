@@ -14,13 +14,12 @@
 #include <iostream>
 
 #include <boost/thread.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/thread/barrier.hpp>
 
-#include "../Node.h"
 #include "Port.h"
-
+#include "../Node.h"
 #include "SoundComponentImpl.h"
+
+#include "../Synthesizer.h"
 
 using namespace std;
 

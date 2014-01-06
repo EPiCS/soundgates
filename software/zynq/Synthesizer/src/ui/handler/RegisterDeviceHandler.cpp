@@ -21,7 +21,7 @@ RegisterDeviceHandler::~RegisterDeviceHandler() { }
 void RegisterDeviceHandler::execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP){
 	std::string device(paramList.getString(0));
 
-	BOOST_LOG_TRIVIAL(info) << "Register device: " << device;
+	SYNTHESIZER_LOG(info) << "Register device: " << device;
 
 	*retvalP = xmlrpc_c::value_int(1337);
 }

@@ -8,6 +8,39 @@
 #ifndef SYNTHESIZER_H_
 #define SYNTHESIZER_H_
 
+#define LOG_DEBUG(msg)   std::cout << "[DEBUG] "   << msg << std::endl;
+#define LOG_INFO(msg)    std::cout << "[INFO] "    << msg << std::endl;
+#define LOG_WARNING(msg) std::cout << "[WARNING] " << msg << std::endl;
+#define LOG_ERROR(msg)   std::cout << "[ERROR] "   << msg << std::endl;
+
+#if defined(APPLICATION_CONTEXT)
+	#include <boost/version.hpp>
+	#include <boost/log/trivial.hpp>
+
+	#define USE_BOOST_LOGGING
+
+    #undef LOG_DEBUG
+    #undef LOG_INFO
+    #undef LOG_WARNING
+    #undef LOG_ERROR
+
+    #define LOG_DEBUG(msg)   BOOST_LOG_TRIVIAL(debug)   << msg;
+    #define LOG_INFO(msg)    BOOST_LOG_TRIVIAL(info)    << msg;
+    #define LOG_WARNING(msg) BOOST_LOG_TRIVIAL(warning) << msg;
+    #define LOG_ERROR(msg)   BOOST_LOG_TRIVIAL(error)   << msg;
+
+	#if ((BOOST_VERSION / 100000) > 1) || ((BOOST_VERSION / 100 % 1000) >= 54)
+
+		#define SYNTHESIZER_LOG(severity) \
+			BOOST_LOG_TRIVIAL(severity)
+
+	#else
+		#warning Boost logging is currently for Boost > 1.54: fallback to default logging
+		#define SYNTHESIZER_LOG(severity) std::cout
+	#endif
+
+#endif
+
 namespace Synthesizer{
 
 	namespace state{
@@ -18,9 +51,11 @@ namespace Synthesizer{
 
 	namespace config{
 
-		static const char*  port 	   = "50500";
-		static const int    samplerate = 44100;
-		static const int 	blocksize  = 64;
+		static const char*  port 	       = "50500";
+		static const int    samplerate     = 44100;
+		static const int 	blocksize      = 64;
+		static const int    bytesPerSample = sizeof(int);
+		static const int    bytesPerBlock  = blocksize * bytesPerSample;
 	}
 
 }

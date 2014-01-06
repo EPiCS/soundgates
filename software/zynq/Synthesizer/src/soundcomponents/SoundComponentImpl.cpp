@@ -9,7 +9,7 @@
 
 SoundComponentImpl::SoundComponentImpl(){ }
 
-SoundComponentImpl::SoundComponentImpl(vector<string> parameters){
+SoundComponentImpl::SoundComponentImpl(std::vector<std::string> parameters){
 
 	this->m_Parameters = parameters;
 }
@@ -19,11 +19,11 @@ SoundComponentImpl::~SoundComponentImpl(){ }
 
 Port* SoundComponentImpl::getInport(unsigned int number){
 
-	vector<Port*>& incoming = getInports();
+	std::vector<Port*>& incoming = getInports();
 
 	if(incoming.size() < number){
 
-		cout << "Port number out of range" << endl;
+		std::cerr << "Port number out of range" << std::endl;
 		return NULL;
 	}
 
@@ -32,11 +32,11 @@ Port* SoundComponentImpl::getInport(unsigned int number){
 
 Port* SoundComponentImpl::getOutport(unsigned int number){
 
-	vector<Port*>& outgoing = getOutports();
+	std::vector<Port*>& outgoing = getOutports();
 
 	if(outgoing.size() < number){
 
-		cout << "Port number out of range" << endl;
+		std::cerr << "Port number out of range" << std::endl;
 		return NULL;
 	}
 

@@ -20,7 +20,7 @@ void TGFReader::normalize(vector<string>& params){
 		boost::algorithm::erase_first((*iter), "'");
 		boost::algorithm::erase_last((*iter),  "'");
 
-		BOOST_LOG_TRIVIAL(debug) << "Normalizing token " << *iter;
+		SYNTHESIZER_LOG(debug) << "Normalizing token " << *iter;
 	}
 }
 
@@ -33,7 +33,7 @@ void TGFReader::read(Patch* patch, string filename){
 	ifstream sgfile(filename.c_str());
 
 	if(!sgfile.good()){
-		BOOST_LOG_TRIVIAL(error) << "input file does not exist";
+		SYNTHESIZER_LOG(error) << "input file does not exist";
 		return;
 	}
 
@@ -60,15 +60,15 @@ void TGFReader::read(Patch* patch, string filename){
 
 			normalize(paramtokens);
 
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "1: "  << match[1];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "2: "  << match[2];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "3: "  << match[3];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "4: " << match[4];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "5: " << match[5];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "6: " << match[6];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "7: " << match[7];
+			SYNTHESIZER_LOG(debug) << "TGF match node " << "8: " << match[8];
 
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "1: "  << match[1];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "2: "  << match[2];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "3: "  << match[3];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "4: " << match[4];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "5: " << match[5];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "6: " << match[6];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "7: " << match[7];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match node " << "8: " << match[8];
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
@@ -81,17 +81,17 @@ void TGFReader::read(Patch* patch, string filename){
 
 			}else{
 
-				BOOST_LOG_TRIVIAL(error) << "unknown implementation type";
+				SYNTHESIZER_LOG(error) << "unknown implementation type";
 			}
 		}
 
 		// match edge
 		if (boost::regex_match(line, match, edgeexpr)){
 
-			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "1: " << match[1];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "2: " << match[2];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "3: " << match[3];
-			BOOST_LOG_TRIVIAL(debug) << "TGF match edge " << "4: " << match[4];
+			SYNTHESIZER_LOG(debug) << "TGF match edge " << "1: " << match[1];
+			SYNTHESIZER_LOG(debug) << "TGF match edge " << "2: " << match[2];
+			SYNTHESIZER_LOG(debug) << "TGF match edge " << "3: " << match[3];
+			SYNTHESIZER_LOG(debug) << "TGF match edge " << "4: " << match[4];
 
 			int source_uid  = boost::lexical_cast<int>(match[1]);
 			int dest_uid    = boost::lexical_cast<int>(match[2]);
@@ -104,6 +104,3 @@ void TGFReader::read(Patch* patch, string filename){
 
 
 }
-
-
-

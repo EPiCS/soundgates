@@ -9,10 +9,11 @@
 #define SOUNDCOMPONENTWORKER_H_
 
 #include <vector>
-#include <boost/log/trivial.hpp>
 #include <boost/thread/thread.hpp>
 
 #include "soundcomponents/SoundComponent.h"
+
+#include "Synthesizer.h"
 
 using namespace std;
 

@@ -15,7 +15,6 @@
 #include <dlfcn.h>
 
 #include <boost/filesystem.hpp>
-#include <boost/log/trivial.hpp>
 #include <boost/algorithm/string/find.hpp>
 
 #include "../SoundComponent.h"
@@ -48,7 +47,7 @@ private:
 
 	std::string* m_SndComponentRepository;
 
-	std::map<std::string, SoundComponentImpl*(*)(std::vector<std::string>)> 	  m_PredefinedComponentsCreateFn;
+	std::map<std::string, SoundComponentImpl*(*)(std::vector<std::string>)> m_PredefinedComponentsCreateFn;
 
 	/* maps a sound component name to its library handle */
 	std::map<std::string, void*, std::less<std::string> > m_Factory;

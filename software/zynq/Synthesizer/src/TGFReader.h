@@ -19,8 +19,6 @@
 #include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-#include <boost/log/trivial.hpp>
-
 #include "Patch.h"
 #include "Synthesizer.h"
 #include "SynthesizerFileReader.h"

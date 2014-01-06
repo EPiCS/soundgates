@@ -17,8 +17,6 @@
 
 #include "Synthesizer.h"
 
-#include <boost/log/trivial.hpp>
-
 #include "soundcomponents/SoundComponent.h"
 #include "soundcomponents/InputSoundComponent.h"
 #include "soundcomponents/utils/SoundComponenLoader.h"
