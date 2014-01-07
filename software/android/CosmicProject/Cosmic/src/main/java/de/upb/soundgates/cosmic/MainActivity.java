@@ -19,16 +19,6 @@ import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
 
-    /*public static OSCMessageStore msg_store;
-
-    private static String host;
-    private static int port;
-
-    public static String getHost() { return host; }
-    public static void setHost(String h) { host = h; }
-    public static int getPort() { return port; }
-    public static void setPort(int p) { port = p; }*/
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -86,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+
         CosmicPreferences prefs = new CosmicPreferences(this);
         prefs.remove("current_host");
         prefs.remove("current_port");
@@ -94,7 +86,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -108,8 +99,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+            case R.id.action_clearhistory:
+                clearHistory();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // delete lists of known hosts and ports
+    private void clearHistory() {
+        CosmicPreferences prefs = new CosmicPreferences(this);
+        prefs.putStringSet("hosts", null);
+        prefs.putStringSet("ports", null);
     }
 
     @Override

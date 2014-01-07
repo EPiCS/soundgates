@@ -3,6 +3,10 @@ package de.upb.soundgates.cosmic;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.SortedSet;
+
 /**
  * Created by posewsky on 03.12.13.
  */
@@ -27,7 +31,6 @@ public class CosmicPreferences {
     public String getString(String key) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         String ret = settings.getString(key, "");
-        android.util.Log.e("Cosmic Pref", ret);
         return (ret=="") ? null : ret;
     }
 
@@ -35,6 +38,22 @@ public class CosmicPreferences {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
+        editor.commit();
+    }
+
+
+    public Set<String> getStringSet(String key) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        Set<String> ret = settings.getStringSet(key, null);
+        if(ret == null)
+            ret = new LinkedHashSet<String>();
+        return ret;
+    }
+
+    public void putStringSet(String key, Set<String> value) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putStringSet(key, value);
         editor.commit();
     }
 

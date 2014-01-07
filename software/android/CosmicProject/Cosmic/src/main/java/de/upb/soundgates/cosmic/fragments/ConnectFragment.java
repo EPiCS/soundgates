@@ -8,9 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Set;
 
 import de.upb.soundgates.cosmic.AsyncTaskListener;
 import de.upb.soundgates.cosmic.CosmicPreferences;
@@ -27,8 +31,8 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
 
     public static final String OSC_MSG_DELIMITER = "\\|\\|"; // always as regex!
 
-    private TextView ipTextView;
-    private TextView portTextView;
+    private AutoCompleteTextView ipTextView;
+    private AutoCompleteTextView portTextView;
 
     String host;
     int port;
@@ -47,9 +51,40 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.connect_main, container, false);
 
-        ipTextView = (TextView) rootView.findViewById(R.id.ip_edittext);
+        CosmicPreferences prefs = new CosmicPreferences(getActivity());
 
-        portTextView = (TextView) rootView.findViewById(R.id.port_edittext);
+        Set<String> hosts = prefs.getStringSet("hosts");
+        String[] hostarray = new String[hosts.size()];
+        hosts.toArray(hostarray);
+
+        Set<String> ports = prefs.getStringSet("ports");
+        String[] portarray = new String[ports.size()];
+        ports.toArray(portarray);
+
+        ipTextView = (AutoCompleteTextView) rootView.findViewById(R.id.ip_edittext);
+        ipTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    ipTextView.showDropDown();
+                }
+            }
+        });
+
+        ArrayAdapter<String> hostAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, hostarray);
+        ipTextView.setAdapter(hostAdapter);
+
+        portTextView = (AutoCompleteTextView) rootView.findViewById(R.id.port_edittext);
+        portTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    portTextView.showDropDown();
+                }
+            }
+        });
+        ArrayAdapter<String> portAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, portarray);
+        portTextView.setAdapter(portAdapter);
 
         Button connectButton = (Button) rootView.findViewById(R.id.connect_button);
         connectButton.setOnClickListener(this);
@@ -90,6 +125,16 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
         CosmicPreferences prefs = new CosmicPreferences(getActivity());
         prefs.putString("current_host", host); // setHost(host);
         prefs.putInt("current_port", port); // setPort(port);
+
+        // add host to list of known hosts
+        Set<String> hosts = prefs.getStringSet("hosts");
+        hosts.add(host);
+        prefs.putStringSet("hosts", hosts);
+
+        // add port to list of known ports
+        Set<String> ports = prefs.getStringSet("ports");
+        ports.add(port + "");
+        prefs.putStringSet("ports", ports);
 
         for(Fragment f : getFragmentManager().getFragments()) {
             if(f instanceof SelectFragment) {
