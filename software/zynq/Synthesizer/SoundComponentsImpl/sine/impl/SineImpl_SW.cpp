@@ -69,7 +69,11 @@ void SineImpl_SW::process() {
 
 		phase_incr = getPhaseIncrement(inlink->getNextControlData());
 
+#ifdef ZYNQ
+		targetBuffer[i] = my_sine(phase) * INT_MAX;
+#else
 		targetBuffer[i] = sin(phase) * INT_MAX;
+#endif
 
 		phase += phase_incr;
 
