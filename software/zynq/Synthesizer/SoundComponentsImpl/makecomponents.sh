@@ -36,3 +36,18 @@ cd noise
 make clean
 make all
 cd ..
+
+cd sampleplayer
+make clean
+make all
+cd ..
+
+cd mixer
+make clean
+make all
+cd ..
+
+cd dummysink
+make clean
+make all
+cd ..

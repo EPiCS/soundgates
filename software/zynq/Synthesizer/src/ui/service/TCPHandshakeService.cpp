@@ -35,29 +35,34 @@ void TCPHandshakeService::stopService(){
     delete m_ServiceThread;
 }
 
-char** TCPHandshakeService::getInteractiveComponents(unsigned int *numInteractiveComponents){
+void TCPHandshakeService::buildMessage(std::string& sndMsg){
 
     if (m_pPatch != NULL) {
 
-        const std::vector<InputSoundComponent*>& sndcomponents =
-                m_pPatch->getInputSoundComponents();
+        const std::vector<InputSoundComponent*>& sndcomponents = m_pPatch->getInputSoundComponents();
 
         for (std::vector<InputSoundComponent*>::const_iterator iter =
-                sndcomponents.begin(); iter != sndcomponents.end(); ++iter) {
+                sndcomponents.begin();
+                iter != sndcomponents.end(); ++iter) {
 
             std::string msg = (*iter)->getOscAddress();
             msg = msg + (*iter)->getOscTypeTag();
 
+            sndMsg += msg;
+
+            if(iter  + 1 == sndcomponents.end()){
+                sndMsg += "\n";
+            }else{
+                sndMsg = std::string(TCP_HANDSHAKE_OSC_MSG_DELIMITER);
+            }
         }
     }
-    return NULL;
 }
-
-void TCPHandshakeService::send_all(int clientSock, void *buf, size_t length){
+void TCPHandshakeService::send_all(int clientSock, const char *buf, size_t length){
 
     size_t i = 0;
     while (i < length) {
-        i += send(clientSock, buf + 0, length - i, 0);
+        i += send(clientSock, buf + i, length - i, 0);
     }
 }
 
@@ -77,40 +82,20 @@ void TCPHandshakeService::tcpClientHandler(int clientSock){
 
     LOG_DEBUG("Received: \" "<< recvMsgBuf <<" \" (" << recvMsgSize << "bytes)\n");
 
-    if (recvMsgSize > 0)
-    {
-        if(strncmp("getInteractiveComponents", recvMsgBuf, strlen("getInteractiveComponents")) == 0)
-        {
-            unsigned int numInteractiveComponents, i;
-            char **components = getInteractiveComponents(&numInteractiveComponents);
+    if (recvMsgSize > 0){
 
-            /* sum up the length of the OSC component descriptions */
-            for(i = 0, sendMsgSize = 0; i < numInteractiveComponents; ++i)
-                sendMsgSize += strlen(components[i]);
+        /* Check if message received equals expected message */
+        if(!strncmp(TCP_HANDSHAKE_RECVMSG, recvMsgBuf, sizeof(TCP_HANDSHAKE_RECVMSG))){
 
-            /* add the length of n-1 delimiters */
-            sendMsgSize += (numInteractiveComponents-1) * sizeof(TCP_HANDSHAKE_OSC_MSG_DELIMITER);
+            std::string msg;
+            buildMessage(msg);
 
-            /* add 1 for the trailing '\n' */
-            sendMsgSize += 1;
+            LOG_DEBUG("Sending: \" "<< msg << "\"\n");
 
-            sendMsgBuf = (char*) malloc(sendMsgSize * sizeof(char) + 1);
-
-            for(i = 0; i < numInteractiveComponents; ++i)
-            {
-                strncat(sendMsgBuf, components[i], strlen(components[i]));
-                if(i != numInteractiveComponents-1)
-                    strncat(sendMsgBuf, TCP_HANDSHAKE_OSC_MSG_DELIMITER, sizeof(TCP_HANDSHAKE_OSC_MSG_DELIMITER));
-                else
-                    strncat(sendMsgBuf, "\n", 1);
-            }
-
-            LOG_DEBUG("Sending: \" "<< sendMsgBuf << "\"\n");
-            send_all(clientSock, sendMsgBuf, sendMsgSize);
+            send_all(clientSock,  msg.c_str(), msg.size());
 
         }
-        else
-        {
+        else{
             sendMsgBuf = (char*) malloc(TCP_HANDSHAKE_BUFSIZE * sizeof(char));
             sendMsgSize = snprintf(sendMsgBuf, TCP_HANDSHAKE_BUFSIZE, "Unknown command:\"%s\"\n", recvMsgBuf);
             fprintf(stderr, "%s", sendMsgBuf);

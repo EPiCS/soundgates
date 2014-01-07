@@ -30,6 +30,7 @@
 #define TCP_HANDSHAKE_OSC_MSG_DELIMITER "||"
 #define TCP_HANDSHAKE_MAXPENDING 5
 
+#define TCP_HANDSHAKE_RECVMSG "getInteractiveComponents"
 
 namespace ui {
 
@@ -51,13 +52,16 @@ public:
 
    /* ************************/
 
-   char** getInteractiveComponents(unsigned int *numInteractiveComponents);
-
-   void send_all(int, void *, size_t);
+   void send_all(int, const char *, size_t);
 
    void tcpClientHandler(int);
 
    void* tcpHandshakeThread();
+
+   /* ************************/
+   void buildMessage(std::string&);
+   /* ************************/
+
 };
 
 } /* namespace ui */
