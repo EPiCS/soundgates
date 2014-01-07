@@ -1,5 +1,7 @@
-CC=g++
+CC=/usr/bin/g++
+CC_ARM=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin/arm-xilinx-linux-gnueabi-g++
 CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2
+CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O0 -I"../../libraries/arm/include" 
 
 SOURCES=ADSRSoundComponent.cpp impl/ADSRSoundComponent_SW.cpp 
 OBJECTS=ADSRSoundComponent_SW.o ADSRSoundComponent.o
@@ -15,6 +17,14 @@ compile:
 libadsr.so:
 	$(CC) -g3 -Wno-unused-variable -shared $(OBJECTS) -o $@
 	
+all_arm: compile_arm libadsr.so_arm
+	
+compile_arm:
+	$(CC_ARM) $(CFLAGS_ARM) -c $(SOURCES)
+	
+libadsr.so_arm:
+	$(CC_ARM) -g3 -shared -o libadsr.so  $(OBJECTS) -lpthread	
+
 clean:
 	rm -f *.so *.o
    

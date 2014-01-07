@@ -1,6 +1,11 @@
 #!/bin/bash
 
-exit
+#exit
+
+#LD_LIBRARY_PATH auf default setzen damit die crosslibs auf dem PG Rechner nicht dazwischenfunken
+LD_LIBRARY_PATH_OLD=$LD_LIBRARY_PATH
+LD_LIBRARY_PATH=/usr/local/lib/:/usr/local/lib:/usr/lib64/:/usr/local/lib64
+export LD_LIBRARY_PATH
 
 cd output
 make clean
@@ -51,3 +56,6 @@ cd dummysink
 make clean
 make all
 cd ..
+
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH_OLD
+export LD_LIBRARY_PATH
