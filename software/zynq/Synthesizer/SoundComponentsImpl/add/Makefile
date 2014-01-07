@@ -1,7 +1,7 @@
 CC=/usr/bin/g++
 CC_ARM=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin/arm-xilinx-linux-gnueabi-g++
-CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2
-CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O0 -I"../../libraries/boost_1_54/arm/include" 
+CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -I"../../libraries/x86_64/include"
+CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O0 -I"../../libraries/arm/include" 
 
 LDFLAGS_ARM=-L"../../libraries/boost_1_54/arm/lib"
 

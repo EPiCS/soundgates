@@ -72,7 +72,7 @@ int main( int argc, const char* argv[])
 	ui::UIService* xmlrpcservice = (ui::UIService*) new ui::RPCService(patch);
 	ui::UIService* oscservice = (ui::UIService*) new ui::OSCService(patch);
 
-	ui::UIManager::getInstance().registerService(xmlrpcservice, string("xmlrpc"), true);
+//	ui::UIManager::getInstance().registerService(xmlrpcservice, string("xmlrpc"), true);
 	ui::UIManager::getInstance().registerService(oscservice, string("oscservice"), true);
 
 	patch->initialize();
