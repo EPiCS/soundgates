@@ -1,6 +1,6 @@
 CC=g++
 CC_ARM=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin/arm-xilinx-linux-gnueabi-g++
-CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O0 -c 
+CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O0 -c -I"../../libraries/x86_64/include"
 CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O0 -I"../../libraries/arm/include" 
 
 SOURCES=Soundbuffer.cpp OutputSoundComponent.cpp 
