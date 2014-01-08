@@ -1,22 +1,24 @@
 package soundgates.codegen.synthesizer;
 
 public class LinkData implements Representable{
+
+	int source;
+	int sink;
 	int sourcePort;
 	int sinkPort;
-	ComponentData source;
-	ComponentData sink;
+
 	
 	@Override
 	public String getRepresentation() {
-		return source.getId() + " " + sink.getId() + " '" + sourcePort + "," + sinkPort + "'";
+		return source + " " + sink + " '" + sourcePort + "," + sinkPort + "'";
 	}
 
-	public LinkData(int sourcePort, int sinkPort, ComponentData source,
-			ComponentData sink) {
+	public LinkData(int source,
+			int sink, int sourcePort, int sinkPort) {
 		super();
-		this.sourcePort = sourcePort;
-		this.sinkPort = sinkPort;
 		this.source = source;
 		this.sink = sink;
+		this.sourcePort = sourcePort;
+		this.sinkPort = sinkPort;
 	}
 }

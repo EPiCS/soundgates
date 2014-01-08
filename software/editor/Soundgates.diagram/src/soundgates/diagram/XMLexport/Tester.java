@@ -1,5 +1,7 @@
 package soundgates.diagram.XMLexport;
 
+import java.util.LinkedList;
+
 import org.eclipse.emf.common.util.EList;
 
 import soundgates.AtomicSoundComponent;
@@ -14,6 +16,8 @@ import soundgates.diagram.messageDialogs.MessageDialogs;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class Tester {
+	
+	LinkedList<String> ioComponentNames = new LinkedList<>();
 	
 	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
 		
@@ -76,6 +80,17 @@ public class Tester {
 
 	public boolean testAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
 
+		// test names of IO components
+		if (atomicSoundComponent.getType().equals("IO")){
+			for(String existingName : ioComponentNames){
+				if(existingName.equals(atomicSoundComponent.getName())){
+						MessageDialogs.ioComponentsMustHaveUniqueNames();
+						return false;
+				}
+			}
+			ioComponentNames.add(atomicSoundComponent.getName());
+		}
+		
 		// test ports
 		for(Port port : atomicSoundComponent.getPorts()){			
 			if ( testAtomicSoundComponentPort(port, atomicSoundComponent) == false )
@@ -142,7 +157,7 @@ public class Tester {
 		for(soundgates.Element element : patch.getElements()){			
 			
 			// atomic components
-			if(element instanceof AtomicSoundComponent){					
+			if(element instanceof AtomicSoundComponent){				
 				if( testAtomicSoundComponent((AtomicSoundComponent) element) == false)
 					return false;
 			}

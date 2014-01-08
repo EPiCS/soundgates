@@ -1,4 +1,4 @@
-package soundgates.codegen;
+package soundgates.codegen.actions;
 
 import java.util.Iterator;
 
@@ -11,6 +11,11 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+
+import soundgates.Patch;
+import soundgates.codegen.CodeGenHelper;
+import soundgates.codegen.simulation.Codegen;
+import soundgates.diagram.XMLexport.Tester;
 
 public class CodegenAction implements IObjectActionDelegate{
 	/**
@@ -32,7 +37,13 @@ public class CodegenAction implements IObjectActionDelegate{
 			Codegen codegen = new Codegen();
 						
 			try {
-				codegen.generate(file);
+				Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
+				
+				Tester tester = new Tester();				
+				if(tester.testPatch(patch) == false)
+					return;	
+				
+				codegen.generate(patch, file.getProject());
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();

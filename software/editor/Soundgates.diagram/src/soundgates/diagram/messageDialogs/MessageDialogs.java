@@ -18,6 +18,7 @@ public class MessageDialogs {
 	   else return false;
 	}
 	
+	
 	// --INFO--
 	
 	public static void compositeSoundComponentWasExported(String name){		
@@ -91,7 +92,11 @@ public class MessageDialogs {
 	}	
 	
 	public static void compositeSoundComponentContaintsIOBlock(String name) {		
-		MessageDialog.openWarning(null, "IO blocks in composite components are not allowed", "Please remove the IO block(s) from the composite sound component \""+name+"\"");		
+		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please remove the IO component(s) from the composite sound component \""+name+"\"");		
+	}
+	
+	public static void ioComponentsMustHaveUniqueNames() {		
+		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
 	}
 	
 	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		

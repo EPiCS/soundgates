@@ -6,11 +6,16 @@ import java.util.List;
 public class SynthData {
 	List<ComponentData> components = new LinkedList<ComponentData>();
 	List<LinkData> links = new LinkedList<LinkData>();
-	public void addComponent(int id, String implementationType, String type, Object value, int hwSlot, String oscAddress, String oscDataType){
-		components.add(new ComponentData(id, type, implementationType, value, hwSlot, oscAddress, oscDataType));
+	public void addComponent(int id, String implementationType, String type, Object value, int hwSlot){
+		components.add(new ComponentData(id, type, implementationType, value, hwSlot));
 	}
-	public void addLink(int sourcePort, int sinkPort, ComponentData source, ComponentData sink){
-		links.add(new LinkData(sourcePort, sinkPort, source, sink));
+	
+	public void addIOComponent(int id, String implementationType, String type, Object value, int hwSlot, String oscAddress, String oscDataType, String range){
+		components.add(new IOComponentData(id, type, implementationType, value, hwSlot, oscAddress, oscDataType, range));
+	}
+	
+	public void addLink(int source, int sink, int sourcePort, int sinkPort){
+		links.add(new LinkData(source, sink, sourcePort, sinkPort));
 	}
 	public List<ComponentData> getComponents(){
 		return components;		
@@ -24,13 +29,17 @@ public class SynthData {
 	}
 	public String getRepresentation(){
 		StringBuilder result = new StringBuilder();
+		
+		result.append("#nodes \n");
 		for(Representable component : components){
-			result.append(component.getRepresentation());
+			result.append(component.getRepresentation() +"\n");
 		}
-		result.append("#\n");
+		
+		result.append("#edges \n");
 		for (Representable link : links) {
-			result.append(link.getRepresentation());
+			result.append(link.getRepresentation() +"\n");
 		}
+		
 		return result.toString();
 	}
 }

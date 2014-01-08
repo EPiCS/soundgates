@@ -6,21 +6,14 @@ public class ComponentData implements Representable{
 	String implementationType;
 	Object value;
 	int hwSlot;
-	String oscAddress;
-	String oscDataType;
 	
-	
-	
-	public ComponentData(int id, String type, String implementationType,
-			Object value, int hwSlot, String oscAddress, String oscDataType) {
+	public ComponentData(int id, String type, String implementationType, Object value, int hwSlot) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.implementationType = implementationType;
 		this.value = value;
 		this.hwSlot = hwSlot;
-		this.oscAddress = oscAddress;
-		this.oscDataType = oscDataType;
 	}
 
 	@Override
@@ -28,7 +21,8 @@ public class ComponentData implements Representable{
 		String result = id + " ";
 		result += type + "/" + implementationType;
 		result += (implementationType.equals("hw")? "(" + hwSlot + ")":"");
-		result += "'" + value + "'";
+		result += (!value.equals(""))? "/'" + value + "'" : "";
+		
 		return result;
 	}
 
