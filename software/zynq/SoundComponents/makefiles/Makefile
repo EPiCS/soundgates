@@ -17,6 +17,7 @@ SUBDIRS = $(addprefix $(SRCDIR)/, $(SoundComponents) )
 
 
 all:
+    @mkdir -p $(DESTDIR)
 	@echo 'Building sound components' 
 	for dir in $(SUBDIRS); do \
        $(MAKE) all -C $$dir;      \

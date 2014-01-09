@@ -80,7 +80,7 @@ $(OUTPUT_DIR)/Port.d \
 $(OUTPUT_DIR)/Link.d \
 $(OUTPUT_DIR)/Node.d 
 
-all: libsynthcore.so copyheaders
+all: folderstruct libsynthcore.so copyheaders
 	
 # Build objects
 $(OUTPUT_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp
@@ -89,6 +89,12 @@ $(OUTPUT_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp
 	$(CC)  $(CFLAGS) -c $(CSYMBOLS) -I/usr/include -I/usr/local/include -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
+
+folderstruct: 
+	@mkdir -p $(OUTPUT_DIR)	 
+	@mkdir -p $(EXPORT_DIR)/lib 
+	@mkdir -p $(EXPORT_DIR)/include 
+	
 
 # Link the library together
 libsynthcore.so: $(OBJS) 
