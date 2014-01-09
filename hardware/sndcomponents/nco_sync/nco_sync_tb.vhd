@@ -5,7 +5,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 
 library soundgates_v1_00_a;
-use soundgates_common_pkg.all;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 ENTITY nco_sync_tb IS
 END nco_sync_tb;
@@ -23,12 +23,12 @@ component nco_sync
             clk    : in  std_logic;           
             rst    : in  std_logic;
             ce     : in  std_logic;
-            master_phase_offset : in signed(31 downto 0);
-            master_phase_incr   : in signed(31 downto 0);
-            slave_phase_offset : in signed(31 downto 0);
-            slave_phase_incr   : in signed(31 downto 0);
+            master_phase_offset : in  signed(31 downto 0);
+            master_phase_incr   : in  signed(31 downto 0);
+            slave_phase_offset  : in  signed(31 downto 0);
+            slave_phase_incr    : in  signed(31 downto 0);
             data_master         : out signed(31 downto 0);
-				data_slave         : out signed(31 downto 0)
+			data_slave          : out signed(31 downto 0)
            );
 end component;
     
@@ -62,8 +62,8 @@ BEGIN
 	      master_phase_incr   => master_phase_incr,
           slave_phase_offset => phase_offset,
 	      slave_phase_incr   => slave_phase_incr,
-          m_data => m_data,
-			 s_data => s_data
+          data_master => m_data,
+			 data_slave=> s_data
         );
    
    -- Clock process definitions

@@ -45,14 +45,16 @@ typedef struct {
 typedef struct {
     int incr;
     int decr;
+    int start_amp;
     int upper_amp;
-    int lower_amp;
+    int end_amp;
 } sRAMPComponentHeader;
 
-struct sNCO_struct{
-
-
-};
+typedef struct {
+    void* slave_src_addr;
+    int slave_src_len;
+    void* slave_dest_addr;
+} sNCO_struct;
 
 
 struct OSCComponent_struct{
