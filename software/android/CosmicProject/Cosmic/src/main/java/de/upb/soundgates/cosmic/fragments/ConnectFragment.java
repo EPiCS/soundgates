@@ -62,27 +62,27 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
         ports.toArray(portarray);
 
         ipTextView = (AutoCompleteTextView) rootView.findViewById(R.id.ip_edittext);
-        ipTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*ipTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if(hasFocus){
                     ipTextView.showDropDown();
                 }
             }
-        });
+        });*/
 
         ArrayAdapter<String> hostAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, hostarray);
         ipTextView.setAdapter(hostAdapter);
 
         portTextView = (AutoCompleteTextView) rootView.findViewById(R.id.port_edittext);
-        portTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*portTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if(hasFocus){
                     portTextView.showDropDown();
                 }
             }
-        });
+        });*/
         ArrayAdapter<String> portAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, portarray);
         portTextView.setAdapter(portAdapter);
 
