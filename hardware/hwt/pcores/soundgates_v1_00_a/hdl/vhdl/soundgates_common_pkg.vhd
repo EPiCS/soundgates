@@ -40,6 +40,8 @@ type WAVEFORM_TYPE is ( SIN, SQU, SAW, TRI);
 
 type NOISE_TYPE is ( WHITE, PINK, GREY );
 
+type ARITHMETIC_TYPE is ( ADD, SUB, MUL );
+
 ------------------------------------------------------------
 -- Functions and Procedure declarations
 ------------------------------------------------------------

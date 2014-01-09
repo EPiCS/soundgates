@@ -6,12 +6,12 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - amplifier.vhd
+--   title:        VHDL module - signal_mul.vhd
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  amplifies samples
+--   description:  multiplies two samples
 --
 -- ======================================================================
     
@@ -23,29 +23,28 @@ use IEEE.MATH_REAL.ALL;
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
-entity amplifier is
+entity signal_mul is
 port(                
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        wave      : in  signed(31 downto 0);
-	    percentage: in  signed(31 downto 0);       
-	    amp       : out signed(31 downto 0)
+        wave1     : in  signed(31 downto 0);
+	    wave2     : in  signed(31 downto 0);       
+	    output    : out signed(31 downto 0)
     );
 
-end amplifier;
+end signal_mul;
 
-architecture Behavioral of amplifier is
+architecture Behavioral of signal_mul is
   
 	begin
-		  
-        ampl : process (clk, rst, ce)
+		adder : process (clk, rst, ce)
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    amp = wave * percentage;
+                    output <= wave1 * wave2;
                 end if;
             end if;
-        end process;	  
+        end process;
         
 end Behavioral;
