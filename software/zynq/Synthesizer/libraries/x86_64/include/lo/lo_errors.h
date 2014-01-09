@@ -14,14 +14,29 @@
  *  $Id$
  */
 
-#ifndef LO_THROW_H
-#define LO_THROW_H
+#ifndef LO_ERRORS_H
+#define LO_ERRORS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void lo_throw(lo_server s, int errnum, const char *message, const char *path);
+#define LO_ENOPATH      9901
+#define LO_ENOTYPE      9902
+#define LO_UNKNOWNPROTO 9903
+#define LO_NOPORT       9904
+#define LO_TOOBIG       9905
+#define LO_INT_ERR      9906
+#define LO_EALLOC       9907
+#define LO_EINVALIDPATH 9908
+#define LO_EINVALIDTYPE 9909
+#define LO_EBADTYPE     9910
+#define LO_ESIZE        9911
+#define LO_EINVALIDARG  9912
+#define LO_ETERM        9913
+#define LO_EPAD         9914
+#define LO_EINVALIDBUND 9915
+#define LO_EINVALIDTIME 9916
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2
+CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -I"../../libraries/x86_64/include"
 
 SOURCES=LowpassComponent.cpp impl/LowpassImplSw.cpp
 OBJECTS=LowpassComponent.o LowpassImplSw.o
