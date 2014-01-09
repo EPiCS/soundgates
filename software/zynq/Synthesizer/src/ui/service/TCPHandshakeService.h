@@ -23,8 +23,9 @@
 
 #include "../UIService.h"
 #include "../../Patch.h"
-#include "../../Synthesizer.h"
-#include "../../soundcomponents/InputSoundComponent.h"
+#include "../../InputSoundComponent.h"
+
+#include "../../core/Synthesizer.h"
 
 #define TCP_HANDSHAKE_BUFSIZE 200
 #define TCP_HANDSHAKE_OSC_MSG_DELIMITER "||"

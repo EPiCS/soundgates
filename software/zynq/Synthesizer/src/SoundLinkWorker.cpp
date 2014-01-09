@@ -15,7 +15,7 @@ void SoundLinkWorker::operator()(){
 	boost::unique_lock< boost::shared_mutex > lock(*m_Sync);
 	while(1){
 
-		for (vector<BufferedLink*>::iterator iter = m_BufferedLink.begin();	iter != m_BufferedLink.end(); ++iter) {
+		for (std::vector<BufferedLink*>::iterator iter = m_BufferedLink.begin(); iter != m_BufferedLink.end(); ++iter) {
 
 			((BufferedLink*) (*iter))->switchBuffers();
 		}

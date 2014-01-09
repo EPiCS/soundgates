@@ -11,9 +11,9 @@
 #include <vector>
 #include <boost/thread/thread.hpp>
 
-#include "soundcomponents/SoundComponent.h"
+#include "core/SoundComponent.h"
 
-#include "Synthesizer.h"
+#include "core/Synthesizer.h"
 
 using namespace std;
 

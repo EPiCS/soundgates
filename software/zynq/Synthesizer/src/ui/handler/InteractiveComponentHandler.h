@@ -13,7 +13,7 @@
 #include <xmlrpc-c/server_abyss.hpp>
 
 #include "../../Patch.h"
-#include "../../soundcomponents/InputSoundComponent.h"
+#include "../../InputSoundComponent.h"
 
 
 namespace ui {

@@ -22,7 +22,7 @@ RPCService::~RPCService() {
 
 void RPCService::startService(void){
 
-		SYNTHESIZER_LOG(info) << "Starting rpc service";
+		LOG_INFO("Starting rpc service");
 
 		xmlrpc_c::methodPtr const registerDeviceHandlePtr(new RegisterDeviceHandler);
 		xmlrpc_c::methodPtr const interactiveComponentsHandlerPtr(new InteractiveComponentHandler(m_pCurrentPatch));
@@ -42,7 +42,7 @@ void RPCService::startService(void){
 
 void RPCService::stopService(void){
 
-	SYNTHESIZER_LOG(info) << "Stopping rpc service";
+	LOG_INFO("Stopping rpc service");
 
 	m_pRPCserver->terminate();
 	m_rpcserver_thread.join();

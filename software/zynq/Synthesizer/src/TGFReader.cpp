@@ -98,7 +98,7 @@ void TGFReader::read(Patch* patch, string filename){
 			int source_port = boost::lexical_cast<int>(match[3]);
 			int dest_port   = boost::lexical_cast<int>(match[4]);
 
-			patch->createSoundLink(source_uid, source_port, dest_uid, dest_port);
+			patch->createLink(source_uid, source_port, dest_uid, dest_port);
 		}
 	}
 

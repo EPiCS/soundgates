@@ -10,8 +10,6 @@
 
 extern Patch* patch;
 
-extern "C" void OnPatchCompletion(){ patch->switchBuffers(); }
-
 Patch::Patch(){
 
 	m_InputComponents = NULL;
@@ -32,7 +30,7 @@ const vector<InputSoundComponent*>& Patch::getInputSoundComponents(){
 
 			SoundComponentImpl* sndcomponent = (*iter)->getDelegate();
 
-			SYNTHESIZER_LOG(debug) << "Check for input sound component: " << typeid(*sndcomponent).name();
+			LOG_DEBUG("Check for input sound component: " << typeid(*sndcomponent).name());
 
 			if(typeid(*sndcomponent) == typeid(InputSoundComponent)){
 
@@ -57,18 +55,18 @@ void Patch::createSoundComponent(int uid, std::string type, std::vector<std::str
 	if(NULL != impl){
 		SoundComponent* component = new SoundComponent(uid, impl);
 
-		SYNTHESIZER_LOG(debug) << "Adding component to patch uid: " << dynamic_cast<Node*>(component)->getUid() << " at " << component;
-		SYNTHESIZER_LOG(debug) << "Component #inports : " << component->getInports().size();
-		SYNTHESIZER_LOG(debug) << "Component #outorts : " << component->getOutports().size();
+		LOG_DEBUG("Adding component to patch uid: " << dynamic_cast<Node*>(component)->getUid() << " at " << component);
+		LOG_DEBUG("Component #inports : " << component->getInports().size());
+		LOG_DEBUG("Component #outorts : " << component->getOutports().size());
 
 		m_ComponentsVector.push_back(component);
 	}
 }
 
 
-void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport){
+void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
-	SYNTHESIZER_LOG(debug) << "Creating sound link from node " << sourceid << " to Node " << destid;
+	LOG_DEBUG("Creating sound link from node " << sourceid << " to Node " << destid);
 
 	SoundComponent* source;
 	SoundComponent* destination;
@@ -83,7 +81,7 @@ void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport)
 		}
 	}
 
-	SYNTHESIZER_LOG(debug) << "Source " << source << " Destination " << destination;
+	LOG_DEBUG("Source " << source << " Destination " << destination);
 
 	Port* srcPort  = source->getDelegate()->getOutport(srcport);
     Port* destPort = destination->getDelegate()->getInport(destport);
@@ -92,36 +90,54 @@ void Patch::createSoundLink(int sourceid, int srcport, int destid, int destport)
 
     if(typeid(*srcPort) != typeid(*destPort)){
 
-    	SYNTHESIZER_LOG(error) << "Sourceport of type " << typeid(*srcPort).name() << " does not match destinationport of type " << typeid(*destPort).name();
+        LOG_ERROR("Sourceport of type " << typeid(*srcPort).name() << " does not match destinationport of type " << typeid(*destPort).name());
 
     }else{
 
-    	SYNTHESIZER_LOG(debug) << "Source port type" << typeid(*srcPort).name();
-    	SYNTHESIZER_LOG(debug) << "Destination port type" << typeid(*destPort).name();
-    	if(typeid(*srcPort) == typeid(SoundPort)){
 
-    		SYNTHESIZER_LOG(debug) << "Creating buffered link";
-    		link = new BufferedLink((Node*)source, (Node*)destination, Synthesizer::config::blocksize * sizeof(int));
+        /*
+         * Check if src has already an outgoid connection
+         */
+        if(srcPort->getLink() != NULL){
 
-    		m_BufferedLinksVector.push_back((BufferedLink*)link);
+            destination->addIncomingLink(*(srcPort->getLink()), destport);
 
-    	}else if(typeid(*srcPort) == typeid(ControlPort)){
+        }else if(destPort->getLink() != NULL){  /* Check if destination port has already been linked */
 
-    		SYNTHESIZER_LOG(debug) << "Creating control link";
-    		link = new ControlLink((Node*)source, (Node*)destination);
+            LOG_ERROR("Destination port of component " << destid << "already connected");
 
-    		m_ControlLinksVector.push_back((ControlLink*)link);
-    	}
+        }else{
 
-		if(NULL == link) {
+            LOG_DEBUG("Source port type"      << typeid(*srcPort).name());
+            LOG_DEBUG("Destination port type" << typeid(*destPort).name());
 
-			SYNTHESIZER_LOG(error) << "Could allocate create link object";
-		} else {
+            /* Create SoundLink */
+            if(typeid(*srcPort) == typeid(SoundPort)){
 
-			source->addOutgoingLink(*link, srcport);
-			destination->addIncomingLink(*link, destport);
+                LOG_DEBUG("Creating buffered link");
+                link = new BufferedLink((Node*)source, (Node*)destination, Synthesizer::config::blocksize * sizeof(int));
 
-		}
+                m_BufferedLinksVector.push_back((BufferedLink*)link);
+
+            /* Create ControlLink */
+            }else if(typeid(*srcPort) == typeid(ControlPort)){
+
+                LOG_DEBUG("Creating control link");
+                link = new ControlLink((Node*)source, (Node*)destination);
+
+                m_ControlLinksVector.push_back((ControlLink*)link);
+            }
+
+            if(NULL == link) {
+
+                LOG_ERROR("Could allocate create link object");
+            } else {
+
+                source->addOutgoingLink(*link, srcport);
+                destination->addIncomingLink(*link, destport);
+
+            }
+        }
     }
 }
 

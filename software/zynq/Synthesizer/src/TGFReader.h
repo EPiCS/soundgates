@@ -19,9 +19,12 @@
 #include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/split.hpp>
 
+
 #include "Patch.h"
-#include "Synthesizer.h"
 #include "SynthesizerFileReader.h"
+
+#include "core/Synthesizer.h"
+
 
 using namespace std;
 

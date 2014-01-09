@@ -15,17 +15,17 @@
 
 #include <pthread.h>
 
-#include "Synthesizer.h"
 
-#include "soundcomponents/SoundComponent.h"
-#include "soundcomponents/InputSoundComponent.h"
-#include "soundcomponents/utils/SoundComponenLoader.h"
+#include "InputSoundComponent.h"
 
-#include "soundcomponents/ControlLink.h"
-#include "soundcomponents/BufferedLink.h"
+#include "core/Synthesizer.h"
+#include "core/SoundComponent.h"
+#include "core/ControlLink.h"
+#include "core/BufferedLink.h"
+#include "core/SoundPort.h"
+#include "core/ControlPort.h"
 
-#include "soundcomponents/ControlPort.h"
-#include "soundcomponents/SoundPort.h"
+#include "utils/SoundComponenLoader.h"
 
 #include "SoundComponentWorker.h"
 #include "SoundLinkWorker.h"
@@ -55,7 +55,7 @@ public:
 	virtual ~Patch();
 
 	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
-	void createSoundLink(int sourceid, int srcport, int destid, int destport);
+	void createLink(int sourceid, int srcport, int destid, int destport);
 
 	const vector<InputSoundComponent*>& getInputSoundComponents();
 	void switchBuffers();

@@ -17,8 +17,8 @@
 
 #include "../UIService.h"
 #include "../../Patch.h"
-#include "../../Synthesizer.h"
-#include "../../soundcomponents/InputSoundComponent.h"
+#include "../../core/Synthesizer.h"
+#include "../../InputSoundComponent.h"
 
 
 using namespace std;
@@ -35,10 +35,7 @@ private:
 	Patch*				m_pPatch;
 	lo_server_thread	m_LoServerThread;
 
-
 	void error(int num, const char *m, const char *path);
-
-
 
 public:
 

@@ -16,7 +16,7 @@
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/server_abyss.hpp>
 
-#include "../../Synthesizer.h"
+#include "../../core/Synthesizer.h"
 
 namespace ui {
 

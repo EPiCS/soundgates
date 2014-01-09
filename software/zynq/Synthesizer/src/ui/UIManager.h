@@ -12,7 +12,7 @@
 
 #include "UIService.h"
 #include "../Patch.h"
-#include "../Synthesizer.h"
+#include "../core/Synthesizer.h"
 
 namespace ui {
 

@@ -11,22 +11,20 @@
 #include <vector>
 #include <boost/thread/thread.hpp>
 
-#include "soundcomponents/BufferedLink.h"
-
-
-using namespace std;
+#include "core/BufferedLink.h"
 
 class SoundLinkWorker {
 
 private:
 
-	vector<BufferedLink*>			m_BufferedLink;
-	boost::shared_mutex*			m_Sync;
+	std::vector<BufferedLink*>			m_BufferedLink;
+	boost::shared_mutex*			    m_Sync;
 	boost::condition_variable_any* 	m_ComponentSync;
 	boost::condition_variable_any* 	m_BufferSync;
+
 public:
 
-	SoundLinkWorker(vector<BufferedLink*> link, boost::shared_mutex* sync,
+	SoundLinkWorker(std::vector<BufferedLink*> link, boost::shared_mutex* sync,
 					boost::condition_variable_any* componentsync, boost::condition_variable_any* buffersync){
 
 		this->m_BufferedLink 	= link;
