@@ -21,17 +21,14 @@
 							<builder buildPath="${workspace_loc:/Synthesizer}/Debug" enableAutoBuild="true" id="cdt.managedbuild.target.gnu.builder.base.1809148714" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1757934757" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.336258821" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
-								<option id="gnu.cpp.compiler.option.include.paths.1576591405" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libraries/x86_64/include}&quot;"/>
-									<listOptionValue builtIn="false" value="/usr/include"/>
-									<listOptionValue builtIn="false" value="/usr/local/include"/>
-								</option>
+								<option id="gnu.cpp.compiler.option.include.paths.1576591405" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.776062431" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="BOOST_LOG_DYN_LINK"/>
 									<listOptionValue builtIn="false" value="APPLICATION_CONTEXT"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.optimization.level.26154705" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1030744543" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.other.other.677962602" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-isystem&quot;${workspace_loc:/Libraries/x86_64/include}&quot; -c -fmessage-length=0 " valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.105561281" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.793778099" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
@@ -65,7 +62,7 @@
 									<listOptionValue builtIn="false" value="xmlrpc_xmltok"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1163960822" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libraries/x86_64/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Libraries/x86_64/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/lib"/>
 									<listOptionValue builtIn="false" value="/usr/local/lib"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu"/>
