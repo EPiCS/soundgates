@@ -7,11 +7,11 @@ public class IOComponentData extends ComponentData{
 	String oscDataType;
 	String range;
 	
-	public IOComponentData(int id, String type, String implementationType,
+	public IOComponentData(int id, String type, String implName, String implType,
 			Object value, int hwSlot, String oscAddress,
 			String oscDataType, String range) {
 		
-		super(id, type, implementationType, value, hwSlot);
+		super(id, type, implName, implType, value, hwSlot);
 		
 		this.oscAddress = oscAddress;
 		this.oscDataType = oscDataType;
@@ -23,10 +23,7 @@ public class IOComponentData extends ComponentData{
 	public String getRepresentation() {
 		
 		String result = super.getRepresentation(); 
-		result += "/'/"+oscAddress + " ";
-		result += "\\\""+oscDataType + "\\\"";
-		result += range + "'";
-		
+		result += "/'/"+oscAddress + " f " + range + "'";		
 		return result;
 	}
 }

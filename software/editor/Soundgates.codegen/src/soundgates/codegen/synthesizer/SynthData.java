@@ -6,12 +6,12 @@ import java.util.List;
 public class SynthData {
 	List<ComponentData> components = new LinkedList<ComponentData>();
 	List<LinkData> links = new LinkedList<LinkData>();
-	public void addComponent(int id, String implementationType, String type, Object value, int hwSlot){
-		components.add(new ComponentData(id, type, implementationType, value, hwSlot));
+	public void addComponent(int id, String type, String implName, String implType,  Object value, int hwSlot){
+		components.add(new ComponentData(id, type, implName, implType, value, hwSlot));
 	}
 	
-	public void addIOComponent(int id, String implementationType, String type, Object value, int hwSlot, String oscAddress, String oscDataType, String range){
-		components.add(new IOComponentData(id, type, implementationType, value, hwSlot, oscAddress, oscDataType, range));
+	public void addIOComponent(int id, String type, String implName, String implType, Object value, int hwSlot, String oscAddress, String oscDataType, String range){
+		components.add(new IOComponentData(id, type, implName, implType, value, hwSlot, oscAddress, oscDataType, range));
 	}
 	
 	public void addLink(int source, int sink, int sourcePort, int sinkPort){

@@ -107,22 +107,36 @@ public class Tester {
 			return false;
 		}
 		
-		if(!testCurrentComponent){
+		
 			if(port.getDirection() == Direction.IN)
 			{
-				if (port.getIncomingConnection()==null){
-					MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
+				if (port.getOutgoingConnection().size()==0){
+					MessageDialogs.portHasNoDelegation(parentComponent.getName(), port.getName());
 					return false;
-				}			
+				}
+				
+				if(!testCurrentComponent){
+					if (port.getIncomingConnection()==null){
+						MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
+						return false;
+					}
+				}
 			}
 			if(port.getDirection() == Direction.OUT)
 			{
-				if(port.getOutgoingConnection().size()==0){
-					MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
+				if (port.getIncomingConnection()==null){
+					MessageDialogs.portHasNoDelegation(parentComponent.getName(), port.getName());
 					return false;
 				}
+				
+				if(!testCurrentComponent){
+					if(port.getOutgoingConnection().size()==0){
+						MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
+						return false;
+					}
+				}
 			}
-		}
+		
 		return true;
 	}
 	

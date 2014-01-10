@@ -42,6 +42,7 @@ public class AtomicSoundComponentXMLHandler{
 	public static String DEVICE_PREFIX = "deviceProp_";
 	public static String DEVICE_PREFIX_PROP_MAPPINGS = DEVICE_PREFIX + "_propMappings_";
 	public static String DEVICE_PREFIX_PORT_MAPPINGS = DEVICE_PREFIX + "_portMappings_";
+	public static String DEVICE_PREFIX_IMPLNAME = DEVICE_PREFIX + "_name";
 	
 	// private AtomicSoundComponentLibrary library;
 
@@ -120,7 +121,8 @@ public class AtomicSoundComponentXMLHandler{
 												StringBuilder portMappings = new StringBuilder();
 												Node implNode = nodeList.item(k);
 												
-												String implType = implNode.getAttributes().getNamedItem("type").getNodeValue();												
+												String implType = implNode.getAttributes().getNamedItem("type").getNodeValue();
+												String implName = implNode.getAttributes().getNamedItem("name").getNodeValue();
 												
 												Node childNode = implNode.getFirstChild(); 
 												do {
@@ -139,6 +141,7 @@ public class AtomicSoundComponentXMLHandler{
 												} while ((childNode = childNode.getNextSibling()) != null);
 
 												soundComponent.getStringProperties().put(DEVICE_PREFIX_PORT_MAPPINGS + implType, portMappings.toString());
+												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME, implName);
 //												soundComponent.getStringProperties().put(DEVICE_PREFIX_PROP_MAPPINGS + implType, propMappings.toString());
 											}
 										}	
