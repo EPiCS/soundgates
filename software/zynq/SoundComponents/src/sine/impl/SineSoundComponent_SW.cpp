@@ -6,7 +6,13 @@
  */
 
 #include "SineSoundComponent_SW.h"
+#include "SineLookupTable.hpp"
 
+double my_sine_lookup(double x)
+{
+
+	return 0;
+}
 
 double my_sine(double x)
 {
