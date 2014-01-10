@@ -6,6 +6,7 @@ SoundComponents = add    		\
 				  noise  		\
 				  output 		\
 				  sampleplayer  \
+				sine \
 				  output        \
 				  dummysink
 
@@ -17,18 +18,18 @@ SUBDIRS = $(addprefix $(SRCDIR)/, $(SoundComponents) )
 
 
 all:
-    @mkdir -p $(DESTDIR)
+	@mkdir -p $(DESTDIR)
 	@echo 'Building sound components' 
 	for dir in $(SUBDIRS); do \
-       $(MAKE) all -C $$dir;      \
+	$(MAKE) all -C $$dir;      \
 	done 
 	@echo 'Copy sound components to repository'
 	@find $(SRCDIR) -name "*.so" -exec cp {} $(DESTDIR) \;
    
 clean:
 	for dir in $(SUBDIRS); do \
-       $(MAKE) clean -C $$dir;      \
-    done
+	$(MAKE) clean -C $$dir;      \
+	done
 	@rm -f $(DESTDIR)/*.so
    
 .PHONY: clean   
