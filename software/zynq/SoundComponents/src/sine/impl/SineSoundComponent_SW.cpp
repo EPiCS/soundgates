@@ -10,13 +10,30 @@
 
 double my_sine_lookup(double x)
 {
+	while (x < 0)
+	{
+		x += 2 * M_PI;
+	}
+	while (x > 2 * M_PI)
+	{
+		x -= 2 * M_PI;
+	}
 
-	return 0;
+	double index = x / 0.0001;
+	int indexi = (int) index;
+	if (index - indexi > 0.5)
+	{
+		indexi++;
+	}
+	double value = sineTable[indexi];
+	// possible improvement linearly interpolate between two values
+	// not really necessary, the difference to the normal sine can't be heard anyway
+	return value;
 }
 
 double my_sine(double x)
 {
-	// useful to pre-calculate
+// useful to pre-calculate
 	double x2 = x * x;
 	double x4 = x2 * x2;
 
@@ -50,36 +67,40 @@ double my_sine(double x)
 	return result;
 }
 
-
-SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) : SineSoundComponent(params){
+SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) :
+		SineSoundComponent(params)
+{
 
 	this->phase = 0.0;
 
 }
 
-void SineSoundComponent_SW::init() {
+void SineSoundComponent_SW::init()
+{
 
-    m_SoundOut_1_Port->init();
+	m_SoundOut_1_Port->init();
 }
 
-void SineSoundComponent_SW::process() {
+void SineSoundComponent_SW::process()
+{
 
-    ControlLink*  inlink  = (ControlLink*)(m_FrequencyIn_1_Port->getLink());
+	ControlLink* inlink = (ControlLink*) (m_FrequencyIn_1_Port->getLink());
 
-    double phase_incr = getPhaseIncrement(inlink->getNextControlData());
+	double phase_incr = getPhaseIncrement(inlink->getNextControlData());
 
-	for (int i = 0; i < Synthesizer::config::blocksize; i++) {
-
+	for (int i = 0; i < Synthesizer::config::blocksize; i++)
+	{
 
 #ifdef ZYNQ
-	    m_SoundOut_1_Port->writeSample(my_sine(phase) * INT_MAX, i);
+		m_SoundOut_1_Port->writeSample(my_sine_lookup(phase) * INT_MAX, i);
 #else
 		m_SoundOut_1_Port->writeSample(sin(phase) * INT_MAX, i);
 #endif
 
 		phase += phase_incr;
 
-		if (phase >= M_PI * 2) {
+		if (phase >= M_PI * 2)
+		{
 			phase -= M_PI * 2;
 		}
 	}
