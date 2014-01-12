@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.upb.soundgates.cosmic.BindArrayAdapter;
+import de.upb.soundgates.cosmic.adapters.BindArrayAdapter;
 import de.upb.soundgates.cosmic.CosmicPreferences;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;

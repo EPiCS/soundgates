@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic;
+package de.upb.soundgates.cosmic.adapters;
 
 /**
  * Created by posewsky on 13.11.13.
@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import de.upb.soundgates.cosmic.MainActivity;
+import de.upb.soundgates.cosmic.MinMaxSeekBar;
+import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCSender;
 import de.upb.soundgates.cosmic.osc.OSCType;

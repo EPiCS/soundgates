@@ -7,14 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
 import de.upb.soundgates.cosmic.MainActivity;
 import de.upb.soundgates.cosmic.R;
-import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.adapters.SelectBindArrayAdapter;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 
 /**
@@ -35,7 +32,7 @@ public class SelectFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.select_main, container, false);
+        View rootView = inflater.inflate(R.layout.select2_main, container, false);
 
         selectButton = (Button) rootView.findViewById(R.id.select_button);
 
@@ -49,6 +46,12 @@ public class SelectFragment extends ListFragment {
                     }
                 }
 
+                OSCMessageStore msg_store = OSCMessageStore.hasInstance();
+                if(msg_store != null)
+                {
+                    Log.d(LOG_TAG, msg_store.toStringFull());
+                }
+
                 ((MainActivity)getActivity()).mViewPager.setCurrentItem(2);
             }
         });
@@ -58,25 +61,11 @@ public class SelectFragment extends ListFragment {
 
     public void updateList()
     {
-        if(OSCMessageStore.hasInstance() != null)
+        OSCMessageStore msg_store = OSCMessageStore.hasInstance();
+        if(msg_store != null)
         {
-            ArrayAdapter<OSCMessage> adapter =
-                    new ArrayAdapter<OSCMessage>(
-                            getActivity(),
-                            android.R.layout.simple_list_item_multiple_choice,
-                            OSCMessageStore.getInstance().getOSCMessageAsList()
-                    );
+            SelectBindArrayAdapter adapter = new SelectBindArrayAdapter(getActivity(), msg_store.getOSCMessageAsList());
             setListAdapter(adapter);
-
-            getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-                    // AdapterView is the parent class of ListView
-                    ListView lv = (ListView) arg0;
-                    OSCMessageStore.getInstance().markOSCMessage(position, lv.isItemChecked(position));
-                    Log.d(LOG_TAG, OSCMessageStore.getInstance().toString());
-                }
-            });
         }
     }
 }

@@ -27,14 +27,14 @@ public class CosmicSensorManager implements SensorEventListener {
         rotationVector = new float[3];
         quaternion = new float[4];
 
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             public void run() {
                 while(true) {
                     set(new Quat4d(quaternion[0], quaternion[1], quaternion[2], quaternion[3]));
 
                     double rad2angleFactor = 180 / Math.PI;
 
-                    Log.i(LOG_TAG,  "\n\nheading (y-axis of device): " + heading * rad2angleFactor +
+                    Log.i(LOG_TAG,  "\nheading (y-axis of device): " + heading * rad2angleFactor +
                                     "\nattitude (z-axis of device): " + attitude  * rad2angleFactor +
                                     "\nbank (x-axis of device): " + bank  * rad2angleFactor);
                     try {
@@ -44,7 +44,7 @@ public class CosmicSensorManager implements SensorEventListener {
                     }
                 }
             }
-        }).start();
+        }).start();*/
     }
 
     private void initListeners() {

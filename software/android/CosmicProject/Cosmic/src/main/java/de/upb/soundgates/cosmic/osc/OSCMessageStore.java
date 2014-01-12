@@ -64,4 +64,11 @@ public class OSCMessageStore {
             ret += msg + "\n";
         return ret;
     }
+
+    public String toStringFull() {
+        String ret = "";
+        for(OSCMessage msg : store)
+            ret += msg.toStringFull() + "\n";
+        return ret;
+    }
 }

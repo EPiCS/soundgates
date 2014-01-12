@@ -18,4 +18,15 @@
     <string name="port_hint">50050</string>
     <string name="connect_button_text">Connect</string>
 
+
+    <string-array name="interaction_technique">
+        <item>@string/seekBar</item>
+        <item>@string/tilt</item>
+        <item>@string/shake</item>
+    </string-array>
+
+    <string name="seekBar">Slider</string>
+    <string name="tilt">Tilt</string>
+    <string name="shake">Shake</string>
+
 </resources>

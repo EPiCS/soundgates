@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic;
+package de.upb.soundgates.cosmic.listeners;
 
 /**
  * Created by posewsky on 10.11.13.

@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import de.upb.soundgates.cosmic.listeners.AsyncTaskListener;
+
 /**
  * Created by posewsky on 08.11.13.
  */

@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Set;
 
-import de.upb.soundgates.cosmic.AsyncTaskListener;
+import de.upb.soundgates.cosmic.listeners.AsyncTaskListener;
 import de.upb.soundgates.cosmic.CosmicPreferences;
 import de.upb.soundgates.cosmic.MainActivity;
 import de.upb.soundgates.cosmic.R;
