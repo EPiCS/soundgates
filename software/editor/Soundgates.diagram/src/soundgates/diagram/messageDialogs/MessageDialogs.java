@@ -102,10 +102,6 @@ public class MessageDialogs {
 	public static void delegation2Error(String parent, String source, String target) {		
 		MessageDialog.openWarning(null, "", "The delegation in \""+parent+"\" between the port \""+source+"\" and the port \""+target+"\" is incorrect" );		
 	}
-
-	public static void compositeSoundComponentHasNoInPort(String name) {		
-		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no IN-ports", "Please add at least one IN-port to the composite sound component \""+name+"\"");		
-	}
 	
 	public static void compositeSoundComponentHasNoOutPort(String name) {		
 		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no OUT-ports", "Please add at least one OUT-port to the composite sound component \""+name+"\"");			

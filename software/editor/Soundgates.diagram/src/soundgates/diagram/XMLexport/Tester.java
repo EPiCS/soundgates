@@ -40,18 +40,12 @@ public class Tester {
 		}
 		
 		// test ports
-		boolean inport = false;
 		boolean outport = false;
 		for(Port port : compositeSoundComponent.getPorts()){			
 			if ( testCompositeSoundComponentPort(port, compositeSoundComponent, testCurrentComponent) == false )
 				return false;
 			
-			if(port.getDirection()==Direction.IN) inport = true;
 			if(port.getDirection()==Direction.OUT) outport = true;
-		}
-		if(!inport){
-			MessageDialogs.compositeSoundComponentHasNoInPort(compositeSoundComponent.getName());
-			return false;
 		}
 		if(!outport){
 			MessageDialogs.compositeSoundComponentHasNoOutPort(compositeSoundComponent.getName());
