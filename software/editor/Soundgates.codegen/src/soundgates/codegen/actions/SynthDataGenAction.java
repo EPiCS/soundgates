@@ -1,4 +1,4 @@
-package soundgates.codegen;
+package soundgates.codegen.actions;
 
 import java.util.Iterator;
 
@@ -11,7 +11,12 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-public class OSCgenAction implements IObjectActionDelegate{
+import soundgates.Patch;
+import soundgates.codegen.CodeGenHelper;
+import soundgates.codegen.synthesizer.SynthDataGen;
+import soundgates.diagram.XMLexport.Tester;
+
+public class SynthDataGenAction implements IObjectActionDelegate{
 	/**
 	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
 	 */
@@ -28,11 +33,18 @@ public class OSCgenAction implements IObjectActionDelegate{
 		Iterator<?> files = structuredSelection.iterator();
 		while (files.hasNext()) {
 			IFile file = (IFile) files.next();
-			OSCgen oscGen = new OSCgen();
+			SynthDataGen dataGen = new SynthDataGen();
 			
 			try {
-				oscGen.generate(file);
-				file.getParent().refreshLocal(1, null);
+				
+				Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
+						
+				Tester tester = new Tester();				
+				if(tester.testPatch(patch) == false)
+					return;				
+				
+				dataGen.generateSynthData(patch, file);
+				
 			} catch (Exception e) {				
 				e.printStackTrace();
 			}
@@ -44,4 +56,6 @@ public class OSCgenAction implements IObjectActionDelegate{
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
+	
+
 }

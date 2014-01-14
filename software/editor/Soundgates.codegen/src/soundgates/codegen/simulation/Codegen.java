@@ -1,4 +1,4 @@
-package soundgates.codegen;
+package soundgates.codegen.simulation;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -6,18 +6,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
@@ -29,7 +23,7 @@ import soundgates.Link;
 import soundgates.Patch;
 import soundgates.Port;
 import soundgates.SoundComponent;
-import soundgates.SoundgatesPackage;
+import soundgates.codegen.CodeGenHelper;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 
 public class Codegen {
@@ -40,28 +34,13 @@ public class Codegen {
 	
 	IFolder pdCodeFolder = null;
 	
+	CodeGenHelper codeGenHelper;
+	
 	public Codegen() {
+		codeGenHelper = new CodeGenHelper();
 	}
 	
-	public Patch getPatch(String path){
-	    SoundgatesPackage.eINSTANCE.eClass();
-	    
-	    // Register the XMI resource factory for the .xmi extension
 
-	    Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-	    Map<String, Object> m = reg.getExtensionToFactoryMap();
-	    m.put("xmi", new XMIResourceFactoryImpl());
-
-	    // Obtain a new resource set
-	    ResourceSet resSet = new ResourceSetImpl();
-
-	    // Get the resource
-	    Resource resource = resSet.getResource(URI.createURI(path), true);
-	    // Get the first model element and cast it to the right type, in my
-	    // example everything is hierarchical included in this first node
-	    Patch patch = (Patch) resource.getContents().get(0);
-	    return patch;		
-	}
 	
 	public void generateCodeForPatch(Patch patch) throws IOException, CoreException {
 		compositeComponentPortMappings = new HashMap<Port, Integer>();
@@ -217,39 +196,7 @@ public class Codegen {
 		printCompositeSoundComponent(compositeSoundComponent, componentList, linkList, delegationList);
 	}
 	
-	private HashMap<Port, Integer> parsePortMappings(AtomicSoundComponent atomicSoundComponent){
-		HashMap<Port,Integer> resultingMapping = new HashMap<Port, Integer>();
-		// get port mapping
-		if (atomicSoundComponent.getStringProperties().
-				containsKey(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS)){
-		
-			//example: PortName="Value"|PortNumber="0"||...
-			String portMapping = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS);
-			
-			// parse ports
-			String[] entries = portMapping.split("\\|\\|");
-			
-			for (String entry : entries) {
-				if (entry.contains("|")) {
-					String[] subEntry = entry.split("\\|");
-					String[] portNameEntry = subEntry[0].split("=");
-					String portName = portNameEntry[1].replace("\"", "");
-					String[] portNumberEntry = subEntry[1].split("=");
-					Integer portNumber = Integer.parseInt(portNumberEntry[1].replace("\"", ""));
 
-					// search for the port
-					try {
-						Port port = portSearch(atomicSoundComponent, portName);
-						resultingMapping.put(port, portNumber);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		return resultingMapping;
-	}
 	
 	private void printPatch(List<SoundComponent> componentList, List<Link> linkList) throws CoreException{
 		IFile file = pdCodeFolder.getFile("patch.pd");
@@ -313,11 +260,13 @@ public class Codegen {
 			int sourcePort = 0;
 			
 			if (sourceComponent instanceof AtomicSoundComponent) {
-				HashMap<Port, Integer> sourcePortMapping = parsePortMappings((AtomicSoundComponent) sourceComponent);
+				HashMap<Port, Integer> sourcePortMapping = codeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent,						
+						AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS);
 				sourcePort = sourcePortMapping.get(link.getSource());
 			}
 			if (targetComponent instanceof AtomicSoundComponent) {
-				HashMap<Port, Integer> targetPortMapping = parsePortMappings((AtomicSoundComponent) targetComponent);
+				HashMap<Port, Integer> targetPortMapping = codeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
+						AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS);
 				sinkPort = targetPortMapping.get(link.getTarget());
 			}
 			if (sourceComponent instanceof CompositeSoundComponent){
@@ -371,7 +320,9 @@ public class Codegen {
 				result += "#X connect " + (componentList.size() + createdObjects - 1) + " 0 ";
 				result += componentList.indexOf(targetPort.getComponent()) + " ";
 				if (targetComponent instanceof AtomicSoundComponent){
-					result += parsePortMappings((AtomicSoundComponent) targetComponent).get(targetPort);
+					result += codeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
+							AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS)
+							.get(targetPort);
 				} else if (targetComponent instanceof CompositeSoundComponent){
 					result += compositeComponentPortMappings.get(targetPort);
 				}
@@ -388,8 +339,11 @@ public class Codegen {
 				
 				SoundComponent sourceComponent = sourcePort.getComponent();
 				result += "#X connect " + componentList.indexOf(sourcePort.getComponent()) + " ";
+				
 				if (sourceComponent instanceof AtomicSoundComponent){
-					result += parsePortMappings((AtomicSoundComponent) sourceComponent).get(sourcePort);
+					result += codeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent,
+							AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS)
+							.get(sourcePort);
 				} else if (sourceComponent instanceof CompositeSoundComponent){
 					result += compositeComponentPortMappings.get(sourcePort);
 				}
@@ -401,14 +355,7 @@ public class Codegen {
 		return result;
 	}
 	
-	private Port portSearch(AtomicSoundComponent atomicSoundComponent, String portName) throws Exception{
-		for (Port port : atomicSoundComponent.getPorts()){
-			if (port.getName().equals(portName)){
-				return port;
-			}
-		}
-		throw new Exception("Port not found in component");
-	}
+
 	
 	private String propertySearch(AtomicSoundComponent atomicSoundComponent, String propName) throws Exception{
 		if (atomicSoundComponent.getBooleanProperties().containsKey(propName))
@@ -423,11 +370,8 @@ public class Codegen {
 		throw new Exception("Property name not in the list!");
 	}
 
-	public void generate(IFile file) throws CoreException, IOException {
-		Patch patch = getPatch(file.getFullPath().toPortableString());
-
-		IProject project = file.getProject();
-		pdCodeFolder = project.getFolder(pdcodeFolderName);
+	public void generate(Patch patch, IProject project) throws CoreException, IOException {
+	    pdCodeFolder = project.getFolder(pdcodeFolderName);
 		if (pdCodeFolder.exists())
 			pdCodeFolder.delete(true, null);
 			pdCodeFolder.create(IResource.NONE, true, null);

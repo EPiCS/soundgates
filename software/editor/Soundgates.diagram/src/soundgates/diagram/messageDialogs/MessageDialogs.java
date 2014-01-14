@@ -74,6 +74,10 @@ public class MessageDialogs {
 	public static void portHasNoIncomingConnection(String parent, String name) {
 		MessageDialog.openWarning(null, "Port \""+name+"\" of \""+parent+"\"  has no incoming link", "Please create an incoming connection for the port \""+name+"\"");		
 	}
+	
+	public static void portHasNoDelegation(String parent, String name) {
+		MessageDialog.openWarning(null, "Port \""+name+"\" of \""+parent+"\"  has no delegation", "Please create a delegetion for the port \""+name+"\"");		
+	}
 		
 	public static void inPortHasOutgoingConnection(String parent, String name) {
 		MessageDialog.openWarning(null, "IN-port \""+name+"\" of \""+parent+"\"  has an outgoing link", "Please delete the outgoing connection from the port \""+name+"\"");		
@@ -112,7 +116,11 @@ public class MessageDialogs {
 	}	
 	
 	public static void compositeSoundComponentContaintsIOBlock(String name) {		
-		MessageDialog.openWarning(null, "IO blocks in composite components are not allowed", "Please remove the IO block(s) from the composite sound component \""+name+"\"");		
+		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please remove the IO component(s) from the composite sound component \""+name+"\"");		
+	}
+	
+	public static void ioComponentsMustHaveUniqueNames() {		
+		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
 	}
 	
 	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		

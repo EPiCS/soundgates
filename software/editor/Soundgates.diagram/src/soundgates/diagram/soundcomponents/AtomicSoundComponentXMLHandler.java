@@ -34,6 +34,16 @@ public class AtomicSoundComponentXMLHandler{
 	public static String CODEGEN_PREFIX_VHDL = CODEGEN_PREFIX + "_vhdl";
 	public static String CODEGEN_PREFIX_PROP_MAPPINGS = CODEGEN_PREFIX + "_propMappings";
 	public static String CODEGEN_PREFIX_PORT_MAPPINGS = CODEGEN_PREFIX + "_portMappings";
+	
+	public static String NODENAME_DEVICE = "Device";
+	public static String NODENAME_DEVICE_IMPL = "Implementation";
+	public static String NODENAME_DEVICE_PROP_MAPPING = "PropMapping";
+	public static String NODENAME_DEVICE_PORT_MAPPING = "PortMapping";
+	public static String DEVICE_PREFIX = "deviceProp_";
+	public static String DEVICE_PREFIX_PROP_MAPPINGS = DEVICE_PREFIX + "_propMappings_";
+	public static String DEVICE_PREFIX_PORT_MAPPINGS = DEVICE_PREFIX + "_portMappings_";
+	public static String DEVICE_PREFIX_IMPLNAME = DEVICE_PREFIX + "_name";
+	
 	// private AtomicSoundComponentLibrary library;
 
 	public static void readFromXML(AtomicSoundComponentLibrary library, String libraryPath) {
@@ -99,7 +109,46 @@ public class AtomicSoundComponentXMLHandler{
 										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PDCODE , code);
 										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PORT_MAPPINGS , portMappings.toString());
 										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PROP_MAPPINGS , propMappings.toString());
-									} else {
+									} 
+									
+									if (propertyName.equals(NODENAME_DEVICE)){
+
+										NodeList nodeList = currentSubNode.getChildNodes();		
+										for(int k=0; k<nodeList.getLength(); k++) 
+										{
+											if(nodeList.item(k).getNodeName().equals(NODENAME_DEVICE_IMPL)){
+//												StringBuilder propMappings = new StringBuilder();
+												StringBuilder portMappings = new StringBuilder();
+												Node implNode = nodeList.item(k);
+												
+												String implType = implNode.getAttributes().getNamedItem("type").getNodeValue();
+												String implName = implNode.getAttributes().getNamedItem("name").getNodeValue();
+												
+												Node childNode = implNode.getFirstChild(); 
+												do {
+													if (childNode.getNodeName().equals(NODENAME_DEVICE_PORT_MAPPING)){
+														portMappings.append(childNode.getAttributes().getNamedItem("PortName"));
+														portMappings.append("|");
+														portMappings.append(childNode.getAttributes().getNamedItem("PortNumber"));
+														portMappings.append("||");
+													}
+//													if (childNode.getNodeName().equals(NODENAME_DEVICE_PROP_MAPPING)){
+//														propMappings.append(childNode.getAttributes().getNamedItem("PropName"));
+//														propMappings.append("|");
+//														propMappings.append(childNode.getAttributes().getNamedItem("Tag"));
+//														propMappings.append("||");
+//													}
+												} while ((childNode = childNode.getNextSibling()) != null);
+
+												soundComponent.getStringProperties().put(DEVICE_PREFIX_PORT_MAPPINGS + implType, portMappings.toString());
+												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME, implName);
+//												soundComponent.getStringProperties().put(DEVICE_PREFIX_PROP_MAPPINGS + implType, propMappings.toString());
+											}
+										}	
+
+									}
+									
+									else {
 										String propertyValue = currentSubNode.getTextContent();
 										soundComponent.getStringProperties().put(CODEGEN_PREFIX + propertyName, propertyValue);
 									}
