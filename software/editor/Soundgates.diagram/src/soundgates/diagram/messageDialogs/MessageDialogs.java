@@ -143,4 +143,8 @@ public class MessageDialogs {
 		MessageDialog.openWarning(null, "Missing composite sound component", "The composite sound component \""+name+"\" which is embedded in the composite sound component \""+parentName+"\" was not found in the folder \"soundcomponents\" or its embedded component(s) are missing");		
 	}
 
+	public static void minValueGreaterThanMaxValue(String name) {
+		MessageDialog.openWarning(null, "The minimum value of the IO component "+name+" is greater than its maximum value.","Please set correct values for the IO component "+name);		
+	}
+
 }

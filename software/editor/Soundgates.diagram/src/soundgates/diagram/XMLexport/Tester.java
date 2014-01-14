@@ -18,6 +18,7 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 public class Tester {
 	
 	LinkedList<String> ioComponentNames = new LinkedList<>();
+	LinkedList<AtomicSoundComponent> ioComponents = new LinkedList<>();
 	
 	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
 		
@@ -81,9 +82,16 @@ public class Tester {
 						MessageDialogs.ioComponentsMustHaveUniqueNames();
 						return false;
 				}
+			}			
+			
+			if(atomicSoundComponent.getFloatProperties().get("MinValue") >
+			  	atomicSoundComponent.getFloatProperties().get("MaxValue")){
+				MessageDialogs.minValueGreaterThanMaxValue(atomicSoundComponent.getName());
+				return false;
 			}
-			ioComponentNames.add(atomicSoundComponent.getName());
-		}
+				
+			ioComponentNames.add(atomicSoundComponent.getName());			
+		}		
 		
 		// test ports
 		for(Port port : atomicSoundComponent.getPorts()){			
@@ -184,6 +192,7 @@ public class Tester {
 				// test daty type?
 			}				
 		}
+				
 		return true;
 	}
 	
