@@ -25,13 +25,16 @@ ConstSoundComponent::ConstSoundComponent(std::vector<std::string> params) : Soun
 
 	}
 
-	CREATE_AND_REGISTER_PORT2(ConstSoundComponent, Out, ControlPort, CtrlOut, 1);
+	CREATE_AND_REGISTER_PORT3(ConstSoundComponent, Out, ControlPort, CtrlOut, 1);
 }
 
 ConstSoundComponent::~ConstSoundComponent() {}
 
 void ConstSoundComponent::init(){
-    ((ControlLink*)m_CtrlOut_1_Port->getLink())->pushControlData(m_CtrlData);
+
 }
 
-void ConstSoundComponent::process(){ /* do nothing */ }
+void ConstSoundComponent::process(){
+//    LOG_DEBUG("Const: " << m_CtrlData)
+    m_CtrlOut_1_Port->push(m_CtrlData);
+}

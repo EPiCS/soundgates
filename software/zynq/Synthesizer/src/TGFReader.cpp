@@ -60,15 +60,6 @@ void TGFReader::read(Patch* patch, string filename){
 
 			normalize(paramtokens);
 
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "1: "  << match[1];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "2: "  << match[2];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "3: "  << match[3];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "4: " << match[4];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "5: " << match[5];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "6: " << match[6];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "7: " << match[7];
-			SYNTHESIZER_LOG(debug) << "TGF match node " << "8: " << match[8];
-
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
@@ -81,24 +72,25 @@ void TGFReader::read(Patch* patch, string filename){
 
 			}else{
 
-				SYNTHESIZER_LOG(error) << "unknown implementation type";
+			    throw std::invalid_argument("Unknown implementation type");
 			}
 		}
 
 		// match edge
 		if (boost::regex_match(line, match, edgeexpr)){
 
-			SYNTHESIZER_LOG(debug) << "TGF match edge " << "1: " << match[1];
-			SYNTHESIZER_LOG(debug) << "TGF match edge " << "2: " << match[2];
-			SYNTHESIZER_LOG(debug) << "TGF match edge " << "3: " << match[3];
-			SYNTHESIZER_LOG(debug) << "TGF match edge " << "4: " << match[4];
-
 			int source_uid  = boost::lexical_cast<int>(match[1]);
 			int dest_uid    = boost::lexical_cast<int>(match[2]);
 			int source_port = boost::lexical_cast<int>(match[3]);
 			int dest_port   = boost::lexical_cast<int>(match[4]);
 
-			patch->createLink(source_uid, source_port, dest_uid, dest_port);
+			try{
+			    patch->createLink(source_uid, source_port, dest_uid, dest_port);
+
+			}catch(std::exception& e){
+
+			    LOG_ERROR("Exception: " << e.what());
+			}
 		}
 	}
 

@@ -10,7 +10,7 @@
 
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
-
+#include <SoundPort.h>
 
 /*
  * Reads an plays audio samples in various formats
@@ -21,7 +21,7 @@ public:
 
     DECLARE_COMPONENTNAME;
 
-    DECLARE_PORT(SoundPort, SoundIn);
+    DECLARE_PORT3(SoundPort, SoundIn, 1);
 
     DummySink(std::vector<std::string> params);
     virtual ~DummySink();

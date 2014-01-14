@@ -10,10 +10,8 @@
 
 
 #include <vector>
-#include <algorithm>
-#include <iostream>
-
-#include <boost/thread.hpp>
+#include <exception>
+#include <stdexcept>
 
 #include "Port.h"
 #include "Node.h"
@@ -23,27 +21,26 @@
 
 using namespace std;
 
+class SoundComponent;
+
+typedef boost::shared_ptr<SoundComponent> SoundComponentPtr;
+
 class SoundComponent : public Node{
 
 private:
 
-	std::vector<Port*>*		m_pInports;
-	std::vector<Port*>* 		m_pOutports;
-	SoundComponentImpl* m_pDelegate;
+    SoundComponentImplPtr     m_pDelegate;
 
 public:
 
-	SoundComponent(int uid, SoundComponentImpl* impl);
+	SoundComponent(int uid, SoundComponentImplPtr impl);
 	virtual ~SoundComponent();
 
 
-	void addOutgoingLink(Link& link, int port);
-	void addIncomingLink(Link& link, int port);
+	void addOutgoingLink(LinkPtr link, unsigned int port);
+	void addIncomingLink(LinkPtr link, unsigned int port);
 
-	const std::vector<Port*>& getInports();
-	const std::vector<Port*>& getOutports();
-
-	SoundComponentImpl* getDelegate();
+	SoundComponentImplPtr getDelegate();
 
 	void run();
 	void init();

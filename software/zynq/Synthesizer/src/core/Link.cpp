@@ -7,32 +7,29 @@
 
 #include "Link.h"
 
-Link::Link(Node* source, Node* destination){
-
-	this->source 		= source;
-	this->destination 	= destination;
-}
-
-Link::~Link(){
-
+Link::Link(NodePtr source, NodePtr destination) :
+    m_pSource(source),
+    m_pDestination(destination){
 
 }
 
-void Link::setSource(Node* newSource){
+Link::~Link(){ }
 
-	this->source = newSource;
+void Link::setSource(NodePtr newSource){
+
+	m_pSource = newSource;
 }
 
-Node* Link::getSource(){
+NodePtr Link::getSource(){
 
-	return this->source;
+	return m_pSource;
 }
 
-void Link::setDestination(Node* newDestination){
+void Link::setDestination(NodePtr newDestination){
 
-	this->destination = newDestination;
+	m_pDestination = newDestination;
 }
-Node* Link::getDestination(){
+NodePtr Link::getDestination(){
 
-	return this->destination;
+	return m_pDestination;
 }

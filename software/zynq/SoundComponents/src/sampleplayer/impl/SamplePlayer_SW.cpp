@@ -69,7 +69,7 @@ void SamplePlayer_SW::initCodec() {
     LOG_INFO("Loading audio file " << m_SourceFile);
     LOG_INFO("#Streams: " << m_ContainerCtx->nb_streams);
 
-    for (int i = 0; i < m_ContainerCtx->nb_streams; i++) {
+    for (unsigned int i = 0; i < m_ContainerCtx->nb_streams; i++) {
         if (m_ContainerCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
             stream_index = i;
             break;
@@ -220,7 +220,7 @@ void SamplePlayer_SW::process() {
     int* writeLeftPortPtr  = (int*)((BufferedLink*)m_SoundOut_Left_1_Port->getLink())->getWriteBuffer();
     int* writeRightPortPtr = (int*)((BufferedLink*)m_SoundOut_Right_2_Port->getLink())->getWriteBuffer();
 
-    int trigger = (int) ((ControlLink*)m_Trigger_1_Port->getLink())->getNextControlData();
+    int trigger = (int) m_Trigger_1_Port->pop();
 
     if(trigger || (m_CurrentPlaybackOffset > 0 && m_CurrentPlaybackOffset < m_DecompressedDataSize)){
 

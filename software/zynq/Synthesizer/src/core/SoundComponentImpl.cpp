@@ -17,29 +17,33 @@ SoundComponentImpl::SoundComponentImpl(std::vector<std::string> parameters){
 SoundComponentImpl::~SoundComponentImpl(){ }
 
 
-Port* SoundComponentImpl::getInport(unsigned int number){
+PortPtr SoundComponentImpl::getInport(unsigned int number){
 
-	std::vector<Port*>& incoming = getInports();
+	if(m_Inports.size() < number){
 
-	if(incoming.size() < number){
-
-		std::cerr << "Port number out of range" << std::endl;
-		return NULL;
+		throw std::out_of_range("Port number out of range");
 	}
 
-	return incoming.at(number - 1);
+	return m_Inports[(number - 1)];
 }
 
-Port* SoundComponentImpl::getOutport(unsigned int number){
+PortPtr SoundComponentImpl::getOutport(unsigned int number){
 
-	std::vector<Port*>& outgoing = getOutports();
+	if(m_Outports.size() < number){
 
-	if(outgoing.size() < number){
-
-		std::cerr << "Port number out of range" << std::endl;
-		return NULL;
+	    throw std::out_of_range("Port number out of range");
 	}
 
-	return outgoing.at(number - 1);
+	return m_Outports[(number - 1)];
 }
 
+
+std::vector<PortPtr>& SoundComponentImpl::getInports(){
+
+    return m_Inports;
+}
+
+std::vector<PortPtr>& SoundComponentImpl::getOutports(){
+
+    return m_Outports;
+}

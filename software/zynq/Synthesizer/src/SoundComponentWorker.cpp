@@ -7,29 +7,29 @@
 
 #include "SoundComponentWorker.h"
 
-SoundComponentWorker::~SoundComponentWorker() {
-}
-
 void SoundComponentWorker::operator()() {
-	try {
 
-		boost::shared_lock<boost::shared_mutex> lock(*m_Sync);
-		while (1) {
+    while (m_Patch->isRunning()) {
 
-			for (vector<SoundComponent*>::iterator iter = m_SoundComponents.begin();
-					iter != m_SoundComponents.end(); ++iter) {
 
-				(*iter)->run();
-			}
+        boost::unique_lock<boost::mutex> lock(m_Patch->m_Mutex);
+        while(m_Patch->jobsToProcess < 1){
+            m_Patch->m_OnBuffersProcessed.wait(lock);   /* wait until buffers were switched */
+        }
 
-			m_Componentsync->notify_all();
+        SoundComponentPtr component = m_Patch->getJob();
 
-			m_Buffersync->wait(lock);
-		}
-	}
-	catch( boost::thread_interrupted const& e )
-	{
-		//SYNTHESIZER_LOG(debug) <<  "Thread interrupted!";
-		return;
-	}
+        if(component){
+            component->run();
+
+            {
+                boost::unique_lock<boost::mutex> lock(m_Patch->_m);
+//                LOG_DEBUG("Thread " << boost::this_thread::get_id() << " running " << m_Patch->m_ComponentsProcessed << " " << m_Patch->jobsToProcess);
+                m_Patch->m_ComponentsProcessed++;
+                m_Patch->jobsToProcess--;
+            }
+            m_Patch->m_OnComponentsProcessed.notify_one();
+        }
+
+    }
 }

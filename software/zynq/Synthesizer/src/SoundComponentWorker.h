@@ -14,30 +14,23 @@
 #include "core/SoundComponent.h"
 
 #include "core/Synthesizer.h"
-
-using namespace std;
+#include "Patch.h"
+//class Patch;
+//
+//typedef boost::shared_ptr<Patch> PatchPtr;
 
 /* Functor class */
 class SoundComponentWorker {
 
 private:
 
-	vector<SoundComponent*> 		m_SoundComponents;
-	boost::shared_mutex* 			m_Sync;
-	boost::condition_variable_any* 	m_Buffersync;
-	boost::condition_variable_any*  m_Componentsync;
+    PatchPtr m_Patch;
 
 public:
-	SoundComponentWorker(vector<SoundComponent*> components, boost::shared_mutex* sync,
-			boost::condition_variable_any* buffersync, boost::condition_variable_any* componentsync){
 
-		this->m_SoundComponents = components;
-		this->m_Sync 			= sync;
-		this->m_Buffersync 		= buffersync;
-		this->m_Componentsync	= componentsync;
-	}
+	SoundComponentWorker(PatchPtr patch) : m_Patch(patch) { }
 
-	virtual ~SoundComponentWorker();
+	virtual ~SoundComponentWorker(){}
 
 	void operator()();
 

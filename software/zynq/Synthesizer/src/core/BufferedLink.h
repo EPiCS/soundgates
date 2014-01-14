@@ -9,8 +9,12 @@
 #define BUFFEREDLINK_H_
 
 #include <cstddef>
+#include <boost/smart_ptr.hpp>
 
 #include "Link.h"
+class BufferedLink;
+
+typedef boost::shared_ptr<BufferedLink>  BufferedLinkPtr;
 
 class BufferedLink : public Link {
 
@@ -22,7 +26,7 @@ private:
 
 public:
 
-	BufferedLink(Node *source, Node* dest, size_t bufferdepth);
+	BufferedLink(NodePtr source, NodePtr dest, size_t bufferdepth);
 	virtual ~BufferedLink(void);
 
 	void switchBuffers(void);

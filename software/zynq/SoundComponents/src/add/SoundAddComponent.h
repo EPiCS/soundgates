@@ -23,10 +23,10 @@ public:
 
 	DECLARE_COMPONENTNAME
 
-	DECLARE_PORT2(SoundPort, SoundIn, 1);
-	DECLARE_PORT2(SoundPort, SoundIn, 2);
+	DECLARE_PORT3(SoundPort, SoundIn, 1);
+	DECLARE_PORT3(SoundPort, SoundIn, 2);
 
-	DECLARE_PORT2(SoundPort, SoundOut, 1);
+	DECLARE_PORT3(SoundPort, SoundOut, 1);
 
 	SoundAddComponent(std::vector<std::string> params);
 	virtual ~SoundAddComponent();

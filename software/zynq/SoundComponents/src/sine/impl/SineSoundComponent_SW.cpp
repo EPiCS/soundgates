@@ -46,35 +46,32 @@ double my_sine(double x)
 
 
 SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) : SineSoundComponent(params){
-
-	this->phase = 0.0;
+    m_Frequency = 0.0;
+	m_Phase = 0.0;
+	m_PhaseIncr = 0.0;
 
 }
 
 void SineSoundComponent_SW::init() {
 
     m_SoundOut_1_Port->init();
+    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(this)));
 }
 
 void SineSoundComponent_SW::process() {
 
-    ControlLink*  inlink  = (ControlLink*)(m_FrequencyIn_1_Port->getLink());
-
-    double phase_incr = getPhaseIncrement(inlink->getNextControlData());
-
 	for (int i = 0; i < Synthesizer::config::blocksize; i++) {
 
-
 #ifdef ZYNQ
-	    m_SoundOut_1_Port->writeSample(my_sine(phase) * INT_MAX, i);
+	    m_SoundOut_1_Port->writeSample(my_sine(m_Phase) * INT_MAX, i);
 #else
-		m_SoundOut_1_Port->writeSample(sin(phase) * INT_MAX, i);
+		m_SoundOut_1_Port->writeSample(sin(m_Phase) * INT_MAX, i);
 #endif
 
-		phase += phase_incr;
+		m_Phase += m_PhaseIncr;
 
-		if (phase >= M_PI * 2) {
-			phase -= M_PI * 2;
+		if (m_Phase >= M_PI * 2) {
+			m_Phase -= M_PI * 2;
 		}
 	}
 

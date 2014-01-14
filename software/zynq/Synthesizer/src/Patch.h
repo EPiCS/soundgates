@@ -12,9 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <typeinfo>
-
-#include <pthread.h>
-
+#include <stdexcept>
 
 #include "InputSoundComponent.h"
 
@@ -27,29 +25,59 @@
 
 #include "utils/SoundComponenLoader.h"
 
-#include "SoundComponentWorker.h"
-#include "SoundLinkWorker.h"
-
 using namespace std;
+
+class Patch;
+
+typedef boost::shared_ptr<Patch> PatchPtr;
 
 class Patch {
 
 private:
 
 
-	vector<InputSoundComponent*>*	m_InputComponents;
+	vector<InputSoundComponentPtr>	m_InputComponents;      /*< Pointer to the input subset of the sound components */
 
-	vector<SoundComponent*> 		m_ComponentsVector;
+	vector<SoundComponentPtr> 		    m_ComponentsVector;     /*< Container holding all references to the sound components */
 
-	vector<BufferedLink*>			m_BufferedLinksVector;
+	vector<BufferedLinkPtr>			m_BufferedLinksVector;  /*< Buffered links container */
 
-	vector<ControlLink*>			m_ControlLinksVector;
+	vector<ControlLinkPtr>			m_ControlLinksVector;   /*< Control links container */
+
 
 	Synthesizer::state::ePatchState m_PatchState;
 
-	boost::barrier*					m_SndComponentBarrier;
+	void initialize(void);
+
+	std::vector<SoundComponentPtr>::iterator jobIter;
 
 public:
+
+	size_t                              m_ComponentsProcessed;
+//	boost::shared_mutex                 m_Mutex;
+	boost::mutex                        m_Mutex;
+	boost::mutex                        _m;
+//	boost::condition_variable_any       m_OnComponentsProcessed;
+//	boost::condition_variable_any       m_OnBuffersProcessed;
+	boost::condition_variable       m_OnComponentsProcessed;
+	boost::condition_variable       m_OnBuffersProcessed;
+	int                                jobsToProcess;
+
+
+	SoundComponentPtr getJob(){
+	    boost::unique_lock<boost::mutex> lock(_m);  /* Let only one worker get a job at a time */
+
+	    SoundComponentPtr component = *jobIter;
+
+	    jobIter++;
+
+	    if(jobIter == m_ComponentsVector.end()){
+	        jobIter = m_ComponentsVector.begin();
+
+	    }
+
+	    return component;
+	}
 
 	Patch();
 	virtual ~Patch();
@@ -57,12 +85,14 @@ public:
 	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
 	void createLink(int sourceid, int srcport, int destid, int destport);
 
-	const vector<InputSoundComponent*>& getInputSoundComponents();
+	vector<InputSoundComponentPtr>& getInputSoundComponents();
 	void switchBuffers();
-	void initialize(void);
+
+	bool isRunning(){ return (m_PatchState == Synthesizer::state::running); }
 
 	void run(void);
 	void stop(void);
+	void dispose();
 };
 
 #endif /* PATCH_H_ */

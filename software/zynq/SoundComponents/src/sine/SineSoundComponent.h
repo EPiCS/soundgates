@@ -24,8 +24,8 @@ public:
 
     DECLARE_COMPONENTNAME;
 
-    DECLARE_PORT2(SoundPort, SoundOut, 1);
-    DECLARE_PORT2(ControlPort, FrequencyIn, 1);
+    DECLARE_PORT3(SoundPort, SoundOut, 1);
+    DECLARE_PORT3(ControlPort, FrequencyIn, 1);
 
 	SineSoundComponent(std::vector<std::string> params);
 	virtual ~SineSoundComponent();

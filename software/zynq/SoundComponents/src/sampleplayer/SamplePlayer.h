@@ -10,7 +10,8 @@
 
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
-
+#include <SoundPort.h>
+#include <ControlPort.h>
 
 /*
  * Reads an plays audio samples in various formats

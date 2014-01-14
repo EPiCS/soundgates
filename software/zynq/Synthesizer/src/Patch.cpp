@@ -5,41 +5,22 @@
  *      Author: lukas
  */
 
-
 #include "Patch.h"
 
-extern Patch* patch;
+#include "SoundComponentWorker.h"
 
 Patch::Patch(){
-
-	m_InputComponents = NULL;
-	m_PatchState  	  = Synthesizer::state::created;
-	m_SndComponentBarrier = NULL;
+	m_PatchState  	        = Synthesizer::state::created;
+	m_ComponentsProcessed   = 0;
+	jobsToProcess         = 0;
 }
 
 Patch::~Patch(){ }
 
 
-const vector<InputSoundComponent*>& Patch::getInputSoundComponents(){
+vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 
-	if(NULL == m_InputComponents){
-
-		m_InputComponents = new vector<InputSoundComponent*>;
-
-		for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter){
-
-			SoundComponentImpl* sndcomponent = (*iter)->getDelegate();
-
-			LOG_DEBUG("Check for input sound component: " << typeid(*sndcomponent).name());
-
-			if(typeid(*sndcomponent) == typeid(InputSoundComponent)){
-
-				m_InputComponents->push_back(dynamic_cast<InputSoundComponent*>(sndcomponent));
-			}
-		}
-	}
-
-	return *m_InputComponents;
+	return m_InputComponents;
 }
 
 void Patch::createSoundComponent(int uid, std::string type, std::vector<std::string> parameters, int slot){
@@ -50,14 +31,12 @@ void Patch::createSoundComponent(int uid, std::string type, std::vector<std::str
 
 	impltype = (slot < 0) ? SoundComponents::SW : SoundComponents::HW;
 
-	SoundComponentImpl* impl = loader.createFromString(type, impltype, parameters);
+	SoundComponentImplPtr impl = loader.createFromString(type, impltype, parameters);
 
 	if(NULL != impl){
-		SoundComponent* component = new SoundComponent(uid, impl);
+		SoundComponentPtr component(new SoundComponent(uid, impl));
 
-		LOG_DEBUG("Adding component to patch uid: " << dynamic_cast<Node*>(component)->getUid() << " at " << component);
-		LOG_DEBUG("Component #inports : " << component->getInports().size());
-		LOG_DEBUG("Component #outorts : " << component->getOutports().size());
+		LOG_DEBUG("Adding component to patch uid: " << component->getUid());
 
 		m_ComponentsVector.push_back(component);
 	}
@@ -66,139 +45,193 @@ void Patch::createSoundComponent(int uid, std::string type, std::vector<std::str
 
 void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
-	LOG_DEBUG("Creating sound link from node " << sourceid << " to Node " << destid);
+	LOG_DEBUG("Creating link from node " << sourceid << " to Node " << destid);
 
-	SoundComponent* source;
-	SoundComponent* destination;
+	SoundComponentPtr source;
+	SoundComponentPtr destination;
 
-	for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter){
+	/* Get source and destination components */
+	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+	        iter != m_ComponentsVector.end(); ++iter){
 
-		if( ((Node*)*iter)->getUid() == sourceid){
-			source = *iter;
+		if((*iter)->getUid() == sourceid){
+			source = (*iter);
 		}
-		if( ((Node*)*iter)->getUid() == destid) {
-			destination = *iter;
+
+		if((*iter)->getUid() == destid) {
+			destination = (*iter);
 		}
 	}
 
-	LOG_DEBUG("Source " << source << " Destination " << destination);
+	/* Check if source and destination were found */
+	if(!source || !destination){
+	    throw std::invalid_argument("Could not create link between sound components: NULL pointer");
+	}
 
-	Port* srcPort  = source->getDelegate()->getOutport(srcport);
-    Port* destPort = destination->getDelegate()->getInport(destport);
+	if(!source->getDelegate() || !destination->getDelegate() ){
 
-    Link* link = NULL;
+	    throw std::invalid_argument("No delegate set.");
+	}
 
-    if(typeid(*srcPort) != typeid(*destPort)){
+	PortPtr srcPort  = source->getDelegate()->getOutport(srcport);
+	PortPtr destPort = destination->getDelegate()->getInport(destport);
 
-        LOG_ERROR("Sourceport of type " << typeid(*srcPort).name() << " does not match destinationport of type " << typeid(*destPort).name());
+    if(typeid(*srcPort) == typeid(*destPort)){
 
-    }else{
+        if(srcPort->getLink()){ /* Check if src has already an outgoid connection */
 
+            LOG_DEBUG("Source port already connected, reusing connection");
 
-        /*
-         * Check if src has already an outgoid connection
-         */
-        if(srcPort->getLink() != NULL){
+            destination->addIncomingLink(srcPort->getLink(), destport);
 
-            destination->addIncomingLink(*(srcPort->getLink()), destport);
-
-        }else if(destPort->getLink() != NULL){  /* Check if destination port has already been linked */
+        }else if(destPort->getLink()){  /* Check if destination port has already been linked */
 
             LOG_ERROR("Destination port of component " << destid << "already connected");
 
         }else{
 
-            LOG_DEBUG("Source port type"      << typeid(*srcPort).name());
-            LOG_DEBUG("Destination port type" << typeid(*destPort).name());
+            LOG_DEBUG("Source port type "      << typeid(*srcPort).name());
+            LOG_DEBUG("Destination port type " << typeid(*destPort).name());
+
+            LinkPtr linkhdnl;
 
             /* Create SoundLink */
             if(typeid(*srcPort) == typeid(SoundPort)){
 
                 LOG_DEBUG("Creating buffered link");
-                link = new BufferedLink((Node*)source, (Node*)destination, Synthesizer::config::blocksize * sizeof(int));
+                BufferedLinkPtr link(new BufferedLink(
+                        boost::static_pointer_cast<Node>(source),
+                        boost::static_pointer_cast<Node>(destination),
+                        Synthesizer::config::bytesPerBlock));
 
-                m_BufferedLinksVector.push_back((BufferedLink*)link);
+                m_BufferedLinksVector.push_back(link);
+
+                linkhdnl = link;
 
             /* Create ControlLink */
             }else if(typeid(*srcPort) == typeid(ControlPort)){
 
                 LOG_DEBUG("Creating control link");
-                link = new ControlLink((Node*)source, (Node*)destination);
+                ControlLinkPtr link(new ControlLink(
+                                       boost::static_pointer_cast<Node>(source),
+                                       boost::static_pointer_cast<Node>(destination)));
 
-                m_ControlLinksVector.push_back((ControlLink*)link);
+                m_ControlLinksVector.push_back(link);
+
+                linkhdnl = link;
+            }else{
+
+                throw std::runtime_error("Could not determine port type");
             }
 
-            if(NULL == link) {
+            try{
+                if(!linkhdnl){
+                    throw std::invalid_argument("Link not created");
+                }
+                source->addOutgoingLink(linkhdnl, srcport);
+                destination->addIncomingLink(linkhdnl, destport);
 
-                LOG_ERROR("Could allocate create link object");
-            } else {
+            }catch(std::exception& e){
 
-                source->addOutgoingLink(*link, srcport);
-                destination->addIncomingLink(*link, destport);
-
+                LOG_ERROR("Exception: " << e.what());
             }
         }
     }
+    else{
+
+        throw std::invalid_argument("Port type mismatch");
+    }
+
 }
 
 void Patch::initialize(void){
 
 
-	for(vector<SoundComponent*>::iterator iter = m_ComponentsVector.begin(); iter != m_ComponentsVector.end(); ++iter ){
+	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+	        iter != m_ComponentsVector.end(); ++iter ){
 
-		(*iter)->init();
+        SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
+
+        LOG_DEBUG("Check for input sound component: " << typeid(sndcomponent.get()).name());
+
+        if (typeid(sndcomponent.get()) == typeid(InputSoundComponent)) {
+
+            m_InputComponents.push_back(boost::static_pointer_cast<InputSoundComponent>(sndcomponent));
+        }
+        sndcomponent->init();
 	}
 
+	jobIter         = m_ComponentsVector.begin();
+	jobsToProcess   = m_ComponentsVector.size();
 	this->m_PatchState = Synthesizer::state::initialized;
 
 }
 
 void Patch::run(){
 
+    if(Synthesizer::state::created == m_PatchState){
+
+        initialize();
+    }
 
 	if(Synthesizer::state::initialized == m_PatchState){
 
 		m_PatchState = Synthesizer::state::running;
 
-		//TODO: Make sure that processing time in both workers is nearly equal
+		boost::thread worker_threads[Synthesizer::config::max_workers];
 
-		vector<SoundComponent*> split_lo(m_ComponentsVector.begin(), m_ComponentsVector.begin() + m_ComponentsVector.size() / 2);
+		for(unsigned int i = 0; i < m_ComponentsVector.size() && i < Synthesizer::config::max_workers; i++){
+		    SoundComponentWorker worker(PatchPtr(this));
+		    worker_threads[i] = boost::thread(worker);
+		}
 
-		vector<SoundComponent*> split_hi(m_ComponentsVector.begin() + m_ComponentsVector.size() / 2, m_ComponentsVector.end());
-
-		boost::condition_variable_any* buffersync 	 = new boost::condition_variable_any;
-		boost::condition_variable_any* componentsync = new boost::condition_variable_any;
-
-		boost::shared_mutex sync;
-
-
-		SoundComponentWorker w1(m_ComponentsVector, &sync, buffersync, componentsync);
-
-// TODO: Check why this leads to noise
-
-//		SoundComponentWorker w1(split_lo, &sync, buffersync, componentsync);
-//		SoundComponentWorker w2(split_hi, &sync, buffersync, componentsync);
-
-		SoundLinkWorker w3(m_BufferedLinksVector, &sync, componentsync, buffersync);
-
-		boost::thread componentworkerthread_t1(boost::ref(w1));
-		//boost::thread componentworkerthread_t2(boost::ref(w2));
-
-		boost::thread linkworkerthread_t1(boost::ref(w3));
+		boost::thread link_thread(&Patch::switchBuffers, this);
 
 		while(1){
-			usleep(1000);
+		    boost::this_thread::sleep(boost::posix_time::seconds(1));
 		}
 	}
 }
 
 void Patch::switchBuffers(){
 
-	for (vector<BufferedLink*>::iterator iter = m_BufferedLinksVector.begin();
-			iter != m_BufferedLinksVector.end(); ++iter) {
+    while (isRunning()) {
 
-		static_cast<BufferedLink*>((*iter))->switchBuffers();
-	}
+        boost::unique_lock<boost::mutex> lock(m_Mutex);
+        while (m_ComponentsProcessed < m_ComponentsVector.size()) {
+            m_OnComponentsProcessed.wait(lock); /* wait until all components were processed */
+        }
+
+        for (vector<BufferedLinkPtr>::iterator iter =
+                m_BufferedLinksVector.begin();
+                iter != m_BufferedLinksVector.end(); ++iter) {
+
+            (*iter)->switchBuffers();
+        }
+
+        {
+            boost::unique_lock<boost::mutex> lock(_m);  /* Let only one worker get a job at a time */
+            m_ComponentsProcessed = 0;
+            jobsToProcess = m_ComponentsVector.size();
+        }
+//        LOG_DEBUG("Thread " << boost::this_thread::get_id() << " buffers switched");
+        m_OnBuffersProcessed.notify_all();
+    }
+}
+
+void Patch::dispose(){
+
+    for (vector<BufferedLinkPtr>::iterator iter = m_BufferedLinksVector.begin();
+                iter != m_BufferedLinksVector.end(); ++iter) {
+
+            (*iter).reset();
+    }
+
+    for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+                iter != m_ComponentsVector.end(); ++iter){
+
+            (*iter).reset();
+    }
 }
 
 void Patch::stop(){

@@ -1,5 +1,6 @@
 SoundComponents = add    		\
 				  adsr   		\
+				  sine 			\
 				  const  		\
 				  delay  		\
 				  mixer 	  	\
@@ -17,7 +18,7 @@ SUBDIRS = $(addprefix $(SRCDIR)/, $(SoundComponents) )
 
 
 all:
-    @mkdir -p $(DESTDIR)
+	@mkdir -p $(DESTDIR)
 	@echo 'Building sound components' 
 	for dir in $(SUBDIRS); do \
        $(MAKE) all -C $$dir;      \

@@ -16,7 +16,7 @@
 #include <lo/lo.h>
 
 #include <boost/algorithm/string.hpp>
-
+#include <boost/shared_ptr.hpp>
 #include "core/ControlPort.h"
 #include "core/ControlLink.h"
 #include "core/SoundComponentImpl.h"
@@ -36,6 +36,10 @@ using namespace std;
  */
 extern "C" int pushOSCMessageToInputsoundComponent(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *inputhndl);
 
+class InputSoundComponent;
+
+typedef boost::shared_ptr<InputSoundComponent> InputSoundComponentPtr;
+
 class InputSoundComponent : public SoundComponentImpl{
 
 private:
@@ -53,6 +57,8 @@ public:
 
 	std::string& getOscAddress();
 	std::string& getOscTypeTag();
+
+	ControlPortPtr getPort(unsigned int);
 
 	void init() { /* do not implement */ }
 	void process() { /* do not implement */ }

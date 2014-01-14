@@ -1,7 +1,4 @@
 #Build shared core library
- ################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
 
 # Paths
 XILINX_DIR=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin
@@ -51,6 +48,7 @@ $(CORE_SRC_DIR)/ControlPort.cpp \
 $(CORE_SRC_DIR)/SoundgatesConfig.cpp \
 $(CORE_SRC_DIR)/SoundComponent.cpp \
 $(CORE_SRC_DIR)/SoundComponentImpl.cpp \
+$(CORE_SRC_DIR)/ICallbackFunctor.cpp \
 $(CORE_SRC_DIR)/SoundPort.cpp \
 $(CORE_SRC_DIR)/Port.cpp \
 $(CORE_SRC_DIR)/Link.cpp \
@@ -62,6 +60,7 @@ $(OUTPUT_DIR)/ControlLink.o \
 $(OUTPUT_DIR)/ControlPort.o \
 $(OUTPUT_DIR)/SoundgatesConfig.o \
 $(OUTPUT_DIR)/SoundComponent.o \
+$(OUTPUT_DIR)/ICallbackFunctor.o \
 $(OUTPUT_DIR)/SoundComponentImpl.o \
 $(OUTPUT_DIR)/SoundPort.o \
 $(OUTPUT_DIR)/Port.o \
@@ -73,6 +72,7 @@ $(OUTPUT_DIR)/BufferedLink.d \
 $(OUTPUT_DIR)/ControlLink.d \
 $(OUTPUT_DIR)/ControlPort.d \
 $(OUTPUT_DIR)/SoundgatesConfig.d \
+$(OUTPUT_DIR)/ICallbackFunctor.d \
 $(OUTPUT_DIR)/SoundComponentImpl.d \
 $(OUTPUT_DIR)/SoundComponent.d \
 $(OUTPUT_DIR)/SoundPort.d \

@@ -1,5 +1,5 @@
 1 input/sw/'/sin f'
-#2 input/sw/'/trigger f'
+2 input/sw/'/trigger f'
 
 #3 const/sw/'0.2' 
 3 input/sw/'/attack f'
@@ -21,7 +21,7 @@
 
 #adsr wiring
 1 7 '1,1' 
-1 8 '1,6'
+2 8 '1,6'
 3 8 '1,2'
 4 8 '1,3'
 5 8 '1,4'

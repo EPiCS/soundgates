@@ -61,16 +61,16 @@ void Mixer_SW::getReadBuffer(int* readbuffer[10]) {
 
 void Mixer_SW::getBiasLevel(float* biasLevel){
 
-    biasLevel[0] = m_BiasIn_11_Port->getNextControlData();
-    biasLevel[1] = m_BiasIn_12_Port->getNextControlData();
-    biasLevel[2] = m_BiasIn_13_Port->getNextControlData();
-    biasLevel[3] = m_BiasIn_14_Port->getNextControlData();
-    biasLevel[4] = m_BiasIn_15_Port->getNextControlData();
-    biasLevel[5] = m_BiasIn_16_Port->getNextControlData();
-    biasLevel[6] = m_BiasIn_17_Port->getNextControlData();
-    biasLevel[7] = m_BiasIn_18_Port->getNextControlData();
-    biasLevel[8] = m_BiasIn_19_Port->getNextControlData();
-    biasLevel[9] = m_BiasIn_19_Port->getNextControlData();
+    biasLevel[0] = m_BiasIn_11_Port->pop();
+    biasLevel[1] = m_BiasIn_12_Port->pop();
+    biasLevel[2] = m_BiasIn_13_Port->pop();
+    biasLevel[3] = m_BiasIn_14_Port->pop();
+    biasLevel[4] = m_BiasIn_15_Port->pop();
+    biasLevel[5] = m_BiasIn_16_Port->pop();
+    biasLevel[6] = m_BiasIn_17_Port->pop();
+    biasLevel[7] = m_BiasIn_18_Port->pop();
+    biasLevel[8] = m_BiasIn_19_Port->pop();
+    biasLevel[9] = m_BiasIn_19_Port->pop();
 }
 
 void Mixer_SW::init(){

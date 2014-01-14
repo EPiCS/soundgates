@@ -10,24 +10,29 @@
 
 #include <cstdlib>
 #include <typeinfo>
+#include <boost/smart_ptr.hpp>
 
-#include "BufferedLink.h"
+#include "Link.h"
+
+class Port;
+
+typedef boost::shared_ptr<Port>  PortPtr;
 
 class Port {
 
 private:
-	int 	m_PortNumber;
-	Link* 	m_Link;
+	int 	    m_PortNumber;
+	LinkPtr 	m_Link;
 
 public:
 
 	Port(int number);
-	virtual ~Port();	/*< Virtual constructor makes this class polymorphic ? */
+	virtual ~Port();
 
 	int getPortNumber();
 
-	Link* getLink();
-	void setLink(Link*);
+	LinkPtr getLink();
+	void setLink(LinkPtr);
 
 	virtual int init() = 0;
 

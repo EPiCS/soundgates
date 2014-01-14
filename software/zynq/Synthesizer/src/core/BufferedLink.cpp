@@ -16,7 +16,8 @@
  *  in one single function. Right now the nodes on the link are set here
  *  in the constructor and the buffer later for the links
  */
-BufferedLink::BufferedLink(Node *source, Node* dest, size_t bufferdepth) : Link(source, dest){
+BufferedLink::BufferedLink(NodePtr source, NodePtr dest, size_t bufferdepth)
+    : Link(source, dest){
 
 	this->m_Bufferdepth = bufferdepth;
 	this->m_ReadbufferPtr = new char[bufferdepth];

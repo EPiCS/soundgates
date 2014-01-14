@@ -26,7 +26,7 @@ public:
 
 
 	DECLARE_COMPONENTNAME
-	DECLARE_PORT2(ControlPort, CtrlOut, 1);
+	DECLARE_PORT3(ControlPort, CtrlOut, 1);
 
 	ConstSoundComponent(std::vector<std::string> params);
 	virtual ~ConstSoundComponent();

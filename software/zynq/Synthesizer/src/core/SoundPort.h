@@ -9,12 +9,16 @@
 #define SOUNDPORT_H_
 
 #include <stdint.h>
+#include <boost/smart_ptr.hpp>
 
 #include "Port.h"
 #include "BufferedLink.h"
 
 #include "Synthesizer.h"
 
+class SoundPort;
+
+typedef boost::shared_ptr<SoundPort>  SoundPortPtr;
 
 class SoundPort: public Port {
 

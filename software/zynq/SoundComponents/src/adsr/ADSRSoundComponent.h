@@ -11,7 +11,8 @@
 
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
-
+#include <SoundPort.h>
+#include <ControlPort.h>
 class ADSRSoundComponent: public SoundComponentImpl {
 
 public:

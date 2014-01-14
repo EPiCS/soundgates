@@ -11,12 +11,11 @@
 #include <vector>
 #include <string.h>
 #include <iostream>
+#include <stdexcept>
+#include <boost/smart_ptr.hpp>
 
-#include "SoundPort.h"
-#include "ControlPort.h"
-#include "BufferedLink.h"
-#include "ControlLink.h"
 #include "Port.h"
+
 
     #define EXPORT_SOUNDCOMPONENT_MIXED_IMPL(CLASSNAME)                             \
             extern "C" {                                                            \
@@ -79,6 +78,11 @@
 		TYPE*	m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port; \
 		const static int s_ ## PORTNAME ## _ ## PORTNUMBER = PORTNUMBER;
 
+#define DECLARE_PORT3(TYPE, PORTNAME, PORTNUMBER) \
+        boost::shared_ptr<TYPE> m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port; \
+        const static int s_ ## PORTNAME ## _ ## PORTNUMBER = PORTNUMBER;
+
+
 #define DEFINE_PORT(CLASSNAME, PORTNAME, NUMBER) \
         int CLASSNAME::s_ ## PORTNAME ## _PortNumber = NUMBER;
 
@@ -91,11 +95,21 @@
         new TYPE(CLASSNAME::s_ ## PORTNAME ## _ ## PORTNUMBER);                     \
         get## DIRECTION ##ports().push_back(m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port);
 
+#define CREATE_AND_REGISTER_PORT3(CLASSNAME, DIRECTION, TYPE, PORTNAME, PORTNUMBER)  \
+        m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port = boost::shared_ptr<TYPE>(    \
+        new TYPE(CLASSNAME::s_ ## PORTNAME ## _ ## PORTNUMBER) );                    \
+        get## DIRECTION ##ports().push_back(m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port);
+
+
+class SoundComponentImpl;
+
+typedef boost::shared_ptr<SoundComponentImpl> SoundComponentImplPtr;
+
 class SoundComponentImpl {
 
 private:
-	std::vector<Port*> m_Inports;
-	std::vector<Port*> m_Outports;
+	std::vector<PortPtr> m_Inports;
+	std::vector<PortPtr> m_Outports;
 
 	std::vector<std::string> m_Parameters;
 
@@ -106,11 +120,11 @@ public:
 
 	virtual ~SoundComponentImpl();
 
-	Port* getInport(unsigned int);
-	Port* getOutport(unsigned int);
+	PortPtr getInport(unsigned int);
+	PortPtr getOutport(unsigned int);
 
-	std::vector<Port*>& getInports(){ return m_Inports; }
-	std::vector<Port*>& getOutports(){ return m_Outports;}
+	std::vector<PortPtr>& getInports();
+	std::vector<PortPtr>& getOutports();
 	std::vector<std::string>& getParameters(){ return m_Parameters;}
 
 	virtual void init() = 0;

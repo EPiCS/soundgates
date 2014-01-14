@@ -44,7 +44,7 @@ public:
 
 	DECLARE_COMPONENTNAME
 
-	DECLARE_PORT2(SoundPort, SoundIn, 1);
+	DECLARE_PORT3(SoundPort, SoundIn, 1);
 
 	OutputSoundComponent(std::vector<std::string> params);
 	virtual ~OutputSoundComponent();

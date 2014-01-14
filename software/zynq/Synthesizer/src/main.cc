@@ -32,9 +32,6 @@ int main( int argc, const char* argv[])
 	SoundgatesConfig* config = SoundgatesConfig::getInstance();
 	config->loadDefault();
 
-	SynthesizerFileReader* foo = new TGFReader;
-	SoundComponentLoader* loader;
-
 	patch = new Patch();
 
 
@@ -62,13 +59,11 @@ int main( int argc, const char* argv[])
 //		}
 
 
-		loader = &(SoundComponentLoader::getInstance());
+		SoundComponentLoader::getInstance().initialize(argv[2]);
 
-		loader->initialize(argv[2]);
+		TGFReader reader;
 
-		foo->read(patch, argv[3]);
-
-		delete foo;
+		reader.read(patch, argv[3]);
 	}
 //	ui::UIService* xmlrpcservice = (ui::UIService*) new ui::RPCService(patch);
 	ui::UIService* oscservice    = (ui::UIService*) new ui::OSCService(patch);
@@ -77,8 +72,6 @@ int main( int argc, const char* argv[])
 //	ui::UIManager::getInstance().registerService(xmlrpcservice, string("xmlrpc"), true);
 	ui::UIManager::getInstance().registerService(oscservice, string("oscservice"), true);
 //	ui::UIManager::getInstance().registerService(tcphandshake, string("tcphandshake"), true);
-
-	patch->initialize();
 
 	patch->run();
 

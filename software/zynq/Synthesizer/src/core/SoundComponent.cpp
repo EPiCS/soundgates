@@ -8,19 +8,16 @@
 #include "SoundComponent.h"
 
 
-SoundComponent::SoundComponent(int uid, SoundComponentImpl* delegate) : Node(uid){
+SoundComponent::SoundComponent(int uid, SoundComponentImplPtr delegate) : Node(uid){
 
-	this->m_pDelegate = delegate;
-	this->m_pInports  = &(delegate->getInports());
-	this->m_pOutports = &(delegate->getOutports());
+	m_pDelegate = delegate;
 
 }
 
 SoundComponent::~SoundComponent(){ }
 
 void SoundComponent::run(){
-
-		m_pDelegate->process();
+    m_pDelegate->process();
 }
 
 void SoundComponent::init() {
@@ -28,38 +25,30 @@ void SoundComponent::init() {
 	this->m_pDelegate->init();
 }
 
-void SoundComponent::addOutgoingLink(Link& link, int port){
+void SoundComponent::addOutgoingLink(LinkPtr link, unsigned int port){
 
-	if((int)this->m_pOutports->size() < port){
+    try{
 
-		LOG_ERROR("Portnumber is out of range");
-	}
-	this->m_pOutports->at(port - 1)->setLink(&link);
+        m_pDelegate->getOutport(port)->setLink(link);
+
+    }catch(std::out_of_range& e){
+        std::cerr << e.what();
+       // LOG_ERROR("Exception: " << e.what());
+    }
 }
 
-void SoundComponent::addIncomingLink(Link& link, int port){
+void SoundComponent::addIncomingLink(LinkPtr link, unsigned int port){
 
-	if((int)this->m_pInports->size() < port){
+    try{
+          m_pDelegate->getInport(port)->setLink(link);
 
-	    LOG_ERROR("Portnumber is out of range");
-	}
-
-	this->m_pInports->at(port - 1)->setLink(&link);
+      }catch(std::out_of_range& e){
+          std::cerr << e.what();
+      }
 }
 
-const std::vector<Port*>& SoundComponent::getInports(){
+SoundComponentImplPtr SoundComponent::getDelegate(){
 
-	return *m_pInports;
-}
-
-const std::vector<Port*>& SoundComponent::getOutports(){
-	return *m_pOutports;
-}
-
-
-SoundComponentImpl* SoundComponent::getDelegate(){
-
-	return this->m_pDelegate;
-
+	return m_pDelegate;
 }
 

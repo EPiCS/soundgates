@@ -39,9 +39,9 @@ namespace ui {
 
 		if (m_pPatch != NULL) {
 
-			const vector<InputSoundComponent*>& sndcomponents =	m_pPatch->getInputSoundComponents();
+			const vector<InputSoundComponentPtr>& sndcomponents =	m_pPatch->getInputSoundComponents();
 
-			for (vector<InputSoundComponent*>::const_iterator iter = sndcomponents.begin(); iter != sndcomponents.end(); ++iter) {
+			for (vector<InputSoundComponentPtr>::const_iterator iter = sndcomponents.begin(); iter != sndcomponents.end(); ++iter) {
 
 				string msg = (*iter)->getOscAddress();
 				msg = msg + (*iter)->getOscTypeTag();

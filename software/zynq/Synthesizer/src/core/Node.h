@@ -8,11 +8,12 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <list>
+#include <boost/smart_ptr.hpp>
 
 #include "Link.h"
+class Node;
 
-using namespace std;
+typedef boost::shared_ptr<Node>  NodePtr;
 
 class Node {
 

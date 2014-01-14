@@ -12,12 +12,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <exception>
 
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/split.hpp>
+
 
 
 #include "Patch.h"

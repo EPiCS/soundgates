@@ -39,9 +39,9 @@ void TCPHandshakeService::buildMessage(std::string& sndMsg){
 
     if (m_pPatch != NULL) {
 
-        const std::vector<InputSoundComponent*>& sndcomponents = m_pPatch->getInputSoundComponents();
+        const std::vector<InputSoundComponentPtr>& sndcomponents = m_pPatch->getInputSoundComponents();
 
-        for (std::vector<InputSoundComponent*>::const_iterator iter =
+        for (std::vector<InputSoundComponentPtr>::const_iterator iter =
                 sndcomponents.begin();
                 iter != sndcomponents.end(); ++iter) {
 

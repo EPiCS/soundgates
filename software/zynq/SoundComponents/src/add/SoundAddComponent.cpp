@@ -14,11 +14,11 @@ EXPORT_SOUNDCOMPONENT_NO_IMPL(SoundAddComponent);
 
 SoundAddComponent::SoundAddComponent(std::vector<std::string> params) : SoundComponentImpl(params) {
 
-    CREATE_AND_REGISTER_PORT2(SoundAddComponent, In, SoundPort, SoundIn, 1);
+    CREATE_AND_REGISTER_PORT3(SoundAddComponent, In, SoundPort, SoundIn, 1);
 
-    CREATE_AND_REGISTER_PORT2(SoundAddComponent, In, SoundPort, SoundIn, 2);
+    CREATE_AND_REGISTER_PORT3(SoundAddComponent, In, SoundPort, SoundIn, 2);
 
-    CREATE_AND_REGISTER_PORT2(SoundAddComponent, Out, SoundPort, SoundOut, 1);
+    CREATE_AND_REGISTER_PORT3(SoundAddComponent, Out, SoundPort, SoundOut, 1);
 }
 
 SoundAddComponent::~SoundAddComponent() { }

@@ -55,11 +55,12 @@ namespace Synthesizer{
 
 	namespace config{
 
-		static const char*  port 	       = "50500";
+		static const char*  port 	        = "50500";
 		static const int    samplerate     = 44100;
-		static const int 	blocksize      = 64;
+		static const int 	 blocksize      = 64;
 		static const int    bytesPerSample = sizeof(int);
 		static const int    bytesPerBlock  = blocksize * bytesPerSample;
+		static const int    max_workers    = 4;
 	}
 }
 

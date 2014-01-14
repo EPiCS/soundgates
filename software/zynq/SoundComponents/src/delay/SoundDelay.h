@@ -29,17 +29,15 @@ private:
 	char* m_pReadPtr;			/* read pointer for ring buffer  */
 	char* m_pWritePtr;			/* write pointer for ring buffer */
 
-	const int   m_BlockSizeInBytes = Synthesizer::config::blocksize * sizeof(int);
-
 	inline int delayToSampleCount(float);
 
 public:
 
 	DECLARE_COMPONENTNAME
 
-	DECLARE_PORT2(SoundPort, SoundIn, 1);
-	DECLARE_PORT2(ControlPort, DelayIn, 2);
-	DECLARE_PORT2(SoundPort, SoundOut, 1);
+	DECLARE_PORT3(SoundPort, SoundIn, 1);
+	DECLARE_PORT3(ControlPort, DelayIn, 2);
+	DECLARE_PORT3(SoundPort, SoundOut, 1);
 
 	SoundDelayComponent(std::vector<std::string> params);
 	virtual ~SoundDelayComponent();

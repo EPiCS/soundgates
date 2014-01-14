@@ -12,8 +12,7 @@
 
 Port::Port(int number){
 
-	this->m_Link = NULL;
-	this->m_PortNumber = number;
+	m_PortNumber = number;
 }
 
 Port::~Port(){ }
@@ -24,16 +23,16 @@ int Port::getPortNumber(){
 }
 
 
-Link* Port::getLink(){
-	return this->m_Link;
+LinkPtr Port::getLink(){
+	return m_Link;
 }
 
-void Port::setLink(Link* link){
-	this->m_Link = link;
+void Port::setLink(LinkPtr link){
+	m_Link = link;
 }
 
 
 bool Port::operator==(const Port& other) const{
 
-	return this->m_PortNumber == other.m_PortNumber;
+	return (m_PortNumber == other.m_PortNumber);
 }

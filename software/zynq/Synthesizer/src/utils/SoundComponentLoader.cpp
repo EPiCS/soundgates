@@ -44,7 +44,7 @@ void SoundComponentLoader::initialize(std::string repository){
 
 		if(!fs::exists(repository)){
 
-			LOG_ERROR("Cannot open soundcomponent repository");
+			LOG_ERROR("Cannot open sound component repository");
 			return; // remain uninitialized
 		}
 
@@ -65,24 +65,22 @@ void SoundComponentLoader::initialize(std::string repository){
 }
 
 void SoundComponentLoader::finailize(){
-
-
 	if(m_IsInitialized){
 
 		LOG_DEBUG("Closing library components");
 
 		/* Free components */
-		for(std::vector<SoundComponentImpl*>::iterator iter = m_RegisteredSndInstances.begin(); iter != m_RegisteredSndInstances.end();) {
+		for(std::vector<SoundComponentImplPtr>::iterator iter = m_RegisteredSndInstances.begin();
+		        iter != m_RegisteredSndInstances.end();) {
 
-			LOG_DEBUG("Cleaning up soundcomponent: " << *iter);
+			LOG_DEBUG("Cleaning up sound component. Use count: " << (*iter).use_count());
 
-			delete (*iter);
+			(*iter).reset();
 
 			iter = m_RegisteredSndInstances.erase(iter);
 		}
 
 		/* Clean library handles */
-
 		for(std::map<std::string, void*>::iterator iter =m_Factory.begin(), end = m_Factory.end();
 				iter != end; ++iter) {
 
@@ -107,33 +105,36 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 	if(NULL == libhndl){
 
 		LOG_ERROR("Could not load library " << filename << ": "<< dlerror());
+		finailize();
+		std::exit(EXIT_FAILURE);
 
 	}else{
 
 		getComponentName_t* namefn = (getComponentName_t*) dlsym(libhndl, SoundComponentLoader::componentNameFcnSymbol);
 
 		if ((liberror = dlerror()) != NULL){
-			LOG_ERROR("Could not resolve library symbols in library " << filename);
+			LOG_ERROR("Could not resolve library symbols in library:" << filename);
+			LOG_ERROR(liberror);
+
+			finailize();
+
+			std::exit(EXIT_FAILURE);
 		}
 
 		std::string componenttype(namefn());
+		m_Factory[componenttype] = libhndl;
 
-		LOG_INFO("Loading sound component of type " << componenttype);
-
-		this->m_Factory[componenttype] = libhndl;
-
-		LOG_INFO("Library handle " << libhndl << " successfully stored");
+		LOG_INFO("Sound component successfully loaded: " << componenttype);
 	}
 }
 
 
 
-SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params){
+SoundComponentImplPtr SoundComponentLoader::createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params){
 
-	SoundComponentImpl* component = NULL;
+    SoundComponentImplPtr newcomponent;
 
 	/* Check if its a predefined component */
-
 	bool ispredefined = false;
 	for(int i = 0; i < sndc::SIZE_OF_PREDEF_COMPONENTS; i++){
 
@@ -147,10 +148,11 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 
 		LOG_DEBUG("Creating predefined component of type " << type);
 
-		component = m_PredefinedComponentsCreateFn[type](params);
+		SoundComponentImplPtr component(static_cast<SoundComponentImpl*>(m_PredefinedComponentsCreateFn[type](params)));
+
+		newcomponent = component;
 
 	}else{
-
 
 		LOG_DEBUG("Creating component from library of type " << type);
 
@@ -161,8 +163,8 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 
 		if(it == m_Factory.end()){
 
-			LOG_INFO("Cannot create component of type \"" << type << " \": library not present");
-			return NULL;
+			LOG_ERROR("Cannot create component of type \"" << type << " \": library not found");
+			return newcomponent;
 		}
 
 		libhndl = it->second;
@@ -171,18 +173,20 @@ SoundComponentImpl* SoundComponentLoader::createFromString(std::string type, Sou
 
 		if ((liberror = dlerror()) != NULL) {
 			LOG_ERROR("Could not resolve library symbol \"" << SoundComponentLoader::createFcnSymbol << "\" in library of type " << type);
+			LOG_ERROR(liberror);
 		}
 
 		if(NULL == createfn){
 			LOG_ERROR("Create function is null");
 		}
 
-		component = createfn(impltype, params);
+		SoundComponentImplPtr component(static_cast<SoundComponentImpl*>(createfn(impltype, params)));
+		newcomponent = component;
 	}
 
+    if (newcomponent) {
+        m_RegisteredSndInstances.push_back(newcomponent);
+    }
 
-
-	m_RegisteredSndInstances.push_back(component);
-
-	return component;
+	return newcomponent;
 }

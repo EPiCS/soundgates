@@ -26,7 +26,7 @@ void InputSoundComponent::setup(string oscaddress){
 	this->m_OSCAddresses = oscaddress;
 
 	std::vector<std::string> oscparts;
-	std::vector<Port*>& outports = getOutports();
+	std::vector<PortPtr>& outports = getOutports();
 
 	boost::trim(m_OSCAddresses);
 	boost::split(oscparts, m_OSCAddresses, boost::is_any_of(" "));
@@ -40,7 +40,7 @@ void InputSoundComponent::setup(string oscaddress){
 	}
 
 	for(int i = 0; i < (int) m_OSCTypeTag.size(); i++){
-		Port* port = new ControlPort(i + 1);
+		PortPtr port(new ControlPort(i + 1));
 		outports.push_back(port);
 	}
 }
@@ -51,18 +51,27 @@ std::string& InputSoundComponent::getOscTypeTag(){
 }
 
 InputSoundComponent::~InputSoundComponent(){
+//    std::vector<PortPtr>& outports = getOutports();
+//
+//	for(std::vector<Port*>::iterator iter = outports.begin(); iter != outports.end();){
+//
+//		Port* p_port = (*iter);
+//
+//		delete p_port;
+//
+//		outports.erase(iter);
+//	}
+}
 
+ControlPortPtr InputSoundComponent::getPort(unsigned int nPort){
 
-    std::vector<Port*>& outports = getOutports();
+    std::vector<PortPtr>& outports = getOutports();
+    if(outports.size() < nPort){
 
-	for(std::vector<Port*>::iterator iter = outports.begin(); iter != outports.end();){
-
-		Port* p_port = (*iter);
-
-		delete p_port;
-
-		outports.erase(iter);
-	}
+        return ControlPortPtr();
+    }else{
+        return boost::static_pointer_cast<ControlPort>(outports[nPort]);
+    }
 }
 
 std::string& InputSoundComponent::getOscAddress(){
@@ -74,28 +83,23 @@ int pushOSCMessageToInputsoundComponent(const char *path, const char *types, lo_
 
 	InputSoundComponent* input = (InputSoundComponent*) inputhndl;
 
-	const std::vector<Port*>& ports = input->getOutports();
-
-	if(argc != (int)ports.size()){
-		LOG_WARNING("OSC message arguments does not match number of input components outports: " << argc << " != " << ports.size());
-	}else{
-		for(int i = 0; i < argc; i++){
-
-			switch(types[i]){
-			case 'f':
-				LOG_DEBUG("Port " << i << " received data: " << argv[i]->f);
-				((ControlLink*)(input->getOutport(i + 1)->getLink()))->pushControlData(argv[i]->f);
-				break;
-			case 'i':
-			    LOG_DEBUG("Port " << i << " received data: " << argv[i]->i);
-				((ControlLink*)(input->getOutport(i + 1)->getLink()))->pushControlData(argv[i]->i);
-				break;
-			default:
-				LOG_WARNING("OSC type is currently not supported");
-			}
-		}
-	}
-
-
+    for (int i = 0; i < argc; i++) {
+        ControlPortPtr port = input->getPort(i + 1);
+        switch (types[i]) {
+        case 'f':
+            LOG_DEBUG("Port " << i << " received data: " << argv[i]->f);
+            if (port){
+                port->push(argv[i]->f);
+            }
+            break;
+        case 'i':
+            if (port) {
+                port->push(argv[i]->i);
+            }
+            break;
+        default:
+            LOG_WARNING("OSC type is currently not supported");
+        }
+    }
 	return 0;
 }

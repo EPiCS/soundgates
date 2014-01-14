@@ -23,7 +23,7 @@ int SoundPort::init(){
 }
 
 void SoundPort::writeSample(int32_t pcm_data, uint32_t nIndex){
-    BufferedLink* soundlink = (BufferedLink*) getLink();
+    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
 
     if (soundlink != NULL) {
         if (nIndex >= 0 && (nIndex * Synthesizer::config::bytesPerSample) < soundlink->getBufferDepth()) {
@@ -40,12 +40,12 @@ void SoundPort::writeSample(int32_t pcm_data, uint32_t nIndex){
 
 int SoundPort::operator[](size_t nIndex) {
 
-    BufferedLink* soundlink = (BufferedLink*) getLink();
+    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
 
     /*
      * Check if index is not out of bound and port is connected
      */
-    if(soundlink != NULL){
+    if(soundlink){
         if(nIndex >= 0 && (nIndex * Synthesizer::config::bytesPerSample) < soundlink->getBufferDepth()){
             return ((int*)soundlink->getReadBuffer())[nIndex];
         }else{

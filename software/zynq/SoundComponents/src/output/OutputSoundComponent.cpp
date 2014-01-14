@@ -19,7 +19,7 @@ OutputSoundComponent::OutputSoundComponent(std::vector<std::string> params) :
 {
 	this->buffer = NULL;
 
-	CREATE_AND_REGISTER_PORT2(OutputSoundComponent, In, SoundPort, SoundIn, 1);
+	CREATE_AND_REGISTER_PORT3(OutputSoundComponent, In, SoundPort, SoundIn, 1);
 }
 
 OutputSoundComponent::~OutputSoundComponent()
@@ -30,7 +30,7 @@ OutputSoundComponent::~OutputSoundComponent()
 
 void OutputSoundComponent::process()
 {
-	BufferedLink* soundLink = (BufferedLink*) m_SoundIn_1_Port->getLink();
+    BufferedLinkPtr soundLink = boost::static_pointer_cast<BufferedLink>(m_SoundIn_1_Port->getLink());
 
 	char* bufferArray 	= soundLink->getReadBuffer();
 	int bufferSize 		= soundLink->getBufferDepth();

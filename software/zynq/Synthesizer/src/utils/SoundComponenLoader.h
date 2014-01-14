@@ -53,7 +53,7 @@ private:
 	std::map<std::string, void*, std::less<std::string> > m_Factory;
 
 	/* keeps track of all created instances */
-	std::vector<SoundComponentImpl*> m_RegisteredSndInstances;
+	std::vector<SoundComponentImplPtr> m_RegisteredSndInstances;
 
 public:
 	static SoundComponentLoader& getInstance(){
@@ -68,7 +68,7 @@ public:
 
 	void loadLibrary(std::string filename);
 
-	SoundComponentImpl* createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params);
+	SoundComponentImplPtr createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params);
 
 };
 

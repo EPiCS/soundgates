@@ -1,4 +1,6 @@
-1 input/sw/'/sin f'
+
+#1 input/sw/'/sin f'
+1 const/sw/'440.0'
 2 sine/sw
 3 dac/sw
 #  

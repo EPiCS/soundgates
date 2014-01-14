@@ -15,16 +15,15 @@ EXPORT_SOUNDCOMPONENT_NO_IMPL(SoundDelayComponent);
 
 inline int SoundDelayComponent::delayToSampleCount(float delay){
 
-	return  (((Synthesizer::config::samplerate * delay) * sizeof(int)) / m_BlockSizeInBytes) * m_BlockSizeInBytes;
+	return  (((Synthesizer::config::samplerate * delay) * sizeof(int)) / Synthesizer::config::bytesPerBlock) * Synthesizer::config::bytesPerBlock;
 }
 
 
 SoundDelayComponent::SoundDelayComponent(std::vector<std::string> params) : SoundComponentImpl(params) {
 
-	CREATE_AND_REGISTER_PORT2(SoundDelayComponent, In, SoundPort,   SoundIn, 1);
-	CREATE_AND_REGISTER_PORT2(SoundDelayComponent, In, ControlPort, DelayIn, 2);
-
-	CREATE_AND_REGISTER_PORT2(SoundDelayComponent, Out, SoundPort, SoundOut, 1);
+	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, In, SoundPort,   SoundIn, 1);
+	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, In, ControlPort, DelayIn, 2);
+	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, Out, SoundPort, SoundOut, 1);
 
 
 	m_DelaySlotSize	= 10 * ((Synthesizer::config::samplerate / Synthesizer::config::blocksize)
@@ -53,16 +52,16 @@ void SoundDelayComponent::process(void){
 
 	size_t offset = 0;
 
-	BufferedLink* soundInLink  = (BufferedLink*) m_SoundIn_1_Port->getLink();
-	BufferedLink* soundOutLink = (BufferedLink*) m_SoundOut_1_Port->getLink();
-	ControlLink*  delayLink    = (ControlLink*)  m_DelayIn_2_Port->getLink();
+	BufferedLinkPtr soundInLink  = boost::static_pointer_cast<BufferedLink>(m_SoundIn_1_Port->getLink());
+	BufferedLinkPtr soundOutLink = boost::static_pointer_cast<BufferedLink>(m_SoundOut_1_Port->getLink());
+	ControlLinkPtr  delayLink    = boost::static_pointer_cast<ControlLink>(m_DelayIn_2_Port->getLink());
 
 	char* readbuffer  = soundInLink->getReadBuffer();
 	char* writebuffer = soundOutLink->getWriteBuffer();
 
 	size_t delay = delayToSampleCount(delayLink->getNextControlData());	/*< delay in bytes */
 
-	memcpy(m_pWritePtr, readbuffer, m_BlockSizeInBytes);
+	memcpy(m_pWritePtr, readbuffer, Synthesizer::config::bytesPerBlock);
 
 	m_pReadPtr = m_pWritePtr - (delay);
 
@@ -72,24 +71,24 @@ void SoundDelayComponent::process(void){
 
 		m_pReadPtr = m_pLastDelaySlot - offset;
 
-		if(offset < m_BlockSizeInBytes){
+		if(offset < Synthesizer::config::bytesPerBlock){
 
 			memcpy(writebuffer, m_pReadPtr, offset);
 			m_pReadPtr = m_pDelaySlot;
 
-			memcpy(writebuffer + offset, m_pReadPtr, (m_BlockSizeInBytes - offset));
+			memcpy(writebuffer + offset, m_pReadPtr, (Synthesizer::config::bytesPerBlock - offset));
 
 		}else{
-			memcpy(writebuffer, m_pReadPtr, m_BlockSizeInBytes);
+			memcpy(writebuffer, m_pReadPtr, Synthesizer::config::bytesPerBlock);
 		}
 
 	}else{
 
-		memcpy(writebuffer, m_pReadPtr, m_BlockSizeInBytes);
+		memcpy(writebuffer, m_pReadPtr, Synthesizer::config::bytesPerBlock);
 	}
 
 	/* increase write address by one block */
-	m_pWritePtr = m_pWritePtr + m_BlockSizeInBytes;
+	m_pWritePtr = m_pWritePtr + Synthesizer::config::bytesPerBlock;
 
 	/* reset pointer if its out of range */
 	if(m_pWritePtr > m_pLastDelaySlot){

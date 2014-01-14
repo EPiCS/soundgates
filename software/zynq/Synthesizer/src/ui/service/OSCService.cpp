@@ -51,17 +51,17 @@ void OSCService::startService(){
 
 	m_LoServerThread = lo_server_thread_new(Synthesizer::config::port, NULL);
 
-	const vector<InputSoundComponent*>& inputs =  this->m_pPatch->getInputSoundComponents();
+	const vector<InputSoundComponentPtr>& inputs =  this->m_pPatch->getInputSoundComponents();
 
 	/* Add a generic handler for debugging purposes */
 	lo_server_thread_add_method(m_LoServerThread, NULL, NULL, genericOSCHandler, NULL);
 
-	for(vector<InputSoundComponent*>::const_iterator iter = inputs.begin(); iter != inputs.end(); ++iter){
+	for(vector<InputSoundComponentPtr>::const_iterator iter = inputs.begin(); iter != inputs.end(); ++iter){
 
 		lo_server_thread_add_method(m_LoServerThread,
 								(*iter)->getOscAddress().c_str(),
 								(*iter)->getOscTypeTag().c_str(),
-								pushOSCMessageToInputsoundComponent, (*iter));
+								pushOSCMessageToInputsoundComponent, (*iter).get());
 	}
 
 	if((err = lo_server_thread_start(m_LoServerThread)) > 0){

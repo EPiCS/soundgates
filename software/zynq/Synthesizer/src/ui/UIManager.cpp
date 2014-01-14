@@ -15,7 +15,7 @@ void UIManager::registerService(UIService* service, string name, bool runOnRegis
 
 		m_UIServices[name] = service;
 
-		LOG_ERROR("Registering service \"" << name << "\" on system");
+		LOG_INFO("Registering service \"" << name << "\" on system");
 
 		if(runOnRegister){
 			service->startService();
