@@ -10,7 +10,7 @@
 #include "impl/SquareSoundComponent_SW.h"
 
 
-DEFINE_COMPONENTNAME(SquareSoundComponent, "nco_sq")
+DEFINE_COMPONENTNAME(SquareSoundComponent, "square")
 
 EXPORT_SOUNDCOMPONENT_SW_ONLY(SquareSoundComponent);
 
