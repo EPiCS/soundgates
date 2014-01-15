@@ -7,6 +7,7 @@ SoundComponents = add    		\
 				  output 		\
 				  sampleplayer  \
 				sine \
+				square \
 				  output        \
 				  dummysink
 
