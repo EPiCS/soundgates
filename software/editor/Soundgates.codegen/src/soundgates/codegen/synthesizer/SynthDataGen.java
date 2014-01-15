@@ -36,7 +36,16 @@ public class SynthDataGen {
 		uniqueIds = new HashMap<SoundComponent, Integer>();
 		implTypes = new HashMap<SoundComponent, String>();
 
-		patch = unrollCompositeSoundComponents(patch);
+		boolean compositesUnrolled = false;		
+		while(!compositesUnrolled){
+			LinkedList<CompositeSoundComponent> componentsToRemove = getComponentsToRemove(patch);
+			if(componentsToRemove.size()>0){
+				patch = unrollCompositeSoundComponents(patch, componentsToRemove);
+			}
+			else{
+				compositesUnrolled=true;
+			}
+		}
 		
 		for (Element element : patch.getElements()) {
 			if(element instanceof AtomicSoundComponent)
@@ -153,9 +162,7 @@ public class SynthDataGen {
 		return "sw";
 	}
 	
-	
-	private Patch unrollCompositeSoundComponents(Patch patch){
-		
+	private LinkedList<CompositeSoundComponent> getComponentsToRemove(Patch patch){
 		LinkedList<CompositeSoundComponent> componentsToRemove = new LinkedList<CompositeSoundComponent>();
 		
 		for(Element element : patch.getElements()){			
@@ -164,39 +171,40 @@ public class SynthDataGen {
 				componentsToRemove.add(compositeSoundComponent);
 			}
 		}
-			
+		return componentsToRemove;
+	}
+	
+	private Patch unrollCompositeSoundComponents(Patch patch, LinkedList<CompositeSoundComponent> componentsToRemove){
+		
 		for(CompositeSoundComponent compositeSoundComponent : componentsToRemove){
 
 			LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
 			HashMap<SoundComponent,SoundComponent> soundComponentCopies = new HashMap<SoundComponent,SoundComponent>();		
 			
 			// add embedded components from the composite component to the patch
-			for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
-				SoundComponent soundComponentCopy = EcoreUtil.copy(soundComponent);
+			for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){				
 				
-				if(soundComponent instanceof AtomicSoundComponent)
+				SoundComponent soundComponentCopy = null;
+				
+				if(soundComponent instanceof AtomicSoundComponent){
+					soundComponentCopy = EcoreUtil.copy(soundComponent);
+					
 					((AtomicSoundComponent) soundComponentCopy).setType
 						(((AtomicSoundComponent) soundComponent).getType());
+				}
+				else if(soundComponent instanceof CompositeSoundComponent){
+					soundComponentCopy =  
+							copyCompositeSoundComponent((CompositeSoundComponent) soundComponent);
+				}
 				
-				soundComponentCopies.put(soundComponent, soundComponentCopy);
-				
+				soundComponentCopies.put(soundComponent, soundComponentCopy);				
 				patch.getElements().add(soundComponentCopy);
 			}
 
 			// add links from the composite component to the patch
 			for(Link link : compositeSoundComponent.getLinks()){
 				
-				Link newLink = SoundgatesFactory.eINSTANCE.createLink();
-				
-				//find component copies and the corresponding ports
-				SoundComponent sourceSoundComponentCopy = soundComponentCopies.get(link.getSource().getComponent());
-				Port sourcePortCopy = getPortCopy(sourceSoundComponentCopy, link.getSource());
-				
-				SoundComponent targetSoundComponentCopy = soundComponentCopies.get(link.getTarget().getComponent());
-				Port targetPortCopy = getPortCopy(targetSoundComponentCopy, link.getTarget());
-				
-				newLink.setSource(sourcePortCopy);
-				newLink.setTarget(targetPortCopy);
+				Link newLink = getLinkCopy(link, soundComponentCopies);
 				
 				patch.getElements().add(newLink);
 			}
@@ -258,6 +266,87 @@ public class SynthDataGen {
 				return newPort;
 		}
 		return null;
+	}
+	
+	public CompositeSoundComponent copyCompositeSoundComponent(CompositeSoundComponent originalCompositeSoundComponent){
+		CompositeSoundComponent newCompositeSoundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
+		newCompositeSoundComponent.setName(originalCompositeSoundComponent.getName());
+		
+		//copy ports
+		HashMap<Port,Port> portCopies = new HashMap<Port,Port>();
+		
+		for(Port originPort : originalCompositeSoundComponent.getPorts()){
+			Port newPort = EcoreUtil.copy(originPort);
+			newCompositeSoundComponent.getPorts().add(newPort);
+			portCopies.put(originPort, newPort);
+		}
+		
+		//copy embeddedElements		
+		HashMap<SoundComponent,SoundComponent> soundComponentCopies = new HashMap<SoundComponent,SoundComponent>();	
+		
+		for(SoundComponent embOriginalSoundComponent : originalCompositeSoundComponent.getEmbeddedComponents()){
+			if(embOriginalSoundComponent instanceof AtomicSoundComponent){
+				AtomicSoundComponent newEmbAtomicSoundComponent = (AtomicSoundComponent) EcoreUtil.copy(embOriginalSoundComponent);
+				
+				((AtomicSoundComponent) newEmbAtomicSoundComponent).setType
+					(((AtomicSoundComponent) embOriginalSoundComponent).getType());
+				
+				newCompositeSoundComponent.getEmbeddedComponents().add(newEmbAtomicSoundComponent);
+				soundComponentCopies.put(embOriginalSoundComponent,newEmbAtomicSoundComponent);
+			}
+			else if(embOriginalSoundComponent instanceof CompositeSoundComponent){
+				CompositeSoundComponent embNewCompositeSoundComponent = 
+						copyCompositeSoundComponent((CompositeSoundComponent) embOriginalSoundComponent);
+				
+				newCompositeSoundComponent.getEmbeddedComponents().add(embNewCompositeSoundComponent);
+				soundComponentCopies.put(embOriginalSoundComponent,embNewCompositeSoundComponent);
+			}
+		}
+		
+		//copy links
+		for(Link originalLink : originalCompositeSoundComponent.getLinks()){
+			newCompositeSoundComponent.getLinks().add(getLinkCopy(originalLink, soundComponentCopies));
+		}
+		
+		//copy delegations
+		for(Delegation originalDelegation : originalCompositeSoundComponent.getDelegations()){
+			Delegation newDelegation = SoundgatesFactory.eINSTANCE.createDelegation();
+			if(originalDelegation.getSource().getComponent()==originalCompositeSoundComponent){
+				newDelegation.setSource(portCopies.get(originalDelegation.getSource()));
+								
+				SoundComponent targetSoundComponentCopy = soundComponentCopies.get(originalDelegation.getTarget().getComponent());
+				Port targetPortCopy = getPortCopy(targetSoundComponentCopy, originalDelegation.getTarget());
+				
+				newDelegation.setTarget(targetPortCopy);
+			}
+			else{
+				newDelegation.setTarget(portCopies.get(originalDelegation.getTarget()));
+				
+				SoundComponent sourceSoundComponentCopy = soundComponentCopies.get(originalDelegation.getSource().getComponent());
+				Port sourcePortCopy = getPortCopy(sourceSoundComponentCopy, originalDelegation.getSource());
+				
+				newDelegation.setSource(sourcePortCopy);
+			}
+			newCompositeSoundComponent.getDelegations().add(newDelegation);
+		}
+		
+		return newCompositeSoundComponent;
+	}
+	
+	public Link getLinkCopy(Link link, HashMap<SoundComponent,SoundComponent> soundComponentCopies){
+		Link newLink = SoundgatesFactory.eINSTANCE.createLink();
+		
+		//find component copies and the corresponding ports
+		SoundComponent sourceSoundComponentCopy = soundComponentCopies.get(link.getSource().getComponent());
+		Port sourcePortCopy = getPortCopy(sourceSoundComponentCopy, link.getSource());
+		
+		SoundComponent targetSoundComponentCopy = soundComponentCopies.get(link.getTarget().getComponent());
+		Port targetPortCopy = getPortCopy(targetSoundComponentCopy, link.getTarget());
+		
+		newLink.setSource(sourcePortCopy);
+		newLink.setTarget(targetPortCopy);
+		
+		return newLink;
 	}
 	
 }

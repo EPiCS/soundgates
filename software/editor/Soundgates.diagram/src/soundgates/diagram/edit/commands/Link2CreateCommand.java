@@ -79,7 +79,7 @@ public class Link2CreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
@@ -88,8 +88,10 @@ public class Link2CreateCommand extends EditElementCommand {
 					"Invalid arguments in create link command"); //$NON-NLS-1$
 		}
 
-		Link newElement = SoundgatesFactory.eINSTANCE.createLink();
-		getContainer().getLinks().add(newElement);
+		Link newElement = SoundgatesFactory.eINSTANCE.createLink();		
+		CompositeSoundComponent comp = getSource().getComponent().getParentComponent();
+		comp.getLinks().add(newElement);
+//		getContainer().getLinks().add(newElement);
 		newElement.setSource(getSource());
 		newElement.setTarget(getTarget());
 		doConfigure(newElement, monitor, info);
