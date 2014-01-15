@@ -67,10 +67,12 @@ architecture Behavioral of hwt_adsr is
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
-     memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
-                    if done then
-                        refresh_state <= "0";
-                        state <= STATE_PROCESS;
+
+    -- ?? Was macht das hier?!
+   --  memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
+   --                 if done then
+    --                    refresh_state <= "0";
+   --                     state <= STATE_PROCESS;
     component adsr is
     Port ( 
             clk         : in  std_logic;
@@ -79,13 +81,13 @@ architecture Behavioral of hwt_adsr is
             input_wave  : in  signed(31 downto 0);
             start       : in  std_logic;
             stop        : in  std_logic;
-            attack      : in  unsigned(31 downto 0); 
-            decay       : in  unsigned(31 downto 0);  
-            release     : in  unsigned(31 downto 0);
-            start_amp   : in  unsigned(31 downto 0);
-            attack_amp  : in  unsigned(31 downto 0);
-            sustain_amp : in  unsigned(31 downto 0);
-            release_amp : in  unsigned(31 downto 0);
+            attack      : in  signed(31 downto 0); 
+            decay       : in  signed(31 downto 0);  
+            release     : in  signed(31 downto 0);
+            start_amp   : in  signed(31 downto 0);
+            attack_amp  : in  signed(31 downto 0);
+            sustain_amp : in  signed(31 downto 0);
+            release_amp : in  signed(31 downto 0);
             wave        : out signed(31 downto 0)
            );
     end component adsr;
@@ -410,6 +412,7 @@ begin
                         if done then
                             if bang = C_START_BANG then
                                 bang_state <= "1";
+                                start <= '1';
                                 state <= STATE_REFRESH;
                             else
                                 state <= STATE_WAITING;
@@ -438,7 +441,7 @@ begin
                         process_state  <= "1";
 
                     when "1" => 
-                        o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
+                        o_RAMData_adsr <= std_logic_vector(adsr_data); --std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
                         o_RAMWE_adsr   <= '1';
 
                         adsr_ce        <= '0';
