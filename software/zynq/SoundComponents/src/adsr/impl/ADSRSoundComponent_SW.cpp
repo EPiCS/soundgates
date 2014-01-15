@@ -19,14 +19,13 @@ void ADSRSoundComponent_SW::OnTrigger::operator()() {
     case ADSRSoundComponent_SW::RELEASE:
 
         if (ADSR_TRIGGERED(m_LastTrigger, trigger)) {
-        /* Update component parameters */
-
             LOG_DEBUG("Going from state " << m_ObjRef->m_ADSRState << " to ATTACK");
             m_ObjRef->m_ADSRState = ADSRSoundComponent_SW::ATTACK;
         }
         break;
     case ADSRSoundComponent_SW::SUSTAIN:
         if (ADSR_RELEASED(m_LastTrigger, trigger)) {
+//        if (trigger == 0) {
             m_ObjRef->m_ADSRState = ADSRSoundComponent_SW::RELEASE;
         }
         break;
@@ -67,19 +66,16 @@ void ADSRSoundComponent_SW::process() {
     int m_decaysamplecount   = (int) (Synthesizer::config::samplerate * m_DecayTime);
     int m_releasesamplecount = (int) (Synthesizer::config::samplerate * m_ReleaseTime);
 
-    char* readptr  = ((BufferedLink*) m_SoundIn_1_Port->getLink())->getReadBuffer();
-    char* writeptr = ((BufferedLink*) m_SoundOut_1_Port->getLink())->getWriteBuffer();
-
-    int i, j, blockSamplesProcessed = 0;
+    int   i, j, blockSamplesProcessed = 0;
 
     while (blockSamplesProcessed < Synthesizer::config::blocksize) {
 
         switch (m_ADSRState) {
 
         case IDLE:
+            //TODO: provide copy function to ports
 
-            memset(writeptr, 0, Synthesizer::config::blocksize * sizeof(int));
-
+            m_SoundOut_1_Port->clearWriteBuffer();
             blockSamplesProcessed = Synthesizer::config::blocksize;
 
             break;
@@ -90,7 +86,7 @@ void ADSRSoundComponent_SW::process() {
 
                 m_currentlevel = ((float) m_SamplesProcessed / m_attacksamplecount);
 
-                ((int*) writeptr)[i] = ((int*) readptr)[i] * m_currentlevel;
+                m_SoundOut_1_Port->writeSample( (*m_SoundIn_1_Port)[i] * m_currentlevel, i);
 
                 if (m_SamplesProcessed >= m_attacksamplecount) {
                     LOG_DEBUG("ATTACK -> DECAY");
@@ -110,8 +106,7 @@ void ADSRSoundComponent_SW::process() {
                 if (m_currentlevel < m_SustainLevel) {
                     m_currentlevel = m_SustainLevel;
                 }
-
-                ((int*) writeptr)[i] = ((int*) readptr)[i] * m_currentlevel;
+                m_SoundOut_1_Port->writeSample( (*m_SoundIn_1_Port)[i] * m_currentlevel, i);
 
                 if (m_SamplesProcessed >= m_decaysamplecount) {
                     LOG_DEBUG("DECAY -> SUSTAIN");
@@ -127,8 +122,7 @@ void ADSRSoundComponent_SW::process() {
 
             for (i = blockSamplesProcessed; i < Synthesizer::config::blocksize;
                     i++, blockSamplesProcessed++) {
-
-                ((int*) writeptr)[i] = ((int*) readptr)[i] * m_currentlevel;
+                m_SoundOut_1_Port->writeSample( (*m_SoundIn_1_Port)[i] * m_currentlevel, i);
             }
 
             break;
@@ -137,14 +131,12 @@ void ADSRSoundComponent_SW::process() {
                     i++, m_SamplesProcessed++, blockSamplesProcessed++) {
 
                 m_currentlevel = ((float) m_SamplesProcessed / m_releasesamplecount);
-
-                ((int*) writeptr)[i] = (((int*) readptr)[i] * m_SustainLevel) * (1.0 - m_currentlevel);
+                m_SoundOut_1_Port->writeSample( (*m_SoundIn_1_Port)[i] * m_SustainLevel * (1.0 - m_currentlevel), i);
 
                 if (m_SamplesProcessed >= m_releasesamplecount) {
 
                     for (j = i; j < Synthesizer::config::blocksize; j++) {
-
-                        ((int*) writeptr)[j] = 0;
+                        m_SoundIn_1_Port->writeSample(j, 0);
                     }
 
                     blockSamplesProcessed = Synthesizer::config::blocksize;

@@ -10,6 +10,7 @@
 ControlLink::ControlLink(NodePtr source, NodePtr destination) :
     Link(source, destination){
     LOG_DEBUG("Control link constructor called");
+    m_ctrldata_0 = 0.0;
 }
 
 ControlLink::~ControlLink() { }
@@ -18,26 +19,32 @@ ControlLink::~ControlLink() { }
 void ControlLink::pushControlData(float data){
     {boost::mutex::scoped_lock lock(m_mutex);
 
-        if(m_ctrldata.size() < MAX_CONTROL_LINK_BUFFER_DEPTH){
-            m_ctrldata.push_back(data);
-        }
+//        if(m_ctrldata.size() < MAX_CONTROL_LINK_BUFFER_DEPTH){
+//            m_ctrldata.push_back(data);
+//        }
+
+        m_ctrldata_0 = data;
     }
     m_notifysignal();
 }
 
 float ControlLink::getNextControlData(){
 
-	float data = 0.0;
+//	float data = 0.0;
+//
+//	if(m_ctrldata.size() > 0){
+//	    boost::unique_lock<boost::mutex> lock(m_mutex);
+//
+//		data = *(m_ctrldata.begin());
+//		if(m_ctrldata.size() > 1){
+//		    m_ctrldata.erase(m_ctrldata.begin());
+//		}
+//	}
+//
+//	return data;
 
-	if(m_ctrldata.size() > 0){
-	    boost::mutex::scoped_lock lock(m_mutex);
-
-		data = *(m_ctrldata.begin());
-
-		m_ctrldata.erase(m_ctrldata.begin());
-	}
-
-	return data;
+    boost::unique_lock<boost::mutex> lock(m_mutex);
+    return m_ctrldata_0;
 }
 
 

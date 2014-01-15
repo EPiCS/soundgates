@@ -63,7 +63,9 @@ void TGFReader::read(Patch* patch, string filename){
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
-
+//			    LOG_DEBUG("Match 4 " << match[4]);
+//			    LOG_DEBUG("Match 5 " << match[5]);
+//			    LOG_DEBUG("Match 6 " << match[6]);
 				patch->createSoundComponent(uid, type, paramtokens, slot);
 
 			}else if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::SW])){

@@ -22,7 +22,7 @@ public:
 
 	DECLARE_COMPONENTNAME
 
-	DECLARE_PORT2(SoundPort, SoundOut, 1);
+	DECLARE_PORT3(SoundPort, SoundOut, 1);
 
 	NoiseSoundComponent(std::vector<std::string> params);
 	virtual ~NoiseSoundComponent();

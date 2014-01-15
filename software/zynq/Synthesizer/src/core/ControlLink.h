@@ -34,7 +34,7 @@ private:
 #endif
 
 	std::vector<float>  m_ctrldata;
-
+	float m_ctrldata_0;
 public:
 
 	ControlLink(NodePtr, NodePtr);

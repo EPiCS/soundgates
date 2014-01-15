@@ -52,6 +52,8 @@ $(CORE_SRC_DIR)/ICallbackFunctor.cpp \
 $(CORE_SRC_DIR)/SoundPort.cpp \
 $(CORE_SRC_DIR)/Port.cpp \
 $(CORE_SRC_DIR)/Link.cpp \
+$(CORE_SRC_DIR)/HWSlot.cpp \
+$(CORE_SRC_DIR)/HWThreadManager.cpp \
 $(CORE_SRC_DIR)/Node.cpp 
 
 OBJS += \
@@ -65,6 +67,8 @@ $(OUTPUT_DIR)/SoundComponentImpl.o \
 $(OUTPUT_DIR)/SoundPort.o \
 $(OUTPUT_DIR)/Port.o \
 $(OUTPUT_DIR)/Link.o \
+$(OUTPUT_DIR)/HWSlot.o \
+$(OUTPUT_DIR)/HWThreadManager.o \
 $(OUTPUT_DIR)/Node.o 
 
 CPP_DEPS += \
@@ -78,6 +82,8 @@ $(OUTPUT_DIR)/SoundComponent.d \
 $(OUTPUT_DIR)/SoundPort.d \
 $(OUTPUT_DIR)/Port.d \
 $(OUTPUT_DIR)/Link.d \
+$(OUTPUT_DIR)/HWSlot.d \
+$(OUTPUT_DIR)/HWThreadManager.d \
 $(OUTPUT_DIR)/Node.d 
 
 all: folderstruct libsynthcore.so copyheaders

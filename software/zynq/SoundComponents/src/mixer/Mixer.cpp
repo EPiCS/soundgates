@@ -43,7 +43,7 @@ Mixer::Mixer(std::vector<std::string> params) : SoundComponentImpl(params) {
     CREATE_AND_REGISTER_PORT3(Mixer, In, ControlPort, BiasIn, 19);
     CREATE_AND_REGISTER_PORT3(Mixer, In, ControlPort, BiasIn, 20);
 
-    CREATE_AND_REGISTER_PORT2(Mixer, Out, SoundPort, SoundOut, 1);
+    CREATE_AND_REGISTER_PORT3(Mixer, Out, SoundPort, SoundOut, 1);
 }
 
 Mixer::~Mixer() {

@@ -79,7 +79,9 @@ int main( int argc, const char* argv[])
 }
 
 void SynthesizerTerminate(int sig){
-
 	patch->stop();
+
+	ui::UIManager::getInstance().stopAllServices();
+
 	SoundComponentLoader::getInstance().finailize();
 }

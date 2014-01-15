@@ -15,11 +15,34 @@ SoundPort::~SoundPort() { }
 int SoundPort::init(){
 
     /* clear outgoing sample data */
-    for(int i = 0; i < Synthesizer::config::blocksize; i++){
-        writeSample(0, i);
-    }
+    clearWriteBuffer();
 
     return 0;
+}
+
+void SoundPort::clearWriteBuffer(){
+
+    char* writeBuffer;
+    if((writeBuffer =  getWriteBuffer())){
+        memset(writeBuffer, 0, Synthesizer::config::bytesPerBlock);
+    }
+}
+
+char* SoundPort::getReadBuffer(){
+
+    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
+    if(soundlink){
+        return soundlink->getReadBuffer();
+    }
+    return NULL;
+}
+char* SoundPort::getWriteBuffer(){
+
+    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
+    if (soundlink) {
+        return soundlink->getWriteBuffer();
+    }
+    return NULL;
 }
 
 void SoundPort::writeSample(int32_t pcm_data, uint32_t nIndex){
@@ -57,4 +80,20 @@ int SoundPort::operator[](size_t nIndex) {
     }
 
     return 0;
+}
+
+SoundPort& SoundPort::operator= (SoundPort& rhs){
+
+    if (this != &rhs) {
+
+        BufferedLinkPtr rhslink = boost::static_pointer_cast<BufferedLink>(rhs.getLink());
+        BufferedLinkPtr lhslink = boost::static_pointer_cast<BufferedLink>(this->getLink());
+
+       if(rhslink && lhslink){
+
+           memcpy(lhslink->getWriteBuffer(), rhslink->getReadBuffer(), Synthesizer::config::bytesPerBlock);
+       }
+    }
+
+    return *this;
 }

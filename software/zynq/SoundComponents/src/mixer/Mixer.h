@@ -45,7 +45,7 @@ public:
     DECLARE_PORT3(ControlPort, BiasIn, 19);
     DECLARE_PORT3(ControlPort, BiasIn, 20);
 
-    DECLARE_PORT2(SoundPort, SoundOut, 1);
+    DECLARE_PORT3(SoundPort, SoundOut, 1);
 
     int m_nPorts;
 

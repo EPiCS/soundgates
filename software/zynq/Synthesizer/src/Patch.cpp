@@ -12,7 +12,7 @@
 Patch::Patch(){
 	m_PatchState  	        = Synthesizer::state::created;
 	m_ComponentsProcessed   = 0;
-	jobsToProcess         = 0;
+	jobsToProcess           = 0;
 }
 
 Patch::~Patch(){ }
@@ -20,6 +20,18 @@ Patch::~Patch(){ }
 
 vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 
+    if(!m_InputComponents.size()){
+        for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+                iter != m_ComponentsVector.end(); ++iter ){
+
+            SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
+
+            if (typeid(*sndcomponent) == typeid(InputSoundComponent)) {
+
+                m_InputComponents.push_back(boost::static_pointer_cast<InputSoundComponent>(sndcomponent));
+            }
+        }
+    }
 	return m_InputComponents;
 }
 
@@ -30,6 +42,8 @@ void Patch::createSoundComponent(int uid, std::string type, std::vector<std::str
 	SoundComponentLoader& loader = SoundComponentLoader::getInstance();
 
 	impltype = (slot < 0) ? SoundComponents::SW : SoundComponents::HW;
+
+	HWThreadManager::getInstance().declareSlot(type, slot);
 
 	SoundComponentImplPtr impl = loader.createFromString(type, impltype, parameters);
 
@@ -152,18 +166,12 @@ void Patch::initialize(void){
 
         SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
 
-        LOG_DEBUG("Check for input sound component: " << typeid(sndcomponent.get()).name());
-
-        if (typeid(sndcomponent.get()) == typeid(InputSoundComponent)) {
-
-            m_InputComponents.push_back(boost::static_pointer_cast<InputSoundComponent>(sndcomponent));
-        }
         sndcomponent->init();
 	}
 
 	jobIter         = m_ComponentsVector.begin();
 	jobsToProcess   = m_ComponentsVector.size();
-	this->m_PatchState = Synthesizer::state::initialized;
+	m_PatchState = Synthesizer::state::initialized;
 
 }
 

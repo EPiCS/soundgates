@@ -6,9 +6,9 @@ SoundComponents = add    		\
 				  mixer 	  	\
 				  noise  		\
 				  output 		\
-				  sampleplayer  \
-				  output        \
 				  dummysink
+
+#				  sampleplayer  \
 
 SRCDIR = ../src
 DESTDIR= ../result

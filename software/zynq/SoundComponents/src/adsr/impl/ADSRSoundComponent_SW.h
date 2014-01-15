@@ -48,10 +48,10 @@ public:
     class OnValueChange: public ICallbackFunctor {
     private:
         float* m_pValueRef;
-        ControlPort* m_pPort;
+        ControlPortPtr m_pPort;
     public:
 
-        OnValueChange(float* ref, ControlPort* port) :
+        OnValueChange(float* ref, ControlPortPtr port) :
                 m_pValueRef(ref), m_pPort(port) {
         }
         void operator()() {

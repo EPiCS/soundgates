@@ -22,6 +22,7 @@
 #include "core/BufferedLink.h"
 #include "core/SoundPort.h"
 #include "core/ControlPort.h"
+#include "core/HWThreadManager.h"
 
 #include "utils/SoundComponenLoader.h"
 
@@ -38,7 +39,7 @@ private:
 
 	vector<InputSoundComponentPtr>	m_InputComponents;      /*< Pointer to the input subset of the sound components */
 
-	vector<SoundComponentPtr> 		    m_ComponentsVector;     /*< Container holding all references to the sound components */
+	vector<SoundComponentPtr> 		m_ComponentsVector;     /*< Container holding all references to the sound components */
 
 	vector<BufferedLinkPtr>			m_BufferedLinksVector;  /*< Buffered links container */
 
@@ -59,9 +60,9 @@ public:
 	boost::mutex                        _m;
 //	boost::condition_variable_any       m_OnComponentsProcessed;
 //	boost::condition_variable_any       m_OnBuffersProcessed;
-	boost::condition_variable       m_OnComponentsProcessed;
-	boost::condition_variable       m_OnBuffersProcessed;
-	int                                jobsToProcess;
+	boost::condition_variable           m_OnComponentsProcessed;
+	boost::condition_variable           m_OnBuffersProcessed;
+	int                                 jobsToProcess;
 
 
 	SoundComponentPtr getJob(){

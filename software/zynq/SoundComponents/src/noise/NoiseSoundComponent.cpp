@@ -16,7 +16,7 @@ EXPORT_SOUNDCOMPONENT_SW_ONLY(NoiseSoundComponent);
 
 NoiseSoundComponent::NoiseSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params){
 
-	CREATE_AND_REGISTER_PORT2(NoiseSoundComponent, Out, SoundPort, SoundOut, 1);
+	CREATE_AND_REGISTER_PORT3(NoiseSoundComponent, Out, SoundPort, SoundOut, 1);
 }
 
 NoiseSoundComponent::~NoiseSoundComponent() {

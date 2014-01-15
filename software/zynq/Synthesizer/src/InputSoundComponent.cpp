@@ -70,6 +70,7 @@ ControlPortPtr InputSoundComponent::getPort(unsigned int nPort){
 
         return ControlPortPtr();
     }else{
+
         return boost::static_pointer_cast<ControlPort>(outports[nPort]);
     }
 }
@@ -84,16 +85,17 @@ int pushOSCMessageToInputsoundComponent(const char *path, const char *types, lo_
 	InputSoundComponent* input = (InputSoundComponent*) inputhndl;
 
     for (int i = 0; i < argc; i++) {
-        ControlPortPtr port = input->getPort(i + 1);
+        ControlPortPtr port = input->getPort(i);
         switch (types[i]) {
         case 'f':
-            LOG_DEBUG("Port " << i << " received data: " << argv[i]->f);
             if (port){
+                LOG_DEBUG("Port " << i << " received data: " << argv[i]->f);
                 port->push(argv[i]->f);
             }
             break;
         case 'i':
             if (port) {
+                LOG_DEBUG("Port " << i << " received data: " << argv[i]->i);
                 port->push(argv[i]->i);
             }
             break;

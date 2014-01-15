@@ -20,16 +20,16 @@ public:
 
     /* in ports */
 
-	DECLARE_PORT2(SoundPort, SoundIn, 1);
+	DECLARE_PORT3(SoundPort, SoundIn, 1);
 
-	DECLARE_PORT2(ControlPort, Attack, 2);
-	DECLARE_PORT2(ControlPort, Decay, 3);
-	DECLARE_PORT2(ControlPort, Sustain, 4);
-	DECLARE_PORT2(ControlPort, Release, 5);
-	DECLARE_PORT2(ControlPort, Trigger, 6);
+	DECLARE_PORT3(ControlPort, Attack, 2);
+	DECLARE_PORT3(ControlPort, Decay,  3);
+	DECLARE_PORT3(ControlPort, Sustain, 4);
+	DECLARE_PORT3(ControlPort, Release, 5);
+	DECLARE_PORT3(ControlPort, Trigger, 6);
 
 	/* in ports */
-	DECLARE_PORT2(SoundPort, SoundOut, 1);
+	DECLARE_PORT3(SoundPort, SoundOut, 1);
 
 
 	ADSRSoundComponent(std::vector<std::string> params);

@@ -16,46 +16,16 @@ Mixer_SW::~Mixer_SW() {
 
 
 void Mixer_SW::getReadBuffer(int* readbuffer[10]) {
-    readbuffer[0] =
-            ((BufferedLink*) m_SoundIn_1_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_1_Port->getLink())->getReadBuffer();
-    readbuffer[1] =
-            ((BufferedLink*) m_SoundIn_2_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_2_Port->getLink())->getReadBuffer();
-    readbuffer[2] =
-            ((BufferedLink*) m_SoundIn_3_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_3_Port->getLink())->getReadBuffer();
-    readbuffer[3] =
-            ((BufferedLink*) m_SoundIn_4_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_4_Port->getLink())->getReadBuffer();
-    readbuffer[4] =
-            ((BufferedLink*) m_SoundIn_5_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_5_Port->getLink())->getReadBuffer();
-    readbuffer[5] =
-            ((BufferedLink*) m_SoundIn_6_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_6_Port->getLink())->getReadBuffer();
-    readbuffer[6] =
-            ((BufferedLink*) m_SoundIn_7_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_7_Port->getLink())->getReadBuffer();
-    readbuffer[7] =
-            ((BufferedLink*) m_SoundIn_8_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_8_Port->getLink())->getReadBuffer();
-    readbuffer[8] =
-            ((BufferedLink*) m_SoundIn_9_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_9_Port->getLink())->getReadBuffer();
-    readbuffer[9] =
-            ((BufferedLink*) m_SoundIn_10_Port->getLink()) == NULL ?
-                    NULL :
-                    (int*) ((BufferedLink*) m_SoundIn_10_Port->getLink())->getReadBuffer();
+    readbuffer[0] = (int*)m_SoundIn_1_Port->getReadBuffer();
+    readbuffer[1] = (int*)m_SoundIn_2_Port->getReadBuffer();
+    readbuffer[2] = (int*)m_SoundIn_3_Port->getReadBuffer();
+    readbuffer[3] = (int*)m_SoundIn_4_Port->getReadBuffer();
+    readbuffer[4] = (int*)m_SoundIn_5_Port->getReadBuffer();
+    readbuffer[5] = (int*)m_SoundIn_6_Port->getReadBuffer();
+    readbuffer[6] = (int*)m_SoundIn_7_Port->getReadBuffer();
+    readbuffer[7] = (int*)m_SoundIn_8_Port->getReadBuffer();
+    readbuffer[8] = (int*)m_SoundIn_9_Port->getReadBuffer();
+    readbuffer[9] = (int*)m_SoundIn_10_Port->getReadBuffer();
 }
 
 
@@ -91,14 +61,17 @@ void Mixer_SW::process(){
     int mixed_sample = 0;
 
     for(int i = 0; i < Synthesizer::config::blocksize; i++){
+
         mixed_sample = 0;
+
         for(int j = 0; j < m_nPorts; j++){
 
-            mixed_sample +=  readbuffer[j][i] * (1.0 / m_nPorts); //TODO: Provide fixed point instead of float
+            mixed_sample += readbuffer[j][i] * (1.0 / m_nPorts); //TODO: Provide fixed point instead of float
 
         }
-
         m_SoundOut_1_Port->writeSample(mixed_sample, i);
+
+//        m_SoundOut_1_Port->writeSample(readbuffer[0][i], i);
     }
 }
 
