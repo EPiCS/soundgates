@@ -25,17 +25,20 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity fir is
 generic(
-        FIR_ORDER   : integer := 31  --> 32 coefficients
+        FIR_ORDER   : integer := 9  --> 10 coefficients
 );
 port(
-        clk         : in  std_logic;
-        rst         : in  std_logic;
-        ce          : in  std_logic;
-        input_wave  : in  signed(31 downto 0);
-        config_valid: in  std_logic;
-        config_index: in  signed(31 downto 0);
-        config_data : in  signed(31 downto 0);
-        wave        : out signed(31 downto 0)
+        clk                       : in  std_logic;
+        rst                       : in  std_logic;
+        ce                        : in  std_logic;
+        input_wave                : in  signed(31 downto 0);
+        config_buffer_state_valid : in  std_logic;
+        config_buffer_state_index : in  signed(31 downto 0);
+        config_buffer_state_data  : in  signed(31 downto 0);
+        config_coefficient_valid  : in  std_logic;
+        config_coefficient_index  : in  signed(31 downto 0);
+        config_coefficient_data   : in  signed(31 downto 0);
+        wave       			       : out signed(31 downto 0)
     );
 
 end fir;
@@ -59,7 +62,7 @@ architecture Behavioral of fir is
 
     signal sum :signed(63 downto 0);
 	 
-	 signal i_coeff_index : integer := to_integer(config_index);
+	 signal i_coeff_index : integer := to_integer(config_coefficient_index);
 
     begin	    
 
@@ -74,6 +77,13 @@ architecture Behavioral of fir is
                 sum <= s_zero64;
 				else
 					 if rising_edge(clk) then
+                     if ce = 1 then
+					 -- reconfigure input buffer
+						if config_buffer_state_valid = '1' then
+							if config_buffer_state_index >= s_zero then
+								 inputs_mem32(to_integer(config_coefficient_index)) <= config_buffer_state_data;
+							end if;
+						end if;
 						  case state is
 								when s_read   =>
 									 inputs_mem32(0) <= input_wave;
@@ -92,6 +102,7 @@ architecture Behavioral of fir is
 									 state <= s_read;
 						  end case;
 					 end if;
+                    end if;
 				 end if;
         end process;
 
@@ -101,10 +112,10 @@ architecture Behavioral of fir is
                 coeffs_mem32 <= (others => (others => '0'));
             else
 				 if rising_edge(clk) then
-					  if config_valid = '1' then
+					  if config_coefficient_valid = '1' then
 							if coeff_index >= s_zero then
-								 i_coeff_index <= to_integer(config_index);
-								 coeffs_mem32(i_coeff_index) <= config_data;
+								 i_coeff_index <= to_integer(config_coefficient_index);
+								 coeffs_mem32(i_coeff_index) <= config_coefficient_data;
 							end if;
 					  end if;
 				 end if;
