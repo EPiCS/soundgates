@@ -1,5 +1,7 @@
 package soundgates.diagram.XMLexport;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import org.eclipse.emf.common.util.EList;
@@ -17,10 +19,16 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class Tester {
 	
+	Patch patchToTest;
+	
 	LinkedList<String> ioComponentNames = new LinkedList<>();
 	LinkedList<AtomicSoundComponent> ioComponents = new LinkedList<>();
+	LinkedList<CompositeSoundComponent> compositeSoundComponents =
+			new LinkedList<CompositeSoundComponent>();
 	
 	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
+		
+		LinkedList<Link> links = new LinkedList<>();
 		
 		// test name
 		if (compositeSoundComponent.getName()==null || "".equals(compositeSoundComponent.getName())){
@@ -32,6 +40,26 @@ public class Tester {
 		for(Link link : compositeSoundComponent.getLinks()){
 			if(testLink(compositeSoundComponent, link) == false)
 				return false;
+			else
+				links.add(link);
+		}
+		
+		// test containers of links
+		boolean modelChanged = false;
+		for(Link link : links){
+			if(!(link.getSource().getComponent().eContainer()==compositeSoundComponent)){
+				compositeSoundComponent.getLinks().remove(link);
+				setCorrectContainerForLink(link, compositeSoundComponents);
+				modelChanged = true;
+			}
+		}
+		
+		if(modelChanged){
+			try {
+				compositeSoundComponent.eResource().save(Collections.EMPTY_MAP);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		// test delegations
@@ -63,6 +91,8 @@ public class Tester {
 			if(soundComponent instanceof CompositeSoundComponent){
 				if (testCompositeSoundComponent((CompositeSoundComponent) soundComponent, false) == false)
 					return false;
+				else
+					compositeSoundComponents.add((CompositeSoundComponent) soundComponent);
 			}
 			else if(soundComponent instanceof AtomicSoundComponent){
 				if (testAtomicSoundComponent((AtomicSoundComponent) soundComponent) == false)
@@ -170,6 +200,8 @@ public class Tester {
 		
 	public boolean testPatch(Patch patch){
 		
+		LinkedList<Link> links = new LinkedList<Link>();				
+				
 		for(soundgates.Element element : patch.getElements()){			
 			
 			// atomic components
@@ -182,20 +214,56 @@ public class Tester {
 			else if(element instanceof CompositeSoundComponent){				
 				if( testCompositeSoundComponent((CompositeSoundComponent) element, false) == false)
 					return false;
+				
+				compositeSoundComponents.add((CompositeSoundComponent) element);
 			}
 			
 			// links
 			else if(element instanceof Link){
 				if (testLink(patch, (Link) element) == false)
 					return false;
-				
+				links.add((Link) element);
 				// test daty type?
 			}				
+		}
+		
+		// test containers of links
+		boolean modelChanged = false;
+		for(Link link : links){
+			if(!(link.getSource().getComponent().eContainer()==patch)){
+				patch.getElements().remove(link);
+				setCorrectContainerForLink(link, compositeSoundComponents);
+				modelChanged = true;
+			}
+		}
+		
+		if(modelChanged){
+			try {
+				patch.eResource().save(Collections.EMPTY_MAP);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 				
 		return true;
 	}
 	
+	
+
+	// this method changes the model
+	private void setCorrectContainerForLink(Link link,
+			LinkedList<CompositeSoundComponent> compositeSoundComponents){
+		
+		CompositeSoundComponent compositeSoundComponentContainer = 
+				link.getSource().getComponent().getParentComponent();
+		
+		for(CompositeSoundComponent compositeSoundComponent	: compositeSoundComponents){
+			if(compositeSoundComponent==compositeSoundComponentContainer){				
+				compositeSoundComponent.getLinks().add(link);
+			}
+		}
+	}
+
 	public boolean testLink(Object parent, Link link){
 		// test directions
 			
@@ -286,4 +354,6 @@ public class Tester {
 			
 		return true;
 	}
+	
+	
 }
