@@ -41,11 +41,13 @@ int HWThreadManager::getAvailableSlot(std::string name){
 }
 
 
-void HWThreadManager::freeSlot(std::string name, unsigned int id){
+void HWThreadManager::freeSlot(std::string name, int id){
     boost::unique_lock<boost::mutex> lock;
 
-    std::set<unsigned int>& slots = m_Slots[name];
-
-    slots.insert(id);
-
+    if(!name.empty() && id >= 0){
+        std::set<unsigned int>& slots = m_Slots[name];
+        slots.insert(id);
+    }else{
+        LOG_ERROR("Cannot release slot: " << id << " of " << name);
+    }
 }

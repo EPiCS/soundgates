@@ -22,6 +22,9 @@ class SineSoundComponent : public SoundComponentImpl{
 
 public:
 
+    float m_PhaseIncr;
+    float m_Frequency;
+
     DECLARE_COMPONENTNAME;
 
     DECLARE_PORT3(SoundPort, SoundOut, 1);
@@ -30,11 +33,30 @@ public:
 	SineSoundComponent(std::vector<std::string> params);
 	virtual ~SineSoundComponent();
 
-	virtual void init(void) = 0;
+	virtual void init(void);
 	virtual void process(void) = 0;
 
 	double getPhaseIncrement(float frequency);
 
+};
+
+
+
+class OnFrequencyChange : public ICallbackFunctor {
+private:
+    SineSoundComponent& m_ObjRef;
+public:
+    OnFrequencyChange(SineSoundComponent& ref ) : m_ObjRef(ref){ }
+
+    void operator()(){
+        float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();
+
+        if(freq != m_ObjRef.m_Frequency){
+            LOG_INFO("Frequency changed: " << freq)
+            m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement(freq);
+            m_ObjRef.m_Frequency = freq;
+        }
+    }
 };
 
 

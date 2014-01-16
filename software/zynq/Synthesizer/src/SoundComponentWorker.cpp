@@ -24,7 +24,6 @@ void SoundComponentWorker::operator()() {
 
             {
                 boost::unique_lock<boost::mutex> lock(m_Patch->_m);
-//                LOG_DEBUG("Thread " << boost::this_thread::get_id() << " running " << m_Patch->m_ComponentsProcessed << " " << m_Patch->jobsToProcess);
                 m_Patch->m_ComponentsProcessed++;
                 m_Patch->jobsToProcess--;
             }

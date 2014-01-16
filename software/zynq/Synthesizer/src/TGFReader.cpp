@@ -20,7 +20,7 @@ void TGFReader::normalize(vector<string>& params){
 		boost::algorithm::erase_first((*iter), "'");
 		boost::algorithm::erase_last((*iter),  "'");
 
-		SYNTHESIZER_LOG(debug) << "Normalizing token " << *iter;
+		LOG_DEBUG("Normalizing token " << *iter);
 	}
 }
 
@@ -33,7 +33,7 @@ void TGFReader::read(Patch* patch, string filename){
 	ifstream sgfile(filename.c_str());
 
 	if(!sgfile.good()){
-		SYNTHESIZER_LOG(error) << "input file does not exist";
+		LOG_ERROR("input file does not exist");
 		return;
 	}
 
@@ -47,13 +47,13 @@ void TGFReader::read(Patch* patch, string filename){
 
 		getline(sgfile, line);
 
-		// match node
+		/* match node */
 		if (boost::regex_match(line, match, nodexpr)){
 
 			int uid = boost::lexical_cast<int>(match[1]);
-			string type = match[2];
+			string type     = match[2];
 			string impltype = match[3];
-			string params = match[7];
+			string params   = match[7];
 
 			vector<string> paramtokens;
 			boost::split(paramtokens, params, boost::is_any_of(","));
@@ -63,9 +63,7 @@ void TGFReader::read(Patch* patch, string filename){
 			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
 
 				int slot = boost::lexical_cast<int>(match[5]);
-//			    LOG_DEBUG("Match 4 " << match[4]);
-//			    LOG_DEBUG("Match 5 " << match[5]);
-//			    LOG_DEBUG("Match 6 " << match[6]);
+
 				patch->createSoundComponent(uid, type, paramtokens, slot);
 
 			}else if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::SW])){
@@ -78,7 +76,7 @@ void TGFReader::read(Patch* patch, string filename){
 			}
 		}
 
-		// match edge
+		/* match edge */
 		if (boost::regex_match(line, match, edgeexpr)){
 
 			int source_uid  = boost::lexical_cast<int>(match[1]);

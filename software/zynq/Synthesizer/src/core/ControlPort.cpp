@@ -52,7 +52,7 @@ void ControlPort::push(float value){
 }
 
 
-void ControlPort::registerCallback(ICallbackPtr functor){
+void ControlPort::registerCallback(const ICallbackPtr& functor){
 
     /* Check if port is connected */
     if(getLink()){

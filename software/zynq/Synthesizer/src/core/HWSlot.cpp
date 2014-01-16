@@ -7,15 +7,15 @@
 
 #include "HWSlot.h"
 
-HWSlot::HWSlot(std::string name) {
-
+HWSlot::HWSlot(const std::string& name) {
     m_name = name;
     m_slot = HWThreadManager::getInstance().getAvailableSlot(name);
+    LOG_DEBUG("Slot acquired: " << m_slot << " by " << m_name);
 }
 
 
 HWSlot::~HWSlot() {
-
+    LOG_DEBUG("Slot released: " << m_slot << " by " << m_name);
     HWThreadManager::getInstance().freeSlot(m_name, m_slot);
 }
 

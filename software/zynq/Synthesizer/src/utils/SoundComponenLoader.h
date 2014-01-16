@@ -62,13 +62,13 @@ public:
 	    return instance;
 	}
 
-	void initialize(std::string repository);
+	void initialize(const std::string& repository);
 
 	void finailize();
 
-	void loadLibrary(std::string filename);
+	void loadLibrary(const std::string& filename);
 
-	SoundComponentImplPtr createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params);
+	SoundComponentImplPtr createFromString(const std::string& type, SoundComponents::ImplType impltype, std::vector<std::string> params);
 
 };
 

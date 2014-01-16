@@ -36,7 +36,7 @@ SoundComponentLoader::SoundComponentLoader(){
 
 SoundComponentLoader::~SoundComponentLoader(){ }
 
-void SoundComponentLoader::initialize(std::string repository){
+void SoundComponentLoader::initialize(const std::string& repository){
 
 	this->m_SndComponentRepository = new std::string(repository);
 
@@ -96,7 +96,7 @@ void SoundComponentLoader::finailize(){
 	}
 }
 
-void SoundComponentLoader::loadLibrary(std::string filename){
+void SoundComponentLoader::loadLibrary(const std::string& filename){
 
 	char *liberror;
 
@@ -130,7 +130,7 @@ void SoundComponentLoader::loadLibrary(std::string filename){
 
 
 
-SoundComponentImplPtr SoundComponentLoader::createFromString(std::string type, SoundComponents::ImplType impltype, std::vector<std::string> params){
+SoundComponentImplPtr SoundComponentLoader::createFromString(const std::string& type, SoundComponents::ImplType impltype, std::vector<std::string> params){
 
     SoundComponentImplPtr newcomponent;
 

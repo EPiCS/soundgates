@@ -59,7 +59,7 @@ int main( int argc, const char* argv[])
 //		}
 
 
-		SoundComponentLoader::getInstance().initialize(argv[2]);
+		SoundComponentLoader::getInstance().initialize(std::string(argv[2]));
 
 		TGFReader reader;
 
@@ -79,7 +79,8 @@ int main( int argc, const char* argv[])
 }
 
 void SynthesizerTerminate(int sig){
-	patch->stop();
+
+    patch->dispose();
 
 	ui::UIManager::getInstance().stopAllServices();
 

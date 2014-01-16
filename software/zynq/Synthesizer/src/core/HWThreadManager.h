@@ -55,7 +55,7 @@ public:
      * @param name  name of the sound component
      * @param id    slot id
      */
-    void freeSlot(std::string name, unsigned int id);
+    void freeSlot(std::string name, int id);
 
 };
 

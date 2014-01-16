@@ -2,7 +2,7 @@ XILINX_BIN_PATH=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin
 
 CXX=g++
 CC_ARM=$(XILINX_BIN_PATH)/arm-xilinx-linux-gnueabi-g++
-CXXFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 #-I"../../libraries/x86_64/include"
+CXXFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../../Libraries/x86_64/include"
 CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O2 #-I"../../libraries/arm/include" 
 
 ifdef $(target)

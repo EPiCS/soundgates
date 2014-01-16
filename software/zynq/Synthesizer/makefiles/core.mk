@@ -13,10 +13,11 @@ CSYMBOLS=-DBOOST_LOG_DYN_LINK -DAPPLICATION_CONTEXT
 CC=g++
 CC_ARM=$(XILINX_DIR)/arm-xilinx-linux-gnueabi-g++
 
-CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 #-I"../../libraries/x86_64/include"
-CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O2 #-I"../../libraries/arm/include" 
+CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../../Libraries/x86_64/include"
+CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../../Libraries/arm/include" 
 
-#LDFLAGS_ARM=-L"../../libraries/boost_1_54/arm/lib"
+LDFLAGS=-L"../../../Libraries/boost_1_54/x86_64/lib"
+LDFLAGS_ARM=-L"../../../Libraries/boost_1_54/arm/lib"
 
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(C++_DEPS)),)
@@ -92,7 +93,7 @@ all: folderstruct libsynthcore.so copyheaders
 $(OUTPUT_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	$(CC)  $(CFLAGS) -c $(CSYMBOLS) -I/usr/include -I/usr/local/include -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	$(CC)  $(CFLAGS) -c $(CSYMBOLS) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
@@ -105,7 +106,7 @@ folderstruct:
 # Link the library together
 libsynthcore.so: $(OBJS) 
 	@echo 'Building shared core library'
-	$(CC) -g3 -shared -o $(OUTPUT_DIR)/$@  $(OBJS)
+	$(CC) $(LDFLAGS) -g3 -shared -o $(OUTPUT_DIR)/$@  $(OBJS)
 	@cp $(OUTPUT_DIR)/$@ $(EXPORT_DIR)/lib/$@
 
 clean:

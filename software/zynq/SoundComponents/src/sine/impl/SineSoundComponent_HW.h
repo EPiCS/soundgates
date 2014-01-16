@@ -12,6 +12,7 @@
 #include "../SineSoundComponent.h"
 
 #include <HWSlot.h>
+#include <HWTParameters.h>
 
 #ifdef ZYNQ
 
@@ -19,28 +20,24 @@ extern "C"{
     #include <reconos.h>
     #include <mbox.h>
 }
+
 #define SINUS_HWT_START 0x0F
 #define SINUS_HWT_STOP  0xF0
 
-class SineSoundComponent_HW : public SineSoundComponent {
+class SineSoundComponent_HW : public SineSoundComponent{
 private:
 
+    HWSlot slot;
 
-    struct CommonComponentStruct {
-        void*   src_addr;
-        int     src_len;
-        void*   dest_addr;
-        void*   opt_arg_addr;
-    };
+    /* Parameter struct: 1 src address, 1 argument */
+    HWTParameters<>::ParamtStruct_t m_HWTParams;
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
 
-    struct reconos_resource resource;
+    /* Two message box resources */
+    struct reconos_resource m_ReconOSResource[2];
     struct reconos_hwt      m_ReconOSThread;
-
-    struct CommonComponentStruct component_t;
-
 public:
 
     SineSoundComponent_HW(std::vector<std::string>);
@@ -56,10 +53,13 @@ public:
 class SineSoundComponent_HW : public SineSoundComponent {
 public:
 
-//    HWSlot slot;
+    HWSlot slot;
+
+    /* Parameter struct: 1 src address, 1 argument */
+    HWTParameters<>::ParamtStruct_t m_HWTParams;
 
     SineSoundComponent_HW(std::vector<std::string>);
-
+    virtual ~SineSoundComponent_HW();
     void init();
     void process();
 };

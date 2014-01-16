@@ -1,14 +1,15 @@
-SoundComponents = add    		\
-				  adsr   		\
-				  sine 			\
-				  const  		\
-				  delay  		\
-				  mixer 	  	\
-				  noise  		\
-				  output 		\
+SoundComponents += add \
+				  adsr \
+				  const	\
+				  delay \
+				  mixer\
+				  noise \
+				  output \
+				  sine \
+				  output \
+				  square \
 				  dummysink
 
-#				  sampleplayer  \
 
 SRCDIR = ../src
 DESTDIR= ../result

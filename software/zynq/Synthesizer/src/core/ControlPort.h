@@ -59,7 +59,7 @@ public:
 	 *
 	 * @param functor
 	 */
-	void registerCallback(ICallbackPtr);
+	void registerCallback(const ICallbackPtr&);
 
 };
 

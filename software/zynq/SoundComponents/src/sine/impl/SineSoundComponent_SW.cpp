@@ -6,7 +6,30 @@
  */
 
 #include "SineSoundComponent_SW.h"
+#include "SineLookupTable.hpp"
 
+double my_sine_lookup(double x)
+{
+	while (x < 0)
+	{
+		x += 2 * M_PI;
+	}
+	while (x > 2 * M_PI)
+	{
+		x -= 2 * M_PI;
+	}
+
+	double index = x / 0.0001;
+	int indexi = (int) index;
+	if (index - indexi > 0.5)
+	{
+		indexi++;
+	}
+	double value = sineTable[indexi];
+	// possible improvement linearly interpolate between two values
+	// not really necessary, the difference to the normal sine can't be heard anyway
+	return value;
+}
 
 double my_sine(double x)
 {
@@ -46,16 +69,8 @@ double my_sine(double x)
 
 
 SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) : SineSoundComponent(params){
-    m_Frequency = 0.0;
+
 	m_Phase = 0.0;
-	m_PhaseIncr = 0.0;
-
-}
-
-void SineSoundComponent_SW::init() {
-
-    m_SoundOut_1_Port->init();
-    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(this)));
 }
 
 void SineSoundComponent_SW::process() {
@@ -63,15 +78,16 @@ void SineSoundComponent_SW::process() {
 	for (int i = 0; i < Synthesizer::config::blocksize; i++) {
 
 #ifdef ZYNQ
-	    m_SoundOut_1_Port->writeSample(my_sine(m_Phase) * INT_MAX, i);
+		m_SoundOut_1_Port->writeSample(my_sine_lookup(m_Phase) * INT_MAX, i);
 #else
 		m_SoundOut_1_Port->writeSample(sin(m_Phase) * INT_MAX, i);
 #endif
 
 		m_Phase += m_PhaseIncr;
 
-		if (m_Phase >= M_PI * 2) {
-			m_Phase -= M_PI * 2;
+		if (m_Phase >= M_PI * 2)
+		{
+		    m_Phase -= M_PI * 2;
 		}
 	}
 

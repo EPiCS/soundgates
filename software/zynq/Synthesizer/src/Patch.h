@@ -26,7 +26,6 @@
 
 #include "utils/SoundComponenLoader.h"
 
-using namespace std;
 
 class Patch;
 
@@ -46,6 +45,8 @@ private:
 	vector<ControlLinkPtr>			m_ControlLinksVector;   /*< Control links container */
 
 
+	boost::thread m_WorkerThreads[Synthesizer::config::max_workers];
+
 	Synthesizer::state::ePatchState m_PatchState;
 
 	void initialize(void);
@@ -55,11 +56,8 @@ private:
 public:
 
 	size_t                              m_ComponentsProcessed;
-//	boost::shared_mutex                 m_Mutex;
 	boost::mutex                        m_Mutex;
 	boost::mutex                        _m;
-//	boost::condition_variable_any       m_OnComponentsProcessed;
-//	boost::condition_variable_any       m_OnBuffersProcessed;
 	boost::condition_variable           m_OnComponentsProcessed;
 	boost::condition_variable           m_OnBuffersProcessed;
 	int                                 jobsToProcess;
@@ -83,10 +81,10 @@ public:
 	Patch();
 	virtual ~Patch();
 
-	void createSoundComponent(int uid, string type, vector<string> parameters, int slot = -1);
+	void createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot = -1);
 	void createLink(int sourceid, int srcport, int destid, int destport);
 
-	vector<InputSoundComponentPtr>& getInputSoundComponents();
+	std::vector<InputSoundComponentPtr>& getInputSoundComponents();
 	void switchBuffers();
 
 	bool isRunning(){ return (m_PatchState == Synthesizer::state::running); }

@@ -118,6 +118,7 @@ void Soundbuffer::run()
 {
 	int nframes;
 	int err = 0;
+	bool bufferUnderrun = false;
 	snd_pcm_prepare(this->pcm_handle);
 
 	while (this->running)
@@ -129,17 +130,25 @@ void Soundbuffer::run()
 		}
 		else
 		{
+			//If a buffer underrun occured, we need to reinitialize the ALSA device
+			if (bufferUnderrun)
+			{
+				snd_pcm_prepare(this->pcm_handle);
+				bufferUnderrun =false;
+			}
+
 			nframes = 0;
 
 			// Wait for the audio device to become ready (or timeout after a second)
 			if ((err = snd_pcm_wait(this->pcm_handle, 1000)) < 0)
 			{
-				fprintf(stderr, "poll failed (%s)\n", snd_strerror(err));
-				this->running = 0;
+				fprintf(stderr, "poll failed (%s): Most likely a buffer underrun occured\n", snd_strerror(err));
+				bufferUnderrun = true;
+				//	this->running = 0;
 			}
 
 			// Ask the audio device how many frames it can accept
-			if ((nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
+			if (!bufferUnderrun && (nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
 			{
 				fprintf(stderr, "unknown ALSA avail update return value (%s)\n",
 						snd_strerror(nframes));
@@ -147,7 +156,7 @@ void Soundbuffer::run()
 			}
 
 			// Only write to the soundcard if alsa requested enough frames
-			if (nframes >= this->alsaSamples)
+			if (!bufferUnderrun && (nframes >= this->alsaSamples))
 			{
 				this->mutex.lock();
 				char* frames = this->getNextFrames();

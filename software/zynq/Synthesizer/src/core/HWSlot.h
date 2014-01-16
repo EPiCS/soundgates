@@ -18,7 +18,8 @@ private:
     int m_slot;
 
 public:
-    HWSlot(std::string);
+
+    HWSlot(const std::string& );
     virtual ~HWSlot();
 
     int getSlot();

@@ -35,7 +35,7 @@ vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 	return m_InputComponents;
 }
 
-void Patch::createSoundComponent(int uid, std::string type, std::vector<std::string> parameters, int slot){
+void Patch::createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot){
 
 	SoundComponents::ImplType impltype;
 
@@ -48,6 +48,7 @@ void Patch::createSoundComponent(int uid, std::string type, std::vector<std::str
 	SoundComponentImplPtr impl = loader.createFromString(type, impltype, parameters);
 
 	if(NULL != impl){
+
 		SoundComponentPtr component(new SoundComponent(uid, impl));
 
 		LOG_DEBUG("Adding component to patch uid: " << component->getUid());
@@ -186,11 +187,10 @@ void Patch::run(){
 
 		m_PatchState = Synthesizer::state::running;
 
-		boost::thread worker_threads[Synthesizer::config::max_workers];
 
 		for(unsigned int i = 0; i < m_ComponentsVector.size() && i < Synthesizer::config::max_workers; i++){
 		    SoundComponentWorker worker(PatchPtr(this));
-		    worker_threads[i] = boost::thread(worker);
+		    m_WorkerThreads[i] = boost::thread(worker);
 		}
 
 		boost::thread link_thread(&Patch::switchBuffers, this);
@@ -222,22 +222,27 @@ void Patch::switchBuffers(){
             m_ComponentsProcessed = 0;
             jobsToProcess = m_ComponentsVector.size();
         }
-//        LOG_DEBUG("Thread " << boost::this_thread::get_id() << " buffers switched");
         m_OnBuffersProcessed.notify_all();
     }
 }
 
 void Patch::dispose(){
 
+    /* stop path */
+    this->stop();
+
     for (vector<BufferedLinkPtr>::iterator iter = m_BufferedLinksVector.begin();
                 iter != m_BufferedLinksVector.end(); ++iter) {
+            (*iter).reset();
+    }
 
+    for (vector<ControlLinkPtr>::iterator iter = m_ControlLinksVector.begin();
+                iter != m_ControlLinksVector.end(); ++iter) {
             (*iter).reset();
     }
 
     for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
                 iter != m_ComponentsVector.end(); ++iter){
-
             (*iter).reset();
     }
 }
@@ -248,6 +253,10 @@ void Patch::stop(){
 
 		m_PatchState = Synthesizer::state::stopped;
 
-		//TODO: currently not implemented
+		/* Joint worker threads */
+		for(int i = 0; i < Synthesizer::config::max_workers; i++){
+		    LOG_DEBUG("Attempting to join worker thread " << i);
+		    m_WorkerThreads[i].join();
+		}
 	}
 }

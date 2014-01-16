@@ -16,8 +16,9 @@ EXPORT_SOUNDCOMPONENT_MIXED_IMPL(SineSoundComponent);
 
 SineSoundComponent::SineSoundComponent(std::vector<std::string> params)
     : SoundComponentImpl(params) {
-//    m_FrequencyIn_1_Port = boost::shared_ptr<ControlPort>(new ControlPort(SineSoundComponent::s_FrequencyIn_1));
-//    getInports().push_back(m_FrequencyIn_1_Port);
+
+    m_Frequency = 0.0;
+    m_PhaseIncr = 0.0;
 
     CREATE_AND_REGISTER_PORT3(SineSoundComponent, In, ControlPort, FrequencyIn, 1);
 
@@ -26,6 +27,14 @@ SineSoundComponent::SineSoundComponent(std::vector<std::string> params)
 }
 
 SineSoundComponent::~SineSoundComponent(){}
+
+void SineSoundComponent::init(){
+
+    m_SoundOut_1_Port->init();
+    m_FrequencyIn_1_Port->registerCallback(
+            ICallbackPtr(new OnFrequencyChange(*this)));
+
+}
 
 double SineSoundComponent::getPhaseIncrement(float frequency){
 
