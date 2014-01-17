@@ -26,6 +26,12 @@ int freq_to_incr (int comp_id, float freq)
     return 0;
 }
 
+void square_duty_cycle(float duty_cycle, float * duty_on, float * duty_off)
+{
+    *duty_on = 2*duty_cycle;
+    *duty_on = 2 - *duty_on;
+}
+
 // returns increment values for the adsr depending on amplitudes of attack, sustain and release phase
 int ms_to_attack (int ms, float attack_amp)
 {
