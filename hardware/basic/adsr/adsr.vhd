@@ -31,13 +31,10 @@ port(
         input_wave  : in  signed(31 downto 0);
         start       : in  std_logic;
         bang_stop   : in  std_logic;
-        attack      : in  unsigned(31 downto 0); 
-        decay       : in  unsigned(31 downto 0);  
-        release     : in  unsigned(31 downto 0);
-        start_amp   : in  unsigned(31 downto 0);
-        attack_amp  : in  unsigned(31 downto 0);
-        sustain_amp : in  unsigned(31 downto 0);
-        release_amp : in  unsigned(31 downto 0);
+        attack      : in  signed(31 downto 0); 
+        decay       : in  signed(31 downto 0);  
+        release     : in  signed(31 downto 0);
+        sustain_amp : in  signed(31 downto 0);
         wave        : out signed(31 downto 0)
     );
 
@@ -49,23 +46,27 @@ architecture Behavioral of adsr is
     signal state  : adsr_states;
     signal i_wave : signed (31 downto 0);
     signal stop : std_logic;
-
+	 signal s_one : signed (31 downto 0) := to_signed(integer(real(1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
+	 signal s_zero : signed (31 downto 0) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
+	 signal wave64 : signed (63 downto 0);
+		
     begin
 	
-        wave <= i_wave * input_wave;
+        wave64 <= i_wave * input_wave;
+		  wave <= wave64(31 downto 0);
         
         ADSR_PROC : process (clk, rst)
 
         begin
             if rst = '1' then
-                i_wave <= start_amp;
+                i_wave <= s_zero;
                 state <= s_idle;
                 stop <= '0';
             else
             
             if rising_edge(clk) then
                 if bang_stop = '1' then
-                    stop <= '1'
+                    stop <= '1';
                 end if;
                 if ce = '1' then
                     if start = '1' then
@@ -75,7 +76,7 @@ architecture Behavioral of adsr is
                     case state is
                         when s_attack   =>
                             i_wave <= i_wave + attack;
-                            if i_wave >= attack_amp then
+                            if i_wave >= s_one then
                                 state <= s_decay;
                             end if;
                         when s_decay    =>
@@ -91,11 +92,13 @@ architecture Behavioral of adsr is
                             end if;
                         when s_release  =>
                             i_wave <= i_wave - release;
-                            if i_wave <= release_amp then
+                            if i_wave <= s_zero then
                                 state <= s_exit;
                             end if;
-				        when s_exit		=>
-					        state <= s_idle;
+							  when s_exit		=>
+								  state <= s_idle;
+							  when others =>
+									state <= s_idle;
                     end case;
                 end if;                       
             end if;

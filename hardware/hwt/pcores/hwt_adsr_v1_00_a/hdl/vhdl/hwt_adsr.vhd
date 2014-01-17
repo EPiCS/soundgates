@@ -392,7 +392,7 @@ begin
             when STATE_REFRESH_RELEASE => 
                 stop <= '0';   
                 case refresh_state is
-                    when => "0"
+                    when "0" => 
                         memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
                         if done then
                             refresh_state <= "1";
@@ -430,6 +430,7 @@ begin
                                 state <= STATE_REFRESH;
                             end if;
                         end if;
+						end case;
 
             when STATE_PROCESS =>
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
@@ -441,7 +442,7 @@ begin
                         process_state  <= "1";
 
                     when "1" => 
-                        o_RAMData_adsr <= std_logic_vector(adsr_data); --std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
+                        o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
                         o_RAMWE_adsr   <= '1';
 
                         adsr_ce        <= '0';
