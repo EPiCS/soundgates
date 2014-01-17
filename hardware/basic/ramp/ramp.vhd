@@ -28,8 +28,6 @@ port(
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        upper_amp : in  signed(31 downto 0);
-	    lower_amp : in  signed(31 downto 0);
         incr      : in  signed(31 downto 0);         
         incr2     : in  signed(31 downto 0);         
 	    rmp       : out signed(31 downto 0)
@@ -40,7 +38,9 @@ end ramp;
 architecture Behavioral of ramp is
 
     type states is (s_increasing, s_decreasing, s_exit);
-	signal state : states := s_increasing;
+	 signal state : states;
+	 signal s_one : signed (31 downto 0) := to_signed(integer(real(1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
+	 signal s_zero : signed (31 downto 0) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
 
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 		  
@@ -60,12 +60,12 @@ architecture Behavioral of ramp is
 			            case state is
 				            when s_increasing =>
 					            x <= x + incr;
-					            if x > upper_amp then
+					            if x > s_one then
 						             state <= s_decreasing;
 					            end if;
 				            when s_decreasing => 
 					            x <= x - incr2;
-					            if x < lower_amp then
+					            if x < s_zero then
 						            state <= s_exit;
 					            end if; 
                             when s_exit =>

@@ -68,8 +68,6 @@ architecture Behavioral of hwt_ramp is
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        upper_amp : in  signed(31 downto 0);
-        lower_amp : in  signed(31 downto 0);
         incr      : in  signed(31 downto 0);         
         incr2     : in  signed(31 downto 0);         
         rmp       : out signed(31 downto 0)
@@ -212,19 +210,7 @@ begin
 		i_RAMData_reconos
 	);
             
-entity ramp is
-port(                
-        clk       : in  std_logic;
-        rst       : in  std_logic;
-        ce        : in  std_logic;
-        upper_amp : in  unsigned(31 downto 0);
-	    lower_amp : in  unsigned(31 downto 0);
-        incr      : in  unsigned(31 downto 0);         
-        incr2     : in  unsigned(31 downto 0);         
-	    rmp       : out signed(31 downto 0)
-    );
 
-end ramp;
 
 
     -- /ReconOS Stuff
@@ -299,8 +285,6 @@ end ramp;
                 if done then
                     incr_addr        <= snd_comp_header.opt_arg_addr;
                     decr_addr        <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
-                    upper_amp_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 8);
-                    lower_amp_addr   <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 12);
 
                     state <= STATE_WAITING;
                 end if;            
@@ -337,22 +321,14 @@ end ramp;
                     if done then
                         refresh_state <= "2";
                     end if;
+                
                 when "2" =>
-                    memif_read_word(i_memif, o_memif, upper_amp_addr, upper_amp, done);
-                    if done then
-                        refresh_state <= "3";
-                    end if;
-                when "3" =>    
-                    memif_read_word(i_memif, o_memif, lower_amp_amp, lower_amp, done);
-                    if done then
-                      refresh_state <= "4";    
-                    end if;
-                when "4" =>
                     memif_read(i_ram, o_ram, i_memif, o_memif, snd_comp_header.source_addr, X"00000000", std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
                     if done then
                         refresh_state <= "0";
                         state <= STATE_PROCESS;                        
                     end if;
+					  end case;
                 
             when STATE_PROCESS =>
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
@@ -391,7 +367,7 @@ end ramp;
                 memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done);
                 if done then
                     state <= STATE_NOTIFY;
-				end if;
+						end if;
 				
 		    when STATE_NOTIFY =>
 
