@@ -28,7 +28,14 @@ typedef struct {
 typedef struct {
 	int phase_offset;
 	int phase_increment;
-} sNcoComponentHeader;
+} sWaveComponentHeader; // sinus, sawtooth, triangle
+
+typedef struct {
+	int phase_offset;
+	int phase_increment;
+	int duty_on;
+	int duty_off;
+} sSquareComponentHeader;
 
 typedef struct {
     int bang;
