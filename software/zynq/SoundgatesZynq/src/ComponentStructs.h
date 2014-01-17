@@ -69,6 +69,10 @@ typedef struct {
     int coefficients;
 } sFIRComponentHeader;
 
+typedef struct {
+    int percentage;
+} sAmplifierComponentHeader;
+
 struct OSCComponent_struct{
     char                  *comp_osc_name;
     void    		      *comp_value_pointer;

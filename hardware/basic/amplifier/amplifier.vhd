@@ -43,7 +43,7 @@ architecture Behavioral of amplifier is
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    amp = wave * percentage;
+                    amp <= resize(wave * percentage, 32);
                 end if;
             end if;
         end process;	  

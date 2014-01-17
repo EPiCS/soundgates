@@ -6,12 +6,12 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - hwt_ramp
+--   title:        VHDL module - hwt_amplifier
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Hardware thread for generating ramp envelope
+--   description:  Hardware thread for amplifying samples
 --
 -- ======================================================================
 
@@ -29,7 +29,7 @@ library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
-entity hwt_ramp is
+entity hwt_amplifier is
    port (
 		-- OSIF FIFO ports
 		OSIF_FIFO_Sw2Hw_Data    : in  std_logic_vector(31 downto 0);
@@ -56,24 +56,24 @@ entity hwt_ramp is
 		HWT_Clk   : in  std_logic;
 		HWT_Rst   : in  std_logic
     );
-end hwt_ramp;
+end hwt_amplifier;
 
-architecture Behavioral of hwt_ramp is
+architecture Behavioral of hwt_amplifier is
 
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
-    component ramp is
+    component amplifier is
     port(                
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        incr      : in  signed(31 downto 0);         
-        incr2     : in  signed(31 downto 0);         
-        rmp       : out signed(31 downto 0)
+        wave      : in  signed(31 downto 0);
+	    percentage: in  signed(31 downto 0);       
+	    amp       : out signed(31 downto 0)
     );
 
-    end component ramp;
+    end component;  
  
     signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -107,10 +107,10 @@ architecture Behavioral of hwt_ramp is
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
-    signal o_RAMAddr_ramp : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
-	signal o_RAMData_ramp : std_logic_vector(0 to 31);   -- ramp to local ram
-	signal i_RAMData_ramp : std_logic_vector(0 to 31);   -- local ram to ramp
-    signal o_RAMWE_ramp   : std_logic;
+    signal o_RAMAddr_amplifier : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_amplifier : std_logic_vector(0 to 31);   -- amplifier to local ram
+	signal i_RAMData_amplifier : std_logic_vector(0 to 31);   -- local ram to amplifier
+    signal o_RAMWE_amplifier   : std_logic;
 	
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
@@ -133,29 +133,28 @@ architecture Behavioral of hwt_ramp is
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal ramp_ce          : std_logic;           -- ramp clock enable (like a start/stop signal)
+    signal amplifier_ce          : std_logic;           -- amplifier clock enable (like a start/stop signal)
     
     signal input_data       : signed(31 downto 0);
-    signal ramp_data        : signed(31 downto 0);
-    signal ramp_wave        : signed(31 downto 0);
+    signal amplifier_data        : signed(31 downto 0);
+    signal amplifier_wave        : signed(31 downto 0);
+    signal amplifier_value        : signed(31 downto 0);
     signal start            : std_logic;
     signal stop             : std_logic;
     
     signal refresh_state    : unsigned(2 downto 0);
     signal process_state    : unsigned(2 downto 0);
     
-    signal incr             : signed(31 downto 0);
-    signal decr             : signed(31 downto 0);
+    signal amp             : signed(31 downto 0);
 
-    signal incr_addr        : std_logic_vector(31 downto 0);
-    signal decr_addr        : std_logic_vector(31 downto 0);
+    signal amp_addr        : std_logic_vector(31 downto 0);
     
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant RAMP_START : std_logic_vector(31 downto 0) := x"0000000F";
-    constant RAMP_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    constant amplifier_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant amplifier_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
 
 begin
     -----------------------------------
@@ -163,7 +162,8 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_ramp <= std_logic_vector(ramp_wave);
+    o_RAMData_amplifier <= std_logic_vector(amplifier_data);
+    amplifier_wave <= i_RAMData_amplifier;
     
     
     
@@ -210,16 +210,14 @@ begin
 
 
     -- /ReconOS Stuff
-    ramp_INST : ramp
+    amplifier_INST : amplifier
     port map( 
             clk         => clk,
             rst         => rst,
-            ce          => ramp_ce,
-            upper_amp   => upper_amp,
-            lower_amp   => lower_amp,
-            incr        => incr,
-            incr2       => decr,
-            rmp         => ramp_data
+            ce          => amplifier_ce,
+            wave    => amplifier_wave,
+            percentage => amplifier_value,
+            amp         => amplifier_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -236,16 +234,16 @@ begin
     local_ram_ctrl_2 : process (clk) is
 	begin
 		if (rising_edge(clk)) then		
-			if (o_RAMWE_ramp = '1') then
-				local_ram(to_integer(unsigned(o_RAMAddr_ramp))) := o_RAMData_ramp;
-            else      -- else needed, because ramp is consuming samples
-				i_RAMData_ramp <= local_ram(conv_integer(unsigned(o_RAMAddr_ramp)));
+			if (o_RAMWE_amplifier = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_amplifier))) := o_RAMData_amplifier;
+            else      -- else needed, because amplifier is consuming samples
+				i_RAMData_amplifier <= local_ram(conv_integer(unsigned(o_RAMAddr_amplifier)));
 			end if;
 		end if;
 	end process;
     
     
-    ramp_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
+    amplifier_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
         variable done : boolean;            
     begin
         if rst = '1' then
@@ -259,13 +257,13 @@ begin
             osif_ctrl_signal <= (others => '0');
             
             
-            ramp_ce     <= '0';
+            amplifier_ce     <= '0';
             incr        <= '0';
             decr        <= '0';
             lower_amp   <= (others => '0');
             upper_amp   <= (others => '0');
-            o_RAMWE_ramp<= '0';
-            o_RAMAddr_ramp <= (others => '0');
+            o_RAMWE_amplifier<= '0';
+            o_RAMAddr_amplifier <= (others => '0');
             
             refresh_state <= 0;
             
@@ -279,8 +277,7 @@ begin
 
                 snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);         
                 if done then
-                    incr_addr        <= snd_comp_header.opt_arg_addr;
-                    decr_addr        <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
+                    amp_addr        <= snd_comp_header.opt_arg_addr;
 
                     state <= STATE_WAITING;
                 end if;            
@@ -290,12 +287,12 @@ begin
                 -- Software process "Synthesizer" sends the start signal via mbox_start
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
                 if done then
-                    if osif_ctrl_signal = RAMP_START then
+                    if osif_ctrl_signal = amplifier_START then
                         
                         sample_count <= to_unsigned(0, 16);
                         state        <= STATE_REFRESH_INPUT;
 
-                    elsif osif_ctrl_signal = RAMP_EXIT then
+                    elsif osif_ctrl_signal = amplifier_EXIT then
                         
                         state   <= STATE_EXIT;
 
@@ -308,43 +305,38 @@ begin
                 
                 case refresh_state is
                 when "0" => 
-                    memif_read_word(i_memif, o_memif, incr_addr , incr, done);
+                    memif_read_word(i_memif, o_memif, amp_addr , amp, done);
                     if done then
                         refresh_state <= "1";
                     end if;
-                when "1" => 
-                    memif_read_word(i_memif, o_memif, decr_addr , decr, done);
-                    if done then
-                        refresh_state <= "2";
-                    end if;
-                
-                when "2" =>
+                when "1" =>
                     memif_read(i_ram, o_ram, i_memif, o_memif, snd_comp_header.source_addr, X"00000000", std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
                     if done then
                         refresh_state <= "0";
                         state <= STATE_PROCESS;                        
                     end if;
 					  end case;
-                
+            
             when STATE_PROCESS =>
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
                    
                     case process_state is
 
                     when "0" => 
-                        ramp_ce        <= '1';
+                        amplifier_ce        <= '1';
+                        
                         process_state  <= "1";
 
                     when "1" => 
-                        o_RAMData_ramp <= std_logic_vector(resize(ramp_data * signed(i_RAMData_ramp), 32));
-                        o_RAMWE_ramp   <= '1';
+                        o_RAMData_amplifier <= amplifier_data;
+                        o_RAMWE_amplifier   <= '1';
 
-                        ramp_ce        <= '0';
+                        amplifier_ce        <= '0';
                         process_state  <= "2";       
 
                     when "2" =>
-                        o_RAMWE_ramp   <= '0';
-                        o_RAMAddr_ramp <= std_logic_vector(unsigned(o_RAMAddr_ramp) + 1);
+                        o_RAMWE_amplifier   <= '0';
+                        o_RAMAddr_amplifier <= std_logic_vector(unsigned(o_RAMAddr_amplifier) + 1);
                         sample_count   <= sample_count + 1; 
 
                         process_state  <= "0";                       
@@ -353,7 +345,7 @@ begin
 
                 else
                     -- Samples have been generated
-                    o_RAMAddr_ramp  <= (others => '0');
+                    o_RAMAddr_amplifier  <= (others => '0');
                     sample_count    <= to_unsigned(0, 16);
                     state <= STATE_WRITE_MEM;
                 end if;
@@ -405,4 +397,5 @@ end Behavioral;
 --             dst_addr : in std_logic_vector(31 downto 0);
 --             len      : in std_logic_vector(23 downto 0);
 --             done);
+
 
