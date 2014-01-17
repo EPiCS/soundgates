@@ -32,9 +32,9 @@ port(
         rst                       : in  std_logic;
         ce                        : in  std_logic;
         input_wave                : in  signed(31 downto 0);
-        config_buffer_state_valid : in  std_logic;
-        config_buffer_state_index : in  signed(31 downto 0);
-        config_buffer_state_data  : in  signed(31 downto 0);
+    --    config_buffer_state_valid : in  std_logic;
+    --    config_buffer_state_index : in  signed(31 downto 0);
+    --    config_buffer_state_data  : in  signed(31 downto 0);
         config_coefficient_valid  : in  std_logic;
         config_coefficient_index  : in  signed(31 downto 0);
         config_coefficient_data   : in  signed(31 downto 0);

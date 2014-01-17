@@ -6,12 +6,13 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - hwt_fir
+--   title:        VHDL module - hwt_adsr
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Hardware thread for implementing a FIR Filter
+--   description:  Hardware thread for generating adsr
+--
 -- ======================================================================
 
 library ieee;
@@ -28,9 +29,10 @@ library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
-entity hwt_fir is
+entity hwt_adsr is
     generic(
-    	SND_COMP_CLK_FREQ   : integer := 100_000_000
+    	SND_COMP_CLK_FREQ   : integer := 100_000_000;
+		SND_COMP_adsr_TPYE : integer := 0
 	);
    port (
 		-- OSIF FIFO ports
@@ -58,33 +60,37 @@ entity hwt_fir is
 		HWT_Clk   : in  std_logic;
 		HWT_Rst   : in  std_logic
     );
-end hwt_fir;
+end hwt_adsr;
 
-architecture Behavioral of hwt_fir is
+architecture Behavioral of hwt_adsr is
 
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
 
-   -- ?? Was macht das hier?
+    -- ?? Was macht das hier?!
    --  memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
    --                 if done then
-   --                     refresh_state <= "0";
+    --                    refresh_state <= "0";
    --                     state <= STATE_PROCESS;
-
-
-    component fir is
+    component adsr is
     Port ( 
             clk         : in  std_logic;
             rst         : in  std_logic;
             ce          : in  std_logic;
             input_wave  : in  signed(31 downto 0);
-            config_valid: in  std_logic;
-            config_index: in  signed(31 downto 0);
-            config_data : in  signed(31 downto 0);
+            start       : in  std_logic;
+            stop        : in  std_logic;
+            attack      : in  signed(31 downto 0); 
+            decay       : in  signed(31 downto 0);  
+            release     : in  signed(31 downto 0);
+            start_amp   : in  signed(31 downto 0);
+            attack_amp  : in  signed(31 downto 0);
+            sustain_amp : in  signed(31 downto 0);
+            release_amp : in  signed(31 downto 0);
             wave        : out signed(31 downto 0)
            );
-    end component fir;
+    end component adsr;
  
     signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -118,10 +124,10 @@ architecture Behavioral of hwt_fir is
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
-    signal o_RAMAddr_fir : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
-	signal o_RAMData_fir : std_logic_vector(0 to 31);   -- fir to local ram
-	signal i_RAMData_fir : std_logic_vector(0 to 31);   -- local ram to fir
-    signal o_RAMWE_fir   : std_logic;
+    signal o_RAMAddr_adsr : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_adsr : std_logic_vector(0 to 31);   -- adsr to local ram
+	signal i_RAMData_adsr : std_logic_vector(0 to 31);   -- local ram to adsr
+    signal o_RAMWE_adsr   : std_logic;
 	
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
@@ -144,10 +150,10 @@ architecture Behavioral of hwt_fir is
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal fir_ce          : std_logic;           -- fir clock enable (like a start/stop signal)
+    signal adsr_ce          : std_logic;           -- adsr clock enable (like a start/stop signal)
     
     signal input_data       : signed(31 downto 0);
-    signal fir_data        : signed(31 downto 0);
+    signal adsr_data        : signed(31 downto 0);
     signal start            : std_logic;
     signal stop             : std_logic;
     
@@ -155,12 +161,34 @@ architecture Behavioral of hwt_fir is
     signal process_state    : unsigned(2 downto 0);
     signal bang_state       : unsigned(2 downto 0);
     
+    signal bang_addr             : std_logic_vector(31 downto 0);
+    signal bang_stop_addr        : std_logic_vector(31 downto 0);
+    signal atck_dura_addr        : std_logic_vector(31 downto 0);
+    signal dcay_dura_addr        : std_logic_vector(31 downto 0);
+    signal rlse_dura_addr        : std_logic_vector(31 downto 0);
+    signal strt_amp_addr         : std_logic_vector(31 downto 0);
+    signal atck_amp_addr         : std_logic_vector(31 downto 0);
+    signal sust_amp_addr         : std_logic_vector(31 downto 0);
+    signal rlse_amp_addr         : std_logic_vector(31 downto 0);
+
+    signal bang             : signed(31 downto 0);
+    signal bang_stop        : signed(31 downto 0);
+    signal atck_dura        : signed(31 downto 0);
+    signal dcay_dura        : signed(31 downto 0);
+    signal rlse_dura        : signed(31 downto 0);
+    signal strt_amp         : signed(31 downto 0);
+    signal atck_amp         : signed(31 downto 0);
+    signal sust_amp         : signed(31 downto 0);
+    signal rlse_amp         : signed(31 downto 0);
+    
+    
+    
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant fir_START : std_logic_vector(31 downto 0) := x"0000000F";
-    constant fir_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    constant ADSR_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant ADSR_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
     
     constant C_START_BANG : std_logic_vector(31 downto 0) := x"00000001";
     constant C_STOP_BANG  : std_logic_vector(31 downto 0) := x"FFFFFFFF";
@@ -171,7 +199,7 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_fir <= std_logic_vector(fir_data);
+    o_RAMData_adsr <= std_logic_vector(adsr_data);
     
     
     
@@ -215,11 +243,11 @@ begin
 	);
             
     -- /ReconOS Stuff
-    fir_INST : fir
+    adsr_INST : adsr
     port map( 
             clk         => clk,
             rst         => rst,
-            ce          => fir_ce,
+            ce          => adsr_ce,
             input_wave  => input_data,
             start       => start,
             stop        => stop,
@@ -230,7 +258,7 @@ begin
             attack_amp  => atck_amp,
             sustain_amp => sust_amp,
             release_amp => rlse_amp,
-            wave        => fir_data
+            wave        => adsr_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -247,16 +275,16 @@ begin
     local_ram_ctrl_2 : process (clk) is
 	begin
 		if (rising_edge(clk)) then		
-			if (o_RAMWE_fir = '1') then
-				local_ram(to_integer(unsigned(o_RAMAddr_fir))) := o_RAMData_fir;
-            --else      -- else not needed, because fir is not consuming any samples
-			--	i_RAMData_fir <= local_ram(conv_integer(unsigned(o_RAMAddr_fir)));
+			if (o_RAMWE_adsr = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_adsr))) := o_RAMData_adsr;
+            --else      -- else not needed, because adsr is not consuming any samples
+			--	i_RAMData_adsr <= local_ram(conv_integer(unsigned(o_RAMAddr_adsr)));
 			end if;
 		end if;
 	end process;
     
     
-    fir_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
+    ADSR_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
         variable done : boolean;            
     begin
         if rst = '1' then
@@ -270,7 +298,7 @@ begin
             osif_ctrl_signal <= (others => '0');
             
             
-            fir_ce     <= '0';
+            adsr_ce     <= '0';
             start       <= '0';
             stop        <= '0';
             attack      <= (others => '0');
@@ -280,7 +308,7 @@ begin
             attack_amp  <= (others => '0');
             sustain_amp <= (others => '0');
             release_amp <= (others => '0');
-            o_RAMWE_fir<= '0';
+            o_RAMWE_adsr<= '0';
 
             refresh_state <= 0;
             process_state <= 0;
@@ -290,8 +318,8 @@ begin
               
         elsif rising_edge(clk) then
             
-            fir_ce      <= '0';
-            o_RAMWE_fir <= '0';
+            adsr_ce      <= '0';
+            o_RAMWE_adsr <= '0';
             osif_ctrl_signal <= ( others => '0');
             
             case state is            
@@ -317,12 +345,12 @@ begin
                 -- Software process "Synthesizer" sends the start signal via mbox_start
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
                 if done then
-                    if osif_ctrl_signal = fir_START then
+                    if osif_ctrl_signal = ADSR_START then
                         
                         sample_count <= to_unsigned(0, 16);
                         state        <= STATE_CHECK_BANG;
 
-                    elsif osif_ctrl_signal = fir_EXIT then
+                    elsif osif_ctrl_signal = ADSR_EXIT then
                         
                         state   <= STATE_EXIT;
 
@@ -364,7 +392,7 @@ begin
             when STATE_REFRESH_RELEASE => 
                 stop <= '0';   
                 case refresh_state is
-                    when => "0"
+                    when "0" => 
                         memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
                         if done then
                             refresh_state <= "1";
@@ -384,6 +412,7 @@ begin
                         if done then
                             if bang = C_START_BANG then
                                 bang_state <= "1";
+                                start <= '1';
                                 state <= STATE_REFRESH;
                             else
                                 state <= STATE_WAITING;
@@ -401,6 +430,7 @@ begin
                                 state <= STATE_REFRESH;
                             end if;
                         end if;
+						end case;
 
             when STATE_PROCESS =>
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
@@ -408,19 +438,19 @@ begin
                     case process_state is
 
                     when "0" => 
-                        fir_ce        <= '1';
+                        adsr_ce        <= '1';
                         process_state  <= "1";
 
                     when "1" => 
-                        o_RAMData_fir <= std_logic_vector(resize(fir_data * signed(i_RAMData_fir), 32));
-                        o_RAMWE_fir   <= '1';
+                        o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
+                        o_RAMWE_adsr   <= '1';
 
-                        fir_ce        <= '0';
+                        adsr_ce        <= '0';
                         process_state  <= "2";       
 
                     when "2" =>
-                        o_RAMWE_fir   <= '0';
-                        o_RAMAddr_fir <= std_logic_vector(unsigned(o_RAMAddr_fir) + 1);
+                        o_RAMWE_adsr   <= '0';
+                        o_RAMAddr_adsr <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
                         sample_count  <= sample_count + 1;
 
                         process_state  <= "0";  
@@ -428,7 +458,7 @@ begin
 
                 else
                     -- Samples have been generated
-                    o_RAMAddr_fir  <= (others => '0');
+                    o_RAMAddr_adsr  <= (others => '0');
                     sample_count    <= to_unsigned(0, 16);
                     state <= STATE_WRITE_MEM;
                 end if;
@@ -481,4 +511,5 @@ end Behavioral;
 --             dst_addr : in std_logic_vector(31 downto 0);
 --             len      : in std_logic_vector(23 downto 0);
 --             done);
+
 
