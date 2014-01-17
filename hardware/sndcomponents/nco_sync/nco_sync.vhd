@@ -38,8 +38,7 @@ entity nco_sync is
             master_phase_incr   : in signed(31 downto 0);
             slave_phase_offset : in signed(31 downto 0);
             slave_phase_incr   : in signed(31 downto 0);
-            data_master         : out signed(31 downto 0);
-            data_slave         : out signed(31 downto 0)
+            soundout         : out signed(31 downto 0)
            );
 end nco_sync;
 
@@ -58,7 +57,7 @@ architecture Behavioral of nco_sync is
      component nco
      generic(
         FPGA_FREQUENCY : integer := 100_000_000;
-        WAVEFORM_SLAVE : WAVEFORM_TYPE := SAW
+        WAVEFORM_SLAVE : WAVEFORM_TYPE := WAVEFORM
 	 );
     Port ( 
             clk    : in  std_logic;           
@@ -70,13 +69,16 @@ architecture Behavioral of nco_sync is
            );
 end component nco;
 	 
-    constant master_threshold  : signed (31 downto 0) := to_signed(integer(real(1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
+    constant master_threshold  : signed (31 downto 0) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
     signal master_data   : signed(31 downto 0);
+	 signal slave_data   : signed(31 downto 0);
     signal slave_rst     : std_logic := '0';
     signal state         : integer := 0;
 
 begin
    
+    soundout <= slave_data;
+
     SAWTOOTH_MASTER_INSTA : sawtooth
         port map(                
                     clk     => clk, 
@@ -84,7 +86,7 @@ begin
                     rst     => rst,
                     incr    => master_phase_incr, 
                     offset  => master_phase_offset,
-                    saw     => data_master ); 
+                    saw     => master_data ); 
 	
     NCO_INSTA : nco
     Port map( 
@@ -93,7 +95,7 @@ begin
             ce     => ce,
             phase_offset => slave_phase_offset,
             phase_incr   => slave_phase_incr,
-            data         => data_slave
+            data         => slave_data
            );
 			  
     SYNC_PROCESS : process (clk)

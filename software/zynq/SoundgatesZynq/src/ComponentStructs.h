@@ -50,12 +50,17 @@ typedef struct {
     int end_amp;
 } sRAMPComponentHeader;
 
-typedef struct {
-    void* slave_src_addr;
-    int slave_src_len;
-    void* slave_dest_addr;
-} sNCO_struct;
+typedef struct {    
+	int master_offset;
+	int master_increment;
+	int slave_offset;
+	int slave_increment;
+} sNCOSyncComponentHeader;
 
+typedef struct {
+    int coefficient_count;
+    int coefficients;
+} sFIRComponentHeader;
 
 struct OSCComponent_struct{
     char                  *comp_osc_name;
