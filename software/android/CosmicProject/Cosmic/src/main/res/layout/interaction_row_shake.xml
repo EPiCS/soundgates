@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/interaction_row_textView"
+        android:id="@+id/msg"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/interaction_row_shakeValue" />
+            android:id="@+id/value" />
     </LinearLayout>
 
 

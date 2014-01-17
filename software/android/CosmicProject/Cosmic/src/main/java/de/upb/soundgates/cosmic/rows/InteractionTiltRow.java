@@ -43,8 +43,8 @@ public class InteractionTiltRow implements InteractionRow {
             ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.interaction_row_tilt, null);
 
             holder = new ViewHolder(
-                    (TextView) viewGroup.findViewById(R.id.interaction_row_textView),
-                    (TextView) viewGroup.findViewById(R.id.interaction_row_tiltValue)
+                    (TextView) viewGroup.findViewById(R.id.msg),
+                    (TextView) viewGroup.findViewById(R.id.value)
             );
 
             viewGroup.setTag(holder);

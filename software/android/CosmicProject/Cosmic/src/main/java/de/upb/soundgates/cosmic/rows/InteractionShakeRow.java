@@ -43,8 +43,8 @@ public class InteractionShakeRow implements InteractionRow {
             ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.interaction_row_shake, null);
 
             holder = new ViewHolder(
-                    (TextView) viewGroup.findViewById(R.id.interaction_row_textView),
-                    (TextView) viewGroup.findViewById(R.id.interaction_row_shakeValue)
+                    (TextView) viewGroup.findViewById(R.id.msg),
+                    (TextView) viewGroup.findViewById(R.id.value)
             );
 
             viewGroup.setTag(holder);

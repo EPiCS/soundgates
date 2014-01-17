@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             else if(position == 1)
                 return SelectFragment.newInstance();
             else if(position == 2)
-                return BindFragment.newInstance();
+                return InteractionFragment.newInstance();
             else
                 return null;
         }
@@ -174,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 case 1:
                     return getString(R.string.title_select).toUpperCase(l);
                 case 2:
-                    return getString(R.string.title_bind).toUpperCase(l);
+                    return getString(R.string.title_interaction).toUpperCase(l);
             }
             return null;
         }

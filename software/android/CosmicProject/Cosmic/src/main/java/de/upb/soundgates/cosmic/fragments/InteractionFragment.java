@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.adapters.BindArrayAdapter;
 import de.upb.soundgates.cosmic.CosmicPreferences;
 import de.upb.soundgates.cosmic.R;
@@ -17,11 +18,15 @@ import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 import de.upb.soundgates.cosmic.rows.InteractionRow;
 import de.upb.soundgates.cosmic.rows.InteractionSeekBarRow;
+import de.upb.soundgates.cosmic.rows.InteractionShakeRow;
+import de.upb.soundgates.cosmic.rows.InteractionTiltRow;
 
 /**
  * Created by posewsky on 03.12.13.
  */
 public class InteractionFragment extends ListFragment {
+    private LayoutInflater inflater;
+
     public static InteractionFragment newInstance() {
         InteractionFragment fragment = new InteractionFragment();
 
@@ -33,6 +38,7 @@ public class InteractionFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.inflater = inflater;
         View rootView = inflater.inflate(R.layout.interaction_main, container, false);
 
         return rootView;
@@ -42,11 +48,7 @@ public class InteractionFragment extends ListFragment {
         OSCMessageStore msg_store = OSCMessageStore.hasInstance();
         if(msg_store != null)
         {
-            CosmicPreferences prefs = new CosmicPreferences(getActivity());
-            String host = prefs.getString("current_host");
-            int port = prefs.getInt("current_port");
-
-            BindArrayAdapter adapter = new BindArrayAdapter(getActivity(), msg_store.getSelectedOSCMessageAsList(), host, port);
+            OSCMessageAdapter adapter = new OSCMessageAdapter(msg_store.getSelectedOSCMessageAsList());
             setListAdapter(adapter);
         }
     }
@@ -61,14 +63,42 @@ public class InteractionFragment extends ListFragment {
                 switch (msg.getInteractionMethod())
                 {
                     case SEEKBAR:
-                        rows.add(new InteractionSeekBarRow(LayoutInflater.from(), msg))
+                        rows.add(new InteractionSeekBarRow(inflater, msg));
                         break;
                     case TILT:
+                        rows.add(new InteractionTiltRow(inflater, msg));
                         break;
                     case SHAKE:
+                        rows.add(new InteractionShakeRow(inflater, msg));
                         break;
                 }
             }
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return InteractionMethod.values().length;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return rows.get(position).getViewType();
+        }
+
+        public int getCount() {
+            return rows.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return rows.get(position).getView(convertView);
         }
     }
 }

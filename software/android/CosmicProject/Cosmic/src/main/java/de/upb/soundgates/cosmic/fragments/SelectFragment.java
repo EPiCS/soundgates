@@ -40,8 +40,8 @@ public class SelectFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 for(Fragment f : getFragmentManager().getFragments()) {
-                    if(f instanceof BindFragment) {
-                        ((BindFragment)f).updateList();
+                    if(f instanceof InteractionFragment) {
+                        ((InteractionFragment)f).updateList();
                         break;
                     }
                 }

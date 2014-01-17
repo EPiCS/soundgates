@@ -1,16 +1,23 @@
 package de.upb.soundgates.cosmic.rows;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
 import de.upb.soundgates.cosmic.InteractionMethod;
+import de.upb.soundgates.cosmic.MainActivity;
 import de.upb.soundgates.cosmic.MinMaxSeekBar;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.osc.OSCSender;
+import de.upb.soundgates.cosmic.osc.OSCType;
 
 /**
  * Created by posewsky on 10.01.14.
@@ -65,19 +72,21 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         // no convertView so create a new one
         if (convertView == null) {
-            ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.interaction_row_tilt, null);
+            ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.interaction_row_seekbar, null);
 
             holder = new ViewHolder(
-                    (TextView) viewGroup.findViewById(R.id.interaction_row_textView),
-                    (MinMaxSeekBar) viewGroup.findViewById(R.id.interaction_row_seekBar),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_c),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_d),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_e),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_f),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_g),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_a),
-                    (Button) viewGroup.findViewById(R.id.interaction_row_button_h)
+                    (TextView) viewGroup.findViewById(R.id.msg),
+                    (MinMaxSeekBar) viewGroup.findViewById(R.id.seekBar),
+                    (Button) viewGroup.findViewById(R.id.button_c),
+                    (Button) viewGroup.findViewById(R.id.button_d),
+                    (Button) viewGroup.findViewById(R.id.button_e),
+                    (Button) viewGroup.findViewById(R.id.button_f),
+                    (Button) viewGroup.findViewById(R.id.button_g),
+                    (Button) viewGroup.findViewById(R.id.button_a),
+                    (Button) viewGroup.findViewById(R.id.button_h)
             );
+
+            configureMinMaxSeekBar(holder);
 
             viewGroup.setTag(holder);
 
@@ -90,9 +99,123 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         // actually setup the view
         holder.text.setText(msg.getPath());
-        //holder.tiltValue.setText();
 
         return view;
+    }
+
+    class OnMinMaxSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+        public OnMinMaxSeekBarChangeListener() {}
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            LinkedList<OSCType> types = msg.getTypes();
+
+            if(types.size() != 1) {
+                Log.e(MainActivity.LOG_TAG, "#Types wrong: " + types.size());
+                return;
+            }
+
+            Object[] args = new Object[1];
+
+            switch(types.get(0).getTypeTag())
+            {
+                case 'i':
+                    args[0] = new Integer((int)((MinMaxSeekBar)seekBar).getFloatValue());
+                    break;
+                case 'f':
+                    args[0] = new Float(((MinMaxSeekBar)seekBar).getFloatValue());
+                    break;
+                default:
+                    Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
+                    return;
+            }
+
+            // trigger msg send here
+            Log.d(MainActivity.LOG_TAG, msg.getPath() + " " + args[0].toString());
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }
+
+    private void configureMinMaxSeekBar(final ViewHolder viewHolder) {
+        viewHolder.seekbar.setOnSeekBarChangeListener(new OnMinMaxSeekBarChangeListener());
+
+        if(msg.getTypes().size() == 1)
+        {
+            switch(msg.getTypes().get(0).getTypeTag())
+            {
+                case 'i':
+                {
+                    OSCType<Integer> t = msg.getTypes().get(0);
+                    viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
+                    viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
+                    break;
+                }
+                case 'f':
+                {
+                    OSCType<Float> t = msg.getTypes().get(0);
+                    viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
+                    viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
+                    break;
+                }
+                default:
+                    Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
+                    return;
+            }
+        }
+
+        View.OnTouchListener otl = (new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                int freq;
+                switch(view.getId())
+                {
+                    case R.id.button_c:
+                        freq = 131; break;
+                    case R.id.button_d:
+                        freq = 147; break;
+                    case R.id.button_e:
+                        freq = 165; break;
+                    case R.id.button_f:
+                        freq = 175; break;
+                    case R.id.button_g:
+                        freq = 196; break;
+                    case R.id.button_a:
+                        freq = 220; break;
+                    case R.id.button_h:
+                        freq = 247; break;
+                    default:
+                        freq = 220;
+                }
+                viewHolder.seekbar.setFloatValue(freq);
+
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    viewHolder.seekbar.setFloatValue(0);
+                    return true;
+                }
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    viewHolder.seekbar.setFloatValue(freq);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        viewHolder.button_c.setOnTouchListener(otl);
+        viewHolder.button_d.setOnTouchListener(otl);
+        viewHolder.button_e.setOnTouchListener(otl);
+        viewHolder.button_f.setOnTouchListener(otl);
+        viewHolder.button_g.setOnTouchListener(otl);
+        viewHolder.button_a.setOnTouchListener(otl);
+        viewHolder.button_h.setOnTouchListener(otl);
     }
 
     @Override
