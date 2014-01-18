@@ -137,6 +137,7 @@ public class SoundgatesNewDiagramFileWizard extends Wizard {
 						PatchEditPart.MODEL_ID,
 						SoundgatesDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT);
 				diagramResource.getContents().add(diagram);
+				diagramResource.getContents().add(diagram.getElement());
 				return CommandResult.newOKCommandResult();
 			}
 		};
