@@ -13,6 +13,7 @@ Patch::Patch(){
 	m_PatchState  	        = Synthesizer::state::created;
 	m_ComponentsProcessed   = 0;
 	jobsToProcess           = 0;
+	m_MaxWorkerThreads      = boost::thread::hardware_concurrency();
 }
 
 Patch::~Patch(){ }
@@ -43,7 +44,9 @@ void Patch::createSoundComponent(int uid, const std::string& type, std::vector<s
 
 	impltype = (slot < 0) ? SoundComponents::SW : SoundComponents::HW;
 
-	HWThreadManager::getInstance().declareSlot(type, slot);
+	if(impltype == SoundComponents::HW){
+	    HWThreadManager::getInstance().declareSlot(type, slot);
+	}
 
 	SoundComponentImplPtr impl = loader.createFromString(type, impltype, parameters);
 
@@ -172,7 +175,7 @@ void Patch::initialize(void){
 
 	jobIter         = m_ComponentsVector.begin();
 	jobsToProcess   = m_ComponentsVector.size();
-	m_PatchState = Synthesizer::state::initialized;
+	m_PatchState    = Synthesizer::state::initialized;
 
 }
 
@@ -187,15 +190,16 @@ void Patch::run(){
 
 		m_PatchState = Synthesizer::state::running;
 
-
-		for(unsigned int i = 0; i < m_ComponentsVector.size() && i < Synthesizer::config::max_workers; i++){
+		for(unsigned int i = 0; i < m_MaxWorkerThreads; i++){
+		    LOG_DEBUG("Creating worker thread: " << i)
 		    SoundComponentWorker worker(PatchPtr(this));
-		    m_WorkerThreads[i] = boost::thread(worker);
+		    m_WorkerThreads.create_thread(worker);
 		}
 
-		boost::thread link_thread(&Patch::switchBuffers, this);
+		/* Create a thread that deals with the links ... */
+		m_WorkerThreads.create_thread(boost::bind(&Patch::switchBuffers, this));
 
-		while(1){
+		while(isRunning()){
 		    boost::this_thread::sleep(boost::posix_time::seconds(1));
 		}
 	}
@@ -210,11 +214,9 @@ void Patch::switchBuffers(){
             m_OnComponentsProcessed.wait(lock); /* wait until all components were processed */
         }
 
-        for (vector<BufferedLinkPtr>::iterator iter =
-                m_BufferedLinksVector.begin();
-                iter != m_BufferedLinksVector.end(); ++iter) {
+        for (uint32_t i = m_BufferedLinksVector.size(); i != 0; --i) {
 
-            (*iter)->switchBuffers();
+            (m_BufferedLinksVector.at(i - 1))->switchBuffers();
         }
 
         {
@@ -224,6 +226,9 @@ void Patch::switchBuffers(){
         }
         m_OnBuffersProcessed.notify_all();
     }
+
+    LOG_INFO("Worker thread finished: " << boost::this_thread::get_id());
+    m_OnBuffersProcessed.notify_all();
 }
 
 void Patch::dispose(){
@@ -254,9 +259,7 @@ void Patch::stop(){
 		m_PatchState = Synthesizer::state::stopped;
 
 		/* Joint worker threads */
-		for(int i = 0; i < Synthesizer::config::max_workers; i++){
-		    LOG_DEBUG("Attempting to join worker thread " << i);
-		    m_WorkerThreads[i].join();
-		}
+		m_WorkerThreads.join_all();
+		LOG_DEBUG("Joining all worker threads");
 	}
 }

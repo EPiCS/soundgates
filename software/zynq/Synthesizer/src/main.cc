@@ -25,15 +25,12 @@
 /* Forward declaration */
 void SynthesizerTerminate(int);
 
-Patch* patch;
+static Patch patch;
 
 int main( int argc, const char* argv[])
 {
 	SoundgatesConfig* config = SoundgatesConfig::getInstance();
 	config->loadDefault();
-
-	patch = new Patch();
-
 
 	/* Register signal handler after starting rpc service, because
 	 * this service currently defines its own signal handler */
@@ -56,33 +53,33 @@ int main( int argc, const char* argv[])
 //			std::cout << "Setting log level to " << loglevel << std::endl;
 //
 //			boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
-//		}
+//		}OSCService
 
 
 		SoundComponentLoader::getInstance().initialize(std::string(argv[2]));
 
 		TGFReader reader;
 
-		reader.read(patch, argv[3]);
+		reader.read(&patch, argv[3]);
 	}
 //	ui::UIService* xmlrpcservice = (ui::UIService*) new ui::RPCService(patch);
 	ui::UIService* oscservice    = (ui::UIService*) new ui::OSCService(patch);
 //	ui::UIService* tcphandshake  = (ui::UIService*) new ui::TCPHandshakeService(patch);
 
-//	ui::UIManager::getInstance().registerService(xmlrpcservice, string("xmlrpc"), true);
-	ui::UIManager::getInstance().registerService(oscservice, string("oscservice"), true);
-//	ui::UIManager::getInstance().registerService(tcphandshake, string("tcphandshake"), true);
+//	ui::UIManager::getInstance().registerService(xmlrpcservice, "xmlrpc", true);
+	ui::UIManager::getInstance().registerService(oscservice, "oscservice", true);
+//	ui::UIManager::getInstance().registerService(tcphandshake, "tcphandshake", true);
 
-	patch->run();
+	patch.run();
 
 	return 0;
 }
 
 void SynthesizerTerminate(int sig){
 
-    patch->dispose();
-
-	ui::UIManager::getInstance().stopAllServices();
+    ui::UIManager::getInstance().stopAllServices();
 
 	SoundComponentLoader::getInstance().finailize();
+
+    patch.dispose();
 }

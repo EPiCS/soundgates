@@ -61,6 +61,8 @@ InputSoundComponent::~InputSoundComponent(){
 //
 //		outports.erase(iter);
 //	}
+
+
 }
 
 ControlPortPtr InputSoundComponent::getPort(unsigned int nPort){

@@ -11,7 +11,6 @@
 #if defined(APPLICATION_CONTEXT)
 	#include <boost/version.hpp>
 	#include <boost/log/trivial.hpp>
-
 	#define USE_BOOST_LOGGING
 
     #undef LOG_DEBUG
@@ -55,12 +54,11 @@ namespace Synthesizer{
 
 	namespace config{
 
-		static const char*  port 	        = "50500";
+		static const char*  port 	       = "50500";
 		static const int    samplerate     = 44100;
-		static const int 	 blocksize      = 64;
+		static const int 	blocksize      = 64;
 		static const int    bytesPerSample = sizeof(int);
 		static const int    bytesPerBlock  = blocksize * bytesPerSample;
-		static const int    max_workers    = 4;
 	}
 }
 

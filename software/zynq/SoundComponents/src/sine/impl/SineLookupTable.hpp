@@ -11,7 +11,7 @@
 // This table ranges from x = 0.0 to x = 2*PI + 0.2
 // Stepsize between elements is 0.0001
 // i.e. sineTable[200] = sin(0.0001 * 200)
-double sineTable[] = {
+float sineTable[] = {
 		0.0,
 		0.00009999999983,
 		0.000199999998667,

@@ -36,4 +36,23 @@ public:
 	virtual ~ADSRSoundComponent();
 };
 
+
+/**
+ * On value changed listener
+ */
+class OnValueChange: public ICallbackFunctor {
+private:
+    float* m_pValueRef;
+    ControlPortPtr m_pPort;
+public:
+
+    OnValueChange(float* ref, ControlPortPtr port) :
+            m_pValueRef(ref), m_pPort(port) {
+    }
+    void operator()() {
+        *m_pValueRef = m_pPort->pop();
+    }
+};
+
+
 #endif /* ADSRSOUNDCOMPONENT_H_ */
