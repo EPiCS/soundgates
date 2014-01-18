@@ -1,4 +1,4 @@
-#N canvas 799 393 450 368 10;
+#N canvas 1440 49 958 1149 10;
 #X obj 27 8 inlet;
 #X obj 109 341 outlet;
 #X obj 279 215 metro;
@@ -11,8 +11,11 @@
 #X floatatom 166 307 5 0 0 0 - - -;
 #X floatatom 54 108 5 0 0 0 - - -;
 #X floatatom 336 195 5 0 0 0 - - -;
-#X obj 293 270 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1;
+#X obj 293 270 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
 #X msg 305 95 float 1;
+#X text 0 0 inports Resolution Frequency;
+#X text 0 0 outports Output;
 #X connect 0 0 6 0;
 #X connect 0 0 10 0;
 #X connect 2 0 8 0;
@@ -30,5 +33,3 @@
 #X connect 8 0 9 0;
 #X connect 10 0 7 0;
 #X connect 13 0 5 0;
-#X text 0 0 inports Resolution Frequency;
-#X text 0 0 outports Output;

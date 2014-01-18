@@ -1,0 +1,8 @@
+#N canvas 1440 49 1918 1149 10;
+#X obj 114 96 mulcc_patch;
+#X floatatom 92 42 5 0 0 0 - - -;
+#X floatatom 187 41 5 0 0 0 - - -;
+#X floatatom 120 159 5 0 0 0 - - -;
+#X connect 0 0 3 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;

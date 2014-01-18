@@ -1,0 +1,9 @@
+#N canvas 1440 49 958 1149 10;
+#X obj 175 159 saw_patch;
+#X msg 169 101 440;
+#X obj 178 207 *~ 0.1;
+#X obj 174 252 dac~;
+#X connect 0 0 2 0;
+#X connect 1 0 0 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;

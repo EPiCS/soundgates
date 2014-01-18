@@ -1,0 +1,5 @@
+#N canvas 961 49 958 559 10;
+#X obj 147 137 noise_patch;
+#X obj 136 213 dac~;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;

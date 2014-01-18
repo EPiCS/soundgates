@@ -1,0 +1,4 @@
+#N canvas 1 49 958 1150 10;
+#X obj 126 133 outlet~;
+#X obj 131 55 noise~;
+#X connect 1 0 0 0;
