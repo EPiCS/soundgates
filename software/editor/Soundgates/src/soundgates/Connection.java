@@ -23,8 +23,6 @@ import org.eclipse.emf.ecore.EObject;
  *
  * @see soundgates.SoundgatesPackage#getConnection()
  * @model abstract="true"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='PortKind'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL PortKind='self.source.kind=self.target.kind'"
  * @generated
  */
 public interface Connection extends EObject {

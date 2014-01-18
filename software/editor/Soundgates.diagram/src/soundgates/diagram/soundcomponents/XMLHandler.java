@@ -27,16 +27,10 @@ public class XMLHandler {
 				throw new NullPointerException("Port Direction invalid! " + portDirection.toUpperCase());
 			}
 
-			if (portType.toUpperCase().contentEquals("INT")
-					|| portType.toUpperCase().contentEquals("INTEGER")) {
-				soundComponentPort.setDataType(DataType.INTEGER);
-			} else if (portType.toUpperCase().contentEquals("FLOAT")) {
-				soundComponentPort.setDataType(DataType.FLOAT);
+			if (portType.toUpperCase().contentEquals("CONTROL")) {
+				soundComponentPort.setDataType(DataType.CONTROL);
 			} else if (portType.toUpperCase().contentEquals("SOUND")) {
 				soundComponentPort.setDataType(DataType.SOUND);
-			} else if (portType.toUpperCase().contentEquals("BOOL")
-					|| portType.toUpperCase().contentEquals("BOOLEAN")) {
-				soundComponentPort.setDataType(DataType.BOOLEAN);
 			} else {
 				throw new NullPointerException("Port DataType invalid! " + portType.toUpperCase());
 			}
