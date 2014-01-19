@@ -43,7 +43,8 @@ public class SynthDataGenAction implements IObjectActionDelegate{
 				if(tester.testPatch(patch) == false)
 					return;				
 				
-				dataGen.generateSynthData(patch, file);
+				// export TGF file and project as zip
+				dataGen.generateSynthData(patch, file);			
 				
 			} catch (Exception e) {				
 				e.printStackTrace();

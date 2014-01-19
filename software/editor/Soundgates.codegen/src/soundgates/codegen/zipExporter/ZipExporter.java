@@ -1,41 +1,73 @@
 package soundgates.codegen.zipExporter;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipExporter {
 
-	public static void zipFiles(String zipFilename,
-			LinkedList<String> sourcesFilenames) {
-		// Create a buffer for reading the files
-		byte[] buf = new byte[1024];
+	ZipOutputStream out;
+	byte[] buf;
 
+	public ZipExporter(String zipFilename) {
+		// Create a buffer for reading the files
+		buf = new byte[1024];
+		// Create the ZIP file
 		try {
-			// Create the ZIP file
-			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFilename));
+			out = new ZipOutputStream(new FileOutputStream(zipFilename));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void zipFile(String filePath, String zipEntry) {
+		try {
 			// Compress the files
-			for (String filename : sourcesFilenames) {
-				FileInputStream in = new FileInputStream(filename);
-				// Add ZIP entry to output stream.
-				File file = new File(filename); // "Users/you/image.jpg"
-				out.putNextEntry(new ZipEntry(file.getName()));
-				// Transfer bytes from the file to the ZIP file
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				// Complete the entry
-				out.closeEntry();
-				in.close();
-			} // Complete the ZIP file
-			out.close();
+			
+			FileInputStream in = new FileInputStream(filePath);
+			// Add ZIP entry to output stream.
+			out.putNextEntry(new ZipEntry(zipEntry));
+			// Transfer bytes from the file to the ZIP file
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			// Complete the entry
+			out.closeEntry();
+			in.close();
 
 		} catch (IOException e) {
+		}
+	}
+	
+	public void zipFileIntoFolder(String filePath, String zipEntry, String folder) {
+		try {
+			// Compress the files
+			
+			FileInputStream in = new FileInputStream(filePath);
+			// Add ZIP entry to output stream.
+			out.putNextEntry(new ZipEntry(folder+"/"+zipEntry));
+			// Transfer bytes from the file to the ZIP file
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			// Complete the entry
+			out.closeEntry();
+			in.close();
+
+		} catch (IOException e) {
+		}
+	}
+
+	public void close() {
+		try {
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

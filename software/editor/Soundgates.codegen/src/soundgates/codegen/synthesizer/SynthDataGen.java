@@ -1,6 +1,7 @@
 package soundgates.codegen.synthesizer;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,6 +10,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMIResource;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
@@ -21,20 +23,21 @@ import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesFactory;
 import soundgates.codegen.CodeGenHelper;
+import soundgates.codegen.zipExporter.ZipExporter;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 
 public class SynthDataGen {
 	private HashMap<SoundComponent, Integer> uniqueIds;
 	private HashMap<SoundComponent, String> implTypes;
+	private HashMap<String, String> fileNamesHashes; //original file name, hashed name
 	private int uniqueCounter = 0;
 	private int hwSlot = 0;
-	private CodeGenHelper codeGenHelper;
 	
 	public void generateSynthData(Patch patch, IFile file){
 		SynthData synthData = new SynthData();
-		codeGenHelper = new CodeGenHelper();
 		uniqueIds = new HashMap<SoundComponent, Integer>();
 		implTypes = new HashMap<SoundComponent, String>();
+		fileNamesHashes = new HashMap<String, String>();
 
 		boolean compositesUnrolled = false;		
 		while(!compositesUnrolled){
@@ -55,21 +58,32 @@ public class SynthDataGen {
 			if (element instanceof Link)
 				synthData.addSynthData(handleLink((Link) element));
 		} 
-		writeToFile(synthData.getRepresentation(), file);	
+		createFiles(synthData.getRepresentation(), file);	
 	}
 	
-	private void writeToFile(String text, IFile file){
+	private void createFiles(String text, IFile file){
 		
 		try {
-			IFile newFile = file.getProject().getFile(file.getName().replace(".soundgates", ".tgf"));
+			IFile newFile = file.getProject().getFile(file.getName().replace(".soundgates_diagram", ".tgf"));
 			
 			InputStream code = new ByteArrayInputStream(text.getBytes());
 			
 			if(newFile.exists())
 				newFile.delete(true, null);
 			
-			newFile.create(code, IResource.FORCE, null);
+			newFile.create(code, IResource.FORCE, null);			
+			
+			// export tgf and project as zip
+			String zipFileName = file.getParent().getLocation().toPortableString() + "/" + file.getName().replace(".soundgates_diagram", ".zip");
+			ZipExporter zipExporter = new ZipExporter(zipFileName);			
+			zipExporter.zipFileIntoFolder(newFile.getLocation().toPortableString(), newFile.getName(), "TGF");			
+			for(String fileName : fileNamesHashes.keySet()){
+				zipExporter.zipFileIntoFolder(fileName, fileNamesHashes.get(fileName), "Binaries");
+			}
+			zipExporter.close();
+			
 			newFile.getParent().refreshLocal(1, null);
+			newFile.delete(true, null);
 			
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
@@ -105,14 +119,42 @@ public class SynthDataGen {
 					       "]";
 			
 			data.addIOComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, "", hwSlot, oscAddress, oscDataType, range);
-		}			
+		}
+		
 		else{
+			
+
+			
+			// save the file patch from the wave player component into the hash map with its hash value 
+			// replace it with the hashed file path
+			if(atomicSoundComponent.getType().equals("WavePlayer")){
+				/*  Example: 
+				 *   
+				 *  fileName = "wave\file.wav"
+				 *  id = "_2ZvxcIEcEeO2Uor-dy1FkA"
+				 *  newFileName = "_2ZvxcIEcEeO2Uor-dy1FkA_file.wav"
+				 */
+				String fileName = atomicSoundComponent.getUserStringProperties().get("FileName");
+				File tmpFile = new File(fileName);
+				String id = getIdOfAtomicSoundComponent(atomicSoundComponent);
+				String newFileName = id +"_" + tmpFile.getName();
+				
+				fileNamesHashes.put(fileName, newFileName);
+				
+				atomicSoundComponent.getUserStringProperties().put("FileName", newFileName);
+			}
 			
 			StringBuffer values = new StringBuffer();	
 			int floatPropertiesSize = atomicSoundComponent.getFloatProperties().size();
 			for(int i=0; i<floatPropertiesSize; i++){
 				values.append(atomicSoundComponent.getFloatProperties().get(i).getValue().toString());
 				if(i!=floatPropertiesSize-1)
+					values.append(",");
+			}
+			int userStringPropertiesSize = atomicSoundComponent.getUserStringProperties().size();
+			for(int i=0; i<userStringPropertiesSize; i++){
+				values.append(atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());
+				if(i!=userStringPropertiesSize-1)
 					values.append(",");
 			}
 			String value=values.toString();
@@ -136,12 +178,12 @@ public class SynthDataGen {
 		int source = uniqueIds.get(sourceComponent);
 		int sink = uniqueIds.get(targetComponent);
 
-		HashMap<Port,Integer> sourcePortMappings =  codeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent, 
+		HashMap<Port,Integer> sourcePortMappings =  CodeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent, 
 				AtomicSoundComponentXMLHandler.DEVICE_PREFIX_PORT_MAPPINGS + implTypes.get(sourceComponent) );
 		
 		int sourcePort = sourcePortMappings.get(link.getSource());
 		
-		HashMap<Port,Integer> targetPortMappings =  codeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
+		HashMap<Port,Integer> targetPortMappings =  CodeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
 				AtomicSoundComponentXMLHandler.DEVICE_PREFIX_PORT_MAPPINGS + implTypes.get(targetComponent) );
 		
 		int sinkPort = targetPortMappings.get(link.getTarget());
@@ -347,6 +389,14 @@ public class SynthDataGen {
 		newLink.setTarget(targetPortCopy);
 		
 		return newLink;
+	}
+	
+	public String getIdOfAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
+		return ((XMIResource) atomicSoundComponent.eResource()).getID(atomicSoundComponent);
+	}
+	
+	public HashMap<String,String> getFileNamesHashes(){
+		return fileNamesHashes;
 	}
 	
 }
