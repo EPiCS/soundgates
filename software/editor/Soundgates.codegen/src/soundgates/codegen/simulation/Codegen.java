@@ -364,8 +364,8 @@ public class Codegen {
 			return atomicSoundComponent.getIntegerProperties().get(propName).toString();
 		if (atomicSoundComponent.getFloatProperties().containsKey(propName))
 			return atomicSoundComponent.getFloatProperties().get(propName).toString();	
-		if (atomicSoundComponent.getStringProperties().containsKey(propName))
-			return atomicSoundComponent.getStringProperties().get(propName).toString();	
+		if (atomicSoundComponent.getUserStringProperties().containsKey(propName))
+			return atomicSoundComponent.getUserStringProperties().get(propName).toString();	
 		
 		throw new Exception("Property name not in the list!");
 	}
