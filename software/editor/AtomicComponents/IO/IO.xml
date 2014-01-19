@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>IO</Type>
 	<Ports>
-		<Port DataType="FLOAT" Direction="OUT" Name="Value"/>
+		<Port DataType="CONTROL" Direction="OUT" Name="Value"/>
 	</Ports>
 	<Properties>
 		<FloatProperty InitialValue="0" Name="MinValue"/>
 		<FloatProperty InitialValue="0" Name="MaxValue"/>
 	</Properties>
 	<Code>
-		<Simulation>
-
-		<PortMapping PortName="Value" PortNumber="0"/><PD>#N canvas 1131 357 450 300 10;&#13;
-#X text 0 0 outports Value;&#13;
-#X obj 49 90 outlet;&#13;
-#X obj 45 50 r @ComponentName;&#13;
-#X connect 2 0 1 0;&#13;
-</PD></Simulation>
+		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="input">
 				<PortMapping PortName="Value" PortNumber="0"/>

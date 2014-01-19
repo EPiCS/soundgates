@@ -5,8 +5,7 @@
 		<Port DataType="SOUND" Direction="OUT" Name="Samples"/>
 	</Ports>
 	<Code>
-		<Simulation>
-		<PortMapping PortName="Samples" PortNumber="0"/><PD></PD></Simulation>
+		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="noise">
 				<PortMapping PortName="Samples" PortNumber="0"/>

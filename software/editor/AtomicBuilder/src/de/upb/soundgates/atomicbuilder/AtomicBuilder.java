@@ -136,15 +136,13 @@ public class AtomicBuilder {
 		return dBuilder.parse(templateFile);
 	}
 
-	private static String executeReplacements(List<String> codeLines){
+	private static void executeReplacements(List<String> codeLines, PureDataInfo pdInfo){
 		List<String> connects = new ArrayList<String>();
 		List<String> onlyObjects = new ArrayList<String>();
 		
 		//find counted pd code lines
 		for (String line : codeLines){
-			if (!line.contains("#X text")){
 				onlyObjects.add(line);
-			}
 		}
 		
 		//find connections
@@ -161,7 +159,7 @@ public class AtomicBuilder {
 			String [] connect = connectLine.split(" ");
 			int sourceObjectNumber = Integer.parseInt(connect[2]);
 			int targetObjectNumber = Integer.parseInt(connect[4]);
-			String targetObject = onlyObjects.get(targetObjectNumber);
+			String targetObject = getObject(codeLines, targetObjectNumber);
 			if (targetObject.contains("#X msg")){
 				String [] message = targetObject.split(" ");
 				
@@ -179,9 +177,9 @@ public class AtomicBuilder {
 					String selector = message [4];
 					if (selector.equals("replace")){
 						int atomToReplace = Integer.parseInt(message[5]);
-						String replacement = message[6];
+						String replacement = "@" + message[6];
 						
-						String [] toManipulate = onlyObjects.get(sourceObjectNumber).split(" ");
+						String [] toManipulate = getObject(codeLines, sourceObjectNumber).split(" ");
 						int offset = 3;
 						//TODO: check if other offsets are needed, 3 is correct for messages, objects and comments
 						toManipulate[atomToReplace + offset] = replacement;
@@ -189,20 +187,41 @@ public class AtomicBuilder {
 						String manipulatedLine = "";
 						for (String part : toManipulate)
 							manipulatedLine += part + " ";
-						
-						onlyObjects.set(sourceObjectNumber, manipulatedLine);
+						pdInfo.addProperty(message[6]);
+						setObject(codeLines, sourceObjectNumber, manipulatedLine);
 					}
 				}
 
 			}
 		}
-		
-
-		StringBuilder result = new StringBuilder();
-		for (String line : onlyObjects){
-			result.append(line + System.lineSeparator());
+	}
+	
+	private static void setObject(List<String> pdCodeLines, int objectId, String object){
+		int counter = 0;
+		int lineNumber = 0;
+		for (String line : pdCodeLines){
+			if (!line.contains("#N")){
+				if (counter == objectId){
+					pdCodeLines.set(lineNumber, object);
+					return;
+				}
+				counter++;
+			}
+			lineNumber++;
 		}
-		return result.toString();
+	}
+	
+	private static String getObject(List<String> pdCodeLines, int objectId){
+		int counter = 0;
+		for (String line : pdCodeLines){
+			if (!line.contains("#N")){
+				if (counter == objectId){
+					return line;
+				}
+				counter++;
+			}
+		}
+		return null;
 	}
 	
 	private static PureDataInfo readPureDataCode(File pdFile) throws IOException {
@@ -228,11 +247,17 @@ public class AtomicBuilder {
 					}
 				}
 			}
-			codeLines.add(read + ";");
+			codeLines.add(read);
 		}
 		
 		bufferedReader.close();
-		result.setCode(executeReplacements(codeLines));
+		
+		StringBuilder resultingCode = new StringBuilder();
+		executeReplacements(codeLines, result);
+		for (String line : codeLines){
+			resultingCode.append(line + ";" + System.lineSeparator());
+		}
+		result.setCode(resultingCode.toString());
 		return result;
 	}
 

@@ -1,5 +1,5 @@
-#N canvas 442 437 450 300 10;
-#X text 0 0 inports SoundIn Multiplier;
+#N canvas 0 49 718 849 10;
+#X text 121 0 inports SoundIn Multiplier;
 #X text 0 0 outports SoundOut;
 #X obj 62 19 inlet~;
 #X obj 120 18 inlet~;

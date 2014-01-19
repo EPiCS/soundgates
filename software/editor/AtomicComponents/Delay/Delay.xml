@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>Delay</Type>
 	<Ports>
-		<Port DataType="FLOAT" Direction="IN" Name="Delay"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Delay"/>
 		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
 		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
-		<Simulation>
-			<PortMapping PortName="Delay" PortNumber="0"/>
-			<PortMapping PortName="SoundIn" PortNumber="1"/>
-			<PortMapping PortName="SoundOut" PortNumber="0"/>
-		<PD>
-		</PD></Simulation>
+		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="delay">
 				<PortMapping PortName="Delay" PortNumber="0"/>

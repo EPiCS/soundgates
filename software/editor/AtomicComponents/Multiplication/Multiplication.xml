@@ -4,14 +4,13 @@
 	<Type>Multiplication</Type>
 	<Ports>
 		<Port Name="SoundIn" Direction="IN" DataType="SOUND"/>
-		<Port Name="Multiplier" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Multiplier" Direction="IN" DataType="CONTROL"/>
 		<Port Name="SoundOut" Direction="OUT" DataType="SOUND"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
-		<Simulation>
-		</Simulation>
+		<Simulation/>
 		<Hardware>
 			VHDL Stuff
 		</Hardware>

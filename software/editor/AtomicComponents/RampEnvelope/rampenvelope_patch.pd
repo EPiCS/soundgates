@@ -1,4 +1,4 @@
-#N canvas 1440 49 958 1149 10;
+#N canvas 720 49 718 261 10;
 #X obj 182 301 outlet~;
 #X obj 82 53 inlet~ sound;
 #X obj 405 54 inlet trigger;
@@ -13,6 +13,8 @@
 #X obj 425 266 print;
 #X floatatom 289 152 5 0 0 0 - - -;
 #X floatatom 336 185 5 0 0 0 - - -;
+#X text 142 377 inports SamplesIn RisingTime FallingTime Trigger;
+#X text 147 356 outports SamplesOut;
 #X connect 1 0 5 0;
 #X connect 2 0 6 0;
 #X connect 3 0 7 1;

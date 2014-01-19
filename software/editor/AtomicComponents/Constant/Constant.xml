@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>Constant</Type>
 	<Ports>
-		<Port DataType="FLOAT" Direction="OUT" Name="Value"/>
+		<Port DataType="CONTROL" Direction="OUT" Name="Value"/>
 	</Ports>
 	<Properties>
 		<FloatProperty InitialValue="0" Name="Value"/>
 	</Properties>
 	<Code>
-		<Simulation>
-		<PortMapping PortName="Value" PortNumber="0"/><PropMapping PropName="Value" Tag="@Value"/><PD>#N canvas 62 471 450 300 10;
-#X obj 39 152 outlet;
-#X obj -16 33 loadbang;
-#X text 0 0 outports Value;
-#X text 109 9 replace 4 Value;
-#X msg 25 95 float @Value ;
-#X connect 1 0 4 0;
-#X connect 4 0 0 0;
-</PD></Simulation>
+		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="const">
 				<PortMapping PortName="Value" PortNumber="0"/>
