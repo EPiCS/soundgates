@@ -31,7 +31,7 @@ public class StartSimulationHandler extends AbstractHandler {
 			while (it.hasNext()){
 				Object next = it.next();
 				IFile modelFile;
-				if (next instanceof IFile && ((modelFile = ((IFile)next)).getName().endsWith(".soundgates"))){
+				if (next instanceof IFile && ((modelFile = ((IFile)next)).getName().endsWith(".soundgates_diagram"))){
 					IProject project = ((IResource)next).getProject();
 					
 					Codegen codegen = new Codegen();
