@@ -27,7 +27,7 @@ import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 public class CompositeSoundComponentExporter extends Exporter {
 
-	public void exportToXML(CompositeSoundComponent compositeSoundComponentToExport) {
+	public static void exportToXML(CompositeSoundComponent compositeSoundComponentToExport) {
 	
 		try {
 
@@ -59,7 +59,6 @@ public class CompositeSoundComponentExporter extends Exporter {
 			Element embeddedComponentsElement = doc.createElement("EmbeddedSoundComponents");
 			
 			Tester patchTester = new Tester();
-			CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
 			
 			for(SoundComponent embComponent : compositeSoundComponentToExport.getEmbeddedComponents()){
 					
@@ -83,7 +82,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 							);
 				 	
 					if(patchTester.shouldWriteFileForCompositeSoundComponent(embComponent.getName())){						
-						exporter.exportToXML((CompositeSoundComponent) embComponent);	
+						exportToXML((CompositeSoundComponent) embComponent);	
 					}
 				}
 				

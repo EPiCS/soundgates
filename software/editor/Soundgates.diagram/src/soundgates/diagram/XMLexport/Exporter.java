@@ -12,7 +12,7 @@ import soundgates.SoundComponent;
 
 public class Exporter {
 	
-	public Element getAtomicSoundComponentElement(Document doc, AtomicSoundComponent atomicSoundComponent, String elementName, int componentCounter){	
+	public static Element getAtomicSoundComponentElement(Document doc, AtomicSoundComponent atomicSoundComponent, String elementName, int componentCounter){	
 		
 		Element atomicSoundComponentElement = doc.createElement(elementName);				
 		atomicSoundComponentElement.setAttribute("Type", atomicSoundComponent.getType());
@@ -56,7 +56,7 @@ public class Exporter {
 		return atomicSoundComponentElement;
 	}
 	
-	public Element getCompositeSoundComponentElement(Document doc, CompositeSoundComponent compositeSoundComponent, String elementName, int componentCounter){	
+	public static Element getCompositeSoundComponentElement(Document doc, CompositeSoundComponent compositeSoundComponent, String elementName, int componentCounter){	
 
 		Element compositeSoundComponentElement = doc.createElement(elementName);		
 		compositeSoundComponentElement.setAttribute("Name", compositeSoundComponent.getName());
@@ -64,7 +64,7 @@ public class Exporter {
 		return compositeSoundComponentElement;
 	}
 	
-	public Element getLinkElement(Document doc, Link link, HashMap<SoundComponent,Integer> componentsHashMap){
+	public static Element getLinkElement(Document doc, Link link, HashMap<SoundComponent,Integer> componentsHashMap){
 		Element linkElement = doc.createElement("Link");
 	
 		linkElement.setAttribute("SourceComponent", Integer.toString(componentsHashMap.get(link.getSource().getComponent())));

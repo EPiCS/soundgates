@@ -40,7 +40,7 @@ import soundgates.impl.SoundgatesFactoryImpl;
 
 public class PatchImporter{
 	
-	public Patch getPatchXML(String filePath) {
+	public static Patch getPatchXML(String filePath) {
 		try {
 
 				File file = new File(filePath);
@@ -148,7 +148,7 @@ public class PatchImporter{
 		return null;
 	}
 	
-	public void createPatchFromXML(String newFilePath, String patchFile, String newFileName) throws IOException {  
+	public static void createPatchFromXML(String newFilePath, String patchFile, String newFileName) throws IOException {  
 		  Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		  Map<String, Object> m = reg.getExtensionToFactoryMap();
 		  m.put(".soundgates_diagram", new SoundgatesFactoryImpl());
