@@ -12,14 +12,16 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import soundgates.codegen.Codegen;
+import soundgates.codegen.CodeGenHelper;
+import soundgates.codegen.simulation.Codegen;
+
 
 public class StartSimulationHandler extends AbstractHandler {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
@@ -35,7 +37,7 @@ public class StartSimulationHandler extends AbstractHandler {
 					Codegen codegen = new Codegen();
 					
 					try {
-						codegen.generate(modelFile);
+						codegen.generate(CodeGenHelper.getPatch(modelFile.getFullPath().toOSString()), project);
 						modelFile.getParent().refreshLocal(1, null);
 						ControlDialog dialog = new ControlDialog(HandlerUtil.getActiveShell(event));
 
