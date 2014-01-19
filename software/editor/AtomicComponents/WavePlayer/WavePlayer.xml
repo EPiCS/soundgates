@@ -1,18 +1,47 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>WavePlayer</Type>
 	<Ports>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Trigger"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
-		<StringProperty Name="FileName" InitialValue=""/>
+		<BooleanProperty InitialValue="true" Name="Play"/>		
+		<UserStringProperty InitialValue="C:\file.wav" Name="FileName"/>
 	</Properties>
 	<Code>
 		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<PortMapping PortName="Trigger" PortNumber="0"/>
+		<PortMapping PortName="Output" PortNumber="0"/>
+		<PropMapping PropName="FileName" Tag="@FileName"/>
+		<PD>#N canvas 591 111 450 300 10;&#13;
+#X text 109 9 replace 4 FileName;&#13;
+#X msg 87 91 open @FileName ;&#13;
+#X text 131 48 click here to open wav file;&#13;
+#X text 204 98 click here once file is open;&#13;
+#X msg -3 129 start;&#13;
+#X obj 87 129 readsf~ 1;&#13;
+#X obj 86 175 outlet~;&#13;
+#X obj 18 26 loadbang;&#13;
+#X text 28 219 outports Output;&#13;
+#X obj -20 82 delay;&#13;
+#X connect 1 0 5 0;&#13;
+#X connect 4 0 5 0;&#13;
+#X connect 5 0 6 0;&#13;
+#X connect 5 1 1 0;&#13;
+#X connect 5 1 9 0;&#13;
+#X connect 7 0 1 0;&#13;
+#X connect 7 0 9 0;&#13;
+#X connect 9 0 4 0;&#13;
+</PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="smplply">
+				<PortMapping PortName="Trigger" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="smplply">
+				<PortMapping PortName="Trigger" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

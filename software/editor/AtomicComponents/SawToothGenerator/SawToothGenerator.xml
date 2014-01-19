@@ -1,18 +1,36 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>SawToothGenerator</Type>
 	<Ports>
-		<Port Name="Frequency" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Frequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
 		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<PortMapping PortName="Frequency" PortNumber="0"/><PortMapping PortName="Output" PortNumber="0"/><PD>#N canvas 2332 509 744 650 12;&#13;
+#X obj 75 133 *~ 2;&#13;
+#X obj 75 163 -~ 1;&#13;
+#X text 0 0 inports Frequency;&#13;
+#X text 0 0 outports Output;&#13;
+#X text 76 12;&#13;
+#X obj 75 203 outlet~;&#13;
+#X obj 76 69 inlet;&#13;
+#X obj 76 103 phasor~;&#13;
+#X connect 0 0 1 0;&#13;
+#X connect 1 0 5 0;&#13;
+#X connect 6 0 7 0;&#13;
+#X connect 7 0 0 0;&#13;
+</PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="nco_saw">
+				<PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="nco_saw">
+			    <PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

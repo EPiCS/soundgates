@@ -1,18 +1,51 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>SquareGenerator</Type>
 	<Ports>
-		<Port Name="Frequency" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Frequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
 		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<PortMapping PortName="Frequency" PortNumber="0"/><PortMapping PortName="Output" PortNumber="0"/><PD>#N canvas 16 298 677 614 12;&#13;
+#X obj 116 116 * -1;&#13;
+#X msg 188 119 0;&#13;
+#X obj 58 159 phasor~;&#13;
+#X obj 159 157 phasor~;&#13;
+#X msg 237 119 0.5;&#13;
+#X obj 97 224 -~ 1;&#13;
+#X obj 96 197 +~;&#13;
+#X text 0 0 inports Frequency;&#13;
+#X text 0 0 outports Output;&#13;
+#X obj 239 48 loadbang;&#13;
+#X obj 99 360 outlet~;&#13;
+#X obj 63 60 inlet;&#13;
+#X obj 199 82 trigger bang;&#13;
+#X connect 0 0 3 0;&#13;
+#X connect 1 0 2 1;&#13;
+#X connect 2 0 6 0;&#13;
+#X connect 3 0 6 1;&#13;
+#X connect 4 0 3 1;&#13;
+#X connect 5 0 10 0;&#13;
+#X connect 6 0 5 0;&#13;
+#X connect 9 0 12 0;&#13;
+#X connect 11 0 0 0;&#13;
+#X connect 11 0 2 0;&#13;
+#X connect 11 0 12 0;&#13;
+#X connect 12 0 4 0;&#13;
+#X connect 12 0 1 0;&#13;
+#X connect 12 0 0 0;&#13;
+</PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="nco_sq">
+				<PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="nco_sq">
+			    <PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

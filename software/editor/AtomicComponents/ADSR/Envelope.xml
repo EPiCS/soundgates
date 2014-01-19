@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Envelope</Type>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Attack"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Decay"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Sustain"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Release"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Trigger"/>
+		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation>
+			<PortMapping PortName="SoundIn" PortNumber="0"/>
+			<PortMapping PortName="Attack" PortNumber="1"/>
+			<PortMapping PortName="Decay" PortNumber="2"/>
+			<PortMapping PortName="Sustain" PortNumber="3"/>
+			<PortMapping PortName="Release" PortNumber="4"/>
+			<PortMapping PortName="Trigger" PortNumber="5"/>
+			<PortMapping PortName="SoundOut" PortNumber="0"/>
+		<PD>
+		</PD>
+		</Simulation>
+		<Device>
+			<Implementation type="hw" name="adsr">
+				<PortMapping PortName="SoundIn" PortNumber="0"/>
+				<PortMapping PortName="Attack" PortNumber="1"/>
+				<PortMapping PortName="Decay" PortNumber="2"/>
+				<PortMapping PortName="Sustain" PortNumber="3"/>
+				<PortMapping PortName="Release" PortNumber="4"/>
+				<PortMapping PortName="Trigger" PortNumber="5"/>
+				<PortMapping PortName="SoundOut" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="adsr">
+				<PortMapping PortName="SoundIn" PortNumber="0"/>
+				<PortMapping PortName="Attack" PortNumber="1"/>
+				<PortMapping PortName="Decay" PortNumber="2"/>
+				<PortMapping PortName="Sustain" PortNumber="3"/>
+				<PortMapping PortName="Release" PortNumber="4"/>
+				<PortMapping PortName="Trigger" PortNumber="5"/>
+				<PortMapping PortName="SoundOut" PortNumber="0"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

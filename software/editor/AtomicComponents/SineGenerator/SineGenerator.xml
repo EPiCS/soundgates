@@ -1,18 +1,31 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>SineGenerator</Type>
 	<Ports>
-		<Port Name="Frequency" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Frequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
 		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<PortMapping PortName="Frequency" PortNumber="0"/><PortMapping PortName="Output" PortNumber="0"/><PD>#N canvas 621 551 450 300 10;
+#X obj 61 115 outlet~;
+#X obj 60 15 inlet;
+#X obj 60 60 osc~;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X text 0 0 inports Frequency;
+#X text 0 0 outports Output;
+</PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="sine">
+				<PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="sine">
+			    <PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

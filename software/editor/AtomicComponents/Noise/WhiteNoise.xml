@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>WhiteNoise</Type>
+	<Ports>
+		<Port DataType="SOUND" Direction="OUT" Name="Samples"/>
+	</Ports>
+	<Code>
+		<Simulation>
+		<PortMapping PortName="Samples" PortNumber="0"/><PD></PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="noise">
+				<PortMapping PortName="Samples" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="noise">
+			    <PortMapping PortName="Samples" PortNumber="0"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

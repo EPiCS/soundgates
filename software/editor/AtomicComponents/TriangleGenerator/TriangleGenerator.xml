@@ -1,18 +1,59 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>TriangleGenerator</Type>
 	<Ports>
-		<Port Name="Frequency" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Frequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
 		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<PortMapping PortName="Frequency" PortNumber="0"/><PortMapping PortName="Output" PortNumber="0"/><PD>#N canvas 642 287 681 618 12;&#13;
+#X obj 116 116 * -1;&#13;
+#X msg 190 115 0;&#13;
+#X obj 58 159 phasor~;&#13;
+#X obj 159 157 phasor~;&#13;
+#X obj 59 199 *~ 2;&#13;
+#X obj 58 226 -~ 1;&#13;
+#X obj 57 254 clip~ 0 1;&#13;
+#X obj 159 202 *~ 2;&#13;
+#X obj 158 229 -~ 1;&#13;
+#X obj 157 257 clip~ 0 1;&#13;
+#X obj 105 308 +~;&#13;
+#X text 32 23 inports Frequency;&#13;
+#X text 20 3 outports Output;&#13;
+#X obj 33 47 inlet;&#13;
+#X obj 202 22 loadbang;&#13;
+#X obj 105 357 outlet~;&#13;
+#X obj 152 67 trigger bang;&#13;
+#X connect 0 0 3 0;&#13;
+#X connect 1 0 3 1;&#13;
+#X connect 1 0 2 1;&#13;
+#X connect 2 0 4 0;&#13;
+#X connect 3 0 7 0;&#13;
+#X connect 4 0 5 0;&#13;
+#X connect 5 0 6 0;&#13;
+#X connect 6 0 10 0;&#13;
+#X connect 7 0 8 0;&#13;
+#X connect 8 0 9 0;&#13;
+#X connect 9 0 10 1;&#13;
+#X connect 10 0 15 0;&#13;
+#X connect 13 0 0 0;&#13;
+#X connect 13 0 2 0;&#13;
+#X connect 13 0 16 0;&#13;
+#X connect 14 0 16 0;&#13;
+#X connect 16 0 0 0;&#13;
+#X connect 16 0 1 0;&#13;
+</PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="nco_tri">
+				<PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="nco_tri">
+			    <PortMapping PortName="Frequency" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="0"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

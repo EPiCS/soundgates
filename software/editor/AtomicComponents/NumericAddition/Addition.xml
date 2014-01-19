@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Addition</Type>
+	<Ports>
+		<Port DataType="FLOAT" Direction="IN" Name="Summand1"/>
+		<Port DataType="FLOAT" Direction="IN" Name="Summand2"/>
+		<Port DataType="FLOAT" Direction="OUT" Name="Result"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation>
+		<PortMapping PortName="Summand1" PortNumber="0"/>
+		<PortMapping PortName="Summand2" PortNumber="1"/>
+		<PortMapping PortName="Result" PortNumber="0"/>
+		<PD>#N canvas 2 79 450 300 10;&#13;
+#X obj 62 19 inlet;&#13;
+#X obj 62 103 outlet;&#13;
+#X obj 120 18 inlet;&#13;
+#X obj 74 76 +;&#13;
+#X text 0 0 inports Summand1 Summand2;&#13;
+#X text 0 0 outports Result;&#13;
+#X obj 138 47 trigger bang;&#13;
+#X connect 0 0 3 0;&#13;
+#X connect 0 0 6 0;&#13;
+#X connect 2 0 3 1;&#13;
+#X connect 2 0 6 0;&#13;
+#X connect 3 0 1 0;&#13;
+#X connect 6 0 3 0;&#13;
+</PD></Simulation>
+		<Device>
+			<Implementation type="hw" name="add">
+				<PortMapping PortName="Summand1" PortNumber="0"/>
+				<PortMapping PortName="Summand2" PortNumber="1"/>
+				<PortMapping PortName="Result" PortNumber="0"/>
+			</Implementation>
+			<Implementation type="sw" name="add">
+			    <PortMapping PortName="Summand1" PortNumber="0"/>
+				<PortMapping PortName="Summand2" PortNumber="1"/>
+				<PortMapping PortName="Result" PortNumber="0"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>
