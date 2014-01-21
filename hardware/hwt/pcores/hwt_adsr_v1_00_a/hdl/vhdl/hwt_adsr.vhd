@@ -19,8 +19,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-library proc_common_v3_00_a;
-use proc_common_v3_00_a.proc_common_pkg.all;
+--library proc_common_v3_00_a;
+--use proc_common_v3_00_a.proc_common_pkg.all;
 
 library reconos_v3_00_c;
 use reconos_v3_00_c.reconos_pkg.all;
@@ -79,15 +79,12 @@ architecture Behavioral of hwt_adsr is
             rst         : in  std_logic;
             ce          : in  std_logic;
             input_wave  : in  signed(31 downto 0);
-            start       : in  std_logic;
-            stop        : in  std_logic;
+            start       : in  std_logic_vector;
+            stop        : in  std_logic_vector;
             attack      : in  signed(31 downto 0); 
             decay       : in  signed(31 downto 0);  
+            sustain     : in  signed(31 downto 0);  
             release     : in  signed(31 downto 0);
-            start_amp   : in  signed(31 downto 0);
-            attack_amp  : in  signed(31 downto 0);
-            sustain_amp : in  signed(31 downto 0);
-            release_amp : in  signed(31 downto 0);
             wave        : out signed(31 downto 0)
            );
     end component adsr;
@@ -108,18 +105,18 @@ architecture Behavioral of hwt_adsr is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_REFRESH, STATE_REFRESH_RELEASE, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_REFRESH, STATE_READ, STATE_REFRESH_RELEASE, STATE_CHECK_BANG, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 1024;
+    constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 6;--clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
@@ -154,15 +151,15 @@ architecture Behavioral of hwt_adsr is
     
     signal input_data       : signed(31 downto 0);
     signal adsr_data        : signed(31 downto 0);
-    signal start            : std_logic;
-    signal stop             : std_logic;
     
-    signal refresh_state    : unsigned(2 downto 0);
-    signal process_state    : unsigned(2 downto 0);
-    signal bang_state       : unsigned(2 downto 0);
+    signal refresh_state    : integer range 0 to 4;
+    signal process_state    : integer range 0 to 2;
+    signal bang_state       : integer range 0 to 1;
     
     signal bang_addr             : std_logic_vector(31 downto 0);
-    signal bang_stop_addr        : std_logic_vector(31 downto 0);
+    signal stop_addr             : std_logic_vector(31 downto 0);
+    signal start                 : std_logic_vector(31 downto 0);
+    signal stop                  : std_logic_vector(31 downto 0);
     signal atck_dura_addr        : std_logic_vector(31 downto 0);
     signal dcay_dura_addr        : std_logic_vector(31 downto 0);
     signal rlse_dura_addr        : std_logic_vector(31 downto 0);
@@ -171,15 +168,15 @@ architecture Behavioral of hwt_adsr is
     signal sust_amp_addr         : std_logic_vector(31 downto 0);
     signal rlse_amp_addr         : std_logic_vector(31 downto 0);
 
-    signal bang             : signed(31 downto 0);
-    signal bang_stop        : signed(31 downto 0);
-    signal atck_dura        : signed(31 downto 0);
-    signal dcay_dura        : signed(31 downto 0);
-    signal rlse_dura        : signed(31 downto 0);
-    signal strt_amp         : signed(31 downto 0);
-    signal atck_amp         : signed(31 downto 0);
-    signal sust_amp         : signed(31 downto 0);
-    signal rlse_amp         : signed(31 downto 0);
+    signal bang             : std_logic_vector(31 downto 0);
+    signal bang_stop        : std_logic_vector(31 downto 0);
+    signal atck_dura        : std_logic_vector(31 downto 0);
+    signal dcay_dura        : std_logic_vector(31 downto 0);
+    signal rlse_dura        : std_logic_vector(31 downto 0);
+    signal strt_amp         : std_logic_vector(31 downto 0);
+    signal atck_amp         : std_logic_vector(31 downto 0);
+    signal sust_amp         : std_logic_vector(31 downto 0);
+    signal rlse_amp         : std_logic_vector(31 downto 0);
     
     
     
@@ -199,7 +196,7 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_adsr <= std_logic_vector(adsr_data);
+--    o_RAMData_adsr <= std_logic_vector(adsr_data);
     
     
     
@@ -248,16 +245,13 @@ begin
             clk         => clk,
             rst         => rst,
             ce          => adsr_ce,
-            input_wave  => input_data,
+            input_wave  => signed(input_data),
             start       => start,
             stop        => stop,
-            attack      => atck_dura,
-            decay       => dcay_dura, 
-            release     => rlse_dura,
-            start_amp   => strt_amp,
-            attack_amp  => atck_amp,
-            sustain_amp => sust_amp,
-            release_amp => rlse_amp,
+            attack      => signed(atck_dura),
+            decay       => signed(dcay_dura),
+            sustain     => signed(sust_amp), 
+            release     => signed(rlse_dura),
             wave        => adsr_data
             );
             
@@ -277,8 +271,8 @@ begin
 		if (rising_edge(clk)) then		
 			if (o_RAMWE_adsr = '1') then
 				local_ram(to_integer(unsigned(o_RAMAddr_adsr))) := o_RAMData_adsr;
-            --else      -- else not needed, because adsr is not consuming any samples
-			--	i_RAMData_adsr <= local_ram(conv_integer(unsigned(o_RAMAddr_adsr)));
+         else      -- else needed, because adsr is  consuming  samples
+				i_RAMData_adsr <= local_ram(to_integer(unsigned(o_RAMAddr_adsr)));
 			end if;
 		end if;
 	end process;
@@ -299,19 +293,13 @@ begin
             
             
             adsr_ce     <= '0';
-            start       <= '0';
-            stop        <= '0';
-            attack      <= (others => '0');
-            decay       <= (others => '0');
-            release     <= (others => '0');
-            start_amp   <= (others => '0');
-            attack_amp  <= (others => '0');
-            sustain_amp <= (others => '0');
-            release_amp <= (others => '0');
+            start       <= (others => '0');
+            stop        <= (others => '0');
             o_RAMWE_adsr<= '0';
 
             refresh_state <= 0;
             process_state <= 0;
+				bang_state 	  <= 0;
             bang        <= (others => '0');
             
             done := False;
@@ -361,99 +349,108 @@ begin
                 
                 -- Refresh your signals
                 case refresh_state is
-                when "0" =>
+                when 0 =>
                     memif_read_word(i_memif, o_memif, atck_dura_addr, atck_dura, done);
                     if done then
-                        refresh_state <= "1";
+                        refresh_state <= 1;
                     end if;
-                when "1" =>
+                when 1 =>
                     memif_read_word(i_memif, o_memif, dcay_dura_addr, dcay_dura, done);
                     if done then
-                        refresh_state <= "2";
+                        refresh_state <= 2;
                     end if;
-                when "2" =>
+                when 2 =>
                     memif_read_word(i_memif, o_memif, strt_amp_addr, strt_amp, done);
                     if done then
-                        refresh_state <= "3";
+                        refresh_state <= 3;
                     end if;
-                when "3" =>
+                when 3 =>
                     memif_read_word(i_memif, o_memif, atck_amp_addr, atck_amp, done);
                     if done then
-                        refresh_state <= "4";
+                        refresh_state <= 4;
                     end if;
-                when "4" =>
+                when 4 =>
                     memif_read_word(i_memif, o_memif, sust_amp_addr, sust_amp, done);
                     if done then
-                        refresh_state <= "0";
+                        refresh_state <= 0;
                         state <= STATE_PROCESS;
                     end if;
             end case;
             
             when STATE_REFRESH_RELEASE => 
-                stop <= '0';   
+                stop <= (others => '0'); 
                 case refresh_state is
-                    when "0" => 
+                    when 0 => 
                         memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
                         if done then
-                            refresh_state <= "1";
+                            refresh_state <= 1;
                         end if;
-                    when "1" =>
+                    when 1 =>
                         memif_read_word(i_memif, o_memif, rlse_dura_addr, rlse_dura, done);
                         if done then
-                            refresh_state <= "0";
+                            refresh_state <= 0;
                             state <= STATE_PROCESS;
                         end if;
+						  when others =>
+						      refresh_state <= 0;
                 end case;
 
             when STATE_CHECK_BANG =>    
                 case bang_state is                
-                    when "0" =>
+                    when 0 =>
                         memif_read_word(i_memif, o_memif, bang_addr, bang, done);
                         if done then
                             if bang = C_START_BANG then
-                                bang_state <= "1";
-                                start <= '1';
+                                bang_state <= 1;
+                                start <= (others => '1');
                                 state <= STATE_REFRESH;
                             else
                                 state <= STATE_WAITING;
                             end if;
                         end if;
  
-                    when "1" =>
-                        memif_read_word(i_memif, o_memif, bang_stop_addr, bang_stop, done);
+                    when 1 =>
+                        memif_read_word(i_memif, o_memif, stop_addr, bang_stop, done);
                         if done then
                             if (bang_stop = C_STOP_BANG) then
-                                bang_state <= "0";
-                                stop <= '1';
+                                bang_state <= 0;
+                                stop <= (others => '1');
                                 state <= STATE_REFRESH_RELEASE;
                             else
                                 state <= STATE_REFRESH;
                             end if;
                         end if;
 						end case;
+						
+				when STATE_READ => 
+					-- store input samples in local ram
+					memif_read(i_ram,o_ram,i_memif,o_memif,snd_comp_header.source_addr,X"00000000",std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)),done);
+					if done then
+						state <= STATE_PROCESS;
+					end if;
 
             when STATE_PROCESS =>
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
                    
                     case process_state is
 
-                    when "0" => 
+                    when 0 => 
                         adsr_ce        <= '1';
-                        process_state  <= "1";
+                        process_state  <= 1;
 
-                    when "1" => 
+                    when 1 => 
                         o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
                         o_RAMWE_adsr   <= '1';
 
                         adsr_ce        <= '0';
-                        process_state  <= "2";       
+                        process_state  <= 2;       
 
-                    when "2" =>
+                    when 2 =>
                         o_RAMWE_adsr   <= '0';
                         o_RAMAddr_adsr <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
                         sample_count  <= sample_count + 1;
 
-                        process_state  <= "0";  
+                        process_state  <= 0;  
                     end case;
 
                 else
