@@ -25,6 +25,18 @@
 #include "core/HWThreadManager.h"
 
 #include "utils/SoundComponenLoader.h"
+#ifdef ZYNQ
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <reconos/reconos.h>
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
 
 
 class Patch;

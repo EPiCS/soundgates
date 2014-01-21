@@ -41,8 +41,15 @@ void Patch::createSoundComponent(int uid, const std::string& type, std::vector<s
 	SoundComponents::ImplType impltype;
 
 	SoundComponentLoader& loader = SoundComponentLoader::getInstance();
+	if(Synthesizer::config::useHWThreads){
+	    /* Create hw threads if demanded */
+	    impltype = (slot < 0) ? SoundComponents::SW : SoundComponents::HW;
 
-	impltype = (slot < 0) ? SoundComponents::SW : SoundComponents::HW;
+	}else{
+	    /* ignore hw threads */
+	    impltype = SoundComponents::SW;
+	}
+
 
 	if(impltype == SoundComponents::HW){
 	    HWThreadManager::getInstance().declareSlot(type, slot);
@@ -164,6 +171,10 @@ void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
 void Patch::initialize(void){
 
+    #ifdef ZYNQ
+    reconos_init();
+    #endif
+
 
 	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
 	        iter != m_ComponentsVector.end(); ++iter ){
@@ -176,13 +187,11 @@ void Patch::initialize(void){
 	jobIter         = m_ComponentsVector.begin();
 	jobsToProcess   = m_ComponentsVector.size();
 	m_PatchState    = Synthesizer::state::initialized;
-
 }
 
 void Patch::run(){
 
     if(Synthesizer::state::created == m_PatchState){
-
         initialize();
     }
 
@@ -191,7 +200,8 @@ void Patch::run(){
 		m_PatchState = Synthesizer::state::running;
 
 		for(unsigned int i = 0; i < m_MaxWorkerThreads; i++){
-		    LOG_DEBUG("Creating worker thread: " << i)
+		    LOG_DEBUG("Creating worker thread: " << i);
+
 		    SoundComponentWorker worker(PatchPtr(this));
 		    m_WorkerThreads.create_thread(worker);
 		}
@@ -235,6 +245,10 @@ void Patch::dispose(){
 
     /* stop path */
     this->stop();
+
+    #ifdef ZYNQ
+    reconos_cleanup();
+    #endif
 
     for (vector<BufferedLinkPtr>::iterator iter = m_BufferedLinksVector.begin();
                 iter != m_BufferedLinksVector.end(); ++iter) {

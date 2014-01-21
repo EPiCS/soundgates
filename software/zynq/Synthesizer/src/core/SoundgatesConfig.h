@@ -15,7 +15,7 @@ using std::string;
 
 typedef enum
 {
-	CFG_SOUND_BUFFER_SIZE = 0, CFG_ALSA_CHUNKS, CFG_SAMPLE_RATE, CFG_NUM_CONFIG_FIELDS
+	CFG_SOUND_BUFFER_SIZE = 0, CFG_ALSA_CHUNKS, CFG_SAMPLE_RATE, CFG_NUM_CONFIG_FIELDS,
 } SoundgatesConfValue;
 
 class SoundgatesConfig
