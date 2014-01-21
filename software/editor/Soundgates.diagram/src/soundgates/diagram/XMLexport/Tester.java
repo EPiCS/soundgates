@@ -1,5 +1,6 @@
 package soundgates.diagram.XMLexport;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,17 +16,17 @@ import soundgates.Patch;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.diagram.messageDialogs.MessageDialogs;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class Tester {
 	
-	Patch patchToTest;
-	
+	String projectPath = AtomicSoundComponentLibrary.getProjectPath();
 	LinkedList<String> ioComponentNames = new LinkedList<>();
 	LinkedList<AtomicSoundComponent> ioComponents = new LinkedList<>();
 	LinkedList<CompositeSoundComponent> compositeSoundComponents =
 			new LinkedList<CompositeSoundComponent>();
-	
+
 	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
 		
 		LinkedList<Link> links = new LinkedList<>();
@@ -122,6 +123,17 @@ public class Tester {
 				
 			ioComponentNames.add(atomicSoundComponent.getName());			
 		}		
+		
+		if (atomicSoundComponent.getType().equals("WavePlayer")){
+			// test file references
+			String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
+			String filePath = projectPath+"/"+relativeFileName;
+			File testFile = new File(filePath);
+			if(!testFile.exists()){
+				MessageDialogs.fileNotFound(filePath);
+				return false;
+			}
+		}
 		
 		// test ports
 		for(Port port : atomicSoundComponent.getPorts()){			

@@ -147,4 +147,8 @@ public class MessageDialogs {
 		MessageDialog.openWarning(null, "The minimum value of the IO component "+name+" is greater than its maximum value.","Please set correct values for the IO component "+name);		
 	}
 
+	public static void fileNotFound(String filePath) {
+		MessageDialog.openWarning(null, "File not found","File "+filePath+" not found");
+	}
+
 }

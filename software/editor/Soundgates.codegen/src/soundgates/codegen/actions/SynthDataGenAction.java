@@ -36,6 +36,7 @@ public class SynthDataGenAction implements IObjectActionDelegate{
 			SynthDataGen dataGen = new SynthDataGen();
 			
 			try {
+				String projectPath = file.getProject().getLocation().toPortableString();
 				
 				Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
 						
@@ -43,8 +44,8 @@ public class SynthDataGenAction implements IObjectActionDelegate{
 				if(tester.testPatch(patch) == false)
 					return;				
 				
-				// export TGF file and project as zip
-				dataGen.generateSynthData(patch, file);			
+				// export TGF file and project as zip				
+				dataGen.generateSynthData(patch, file, projectPath);			
 				
 			} catch (Exception e) {				
 				e.printStackTrace();

@@ -15,6 +15,7 @@ public class AtomicSoundComponentLibrary{
 	private static AtomicSoundComponentLibrary instance;
 	private TreeMap<String, AtomicSoundComponent> components;
 	private static IFolder xmlfolder;
+	private static String projectPath;
 
 	public static AtomicSoundComponentLibrary getInstance() {
 		if (instance == null) {
@@ -71,10 +72,15 @@ public class AtomicSoundComponentLibrary{
 	public static void setXMLFolder(IFolder folder) {
 		instance = null;
 		xmlfolder = folder;
+		projectPath = folder.getProject().getLocation().toPortableString();
 	}
 	
 	public static IFolder getXMLFolder() {
 		return xmlfolder;
+	}
+	
+	public static String getProjectPath() {
+		return projectPath;
 	}
 }
 

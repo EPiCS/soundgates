@@ -32,12 +32,15 @@ public class SynthDataGen {
 	private HashMap<String, String> fileNamesHashes; //original file name, hashed name
 	private int uniqueCounter = 0;
 	private int hwSlot = 0;
+	private String projectPath;
+	public final static String binariesFolderName="binaries";
 	
-	public void generateSynthData(Patch patch, IFile file){
+	public void generateSynthData(Patch patch, IFile file, String projectPath){
 		SynthData synthData = new SynthData();
 		uniqueIds = new HashMap<SoundComponent, Integer>();
 		implTypes = new HashMap<SoundComponent, String>();
 		fileNamesHashes = new HashMap<String, String>();
+		this.projectPath = projectPath;
 
 		boolean compositesUnrolled = false;		
 		while(!compositesUnrolled){
@@ -74,11 +77,11 @@ public class SynthDataGen {
 			newFile.create(code, IResource.FORCE, null);			
 			
 			// export tgf and project as zip
-			String zipFileName = file.getParent().getLocation().toPortableString() + "/" + file.getName().replace(".soundgates_diagram", ".zip");
+			String zipFileName = projectPath + "/" + file.getName().replace(".soundgates_diagram", ".zip");
 			ZipExporter zipExporter = new ZipExporter(zipFileName);			
-			zipExporter.zipFileIntoFolder(newFile.getLocation().toPortableString(), newFile.getName(), "TGF");			
+			zipExporter.zipFile(newFile.getLocation().toPortableString(), newFile.getName());			
 			for(String fileName : fileNamesHashes.keySet()){
-				zipExporter.zipFileIntoFolder(fileName, fileNamesHashes.get(fileName), "Binaries");
+				zipExporter.zipFileIntoFolder(fileName, fileNamesHashes.get(fileName), binariesFolderName);
 			}
 			zipExporter.close();
 			
@@ -105,61 +108,13 @@ public class SynthDataGen {
 		String implType = getBestImplementationType(atomicSoundComponent);		
 
 		if(atomicSoundComponent.getType().equals("IO")){
-			
-			/*  Format: 
-			 *   
-			 *  input/sw/'/BeatLevel \"f\" [0:800]'
-			 * 
-			 */
-			
-			String oscAddress = atomicSoundComponent.getName();
-			String oscDataType = atomicSoundComponent.getPorts().get(0).getDataType().getName();				
-			String range = "[" + atomicSoundComponent.getFloatProperties().get("MinValue") +
-					       ":" + atomicSoundComponent.getFloatProperties().get("MaxValue") +
-					       "]";
-			
-			data.addIOComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, "", hwSlot, oscAddress, oscDataType, range);
+			addIOComponentToData(data,atomicSoundComponent,type,implName,implType);					
+		}		
+		else if(atomicSoundComponent.getType().equals("WavePlayer")){
+			addWavePlayerComponentToData(data, atomicSoundComponent, type, implName, implType);
 		}
-		
-		else{
-			
-
-			
-			// save the file patch from the wave player component into the hash map with its hash value 
-			// replace it with the hashed file path
-			if(atomicSoundComponent.getType().equals("WavePlayer")){
-				/*  Example: 
-				 *   
-				 *  fileName = "wave\file.wav"
-				 *  id = "_2ZvxcIEcEeO2Uor-dy1FkA"
-				 *  newFileName = "_2ZvxcIEcEeO2Uor-dy1FkA_file.wav"
-				 */
-				String fileName = atomicSoundComponent.getUserStringProperties().get("FileName");
-				File tmpFile = new File(fileName);
-				String id = getIdOfAtomicSoundComponent(atomicSoundComponent);
-				String newFileName = id +"_" + tmpFile.getName();
-				
-				fileNamesHashes.put(fileName, newFileName);
-				
-				atomicSoundComponent.getUserStringProperties().put("FileName", newFileName);
-			}
-			
-			StringBuffer values = new StringBuffer();	
-			int floatPropertiesSize = atomicSoundComponent.getFloatProperties().size();
-			for(int i=0; i<floatPropertiesSize; i++){
-				values.append(atomicSoundComponent.getFloatProperties().get(i).getValue().toString());
-				if(i!=floatPropertiesSize-1)
-					values.append(",");
-			}
-			int userStringPropertiesSize = atomicSoundComponent.getUserStringProperties().size();
-			for(int i=0; i<userStringPropertiesSize; i++){
-				values.append(atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());
-				if(i!=userStringPropertiesSize-1)
-					values.append(",");
-			}
-			String value=values.toString();
-			
-			data.addComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, value, hwSlot);
+		else{			
+			addStandardComponentToData(data, atomicSoundComponent, type, implName, implType);
 		}
 		
 		implTypes.put(atomicSoundComponent, implType);
@@ -167,6 +122,73 @@ public class SynthDataGen {
 			hwSlot++;
 			
 		return data;
+	}
+	
+	public String generateValueString(AtomicSoundComponent atomicSoundComponent){
+		StringBuffer values = new StringBuffer();	
+		int floatPropertiesSize = atomicSoundComponent.getFloatProperties().size();
+		for(int i=0; i<floatPropertiesSize; i++){
+			values.append(atomicSoundComponent.getFloatProperties().get(i).getValue().toString());
+			if(i!=floatPropertiesSize-1)
+				values.append(",");
+		}
+		int userStringPropertiesSize = atomicSoundComponent.getUserStringProperties().size();
+		for(int i=0; i<userStringPropertiesSize; i++){
+			values.append(atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());
+			if(i!=userStringPropertiesSize-1)
+				values.append(",");
+		}
+		return values.toString();
+	}
+	
+	
+	public void addWavePlayerComponentToData(SynthData data, AtomicSoundComponent atomicSoundComponent, String type, String implName, String implType){
+		// save the file patch from the wave player component into the hash map with its hash value 
+		// replace it with the hashed file path	
+		
+		/*  Example: 
+		 *   
+		 *  fileName = "wave\file.wav"
+		 *  id = "_2ZvxcIEcEeO2Uor-dy1FkA"
+		 *  newFileName = "_2ZvxcIEcEeO2Uor-dy1FkA_file.wav"
+		 */
+		String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
+		String filePath = projectPath+"/"+relativeFileName;
+		File tmpFile = new File(filePath);
+		String id = getIdOfAtomicSoundComponent(atomicSoundComponent);
+		String newFileName = id +"_" + tmpFile.getName();				
+		
+		fileNamesHashes.put(filePath, newFileName);
+		
+		// for the tgf file
+		String newFileNameWithPath =  binariesFolderName+"/"+newFileName;
+		
+		atomicSoundComponent.getUserStringProperties().put("FileName",newFileNameWithPath);
+		
+		String value = generateValueString(atomicSoundComponent);			
+		data.addComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, value, hwSlot);
+	}
+	
+	public void addIOComponentToData(SynthData data, AtomicSoundComponent atomicSoundComponent, String type, String implName, String implType){
+		
+		/*  Format: 
+		 *   
+		 *  input/sw/'/BeatLevel \"f\" [0:800]'
+		 * 
+		 */
+		
+		String oscAddress = atomicSoundComponent.getName();
+		String oscDataType = atomicSoundComponent.getPorts().get(0).getDataType().getName();				
+		String range = "[" + atomicSoundComponent.getFloatProperties().get("MinValue") +
+				       ":" + atomicSoundComponent.getFloatProperties().get("MaxValue") +
+				       "]";
+		
+		data.addIOComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, "", hwSlot, oscAddress, oscDataType, range);
+	} 
+	
+	public void addStandardComponentToData(SynthData data, AtomicSoundComponent atomicSoundComponent, String type, String implName, String implType){
+		String value = generateValueString(atomicSoundComponent);			
+		data.addComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, value, hwSlot);
 	}
 	
 	public SynthData handleLink(Link link){
