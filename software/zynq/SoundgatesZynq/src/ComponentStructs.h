@@ -70,6 +70,10 @@ typedef struct {
 } sFIRComponentHeader;
 
 typedef struct {
+    int control_sound_in;
+} sArithmeticComponentHeader;
+
+typedef struct {
     int percentage;
 } sAmplifierComponentHeader;
 
