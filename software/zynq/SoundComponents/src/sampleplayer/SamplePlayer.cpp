@@ -15,10 +15,10 @@ EXPORT_SOUNDCOMPONENT_SW_ONLY(SamplePlayer);
 
 SamplePlayer::SamplePlayer(std::vector<std::string> params) : SoundComponentImpl(params) {
 
-    CREATE_AND_REGISTER_PORT2(SamplePlayer, In, ControlPort, Trigger, 1);
+    CREATE_AND_REGISTER_PORT3(SamplePlayer, In, ControlPort, Trigger, 1);
 
-    CREATE_AND_REGISTER_PORT2(SamplePlayer, Out, SoundPort, SoundOut_Left, 1);
-    CREATE_AND_REGISTER_PORT2(SamplePlayer, Out, SoundPort, SoundOut_Right, 2);
+    CREATE_AND_REGISTER_PORT3(SamplePlayer, Out, SoundPort, SoundOut_Left, 1);
+    CREATE_AND_REGISTER_PORT3(SamplePlayer, Out, SoundPort, SoundOut_Right, 2);
 }
 
 SamplePlayer::~SamplePlayer() { }

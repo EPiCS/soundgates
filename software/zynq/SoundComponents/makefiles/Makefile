@@ -8,7 +8,8 @@ SoundComponents += add \
 				  sine \
 				  output \
 				  square \
-				  dummysink
+				  dummysink \
+				sampleplayer 
 
 
 SRCDIR = ../src

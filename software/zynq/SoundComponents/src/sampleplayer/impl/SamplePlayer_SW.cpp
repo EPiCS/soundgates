@@ -202,8 +202,8 @@ void SamplePlayer_SW::init() {
     }
 
 
-    char* writeLeftPortPtr  = ((BufferedLink*) m_SoundOut_Left_1_Port->getLink())->getWriteBuffer();
-    char* writeRightPortPtr = ((BufferedLink*) m_SoundOut_Right_2_Port->getLink())->getWriteBuffer();
+    char* writeLeftPortPtr  = m_SoundOut_Left_1_Port->getWriteBuffer();
+    char* writeRightPortPtr = m_SoundOut_Right_2_Port->getWriteBuffer();
 
     memset(writeLeftPortPtr,  0, Synthesizer::config::bytesPerBlock);
     memset(writeRightPortPtr, 0, Synthesizer::config::bytesPerBlock);
@@ -217,8 +217,8 @@ void SamplePlayer_SW::init() {
 
 void SamplePlayer_SW::process() {
 
-    int* writeLeftPortPtr  = (int*)((BufferedLink*)m_SoundOut_Left_1_Port->getLink())->getWriteBuffer();
-    int* writeRightPortPtr = (int*)((BufferedLink*)m_SoundOut_Right_2_Port->getLink())->getWriteBuffer();
+    int* writeLeftPortPtr  = (int*)m_SoundOut_Left_1_Port->getWriteBuffer();
+    int* writeRightPortPtr = (int*)m_SoundOut_Right_2_Port->getWriteBuffer();
 
     int trigger = (int) m_Trigger_1_Port->pop();
 

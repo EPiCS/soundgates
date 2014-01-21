@@ -22,9 +22,9 @@ public:
 
     DECLARE_COMPONENTNAME;
 
-    DECLARE_PORT2(SoundPort, SoundOut_Left, 1);
-    DECLARE_PORT2(SoundPort, SoundOut_Right, 2);
-    DECLARE_PORT2(ControlPort, Trigger, 1);
+    DECLARE_PORT3(SoundPort, SoundOut_Left, 1);
+    DECLARE_PORT3(SoundPort, SoundOut_Right, 2);
+    DECLARE_PORT3(ControlPort, Trigger, 1);
 
     SamplePlayer(std::vector<std::string> params);
     virtual ~SamplePlayer();
