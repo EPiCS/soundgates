@@ -6,12 +6,12 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - signal_add.vhd
+--   title:        VHDL module - mul.vhd
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  adds up two samples
+--   description:  multiplies two samples
 --
 -- ======================================================================
     
@@ -23,7 +23,7 @@ use IEEE.MATH_REAL.ALL;
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
-entity signal_add is
+entity mul is
 port(                
         clk       : in  std_logic;
         rst       : in  std_logic;
@@ -33,16 +33,20 @@ port(
 	    output    : out signed(31 downto 0)
     );
 
-end signal_add;
+end mul;
 
-architecture Behavioral of signal_add is
+architecture Behavioral of mul is
+  
+  signal output64 : signed (63 downto 0);
   
 	begin
+	output <= output64(31 downto 0);
+	
 		adder : process (clk, rst, ce)
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    output <= wave1 + wave2;
+                    output64 <= wave1 * wave2;
                 end if;
             end if;
         end process;

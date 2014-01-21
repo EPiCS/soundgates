@@ -6,7 +6,7 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - signal_sub.vhd
+--   title:        VHDL module - sub.vhd
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
@@ -23,7 +23,7 @@ use IEEE.MATH_REAL.ALL;
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
-entity signal_sub is
+entity sub is
 port(                
         clk       : in  std_logic;
         rst       : in  std_logic;
@@ -33,9 +33,9 @@ port(
 	    output    : out signed(31 downto 0)
     );
 
-end signal_sub;
+end sub;
 
-architecture Behavioral of signal_sub is
+architecture Behavioral of sub is
   
 	begin
 		adder : process (clk, rst, ce)
