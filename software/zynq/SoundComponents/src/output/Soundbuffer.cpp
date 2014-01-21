@@ -166,7 +166,15 @@ void Soundbuffer::run()
 				{
 					fprintf(stderr, "write to audio interface failed (%s)\n",
 							snd_strerror(err));
-					this->running = 0;
+					if (err == -32)
+					{
+						bufferUnderrun = true;
+					}
+					else
+					{
+						// Some other error, not just a buffer underrun
+						this->running = 0;
+					}
 				}
 				this->mutex.unlock();
 
