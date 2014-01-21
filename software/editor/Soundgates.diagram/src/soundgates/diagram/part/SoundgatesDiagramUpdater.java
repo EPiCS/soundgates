@@ -7,9 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.gmf.runtime.diagram.ui.editpolicies.CanonicalEditPolicy;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.update.DiagramUpdater;
 
@@ -870,4 +872,14 @@ public class SoundgatesDiagramUpdater {
 		}
 	};
 
+	public static void refreshContainer(EObject container) throws ExecutionException {
+			List<CanonicalEditPolicy> editPolicies = CanonicalEditPolicy
+					.getRegisteredEditPolicies(container);
+			for (Iterator<CanonicalEditPolicy> it = editPolicies.iterator(); it.hasNext();) {
+				CanonicalEditPolicy nextEditPolicy = (CanonicalEditPolicy) it
+						.next();
+				nextEditPolicy.refresh();
+		}
+	}
+	
 }
