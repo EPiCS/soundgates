@@ -1,0 +1,9 @@
+# node
+
+1 noise/sw
+2 dac/sw
+
+# edges
+
+1 2 '1,1'
+

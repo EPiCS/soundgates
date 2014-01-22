@@ -3,9 +3,9 @@
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>NumericSubtraction</Type>
 	<Ports>
-		<Port Name="Minuend " Direction="IN" DataType="FLOAT"/>
-		<Port Name="Subtrahend" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Difference" Direction="OUT" DataType="FLOAT"/>
+		<Port Name="Minuend " Direction="IN" DataType="CONTROL"/>
+		<Port Name="Subtrahend" Direction="IN" DataType="CONTROL"/>
+		<Port Name="Difference" Direction="OUT" DataType="CONTROL"/>
 	</Ports>
 	<Properties>
 	</Properties>

@@ -1,0 +1,6 @@
+#N canvas 1440 49 958 1149 10;
+#X obj 168 205 dac~;
+#X msg 165 77 1;
+#X obj 146 124 sampleplayer_patch;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
