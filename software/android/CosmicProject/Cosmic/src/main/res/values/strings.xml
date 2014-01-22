@@ -30,5 +30,6 @@
     <string name="tilt">Tilt</string>
     <string name="shake">Shake</string>
     <string name="light">Light</string>
+    <string name="lightCalibrate">Calibrate</string>
 
 </resources>

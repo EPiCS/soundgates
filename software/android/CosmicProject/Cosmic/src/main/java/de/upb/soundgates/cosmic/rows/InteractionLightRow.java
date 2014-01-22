@@ -4,10 +4,12 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Observable;
 
+import de.upb.soundgates.cosmic.CosmicSensorManager;
 import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
@@ -22,6 +24,7 @@ public class InteractionLightRow implements InteractionRow {
 
     @Override
     public void update(Observable observable, Object o) {
+        final float p = (Float)o;
         if(holder != null) {
             // Using AsyncTask.onPostExecute to update UI (UI-Updates must happen on UI thread)
             new AsyncTask<Void, Void, Void>() {
@@ -31,7 +34,7 @@ public class InteractionLightRow implements InteractionRow {
                 }
                 @Override
                 protected void onPostExecute(Void result) {
-                    holder.luxValue.setText(msg.getTypes().get(0).value + " Lux");
+                    holder.luxValue.setText(100 * p + "% Intensity");
                 }
             }.execute();
         }
@@ -40,10 +43,12 @@ public class InteractionLightRow implements InteractionRow {
     private static class ViewHolder {
         final TextView msgText;
         final TextView luxValue;
+        final Button calibrate;
 
-        private ViewHolder(TextView msgText, TextView luxValue) {
+        private ViewHolder(TextView msgText, TextView luxValue, Button calibrate) {
             this.msgText = msgText;
             this.luxValue = luxValue;
+            this.calibrate= calibrate;
         }
     }
 
@@ -68,8 +73,18 @@ public class InteractionLightRow implements InteractionRow {
 
             holder = new ViewHolder(
                     (TextView) viewGroup.findViewById(R.id.msg),
-                    (TextView) viewGroup.findViewById(R.id.value)
+                    (TextView) viewGroup.findViewById(R.id.value),
+                    (Button) viewGroup.findViewById(R.id.calibrate)
             );
+
+            holder.calibrate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CosmicSensorManager csm = CosmicSensorManager.getInstance(null);
+                    if (csm != null)
+                        csm.calibrateLightSensor();
+                }
+            });
 
             viewGroup.setTag(holder);
 

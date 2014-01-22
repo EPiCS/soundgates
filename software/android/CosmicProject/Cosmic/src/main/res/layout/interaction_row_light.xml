@@ -2,31 +2,47 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="?android:attr/listPreferredItemHeight"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/msg"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
+        android:id="@+id/msg" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/light"/>
+        android:layout_height="fill_parent" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/value" />
-    </LinearLayout>
+            android:id="@+id/dummyText"
+            android:text="@string/light"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/value"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/dummyText"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true" />
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity = "right" >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="@string/lightCalibrate"
+                android:id="@+id/calibrate" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

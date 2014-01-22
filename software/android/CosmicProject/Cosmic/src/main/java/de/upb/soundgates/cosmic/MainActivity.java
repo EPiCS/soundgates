@@ -8,14 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.Locale;
 
 import de.upb.soundgates.cosmic.fragments.*;
-import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
@@ -74,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-        CosmicSensorManager csm = new CosmicSensorManager(this);
+        CosmicSensorManager csm = CosmicSensorManager.getInstance(this);
     }
 
     @Override

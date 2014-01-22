@@ -156,26 +156,9 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         if(msg.getTypes().size() == 1)
         {
-            switch(msg.getTypes().get(0).getTypeTag())
-            {
-                case 'i':
-                {
-                    OSCType<Integer> t = msg.getTypes().get(0);
-                    viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
-                    viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
-                    break;
-                }
-                case 'f':
-                {
-                    OSCType<Float> t = msg.getTypes().get(0);
-                    viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
-                    viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
-                    break;
-                }
-                default:
-                    Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
-                    return;
-            }
+            OSCType t = msg.getTypes().get(0);
+            viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
+            viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
         }
 
         View.OnTouchListener otl = (new View.OnTouchListener() {

@@ -15,6 +15,7 @@ import de.upb.soundgates.cosmic.osc.OSCMessageStore;
  */
 public class CosmicSensorManager implements SensorEventListener {
     public static final String LOG_TAG = "Cosmic - SensorManager";
+    private static CosmicSensorManager instance = null;
 
     private Context context;
     private SensorManager sensorManager;
@@ -24,7 +25,22 @@ public class CosmicSensorManager implements SensorEventListener {
 
     public double heading, attitude, bank;
 
-    public CosmicSensorManager(Context context) {
+    public float lux;
+    public float maxLux;
+
+
+    public static CosmicSensorManager getInstance(Context context) {
+        if(instance == null)
+        {
+            if(context == null)
+                return null;
+            instance = new CosmicSensorManager(context);
+            return instance;
+        }
+        return instance;
+    }
+
+    private CosmicSensorManager(Context context) {
         this.context = context;
         sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
         initListeners();
@@ -32,24 +48,7 @@ public class CosmicSensorManager implements SensorEventListener {
         rotationVector = new float[3];
         quaternion = new float[4];
 
-        /*new Thread(new Runnable() {
-            public void run() {
-                while(true) {
-                    set(new Quat4d(quaternion[0], quaternion[1], quaternion[2], quaternion[3]));
-
-                    double rad2angleFactor = 180 / Math.PI;
-
-                    Log.i(LOG_TAG,  "\nheading (y-axis of device): " + heading * rad2angleFactor +
-                                    "\nattitude (z-axis of device): " + attitude  * rad2angleFactor +
-                                    "\nbank (x-axis of device): " + bank  * rad2angleFactor);
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();*/
+        maxLux = 30;
     }
 
     private void initListeners() {
@@ -60,10 +59,6 @@ public class CosmicSensorManager implements SensorEventListener {
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
                 SensorManager.SENSOR_DELAY_NORMAL); // SensorManager.SENSOR_DELAY_FASTEST
-
-        sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY),
-                sensorManager.SENSOR_DELAY_FASTEST);
 
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT),
@@ -91,30 +86,33 @@ public class CosmicSensorManager implements SensorEventListener {
                     SensorManager.getQuaternionFromVector(quaternion, rotationVector);
 
                 break;
-            case Sensor.TYPE_PROXIMITY:
-                Log.i(LOG_TAG, "Proximity: " + sensorEvent.values[0]);
-                break;
             case Sensor.TYPE_LIGHT:
-                float lux = sensorEvent.values[0];
-                updateModel(InteractionMethod.LIGHT, lux);
+                lux = sensorEvent.values[0];
+                if(lux <= maxLux)
+                {
+                    float p = (maxLux - lux) / maxLux;
+                    updateModel(InteractionMethod.LIGHT, p);
+                }
                 break;
         }
     }
 
-    public void updateModel(final InteractionMethod im, final float value) {
+    public void updateModel(final InteractionMethod im, final float percent) {
         new Thread(new Runnable() {
             public void run() {
                 OSCMessageStore msg_store = OSCMessageStore.hasInstance();
                 if(msg_store != null) {
                     for(OSCMessage msg : msg_store.getSelectedOSCMessageAsList()) {
                         if(msg.getInteractionMethod() == im) {
-                            msg.setValue(value);
+                            msg.setValueAsPercent(percent);
                         }
                     }
                 }
             }
         }).start();
     }
+
+    public void calibrateLightSensor() { maxLux = lux; Log.i(LOG_TAG, "Calibration of Light sensors: " + maxLux);}
 
     private class Quat4d {
         public float w, x, y, z;

@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.upb.soundgates.cosmic.InteractionMethod;
-import de.upb.soundgates.cosmic.adapters.BindArrayAdapter;
-import de.upb.soundgates.cosmic.CosmicPreferences;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
