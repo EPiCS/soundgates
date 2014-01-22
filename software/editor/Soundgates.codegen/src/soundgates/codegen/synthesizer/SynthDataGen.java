@@ -105,7 +105,7 @@ public class SynthDataGen {
 		String type = atomicSoundComponent.getType();
 		String implName = atomicSoundComponent.getStringProperties().
 				get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
-		String implType = getBestImplementationType(atomicSoundComponent);		
+		String implType = atomicSoundComponent.getStringProperties().get("implType");		
 
 		if(atomicSoundComponent.getType().equals("IO")){
 			addIOComponentToData(data,atomicSoundComponent,type,implName,implType);					
@@ -214,17 +214,6 @@ public class SynthDataGen {
 	
 		return data;
 	}	
-	
-	private String getBestImplementationType(AtomicSoundComponent atomicSoundComponent){
-//		//TODO: actual implementation
-//		double r = Math.random();
-//		if (r<=0.5)
-//			return "sw";
-//		else 
-//			return "hw";
-		
-		return "sw";
-	}
 	
 	private LinkedList<CompositeSoundComponent> getComponentsToRemove(Patch patch){
 		LinkedList<CompositeSoundComponent> componentsToRemove = new LinkedList<CompositeSoundComponent>();
