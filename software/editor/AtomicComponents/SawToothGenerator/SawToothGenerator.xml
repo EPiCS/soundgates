@@ -9,13 +9,13 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="nco_saw">
-				<PortMapping PortName="Frequency" PortNumber="0"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+			<Implementation type="hw" name="saw">
+				<PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
-			<Implementation type="sw" name="nco_saw">
-			    <PortMapping PortName="Frequency" PortNumber="0"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+			<Implementation type="sw" name="saw">
+			    <PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>

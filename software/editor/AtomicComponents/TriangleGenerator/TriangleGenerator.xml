@@ -9,13 +9,13 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="nco_tri">
-				<PortMapping PortName="Frequency" PortNumber="0"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+			<Implementation type="hw" name="triangle">
+				<PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
-			<Implementation type="sw" name="nco_tri">
-			    <PortMapping PortName="Frequency" PortNumber="0"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+			<Implementation type="sw" name="triangle">
+			    <PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>

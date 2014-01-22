@@ -12,16 +12,16 @@
 		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="mixer">
-				<PortMapping PortName="Waveform1" PortNumber="0"/>
-				<PortMapping PortName="Bias" PortNumber="1"/>
+				<PortMapping PortName="Waveform1" PortNumber="1"/>
+				<PortMapping PortName="Bias" PortNumber="3"/>
 				<PortMapping PortName="Waveform2" PortNumber="2"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
 			<Implementation type="sw" name="mixer">
-			    <PortMapping PortName="Waveform1" PortNumber="0"/>
-				<PortMapping PortName="Bias" PortNumber="1"/>
+			    <PortMapping PortName="Waveform1" PortNumber="1"/>
+				<PortMapping PortName="Bias" PortNumber="3"/>
 				<PortMapping PortName="Waveform2" PortNumber="2"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>

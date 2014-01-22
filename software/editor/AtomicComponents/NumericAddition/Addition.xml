@@ -11,14 +11,14 @@
 		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="add">
-				<PortMapping PortName="Summand1" PortNumber="0"/>
-				<PortMapping PortName="Summand2" PortNumber="1"/>
-				<PortMapping PortName="Result" PortNumber="0"/>
+				<PortMapping PortName="Summand1" PortNumber="1"/>
+				<PortMapping PortName="Summand2" PortNumber="2"/>
+				<PortMapping PortName="Result" PortNumber="1"/>
 			</Implementation>
 			<Implementation type="sw" name="add">
-			    <PortMapping PortName="Summand1" PortNumber="0"/>
-				<PortMapping PortName="Summand2" PortNumber="1"/>
-				<PortMapping PortName="Result" PortNumber="0"/>
+			    <PortMapping PortName="Summand1" PortNumber="1"/>
+				<PortMapping PortName="Summand2" PortNumber="2"/>
+				<PortMapping PortName="Result" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>

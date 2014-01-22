@@ -15,22 +15,22 @@
 		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="adsr">
-				<PortMapping PortName="SoundIn" PortNumber="0"/>
-				<PortMapping PortName="Attack" PortNumber="1"/>
-				<PortMapping PortName="Decay" PortNumber="2"/>
-				<PortMapping PortName="Sustain" PortNumber="3"/>
-				<PortMapping PortName="Release" PortNumber="4"/>
-				<PortMapping PortName="Trigger" PortNumber="5"/>
-				<PortMapping PortName="SoundOut" PortNumber="0"/>
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="Attack" PortNumber="2"/>
+				<PortMapping PortName="Decay" PortNumber="3"/>
+				<PortMapping PortName="Sustain" PortNumber="4"/>
+				<PortMapping PortName="Release" PortNumber="5"/>
+				<PortMapping PortName="Trigger" PortNumber="6"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
 			</Implementation>
 			<Implementation type="sw" name="adsr">
-				<PortMapping PortName="SoundIn" PortNumber="0"/>
-				<PortMapping PortName="Attack" PortNumber="1"/>
-				<PortMapping PortName="Decay" PortNumber="2"/>
-				<PortMapping PortName="Sustain" PortNumber="3"/>
-				<PortMapping PortName="Release" PortNumber="4"/>
-				<PortMapping PortName="Trigger" PortNumber="5"/>
-				<PortMapping PortName="SoundOut" PortNumber="0"/>
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="Attack" PortNumber="2"/>
+				<PortMapping PortName="Decay" PortNumber="3"/>
+				<PortMapping PortName="Sustain" PortNumber="4"/>
+				<PortMapping PortName="Release" PortNumber="5"/>
+				<PortMapping PortName="Trigger" PortNumber="6"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>

@@ -10,12 +10,12 @@
 		<Simulation/>
 		<Device>
 			<Implementation type="hw" name="sine">
-				<PortMapping PortName="Frequency" PortNumber="0"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+				<PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
 			<Implementation type="sw" name="sine">
-			    <PortMapping PortName="Frequency" PortNumber="0"/>
-				<PortMapping PortName="Output" PortNumber="0"/>
+			    <PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>

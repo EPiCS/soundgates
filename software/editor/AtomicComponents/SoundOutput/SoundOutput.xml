@@ -6,11 +6,11 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="output">
-				<PortMapping PortName="Sound" PortNumber="0"/>
+			<Implementation type="hw" name="dac">
+				<PortMapping PortName="Sound" PortNumber="1"/>
 			</Implementation>
-			<Implementation type="sw" name="output">
-				<PortMapping PortName="Sound" PortNumber="0"/>
+			<Implementation type="sw" name="dac">
+				<PortMapping PortName="Sound" PortNumber="1"/>
 			</Implementation>
 		</Device>
 	</Code>
