@@ -9,10 +9,9 @@
 
 namespace ui {
 
-TCPHandshakeService::TCPHandshakeService(Patch* patch) {
+TCPHandshakeService::TCPHandshakeService(Patch& patch) : m_pPatch(patch) {
 
     m_ServiceThread = NULL;
-    m_pPatch  = patch;
 }
 
 TCPHandshakeService::~TCPHandshakeService() {
@@ -37,24 +36,21 @@ void TCPHandshakeService::stopService(){
 
 void TCPHandshakeService::buildMessage(std::string& sndMsg){
 
-    if (m_pPatch != NULL) {
+    const std::vector<InputSoundComponentPtr>& sndcomponents =
+            m_pPatch.getInputSoundComponents();
 
-        const std::vector<InputSoundComponentPtr>& sndcomponents = m_pPatch->getInputSoundComponents();
+    for (std::vector<InputSoundComponentPtr>::const_iterator iter =
+            sndcomponents.begin(); iter != sndcomponents.end(); ++iter) {
 
-        for (std::vector<InputSoundComponentPtr>::const_iterator iter =
-                sndcomponents.begin();
-                iter != sndcomponents.end(); ++iter) {
+        std::string msg = (*iter)->getOscAddress();
+        msg = msg + " " + (*iter)->getOscTypeTag();
 
-            std::string msg = (*iter)->getOscAddress();
-            msg = msg + (*iter)->getOscTypeTag();
+        sndMsg += msg;
 
-            sndMsg += msg;
-
-            if(iter  + 1 == sndcomponents.end()){
-                sndMsg += "\n";
-            }else{
-                sndMsg = std::string(TCP_HANDSHAKE_OSC_MSG_DELIMITER);
-            }
+        if (iter + 1 == sndcomponents.end()) {
+//            sndMsg += "\n";
+        } else {
+            sndMsg += std::string(TCP_HANDSHAKE_OSC_MSG_DELIMITER);
         }
     }
 }

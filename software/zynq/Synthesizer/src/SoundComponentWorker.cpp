@@ -11,7 +11,6 @@ void SoundComponentWorker::operator()() {
 
     while (m_Patch->isRunning()) {
 
-
         boost::unique_lock<boost::mutex> lock(m_Patch->m_Mutex);
         while(m_Patch->jobsToProcess < 1){
             m_Patch->m_OnBuffersProcessed.wait(lock);   /* wait until buffers were switched */
@@ -29,6 +28,7 @@ void SoundComponentWorker::operator()() {
             }
             m_Patch->m_OnComponentsProcessed.notify_one();
         }
-
     }
+    LOG_INFO("Worker thread finished: " << boost::this_thread::get_id());
+    m_Patch->m_OnComponentsProcessed.notify_one();
 }

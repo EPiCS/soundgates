@@ -13,7 +13,9 @@ ControlLink::ControlLink(NodePtr source, NodePtr destination) :
     m_ctrldata_0 = 0.0;
 }
 
-ControlLink::~ControlLink() { }
+ControlLink::~ControlLink() {
+    m_mutex.unlock();   /* unlock on deletion */
+}
 
 
 void ControlLink::pushControlData(float data){

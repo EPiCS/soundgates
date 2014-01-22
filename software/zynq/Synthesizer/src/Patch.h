@@ -25,6 +25,18 @@
 #include "core/HWThreadManager.h"
 
 #include "utils/SoundComponenLoader.h"
+#ifdef ZYNQ
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <reconos/reconos.h>
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
 
 
 class Patch;
@@ -36,22 +48,24 @@ class Patch {
 private:
 
 
-	vector<InputSoundComponentPtr>	m_InputComponents;      /*< Pointer to the input subset of the sound components */
+    std::vector<InputSoundComponentPtr>	m_InputComponents;      /*< Pointer to the input subset of the sound components */
 
-	vector<SoundComponentPtr> 		m_ComponentsVector;     /*< Container holding all references to the sound components */
+	std::vector<SoundComponentPtr> 		m_ComponentsVector;     /*< Container holding all references to the sound components */
 
-	vector<BufferedLinkPtr>			m_BufferedLinksVector;  /*< Buffered links container */
+	std::vector<BufferedLinkPtr>	    m_BufferedLinksVector;  /*< Buffered links container */
 
-	vector<ControlLinkPtr>			m_ControlLinksVector;   /*< Control links container */
+	std::vector<ControlLinkPtr>			m_ControlLinksVector;   /*< Control links container */
 
 
-	boost::thread m_WorkerThreads[Synthesizer::config::max_workers];
+	boost::thread_group m_WorkerThreads;
 
 	Synthesizer::state::ePatchState m_PatchState;
 
 	void initialize(void);
 
 	std::vector<SoundComponentPtr>::iterator jobIter;
+
+	unsigned int                        m_MaxWorkerThreads;
 
 public:
 
