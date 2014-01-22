@@ -25,7 +25,7 @@ library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity PRBS is
-    Generic ( constant levels : integer := 16);
+    Generic ( constant levels : integer := 32);
     Port (    clk    : in  STD_LOGIC;
               rst    : in  STD_LOGIC;
               ce     : in  STD_LOGIC;
@@ -36,7 +36,7 @@ architecture Behavioral of PRBS is
 
 	signal seed			   : std_logic_vector (levels-1 downto 0) := (0 => '1', others => '0');
 	signal feedback	   : std_logic := '1';
- 	constant polynome		: std_logic_vector (0 to levels-1)     := "1011010000000000";
+ 	constant polynome		: std_logic_vector (0 to levels-1)     := "10110100000000001011010000000000";
 begin
 
 	rand <= seed;

@@ -19,8 +19,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-library proc_common_v3_00_a;
-use proc_common_v3_00_a.proc_common_pkg.all;
+--library proc_common_v3_00_a;
+--use proc_common_v3_00_a.proc_common_pkg.all;
 
 library reconos_v3_00_c;
 use reconos_v3_00_c.reconos_pkg.all;
@@ -68,18 +68,17 @@ architecture Behavioral of hwt_noise is
     -- Subcomponent declarations
     ----------------------------------------------------------------
     
-    component noise is
+    component PRBS is
 	generic(
-		FPGA_FREQUENCY  : integer       := 100_000_000;
-		NOISE           : NOISE_TYPE    := WHITE
+		FPGA_FREQUENCY  : integer       := 100_000_000
 	);
     Port ( 
             clk          : in  std_logic;           
             rst          : in  std_logic;
             ce           : in  std_logic;
-            data         : out signed(31 downto 0)
+            rand         : out std_logic_vector(31 downto 0)
            );
-    end component noise;
+    end component PRBS;
  
     signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -104,11 +103,11 @@ architecture Behavioral of hwt_noise is
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 1024;
+    constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 6;--clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
@@ -133,7 +132,9 @@ architecture Behavioral of hwt_noise is
 	shared variable local_ram : LOCAL_MEMORY_T;
     
     signal snd_comp_header : snd_comp_header_msg_t;  -- common sound component header
-       
+    
+    signal state_inner_process : std_logic;	 
+	 
     signal sample_count            : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_COUNT, 16);
     
     ----------------------------------------------------------------
@@ -198,16 +199,15 @@ begin
 	);
             
     -- /ReconOS Stuff
-    NOISE_INST : noise
+    NOISE_INST : PRBS
     generic map(
-		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ,
-		NOISE        => WAVEFORM_TYPE'val(SND_COMP_NOISE_TPYE)
+		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ
 	 )
     port map( 
             clk          => clk,
             rst          => rst,
             ce           => noise_ce,
-            data         => noise_data
+            signed(rand)         => noise_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -283,13 +283,21 @@ begin
                 
             when STATE_PROCESS =>
                 if sample_count > 0 then
-                    
-                    noise_ce        <= '1';
-                    o_RAMWE_noise   <= '1';
-                    o_RAMAddr_noise <= std_logic_vector(unsigned(o_RAMAddr_noise) + 1);
-                    sample_count  <= sample_count - 1;
+                    case state_inner_process is
+                        when '0' =>
+                            o_RAMWE_noise   <= '1';
+                            noise_ce        <= '1'; -- ein takt früher
+                            state_inner_process          <= '1';
+                        when '1' =>
+                            o_RAMAddr_noise       <= std_logic_vector(unsigned(o_RAMAddr_noise) + 1);
+                            sample_count        <= sample_count - 1;
+                            state_inner_process <= '0';
+								when others =>
+									 state_inner_process <= '0';
+                    end case;
                 else
                     -- Samples have been generated
+                    o_RAMAddr_noise <= (others => '0');
                     state <= STATE_WRITE_MEM;
                 end if;
 
