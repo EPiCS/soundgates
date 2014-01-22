@@ -105,7 +105,7 @@ architecture Behavioral of hwt_adsr is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_REFRESH, STATE_READ, STATE_REFRESH_RELEASE, STATE_CHECK_BANG, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_REFRESH, STATE_READ,STATE_CHECK_BANG, STATE_WAITING, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
@@ -152,7 +152,7 @@ architecture Behavioral of hwt_adsr is
     signal input_data       : signed(31 downto 0);
     signal adsr_data        : signed(31 downto 0);
     
-    signal refresh_state    : integer range 0 to 4;
+    signal refresh_state    : integer range 0 to 3;
     signal process_state    : integer range 0 to 2;
     signal bang_state       : integer range 0 to 1;
     
@@ -320,11 +320,8 @@ begin
                         stop_addr      <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 4);
                         atck_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 8);
                         dcay_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 12);
-                        rlse_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 16);
-                        strt_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 20);
-                        atck_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 24);
-                        sust_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 28);
-                        rlse_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 32);
+                        sust_amp_addr  <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 16);
+                        rlse_dura_addr <= std_logic_vector(unsigned(snd_comp_header.opt_arg_addr) + 20);
 
                         state <= STATE_WAITING;
                 end if;    
@@ -344,58 +341,8 @@ begin
 
                     end if;    
                 end if;
-                 
-            when STATE_REFRESH =>
-                
-                -- Refresh your signals
-                case refresh_state is
-                when 0 =>
-                    memif_read_word(i_memif, o_memif, atck_dura_addr, atck_dura, done);
-                    if done then
-                        refresh_state <= 1;
-                    end if;
-                when 1 =>
-                    memif_read_word(i_memif, o_memif, dcay_dura_addr, dcay_dura, done);
-                    if done then
-                        refresh_state <= 2;
-                    end if;
-                when 2 =>
-                    memif_read_word(i_memif, o_memif, strt_amp_addr, strt_amp, done);
-                    if done then
-                        refresh_state <= 3;
-                    end if;
-                when 3 =>
-                    memif_read_word(i_memif, o_memif, atck_amp_addr, atck_amp, done);
-                    if done then
-                        refresh_state <= 4;
-                    end if;
-                when 4 =>
-                    memif_read_word(i_memif, o_memif, sust_amp_addr, sust_amp, done);
-                    if done then
-                        refresh_state <= 0;
-                        state <= STATE_PROCESS;
-                    end if;
-            end case;
-            
-            when STATE_REFRESH_RELEASE => 
-                stop <= (others => '0'); 
-                case refresh_state is
-                    when 0 => 
-                        memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
-                        if done then
-                            refresh_state <= 1;
-                        end if;
-                    when 1 =>
-                        memif_read_word(i_memif, o_memif, rlse_dura_addr, rlse_dura, done);
-                        if done then
-                            refresh_state <= 0;
-                            state <= STATE_PROCESS;
-                        end if;
-						  when others =>
-						      refresh_state <= 0;
-                end case;
-
-            when STATE_CHECK_BANG =>    
+					 
+				when STATE_CHECK_BANG =>    
                 case bang_state is                
                     when 0 =>
                         memif_read_word(i_memif, o_memif, bang_addr, bang, done);
@@ -415,13 +362,60 @@ begin
                             if (bang_stop = C_STOP_BANG) then
                                 bang_state <= 0;
                                 stop <= (others => '1');
-                                state <= STATE_REFRESH_RELEASE;
+                                state <= STATE_PROCESS;
                             else
                                 state <= STATE_REFRESH;
                             end if;
                         end if;
 						end case;
-						
+                 
+            when STATE_REFRESH =>
+                
+                -- Refresh your signals
+                case refresh_state is
+                when 0 =>
+                    memif_read_word(i_memif, o_memif, atck_dura_addr, atck_dura, done);
+                    if done then
+                        refresh_state <= 1;
+                    end if;
+                when 1 =>
+                    memif_read_word(i_memif, o_memif, dcay_dura_addr, dcay_dura, done);
+                    if done then
+                        refresh_state <= 2;
+                    end if;
+                when 2 =>
+                    memif_read_word(i_memif, o_memif, sust_amp_addr, sust_amp, done);
+                    if done then
+                        refresh_state <= 3;
+                    end if;
+					
+					 when 3 =>
+                    memif_read_word(i_memif, o_memif, dcay_dura_addr, dcay_dura, done);
+                    if done then
+                        refresh_state <= 0;
+                        state <= STATE_READ;
+                    end if;
+            end case;
+            
+--            when STATE_REFRESH_RELEASE => 
+--                state <= STATE_PROCESS;
+					 -- folgendes nicht mehr anpassbar:
+--                case refresh_state is
+--                    when 0 => 
+--                        memif_read_word(i_memif, o_memif, rlse_amp_addr, rlse_amp, done);
+--                        if done then
+--                            refresh_state <= 1;
+--                        end if;
+--                    when 1 =>
+--                        memif_read_word(i_memif, o_memif, rlse_dura_addr, rlse_dura, done);
+--                        if done then
+--                            refresh_state <= 0;
+--                            state <= STATE_PROCESS;
+--                        end if;
+--						  when others =>
+--						      refresh_state <= 0;
+--                end case;
+					 
 				when STATE_READ => 
 					-- store input samples in local ram
 					memif_read(i_ram,o_ram,i_memif,o_memif,snd_comp_header.source_addr,X"00000000",std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)),done);
@@ -439,6 +433,8 @@ begin
                         process_state  <= 1;
 
                     when 1 => 
+								
+								stop <= (others => '0'); 
                         o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
                         o_RAMWE_adsr   <= '1';
 
