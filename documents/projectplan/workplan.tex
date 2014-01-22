@@ -7,24 +7,27 @@
 
 %Mention our different milestones with their due dates. A Gantt Diagram would be fancy as hell.
 
-The whole project is divided into multiple milestones. Each milestones consists of set of tasks. One milestone must be completed before another milestone can start.
+The whole project is divided into multiple milestones. Each milestone consists of a set of tasks. One milestone must be completed before another milestone can start.
 
 \section{Milestones}
 
-Five milestones are planned, where each milestones should be completed in approximately five to six weeks. Depending on the set of tasks in each milestone, some may consume more time, some less.
+Five milestones are planned, where each milestone should be completed in approximately five to six weeks. Depending on the set of tasks in each milestone, some may consume more time, some less.
 
 \subsection{Milestone 1 - Prototyping infrastructure/environment}
 
 The fundamental infrastructure to achieve the project objectives is prototyped in the first milestone. This involves three basic tasks:
 
 \begin{enumerate}
-	\item prototype a graphical design environment (editor) for signal\footnote{The term "signal" is restricted to audio signals by the application domain} generation and signal processing components. 
-	\item prototype a simulation environment to simulate a patch created with the editor
+	\item Prototype a graphical design environment (editor) for signal\footnote{The term "signal" is restricted to audio signals by the application domain} generation and signal processing components. 
+	\item Ürototype a simulation environment to simulate a patch created with the editor.
+	      \textit{The editor has the ability to export created patches to Pure Data, which is then used to simulate a patch.}
 	\item Choose an \ac{FPGA} platform (ML605 or Zynq) together with the project group supervisors.
-	\item prototype a hardware infrastructure such as digital-to-analog (dac) controller, (rotary) switches and an interface to a external sensors (ReconOS)
+	      \textit{Zynq was choosen due to a better and more stable Linux environment.}
+	\item Prototype a hardware infrastructure such as digital-to-analog (dac) controller, (rotary) switches and an interface to external sensors (ReconOS).
+	      \textit{The DAC on the Zynq Board can be used via Linux/ALSA. The usage of a rotary switch is dropped because the Zynq board does not support this.}
 \end{enumerate}
 
-The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development. At the end of this milestone one should be able to open an editor and add/connect dummy components. The dummy components representing signal/audio processing components in later stages of development. The system of dummy components, refereed to as patch, can be exported to a simulator. The simulator will playback the patch on the editors host-pc.
+The goal of this milestone is not to have a complete working toolflow, but to have a quick start of the development. At the end of this milestone one should be able to open an editor and add/connect dummy components. The dummy components representing signal/audio processing components in later stages of development. The system of dummy components, referred to as patch, can be exported to a simulator. The simulator will play the patch on the editors host-pc.
 In addition to the software-side we will choose our hardware platform. It will either be the Virtex-6 \ac{FPGA} ML605 or an \ac{FPGA} of the newer Zynq family. The biggest difference between these platforms is the processor. The ML605 has no dedicated Hardcore processor and therefore we would need a Softcore processor like the MicroBlaze. With the ML605 we would also use an expansion board for the sound hardware part due to the lack of audio connectors. The Zynq platform on the other hand has a dedicated ARM dualcore processor and should have all sound related hardware components on the \ac{SoC}.
 %In addition to the software-side there will exist a working interface for the \ac{FPGA} expansion board components at the end of this milestone, written in an HDL language. For testing purposes and later evaluation, it will be possible to interface the expansion board components with the ReconOS operating system.
 
@@ -71,9 +74,9 @@ In detail the basic tasks can be further subdivided:
 
 In the second milestone more features will be added to the whole system. 
 The goal of this milestone should be, that a basic digital synthesizer system can be modeled by using the soundgate editor toolkit. 
-The user will find basic components, known from digital signal processing (constants, adders, multiplicators, delays, ...), in the editors sound-component library as well as components which represent external interfaces (DAC-Audio-Output, basic sensors likes (rotary) switches).
- With these components it will be possible for a user to alter audio-signals in a signal processing manner and listen to the result on the \ac{COSMIC} system. 
- The interaction with the system is restricted to the basic sensors, mentioned in milestone one. The following list represents the set of tasks to achieve the suggested goal.
+The user will find basic components, known from digital signal processing (constants, adders, multiplicators, delays, ...), in the editors sound-component library as well as components which represent external interfaces (DAC-Audio-Output, basic sensors likes (rotary) switches \textit{(dropped because no hardware support on the Zynq, see Milestone 1)}).
+With these components it will be possible for a user to alter audio-signals in a signal processing manner and listen to the result on the \ac{COSMIC} system. 
+The interaction with the system is restricted to the basic sensors, mentioned in milestone one. The following list represents the set of tasks to achieve the suggested goal.
 
 	\begin{enumerate}
 		\item Editor
@@ -84,7 +87,7 @@ The user will find basic components, known from digital signal processing (const
 			\end{itemize}
 		\item Basic sensor interaction
 			\begin{itemize}
-				\item It should be possible to adjust a parameter with a sensor, that is attached to the I/O expansion board
+				\item It should be possible to adjust a parameter with a sensor, that is attached to the I/O expansion board. \textit{This point is not longer planned because we will not use an I/O expansion board on the Zynq.}
 			\end{itemize}
 		\item Codegeneration	
 			\begin{itemize}
@@ -94,7 +97,7 @@ The user will find basic components, known from digital signal processing (const
 		\item Hardware prototype %Was in the first version in Milestone 1
 			\begin{itemize}
 				\item Setup a working ReconOS environment
-				\item Prototype I/O expansion interface
+				\item Prototype I/O expansion interface. \textit{Not longer planned, see above.}
 				\begin{itemize}
 					\item Create the DAC-controller and a correspondent testbench
 					%\item Rotary switch should work
@@ -171,18 +174,44 @@ The fifth milestone is designed to polish different aspects of the system.
 One aspect targets the documentation of the editor, sound-components and the \ac{COSMIC} system. 
 Although all system-level components will be documented during development, these documents are just fragments of a bigger picture. 
 These fragments will be gathered and assembled into a well understandable form (e.g webpage or handbook). 
-The target audience of these documentation will be musicians, and non-technical but interested end-users.  
+The target audience of these documentation will be musicians, and non-technical but interested end-users.
+
+\subsection{Milestone Deadlines}
+
+\begin{itemize}
+\item 19.11: Milestone 1 and Milestone 2
+\item 31.01: Milestone 3
+\item 28.02: Milestone 4
+\item 31.03: Milestone 5
+\end{itemize}  
+
+\newpage
 
 \section{Miniseminar Topics}
 The different technologies and disciplines of this project require additional research in at least the following topics.
 Each member of the project group will be assigned to one of the below topics and should write an report of his research.
-The seminar topics will start in late September or October.
+The seminar topics will start in late November and December.
 
 \begin{enumerate}
-	\item Zynq audio components (e.g. the DAC).
-	\item Android sensors/realtime capabilities
-	\item GMF
-	\item PureData
-	\item Intepretation of gestures (with sensordata, e.g. swiping)
-	\item Digital signal processing with a focus on transformation of frequency intervals.
+	\item Digital-to-Analogue conversion with the ZedBoards adau1761 as a concrete example (Funke):
+	
+	Analogue signals are usually digitized by an analogue to digital converter, then processed and then converted back into the analogue world. Because of the first part, the AD-Conversion, is not the focus of the project group and signal processing is covered by another participant, the topic of my seminar will be the field of digital to analogue conversion with its large spectrum of variants. Common techniques like ``Sigma-Delta'' conversion will be investigated in depth as well as methods like pulse-width modulation. As a concrete example the ZedBoards adau1761 SignaDSP audio codec and its characteristics will also be further investigated.
+	\item Input devices with a focus on smartphone sensors (Posewsky):
+	
+	Finding and interpreting of suitable gestures for controlling an interactive sound synthesis system is a main part of our project. The first step of this task is an exploration of devices that are capable to control our system. Secondly we've already agreed to use android-based smartphones as input devices. Therefore the study of the Android Sensor Framework is a large part of this seminar. This includes simple algorithms that directly (or with minor transformations) modify input values of synthesizer components or more advanced algorithms that are able to recognize complex gestures.
+	\item EMF, GEF, GMF (Pines):
+	
+	I will explain the concepts of \ac{EMF} that we use in our project to build models of patches. These \ac{EMF} models are used for the code generation, e.g. to generate \ac{VHDL} code or C code for a patch. Furthermore I will explain \ac{GEF} and \ac{GMF}. \ac{GEF} editors provide a graphical interface to create \ac{EMF} models. \ac{GMF} is a tool, which can generate a \ac{GEF} editor from a specification.
+	\item Pure Data (Boonk):
+	
+	Pure Data is a visual data flow oriented programming language. Despite beeing much more universally usable it will be used mainly for its audio processing capabilities and provide the backend to our simulation function. The goals of this seminar are the exploration of the possibilities that Pure Data provides using its advanced functions to simulate our hardware patches in software prior to synthetization. For this I will evaluate Pure Datas language elements with a focus on the audio part. To facilitate the development of hardware simulation patches some of the internal workings will be revealed. In this part the focus will be on the internal representation and communication of audio data and the principles of real time audio calculation employed in Pure Data.
+	\item Linux Audio Architecture (Cioran):
+	
+	The Zedboard offers an ADAU1761 Audio codec for digitial audio processing. But instead of wiring our Hardware Sound Components directly via the i2s interface to the chip, we want to benefit of a software abstraction through an existing and already evaluated Linux driver. But the Linux sound architecture is not as transparent as one might think, since the raw audio data does not pass through normalized and well defined layers. Instead there are different technologies like ALSA, Jack and PulseAudio, which partially work on different layers simultaneously. Therefore I would like to give an overview of existing technologies and try to work out advantages and USE-Cases concerning our system.
+	\item Turning sound into music (Wuellrich):
+	
+	While the project's main focus is on creating the hardware platform itself, the Soundgates system should finally not only produce some random noise but create music. This requires that we have at least a rough idea about music. Therefore I want to introduce some basic musical knowledge, e.g. notation. Furthermore I want to give an overview about the field of music theory. Since we are mainly computer scientists rather than musicians, I will most likely only be able to scratch on the surface of this vast field. In the end, I want to give an idea how one can construct sounds that generally sound pleasant and can be considered music. Ideally there will be an example that can finally be implemented with the Soundgates system as a proof of concept.
+	\item Digital signal processing with a focus on transformation of frequency ranges (Hangmann):
+	
+	Digital signal processing is about the signal manipulation in digital systems. The goal of \ac{DSP} is usually to measure, filter and compress continuous real-world analog signals. Areas of application are nowadays mainly the manipulation or compression of movie and sound. Especially in the field of sound the main task of \ac{DSP} is to filter audio frequencies. This is done by two kinds of filters: the \ac{FIR} and \ac{IIR}. These filters enable the common bandpass, lowpass and highpass filters. This paper gives an overview of the realization of these filters, especially the transformation of frequency ranges. 
 \end{enumerate}

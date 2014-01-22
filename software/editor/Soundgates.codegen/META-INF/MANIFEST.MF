@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Codegen
+Bundle-SymbolicName: Soundgates.codegen;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: soundgates.codegen.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ Soundgates;bundle-version="1.0.0",
+ org.eclipse.emf.ecore.xmi;bundle-version="2.9.0",
+ org.eclipse.core.resources,
+ Soundgates.diagram;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: soundgates.codegen

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>NumericAddition</Type>
+	<Ports>
+		<Port Name="Summand1" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Summand2" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Result" Direction="OUT" DataType="FLOAT"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation>
+		</Simulation>
+		<Hardware>
+			VHDL Stuff
+		</Hardware>
+	</Code>
+</AtomicSoundComponent>

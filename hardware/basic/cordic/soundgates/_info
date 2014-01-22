@@ -1,0 +1,53 @@
+m255
+K4
+z2
+13
+cModel Technology
+Z0 dF:/uni/master/PGSoundgates/pg-soundgates/hardware/cordic
+!s112 0.1
+!i10d 8192
+!i10e 25
+!i10f 100
+Psoundcomponents
+Z1 DPx4 ieee 9 math_real 0 22 X1eFklFj<NHn@4Wz7P8j:2
+Z2 DPx4 ieee 11 numeric_std 0 22 WES[o8HS0jHV[MIXQk2Ha1
+Z3 DPx3 std 6 textio 0 22 Y8d?=bLj9m4jiPLbo;>GT0
+Z4 DPx4 ieee 14 std_logic_1164 0 22 1bm?@Gd;P>[>_lN8Do9gP3
+Z5 w1383419505
+Z6 dF:/uni/master/PGSoundgates/pg-soundgates/hardware/cordic
+Z7 8soundgates.vhd
+Z8 Fsoundgates.vhd
+l0
+L16
+VkhcJPJD?E]h]T`:l6[]8J0
+!s100 afAEgZ@k8h`PSB9AVlNhO0
+Z9 OP;C;10.2c;57
+31
+b1
+Z10 !s110 1383516192
+!i10b 1
+Z11 !s108 1383516192.588000
+Z12 !s90 -reportprogress|300|-explicit|-93|-work|soundgates|soundgates.vhd|
+Z13 !s107 soundgates.vhd|
+Z14 o-explicit -93 -work soundgates -O0
+Z15 tExplicit 1
+Bbody
+Z16 DPx4 work 15 soundcomponents 0 22 khcJPJD?E]h]T`:l6[]8J0
+R1
+R2
+R3
+R4
+l0
+L42
+Z17 V2F9lQ>N]75]e8>1XH^j]93
+Z18 !s100 >lX8kec]MWRUPdDB^V?Te2
+R9
+31
+R10
+!i10b 1
+R11
+R12
+R13
+R14
+R15
+nbody

@@ -1,0 +1,4 @@
+cordic.vhd
+cordic_stage.vhd
+soundgates.vhd
+soundgates/
