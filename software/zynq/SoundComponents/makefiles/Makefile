@@ -9,7 +9,8 @@ SoundComponents += add \
 				  cmult \
 				  output \
 				  square \
-				  dummysink
+				  dummysink \
+				sampleplayer 
 
 
 SRCDIR = ../src

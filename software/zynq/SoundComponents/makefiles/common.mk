@@ -1,9 +1,15 @@
 XILINX_BIN_PATH=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin
 
+ifeq ($(debugging), on)
+DEBUGLEVEL = -g3 -O0
+else
+DEBUGLEVEL = -g0 -O3
+endif
+
 CXX=g++
 CC_ARM=$(XILINX_BIN_PATH)/arm-xilinx-linux-gnueabi-g++
-CXXFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../../Libraries/x86_64/include"
-CFLAGS_ARM=-Wall -Wno-unused-variable -g3 -fPIC -O2 #-I"../../libraries/arm/include" 
+CXXFLAGS=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC -isystem"../../../Libraries/x86_64/include"
+CFLAGS_ARM=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC #-I"../../libraries/arm/include" 
 
 ifdef $(target)
 
