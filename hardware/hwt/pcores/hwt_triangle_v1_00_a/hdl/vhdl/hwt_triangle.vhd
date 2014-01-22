@@ -102,11 +102,11 @@ architecture Behavioral of hwt_triangle is
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 1024;
+    constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 10;--clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 6;--clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
@@ -209,8 +209,8 @@ begin
             clk          => clk,
             rst          => rst,
             ce           => tri_ce,
-            phase_offset => signed(phase_offset),
-            phase_incr   => signed(phase_incr),
+            incr   => signed(phase_incr),
+            offset => signed(phase_offset),
             tri         => tri_data
             );
             
@@ -316,7 +316,9 @@ begin
                         when '1' =>
                             o_RAMAddr_tri       <= std_logic_vector(unsigned(o_RAMAddr_tri) + 1);
                             sample_count        <= sample_count - 1;
-                            state_inner_process <= '0';                    
+                            state_inner_process <= '0';
+								when others =>
+									 state_inner_process <= '0';
                     end case;
                 else
                     -- Samples have been generated
