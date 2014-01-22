@@ -24,9 +24,6 @@
 
 namespace po = boost::program_options;
 
-
-
-
 /* Forward declaration */
 void SynthesizerTerminate(int);
 
@@ -47,7 +44,7 @@ int main( int argc, const char* argv[])
 
 	po::options_description desc("Allowed options");
 	desc.add_options()
-	    ("help,h",    "prints help message")
+	    ("help,h", "prints help message")
 	    ("verbose", "verbose output")
 	    ("soundcomponents,S", po::value<std::string>()->required(), "Path to the sound components")
 	    ("hw", po::value<bool>(&Synthesizer::config::useHWThreads)->default_value(false), "Run with hardware threads")
@@ -103,4 +100,6 @@ void SynthesizerTerminate(int sig){
 	SoundComponentLoader::getInstance().finailize();
 
     patch.dispose();
+
+    std::exit(EXIT_SUCCESS);
 }
