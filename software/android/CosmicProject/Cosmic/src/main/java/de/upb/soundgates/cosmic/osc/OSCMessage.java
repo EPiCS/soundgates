@@ -1,6 +1,7 @@
 package de.upb.soundgates.cosmic.osc;
 
 import java.util.LinkedList;
+import java.util.Observable;
 
 import de.upb.soundgates.cosmic.InteractionMethod;
 
@@ -8,7 +9,7 @@ import de.upb.soundgates.cosmic.InteractionMethod;
  * Created by posewsky on 12.11.13.
  */
 
-public class OSCMessage {
+public class OSCMessage extends Observable {
     protected String path;
     protected LinkedList<OSCType> types;
     protected boolean selected;
@@ -73,6 +74,12 @@ public class OSCMessage {
     public void setPath(String path) { this.path = path; }
 
     public LinkedList<OSCType> getTypes() { return types; }
+
+    public void setValue(float value) {
+        getTypes().get(0).value = value;
+        setChanged();
+        notifyObservers();
+    }
 
     public boolean isSelected() {
         return selected;

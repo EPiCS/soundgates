@@ -8,6 +8,7 @@ import de.upb.soundgates.cosmic.InteractionMethod;
 public class OSCType<E> {
     protected OSCMessage msg;
     protected char typeTag;
+    public E value;
     public E MIN_VALUE, MAX_VALUE;
 
     private OSCType(OSCMessage msg, char typeTag, E minValue, E maxValue) {

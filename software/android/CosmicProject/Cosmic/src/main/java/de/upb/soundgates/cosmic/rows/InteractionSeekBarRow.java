@@ -10,6 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.LinkedList;
+import java.util.Observable;
 
 import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.MainActivity;
@@ -25,6 +26,11 @@ import de.upb.soundgates.cosmic.osc.OSCType;
 public class InteractionSeekBarRow implements InteractionRow{
     private final OSCMessage msg;
     private final LayoutInflater inflater;
+
+    @Override
+    public void update(Observable observable, Object o) {
+
+    }
 
     private static class ViewHolder {
         final TextView text;
