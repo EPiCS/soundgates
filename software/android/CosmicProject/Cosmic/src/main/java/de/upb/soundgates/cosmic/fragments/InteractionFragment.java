@@ -16,6 +16,7 @@ import de.upb.soundgates.cosmic.CosmicPreferences;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+import de.upb.soundgates.cosmic.rows.InteractionLightRow;
 import de.upb.soundgates.cosmic.rows.InteractionRow;
 import de.upb.soundgates.cosmic.rows.InteractionSeekBarRow;
 import de.upb.soundgates.cosmic.rows.InteractionShakeRow;
@@ -70,6 +71,9 @@ public class InteractionFragment extends ListFragment {
                         break;
                     case SHAKE:
                         rows.add(new InteractionShakeRow(inflater, msg));
+                        break;
+                    case LIGHT:
+                        rows.add(new InteractionLightRow(inflater, msg));
                         break;
                 }
             }

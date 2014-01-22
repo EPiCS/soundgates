@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Observable;
+
 import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
@@ -15,6 +17,11 @@ import de.upb.soundgates.cosmic.osc.OSCMessage;
 public class InteractionShakeRow implements InteractionRow {
     private final OSCMessage msg;
     private final LayoutInflater inflater;
+
+    @Override
+    public void update(Observable observable, Object o) {
+
+    }
 
     private static class ViewHolder {
         final TextView msgText;

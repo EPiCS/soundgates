@@ -7,6 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+
 /**
  * Created by posewsky on 08.01.14.
  */
@@ -57,6 +60,14 @@ public class CosmicSensorManager implements SensorEventListener {
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
                 SensorManager.SENSOR_DELAY_NORMAL); // SensorManager.SENSOR_DELAY_FASTEST
+
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY),
+                sensorManager.SENSOR_DELAY_FASTEST);
+
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT),
+                sensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -80,7 +91,29 @@ public class CosmicSensorManager implements SensorEventListener {
                     SensorManager.getQuaternionFromVector(quaternion, rotationVector);
 
                 break;
+            case Sensor.TYPE_PROXIMITY:
+                Log.i(LOG_TAG, "Proximity: " + sensorEvent.values[0]);
+                break;
+            case Sensor.TYPE_LIGHT:
+                float lux = sensorEvent.values[0];
+                updateModel(InteractionMethod.LIGHT, lux);
+                break;
         }
+    }
+
+    public void updateModel(final InteractionMethod im, final float value) {
+        new Thread(new Runnable() {
+            public void run() {
+                OSCMessageStore msg_store = OSCMessageStore.hasInstance();
+                if(msg_store != null) {
+                    for(OSCMessage msg : msg_store.getSelectedOSCMessageAsList()) {
+                        if(msg.getInteractionMethod() == im) {
+                            msg.setValue(value);
+                        }
+                    }
+                }
+            }
+        }).start();
     }
 
     private class Quat4d {
