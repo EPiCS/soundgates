@@ -19,8 +19,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-library proc_common_v3_00_a;
-use proc_common_v3_00_a.proc_common_pkg.all;
+--library proc_common_v3_00_a;
+--use proc_common_v3_00_a.proc_common_pkg.all;
 
 library reconos_v3_00_c;
 use reconos_v3_00_c.reconos_pkg.all;
@@ -98,11 +98,11 @@ architecture Behavioral of hwt_ramp is
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 1024;
+    constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 6;--clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
@@ -141,11 +141,11 @@ architecture Behavioral of hwt_ramp is
     signal start            : std_logic;
     signal stop             : std_logic;
     
-    signal refresh_state    : unsigned(2 downto 0);
-    signal process_state    : unsigned(2 downto 0);
+    signal refresh_state    : integer range 0 to 2;
+    signal process_state    : integer range 0 to 2;
     
-    signal incr             : signed(31 downto 0);
-    signal decr             : signed(31 downto 0);
+    signal incr             : std_logic_vector(31 downto 0);
+    signal decr             : std_logic_vector(31 downto 0);
 
     signal incr_addr        : std_logic_vector(31 downto 0);
     signal decr_addr        : std_logic_vector(31 downto 0);
@@ -163,7 +163,7 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_ramp <= std_logic_vector(ramp_wave);
+    --o_RAMData_ramp <= std_logic_vector(ramp_wave);
     
     
     
@@ -215,10 +215,8 @@ begin
             clk         => clk,
             rst         => rst,
             ce          => ramp_ce,
-            upper_amp   => upper_amp,
-            lower_amp   => lower_amp,
-            incr        => incr,
-            incr2       => decr,
+            incr        => signed(incr),
+            incr2       => signed(decr),
             rmp         => ramp_data
             );
             
@@ -239,7 +237,7 @@ begin
 			if (o_RAMWE_ramp = '1') then
 				local_ram(to_integer(unsigned(o_RAMAddr_ramp))) := o_RAMData_ramp;
             else      -- else needed, because ramp is consuming samples
-				i_RAMData_ramp <= local_ram(conv_integer(unsigned(o_RAMAddr_ramp)));
+				i_RAMData_ramp <= local_ram(to_integer(unsigned(o_RAMAddr_ramp)));
 			end if;
 		end if;
 	end process;
@@ -260,10 +258,8 @@ begin
             
             
             ramp_ce     <= '0';
-            incr        <= '0';
-            decr        <= '0';
-            lower_amp   <= (others => '0');
-            upper_amp   <= (others => '0');
+            incr        <= (others => '0');
+            decr        <= (others => '0');
             o_RAMWE_ramp<= '0';
             o_RAMAddr_ramp <= (others => '0');
             
@@ -307,21 +303,21 @@ begin
                 -- Refresh your signals
                 
                 case refresh_state is
-                when "0" => 
+                when 0 => 
                     memif_read_word(i_memif, o_memif, incr_addr , incr, done);
                     if done then
-                        refresh_state <= "1";
+                        refresh_state <= 1;
                     end if;
-                when "1" => 
+                when 1 => 
                     memif_read_word(i_memif, o_memif, decr_addr , decr, done);
                     if done then
-                        refresh_state <= "2";
+                        refresh_state <= 2;
                     end if;
                 
-                when "2" =>
+                when 2 =>
                     memif_read(i_ram, o_ram, i_memif, o_memif, snd_comp_header.source_addr, X"00000000", std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
                     if done then
-                        refresh_state <= "0";
+                        refresh_state <= 0;
                         state <= STATE_PROCESS;                        
                     end if;
 					  end case;
@@ -331,23 +327,23 @@ begin
                    
                     case process_state is
 
-                    when "0" => 
+                    when 0 => 
                         ramp_ce        <= '1';
-                        process_state  <= "1";
+                        process_state  <= 1;
 
-                    when "1" => 
+                    when 1 => 
                         o_RAMData_ramp <= std_logic_vector(resize(ramp_data * signed(i_RAMData_ramp), 32));
                         o_RAMWE_ramp   <= '1';
 
                         ramp_ce        <= '0';
-                        process_state  <= "2";       
+                        process_state  <= 0;       
 
-                    when "2" =>
+                    when 2 =>
                         o_RAMWE_ramp   <= '0';
                         o_RAMAddr_ramp <= std_logic_vector(unsigned(o_RAMAddr_ramp) + 1);
                         sample_count   <= sample_count + 1; 
 
-                        process_state  <= "0";                       
+                        process_state  <= 0;                       
 
                     end case;
 
