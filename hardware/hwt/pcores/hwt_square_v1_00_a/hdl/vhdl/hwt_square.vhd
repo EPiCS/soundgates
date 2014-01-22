@@ -97,18 +97,18 @@ architecture Behavioral of hwt_square is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_REFRESH_INPUT_PHASE_OFFSET, STATE_REFRESH_INPUT_PHASE_INCR, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_REFRESH_DUTY_ON,STATE_REFRESH_DUTY_OFF, STATE_REFRESH_INPUT_PHASE_OFFSET, STATE_REFRESH_INPUT_PHASE_INCR, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 1024;
+    constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 10;--clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := 6;--10;--clog2(C_LOCAL_RAM_SIZE);
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
@@ -216,8 +216,8 @@ begin
             clk          => clk,
             rst          => rst,
             ce           => sq_ce,
-            phase_offset => signed(phase_offset),
-            phase_incr   => signed(phase_incr),
+            incr   => signed(phase_incr),
+            offset => signed(phase_offset),
             duty_on      => signed(duty_on), 
             duty_off     => signed(duty_off),
             sq           => sq_data
@@ -341,7 +341,9 @@ begin
                         when '1' =>
                             o_RAMAddr_sq       <= std_logic_vector(unsigned(o_RAMAddr_sq) + 1);
                             sample_count        <= sample_count - 1;
-                            state_inner_process <= '0';                    
+                            state_inner_process <= '0';   
+								when others =>
+									 state_inner_process <= '0';
                     end case;
                 else
                     -- Samples have been generated
