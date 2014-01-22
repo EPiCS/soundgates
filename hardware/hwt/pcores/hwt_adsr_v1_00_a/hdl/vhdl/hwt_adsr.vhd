@@ -433,7 +433,8 @@ begin
                         process_state  <= 1;
 
                     when 1 => 
-								
+						  
+								start <= (others => '0'); 
 								stop <= (others => '0'); 
                         o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
                         o_RAMWE_adsr   <= '1';
