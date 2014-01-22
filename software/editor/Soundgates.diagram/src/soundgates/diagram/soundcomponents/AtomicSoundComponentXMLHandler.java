@@ -66,7 +66,7 @@ public class AtomicSoundComponentXMLHandler{
 						AtomicSoundComponent soundComponent = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
 						String type = element.getElementsByTagName("Type").item(0).getTextContent();
 						soundComponent.setName(type);
-						soundComponent.setType(type);
+						soundComponent.setType(type);				
 						
 						NodeList portList = element.getElementsByTagName("Port");						
 						XMLHandler.addPortsToSoundComponentFromPortList(soundComponent, portList);
@@ -108,7 +108,8 @@ public class AtomicSoundComponentXMLHandler{
 
 										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PDCODE , code);
 										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PORT_MAPPINGS , portMappings.toString());
-										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PROP_MAPPINGS , propMappings.toString());
+										soundComponent.getStringProperties().put(CODEGEN_PREFIX_PROP_MAPPINGS , propMappings.toString());									
+										
 									} 
 									
 									if (propertyName.equals(NODENAME_DEVICE)){
@@ -143,6 +144,13 @@ public class AtomicSoundComponentXMLHandler{
 												soundComponent.getStringProperties().put(DEVICE_PREFIX_PORT_MAPPINGS + implType, portMappings.toString());
 												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME, implName);
 //												soundComponent.getStringProperties().put(DEVICE_PREFIX_PROP_MAPPINGS + implType, propMappings.toString());
+											
+												// put "sw", "hw" or "sw/hw" for possibleImplType
+												if(!soundComponent.getStringProperties().containsKey("possibleImplType"))
+													soundComponent.getStringProperties().put("possibleImplType", implType);
+												else
+													soundComponent.getStringProperties().put("possibleImplType", 
+															soundComponent.getStringProperties().get("possibleImplType")+"|"+implType);
 											}
 										}	
 
@@ -157,6 +165,12 @@ public class AtomicSoundComponentXMLHandler{
 								}
 							}
 						}
+						
+						if(soundComponent.getStringProperties().get("possibleImplType").contains("hw"))
+							soundComponent.getStringProperties().put("implType", "hw");
+						else
+							soundComponent.getStringProperties().put("implType", "sw");
+						
 						library.addComponent(soundComponent);
 						
 					} catch (NullPointerException e) {

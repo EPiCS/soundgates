@@ -28,7 +28,7 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 public class SoundgatesPaletteFactory {
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public void fillPalette(PaletteRoot paletteRoot) {
 		PaletteToolbar standardGroup = ((PaletteToolbar)paletteRoot.getChildren().get(0));
@@ -44,7 +44,8 @@ public class SoundgatesPaletteFactory {
 	 * @generated NOT
 	 */
 	private PaletteContainer createComponents1Group() {
-		PaletteDrawer paletteContainer = new PaletteDrawer("Atomic sound components");
+		PaletteDrawer paletteContainer = new PaletteDrawer(
+				"Atomic sound components");
 		paletteContainer.setId("createComponents1Group"); //$NON-NLS-1$
 		// We don't want to create untyped AtomicSoundComponents
 		// paletteContainer.add(createAtomicSoundComponent1CreationTool());
@@ -57,31 +58,34 @@ public class SoundgatesPaletteFactory {
 		}
 		return paletteContainer;
 	}
-	
+
 	/**
 	 * Creates "Composite Components" palette tool group
 	 * 
 	 * @generated NOT
 	 */
 	private PaletteContainer createComponents2Group() {
-		PaletteDrawer paletteContainer = new PaletteDrawer("Composite sound components");
+		PaletteDrawer paletteContainer = new PaletteDrawer(
+				"Composite sound components");
 		paletteContainer.setId("createComponents2Group"); //$NON-NLS-1$
 
 		paletteContainer.add(createCompositeSoundComponent2CreationTool());
-		
-		List<String> availableComponents = CompositeSoundComponentLibrary.getInstance().getAvailableComponents();
+
+		List<String> availableComponents = CompositeSoundComponentLibrary
+				.getInstance().getAvailableComponents();
 		for (int i = 0; i < availableComponents.size(); i++) {
 			paletteContainer
-					.add(createConcreteCompositeNodeCreationTool(availableComponents.get(i))); // MYTOOL
+					.add(createConcreteCompositeNodeCreationTool(availableComponents
+							.get(i))); // MYTOOL
 		}
-		
+
 		return paletteContainer;
 	}
 
 	/**
 	 * Creates "Ports" palette tool group
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	private PaletteContainer createPorts2Group() {
 		PaletteDrawer paletteContainer = new PaletteDrawer("Ports");
@@ -93,7 +97,7 @@ public class SoundgatesPaletteFactory {
 	/**
 	 * Creates "Connections" palette tool group
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	private PaletteContainer createConnections3Group() {
 		PaletteDrawer paletteContainer = new PaletteDrawer("Connections");
@@ -105,7 +109,7 @@ public class SoundgatesPaletteFactory {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	private ToolEntry createCompositeSoundComponent2CreationTool() {
 		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
@@ -186,15 +190,16 @@ public class SoundgatesPaletteFactory {
 	}
 
 	// MYTOOL
-	
+
 	// atomic components
 	private ToolEntry createConcreteAtomicNodeCreationTool(String atomicType) {
-		
+
 		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
 		types.add(SoundgatesElementTypes.AtomicSoundComponent_2001);
 		types.add(SoundgatesElementTypes.AtomicSoundComponent_3002);
-		
-		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(atomicType,"Create " + atomicType,types);
+
+		NodeToolEntry entry = new ConcreteAtomicNodeToolEntry(atomicType,
+				"Create " + atomicType, types);
 		entry.setId("createAtomicSoundComponent1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.AtomicSoundComponent_2001));
@@ -237,15 +242,16 @@ public class SoundgatesPaletteFactory {
 			return tool;
 		}
 	}
-		
+
 	// composite components
 	private ToolEntry createConcreteCompositeNodeCreationTool(String name) {
-		
+
 		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
-		
-		NodeToolEntry entry = new ConcreteCompositeNodeToolEntry(name,"Create " + name,types);
+
+		NodeToolEntry entry = new ConcreteCompositeNodeToolEntry(name,
+				"Create " + name, types);
 		entry.setId("createCompositeSoundComponent1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes
 				.getImageDescriptor(SoundgatesElementTypes.CompositeSoundComponent_2002));
@@ -253,10 +259,11 @@ public class SoundgatesPaletteFactory {
 		return entry;
 	}
 
-	private static class ConcreteCompositeCreationTool extends UnspecifiedTypeCreationTool {
+	private static class ConcreteCompositeCreationTool extends
+			UnspecifiedTypeCreationTool {
 		private String name;
 
-		public ConcreteCompositeCreationTool(List names,String name) {
+		public ConcreteCompositeCreationTool(List names, String name) {
 			super(names);
 			this.name = name;
 		}
@@ -273,13 +280,14 @@ public class SoundgatesPaletteFactory {
 	private static class ConcreteCompositeNodeToolEntry extends NodeToolEntry {
 		private String name;
 
-		protected ConcreteCompositeNodeToolEntry(String title, String description,List<IElementType> names) {
+		protected ConcreteCompositeNodeToolEntry(String title,
+				String description, List<IElementType> names) {
 			super(title, description, names);
 			this.name = title;
 		}
 
 		public Tool createTool() {
-			Tool tool = new ConcreteCompositeCreationTool(elementTypes,name);
+			Tool tool = new ConcreteCompositeCreationTool(elementTypes, name);
 			tool.setProperties(getToolProperties());
 			return tool;
 		}

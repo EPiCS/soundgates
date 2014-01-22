@@ -34,14 +34,6 @@ public class Codegen {
 	
 	IFolder pdCodeFolder = null;
 	
-	CodeGenHelper codeGenHelper;
-	
-	public Codegen() {
-		codeGenHelper = new CodeGenHelper();
-	}
-	
-
-	
 	public void generateCodeForPatch(Patch patch) throws IOException, CoreException {
 		compositeComponentPortMappings = new HashMap<Port, Integer>();
 		List<SoundComponent> componentList = new ArrayList<SoundComponent>();
@@ -260,12 +252,12 @@ public class Codegen {
 			int sourcePort = 0;
 			
 			if (sourceComponent instanceof AtomicSoundComponent) {
-				HashMap<Port, Integer> sourcePortMapping = codeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent,						
+				HashMap<Port, Integer> sourcePortMapping = CodeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent,						
 						AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS);
 				sourcePort = sourcePortMapping.get(link.getSource());
 			}
 			if (targetComponent instanceof AtomicSoundComponent) {
-				HashMap<Port, Integer> targetPortMapping = codeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
+				HashMap<Port, Integer> targetPortMapping = CodeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
 						AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS);
 				sinkPort = targetPortMapping.get(link.getTarget());
 			}
@@ -320,7 +312,7 @@ public class Codegen {
 				result += "#X connect " + (componentList.size() + createdObjects - 1) + " 0 ";
 				result += componentList.indexOf(targetPort.getComponent()) + " ";
 				if (targetComponent instanceof AtomicSoundComponent){
-					result += codeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
+					result += CodeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
 							AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS)
 							.get(targetPort);
 				} else if (targetComponent instanceof CompositeSoundComponent){
@@ -341,7 +333,7 @@ public class Codegen {
 				result += "#X connect " + componentList.indexOf(sourcePort.getComponent()) + " ";
 				
 				if (sourceComponent instanceof AtomicSoundComponent){
-					result += codeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent,
+					result += CodeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent,
 							AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PORT_MAPPINGS)
 							.get(sourcePort);
 				} else if (sourceComponent instanceof CompositeSoundComponent){
@@ -364,8 +356,8 @@ public class Codegen {
 			return atomicSoundComponent.getIntegerProperties().get(propName).toString();
 		if (atomicSoundComponent.getFloatProperties().containsKey(propName))
 			return atomicSoundComponent.getFloatProperties().get(propName).toString();	
-		if (atomicSoundComponent.getStringProperties().containsKey(propName))
-			return atomicSoundComponent.getStringProperties().get(propName).toString();	
+		if (atomicSoundComponent.getUserStringProperties().containsKey(propName))
+			return atomicSoundComponent.getUserStringProperties().get(propName).toString();	
 		
 		throw new Exception("Property name not in the list!");
 	}

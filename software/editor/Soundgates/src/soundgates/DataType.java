@@ -19,36 +19,14 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum DataType implements Enumerator {
 	/**
-	 * The '<em><b>FLOAT</b></em>' literal object.
+	 * The '<em><b>CONTROL</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #FLOAT_VALUE
+	 * @see #CONTROL_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	FLOAT(0, "FLOAT", "FLOAT"),
-
-	/**
-	 * The '<em><b>INTEGER</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #INTEGER_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	INTEGER(1, "INTEGER", "INTEGER"),
-
-	/**
-	 * The '<em><b>BOOLEAN</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #BOOLEAN_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	BOOLEAN(2, "BOOLEAN", "BOOLEAN"),
-
-	/**
+	CONTROL(0, "CONTROL", "CONTROL"), /**
 	 * The '<em><b>SOUND</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -56,52 +34,22 @@ public enum DataType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	SOUND(3, "SOUND", "SOUND");
+	SOUND(1, "SOUND", "SOUND");
 
 	/**
-	 * The '<em><b>FLOAT</b></em>' literal value.
+	 * The '<em><b>CONTROL</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>FLOAT</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>CONTROL</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #FLOAT
+	 * @see #CONTROL
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int FLOAT_VALUE = 0;
-
-	/**
-	 * The '<em><b>INTEGER</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>INTEGER</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @see #INTEGER
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
-	public static final int INTEGER_VALUE = 1;
-
-	/**
-	 * The '<em><b>BOOLEAN</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>BOOLEAN</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @see #BOOLEAN
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
-	public static final int BOOLEAN_VALUE = 2;
+	public static final int CONTROL_VALUE = 0;
 
 	/**
 	 * The '<em><b>SOUND</b></em>' literal value.
@@ -116,7 +64,7 @@ public enum DataType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int SOUND_VALUE = 3;
+	public static final int SOUND_VALUE = 1;
 
 	/**
 	 * An array of all the '<em><b>Data Type</b></em>' enumerators.
@@ -126,9 +74,7 @@ public enum DataType implements Enumerator {
 	 */
 	private static final DataType[] VALUES_ARRAY =
 		new DataType[] {
-			FLOAT,
-			INTEGER,
-			BOOLEAN,
+			CONTROL,
 			SOUND,
 		};
 
@@ -180,9 +126,7 @@ public enum DataType implements Enumerator {
 	 */
 	public static DataType get(int value) {
 		switch (value) {
-			case FLOAT_VALUE: return FLOAT;
-			case INTEGER_VALUE: return INTEGER;
-			case BOOLEAN_VALUE: return BOOLEAN;
+			case CONTROL_VALUE: return CONTROL;
 			case SOUND_VALUE: return SOUND;
 		}
 		return null;

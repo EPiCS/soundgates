@@ -15,6 +15,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.gmf.runtime.diagram.core.services.ViewService;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,7 +29,9 @@ import soundgates.Patch;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesFactory;
+import soundgates.diagram.edit.parts.PatchEditPart;
 import soundgates.diagram.messageDialogs.MessageDialogs;
+import soundgates.diagram.part.SoundgatesDiagramEditorPlugin;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.XMLHandler;
@@ -36,7 +40,7 @@ import soundgates.impl.SoundgatesFactoryImpl;
 
 public class PatchImporter{
 	
-	public Patch getPatchXML(String filePath) {
+	public static Patch getPatchXML(String filePath) {
 		try {
 
 				File file = new File(filePath);
@@ -144,10 +148,10 @@ public class PatchImporter{
 		return null;
 	}
 	
-	public void createPatchFromXML(String newFilePath, String patchFile, String newFileName) throws IOException {  
+	public static void createPatchFromXML(String newFilePath, String patchFile, String newFileName) throws IOException {  
 		  Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		  Map<String, Object> m = reg.getExtensionToFactoryMap();
-		  m.put(".soundgates", new SoundgatesFactoryImpl());
+		  m.put(".soundgates_diagram", new SoundgatesFactoryImpl());
 
 		  Patch patch = getPatchXML(patchFile);
 		  
@@ -155,6 +159,15 @@ public class PatchImporter{
 			  ResourceSet resSet = new ResourceSetImpl();
 			  Resource resource = resSet.createResource(URI.createFileURI(newFilePath));
 			  resource.getContents().add(patch);
+			  
+			  Diagram diag = 
+			  ViewService.createDiagram(
+					  patch,
+						PatchEditPart.MODEL_ID,
+						SoundgatesDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT);
+			  
+			  resource.getContents().add(diag);
+			  
 			  resource.save(Collections.EMPTY_MAP);
 			  
 			  MessageDialogs.patchtWasImported(newFileName);

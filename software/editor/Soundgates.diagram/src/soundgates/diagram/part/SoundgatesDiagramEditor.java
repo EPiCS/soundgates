@@ -88,25 +88,25 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected PaletteRoot createPaletteRoot(PaletteRoot existingPaletteRoot) {
-		
+
 		// Find out in which project the diagram resides 
 		IDiagramDocument dd = this.getDiagramDocument();
 		EList l = dd.getEditingDomain().getResourceSet().getResources();
 		GMFResource g = (GMFResource) l.get(0);
-		
+
 		// Construct a Resource Locator from this URI
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(g.getURI().toPlatformString(false)));
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot()
+				.findMember(new Path(g.getURI().toPlatformString(false)));
 		IProject project = resource.getProject();
 		IFolder folder = project.getFolder("soundcomponents");
-		
+
 		// Tell the Component Library about the new path
 		AtomicSoundComponentLibrary.setXMLFolder(folder);
 		CompositeSoundComponentLibrary.setXMLFolder(folder);
-		
-		
+
 		PaletteRoot root = super.createPaletteRoot(existingPaletteRoot);
 		new SoundgatesPaletteFactory().fillPalette(root);
 		return root;

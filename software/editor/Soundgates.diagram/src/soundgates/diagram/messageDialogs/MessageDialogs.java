@@ -102,10 +102,6 @@ public class MessageDialogs {
 	public static void delegation2Error(String parent, String source, String target) {		
 		MessageDialog.openWarning(null, "", "The delegation in \""+parent+"\" between the port \""+source+"\" and the port \""+target+"\" is incorrect" );		
 	}
-
-	public static void compositeSoundComponentHasNoInPort(String name) {		
-		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no IN-ports", "Please add at least one IN-port to the composite sound component \""+name+"\"");		
-	}
 	
 	public static void compositeSoundComponentHasNoOutPort(String name) {		
 		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no OUT-ports", "Please add at least one OUT-port to the composite sound component \""+name+"\"");			
@@ -145,6 +141,14 @@ public class MessageDialogs {
 	
 	public static void compositeComponentInCompositeComponentMissing(String name, String parentName) {		
 		MessageDialog.openWarning(null, "Missing composite sound component", "The composite sound component \""+name+"\" which is embedded in the composite sound component \""+parentName+"\" was not found in the folder \"soundcomponents\" or its embedded component(s) are missing");		
+	}
+
+	public static void minValueGreaterThanMaxValue(String name) {
+		MessageDialog.openWarning(null, "The minimum value of the IO component "+name+" is greater than its maximum value.","Please set correct values for the IO component "+name);		
+	}
+
+	public static void fileNotFound(String filePath) {
+		MessageDialog.openWarning(null, "File not found","File "+filePath+" not found");
 	}
 
 }

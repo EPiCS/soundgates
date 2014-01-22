@@ -79,5 +79,4 @@ public class CompositeSoundComponentComponentCompartmentEditPart extends
 			super.setRatio(ratio);
 		}
 	}
-
 }

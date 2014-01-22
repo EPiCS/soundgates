@@ -5,7 +5,7 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             id="Soundgates.codegen.wizard"
-            nameFilter="*.soundgates"
+            nameFilter="*.soundgates_diagram"
             objectClass="org.eclipse.core.resources.IFile">
          <menu
                id="Soundgates.codegen.menu"

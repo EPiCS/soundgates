@@ -31,7 +31,7 @@ import soundgates.SoundgatesPackage;
 
 public class PatchExporter extends Exporter{
 
-	public void exportToXML(String location, Patch patchToExport, String patchName) {
+	public static void exportToXML(String location, Patch patchToExport, String patchName) {
 	
 		try {
 
@@ -52,7 +52,6 @@ public class PatchExporter extends Exporter{
 			
 			// test and export of composite components
 			Tester patchTester = new Tester();
-			CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
 			
 			for(soundgates.Element element : patchToExport.getElements()){
 				
@@ -72,7 +71,7 @@ public class PatchExporter extends Exporter{
 					
 					// if the composite sound component is not exported
 					if(patchTester.shouldWriteFileForCompositeSoundComponent(compositeSoundComponent.getName())){						
-						exporter.exportToXML(compositeSoundComponent);	
+						CompositeSoundComponentExporter.exportToXML(compositeSoundComponent);	
 					}
 					
 					elements.appendChild(
@@ -112,7 +111,7 @@ public class PatchExporter extends Exporter{
 		}
 	}
 	
-	public Patch getPatch(String path){
+	public static Patch getPatch(String path){
 	    SoundgatesPackage.eINSTANCE.eClass();
 	    
 	    // Register the XMI resource factory for the .xmi extension

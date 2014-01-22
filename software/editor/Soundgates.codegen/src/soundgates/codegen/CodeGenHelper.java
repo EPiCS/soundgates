@@ -35,7 +35,7 @@ public class CodeGenHelper {
 	    return patch;		
 	}
 	
-	public HashMap<Port, Integer> parsePortMappings(AtomicSoundComponent atomicSoundComponent, String prefix){
+	public static HashMap<Port, Integer> parsePortMappings(AtomicSoundComponent atomicSoundComponent, String prefix){
 		HashMap<Port,Integer> resultingMapping = new HashMap<Port, Integer>();
 		// get port mapping
 		if (atomicSoundComponent.getStringProperties().containsKey(prefix)){
@@ -68,7 +68,7 @@ public class CodeGenHelper {
 		return resultingMapping;
 	}
 	
-	public Port portSearch(AtomicSoundComponent atomicSoundComponent, String portName) throws Exception{
+	public static Port portSearch(AtomicSoundComponent atomicSoundComponent, String portName) throws Exception{
 		for (Port port : atomicSoundComponent.getPorts()){
 			if (port.getName().equals(portName)){
 				return port;

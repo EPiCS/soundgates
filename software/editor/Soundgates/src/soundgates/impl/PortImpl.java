@@ -87,7 +87,7 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final DataType DATA_TYPE_EDEFAULT = DataType.FLOAT;
+	protected static final DataType DATA_TYPE_EDEFAULT = DataType.CONTROL;
 
 	/**
 	 * The cached value of the '{@link #getDataType() <em>Data Type</em>}' attribute.

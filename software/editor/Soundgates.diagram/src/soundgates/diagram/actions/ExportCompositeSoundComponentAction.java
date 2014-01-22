@@ -35,8 +35,7 @@ public class ExportCompositeSoundComponentAction implements IObjectActionDelegat
 			 	if(!accepted) return;
 			 	
 				if(patchTester.shouldWriteFileForCompositeSoundComponent(compositeSoundComponent.getName())){
-					CompositeSoundComponentExporter exporter = new CompositeSoundComponentExporter();
-					exporter.exportToXML(compositeSoundComponent);	
+					CompositeSoundComponentExporter.exportToXML(compositeSoundComponent);	
 				}
 			 }
 		}

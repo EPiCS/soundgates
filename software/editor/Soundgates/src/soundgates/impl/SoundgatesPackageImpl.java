@@ -201,15 +201,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		// Initialize created meta-data
 		theSoundgatesPackage.initializePackageContents();
 
-		// Register package validator
-		EValidator.Registry.INSTANCE.put
-			(theSoundgatesPackage, 
-			 new EValidator.Descriptor() {
-				 public EValidator getEValidator() {
-					 return SoundgatesValidator.INSTANCE;
-				 }
-			 });
-
 		// Mark meta-data to indicate it can't be changed
 		theSoundgatesPackage.freeze();
 
@@ -804,9 +795,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		addEEnumLiteral(directionEEnum, Direction.OUT);
 
 		initEEnum(dataTypeEEnum, DataType.class, "DataType");
-		addEEnumLiteral(dataTypeEEnum, DataType.FLOAT);
-		addEEnumLiteral(dataTypeEEnum, DataType.INTEGER);
-		addEEnumLiteral(dataTypeEEnum, DataType.BOOLEAN);
+		addEEnumLiteral(dataTypeEEnum, DataType.CONTROL);
 		addEEnumLiteral(dataTypeEEnum, DataType.SOUND);
 
 		// Create resource
@@ -815,8 +804,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		// Create annotations
 		// http://www.eclipse.org/emf/2002/Ecore
 		createEcoreAnnotations();
-		// http://www.eclipse.org/emf/2002/Ecore/OCL
-		createOCLAnnotations();
 	}
 
 	/**
@@ -834,52 +821,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 			 "invocationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL",
 			 "validationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL"
 		   });								
-		addAnnotation
-		  (connectionEClass, 
-		   source, 
-		   new String[] {
-			 "constraints", "PortKind"
-		   });				
-		addAnnotation
-		  (delegationEClass, 
-		   source, 
-		   new String[] {
-			 "constraints", "PortDirection"
-		   });				
-		addAnnotation
-		  (linkEClass, 
-		   source, 
-		   new String[] {
-			 "constraints", "PortDirection"
-		   });	
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore/OCL</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createOCLAnnotations() {
-		String source = "http://www.eclipse.org/emf/2002/Ecore/OCL";											
-		addAnnotation
-		  (connectionEClass, 
-		   source, 
-		   new String[] {
-			 "PortKind", "self.source.kind=self.target.kind"
-		   });				
-		addAnnotation
-		  (delegationEClass, 
-		   source, 
-		   new String[] {
-			 "PortDirection", "self.source.direction=self.target.direction"
-		   });				
-		addAnnotation
-		  (linkEClass, 
-		   source, 
-		   new String[] {
-			 "PortDirection", "not (self.source.direction=self.target.direction)"
-		   });
 	}
 
 } //SoundgatesPackageImpl
