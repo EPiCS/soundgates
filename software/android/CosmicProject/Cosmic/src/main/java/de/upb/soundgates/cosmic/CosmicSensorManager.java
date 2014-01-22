@@ -19,6 +19,8 @@ public class CosmicSensorManager implements SensorEventListener {
     public float[] rotationVector;
     public float[] quaternion;
 
+    public double heading, attitude, bank;
+
     public CosmicSensorManager(Context context) {
         this.context = context;
         sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
@@ -90,32 +92,72 @@ public class CosmicSensorManager implements SensorEventListener {
             this.y = y;
             this.z = z;
         }
-    }
 
-    public double heading, attitude, bank;
+        double getHeading() {
+            double sqw = w*w;
+            double sqx = x*x;
+            double sqy = y*y;
+            double sqz = z*z;
+            double unit = sqx + sqy + sqz + sqw;
+            double test = x*y + z*w;
+            if (test > 0.499*unit)
+                return 2 * Math.atan2(x, w);
+            if (test < -0.499*unit)
+                return -2 * Math.atan2(x, w);
+            return Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw);
+        }
 
-    public void set(Quat4d q1) {
-        double sqw = q1.w*q1.w;
-        double sqx = q1.x*q1.x;
-        double sqy = q1.y*q1.y;
-        double sqz = q1.z*q1.z;
-        double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-        double test = q1.x*q1.y + q1.z*q1.w;
-        if (test > 0.499*unit) { // singularity at north pole
-            heading = 2 * Math.atan2(q1.x, q1.w);
-            attitude = Math.PI/2;
-            bank = 0;
-            return;
+        double getAttitude() {
+            double sqw = w*w;
+            double sqx = x*x;
+            double sqy = y*y;
+            double sqz = z*z;
+            double unit = sqx + sqy + sqz + sqw;
+            double test = x*y + z*w;
+            if (test > 0.499*unit)
+                return Math.PI/2;
+            if (test < -0.499*unit)
+                return -Math.PI/2;
+            return Math.asin(2 * test / unit);
         }
-        if (test < -0.499*unit) { // singularity at south pole
-            heading = -2 * Math.atan2(q1.x, q1.w);
-            attitude = -Math.PI/2;
-            bank = 0;
-            return;
+
+        double getBank() {
+            double sqw = w*w;
+            double sqx = x*x;
+            double sqy = y*y;
+            double sqz = z*z;
+            double unit = sqx + sqy + sqz + sqw;
+            double test = x*y + z*w;
+            if (test > 0.499*unit)
+                return 0;
+            if (test < -0.499*unit)
+                return 0;
+            return Math.atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw);
         }
-        heading = Math.atan2(2 * q1.y * q1.w - 2 * q1.x * q1.z, sqx - sqy - sqz + sqw);
-        attitude = Math.asin(2 * test / unit);
-        bank = Math.atan2(2 * q1.x * q1.w - 2 * q1.y * q1.z, -sqx + sqy - sqz + sqw);
+
+        /*public void set(Quat4d q1) {
+            double sqw = q1.w*q1.w;
+            double sqx = q1.x*q1.x;
+            double sqy = q1.y*q1.y;
+            double sqz = q1.z*q1.z;
+            double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+            double test = q1.x*q1.y + q1.z*q1.w;
+            if (test > 0.499*unit) { // singularity at north pole
+                heading = 2 * Math.atan2(q1.x, q1.w);
+                attitude = Math.PI/2;
+                bank = 0;
+                return;
+            }
+            if (test < -0.499*unit) { // singularity at south pole
+                heading = -2 * Math.atan2(q1.x, q1.w);
+                attitude = -Math.PI/2;
+                bank = 0;
+                return;
+            }
+            heading = Math.atan2(2 * q1.y * q1.w - 2 * q1.x * q1.z, sqx - sqy - sqz + sqw);
+            attitude = Math.asin(2 * test / unit);
+            bank = Math.atan2(2 * q1.x * q1.w - 2 * q1.y * q1.z, -sqx + sqy - sqz + sqw);
+        }*/
     }
 
     @Override

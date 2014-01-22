@@ -56,10 +56,10 @@ public class InteractionFragment extends ListFragment {
     private class OSCMessageAdapter extends BaseAdapter {
         final List<InteractionRow> rows;
 
-        OSCMessageAdapter(List<OSCMessage> msgs) {
-            rows = new ArrayList<InteractionRow>(msgs.size());
+        OSCMessageAdapter(List<OSCMessage> msgList) {
+            rows = new ArrayList<InteractionRow>(msgList.size());
 
-            for (OSCMessage msg : msgs) {
+            for (OSCMessage msg : msgList) {
                 switch (msg.getInteractionMethod())
                 {
                     case SEEKBAR:
