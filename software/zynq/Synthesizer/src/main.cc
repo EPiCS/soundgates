@@ -73,6 +73,15 @@ int main( int argc, const char* argv[])
 	ui::UIManager::getInstance().registerService(oscservice, string("oscservice"), true);
 //	ui::UIManager::getInstance().registerService(tcphandshake, string("tcphandshake"), true);
 
+	if (argc > 3)
+	{
+		const char* name = (argv[4]);
+		if (name != NULL)
+		{
+			config->setAlsaDevicename(argv[4]);
+		}
+	}
+
 	patch->run();
 
 	return 0;
