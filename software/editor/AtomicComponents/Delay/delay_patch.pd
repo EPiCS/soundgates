@@ -1,0 +1,15 @@
+#N canvas 1440 49 1918 1149 10;
+#X obj 96 80 inlet;
+#X obj 114 196 outlet~;
+#X obj 272 99 inlet~;
+#X obj 113 151 delread~ \$0_delayline;
+#X obj 105 119 * 1000;
+#X floatatom 63 169 5 0 0 0 - - -;
+#X obj 256 150 delwrite~ \$0_delayline 10000;
+#X text 88 250 outports SoundOut;
+#X text 89 280 inports Delay SoundIn;
+#X connect 0 0 4 0;
+#X connect 2 0 6 0;
+#X connect 3 0 1 0;
+#X connect 4 0 3 0;
+#X connect 4 0 5 0;

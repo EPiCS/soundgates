@@ -21,7 +21,7 @@
 #include <unistd.h>
 
 #include "UserInput/tcp_handshake.h"
-#include "software_sound_components/software_sound_components.h"
+#include "SoundComponents/software/software_sound_components.h"
 
 // Soundgates imports
 #include "Inputconverter.h"

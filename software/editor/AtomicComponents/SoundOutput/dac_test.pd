@@ -1,0 +1,4 @@
+#N canvas 0 49 718 849 10;
+#X obj 192 149 dac_patch;
+#X obj 193 95 osc~ 440;
+#X connect 1 0 0 0;

@@ -1,0 +1,8 @@
+#N canvas 2400 49 958 558 10;
+#X obj 156 176 sinec_patch;
+#X floatatom 137 124 5 0 0 0 - - -;
+#X floatatom 222 123 5 0 0 0 - - -;
+#X floatatom 144 248 5 0 0 0 - - -;
+#X connect 0 0 3 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;
