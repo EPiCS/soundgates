@@ -394,6 +394,10 @@ begin
                     case process_state is
 
                     when 0 => 
+								for i in 0 to FIR_ORDER - 1 loop
+									input_mem32(i + 1) <= input_mem32(i);
+								end loop;
+								
 								input_mem32(0) <= signed(i_RAMData_fir);
 								
 								for i in 0 to FIR_ORDER loop
@@ -415,10 +419,6 @@ begin
 								fir_data64 <= (others => '0');
                         o_RAMAddr_fir <= std_logic_vector(unsigned(o_RAMAddr_fir) + 1);
                         sample_count  <= sample_count + 1;
-								
-								for i in 0 to FIR_ORDER - 1 loop
-									input_mem32(i + 1) <= input_mem32(i);
-								end loop;
 								
                         process_state  <= 0;  
                     end case;
