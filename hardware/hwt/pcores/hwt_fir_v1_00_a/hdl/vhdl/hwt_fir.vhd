@@ -72,26 +72,6 @@ architecture Behavioral of hwt_fir is
    --                 if done then
    --                     refresh_state <= "0";
    --                     state <= STATE_PROCESS;
-
-
-    component fir is
-	 Generic (
-		FIR_ORDER : integer := 9
-		);
-    Port ( 
-		  clk                       : in  std_logic;
-		  rst                       : in  std_logic;
-		  ce                        : in  std_logic;
-		  input_wave                : in  signed(31 downto 0);
---		  config_coefficient_buffer_state_valid : in  std_logic;
---		  config_coefficient_buffer_state_index : in  signed(31 downto 0);
---		  config_coefficient_buffer_state_data  : in  signed(31 downto 0);
-		  config_coefficient_valid  : in  std_logic;
-		  config_coefficient_index  : in  signed(31 downto 0);
-		  config_coefficient_data   : in  signed(31 downto 0);
-		  wave       			       : out signed(31 downto 0)
-      );
-    end component fir;
  
     signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -157,17 +137,21 @@ architecture Behavioral of hwt_fir is
     
     signal input_data       : signed(31 downto 0);
     signal fir_data         : signed(31 downto 0);
-    signal config_coefficient_valid     : std_logic;
-    signal config_coefficient_data      : signed(31 downto 0);
-	 signal config_coefficient_index     : signed(31 downto 0);
-    signal config_buffer_state_valid     : std_logic;
-    signal config_buffer_state_data      : signed(31 downto 0);
-	 signal config_buffer_state_index     : signed(31 downto 0);
+
 	 signal count 			    : signed (31 downto 0);
 	 
 	 signal process_state    : integer range 0 to 2;
 	 
-	 type mem32 is array (natural range <>) of std_logic_vector(31 downto 0);
+    type mem32 is array (natural range <>) of std_logic_vector(31 downto 0);
+	 type smem32 is array (natural range <>) of signed(31 downto 0);
+	 type mem64 is array (natural range <>) of signed(63 downto 0);
+	 
+    signal coeffs_mem32 : mem32(FIR_ORDER downto 0);
+    signal coeff_index : signed(31 downto 0);
+
+    signal inputs_mem32 : mem32(FIR_ORDER downto 0);
+
+    signal mult_mem64 : mem64(FIR_ORDER downto 0);
 	 
 	 signal init_state : integer range 0 to 1;
 	 
@@ -177,16 +161,17 @@ architecture Behavioral of hwt_fir is
 	 signal buffer_states_addr : mem32(FIR_ORDER downto 0);
 	 signal buffer_states : mem32(FIR_ORDER downto 0);
 	 
-	 signal buffer_state_count_addr : std_logic_vector(31 downto 0);
-	 signal buffer_state_count : std_logic_vector(31 downto 0);
-	 
 	 signal opt_arg : std_logic_vector(31 downto 0);
 	 signal coefficient_count_addr : std_logic_vector(31 downto 0);
 	 signal coefficient_count : std_logic_vector(31 downto 0);
 	 
 	 signal addr_counter : integer range 0 to FIR_ORDER + 1;
-
-    
+	 
+	 signal input_mem32 : smem32(FIR_ORDER downto 0);
+	 signal output_mem64 : mem64(FIR_ORDER downto 0);
+	 
+	 signal fir_data64 : signed(63 downto 0);
+	     
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
@@ -247,20 +232,6 @@ begin
 	);
             
     -- /ReconOS Stuff
-    fir_INST : fir
-    port map( 
-            clk         => clk,
-            rst         => rst,
-            ce          => fir_ce,
-            input_wave  => input_data,
-            config_coefficient_valid=> config_buffer_state_valid,
-				config_coefficient_index=> config_buffer_state_index,
-				config_coefficient_data => config_buffer_state_data,
---            config_buffer_state_valid=> config_buffer_state_valid,
---				config_buffer_state_index=> config_buffer_state_index,
---				config_buffer_state_data => config_buffer_state_data,
-            wave        => fir_data
-            );
             
     local_ram_ctrl_1 : process (clk) is
 	begin
@@ -384,10 +355,6 @@ begin
 						-- write values to FIR component
 							count <= count + 1;
 							
-							config_coefficient_valid <= '1';
-							config_coefficient_index <= count;
-							config_coefficient_data <= signed(coefficients(to_integer(count)));
-							
 							if count > signed(coefficient_count) then
 							  state <= STATE_READ;
 							  count <= (others => '0');
@@ -421,29 +388,38 @@ begin
 					if done then
 						state <= STATE_PROCESS;
 					end if;
-										
 			 
             when STATE_PROCESS =>
                 if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
                     case process_state is
 
                     when 0 => 
-								fir_ce        <= '1';
+								input_mem32(0) <= signed(i_RAMData_fir);
+								
+								for i in 0 to FIR_ORDER loop
+									output_mem64(i) <= signed(coefficients(i)) * input_mem32(FIR_ORDER - i);
+									fir_data64 <= fir_data64 + output_mem64(i);
+								end loop;
+								
 								process_state  <= 1;
 
                     when 1 =>
-								input_data <= signed(i_RAMData_fir);
+								fir_data <= fir_data64(31 downto 0);
 								o_RAMData_fir <= std_logic_vector(fir_data);
                         o_RAMWE_fir   <= '1';
 								count <= count + 1;
-                        process_state  <= 2; 
-                        o_RAMWE_fir   <= '1';      
+                        process_state  <= 2;       
 
                     when 2 =>
                         o_RAMWE_fir   <= '0';
+								fir_data64 <= (others => '0');
                         o_RAMAddr_fir <= std_logic_vector(unsigned(o_RAMAddr_fir) + 1);
                         sample_count  <= sample_count + 1;
-									
+								
+								for i in 0 to FIR_ORDER - 1 loop
+									input_mem32(i + 1) <= input_mem32(i);
+								end loop;
+								
                         process_state  <= 0;  
                     end case;
 
