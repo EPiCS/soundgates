@@ -22,7 +22,7 @@ class ADSRSoundComponent_SW : public ADSRSoundComponent{
 
 private:
 
-    enum eADSRStateType { IDLE, ATTACK, DECAY, SUSTAIN, RELEASE   };
+    enum eADSRStateType { IDLE, ATTACK, DECAY, SUSTAIN, RELEASE, CLICK_SUPPRESSION   };
 
     enum eADSRStateType m_ADSRState;
 
@@ -33,7 +33,7 @@ private:
     float               m_DecayTime;
     float               m_SustainLevel;
     float               m_ReleaseTime;
-
+    bool                m_SkipSustain;
 public:
 
     ADSRSoundComponent_SW(std::vector<std::string> params);
@@ -65,10 +65,12 @@ public:
     class OnTrigger : public ICallbackFunctor {
     private:
         ADSRSoundComponent_SW* const m_ObjRef;
+
         float m_LastTrigger;
     public:
         OnTrigger(ADSRSoundComponent_SW* ref) : m_ObjRef(ref) {
             m_LastTrigger  = 0.0;
+
         }
         void operator()();
     };

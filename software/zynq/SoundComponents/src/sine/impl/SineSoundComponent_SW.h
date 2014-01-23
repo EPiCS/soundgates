@@ -14,7 +14,6 @@
 #include <iconv.h>
 #include "../SineSoundComponent.h"
 
-
 class SineSoundComponent_SW : public SineSoundComponent {
 private:
 

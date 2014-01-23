@@ -41,10 +41,10 @@ class TCPHandshakeService : public UIService {
 private:
 
     boost::thread*  m_ServiceThread;
-    Patch*          m_pPatch;
+    Patch&          m_pPatch;
 
 public:
-    TCPHandshakeService(Patch* patch = NULL);
+    TCPHandshakeService(Patch& patch);
     virtual ~TCPHandshakeService();
 
    void startService();

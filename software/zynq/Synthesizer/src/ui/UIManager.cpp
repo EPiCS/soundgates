@@ -9,7 +9,7 @@
 
 namespace ui {
 
-void UIManager::registerService(UIService* service, string name, bool runOnRegister){
+void UIManager::registerService(UIService* service, const string& name, bool runOnRegister){
 
 	if(NULL == m_UIServices[name]){
 
@@ -26,12 +26,12 @@ void UIManager::registerService(UIService* service, string name, bool runOnRegis
 	}
 }
 
-void UIManager::startService(string name){
+void UIManager::startService(const string& name){
 
 	UIService* service = m_UIServices[name];
 
-	if(service != NULL){
-		LOG_ERROR("Could start service " << name << ": service is not registered.");
+	if(NULL == service){
+		LOG_ERROR("Could not start service " << name << ": service is not registered.");
 	}else{
 
 		eServiceState serviceState = service->getServiceState();
@@ -43,12 +43,12 @@ void UIManager::startService(string name){
 	}
 }
 
-void UIManager::stopService(string name){
+void UIManager::stopService(const string& name){
 
 	UIService* service = m_UIServices[name];
 
-	if(service != NULL){
-		LOG_ERROR("Could stop service " << name << ": service is not registered.");
+	if(NULL == service){
+		LOG_ERROR("Could not stop service " << name << ": service is not registered.");
 	}else{
 
 		eServiceState serviceState = service->getServiceState();
@@ -61,7 +61,6 @@ void UIManager::stopService(string name){
 }
 
 void UIManager::stopAllServices(){
-
 
 	for(map<string, UIService*>::iterator iter = m_UIServices.begin(); iter != m_UIServices.end(); ++iter){
 

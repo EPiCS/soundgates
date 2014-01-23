@@ -32,9 +32,8 @@ int genericOSCHandler(const char *path, const char *types, lo_arg ** argv, int a
 }
 
 
-OSCService::OSCService(Patch* patch){
+OSCService::OSCService(Patch& patch) : m_pPatch(patch){
 
-	m_pPatch 		 = patch;
 	m_LoServerThread = NULL;
 
 	setServiceState(CREATED);
@@ -51,7 +50,7 @@ void OSCService::startService(){
 
 	m_LoServerThread = lo_server_thread_new(Synthesizer::config::port, NULL);
 
-	vector<InputSoundComponentPtr>& inputs =  m_pPatch->getInputSoundComponents();
+	vector<InputSoundComponentPtr>& inputs =  m_pPatch.getInputSoundComponents();
 	LOG_DEBUG("Registering #" <<  inputs.size() << " components");
 	/* Add a generic handler for debugging purposes */
 	lo_server_thread_add_method(m_LoServerThread, NULL, NULL, genericOSCHandler, NULL);
@@ -73,8 +72,6 @@ void OSCService::startService(){
 }
 
 void OSCService::stopService(){
-
-
 	LOG_DEBUG("Stopping osc handler service");
 
 	lo_server_thread_free(m_LoServerThread);
