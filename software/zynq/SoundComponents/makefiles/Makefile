@@ -10,7 +10,8 @@ SoundComponents += add \
 				  output \
 				  square \
 				  dummysink \
-				sampleplayer 
+				sampleplayer \
+				template
 
 
 SRCDIR = ../src
