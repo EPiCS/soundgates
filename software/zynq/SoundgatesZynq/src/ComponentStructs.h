@@ -70,6 +70,12 @@ typedef struct {
 } sFIRComponentHeader;
 
 typedef struct {
+    int coefficient_count;
+    int coefficients;
+    int feedback_coefficients;
+} sIIRComponentHeader;
+
+typedef struct {
     int control_sound_in;
 } sArithmeticComponentHeader;
 

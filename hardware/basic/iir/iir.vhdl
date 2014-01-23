@@ -27,7 +27,7 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 entity iir is
 generic(
-        IIR_ORDER   : integer := 31  --> 32 coefficients
+        IIR_ORDER   : integer := 9  --> 10 coefficients
 );
 port(
         clk                  : in  std_logic;
