@@ -46,7 +46,7 @@ TemplateSoundComponent::TemplateSoundComponent(std::vector<std::string> params) 
 	CREATE_AND_REGISTER_PORT3(TemplateSoundComponent, In, ControlPort, TemplateControlIn, 1);
 
 	// For: DECLARE_PORT3(ControlPort, TemplateControlOut, 1);
-	CREATE_AND_REGISTER_PORT3(TemplateSoundComponent, In, ControlPort, TemplateControlOut, 1);
+	CREATE_AND_REGISTER_PORT3(TemplateSoundComponent, Out, ControlPort, TemplateControlOut, 1);
 
 	// For: DECLARE_PORT3(SoundPort, TemplateSoundIn, 2);
 	CREATE_AND_REGISTER_PORT3(TemplateSoundComponent, In, SoundPort, TemplateSoundIn, 2);
