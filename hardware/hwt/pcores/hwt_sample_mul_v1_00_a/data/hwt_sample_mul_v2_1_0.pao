@@ -10,5 +10,4 @@ lib proc_common_v3_00_a  proc_common_pkg vhdl
 lib soundgates_v1_00_a soundgates_common_pkg vhdl
 lib soundgates_v1_00_a soundgates_reconos_pkg vhdl
 
-lib hwt_nco_v1_00_a hwt_sample_mul vhdl
-lib hwt_nco_v1_00_a mul vhdl
+lib hwt_hwt_sample_mul_v1_00_a hwt_sample_mul vhdl

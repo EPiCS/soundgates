@@ -10,8 +10,8 @@ lib proc_common_v3_00_a  proc_common_pkg vhdl
 lib soundgates_v1_00_a soundgates_common_pkg vhdl
 lib soundgates_v1_00_a soundgates_reconos_pkg vhdl
 
-lib hwt_nco_v1_00_a hwt_sinus vhdl
-lib hwt_nco_v1_00_a nco vhdl
-lib hwt_nco_v1_00_a cordic vhdl
-lib hwt_nco_v1_00_a cordic_stage vhdl
+lib hwt_sinus_v1_00_a hwt_sinus vhdl
+lib hwt_sinus_v1_00_a nco vhdl
+lib hwt_sinus_v1_00_a cordic vhdl
+lib hwt_sinus_v1_00_a cordic_stage vhdl
 
