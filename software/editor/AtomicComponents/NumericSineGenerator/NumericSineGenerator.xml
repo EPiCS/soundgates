@@ -10,10 +10,18 @@
 	<Properties>
 	</Properties>
 	<Code>
-		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="num_sine">
+				<PortMapping PortName="Resolution" PortNumber="1"/>
+				<PortMapping PortName="Frequency" PortNumber="2"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="num_sine">
+				<PortMapping PortName="Resolution" PortNumber="1"/>
+				<PortMapping PortName="Frequency" PortNumber="2"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

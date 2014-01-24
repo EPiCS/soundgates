@@ -11,8 +11,17 @@
 	</Properties>
 	<Code>
 		<Simulation/>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Device>
+			<Implementation type="hw" name="mulcc">
+				<PortMapping PortName="Multiplicand" PortNumber="1"/>
+				<PortMapping PortName="Multiplier" PortNumber="2"/>
+				<PortMapping PortName="Product" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="mulcc">
+				<PortMapping PortName="Multiplicand" PortNumber="1"/>
+				<PortMapping PortName="Multiplier" PortNumber="2"/>
+				<PortMapping PortName="Product" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

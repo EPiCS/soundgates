@@ -11,8 +11,17 @@
 	</Properties>
 	<Code>
 		<Simulation/>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Device>
+			<Implementation type="hw" name="divcc">
+				<PortMapping PortName="Dividend" PortNumber="1"/>
+				<PortMapping PortName="Divisor" PortNumber="2"/>
+				<PortMapping PortName="Quotient" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="divcc">
+				<PortMapping PortName="Dividend" PortNumber="1"/>
+				<PortMapping PortName="Divisor" PortNumber="2"/>
+				<PortMapping PortName="Quotient" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>
