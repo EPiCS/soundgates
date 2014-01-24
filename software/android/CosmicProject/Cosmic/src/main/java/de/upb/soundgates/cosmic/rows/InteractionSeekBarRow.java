@@ -114,30 +114,8 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-            LinkedList<OSCType> types = msg.getTypes();
-
-            if(types.size() != 1) {
-                Log.e(MainActivity.LOG_TAG, "#Types wrong: " + types.size());
-                return;
-            }
-
-            Object[] args = new Object[1];
-
-            switch(types.get(0).getTypeTag())
-            {
-                case 'i':
-                    args[0] = new Integer((int)((MinMaxSeekBar)seekBar).getFloatValue());
-                    break;
-                case 'f':
-                    args[0] = new Float(((MinMaxSeekBar)seekBar).getFloatValue());
-                    break;
-                default:
-                    Log.e(MainActivity.LOG_TAG, "TypeTag not recognized");
-                    return;
-            }
-
-            // trigger msg send here
-            Log.d(MainActivity.LOG_TAG, msg.getPath() + " " + args[0].toString());
+            msg.getTypes().get(0).value = ((MinMaxSeekBar)seekBar).getFloatValue();
+            OSCSender.send(msg);
         }
 
         @Override
