@@ -5,4 +5,4 @@ OBJECTS=Soundbuffer.o OutputSoundComponent.o
 all: liboutput.so
 
 liboutput.so: $(OBJECTS)
-	$(CC) -g3 -shared -o $@  $(OBJECTS) -lasound -lpthread -L/usr/local/lib
+	$(CC) $(CLINKER_FLAGS) -o $@  $(OBJECTS) -lasound -lpthread

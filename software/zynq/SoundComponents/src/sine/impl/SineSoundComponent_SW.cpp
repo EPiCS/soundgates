@@ -79,7 +79,8 @@ void SineSoundComponent_SW::process() {
 #ifdef ZYNQ
 		m_SoundOut_1_Port->writeSample(my_sine_lookup(m_Phase) * INT_MAX, i);
 #else
-		m_SoundOut_1_Port->writeSample(sin(m_Phase) * INT_MAX, i);
+	    m_SoundOut_1_Port->writeSample(my_sine_lookup(m_Phase) * INT_MAX, i);
+//		m_SoundOut_1_Port->writeSample(sin(m_Phase) * INT_MAX, i);
 #endif
 
 		m_Phase += m_PhaseIncr;
