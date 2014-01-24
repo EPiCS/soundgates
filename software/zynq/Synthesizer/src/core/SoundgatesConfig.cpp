@@ -55,5 +55,16 @@ void SoundgatesConfig::loadDefault()
 	configValues[CFG_ALSA_CHUNKS] = 1024;
 	// Desired sample rate for the system. Not all rates might be supported
 	configValues[CFG_SAMPLE_RATE] = 44100;
+	alsadevicename = "plughw:0,0";
 	initialized = true;
+}
+
+string SoundgatesConfig::getAlsaDevicename()
+{
+	return this->alsadevicename;
+}
+
+void SoundgatesConfig::setAlsaDevicename(string s)
+{
+	this->alsadevicename = s;
 }

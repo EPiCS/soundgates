@@ -67,7 +67,6 @@ double my_sine(double x)
 	return result;
 }
 
-
 SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) : SineSoundComponent(params){
 
 	m_Phase = 0.0;

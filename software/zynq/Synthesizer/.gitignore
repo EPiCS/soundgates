@@ -3,3 +3,4 @@
 /Zynq
 makefiles/build
 makefiles/libsynthesizercore
+/Release

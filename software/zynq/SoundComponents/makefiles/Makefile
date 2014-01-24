@@ -6,9 +6,12 @@ SoundComponents += add \
 				  noise \
 				  output \
 				  sine \
+				  cmult \
 				  output \
 				  square \
-				  dummysink
+				  dummysink \
+				sampleplayer \
+				template
 
 
 SRCDIR = ../src

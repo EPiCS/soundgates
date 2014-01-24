@@ -73,9 +73,9 @@ void SoundComponentLoader::finailize(){
 		for(std::vector<SoundComponentImplPtr>::iterator iter = m_RegisteredSndInstances.begin();
 		        iter != m_RegisteredSndInstances.end();) {
 
-			LOG_DEBUG("Cleaning up sound component. Use count: " << (*iter).use_count());
 
 			(*iter).reset();
+			LOG_DEBUG("Cleaning up sound component. Use count: " << (*iter).use_count());
 
 			iter = m_RegisteredSndInstances.erase(iter);
 		}

@@ -36,10 +36,10 @@ public:
 		return instance;
 	}
 
-	void registerService(UIService*, string name, bool runOnRegister = false);
+	void registerService(UIService*, const string& name, bool runOnRegister = false);
 
-	void startService(string name);
-	void stopService(string name);
+	void startService(const string& name);
+	void stopService(const string& name);
 
 	void stopAllServices();
 	void startAllServices();

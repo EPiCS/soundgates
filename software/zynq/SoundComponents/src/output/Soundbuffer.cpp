@@ -32,10 +32,18 @@ Soundbuffer::Soundbuffer()
 
 	snd_pcm_stream_t stream = SND_PCM_STREAM_PLAYBACK;
 
-	if ((err = snd_pcm_open(&(this->pcm_handle), "plughw:0,0", stream, 0)) < 0)
+	string devName = SoundgatesConfig::getInstance()->getAlsaDevicename();
+
+	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0)) < 0)
 	{
 		fprintf(stderr, "cannot open audio device (%s)\n", snd_strerror(err));
 		this->sane = false;
+	}
+	else
+	{
+		fprintf(stdout, "opened audio device: ");
+		fprintf(stdout, "%s", devName.c_str());
+		fprintf(stdout, "\n");
 	}
 
 	if ((err = snd_pcm_hw_params_malloc(&this->hw_params)) < 0)
@@ -166,7 +174,15 @@ void Soundbuffer::run()
 				{
 					fprintf(stderr, "write to audio interface failed (%s)\n",
 							snd_strerror(err));
-					this->running = 0;
+					if (err == -32)
+					{
+						bufferUnderrun = true;
+					}
+					else
+					{
+						// Some other error, not just a buffer underrun
+						this->running = 0;
+					}
 				}
 				this->mutex.unlock();
 
