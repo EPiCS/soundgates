@@ -26,9 +26,9 @@ public class OSCType {
         switch(typeTag)
         {
             case 'i':
-                return new OSCType(msg, 'i', 0, Integer.MAX_VALUE);
+                return new OSCType(msg, 'i', 0, 1);
             case 'f':
-                return new OSCType(msg, 'f', 0, Float.MAX_VALUE);
+                return new OSCType(msg, 'f', 0, 1);
             default:
                 return null;
         }

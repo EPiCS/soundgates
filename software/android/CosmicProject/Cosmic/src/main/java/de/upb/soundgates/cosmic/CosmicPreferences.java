@@ -12,10 +12,21 @@ import java.util.SortedSet;
  */
 public class CosmicPreferences {
     public static final String PREFS_NAME = "CosmicPrefs";
+    private static CosmicPreferences instance = null;
 
     private Context context;
 
-    public CosmicPreferences(Context context) {
+    public static CosmicPreferences getInstance(Context context) {
+        if(instance == null) {
+            if(context == null)
+                return null;
+            instance = new CosmicPreferences(context);
+            return instance;
+        }
+        return instance;
+    }
+
+    private CosmicPreferences(Context context) {
         this.context = context;
     }
 

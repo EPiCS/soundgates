@@ -9,6 +9,7 @@ import android.util.Log;
 
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+import de.upb.soundgates.cosmic.osc.OSCSender;
 
 /**
  * Created by posewsky on 08.01.14.
@@ -30,8 +31,7 @@ public class CosmicSensorManager implements SensorEventListener {
 
 
     public static CosmicSensorManager getInstance(Context context) {
-        if(instance == null)
-        {
+        if(instance == null) {
             if(context == null)
                 return null;
             instance = new CosmicSensorManager(context);
@@ -105,6 +105,7 @@ public class CosmicSensorManager implements SensorEventListener {
                     for(OSCMessage msg : msg_store.getSelectedOSCMessageAsList()) {
                         if(msg.getInteractionMethod() == im) {
                             msg.setValueAsPercent(percent);
+                            OSCSender.send(msg);
                         }
                     }
                 }

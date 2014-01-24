@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onDestroy() {
         super.onDestroy();
 
-        CosmicPreferences prefs = new CosmicPreferences(this);
+        CosmicPreferences prefs = CosmicPreferences.getInstance(this);
         prefs.remove("current_host");
         prefs.remove("current_port");
     }
@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     // delete lists of known hosts and ports
     private void clearHistory() {
-        CosmicPreferences prefs = new CosmicPreferences(this);
+        CosmicPreferences prefs = CosmicPreferences.getInstance(this);
         prefs.putStringSet("hosts", null);
         prefs.putStringSet("ports", null);
     }

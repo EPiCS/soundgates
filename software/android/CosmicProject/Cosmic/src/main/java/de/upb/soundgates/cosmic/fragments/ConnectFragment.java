@@ -50,7 +50,7 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.connect_main, container, false);
 
-        CosmicPreferences prefs = new CosmicPreferences(getActivity());
+        CosmicPreferences prefs = CosmicPreferences.getInstance(getActivity());
 
         Set<String> hosts = prefs.getStringSet("hosts");
         String[] hostarray = new String[hosts.size()];
@@ -121,7 +121,7 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
             }
         }
 
-        CosmicPreferences prefs = new CosmicPreferences(getActivity());
+        CosmicPreferences prefs = CosmicPreferences.getInstance(getActivity());
         prefs.putString("current_host", host); // setHost(host);
         prefs.putInt("current_port", port); // setPort(port);
 
