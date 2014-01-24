@@ -25,12 +25,15 @@ public:
 	void load(string path);
 	void loadDefault();
 	double getConf(SoundgatesConfValue);
+	string getAlsaDevicename();
+	void setAlsaDevicename(string s);
 
 private:
 	SoundgatesConfig();
 	~SoundgatesConfig();
 
 	double configValues[CFG_NUM_CONFIG_FIELDS];
+	string alsadevicename;
 	static SoundgatesConfig* instance;
 	bool initialized;
 	string cfgPath;

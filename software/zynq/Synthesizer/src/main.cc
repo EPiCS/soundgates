@@ -49,6 +49,7 @@ int main( int argc, const char* argv[])
 	    ("soundcomponents,S", po::value<std::string>()->required(), "Path to the sound components")
 	    ("hw", po::value<bool>(&Synthesizer::config::useHWThreads)->default_value(false), "Run with hardware threads")
 	    ("patch-file,p", po::value<std::string>()->required(), "Patch file")
+	    ("alsadevice,a", po::value<std::string>()->default_value("plughw:0,0"), "ALSA device name")
 	;
 
 	po::variables_map vm;
@@ -77,6 +78,7 @@ int main( int argc, const char* argv[])
 
 	TGFReader reader;
 
+    config->setAlsaDevicename(vm["alsadevice"].as<std::string>());
     SoundComponentLoader::getInstance().initialize(vm["soundcomponents"].as<std::string>());
 
     reader.read(&patch, vm["patch-file"].as<std::string>());
