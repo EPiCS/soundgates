@@ -31,7 +31,7 @@ public class AtomicBuilder {
 		}
 		if (args.length == 0){
 			System.out.println("Usage:");
-			System.out.println("\t -r <sourceFolder> <destinationFolder>");
+			System.out.println("\t --folder <sourceFolder> <destinationFolder>");
 			System.out.println("or");
 			System.out.println("\t <pdFile> <templateFile> <destinationFile>");
 		}
