@@ -28,13 +28,60 @@ typedef struct {
 typedef struct {
 	int phase_offset;
 	int phase_increment;
-} sNcoComponentHeader;
+} sWaveComponentHeader; // sinus, sawtooth, triangle
 
-struct sNCO_struct{
+typedef struct {
+	int phase_offset;
+	int phase_increment;
+	int duty_on;
+	int duty_off;
+} sSquareComponentHeader;
 
+typedef struct {
+    int bang;
+    int stop;
+    int atck_dura;
+    int dcay_dura;
+    int rlse_dura;
+    int strt_amp;
+    int atck_amp;
+    int sust_amp;
+    int rlse_amp;
+} sADSRComponentHeader;
 
-};
+typedef struct {
+    int incr;
+    int decr;
+    int start_amp;
+    int upper_amp;
+    int end_amp;
+} sRAMPComponentHeader;
 
+typedef struct {    
+	int master_offset;
+	int master_increment;
+	int slave_offset;
+	int slave_increment;
+} sNCOSyncComponentHeader;
+
+typedef struct {
+    int coefficient_count;
+    int coefficients;
+} sFIRComponentHeader;
+
+typedef struct {
+    int coefficient_count;
+    int coefficients;
+    int feedback_coefficients;
+} sIIRComponentHeader;
+
+typedef struct {
+    int control_sound_in;
+} sArithmeticComponentHeader;
+
+typedef struct {
+    int percentage;
+} sAmplifierComponentHeader;
 
 struct OSCComponent_struct{
     char                  *comp_osc_name;

@@ -9,6 +9,7 @@ import java.util.List;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -90,7 +91,7 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-            
+
         }
 
         @Override
@@ -136,7 +137,44 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
                 }
             }
 
-            View.OnClickListener ocl = new View.OnClickListener() {
+            View.OnTouchListener otl = (new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    int freq;
+                    switch(view.getId())
+                    {
+                        case R.id.bindrow_button_c:
+                            freq = 131; break;
+                        case R.id.bindrow_button_d:
+                            freq = 147; break;
+                        case R.id.bindrow_button_e:
+                            freq = 165; break;
+                        case R.id.bindrow_button_f:
+                            freq = 175; break;
+                        case R.id.bindrow_button_g:
+                            freq = 196; break;
+                        case R.id.bindrow_button_a:
+                            freq = 220; break;
+                        case R.id.bindrow_button_h:
+                            freq = 247; break;
+                        default:
+                            freq = 220;
+                    }
+                    viewHolder.seekbar.setFloatValue(freq);
+
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        viewHolder.seekbar.setFloatValue(0);
+                        return true;
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        viewHolder.seekbar.setFloatValue(freq);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            /*View.OnClickListener ocl = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int freq;
@@ -161,7 +199,7 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
                     }
                     viewHolder.seekbar.setFloatValue(freq);
                 }
-            };
+            };*/
 
             viewHolder.button_c =(Button) view.findViewById(R.id.bindrow_button_c);
             viewHolder.button_d =(Button) view.findViewById(R.id.bindrow_button_d);
@@ -171,13 +209,21 @@ public class BindArrayAdapter extends ArrayAdapter<OSCMessage> {
             viewHolder.button_a =(Button) view.findViewById(R.id.bindrow_button_a);
             viewHolder.button_h =(Button) view.findViewById(R.id.bindrow_button_h);
 
-            viewHolder.button_c.setOnClickListener(ocl);
+            /*viewHolder.button_c.setOnClickListener(ocl);
             viewHolder.button_d.setOnClickListener(ocl);
             viewHolder.button_e.setOnClickListener(ocl);
             viewHolder.button_f.setOnClickListener(ocl);
             viewHolder.button_g.setOnClickListener(ocl);
             viewHolder.button_a.setOnClickListener(ocl);
-            viewHolder.button_h.setOnClickListener(ocl);
+            viewHolder.button_h.setOnClickListener(ocl);*/
+
+            viewHolder.button_c.setOnTouchListener(otl);
+            viewHolder.button_d.setOnTouchListener(otl);
+            viewHolder.button_e.setOnTouchListener(otl);
+            viewHolder.button_f.setOnTouchListener(otl);
+            viewHolder.button_g.setOnTouchListener(otl);
+            viewHolder.button_a.setOnTouchListener(otl);
+            viewHolder.button_h.setOnTouchListener(otl);
 
             view.setTag(viewHolder);
             viewHolder.seekbar.setTag(list.get(position));
