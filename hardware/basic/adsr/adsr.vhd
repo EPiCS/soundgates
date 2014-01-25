@@ -28,14 +28,13 @@ port(
         clk         : in  std_logic;
         rst         : in  std_logic;
         ce          : in  std_logic;
+        input_wave  : in  signed(31 downto 0);
+        start       : in  std_logic_vector(31 downto 0);
+        stop        : in  std_logic_vector(31 downto 0);
         attack      : in  signed(31 downto 0); 
-        decay       : in  signed(31 downto 0);  
+        decay       : in  signed(31 downto 0);
         sustain     : in  signed(31 downto 0);
         release     : in  signed(31 downto 0);
-        start_amp   : in  signed(31 downto 0);
-        attack_amp  : in  signed(31 downto 0);
-        sustain_amp : in  signed(31 downto 0);
-        release_amp : in  signed(31 downto 0);
         wave        : out signed(31 downto 0)
     );
 
@@ -43,48 +42,64 @@ end adsr;
 
 architecture Behavioral of adsr is
 
-    type   adsr_states is (s_attack, s_decay, s_sustain, s_release, s_exit);
+    type   adsr_states is (s_idle, s_attack, s_decay, s_sustain, s_release, s_exit);
     signal state  : adsr_states;
-    signal count  : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     signal i_wave : signed (31 downto 0);
-
+    signal b_stop : std_logic;
+	 signal s_one : signed (31 downto 0) := to_signed(integer(real(1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
+	 signal s_zero : signed (31 downto 0) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
+	 signal wave64 : signed (63 downto 0);
+		
     begin
 	
-        wave <= i_wave;
+        wave64 <= i_wave * input_wave;
+		  wave <= wave64(31 downto 0);
         
         ADSR_PROC : process (clk, rst)
 
         begin
             if rst = '1' then
-                i_wave <= start_amp;
+                i_wave <= s_zero;
+                state <= s_idle;
+                b_stop <= '0';
             else
             
             if rising_edge(clk) then
+                if stop(0) = '1' then
+                    b_stop <= '1';
+                end if;
                 if ce = '1' then
-                case state is
-                    when s_attack   =>
-                        i_wave <= i_wave + attack;
-                        if i_wave >= attack_amp then
-                            state <= s_decay;
-                        end if;
-                    when s_decay    =>
-                        i_wave <= i_wave - decay;
-                        if i_wave <= sustain_amp then
-                            state <= s_sustain;
-                        end if;
-                    when s_sustain  =>
-                        count <= count + to_signed(integer(real( 0.1 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-                        if count >= to_signed(integer(real( 15.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
-                            state <= s_release;
-                        end if;
-                    when s_release  =>
-                        i_wave <= i_wave - release;
-                        if i_wave <= release_amp then
-                            state <= s_exit;
-                        end if;
-							when s_exit		=>
-								--state <= s_exit;
-                end case; 
+                    if start(0) = '1' then
+                        state <= s_attack;
+                    end if;
+
+                    case state is
+                        when s_attack   =>
+                            i_wave <= i_wave + attack;
+                            if i_wave >= s_one then
+                                state <= s_decay;
+                            end if;
+                        when s_decay    =>
+                            i_wave <= i_wave - decay;
+                            if i_wave <= sustain then
+                                state <= s_sustain;
+                            end if;
+                        when s_sustain  =>
+                            i_wave <= sustain;
+                            if b_stop = '1' then
+                                state <= s_release;
+                                b_stop <= '0';
+                            end if;
+                        when s_release  =>
+                            i_wave <= i_wave - release;
+                            if i_wave <= s_zero then
+                                state <= s_exit;
+                            end if;
+							  when s_exit		=>
+								  state <= s_idle;
+							  when others =>
+									state <= s_idle;
+                    end case;
                 end if;                       
             end if;
 		end if;
