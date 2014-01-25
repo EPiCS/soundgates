@@ -70,9 +70,12 @@ class TGF(object):
                 used_components.add(c.getType())
                 implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())+ '\n' 
         implementations = implementations + '"'
-        # Write file
+        # Check preconditions
+        if not (os.path.exists("project")):
+            os.makedirs("project")
         if os.path.isfile(path):
             os.remove(path)
+        # Write file
         with open(path, 'a') as f:
             f.write(base_design + '\n')
             f.write(num_static_hwts+ '\n')
@@ -137,8 +140,9 @@ class HardwareComponent(object):
             src = library.getPath(self.Type)
             dst = 'project/' + self.Implementation
             if (os.path.isdir(dst)):
-                shutil.rmtree(dst)  
-            os.link(src, dst)    
+                os.unlink(dst)
+            os.symlink(src, dst)
+            self.IsLinked = True
     
     def getType(self):
         return self.Type
@@ -185,10 +189,11 @@ class LibraryComponent(object):
     '''
     This class represents a single Hardware Component
     '''
-    def __init__(self, abbreviation, implementation, path):
+    def __init__(self, abbreviation, implementation):
         self.Abbreviation = abbreviation
         self.Implementation = implementation
-        self.Path = path
+        soundgates = os.getenv("SOUNDGATES")
+        self.Path = soundgates + '/hardware/hwt/pcores/'+self.getImplementation() # os.path.join(soundgates, '/hardware/hwt/pcores/'+self.getImplementation())
         self.Count = 0
 
     def getAbbreviation(self):
@@ -198,7 +203,7 @@ class LibraryComponent(object):
         return self.Implementation
     
     def getPath(self):
-        return '$SOUNDGATES/hardware/hwt/pcores/'+self.getImplementation()
+        return self.Path
     
     def increaseCount(self):
         self.Count = self.Count + 1
