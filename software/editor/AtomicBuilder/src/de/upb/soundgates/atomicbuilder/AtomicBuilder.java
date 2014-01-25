@@ -84,7 +84,8 @@ public class AtomicBuilder {
 		return null;
 	}
 
-	private static void output(Document templateDoc, File destination) throws TransformerException {
+	private static void output(Document templateDoc, File destination) throws TransformerException, IOException {
+		destination.createNewFile();
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(templateDoc);
