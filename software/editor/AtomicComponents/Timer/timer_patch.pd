@@ -1,8 +1,8 @@
 #N canvas 0 49 718 849 12;
 #X obj 76 69 inlet;
 #X obj 148 69 inlet;
-#X text 79 34 inports Trigger Delay;
-#X text 28 16 outports Trigger;
+#X text 79 34 inports TriggerIn Delay;
+#X text 28 16 outports TriggerOut;
 #X obj 70 246 outlet;
 #X obj 97 186 delay;
 #X obj 85 124 sel 1;

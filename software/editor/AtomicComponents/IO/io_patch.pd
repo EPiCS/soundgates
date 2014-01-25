@@ -1,7 +1,5 @@
-#N canvas 1440 49 958 1149 10;
+#N canvas 0 49 718 849 10;
 #X text 0 0 outports Value;
 #X obj 49 90 outlet;
 #X obj 45 50 r @ComponentName;
-#X msg 96 90 replace 2 ComponentName;
 #X connect 2 0 1 0;
-#X connect 2 0 3 0;
