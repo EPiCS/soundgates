@@ -23,7 +23,7 @@
 #include "core/SoundPort.h"
 #include "core/ControlPort.h"
 #include "core/HWThreadManager.h"
-
+#include "core/SoundgatesConfig.h"
 #include "utils/SoundComponenLoader.h"
 #ifdef ZYNQ
 

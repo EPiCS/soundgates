@@ -1,5 +1,5 @@
 
-1 input/sw/'/sin f'
+1 input/sw/'/sin f', '[0:800]'
 #1 const/sw/'440.0'
 #2 sine/hw(0)
 2 sine/sw

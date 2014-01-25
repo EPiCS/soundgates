@@ -9,7 +9,7 @@ endif
 CXX=g++
 CC_ARM=$(XILINX_BIN_PATH)/arm-xilinx-linux-gnueabi-g++
 CXXFLAGS=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC -isystem"../../../Libraries/x86_64/include"
-CFLAGS_ARM=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC -isystem"../../../Libraries/arm/include" 
+CFLAGS_ARM=-Wall -Wno-unused-variable $(DEBUGLEVEL) -DZYNQ -fPIC -isystem"../../../Libraries/arm/include" 
 
 ifndef target
 target=x86_64

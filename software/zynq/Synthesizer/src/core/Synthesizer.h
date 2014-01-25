@@ -59,7 +59,6 @@ namespace Synthesizer{
 		static const int 	blocksize      = 64;
 		static const int    bytesPerSample = sizeof(int);
 		static const int    bytesPerBlock  = blocksize * bytesPerSample;
-		static bool         useHWThreads   = false;
 	}
 }
 

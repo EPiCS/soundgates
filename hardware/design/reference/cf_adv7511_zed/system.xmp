@@ -3,7 +3,6 @@ XmpVersion: 14.6
 VerMgmt: 14.6
 IntStyle: default
 Flow: ise
-ModuleSearchPath: ../cf_lib/
 MHS File: system.mhs
 Architecture: zynq
 Device: xc7z020

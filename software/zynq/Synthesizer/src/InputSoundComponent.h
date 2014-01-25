@@ -17,6 +17,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 #include "core/ControlPort.h"
 #include "core/ControlLink.h"
 #include "core/SoundComponentImpl.h"
@@ -46,8 +47,9 @@ private:
 
 	std::string m_OSCAddresses;
 	std::string m_OSCTypeTag;
-	void setup(string oscaddress);
-
+	std::vector<std::pair<float, float> > m_Ranges;
+	void setupOSCAddress(string oscaddress);
+	void setupRange(std::string range);
 public:
 
 	InputSoundComponent() { }
@@ -57,7 +59,7 @@ public:
 
 	std::string& getOscAddress();
 	std::string& getOscTypeTag();
-
+	std::pair<float, float>& getRange(int typTagIndex);
 	ControlPortPtr getPort(unsigned int);
 
 	void init() { /* do not implement */ }

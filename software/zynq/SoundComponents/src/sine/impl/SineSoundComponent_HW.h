@@ -8,7 +8,7 @@
 #ifndef SINEIMPL_HW_H_
 #define SINEIMPL_HW_H_
 
-//#define ZYNQ
+#define ZYNQ
 #include "../SineSoundComponent.h"
 
 #include <HWSlot.h>
@@ -17,8 +17,8 @@
 #ifdef ZYNQ
 
 extern "C"{
-    #include <reconos.h>
-    #include <mbox.h>
+    #include <reconos/reconos.h>
+    #include <reconos/mbox.h>
 }
 
 #define SINUS_HWT_START 0x0F
@@ -34,14 +34,14 @@ private:
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
-
+    char*  m_LocalBuffer;
     /* Two message box resources */
     struct reconos_resource m_ReconOSResource[2];
     struct reconos_hwt      m_ReconOSThread;
 public:
 
     SineSoundComponent_HW(std::vector<std::string>);
-
+    virtual ~SineSoundComponent_HW();
     void init();
     void process();
 

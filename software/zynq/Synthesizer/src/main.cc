@@ -31,8 +31,8 @@ static Patch patch;
 
 int main( int argc, const char* argv[])
 {
-	SoundgatesConfig* config = SoundgatesConfig::getInstance();
-	config->loadDefault();
+	SoundgatesConfig::getInstance().loadDefault();
+
 
 	/* Register signal handler after starting rpc service, because
 	 * this service currently defines its own signal handler */
@@ -46,8 +46,8 @@ int main( int argc, const char* argv[])
 	desc.add_options()
 	    ("help,h", "prints help message")
 	    ("verbose", "verbose output")
-	    ("soundcomponents,S", po::value<std::string>()->required(), "Path to the sound components")
-	    ("hw", po::value<bool>(&Synthesizer::config::useHWThreads)->default_value(false), "Run with hardware threads")
+	    ("soundcomponents,s", po::value<std::string>()->required(), "Path to the sound components")
+	    ("hw", po::value<bool>()->default_value(false), "Run with hardware threads")
 	    ("patch-file,p", po::value<std::string>()->required(), "Patch file")
 	    ("alsadevice,a", po::value<std::string>()->default_value("plughw:0,0"), "ALSA device name")
 	;
@@ -76,9 +76,13 @@ int main( int argc, const char* argv[])
 	      return EXIT_FAILURE;
 	    }
 
+	SoundgatesConfig::getInstance().setUseHWThreads(vm["hw"].as<bool>());
+
+    LOG_INFO("Hardware thread support: " << SoundgatesConfig::getInstance().useHWThreads());
+
 	TGFReader reader;
 
-    config->setAlsaDevicename(vm["alsadevice"].as<std::string>());
+	SoundgatesConfig::getInstance().setAlsaDevicename(vm["alsadevice"].as<std::string>());
     SoundComponentLoader::getInstance().initialize(vm["soundcomponents"].as<std::string>());
 
     reader.read(&patch, vm["patch-file"].as<std::string>());
@@ -89,6 +93,7 @@ int main( int argc, const char* argv[])
 //	ui::UIManager::getInstance().registerService(xmlrpcservice, "xmlrpc", true);
 	ui::UIManager::getInstance().registerService(oscservice, "oscservice", true);
 	ui::UIManager::getInstance().registerService(tcphandshake, "tcphandshake", true);
+
 
 	patch.run();
 

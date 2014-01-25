@@ -15,6 +15,7 @@ Class/Function however should not be documented here.
 
 
 import struct
+import sys
 
 def do_convert(filename):
     """ """
@@ -38,5 +39,5 @@ def do_convert(filename):
 if __name__=='__main__':
     print "Converting..."
 
-    do_convert("sine.out")
+    do_convert(sys.argv[1])
     print "done"
