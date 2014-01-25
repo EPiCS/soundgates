@@ -1,0 +1,17 @@
+abbreviation,implementation
+sin,hwt_sinus_v1_00_a
+noise,hwt_noise_v1_00_a
+saw,hwt_sawtooth_v1_00_a
+triangle,hwt_triangle_v1_00_a
+square,hwt_square_v1_00_a
+add,ad_hwt
+sub,sub_hwt
+mul,mul_hwt
+mixer,mixer_hwt
+delay,delay_hwt
+smplply,smplply_hwt
+adsr,hwt_adsr_v1_00_a
+ramp,hwt_ramp_v1_00_a
+const,const_hwt
+dac,dac_hwt
+amp,hwt_amplifier_v1_00_a
