@@ -29,6 +29,8 @@ public class CosmicSensorManager implements SensorEventListener {
     public float lux;
     public float maxLux;
 
+    private final float deltaRotation = 0.001f;
+
 
     public static CosmicSensorManager getInstance(Context context) {
         if(instance == null) {
@@ -53,7 +55,7 @@ public class CosmicSensorManager implements SensorEventListener {
 
     private void initListeners() {
         sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),
                 SensorManager.SENSOR_DELAY_NORMAL); // SensorManager.SENSOR_DELAY_FASTEST
 
         sensorManager.registerListener(this,
@@ -68,9 +70,13 @@ public class CosmicSensorManager implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         switch(sensorEvent.sensor.getType()) {
-            case Sensor.TYPE_ACCELEROMETER:
+            case Sensor.TYPE_LINEAR_ACCELERATION:
                 break;
             case Sensor.TYPE_ROTATION_VECTOR:
+                if(Math.abs(rotationVector[0] - sensorEvent.values[0]) < deltaRotation &&
+                   Math.abs(rotationVector[1] - sensorEvent.values[1]) < deltaRotation &&
+                   Math.abs(rotationVector[2] - sensorEvent.values[2]) < deltaRotation)
+                    return;
                 rotationVector[0] = sensorEvent.values[0];
                 rotationVector[1] = sensorEvent.values[1];
                 rotationVector[2] = sensorEvent.values[2];
@@ -85,11 +91,24 @@ public class CosmicSensorManager implements SensorEventListener {
                 else
                     SensorManager.getQuaternionFromVector(quaternion, rotationVector);
 
+                Quat4d q = new Quat4d();
+                q.setQuat4d(quaternion);
+                heading = q.getHeading();
+                attitude = q.getAttitude();
+
+                //Log.i(LOG_TAG, "Rotary Switch: " + ((attitude+Math.PI/2) * 100 / Math.PI));
+                float pHeading = (float)((heading+Math.PI) / (2 * Math.PI));
+                float offset = 0.5f;
+                if(pHeading+offset > 1)
+                    pHeading = pHeading+offset - 1;
+                else
+                    pHeading += offset;
+                updateModel(InteractionMethod.TILT, pHeading);
+
                 break;
             case Sensor.TYPE_LIGHT:
                 lux = sensorEvent.values[0];
-                if(lux <= maxLux)
-                {
+                if(lux <= maxLux) {
                     float p = (maxLux - lux) / maxLux;
                     updateModel(InteractionMethod.LIGHT, p);
                 }
@@ -117,6 +136,20 @@ public class CosmicSensorManager implements SensorEventListener {
 
     private class Quat4d {
         public float w, x, y, z;
+
+        public boolean setQuat4d(float[] quaternion) {
+            if(quaternion.length != 4)
+                return false;
+            w = quaternion[0];
+            x = quaternion[1];
+            y = quaternion[2];
+            z = quaternion[3];
+            return true;
+        }
+
+        public Quat4d() {
+            this(0, 0, 0, 0);
+        }
 
         public Quat4d(float w, float x, float y, float z) {
             this.w = w;
