@@ -9,7 +9,7 @@
 #define TEMPLATECOMPONENT_HPP_
 
 #include <sstream>
-
+#include <climits>
 // necessary includes
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
@@ -21,6 +21,8 @@ class TemplateSoundComponent: public SoundComponentImpl
 {
 
 public:
+	float val;
+
 	// REQUIRED: This macro creates a name field.
 	DECLARE_COMPONENTNAME
 
@@ -53,6 +55,21 @@ public:
 	// Will usually be implemented in the SW/HW subclasses
 	virtual void process(void) = 0;
 
+};
+
+// This class implements a callback function that is called when a control value changes.
+// Needs to be registered in the init() method.
+class OnChange : public ICallbackFunctor {
+private:
+    TemplateSoundComponent& m_ObjRef;
+public:
+    OnChange(TemplateSoundComponent& ref ) : m_ObjRef(ref){ }
+
+    void operator()(){
+    	// The first new control value can be accessed like this.
+    	float val = m_ObjRef.m_TemplateControlIn_1_Port->pop();
+        m_ObjRef.val = val;
+    }
 };
 
 #endif /* TEMPLATECOMPONENT_HPP_ */
