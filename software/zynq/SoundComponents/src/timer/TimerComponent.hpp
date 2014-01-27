@@ -72,8 +72,7 @@ public:
     void operator()(){
     	struct timeval tv;
     	gettimeofday(&tv, NULL);
-
-    	//m_ObjRef.lastTime = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    	m_ObjRef.lastTime = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 
     	// The first new control value can be accessed like this.
     	float val = m_ObjRef.m_TimerEnabledIn_1_Port->pop();

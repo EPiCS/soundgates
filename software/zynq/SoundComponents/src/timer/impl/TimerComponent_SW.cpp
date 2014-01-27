@@ -26,8 +26,6 @@ void TimerComponent_SW::process()
 		lastTime = now;
 	}
 	std::cout << now << " " << lastTime << " " << duration << " " << now-lastTime << std::endl;
-	char bla;
-	//std::cin >> bla;
 
 	// finally, push a value to the outgoing control port
 	m_TimerOut_1_Port->push(out ? 1.0f : 0.0f);
