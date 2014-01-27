@@ -11,6 +11,7 @@ SoundComponents += add \
 				  square \
 				  dummysink \
 				sampleplayer \
+                soundToControl \
 				template \
 				timer
 
