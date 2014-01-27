@@ -11,7 +11,8 @@ SoundComponents += add \
 				  square \
 				  dummysink \
 				sampleplayer \
-				template
+				template \
+				timer
 
 
 SRCDIR = ../src
