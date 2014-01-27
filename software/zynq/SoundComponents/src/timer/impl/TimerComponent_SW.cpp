@@ -21,8 +21,13 @@ void TimerComponent_SW::process()
 	gettimeofday(&tv, NULL);
 	unsigned long long now = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	// Access the control value. We implemented a callback method in the superclass which handles control values.
-	if(now-lastTime >= duration)
+	if(now-lastTime >= (unsigned long long)duration) {
 		out = !out;
+		lastTime = now;
+	}
+	std::cout << now << " " << lastTime << " " << duration << " " << now-lastTime << std::endl;
+	char bla;
+	//std::cin >> bla;
 
 	// finally, push a value to the outgoing control port
 	m_TimerOut_1_Port->push(out ? 1.0f : 0.0f);
