@@ -1,0 +1,15 @@
+#N canvas 1440 49 958 1149 10;
+#X floatatom 389 139 5 0 0 0 - - -;
+#X msg 64 9 1;
+#X msg 97 9 0;
+#X obj 68 221 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 25 88 expr $f1 \; if (($f1 == 0 && $f2 == 1) || ($f1 == 1 &&
+$f2 == 0) \, 1 \, 0) \;;
+#X obj 68 156 sel 1;
+#X connect 0 0 4 1;
+#X connect 1 0 4 0;
+#X connect 2 0 4 0;
+#X connect 4 0 0 0;
+#X connect 4 1 5 0;
+#X connect 5 0 3 0;
