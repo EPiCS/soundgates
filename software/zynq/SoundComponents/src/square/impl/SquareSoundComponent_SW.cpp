@@ -15,21 +15,18 @@ SquareSoundComponent_SW::SquareSoundComponent_SW(std::vector<std::string> params
 
 }
 
+SquareSoundComponent_SW::~SquareSoundComponent_SW() {}
+
 void SquareSoundComponent_SW::init()
 {
-	m_SoundOut_1_Port->init();
+	SquareSoundComponent::init();
 }
 
 void SquareSoundComponent_SW::process()
 {
-
-	double phase_incr = getPhaseIncrement(m_FrequencyIn_1_Port->pop());
-
 	int value = 0;
 	for (int i = 0; i < Synthesizer::config::blocksize; i++)
 	{
-//		phase_incr = getPhaseIncrement(inlink->getNextControlData());
-
 		if (phase < M_PI)
 		{
 			value = INT_MAX;
@@ -40,7 +37,7 @@ void SquareSoundComponent_SW::process()
 		}
 
 		m_SoundOut_1_Port->writeSample(value,i);
-		phase += phase_incr;
+		phase += this->m_PhaseIncr;
 
 		if (phase >= M_PI * 2)
 		{
