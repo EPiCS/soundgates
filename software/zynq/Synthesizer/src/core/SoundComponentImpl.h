@@ -129,6 +129,7 @@ public:
 
 	virtual void init() = 0;
 	virtual void process() = 0;
+	virtual void initLater();
 
 };
 

@@ -28,8 +28,11 @@ public:
 
     DECLARE_PORT3(SoundPort, SoundOut, 1);
 
+    float multValue;
+
     MultiplyControl(std::vector<std::string>);
     virtual ~MultiplyControl();
+    virtual void init(void);
 };
 
 #endif /* MULTIPLYCONTROL_H_ */

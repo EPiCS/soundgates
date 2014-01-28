@@ -16,11 +16,13 @@
 #include <ControlLink.h>
 #include <ControlPort.h>
 #include <BufferedLink.h>
+#include <Listener.h>
 
 class SoundDelayComponent: public SoundComponentImpl {
 
 private:
 
+	float delayValue;
 	int   m_DelaySlotSize;      /*< maximum number of samples for delay buffer */
 
 	char* m_pDelaySlot;			/*< sample buffer for delay */

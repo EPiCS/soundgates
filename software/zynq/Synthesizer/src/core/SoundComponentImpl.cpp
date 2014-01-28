@@ -47,3 +47,8 @@ std::vector<PortPtr>& SoundComponentImpl::getOutports(){
 
     return m_Outports;
 }
+
+void SoundComponentImpl::initLater()
+{
+}
+

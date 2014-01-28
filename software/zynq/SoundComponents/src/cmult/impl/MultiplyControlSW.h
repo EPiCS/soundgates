@@ -15,8 +15,6 @@ public:
     MultiplyControl_SW(std::vector<std::string>);
     virtual ~MultiplyControl_SW();
 
-    void init();
-
     void process();
 
 };

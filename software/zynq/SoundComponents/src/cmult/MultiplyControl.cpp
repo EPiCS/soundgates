@@ -25,3 +25,7 @@ MultiplyControl::MultiplyControl(std::vector<std::string> params) : SoundCompone
 MultiplyControl::~MultiplyControl() {
 
 }
+
+void MultiplyControl::init() {
+	m_ValueIn_2_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(multValue, m_ValueIn_2_Port)));
+}
