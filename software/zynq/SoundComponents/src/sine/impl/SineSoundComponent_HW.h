@@ -13,7 +13,7 @@
 
 #include <HWSlot.h>
 #include <HWTParameters.h>
-
+#define ZYNQ
 #ifdef ZYNQ
 
 extern "C"{
@@ -30,7 +30,7 @@ private:
     HWSlot slot;
 
     /* Parameter struct: 1 src address, 1 argument */
-    HWTParameters<>::ParamtStruct_t m_HWTParams;
+    HWTParameters<1, 2>::ParamtStruct_t m_HWTParams;
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
@@ -59,7 +59,7 @@ public:
     HWSlot slot;
 
     /* Parameter struct: 1 src address, 1 argument */
-    HWTParameters<>::ParamtStruct_t m_HWTParams;
+    HWTParameters<1, 2>::ParamtStruct_t m_HWTParams;
 
     SineSoundComponent_HW(std::vector<std::string>);
     virtual ~SineSoundComponent_HW();

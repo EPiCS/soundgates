@@ -26,9 +26,12 @@ def do_convert(filename):
         sample = 0
 
         for line in f_in:
-            sample = int(line)
-            data = struct.pack("i", sample) # pack integer in a binary string
-            f_out.write(data)
+	    try:
+            	sample = int(line)
+            	data = struct.pack("i", sample) # pack integer in a binary string
+            	f_out.write(data)
+	    except:
+		print "Cannot convert: " + line
 
     finally:
         f_in.close()
