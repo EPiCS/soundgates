@@ -24,9 +24,8 @@ void TimerComponent_SW::process()
 	if(now-lastTime >= (unsigned long long)duration) {
 		out = !out;
 		lastTime = now;
+	    // finally, push a value to the outgoing control port
+	    m_TimerOut_1_Port->push(out ? 1.0f : 0.0f);
 	}
-	std::cout << now << " " << lastTime << " " << duration << " " << now-lastTime << std::endl;
-
-	// finally, push a value to the outgoing control port
-	m_TimerOut_1_Port->push(out ? 1.0f : 0.0f);
+	LOG_DEBUG("Duration " << duration);
 }

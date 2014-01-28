@@ -1,9 +1,9 @@
 1 const/sw/'1'
-2 const/sw/'2000'
+2 input/sw/'/duration f', '[0:5000]'
 3 timer/sw
 4 sine/sw
 5 soundtocontrol/sw
-6 const/sw/'110'
+6 const/sw/'/lower f', '[0:200]'
 7 const/sw/'440'
 8 sine/sw
 9 dac/sw 

@@ -54,8 +54,9 @@ void TimerComponent::init()
 	lastTime = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 
 	// Control values can trigger a callback function when they change.
-	m_TimerEnabledIn_1_Port->registerCallback(ICallbackPtr(new OnChangeTimerEnabled(*this)));
-	m_TimerDurationIn_2_Port->registerCallback(ICallbackPtr(new OnChangeTimerDuration(*this)));
+	//m_TimerEnabledIn_1_Port->registerCallback(ICallbackPtr(new OnChangeTimerEnabled(*this)));
+	m_TimerEnabledIn_1_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(enabled, m_TimerEnabledIn_1_Port)));
+	m_TimerDurationIn_2_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(duration, m_TimerDurationIn_2_Port)));
 }
 
 // ::process is not implemented here but in the SW subclass!

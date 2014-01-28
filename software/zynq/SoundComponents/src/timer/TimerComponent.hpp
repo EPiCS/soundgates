@@ -16,6 +16,7 @@
 #include <SoundComponentImpl.h>
 #include <SoundPort.h>
 #include <ControlPort.h>
+#include <Listener.h>
 
 // Implementation independant base class for some sound component
 class TimerComponent: public SoundComponentImpl
@@ -59,38 +60,6 @@ public:
 	// Will usually be implemented in the SW/HW subclasses
 	virtual void process(void) = 0;
 
-};
-
-// This class implements a callback function that is called when a (in-) control value changes.
-// Needs to be registered in the init() method.
-class OnChangeTimerEnabled : public ICallbackFunctor {
-private:
-    TimerComponent& m_ObjRef;
-public:
-    OnChangeTimerEnabled(TimerComponent& ref ) : m_ObjRef(ref){ }
-
-    void operator()(){
-    	struct timeval tv;
-    	gettimeofday(&tv, NULL);
-    	m_ObjRef.lastTime = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-
-    	// The first new control value can be accessed like this.
-    	float val = m_ObjRef.m_TimerEnabledIn_1_Port->pop();
-        m_ObjRef.enabled = val;
-    }
-};
-
-class OnChangeTimerDuration : public ICallbackFunctor {
-private:
-    TimerComponent& m_ObjRef;
-public:
-    OnChangeTimerDuration(TimerComponent& ref ) : m_ObjRef(ref){ }
-
-    void operator()(){
-    	// The first new control value can be accessed like this.
-    	float val = m_ObjRef.m_TimerDurationIn_2_Port->pop();
-        m_ObjRef.duration = val;
-    }
 };
 
 #endif /* TIMERCOMPONENT_HPP_ */
