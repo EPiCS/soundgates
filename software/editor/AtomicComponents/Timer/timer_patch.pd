@@ -3,10 +3,31 @@
 #X obj 148 69 inlet;
 #X text 79 34 inports TriggerIn Delay;
 #X text 28 16 outports TriggerOut;
-#X obj 70 246 outlet;
+#X obj 37 306 outlet;
 #X obj 97 186 delay;
 #X obj 85 124 sel 1;
+#X floatatom 96 100 5 0 0 0 - - -;
+#X floatatom 174 102 5 0 0 0 - - -;
+#X obj 57 161 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 55 223 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 76 247 1;
+#X obj 147 221 delay;
+#X msg 203 186 5;
+#X obj 218 147 loadbang;
+#X msg 150 269 0;
 #X connect 0 0 6 0;
+#X connect 0 0 7 0;
 #X connect 1 0 5 1;
-#X connect 5 0 4 0;
+#X connect 1 0 8 0;
+#X connect 5 0 10 0;
+#X connect 5 0 11 0;
+#X connect 5 0 12 0;
 #X connect 6 0 5 0;
+#X connect 6 0 9 0;
+#X connect 11 0 4 0;
+#X connect 12 0 15 0;
+#X connect 13 0 12 1;
+#X connect 14 0 13 0;
+#X connect 15 0 4 0;
