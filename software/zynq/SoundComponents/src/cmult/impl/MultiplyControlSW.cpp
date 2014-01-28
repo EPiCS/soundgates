@@ -16,9 +16,6 @@ MultiplyControl_SW::~MultiplyControl_SW() {
 }
 
 
-void MultiplyControl_SW::init(){ }
-
-
 void MultiplyControl_SW::process(){
 
 //    int fixpt = (int)(m_ValueIn_2_Port->pop() * (1 << 31));
