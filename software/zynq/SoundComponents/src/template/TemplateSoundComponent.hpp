@@ -58,7 +58,10 @@ public:
 };
 
 // This class implements a callback function that is called when a control value changes.
-// Needs to be registered in the init() method.
+// Always access control values like this (i.e. only when they change) and cache them inside the component if needed.
+// Never access them periodically in the process method.
+//
+// This handler needs to be registered in the init() method.
 class OnChange : public ICallbackFunctor {
 private:
     TemplateSoundComponent& m_ObjRef;
