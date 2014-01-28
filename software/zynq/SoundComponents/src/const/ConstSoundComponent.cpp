@@ -31,10 +31,12 @@ ConstSoundComponent::ConstSoundComponent(std::vector<std::string> params) : Soun
 ConstSoundComponent::~ConstSoundComponent() {}
 
 void ConstSoundComponent::init(){
-
 }
 
 void ConstSoundComponent::process(){
-//    LOG_DEBUG("Const: " << m_CtrlData)
+}
+
+void ConstSoundComponent::initLater() {
     m_CtrlOut_1_Port->push(m_CtrlData);
+    LOG_DEBUG("Const: " << m_CtrlData)
 }
