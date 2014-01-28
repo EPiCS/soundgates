@@ -8,7 +8,7 @@
 #ifndef SINEIMPL_HW_H_
 #define SINEIMPL_HW_H_
 
-#define ZYNQ
+
 #include "../SineSoundComponent.h"
 
 #include <HWSlot.h>
@@ -51,6 +51,9 @@ public:
 
 
 class SineSoundComponent_HW : public SineSoundComponent {
+private:
+    char*  m_LocalBuffer;
+
 public:
 
     HWSlot slot;
