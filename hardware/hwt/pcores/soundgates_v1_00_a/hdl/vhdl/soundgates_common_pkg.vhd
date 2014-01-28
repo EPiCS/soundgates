@@ -27,7 +27,7 @@ package soundgates_common_pkg is
 
 -- Constant declarations
 
-constant SOUNDGATE_FIX_PT_SCALING : real := 28.0;
+constant SOUNDGATE_FIX_PT_SCALING : real := 27.0;
 
 constant MAX_NCO_FREQUNCY : integer := 16000;
 

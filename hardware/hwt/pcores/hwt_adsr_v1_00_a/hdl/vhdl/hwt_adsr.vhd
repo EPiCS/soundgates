@@ -31,8 +31,7 @@ use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
 entity hwt_adsr is
     generic(
-    	SND_COMP_CLK_FREQ   : integer := 100_000_000;
-		SND_COMP_adsr_TPYE : integer := 0
+    	SND_COMP_CLK_FREQ   : integer := 100_000_000
 	);
    port (
 		-- OSIF FIFO ports
@@ -163,20 +162,14 @@ architecture Behavioral of hwt_adsr is
     signal atck_dura_addr        : std_logic_vector(31 downto 0);
     signal dcay_dura_addr        : std_logic_vector(31 downto 0);
     signal rlse_dura_addr        : std_logic_vector(31 downto 0);
-    signal strt_amp_addr         : std_logic_vector(31 downto 0);
-    signal atck_amp_addr         : std_logic_vector(31 downto 0);
     signal sust_amp_addr         : std_logic_vector(31 downto 0);
-    signal rlse_amp_addr         : std_logic_vector(31 downto 0);
 
     signal bang             : std_logic_vector(31 downto 0);
     signal bang_stop        : std_logic_vector(31 downto 0);
     signal atck_dura        : std_logic_vector(31 downto 0);
     signal dcay_dura        : std_logic_vector(31 downto 0);
     signal rlse_dura        : std_logic_vector(31 downto 0);
-    signal strt_amp         : std_logic_vector(31 downto 0);
-    signal atck_amp         : std_logic_vector(31 downto 0);
     signal sust_amp         : std_logic_vector(31 downto 0);
-    signal rlse_amp         : std_logic_vector(31 downto 0);
     
     
     
