@@ -180,6 +180,15 @@ void Patch::initialize(void){
         sndcomponent->init();
 	}
 
+	// Second initialization phase (e.g. Const blocks need be initialized at the end to reliably propagate values)
+	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+	        iter != m_ComponentsVector.end(); ++iter ){
+
+        SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
+
+        sndcomponent->initLater();
+	}
+
 	jobIter         = m_ComponentsVector.begin();
 	jobsToProcess   = m_ComponentsVector.size();
 	m_PatchState    = Synthesizer::state::initialized;
