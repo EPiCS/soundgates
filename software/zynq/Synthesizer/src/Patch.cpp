@@ -166,11 +166,12 @@ void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
 void Patch::initialize(void){
 
+
     if(SoundgatesConfig::getInstance().useHWThreads()){
         #ifdef ZYNQ
         reconos_init();
         #endif
-    }
+	}
 
 	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
 	        iter != m_ComponentsVector.end(); ++iter ){
