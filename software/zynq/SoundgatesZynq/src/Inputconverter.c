@@ -32,6 +32,22 @@ void square_duty_cycle(float duty_cycle, float * duty_on, float * duty_off)
     *duty_on = 2 - *duty_on;
 }
 
+// normalize fir coefficients/taps, len = number of taps
+void fir_taps (float * tapsSrc, float * tapsDest, int len)
+{
+    int i;
+    float sum = 0;
+    for (i = 0; i < len; i++)
+    {
+        sum += tapsSrc[i];
+    }
+
+    for (i = 0; i < len; i++)
+    {
+        tapsDest[i] = tapsSrc[i] / sum;
+    }
+}
+
 // returns increment values for the adsr depending on amplitudes of attack, sustain and release phase
 int ms_to_attack (int ms, float attack_amp)
 {
