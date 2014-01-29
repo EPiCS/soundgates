@@ -13,18 +13,18 @@ from models import TGF
 inputfile = ''
 outputfile = ''
 
-def main(argv):
+def main():
     # Check arguments
-    if(len(argv) == 0):
+    if(len(sys.argv) == 0):
         usage()
         sys.exit(1)
     try:
-        opts, args = getopt.getopt(argv,"hi:ob:",["ifile=","ofile=","base_design="])
+        opts, args = getopt.getopt(sys.argv[1:],'hi:c:b',["ifile=","cfile=","base_design="])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
-    component_path = "components"
     base_design = "zynq_audio_adau1761"
+    component_path = None
     for opt, arg in opts:
         if opt == '-h':
             usage()
@@ -33,9 +33,15 @@ def main(argv):
             inputfile = arg
         elif opt in ("-c", "--cfile"):
             component_path = arg
+            if not component_path.endswith('/'):
+                component_path = component_path + '/'
         elif opt in ("-b", "--base_design"):
             base_design = arg
+        else:
+            assert False, "unhandled option"
     # Search for HW components
+    print 'COMPONENT PATH:'
+    print component_path
     tgf = TGF(inputfile, component_path)
     # Create setup_zynq file
     tgf.createSetupFile(base_design)
@@ -51,4 +57,5 @@ def usage():
     
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    #main(sys.argv[1:])#
+    main()

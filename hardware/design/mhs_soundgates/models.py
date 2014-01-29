@@ -68,7 +68,7 @@ class TGF(object):
         for c in self.Components:
             if(c.getType() not in used_components):
                 used_components.add(c.getType())
-                implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())+ '\n' 
+                implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())+ ' ' 
         implementations = implementations + '"'
         # Check preconditions
         if not (os.path.exists("project")):
@@ -102,6 +102,7 @@ class HardwareComponent(object):
     '''
     
     c_dict = dict()
+    linked_set = set()
     
     def __init__(self, line, library):
         '''
@@ -136,7 +137,10 @@ class HardwareComponent(object):
         print ''
         
     def export(self, library):
-        if not ( self.IsLinked ): #Every component has to be linked only one time
+        if self.Type in HardwareComponent.linked_set:
+            return
+        else:
+            HardwareComponent.linked_set.add(self.Type) 
             src = library.getPath(self.Type)
             dst = 'project/' + self.Implementation
             if (os.path.isdir(dst)):
@@ -166,7 +170,8 @@ class Library(object):
         with open('components.csv', 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
-                self.Components.append(LibraryComponent(row[0], row[1]))
+                self.Components.append(LibraryComponent(row[0], row[1], self.ComponentPath))
+
 
     def getComponentList(self):
         return self.Components
@@ -189,11 +194,13 @@ class LibraryComponent(object):
     '''
     This class represents a single Hardware Component
     '''
-    def __init__(self, abbreviation, implementation):
+    def __init__(self, abbreviation, implementation, componentPath):
         self.Abbreviation = abbreviation
         self.Implementation = implementation
-        soundgates = os.getenv("SOUNDGATES")
-        self.Path = soundgates + '/hardware/hwt/pcores/'+self.getImplementation() # os.path.join(soundgates, '/hardware/hwt/pcores/'+self.getImplementation())
+        if componentPath is None:
+            componentPath = os.getenv("SOUNDGATES")
+            componentPath = componentPath + '/hardware/hwt/pcores/'
+        self.Path = componentPath + self.getImplementation() # os.path.join(soundgates, '/hardware/hwt/pcores/'+self.getImplementation())
         self.Count = 0
 
     def getAbbreviation(self):
