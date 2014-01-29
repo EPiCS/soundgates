@@ -12,7 +12,6 @@ OPTION LONG_DESC = Hardwarethread that implements an noise
 ## Parameters
 
 PARAMETER SND_COMP_CLK_FREQ=100000000, DT=integer, ASSIGNMENT=OPTIONAL
-PARAMETER SND_COMP_NOISE_TPYE=0, DT=integer, RANGE =(0:3), ASSIGNMENT=REQUIRE 
 
 
 ## Bus Interfaces

@@ -31,7 +31,7 @@ use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 entity hwt_fir is
     generic(
     	SND_COMP_CLK_FREQ   : integer := 100_000_000;
-		FIR_ORDER			  : integer := 9  -- 10 coefficients
+		FIR_ORDER			  : integer := 7  -- 8 coefficients
 	);
    port (
 		-- OSIF FIFO ports

@@ -83,6 +83,10 @@ typedef struct {
     int percentage;
 } sAmplifierComponentHeader;
 
+typedef struct {
+    int trigger;
+} sAmplifierComponentHeader;
+
 struct OSCComponent_struct{
     char                  *comp_osc_name;
     void    		      *comp_value_pointer;
