@@ -13,6 +13,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <boost/smart_ptr.hpp>
+#include <sstream>
 
 #include "Port.h"
 

@@ -65,7 +65,7 @@ void Patch::createSoundComponent(int uid, const std::string& type, std::vector<s
 
 void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
-	LOG_DEBUG("Creating link from node " << sourceid << " to Node " << destid);
+	LOG_DEBUG("Creating link from node " << sourceid << ":" << srcport << " to Node " << destid << ":" << destport);
 
 	SoundComponentPtr source;
 	SoundComponentPtr destination;
