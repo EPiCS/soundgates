@@ -2,6 +2,7 @@ SoundComponents += add \
 				  adsr \
 				  const	\
 				  delay \
+				  fir \
 				  mixer\
 				  noise \
 				  output \
