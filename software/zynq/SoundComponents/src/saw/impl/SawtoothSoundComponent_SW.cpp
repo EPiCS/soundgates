@@ -36,7 +36,6 @@ void SawtoothSoundComponent_SW::process()
 
 			m_SoundOut_1_Port->writeSample(value, i);
 			phase += this->m_PhaseIncr;
-			LOG_DEBUG(value);
 
 			if (phase >= M_PI * 2)
 			{
