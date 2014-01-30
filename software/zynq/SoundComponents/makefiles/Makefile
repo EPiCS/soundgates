@@ -2,6 +2,7 @@ SoundComponents += add \
 				  adsr \
 				  const	\
 				  delay \
+				  fir \
 				  mixer\
 				  noise \
 				  output \
@@ -10,10 +11,10 @@ SoundComponents += add \
 				  output \
 				  square \
 				  dummysink \
-				sampleplayer \
-                soundToControl \
-				template \
-				timer
+				  sampleplayer \
+                  soundToControl \
+				  template \
+				  timer
 
 
 SRCDIR = ../src
