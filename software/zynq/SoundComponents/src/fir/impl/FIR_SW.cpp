@@ -20,12 +20,12 @@ void FIR_SW::process()
 	float sampleAdder = 0.0;
 
 	// Access the control value. We implemented a callback method in the superclass which handles control values.
-	float controlValue = this->val;
+	float controlValue = 5;
 
 	// Components that produce sound need to do so for a number of samples in one processing step
 	// This is done by iterating from 0 to blocksize
 	for (int i = 0; i < Synthesizer::config::blocksize; i++ ) {
-		m_SoundOut_2_Port->writeSample(controlValue, i);
+		m_SoundOut_1_Port->writeSample(controlValue, i);
 
 		// if we want to access the i-th sample on an incoming sound port, we do that like this:
 		int sample = (*m_SoundIn_2_Port)[i];

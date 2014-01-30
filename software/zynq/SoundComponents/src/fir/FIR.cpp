@@ -57,17 +57,4 @@ void FIR::init()
 	m_CutOffFrequency_1_Port->registerCallback(ICallbackPtr(new OnChange(*this)));
 }
 
-class OnChange : public ICallbackFunctor {
-private:
-    FIR& m_ObjRef;
-public:
-    OnChange(FIR& ref ) : m_ObjRef(ref){ }
-
-    void operator()(){
-    	// The first new control value can be accessed like this.
-    	float val = m_ObjRef.m_CutOffFrequency_1_Port->pop();
-        m_ObjRef.cutOffFrequency = val;
-    }
-};
-
 // ::process is not implemented here but in the SW subclass!
