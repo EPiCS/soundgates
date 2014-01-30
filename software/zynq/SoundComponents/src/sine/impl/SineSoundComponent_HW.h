@@ -13,7 +13,7 @@
 
 #include <HWSlot.h>
 #include <HWTParameters.h>
-#define ZYNQ
+//#define ZYNQ
 #ifdef ZYNQ
 
 extern "C"{

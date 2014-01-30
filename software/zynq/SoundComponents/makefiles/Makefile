@@ -14,7 +14,8 @@ SoundComponents += add \
                 soundToControl \
 				template \
 				timer \
-				saw
+				saw \
+				pwm
 
 
 SRCDIR = ../src
