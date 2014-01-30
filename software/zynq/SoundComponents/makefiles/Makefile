@@ -11,10 +11,11 @@ SoundComponents += add \
 				  output \
 				  square \
 				  dummysink \
-				  sampleplayer \
-                  soundToControl \
-				  template \
-				  timer
+				sampleplayer \
+                soundToControl \
+				template \
+				timer \
+				saw
 
 
 SRCDIR = ../src

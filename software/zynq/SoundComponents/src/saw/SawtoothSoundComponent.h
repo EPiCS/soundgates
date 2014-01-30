@@ -1,12 +1,12 @@
 /*
- * SquareSoundComponent.h
+ * SawtoothSoundComponent.h
  *
  *  Created on: Nov 27, 2013
  *      Author: gwue
  */
 
-#ifndef SQUARESWSOUNDCOMPONENT_H_
-#define SQUARESWSOUNDCOMPONENT_H_
+#ifndef SAWSOUNDCOMPONENT_H_
+#define SAWSOUNDCOMPONENT_H_
 
 #include <string.h>
 #include <vector>
@@ -18,7 +18,7 @@
 
 #include <SoundComponentImpl.h>
 
-class SquareSoundComponent : public SoundComponentImpl{
+class SawtoothSoundComponent : public SoundComponentImpl{
 
 public:
 
@@ -31,8 +31,8 @@ public:
     DECLARE_PORT3(SoundPort, SoundOut, 1);
     DECLARE_PORT3(ControlPort, FrequencyIn, 1);
 
-	SquareSoundComponent(std::vector<std::string> params);
-	virtual ~SquareSoundComponent();
+	SawtoothSoundComponent(std::vector<std::string> params);
+	virtual ~SawtoothSoundComponent();
 
 	virtual void init(void);
 	virtual void process(void) = 0;
@@ -43,9 +43,9 @@ public:
 
 class OnFrequencyChange : public ICallbackFunctor {
 private:
-    SquareSoundComponent& m_ObjRef;
+    SawtoothSoundComponent& m_ObjRef;
 public:
-    OnFrequencyChange(SquareSoundComponent& ref ) : m_ObjRef(ref){ }
+    OnFrequencyChange(SawtoothSoundComponent& ref ) : m_ObjRef(ref){ }
 
     void operator()(){
         float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();
@@ -64,4 +64,4 @@ public:
     }
 };
 
-#endif /* SQUARESOUNDCOMPONENT_H_ */
+#endif /* SawtoothSOUNDCOMPONENT_H_ */

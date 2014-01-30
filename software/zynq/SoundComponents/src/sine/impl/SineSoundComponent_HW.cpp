@@ -73,12 +73,20 @@ void SineSoundComponent_HW::init(){
 }
 
 void SineSoundComponent_HW::process(){
-    m_HWTParams.opt_args[1] = (uint32_t) (m_PhaseIncr* SOUNDGATES_FIXED_PT_SCALE); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
+    if (this->m_active) {
+		m_HWTParams.opt_args[1] = (uint32_t) (m_PhaseIncr* SOUNDGATES_FIXED_PT_SCALE); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
-    mbox_put(&m_CtrlStart, SINUS_HWT_START);
-    mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
+		mbox_put(&m_CtrlStart, SINUS_HWT_START);
+		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
 
-    memcpy(m_SoundOut_1_Port->getWriteBuffer(), &m_LocalBuffer[0], Synthesizer::config::bytesPerBlock);
+		memcpy(m_SoundOut_1_Port->getWriteBuffer(), &m_LocalBuffer[0], Synthesizer::config::bytesPerBlock);
+    }
+    else {
+    	for (int i = 0; i < Synthesizer::config::blocksize; i++)
+    	{
+    		m_SoundOut_1_Port->writeSample(0, i);
+   		}
+   	}
 }
 
 #endif

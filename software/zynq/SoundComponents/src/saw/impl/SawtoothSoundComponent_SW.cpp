@@ -1,48 +1,42 @@
 /*
- * SquareImpl_SW.cpp
+ * SawtoothImpl_SW.cpp
  *
  *  Created on: Nov 29, 2013
  *      Author: gwue
  */
 
-#include "SquareSoundComponent_SW.h"
+#include "SawtoothSoundComponent_SW.h"
 
-SquareSoundComponent_SW::SquareSoundComponent_SW(
+SawtoothSoundComponent_SW::SawtoothSoundComponent_SW(
 		std::vector<std::string> params) :
-		SquareSoundComponent(params)
+		SawtoothSoundComponent(params)
 {
 
 	this->phase = 0.0;
 
 }
 
-SquareSoundComponent_SW::~SquareSoundComponent_SW()
+SawtoothSoundComponent_SW::~SawtoothSoundComponent_SW()
 {
 }
 
-void SquareSoundComponent_SW::init()
+void SawtoothSoundComponent_SW::init()
 {
-	SquareSoundComponent::init();
+	SawtoothSoundComponent::init();
 }
 
-void SquareSoundComponent_SW::process()
+void SawtoothSoundComponent_SW::process()
 {
 	if (this->m_active)
 	{
 		int value = 0;
 		for (int i = 0; i < Synthesizer::config::blocksize; i++)
 		{
-			if (phase < M_PI)
-			{
-				value = INT_MAX;
-			}
-			else
-			{
-				value = INT_MIN;
-			}
+			value = (int)(INT_MIN + (INT_MAX * (phase/(M_PI))));
 
 			m_SoundOut_1_Port->writeSample(value, i);
 			phase += this->m_PhaseIncr;
+			LOG_DEBUG(value);
 
 			if (phase >= M_PI * 2)
 			{
