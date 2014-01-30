@@ -13,7 +13,8 @@ SoundComponents += add \
 				sampleplayer \
                 soundToControl \
 				template \
-				timer
+				timer \
+				saw
 
 
 SRCDIR = ../src
