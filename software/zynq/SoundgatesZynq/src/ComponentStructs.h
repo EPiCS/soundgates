@@ -85,7 +85,11 @@ typedef struct {
 
 typedef struct {
     int trigger;
-} sAmplifierComponentHeader;
+} sSampleHoldComponentHeader;
+
+typedef struct {
+    int sound_in_slave;
+} sPWMComponentHeader;
 
 struct OSCComponent_struct{
     char                  *comp_osc_name;
