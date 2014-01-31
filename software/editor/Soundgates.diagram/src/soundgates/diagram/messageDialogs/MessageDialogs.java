@@ -151,4 +151,8 @@ public class MessageDialogs {
 		MessageDialog.openWarning(null, "File not found","File "+filePath+" not found");
 	}
 
+	public static void soundToControlConnection(String parent, String port1, String port2) {
+		MessageDialog.openWarning(null, "Wrong connection","A connection in \""+parent+"\" connects the sound port \""+port1+"\" with the control port \""+port2+"\"");
+	}
+
 }

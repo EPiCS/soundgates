@@ -101,6 +101,18 @@ public class XMLHandler {
 				}
 				soundComponent.getUserStringProperties().put(propertyName, propertyValue);
 			}
+			
+			properties = propertiesNode.getElementsByTagName("StringProperty");
+			for (int property = 0; property < properties.getLength(); property++) {
+				String propertyName = properties.item(property).getAttributes().getNamedItem("Name")
+						.getTextContent();
+				String propertyValue = "";
+				if (properties.item(property).getAttributes().getNamedItem(valueString) != null) {
+					propertyValue = properties.item(property).getAttributes()
+							.getNamedItem(valueString).getNodeValue();
+				}
+				soundComponent.getStringProperties().put(propertyName, propertyValue);
+			}
 		}
 	}
 }
