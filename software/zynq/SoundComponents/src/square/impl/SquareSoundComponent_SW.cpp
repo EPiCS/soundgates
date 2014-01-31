@@ -7,7 +7,8 @@
 
 #include "SquareSoundComponent_SW.h"
 
-SquareSoundComponent_SW::SquareSoundComponent_SW(std::vector<std::string> params) :
+SquareSoundComponent_SW::SquareSoundComponent_SW(
+		std::vector<std::string> params) :
 		SquareSoundComponent(params)
 {
 
@@ -15,7 +16,9 @@ SquareSoundComponent_SW::SquareSoundComponent_SW(std::vector<std::string> params
 
 }
 
-SquareSoundComponent_SW::~SquareSoundComponent_SW() {}
+SquareSoundComponent_SW::~SquareSoundComponent_SW()
+{
+}
 
 void SquareSoundComponent_SW::init()
 {
@@ -24,24 +27,34 @@ void SquareSoundComponent_SW::init()
 
 void SquareSoundComponent_SW::process()
 {
-	int value = 0;
-	for (int i = 0; i < Synthesizer::config::blocksize; i++)
+	if (this->m_active)
 	{
-		if (phase < M_PI)
+		int value = 0;
+		for (int i = 0; i < Synthesizer::config::blocksize; i++)
 		{
-			value = INT_MAX;
-		}
-		else
-		{
-			value = INT_MIN;
-		}
+			if (phase < M_PI)
+			{
+				value = INT_MAX;
+			}
+			else
+			{
+				value = INT_MIN;
+			}
 
-		m_SoundOut_1_Port->writeSample(value,i);
-		phase += this->m_PhaseIncr;
+			m_SoundOut_1_Port->writeSample(value, i);
+			phase += this->m_PhaseIncr;
 
-		if (phase >= M_PI * 2)
+			if (phase >= M_PI * 2)
+			{
+				phase -= M_PI * 2;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < Synthesizer::config::blocksize; i++)
 		{
-			phase -= M_PI * 2;
+			m_SoundOut_1_Port->writeSample(0, i);
 		}
 	}
 

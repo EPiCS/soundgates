@@ -18,6 +18,7 @@ SquareSoundComponent::SquareSoundComponent(std::vector<std::string> params) :
 {
     m_Frequency = 0.0;
     m_PhaseIncr = 0.0;
+    m_active = false;
 
 	CREATE_AND_REGISTER_PORT3(SquareSoundComponent, In, ControlPort,
 			FrequencyIn, 1);
