@@ -51,6 +51,16 @@ public class Exporter {
 			userStringProperty.setAttribute("Value",atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());						
 			properties.appendChild(userStringProperty);
 		}
+		
+		//string property - impl type
+		for(int i=0; i<atomicSoundComponent.getStringProperties().size(); i++){
+			if(atomicSoundComponent.getStringProperties().get(i).getKey().equals("implType")){
+				Element stringProperty = doc.createElement("StringProperty");						
+				stringProperty.setAttribute("Name",atomicSoundComponent.getStringProperties().get(i).getKey().toString());
+				stringProperty.setAttribute("Value",atomicSoundComponent.getStringProperties().get(i).getValue().toString());						
+				properties.appendChild(stringProperty);
+			}			
+		}
 		atomicSoundComponentElement.appendChild(properties);
 		
 		return atomicSoundComponentElement;

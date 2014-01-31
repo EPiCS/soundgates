@@ -5,13 +5,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -24,22 +26,20 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.BorderedBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.FlowLayoutEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.figures.BorderItemLocator;
-import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
-import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 
+import soundgates.Direction;
 import soundgates.diagram.edit.policies.PortItemSemanticEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
+import soundgates.impl.PortImpl;
 
 /**
  * @generated
@@ -326,4 +326,48 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 
 	}
 
+	@Override
+	public void activate() {
+		super.activate();
+		Adapter adapter = new Adapter() {
+
+			@Override
+			public void setTarget(Notifier newTarget) {
+
+			}
+
+			@Override
+			public void notifyChanged(Notification notification) {
+				refreshGraphic();
+			}
+
+			@Override
+			public boolean isAdapterForType(Object type) {
+				return false;
+			}
+
+			@Override
+			public Notifier getTarget() {
+				return null;
+			}
+		};
+
+		getPortImpl().eAdapters().add(adapter);
+		refreshGraphic();
+	}
+
+	public void refreshGraphic() {
+		PortImpl portImpl = getPortImpl();
+		if ((portImpl.getDirection() == Direction.OUT && getPortImpl().getOutgoingConnection().size() == 0)
+				|| (portImpl.getDirection() == Direction.IN && getPortImpl().getIncomingConnection() == null)) {
+			setForegroundColor(new Color(null, 255, 0, 0));
+		} else
+			setForegroundColor(new Color(null, 0, 0, 0));
+
+	}
+
+	public PortImpl getPortImpl() {
+		return (PortImpl) ((org.eclipse.gmf.runtime.notation.Shape) getModel())
+				.getElement();
+	}
 }
