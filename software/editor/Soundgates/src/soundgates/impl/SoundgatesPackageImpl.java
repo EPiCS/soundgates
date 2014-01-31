@@ -201,6 +201,15 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		// Initialize created meta-data
 		theSoundgatesPackage.initializePackageContents();
 
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theSoundgatesPackage, 
+			 new EValidator.Descriptor() {
+				 public EValidator getEValidator() {
+					 return SoundgatesValidator.INSTANCE;
+				 }
+			 });
+
 		// Mark meta-data to indicate it can't be changed
 		theSoundgatesPackage.freeze();
 
@@ -804,6 +813,8 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		// Create annotations
 		// http://www.eclipse.org/emf/2002/Ecore
 		createEcoreAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore/OCL
+		createOCLAnnotations();
 	}
 
 	/**
@@ -820,7 +831,29 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		   new String[] {
 			 "invocationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL",
 			 "validationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL"
-		   });								
+		   });					
+		addAnnotation
+		  (portEClass, 
+		   source, 
+		   new String[] {
+			 "constraints", "UnconnectedPort"
+		   });						
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore/OCL</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createOCLAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore/OCL";								
+		addAnnotation
+		  (portEClass, 
+		   source, 
+		   new String[] {
+			 "UnconnectedPort", "if (self.direction=Direction::IN) then (not (self.incomingConnection=null)) else (self.outgoingConnection->size()>0) endif"
+		   });					
 	}
 
 } //SoundgatesPackageImpl
