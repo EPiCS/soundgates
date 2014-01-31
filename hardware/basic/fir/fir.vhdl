@@ -32,13 +32,13 @@ port(
         rst                       : in  std_logic;
         ce                        : in  std_logic;
         input_wave                : in  signed(31 downto 0);
-    --    config_buffer_state_valid : in  std_logic;
-    --    config_buffer_state_index : in  signed(31 downto 0);
-    --    config_buffer_state_data  : in  signed(31 downto 0);
+  --    config_buffer_state_valid : in  std_logic;
+  --    config_buffer_state_index : in  signed(31 downto 0);
+  --    config_buffer_state_data  : in  signed(31 downto 0);
         config_coefficient_valid  : in  std_logic;
         config_coefficient_index  : in  signed(31 downto 0);
         config_coefficient_data   : in  signed(31 downto 0);
-        wave       			       : out signed(31 downto 0)
+        wave       			      : out signed(31 downto 0)
     );
 
 end fir;
@@ -46,7 +46,7 @@ end fir;
 architecture Behavioral of fir is
 
     type mem32 is array (natural range <>) of signed(31 downto 0);
-	 type mem64 is array (natural range <>) of signed(63 downto 0);
+	type mem64 is array (natural range <>) of signed(63 downto 0);
 	 
     signal coeffs_mem32 : mem32(FIR_ORDER downto 0);
     signal coeff_index : signed(31 downto 0);
@@ -56,13 +56,13 @@ architecture Behavioral of fir is
     signal mult_mem64 : mem64(FIR_ORDER downto 0);
 
     signal s_zero   : signed (31 downto 0 ) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);    
-	 signal s_zero64 : signed (63 downto 0 ) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 64);
+	signal s_zero64 : signed (63 downto 0 ) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 64);
     type   calc_states is (s_read, s_calc, s_shift);
     signal state  : calc_states;
 
     signal sum :signed(63 downto 0);
 	 
-	 signal i_coeff_index : integer := to_integer(config_coefficient_index);
+	signal i_coeff_index : integer := to_integer(config_coefficient_index);
 
     begin	    
 
