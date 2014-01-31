@@ -19,9 +19,8 @@ END fir_transposed_tb;
 
 ARCHITECTURE behavior OF fir_transposed_tb IS 
     
---    constant FIR_ORDER : integer := 16;
-    constant FIR_ORDER : integer := 30;
-    
+    constant FIR_ORDER : integer := 28;
+   
     -- Component Declaration
     COMPONENT fir
         generic(
@@ -36,8 +35,7 @@ ARCHITECTURE behavior OF fir_transposed_tb IS
             y_out        : out signed(23 downto 0)
         );
     END COMPONENT;
-  
-  
+ 
     signal clk   : std_logic    := '0';
     signal rst   : std_logic    := '0';
     signal ce    : std_logic    := '1';
@@ -45,54 +43,35 @@ ARCHITECTURE behavior OF fir_transposed_tb IS
     constant scaling : real := 14.0;
  
     constant coefficients : mem16(FIR_ORDER downto 0) := ( 
---        to_signed( integer(real(0.0024164 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0047672 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0112821 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0229241 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0390422 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0573203 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0743025 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0863473 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0907029 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0863473 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0743025 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0573203 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0390422 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0229241 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0112821 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0047672 * 2 ** scaling)),16),
---        to_signed( integer(real(0.0024164 * 2 ** scaling)),16)
-        to_signed(-50, 16),
-        to_signed(-50, 16),
-        to_signed(-51, 16),
-        to_signed(-40, 16),
-        to_signed(2, 16),
-        to_signed(93, 16),
-        to_signed(252, 16),
-        to_signed(487, 16),
-        to_signed(799, 16),
-        to_signed(1174, 16),
-        to_signed(1589, 16),
-        to_signed(2009, 16),
-        to_signed(2393, 16),
-        to_signed(2702, 16),
-        to_signed(2903, 16),
-        to_signed(2972, 16),
-        to_signed(2903, 16),
-        to_signed(2702, 16),
-        to_signed(2393, 16),
-        to_signed(2009, 16),
-        to_signed(1589, 16),
-        to_signed(1174, 16),
-        to_signed(799, 16),
-        to_signed(487, 16),
-        to_signed(252, 16),
-        to_signed(93, 16),
-        to_signed(2, 16),
-        to_signed(-40, 16),
-        to_signed(-51, 16),
-        to_signed(-50, 16),
-        to_signed(-50, 16)
+        to_signed(-22, 16),
+        to_signed(-20, 16),
+        to_signed(-15, 16),
+        to_signed(1, 16),
+        to_signed(38, 16),
+        to_signed(108, 16),
+        to_signed(217, 16),
+        to_signed(367, 16),
+        to_signed(553, 16),
+        to_signed(763, 16),
+        to_signed(979, 16),
+        to_signed(1180, 16),
+        to_signed(1343, 16),
+        to_signed(1449, 16),
+        to_signed(1486, 16),
+        to_signed(1449, 16),
+        to_signed(1343, 16),
+        to_signed(1180, 16),
+        to_signed(979, 16),
+        to_signed(763, 16),
+        to_signed(553, 16),
+        to_signed(367, 16),
+        to_signed(217, 16),
+        to_signed(108, 16),
+        to_signed(38, 16),
+        to_signed(1, 16),
+        to_signed(-15, 16),
+        to_signed(-20, 16),
+        to_signed(-22, 16)
     ); 
 
     signal x_i  : signed(23 downto 0);
