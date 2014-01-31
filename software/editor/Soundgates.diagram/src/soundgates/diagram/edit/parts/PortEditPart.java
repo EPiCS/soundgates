@@ -46,6 +46,8 @@ import soundgates.impl.PortImpl;
  */
 public class PortEditPart extends BorderedBorderItemEditPart {
 
+	Adapter adapter;
+	
 	/**
 	 * @generated
 	 */
@@ -329,7 +331,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	@Override
 	public void activate() {
 		super.activate();
-		Adapter adapter = new Adapter() {
+		adapter = new Adapter() {
 
 			@Override
 			public void setTarget(Notifier newTarget) {
@@ -352,22 +354,46 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 			}
 		};
 
-		getPortImpl().eAdapters().add(adapter);
-		refreshGraphic();
+		try{
+			getPortImpl().eAdapters().add(adapter);
+			refreshGraphic();
+		}
+		catch(Exception e){
+			
+		}
 	}
 
 	public void refreshGraphic() {
-		PortImpl portImpl = getPortImpl();
-		if ((portImpl.getDirection() == Direction.OUT && getPortImpl().getOutgoingConnection().size() == 0)
-				|| (portImpl.getDirection() == Direction.IN && getPortImpl().getIncomingConnection() == null)) {
-			setForegroundColor(new Color(null, 255, 0, 0));
-		} else
-			setForegroundColor(new Color(null, 0, 0, 0));
+		try{
+			PortImpl portImpl = getPortImpl();
+			if ((portImpl.getDirection() == Direction.OUT && getPortImpl().getOutgoingConnection().size() == 0)
+					|| (portImpl.getDirection() == Direction.IN && getPortImpl().getIncomingConnection() == null)) {
+				setForegroundColor(new Color(null, 255, 0, 0));
+			} else
+				setForegroundColor(new Color(null, 0, 0, 0));
+		}
+		catch(Exception e){
+			
+		}
 
 	}
 
 	public PortImpl getPortImpl() {
-		return (PortImpl) ((org.eclipse.gmf.runtime.notation.Shape) getModel())
-				.getElement();
+		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof PortImpl)
+			return (PortImpl) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+		else 
+			return null;
+	}
+	
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		try{
+			getPortImpl().eAdapters().remove(adapter);
+			refreshGraphic();
+		}
+		catch(Exception e){
+			
+		}
 	}
 }

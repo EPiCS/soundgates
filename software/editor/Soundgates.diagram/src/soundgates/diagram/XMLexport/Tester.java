@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.EList;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
+import soundgates.DataType;
 import soundgates.Delegation;
 import soundgates.Direction;
 import soundgates.Link;
@@ -134,12 +135,6 @@ public class Tester {
 				return false;
 			}
 		}
-		
-		// test ports
-		for(Port port : atomicSoundComponent.getPorts()){			
-			if ( testAtomicSoundComponentPort(port, atomicSoundComponent) == false )
-				return false;
-		}
 
 		return true;
 	}
@@ -151,62 +146,6 @@ public class Tester {
 			return false;
 		}
 		
-		
-			if(port.getDirection() == Direction.IN)
-			{
-				if (port.getOutgoingConnection().size()==0){
-					MessageDialogs.portHasNoDelegation(parentComponent.getName(), port.getName());
-					return false;
-				}
-				
-				if(!testCurrentComponent){
-					if (port.getIncomingConnection()==null){
-						MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
-						return false;
-					}
-				}
-			}
-			if(port.getDirection() == Direction.OUT)
-			{
-				if (port.getIncomingConnection()==null){
-					MessageDialogs.portHasNoDelegation(parentComponent.getName(), port.getName());
-					return false;
-				}
-				
-				if(!testCurrentComponent){
-					if(port.getOutgoingConnection().size()==0){
-						MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
-						return false;
-					}
-				}
-			}
-		
-		return true;
-	}
-	
-	public boolean testAtomicSoundComponentPort(Port port, AtomicSoundComponent parentComponent){		
-		if(port.getDirection() == Direction.IN)
-		{
-			if(port.getOutgoingConnection().size()>0){
-				MessageDialogs.inPortHasOutgoingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-			if (port.getIncomingConnection()==null){
-				MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-		}
-		if(port.getDirection() == Direction.OUT)
-		{
-			if(port.getIncomingConnection() != null){
-				MessageDialogs.outPortHasIncomingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-			if(port.getOutgoingConnection().size()==0){
-				MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-		}
 		return true;
 	}
 		
@@ -235,7 +174,6 @@ public class Tester {
 				if (testLink(patch, (Link) element) == false)
 					return false;
 				links.add((Link) element);
-				// test daty type?
 			}				
 		}
 		
@@ -278,27 +216,27 @@ public class Tester {
 
 	public boolean testLink(Object parent, Link link){
 		// test directions
-			
+		
+		String parentString;
+		if(parent instanceof Patch) parentString = "the patch";
+		else parentString = ((CompositeSoundComponent)parent).getName();
+		
 		if(link.getSource().getDirection()==Direction.IN)
-		{
-			String parentString;
-			if(parent instanceof Patch) parentString = "the patch";
-			else parentString = ((CompositeSoundComponent)parent).getName();
-			
-			MessageDialogs.inPortAsSource(parentString, link.getSource().getName());
-			
+		{			
+			MessageDialogs.inPortAsSource(parentString, link.getSource().getName());			
 			return false;
 		}
 		if(link.getTarget().getDirection()==Direction.OUT)
-		{
-			String parentString;
-			if(parent instanceof Patch) parentString = "the patch";
-			else parentString = ((CompositeSoundComponent)parent).getName();
-			
-			MessageDialogs.outPortAsTarget(parentString, link.getSource().getName());
-			
+		{		
+			MessageDialogs.outPortAsTarget(parentString, link.getSource().getName());			
 			return false;
 		}
+		
+		if(link.getSource().getDataType()==DataType.SOUND && link.getTarget().getDataType()==DataType.CONTROL){
+			MessageDialogs.soundToControlConnection(parentString, link.getSource().getName(), link.getTarget().getName());
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -313,6 +251,11 @@ public class Tester {
 				);
 			return false;
 		}		
+		
+		if(delegation.getSource().getDataType()==DataType.SOUND && delegation.getTarget().getDataType()==DataType.CONTROL){
+			MessageDialogs.soundToControlConnection(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
+			return false;
+		}
 		
 		// special case
 		if(parent.getPorts().contains(delegation.getTarget()) && 
