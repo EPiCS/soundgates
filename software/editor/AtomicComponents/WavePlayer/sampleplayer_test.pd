@@ -1,4 +1,4 @@
-#N canvas 1440 49 958 1149 10;
+#N canvas 720 49 718 261 10;
 #X obj 168 205 dac~;
 #X msg 165 77 1;
 #X obj 146 124 sampleplayer_patch;
