@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
-	<Type>Multiplication</Type>
+	<Type>SampleMultiplication</Type>
 	<Ports>
 		<Port Name="SoundIn" Direction="IN" DataType="SOUND"/>
 		<Port Name="Multiplier" Direction="IN" DataType="CONTROL"/>
