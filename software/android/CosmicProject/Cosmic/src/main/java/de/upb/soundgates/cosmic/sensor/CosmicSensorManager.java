@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic;
+package de.upb.soundgates.cosmic.sensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 import de.upb.soundgates.cosmic.osc.OSCSender;
@@ -70,7 +71,26 @@ public class CosmicSensorManager implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         switch(sensorEvent.sensor.getType()) {
-            case Sensor.TYPE_LINEAR_ACCELERATION:
+            case Sensor.TYPE_LINEAR_ACCELERATION: // also see http://android-developers.blogspot.de/2010/09/one-screen-turn-deserves-another.html
+                float x = sensorEvent.values[0];
+                float y = sensorEvent.values[1];
+                float z = sensorEvent.values[2];
+
+                Vector3d v = new Vector3d(x, y, z);
+
+                if(v.length() < 0.6 * 9.81)
+                    return;
+
+                Vector3d[] charVectors = {
+                        new Vector3d(1,0,0),
+                        new Vector3d(-1,0,0),
+                        new Vector3d(0,1,0),
+                        new Vector3d(0,-1,0),
+                        new Vector3d(0,0,1),
+                        new Vector3d(0,0,-1)
+                };
+                Log.d(LOG_TAG, "Linear Acceleration Vector v="+v+" quantized to " + v.quantize(charVectors));
+
                 break;
             case Sensor.TYPE_ROTATION_VECTOR:
                 if(Math.abs(rotationVector[0] - sensorEvent.values[0]) < deltaRotation &&
@@ -91,8 +111,8 @@ public class CosmicSensorManager implements SensorEventListener {
                 else
                     SensorManager.getQuaternionFromVector(quaternion, rotationVector);
 
-                Quat4d q = new Quat4d();
-                q.setQuat4d(quaternion);
+                Quaternion q = new Quaternion();
+                q.setQuaternion(quaternion);
                 heading = q.getHeading();
                 attitude = q.getAttitude();
 
@@ -133,97 +153,6 @@ public class CosmicSensorManager implements SensorEventListener {
     }
 
     public void calibrateLightSensor() { maxLux = lux; Log.i(LOG_TAG, "Calibration of Light sensors: " + maxLux);}
-
-    private class Quat4d {
-        public float w, x, y, z;
-
-        public boolean setQuat4d(float[] quaternion) {
-            if(quaternion.length != 4)
-                return false;
-            w = quaternion[0];
-            x = quaternion[1];
-            y = quaternion[2];
-            z = quaternion[3];
-            return true;
-        }
-
-        public Quat4d() {
-            this(0, 0, 0, 0);
-        }
-
-        public Quat4d(float w, float x, float y, float z) {
-            this.w = w;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        double getHeading() {
-            double sqw = w*w;
-            double sqx = x*x;
-            double sqy = y*y;
-            double sqz = z*z;
-            double unit = sqx + sqy + sqz + sqw;
-            double test = x*y + z*w;
-            if (test > 0.499*unit)
-                return 2 * Math.atan2(x, w);
-            if (test < -0.499*unit)
-                return -2 * Math.atan2(x, w);
-            return Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw);
-        }
-
-        double getAttitude() {
-            double sqw = w*w;
-            double sqx = x*x;
-            double sqy = y*y;
-            double sqz = z*z;
-            double unit = sqx + sqy + sqz + sqw;
-            double test = x*y + z*w;
-            if (test > 0.499*unit)
-                return Math.PI/2;
-            if (test < -0.499*unit)
-                return -Math.PI/2;
-            return Math.asin(2 * test / unit);
-        }
-
-        double getBank() {
-            double sqw = w*w;
-            double sqx = x*x;
-            double sqy = y*y;
-            double sqz = z*z;
-            double unit = sqx + sqy + sqz + sqw;
-            double test = x*y + z*w;
-            if (test > 0.499*unit)
-                return 0;
-            if (test < -0.499*unit)
-                return 0;
-            return Math.atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw);
-        }
-
-        /*public void set(Quat4d q1) {
-            double sqw = q1.w*q1.w;
-            double sqx = q1.x*q1.x;
-            double sqy = q1.y*q1.y;
-            double sqz = q1.z*q1.z;
-            double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-            double test = q1.x*q1.y + q1.z*q1.w;
-            if (test > 0.499*unit) { // singularity at north pole
-                heading = 2 * Math.atan2(q1.x, q1.w);
-                attitude = Math.PI/2;
-                bank = 0;
-                return;
-            }
-            if (test < -0.499*unit) { // singularity at south pole
-                heading = -2 * Math.atan2(q1.x, q1.w);
-                attitude = -Math.PI/2;
-                bank = 0;
-                return;
-            }
-            heading = Math.atan2(2 * q1.y * q1.w - 2 * q1.x * q1.z, sqx - sqy - sqz + sqw);
-            attitude = Math.asin(2 * test / unit);
-            bank = Math.atan2(2 * q1.x * q1.w - 2 * q1.y * q1.z, -sqx + sqy - sqz + sqw);
-        }*/
-    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {

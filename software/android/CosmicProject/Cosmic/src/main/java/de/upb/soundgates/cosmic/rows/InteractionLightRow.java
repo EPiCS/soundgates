@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.CosmicSensorManager;
+import de.upb.soundgates.cosmic.sensor.CosmicSensorManager;
 import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import java.util.Locale;
 
 import de.upb.soundgates.cosmic.fragments.*;
+import de.upb.soundgates.cosmic.sensor.CosmicSensorManager;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
