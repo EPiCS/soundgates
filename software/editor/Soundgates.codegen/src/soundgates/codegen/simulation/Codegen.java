@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -12,6 +13,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.internal.dialogs.TreeManager.CheckListener;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
@@ -100,7 +102,9 @@ public class Codegen {
 		if (!componentId.containsKey(soundComponent)){
 			componentId.put(soundComponent, lastUsedId++);
 		}
-		return "component_" + componentId.get(soundComponent) + "_" + soundComponent.getName();
+		String name = soundComponent.getName();
+		name = name.replaceAll("[\\\\/\\?\\s]+", "_");
+		return "component_" + componentId.get(soundComponent) + "_" + name;
 	}
 	
 	private void printAtomicComponent(AtomicSoundComponent atomicSoundComponent)  throws CoreException {
@@ -218,29 +222,80 @@ public class Codegen {
 		HashMap<AtomicSoundComponent, Integer> mapping = new HashMap<AtomicSoundComponent, Integer>(); 
 		result.append("#X obj 72 31 dumpOSC 50050;\n");
 		objNum += 1;
-		int oscroutenum = objNum;
-		result.append("#X obj 138 101 OSCroute ");
-		objNum += 1;
-		int counter = 0;
-		for (AtomicSoundComponent atomic : ioComponents){
-			result.append("/" + atomic.getName() + " ");
-			mapping.put(atomic, counter);
-			counter++;
-		}
-		result.append(";\n");
+		addOSCRoute(result, objNum, mapping, ioComponents, "");
 
-		result.append("#X connect " + (objNum - 2) + " 0 " + (objNum - 1) + " 0;\n"); //connect dumpOSC with OSCroute
-		
-		for (AtomicSoundComponent atomic : ioComponents){
-			result.append("#X obj 192 154 unpack f;\n");
-			result.append("#X obj 99 218 s " + atomic.getName() + ";\n");
-			objNum += 2;
-			result.append("#X connect " + oscroutenum + " " + mapping.get(atomic) + " " + (objNum - 2) + " 0;\n"); //connect OSCroute with unpack
-			result.append("#X connect " + (objNum - 2) + " 0 " + (objNum - 1) + " 0;\n"); //connect unpack with s
-		}
 		return result.toString();
 	}
 
+	private int addOSCRoute(StringBuilder result, int oscRouteObjectNumber, HashMap<AtomicSoundComponent, Integer> mapping, List<AtomicSoundComponent> ioComponents, String prefix){
+		int oscroutenum = oscRouteObjectNumber;
+		result.append("#X obj 138 101 OSCroute ");
+		oscRouteObjectNumber += 1;
+		int counter = 0;
+		List<AtomicSoundComponent> toProcess = new ArrayList<AtomicSoundComponent>();
+		HashSet<String> prefixesToRoute = new HashSet<>();
+		for (AtomicSoundComponent atomic : ioComponents){
+			String atomicName = atomic.getName();
+			if (checkStringForPrefix(atomicName, prefix)){
+				String cleanedName = atomicName.substring(prefix.length());
+				if (cleanedName.substring(1).contains("/")){
+					String atomicPrefix = cleanedName.substring(0, cleanedName.substring(1).indexOf("/") + 1);
+					prefixesToRoute.add(atomicPrefix);
+				} else {
+					toProcess.add(atomic);
+					result.append(cleanedName + " ");
+					mapping.put(atomic, counter);
+					counter++;
+				}
+			}
+		}
+		
+		List<String> prefixesList = new ArrayList<String>(prefixesToRoute);
+		
+		for(String prefixToRoute : prefixesList){
+			result.append(prefixToRoute + " ");
+		}
+		
+		result.append(";\n");
+
+		result.append("#X connect " + (oscRouteObjectNumber - 2) + " 0 " + (oscRouteObjectNumber - 1) + " 0;\n"); //connect dumpOSC with OSCroute
+		
+		int usedPorts = 0;
+		for (AtomicSoundComponent atomic : toProcess){
+			result.append("#X obj 192 154 unpack f;\n");
+			result.append("#X obj 99 218 s " + atomic.getName() + ";\n");
+			oscRouteObjectNumber += 2;
+			result.append("#X connect " + oscroutenum + " " + mapping.get(atomic) + " " + (oscRouteObjectNumber - 2) + " 0;\n"); //connect OSCroute with unpack
+			result.append("#X connect " + (oscRouteObjectNumber - 2) + " 0 " + (oscRouteObjectNumber - 1) + " 0;\n"); //connect unpack with s
+			usedPorts += 1;
+		}
+		for (String prefixToRoute : prefixesList){
+			int nextLevelRoute = oscRouteObjectNumber; 
+			String fullPrefix = prefix + prefixToRoute;
+			oscRouteObjectNumber = addOSCRoute(result, nextLevelRoute, mapping, getAtomicsWithNamePrefix(ioComponents, fullPrefix), fullPrefix);
+			result.append("#X connect " + oscroutenum + " " + (usedPorts + prefixesList.indexOf(prefixToRoute)) + " " + nextLevelRoute + " 0;\n"); //connect OSCroute with next level OSCRoute
+			
+		}
+		return oscRouteObjectNumber;
+	}
+	
+	private boolean checkStringForPrefix(String toCheck, String prefix){
+		if (prefix.length() <= toCheck.length()){
+			return toCheck.substring(0, prefix.length()).equals(prefix);	
+		}
+		return false;
+	}
+	
+	private List<AtomicSoundComponent> getAtomicsWithNamePrefix(List<AtomicSoundComponent> components, String prefix){
+		List<AtomicSoundComponent> result = new ArrayList<AtomicSoundComponent>();
+		for (AtomicSoundComponent ac : components){
+			if (checkStringForPrefix(ac.getName(), prefix)){
+				result.add(ac);
+			}
+		}
+		return result;
+	}
+	
 	private String handleLinks(List<Link> linkList, List<SoundComponent> componentList){
 		StringBuilder pdcode = new StringBuilder();
 		for (Link link : linkList){
