@@ -21,8 +21,8 @@ inline int SoundDelayComponent::delayToSampleCount(float delay){
 
 SoundDelayComponent::SoundDelayComponent(std::vector<std::string> params) : SoundComponentImpl(params) {
 
-	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, In, SoundPort,   SoundIn, 1);
-	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, In, ControlPort, DelayIn, 2);
+	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, In, ControlPort, DelayIn, 1);
+	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, In, SoundPort,   SoundIn, 2);
 	CREATE_AND_REGISTER_PORT3(SoundDelayComponent, Out, SoundPort, SoundOut, 1);
 
 
@@ -46,14 +46,14 @@ SoundDelayComponent::~SoundDelayComponent() {
 
 void SoundDelayComponent::init(void){
     m_SoundOut_1_Port->init();
-    m_DelayIn_2_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(delayValue,m_DelayIn_2_Port)));
+    m_DelayIn_1_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(delayValue,m_DelayIn_1_Port)));
 }
 
 void SoundDelayComponent::process(void){
 
 	size_t offset = 0;
 
-	BufferedLinkPtr soundInLink  = boost::static_pointer_cast<BufferedLink>(m_SoundIn_1_Port->getLink());
+	BufferedLinkPtr soundInLink  = boost::static_pointer_cast<BufferedLink>(m_SoundIn_2_Port->getLink());
 	BufferedLinkPtr soundOutLink = boost::static_pointer_cast<BufferedLink>(m_SoundOut_1_Port->getLink());
 	//ControlLinkPtr  delayLink    = boost::static_pointer_cast<ControlLink>(m_DelayIn_2_Port->getLink());
 
