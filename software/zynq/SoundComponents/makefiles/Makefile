@@ -7,7 +7,7 @@ SoundComponents += add \
 				  noise \
 				  output \
 				  sine \
-				  cmult \
+				  mulsc \
 				  output \
 				  square \
 				  dummysink \

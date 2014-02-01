@@ -38,7 +38,7 @@ void Mixer_SW::process()
 		// here as well
 		double s1 = (*m_SoundIn_1_Port)[i];
 		double s2 = (*m_SoundIn_2_Port)[i];
-		s1 *= (1.0f - this->m_bias);
+		s1 *= (1.0 - this->m_bias);
 		s2 *= (this->m_bias);
 
 		mixed_sample = s1 + s2;
