@@ -9,11 +9,13 @@
 
 #include "impl/MultiplyControlSW.h"
 
-DEFINE_COMPONENTNAME(MultiplyControl, "cmult")
+DEFINE_COMPONENTNAME(MultiplyControl, "mulsc")
 
 EXPORT_SOUNDCOMPONENT_SW_ONLY(MultiplyControl);
 
 MultiplyControl::MultiplyControl(std::vector<std::string> params) : SoundComponentImpl(params) {
+
+	multValue = 0;
 
     CREATE_AND_REGISTER_PORT3(MultiplyControl, In, SoundPort, SoundIn, 1);
     CREATE_AND_REGISTER_PORT3(MultiplyControl, In, ControlPort, ValueIn, 2);
