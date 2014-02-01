@@ -129,7 +129,12 @@ BEGIN
             
             tmp         := std_logic_vector(to_signed(sample_in, 32));
             x_i         <= signed(tmp(31 downto 8));
-            sample_out  := to_integer(signed(std_logic_vector(y_i) & X"00"));
+            
+            if y_i(23) = '1' then
+                sample_out  := to_integer(signed(std_logic_vector(y_i) & X"11"));
+            else
+                sample_out  := to_integer(signed(std_logic_vector(y_i) & X"00"));
+            end if;
             
             write(sound_out_l, sample_out);
             writeline(outputfile, sound_out_l);

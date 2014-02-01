@@ -17,11 +17,13 @@ Class/Function however should not be documented here.
 import struct
 import sys
 
+outputfilename = 'raw_audio.out'
+
 def do_convert(filename):
     """ """
     try:
         f_in  = open(filename, 'r')
-        f_out = open('raw_audio.out', 'wb')
+        f_out = open(outputfilename, 'wb')
 
         sample = 0
 
@@ -43,4 +45,4 @@ if __name__=='__main__':
     print "Converting..."
 
     do_convert(sys.argv[1])
-    print "done"
+    print "done. Written to " + outputfilename

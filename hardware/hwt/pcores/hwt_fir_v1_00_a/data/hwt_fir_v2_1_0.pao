@@ -11,3 +11,4 @@ lib soundgates_v1_00_a soundgates_common_pkg vhdl
 lib soundgates_v1_00_a soundgates_reconos_pkg vhdl
 
 lib hwt_fir_v1_00_a hwt_fir vhdl
+lib hwt_fir_v1_00_a fir_transposed vhdl

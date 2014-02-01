@@ -25,7 +25,6 @@ int main(int argc, char* argv[]){
 
     std::cout << "Starting sinus hw thread" << std::endl;
 
-    HWTParameters<1, 2>::ParamtStruct_t m_HWTParams;
     float freq = 440;
 
     unsigned int foo =  ((float)(2 * M_PI / SAMPLE_RATE) * freq) * SOUNDGATES_FIXED_PT_SCALE;
@@ -33,13 +32,9 @@ int main(int argc, char* argv[]){
     std::cout << "Phase incr: " << foo << std::endl;
     char* buffer = new char[64 * sizeof(int)];
 
-    m_HWTParams.src_addr[0]     = NULL;
-    m_HWTParams.src_len         = 0;
-    m_HWTParams.dest_addr       = buffer;
-    m_HWTParams.opt_arg_addr    = &m_HWTParams.opt_args[0] ;
-    m_HWTParams.opt_args[0]     = 0;
-    m_HWTParams.opt_args[1]     = foo;
+    uint32_t hwt_args[3] = { (uint32_t) &buffer[0], 0, foo};
 
+    //std::cout << "Dest addr: " << std::hex << "0x" << hwt_args[0] << " : "<< (void*) &buffer[0] <<  std::endl;
     /* 1. initialize mailboxes */
     mbox_init(&mb_sin_start, 1);
     mbox_init(&mb_sin_stop,  1);
@@ -53,9 +48,8 @@ int main(int argc, char* argv[]){
     m_ReconOSResource[1].type = RECONOS_TYPE_MBOX;
     m_ReconOSResource[1].ptr  = &mb_sin_stop;
 
-
     reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
-    reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams);
+    reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &hwt_args[0]);
 
     reconos_hwt_create(&m_ReconOSThread, 0, NULL);
 
@@ -64,7 +58,7 @@ int main(int argc, char* argv[]){
         mbox_put(&mb_sin_start, SINUS_HWT_START);
 
         mbox_get(&mb_sin_stop);
-        m_HWTParams.opt_args[0]  = foo;
+
         for(int j = 0; j < 64; j++){
             std::cout << ((int*)buffer)[j] << std::endl;
         }

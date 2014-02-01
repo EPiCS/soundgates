@@ -27,12 +27,16 @@ use reconos_v3_00_c.reconos_pkg.all;
 
 package soundgates_reconos_pkg is
 
-
 -- Constant declarations
+
+constant MAX_HWT_ARGS : integer := 32;
+
+constant DWORD_WIDTH  : integer := 32;
+constant ADDR_WIDTH   : integer := 32;
 
 -- Type declarations
 type snd_comp_header_msg_t is record
-        base_addr     : std_logic_vector(31 downto 0);
+        base_addr       : std_logic_vector(31 downto 0);
         source_addr     : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- memory address of the data source buffer
         src_len         : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- data length of the source buffer
         dest_addr       : std_logic_vector(C_FIFO_WIDTH - 1 downto 0);  -- memory address destination buffer
@@ -43,6 +47,14 @@ type snd_comp_header_msg_t is record
         f_step          : integer range 0 to 15;
 end record;
 
+
+type hwtargs_t is array (0 to MAX_HWT_ARGS - 1) of std_logic_vector(DWORD_WIDTH - 1 downto 0);
+
+type hwtio_t is record    
+    base_addr : std_logic_vector(DWORD_WIDTH - 1 downto 0);
+    f_step    : integer range 0 to MAX_HWT_ARGS + 2;
+    argv      : hwtargs_t;   
+end record;
 
 ------------------------------------------------------------
 -- Functions and Procedure declarations
@@ -60,12 +72,72 @@ procedure snd_comp_get_header(
 		);
 
 procedure snd_comp_init_header ( signal snd_comp_header : out snd_comp_header_msg_t );
-        
+
+procedure hwtio_init( signal   hwt_args : inout hwtio_t );
+
+procedure get_hwt_args(
+   		signal   i_osif   : in    i_osif_t;
+		signal   o_osif   : out   o_osif_t;
+		signal   i_memif  : in    i_memif_t;
+        signal   o_memif  : out   o_memif_t;
+        signal   hwt_args : inout hwtio_t;
+        constant argc     : in    integer;
+   		variable done     : out   boolean
+        );
+
 ------------------------------------------------------------
 
 end soundgates_reconos_pkg;
 
 package body soundgates_reconos_pkg is
+
+    procedure hwtio_init( signal   hwt_args : inout hwtio_t ) is
+
+    begin
+    
+        hwt_args.f_step     <= 0;
+        hwt_args.base_addr  <= (others => '0');
+        
+    end procedure hwtio_init;
+
+    procedure get_hwt_args(
+   		signal   i_osif   : in    i_osif_t;
+		signal   o_osif   : out   o_osif_t;
+		signal   i_memif  : in    i_memif_t;
+        signal   o_memif  : out   o_memif_t;
+        signal   hwt_args : inout hwtio_t;
+        constant argc     : in    integer;
+   		variable done     : out   boolean
+        ) is
+    variable patially_done : boolean := False;
+    
+    begin
+
+        case hwt_args.f_step is
+                  
+            when 0 => 
+               -- get header address
+               osif_get_init_data(i_osif, o_osif, hwt_args.base_addr, patially_done);
+                    
+               if (patially_done) then
+                hwt_args.f_step <= 1;
+               end if;
+            when 1 to (argc + 1) =>
+
+                memif_read_word(i_memif, o_memif, 
+                                std_logic_vector(unsigned(hwt_args.base_addr) + ((hwt_args.f_step-1) * 4)), 
+                                hwt_args.argv(hwt_args.f_step-1) , patially_done);
+                    
+                 if (patially_done) then
+                     hwt_args.f_step <= hwt_args.f_step + 1;
+                 end if;
+
+            when others =>
+                done := True;
+                hwt_args.f_step <= 0;
+        end case;
+
+    end procedure get_hwt_args;
 
 
 procedure snd_comp_init_header ( signal snd_comp_header : out snd_comp_header_msg_t ) is 
@@ -76,15 +148,15 @@ begin
     snd_comp_header.opt_arg_addr <= (others => '0');
     
     snd_comp_header.f_step <= 0;
-end procedure snd_comp_init_header;
+    end procedure snd_comp_init_header;
 
-procedure snd_comp_get_header(
-    signal i_osif   : in  i_osif_t;
-    signal o_osif   : out o_osif_t;
-    signal i_memif  : in  i_memif_t;
-    signal o_memif  : out o_memif_t;
-    signal snd_comp_header : inout snd_comp_header_msg_t;
-    variable done   : out boolean
+    procedure snd_comp_get_header(
+        signal i_osif   : in  i_osif_t;
+        signal o_osif   : out o_osif_t;
+        signal i_memif  : in  i_memif_t;
+        signal o_memif  : out o_memif_t;
+        signal snd_comp_header : inout snd_comp_header_msg_t;
+        variable done   : out boolean
     ) is 
     
     variable patially_done : boolean := False;

@@ -27,10 +27,11 @@ package soundgates_common_pkg is
 
 -- Constant declarations
 
-constant SOUNDGATE_FIX_PT_SCALING : real := 27.0;
+constant SOUNDGATE_FIX_PT_SCALING   : real    := 28.0;
 
-constant MAX_NCO_FREQUNCY : integer := 16000;
+constant MAX_NCO_FREQUNCY           : integer := 16000;
 
+constant SAMPLE_WIDTH               : integer := 32;
 
 -- Type declarations
 
@@ -41,6 +42,14 @@ type WAVEFORM_TYPE is ( SIN, SQU, SAW, TRI);
 type NOISE_TYPE is ( WHITE, PINK, GREY );
 
 type ARITHMETIC_TYPE is ( ADD, SUB, MUL );
+
+type mem16 is array (natural range <>) of signed(15 downto 0);
+
+type mem24 is array (natural range <>) of signed(23 downto 0);
+
+type mem32 is array (natural range <>) of signed(31 downto 0);
+
+type mem64 is array (natural range <>) of signed(63 downto 0);
 
 ------------------------------------------------------------
 -- Functions and Procedure declarations
