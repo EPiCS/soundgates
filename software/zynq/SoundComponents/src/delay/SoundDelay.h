@@ -25,11 +25,11 @@ private:
 	float delayValue;
 	int   m_DelaySlotSize;      /*< maximum number of samples for delay buffer */
 
-	char* m_pDelaySlot;			/*< sample buffer for delay */
-	char* m_pLastDelaySlot;		/*< pointer to the last delay slot */
+	int* m_pDelaySlot;			/*< sample buffer for delay */
+	int* m_pLastDelaySlot;		/*< pointer to the last delay slot */
 
-	char* m_pReadPtr;			/* read pointer for ring buffer  */
-	char* m_pWritePtr;			/* write pointer for ring buffer */
+	int* m_pReadPtr;			/* read pointer for ring buffer  */
+	int* m_pWritePtr;			/* write pointer for ring buffer */
 
 	inline int delayToSampleCount(float);
 
