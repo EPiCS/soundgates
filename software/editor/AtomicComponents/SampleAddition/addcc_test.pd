@@ -1,8 +1,0 @@
-#N canvas 1440 49 958 1149 10;
-#X obj 170 145 addcc_patch;
-#X floatatom 141 88 5 0 0 0 - - -;
-#X floatatom 251 89 5 0 0 0 - - -;
-#X floatatom 160 198 5 0 0 0 - - -;
-#X connect 0 0 3 0;
-#X connect 1 0 0 0;
-#X connect 2 0 0 1;
