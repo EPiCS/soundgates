@@ -26,7 +26,8 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  *
  * @see soundgates.SoundgatesPackage#getPort()
- * @model
+ * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='UnconnectedPort'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL UnconnectedPort='if (self.direction=Direction::IN) then (not (self.incomingConnection=null)) else (self.outgoingConnection->size()>0) endif'"
  * @generated
  */
 public interface Port extends NamedElement {
