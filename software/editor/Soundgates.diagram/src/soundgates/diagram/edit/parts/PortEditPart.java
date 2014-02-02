@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
@@ -46,7 +47,7 @@ import soundgates.impl.PortImpl;
  */
 public class PortEditPart extends BorderedBorderItemEditPart {
 
-	Adapter adapter;
+	private Adapter adapter;
 	
 	/**
 	 * @generated
@@ -156,7 +157,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	 * @generated
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(20, 20);
+		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(10, 10);
 
 		//FIXME: workaround for #154536
 		result.getBounds().setSize(result.getPreferredSize());
@@ -169,17 +170,23 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	 * Body of this method does not depend on settings in generation model
 	 * so you may safely remove <i>generated</i> tag and modify it.
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createMainFigure() {
 		NodeFigure figure = createNodePlate();
 		figure.setLayoutManager(new StackLayout());
 		IFigure shape = createNodeShape();
 		figure.add(shape);
+		figure.setToolTip(new Label(createToolTip()));
 		contentPane = setupContentPane(shape);
 		return figure;
 	}
 
+	public String createToolTip(){
+		PortImpl portImpl = getPortImpl();
+		return "Name: "+portImpl.getName()+"\nDirection: "+portImpl.getDirection()+"\nType: "+portImpl.getDataType();
+	}
+	
 	/**
 	 * Default implementation treats passed figure as content pane.
 	 * Respects layout one may have set for generated figure.
@@ -366,14 +373,36 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	public void refreshGraphic() {
 		try{
 			PortImpl portImpl = getPortImpl();
+			
+			refreshConnections();
+			getFigure().setToolTip(new Label(createToolTip()));
+			
 			if ((portImpl.getDirection() == Direction.OUT && getPortImpl().getOutgoingConnection().size() == 0)
 					|| (portImpl.getDirection() == Direction.IN && getPortImpl().getIncomingConnection() == null)) {
 				setForegroundColor(new Color(null, 255, 0, 0));
-			} else
+				getPortNameEditPart().getFigure().setVisible(true);
+			} else{
 				setForegroundColor(new Color(null, 0, 0, 0));
+				getPortNameEditPart().getFigure().setVisible(false);
+			}
+
 		}
 		catch(Exception e){
 			
+		}
+
+	}
+	
+	public void refreshConnections(){
+		for(Object editPart : getSourceConnections()){
+			if(editPart instanceof ConnectionAbstractEditPart){
+				((ConnectionAbstractEditPart) editPart).refreshGraphic();
+			}
+		}
+		for(Object editPart : getTargetConnections()){
+			if(editPart instanceof ConnectionAbstractEditPart){
+				((ConnectionAbstractEditPart) editPart).refreshGraphic();
+			}
 		}
 
 	}
@@ -383,6 +412,15 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 			return (PortImpl) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
 		else 
 			return null;
+	}
+	
+	public PortNameEditPart getPortNameEditPart(){
+		for(Object editPart : getChildren()){
+			if ( editPart instanceof PortNameEditPart){
+				return (PortNameEditPart) editPart;
+			}
+		}
+		return null;
 	}
 	
 	@Override
@@ -395,5 +433,11 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		catch(Exception e){
 			
 		}
+	}
+	
+	@Override
+	public void refresh() {
+		super.refresh();
+		refreshGraphic();		
 	}
 }
