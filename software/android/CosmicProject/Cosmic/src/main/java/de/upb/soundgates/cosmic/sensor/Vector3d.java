@@ -32,7 +32,7 @@ public class Vector3d {
         z /= length;
     }
 
-    public Vector3d quantize(Vector3d[] charVectors) {
+    public int/*Vector3d*/ quantize(Vector3d[] charVectors) {
         float minDist = Float.MAX_VALUE;
         int minIndex = 0;
 
@@ -48,7 +48,16 @@ public class Vector3d {
             }
         }
 
-        return charVectors[minIndex];
+        return minIndex;//charVectors[minIndex];
+    }
+
+    public float[] to4dFloatVector() {
+        float ret[] = new float[4];
+        ret[0] = x;
+        ret[1] = y;
+        ret[2] = z;
+        ret[3] = 1;
+        return ret;
     }
 
     public String toString() {

@@ -89,7 +89,26 @@ public class CosmicSensorManager implements SensorEventListener {
                         new Vector3d(0,0,1),
                         new Vector3d(0,0,-1)
                 };
-                Log.d(LOG_TAG, "Linear Acceleration Vector v="+v+" quantized to " + v.quantize(charVectors));
+
+                String[] description = {
+                        "East",
+                        "West",
+                        "North",
+                        "South",
+                        "Up",
+                        "Down"
+                };
+
+                float[] resultVec = new float[4];
+                float[] R = new float[16];
+                float[] RInv = new float[16];
+
+                android.hardware.SensorManager.getRotationMatrixFromVector(R, rotationVector);
+                android.opengl.Matrix.invertM(RInv, 0, R, 0);
+                android.opengl.Matrix.multiplyMV(resultVec, 0, RInv, 0, v.to4dFloatVector(), 0);
+
+                Vector3d vWorld = new Vector3d(resultVec[0], resultVec[1], resultVec[2]);
+                Log.d(LOG_TAG, "Linear Acceleration Vector v="+vWorld+" quantized to " + description[vWorld.quantize(charVectors)]);
 
                 break;
             case Sensor.TYPE_ROTATION_VECTOR:
