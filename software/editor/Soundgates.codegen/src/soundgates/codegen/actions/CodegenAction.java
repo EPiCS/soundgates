@@ -3,6 +3,7 @@ package soundgates.codegen.actions;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,12 +39,12 @@ public class CodegenAction implements IObjectActionDelegate{
 						
 			try {
 				Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
-				
+				Diagram diagram = CodeGenHelper.getDiagram(file.getFullPath().toPortableString());
 				Tester tester = new Tester();				
 				if(tester.testPatch(patch) == false)
 					return;	
 				
-				codegen.generate(patch, file.getProject());
+				codegen.generate(patch, diagram, file.getProject());
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();

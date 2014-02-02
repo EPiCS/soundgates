@@ -13,6 +13,13 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.gmf.runtime.notation.Bounds;
+import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.gmf.runtime.notation.impl.ShapeImpl;
 import org.eclipse.ui.internal.dialogs.TreeManager.CheckListener;
 
 import soundgates.AtomicSoundComponent;
@@ -36,7 +43,7 @@ public class Codegen {
 	
 	IFolder pdCodeFolder = null;
 	
-	public void generateCodeForPatch(Patch patch) throws IOException, CoreException {
+	public void generateCodeForPatch(Patch patch, Diagram diagram) throws IOException, CoreException {
 		compositeComponentPortMappings = new HashMap<Port, Integer>();
 		List<SoundComponent> componentList = new ArrayList<SoundComponent>();
 		List<Link> linkList = new ArrayList<Link>();		
@@ -59,7 +66,7 @@ public class Codegen {
 				linkList.add((Link) element);
 			}
 		}		
-		printPatch(componentList, linkList);
+		printPatch(componentList, linkList, diagram);
 	}
 	
 	private void buildCompositeMappings(Patch patch) {
@@ -192,13 +199,37 @@ public class Codegen {
 		printCompositeSoundComponent(compositeSoundComponent, componentList, linkList, delegationList);
 	}
 	
-
+	private Shape findCoords(Diagram diagram, SoundComponent component){
+		TreeIterator<EObject> iter = diagram.eAllContents();
+		while (iter.hasNext()){
+			
+			EObject current = iter.next();
+			if (current instanceof Shape){
+				Shape shape = (Shape) current;
+				XMIResource shapeRes = (XMIResource)shape.getElement().eResource(); 
+				XMIResource compRes = (XMIResource)component.eResource();
+				if (shapeRes.getID(shape.getElement()).equals(compRes.getID(component))){
+					return shape;
+				}			
+			}
+		}
+		return null;
+		
+	}
 	
-	private void printPatch(List<SoundComponent> componentList, List<Link> linkList) throws CoreException{
+	private void printPatch(List<SoundComponent> componentList, List<Link> linkList, Diagram diagram) throws CoreException{
 		IFile file = pdCodeFolder.getFile("patch.pd");
 		String result = "#N canvas 621 551 450 300 10; \n";
 		for (SoundComponent comp : componentList){
-				result += "#X obj 0 0 "+ getUniqueName(comp) + ";\n";
+			Shape shape = findCoords(diagram, comp);
+
+			int x = 0;
+			int y = 0;
+			if (shape.getLayoutConstraint() instanceof Bounds){
+				x = ((Bounds)shape.getLayoutConstraint()).getX();
+				y = ((Bounds)shape.getLayoutConstraint()).getY();
+			}
+			result += "#X obj " + x + " " + y + " "+ getUniqueName(comp) + ";\n";
 		}		
 		result += handleLinks(linkList, componentList);
 		result += addControlLogic(componentList);
@@ -417,12 +448,12 @@ public class Codegen {
 		throw new Exception("Property name not in the list!");
 	}
 
-	public void generate(Patch patch, IProject project) throws CoreException, IOException {
+	public void generate(Patch patch, Diagram diagram, IProject project) throws CoreException, IOException {
 	    pdCodeFolder = project.getFolder(pdcodeFolderName);
 		if (pdCodeFolder.exists())
 			pdCodeFolder.delete(true, null);
 			pdCodeFolder.create(IResource.NONE, true, null);
-		generateCodeForPatch(patch);
+		generateCodeForPatch(patch, diagram);
 	}
 
 	public List<AtomicSoundComponent> getIoComponents() {

@@ -13,3 +13,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/javaoscfull.jar,
  .
+Import-Package: org.eclipse.gmf.runtime.notation

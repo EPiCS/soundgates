@@ -14,3 +14,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: soundgates.codegen,
  soundgates.codegen.simulation
+Import-Package: org.eclipse.gmf.runtime.notation,
+ org.eclipse.gmf.runtime.notation.impl
