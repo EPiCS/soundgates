@@ -24,7 +24,7 @@ public class IOComponentData extends ComponentData{
 		
 		String result = super.getRepresentation(); 
 		//         /'/  BeatLevel      f','    [0:800]  '
-		result += "/'/"+oscAddress + " f','" + range + "'";		
+		result += "/'"+oscAddress + " f','" + range + "'";		
 		return result;
 	}
 }
