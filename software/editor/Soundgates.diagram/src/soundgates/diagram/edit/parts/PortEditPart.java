@@ -371,9 +371,25 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 				setForegroundColor(new Color(null, 255, 0, 0));
 			} else
 				setForegroundColor(new Color(null, 0, 0, 0));
+			
+			refreshConnections();
 		}
 		catch(Exception e){
 			
+		}
+
+	}
+	
+	public void refreshConnections(){
+		for(Object editPart : getSourceConnections()){
+			if(editPart instanceof ConnectionAbstractEditPart){
+				((ConnectionAbstractEditPart) editPart).refreshGraphic();
+			}
+		}
+		for(Object editPart : getTargetConnections()){
+			if(editPart instanceof ConnectionAbstractEditPart){
+				((ConnectionAbstractEditPart) editPart).refreshGraphic();
+			}
 		}
 
 	}
@@ -396,4 +412,12 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 			
 		}
 	}
+	
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		super.refresh();
+		refreshGraphic();
+	}
+
 }
