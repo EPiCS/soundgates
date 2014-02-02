@@ -157,7 +157,46 @@ public class SoundgatesValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validatePort(Port port, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(port, diagnostics, context);
+		if (!validate_NoCircularContainment(port, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(port, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePort_UnconnectedPort(port, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * The cached validation expression for the UnconnectedPort constraint of '<em>Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected static final String PORT__UNCONNECTED_PORT__EEXPRESSION = "if (self.direction=Direction::IN) then (not (self.incomingConnection=null)) else (self.outgoingConnection->size()>0) endif";
+
+	/**
+	 * Validates the UnconnectedPort constraint of '<em>Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validatePort_UnconnectedPort(Port port, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return
+			validate
+				(SoundgatesPackage.Literals.PORT,
+				 port,
+				 diagnostics,
+				 context,
+				 "http://www.eclipse.org/emf/2002/Ecore/OCL",
+				 "UnconnectedPort",
+				 PORT__UNCONNECTED_PORT__EEXPRESSION,
+				 Diagnostic.ERROR,
+				 DIAGNOSTIC_SOURCE,
+				 0);
 	}
 
 	/**
@@ -193,46 +232,7 @@ public class SoundgatesValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateConnection(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(connection, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(connection, diagnostics, context);
-		if (result || diagnostics != null) result &= validateConnection_PortKind(connection, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * The cached validation expression for the PortKind constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected static final String CONNECTION__PORT_KIND__EEXPRESSION = "self.source.kind=self.target.kind";
-
-	/**
-	 * Validates the PortKind constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateConnection_PortKind(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return
-			validate
-				(SoundgatesPackage.Literals.CONNECTION,
-				 connection,
-				 diagnostics,
-				 context,
-				 "http://www.eclipse.org/emf/2002/Ecore/OCL",
-				 "PortKind",
-				 CONNECTION__PORT_KIND__EEXPRESSION,
-				 Diagnostic.ERROR,
-				 DIAGNOSTIC_SOURCE,
-				 0);
+		return validate_EveryDefaultConstraint(connection, diagnostics, context);
 	}
 
 	/**
@@ -241,47 +241,7 @@ public class SoundgatesValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateDelegation(Delegation delegation, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(delegation, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validateConnection_PortKind(delegation, diagnostics, context);
-		if (result || diagnostics != null) result &= validateDelegation_PortDirection(delegation, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * The cached validation expression for the PortDirection constraint of '<em>Delegation</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected static final String DELEGATION__PORT_DIRECTION__EEXPRESSION = "self.source.direction=self.target.direction";
-
-	/**
-	 * Validates the PortDirection constraint of '<em>Delegation</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateDelegation_PortDirection(Delegation delegation, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return
-			validate
-				(SoundgatesPackage.Literals.DELEGATION,
-				 delegation,
-				 diagnostics,
-				 context,
-				 "http://www.eclipse.org/emf/2002/Ecore/OCL",
-				 "PortDirection",
-				 DELEGATION__PORT_DIRECTION__EEXPRESSION,
-				 Diagnostic.ERROR,
-				 DIAGNOSTIC_SOURCE,
-				 0);
+		return validate_EveryDefaultConstraint(delegation, diagnostics, context);
 	}
 
 	/**
@@ -290,47 +250,7 @@ public class SoundgatesValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateLink(Link link, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(link, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validateConnection_PortKind(link, diagnostics, context);
-		if (result || diagnostics != null) result &= validateLink_PortDirection(link, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * The cached validation expression for the PortDirection constraint of '<em>Link</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected static final String LINK__PORT_DIRECTION__EEXPRESSION = "not (self.source.direction=self.target.direction)";
-
-	/**
-	 * Validates the PortDirection constraint of '<em>Link</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateLink_PortDirection(Link link, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return
-			validate
-				(SoundgatesPackage.Literals.LINK,
-				 link,
-				 diagnostics,
-				 context,
-				 "http://www.eclipse.org/emf/2002/Ecore/OCL",
-				 "PortDirection",
-				 LINK__PORT_DIRECTION__EEXPRESSION,
-				 Diagnostic.ERROR,
-				 DIAGNOSTIC_SOURCE,
-				 0);
+		return validate_EveryDefaultConstraint(link, diagnostics, context);
 	}
 
 	/**
