@@ -9,6 +9,7 @@ import csv
 import subprocess
 import shutil
 import os
+import sys
 
 class TGF(object):
     '''
@@ -68,6 +69,9 @@ class TGF(object):
         for c in self.Components:
             if(c.getType() not in used_components):
                 used_components.add(c.getType())
+                if c.getImplementation() is None:
+                    print 'Error: Could not find ' + c.Id + ' inside of the components.csv'
+                    sys.exit(1)
                 implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())+ ' ' 
         implementations = implementations + '"'
         # Check preconditions
@@ -90,7 +94,7 @@ class TGF(object):
     
     def reconosSetup(self):
         # Executes the reconos_setup script
-        subprocess.call(['reconos_setup.sh', 'project/setup_zynq'])
+        subprocess.call(['reconos/reconos_setup.sh', 'project/setup_zynq'])
         
 
     def getLibrary(self):

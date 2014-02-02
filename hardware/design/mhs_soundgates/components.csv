@@ -1,5 +1,5 @@
 abbreviation,implementation
-sin,hwt_sinus_v1_00_a
+sine,hwt_sinus_v1_00_a
 noise,hwt_noise_v1_00_a
 saw,hwt_sawtooth_v1_00_a
 triangle,hwt_triangle_v1_00_a

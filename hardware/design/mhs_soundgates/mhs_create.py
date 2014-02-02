@@ -6,7 +6,8 @@ Created on Jan 19, 2014
 
 #!/usr/bin/python
 
-import sys, getopt
+import sys, getopt, os
+import shutil
 
 from models import TGF
 
@@ -40,6 +41,7 @@ def main():
         else:
             assert False, "unhandled option"
     # Search for HW components
+    clean()
     print 'COMPONENT PATH:'
     print component_path
     tgf = TGF(inputfile, component_path)
@@ -48,8 +50,20 @@ def main():
     # Link components into project folder
     tgf.linkComponents()
     # Execute ReconosScript
+    checkReconOs()
     tgf.reconosSetup()
     
+def clean():
+    print "Cleaning project folder"
+    if (os.path.exists("project")):
+        shutil.rmtree('project/')
+        
+def checkReconOs():
+    reconos = os.getenv("RECONOS")
+    if reconos is None:
+        print 'Error: Can not build project. ReconoOS Variable is not set.'
+        sys.exit()
+
 
 def usage():
     print 'This script creates a mhs file out of the TGF'
