@@ -175,7 +175,7 @@ architecture Behavioral of hwt_fir is
     signal x_i          : signed(23 downto 0);     -- 24 bit internal input  sample
     signal y_i          : signed(23 downto 0);     -- 24 bit internal output sample
     
-    signal sample_in    : std_logic_vector(SAMPLE_WIDTH - 1 downto 0);
+    signal sample_in    : std_logic_vector(SAMPLE_WIDTH - 1 downto 0) := (others =>'0');
     signal sample_out   : std_logic_vector(SAMPLE_WIDTH - 1 downto 0);
 
     signal coefficients_i16  : mem16(FIR_ORDER downto 0);
@@ -217,9 +217,6 @@ architecture Behavioral of hwt_fir is
     
     constant FIR_START      : std_logic_vector(31 downto 0) := x"0000000F";
     constant FIR_EXIT       : std_logic_vector(31 downto 0) := x"000000F0";
-    
-    constant C_START_BANG   : std_logic_vector(31 downto 0) := x"00000001";
-    constant C_STOP_BANG    : std_logic_vector(31 downto 0) := x"FFFFFFFF";
 
 begin
 
@@ -228,9 +225,10 @@ begin
     -----------------------------------
     
     x_i               <= signed(sample_in(31 downto 8));
-    sample_out        <= std_logic_vector(y_i) & X"11" when y_i(23) = '1' else
-                         std_logic_vector(y_i) & X"00";
-        
+--    sample_out        <= std_logic_vector(y_i) & X"11" when y_i(23) = '1' else
+--                         std_logic_vector(y_i) & X"00";
+    sample_out        <= std_logic_vector(y_i) & X"00";
+    
     sourceaddr        <= hwtio.argv(0);
     destaddr          <= hwtio.argv(1);
     coefficients_i_0  <= hwtio.argv(2);
@@ -298,7 +296,7 @@ begin
     -----------------------------------------------------------------
     o_RAMAddr_fir  <= std_logic_vector(TO_UNSIGNED(ptr, C_LOCAL_RAM_ADDRESS_WIDTH));
     
-    o_RAMData_fir  <= sample_out;
+    o_RAMData_fir  <= reverse_vector(sample_out);
 
     
     uut: fir
@@ -398,9 +396,9 @@ begin
 
             state               <= STATE_IDLE;
             o_RAMWE_fir         <= '0';
-             
+            ptr                 <= 0;
+                        
             sample_count        <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);  -- number of samples processed
-
             done := False;
             
         elsif rising_edge(clk) then
@@ -443,27 +441,26 @@ begin
 			 
             when STATE_PROCESS =>
                 if sample_count > 0 then
-                
                     case process_state is
-                    
+
                     -- Read one sample from local memory
-                    when 0 =>
-                        
-                        sample_in     <= i_RAMData_fir;                        
+                    when 0 =>                        
                         process_state <= 1;
-                        
-					-- Filter	
+                    -- delay 1
                     when 1 =>
-                        fir_ce        <= '1';
-                        o_RAMWE_fir   <= '1';
+                        sample_in     <= reverse_vector(i_RAMData_fir); -- not sure here
                         process_state <= 2;
-                        
-                    -- Write sample back to local memory
                     when 2 =>
-                                               
+                        fir_ce        <= '1';
+                        process_state <= 3;
+                    when 3 =>                        
+                        o_RAMWE_fir   <= '1';
+                        process_state <= 4;                        
+                    -- Write sample back to local memory
+                    when 4 =>
                         ptr           <= ptr + 1;
                         sample_count  <= sample_count - 1;
-                        process_state <= 3;
+                        process_state <= 0;
                     when others =>
                         process_state <= 0;
                     end case;

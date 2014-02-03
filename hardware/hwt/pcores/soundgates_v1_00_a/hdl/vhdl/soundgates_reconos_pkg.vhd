@@ -85,11 +85,25 @@ procedure get_hwt_args(
    		variable done     : out   boolean
         );
 
+-- Reverse a std_logic_vector   (to <--> downto)
+function reverse_vector (a: in std_logic_vector) return std_logic_vector;
+
 ------------------------------------------------------------
 
 end soundgates_reconos_pkg;
 
 package body soundgates_reconos_pkg is
+    
+    function reverse_vector (a: in std_logic_vector) return std_logic_vector is
+        variable result: std_logic_vector(a'RANGE);
+        alias aa: std_logic_vector(a'REVERSE_RANGE) is a;
+    begin
+        for i in aa'RANGE loop
+            result(i) := aa(i);
+        end loop;
+        return result;
+    end; -- function reverse_any_vector
+
 
     procedure hwtio_init( signal   hwt_args : inout hwtio_t ) is
 

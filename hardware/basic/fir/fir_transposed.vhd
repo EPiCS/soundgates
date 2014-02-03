@@ -22,8 +22,6 @@ use IEEE.MATH_REAL.ALL;
 
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
---use soundgates_v1_00_a.soundgates_reconos_pkg.all;
-
 
 entity fir is
 generic(
@@ -50,23 +48,21 @@ begin
         variable tmp        : std_logic_vector(39 downto 0);
         variable tmp_scale  : std_logic_vector(23 downto 0);
     begin
-        if rising_edge(clk) then
-            if rst = '1' then
-                taps <= (others => (others => '0'));                
-            else
-                if ce = '1' then
-                    for i in 0 to FIR_ORDER loop                    
-                        if i = 0 then
-                            tmp := std_logic_vector(x_in * coefficients(FIR_ORDER));
-                            taps(0) <= signed(tmp(39) & tmp(37 downto 15));
-                        else    
-                            tmp       := std_logic_vector(x_in * coefficients(FIR_ORDER - i));
-                            tmp_scale := tmp(39) & tmp(37 downto 15);   
-                            tmp_scale := std_logic_vector(signed(tmp_scale) + taps(i - 1));       -- possible overflow error!
-                            taps(i)   <= signed(tmp_scale);
-                        end if;
-                    end loop;
-               end if;
+        if rst = '1' then
+            taps <= (others => (others => '0'));                
+        elsif rising_edge(clk) then            
+           if ce = '1' then
+                for i in 0 to FIR_ORDER loop                    
+                    if i = 0 then
+                        tmp := std_logic_vector(x_in * coefficients(FIR_ORDER));
+                        taps(0) <= signed(tmp(39) & tmp(37 downto 15));
+                    else    
+                        tmp       := std_logic_vector(x_in * coefficients(FIR_ORDER - i));
+                        tmp_scale := tmp(39) & tmp(37 downto 15);   
+                        tmp_scale := std_logic_vector(signed(tmp_scale) + taps(i - 1));       -- possible overflow error!
+                        taps(i)   <= signed(tmp_scale);
+                    end if;
+                end loop;          
            end if;
         end if;
     end process;

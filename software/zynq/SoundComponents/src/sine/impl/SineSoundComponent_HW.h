@@ -13,7 +13,7 @@
 
 #include <HWSlot.h>
 #include <HWTParameters.h>
-//#define ZYNQ
+#define ZYNQ
 #ifdef ZYNQ
 
 extern "C"{
@@ -30,7 +30,7 @@ private:
     HWSlot slot;
 
     /* Parameter struct: 1 src address, 1 argument */
-    HWTParameters<1, 2>::ParamtStruct_t m_HWTParams;
+    HWTParameters<3> m_HWTParams;
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;

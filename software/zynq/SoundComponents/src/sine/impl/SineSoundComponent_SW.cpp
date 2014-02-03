@@ -8,7 +8,7 @@
 #include "SineSoundComponent_SW.h"
 #include "SineLookupTable.hpp"
 
-double my_sine_lookup(double x)
+double sine_lookup(double x)
 {
 	while (x < 0)
 	{
@@ -83,13 +83,7 @@ void SineSoundComponent_SW::process()
 		for (int i = 0; i < Synthesizer::config::blocksize; i++)
 		{
 
-#ifdef ZYNQ
-			m_SoundOut_1_Port->writeSample(my_sine_lookup(m_Phase) * INT_MAX, i);
-#else
-			m_SoundOut_1_Port->writeSample(my_sine_lookup(m_Phase) * INT_MAX,
-					i);
-//		m_SoundOut_1_Port->writeSample(sin(m_Phase) * INT_MAX, i);
-#endif
+			m_SoundOut_1_Port->writeSample(sine_lookup(m_Phase) * INT_MAX, i);
 
 			m_Phase += m_PhaseIncr;
 

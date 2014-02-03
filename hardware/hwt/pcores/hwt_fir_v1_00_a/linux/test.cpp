@@ -3,12 +3,15 @@
 #include <iostream>
 #include <math.h>
 #include <cstdlib>
+#include <limits.h>
 #include <string.h>
+
 extern "C"{
     #include <reconos/reconos.h>
     #include <reconos/mbox.h>
 }
 
+#include "SineLookupTable.hpp"
 #include "fir_coeff_lp_.hpp"
 
 #define FIR_HWT_START 0x0F
@@ -20,23 +23,56 @@ struct mbox mb_stop;
 struct reconos_resource m_ReconOSResource[2];
 struct reconos_hwt      m_ReconOSThread;
 
-#define SAMPLE_RATE (float) 44100
+#define SAMPLE_RATE 44100	// Sample rate
 
-#define CUTOFF 		2000			// cutoff frequency in Hz
-#define f1     		1000			// sinus frequency 1
-#define f2     		4000			// sinus frequency 2
+#define CUTOFF 		2000	// Cutoff frequency in Hz
+#define f1     		1000	// Sinus frequency 1
+#define f2     		4000	// Sinus frequency 2
 
-#define N_FIR_COEFF 29	// Number of filter coefficients
+#define N_FIR_COEFF 29		// Number of filter coefficients
+
+#define AMPLITURE   0.8		// Max amplitude
+
+#define BLOCK_SIZE	64		// Block size
+
+float getPhaseIncrement(float frequency){
+
+	return  (2 * M_PI / (float)SAMPLE_RATE) * frequency;
+}
+
+double sine_lookup(double x){
+	
+	while (x < 0){
+		x += 2 * M_PI;		
+	}
+	
+	while (x > 2 * M_PI){
+		x -= 2 * M_PI;
+	}
+
+	double index = x / 0.0001;
+	int indexi = (int) index;
+	
+	if (index - indexi > 0.5){
+		indexi++;
+	}
+	double value = sineTable[indexi];
+
+	return value;
+}
 
 int main(int argc, char* argv[]){
 
-	char* srcbuffer   = new char[64 * sizeof(int)];
-	char* destbuffer  = new char[64 * sizeof(int)];
-
-    std::cout << "Starting filter..." << std::endl;
-
-    int cutoff = CUTOFF; 	
-
+	int i, j;
+    int cutoff = CUTOFF;
+	
+	int* srcbuffer  = new int[BLOCK_SIZE];
+	int* destbuffer = new int[BLOCK_SIZE];
+		
+	int*  input	= new int[SAMPLE_RATE];
+	
+	float phase = 0.0, phaseIncr = 0.0;
+	
     std::cout << "Cutoff set to: " << cutoff << std::endl;
 	
     uint32_t hwt_args[31];
@@ -45,7 +81,46 @@ int main(int argc, char* argv[]){
     hwt_args[1] = (uint32_t) destbuffer;
 	
 	memcpy(&hwt_args[2], &coeff_lp[cutoff], N_FIR_COEFF);
- 
+	
+	std::cout << "Calculating input for " << f1 << " Hz" << std::endl;
+	
+	phaseIncr = getPhaseIncrement(f1);
+	
+	for(i = 0; i < SAMPLE_RATE; i++){
+		
+		input[i] = (int32_t) (sine_lookup(phase) * AMPLITURE * INT_MAX);
+		
+		
+		phase += phaseIncr;
+
+		if (phase >= M_PI * 2){
+			phase -= M_PI * 2;
+		}
+	}
+	
+	phase = 0.0;
+	phaseIncr = 0.0;
+	
+	std::cout << "Calculating input for " << f2 << " Hz" << std::endl;
+	
+	phaseIncr = getPhaseIncrement(f2);
+	
+	for(i = 0; i < SAMPLE_RATE; i++){
+		uint32_t sample =  (int32_t) (sine_lookup(phase) * AMPLITURE * INT_MAX);
+		
+		input[i] += sample;
+		
+		std::cout << input[i] << std::endl;
+		
+		phase += phaseIncr;
+
+		if (phase >= M_PI * 2){
+			phase -= M_PI * 2;
+		}
+	}
+	
+    std::cout << "Starting filter..." << std::endl;
+	
     /* 1. initialize mailboxes */
     mbox_init(&mb_start, 1);
     mbox_init(&mb_stop,  1);
@@ -64,14 +139,15 @@ int main(int argc, char* argv[]){
 
     reconos_hwt_create(&m_ReconOSThread, 0, NULL);
 
-//    for(;;){
-    for(int i = 0; i < 10; i++){
+    for(i = 0; i < SAMPLE_RATE; i+=64){
+		
+		memcpy(srcbuffer, &input[i], BLOCK_SIZE * sizeof(int32_t));
 		
         mbox_put(&mb_start, FIR_HWT_START);
 
         mbox_get(&mb_stop);
 
-        for(int j = 0; j < 64; j++){
+        for(j = 0; j < BLOCK_SIZE; j++){
             std::cout << ((int*)destbuffer)[j] << std::endl;
         }
     }
@@ -79,6 +155,6 @@ int main(int argc, char* argv[]){
     
     delete srcbuffer;
 	delete destbuffer;
-	
+	delete input;
     return 0;
 }

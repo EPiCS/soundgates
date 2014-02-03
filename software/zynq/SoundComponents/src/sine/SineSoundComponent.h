@@ -24,7 +24,7 @@ public:
 
     float m_PhaseIncr;
     float m_Frequency;
-    bool m_active;
+    bool  m_active;
 
     DECLARE_COMPONENTNAME;
 

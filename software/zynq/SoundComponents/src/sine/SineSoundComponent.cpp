@@ -32,8 +32,7 @@ SineSoundComponent::~SineSoundComponent(){}
 void SineSoundComponent::init(){
 
     m_SoundOut_1_Port->init();
-    m_FrequencyIn_1_Port->registerCallback(
-            ICallbackPtr(new OnFrequencyChange(*this)));
+    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(*this)));
 
 }
 

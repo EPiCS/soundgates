@@ -3,7 +3,7 @@
    
 # list of objects that. This will alwyas be <ComponentName>.o and depeneding on implementation
 # <ComponentName>_SW.o and/or <ComponentName>_HW.o
-OBJECTS=FIR_SW.o FIR.o
+OBJECTS=FIR_HW.o FIR_SW.o FIR.o
 
 # all: <nameofyoursharedlibrary>.so
 all: libfir.so

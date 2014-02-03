@@ -19,7 +19,7 @@ n = length(t);
 
 fv = linspace(0,Fs,length(t)); // frequency vectors
 
-[h, hm, fr] = wfir ('lp', fir_order, [nc 0], 'hm', [0 0]); 
+[h, hm, fr] = wfir ('hp', fir_order, [nc 0], 'hm', [0 0]); 
 
 x1 = sin(2*%pi*f1*t);     // 
 

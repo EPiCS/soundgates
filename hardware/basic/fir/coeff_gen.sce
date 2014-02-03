@@ -5,14 +5,14 @@ Fs              = 44100;     // sample rate
 Cmax            = 8000;
 FirOrder        = 29;
 FixPtScale      = 14;
-FilterType      = 'lp';
+FilterType      = 'hp';
 OutputFilename  = ['fir_coeff_', FilterType, '_.hpp']
 // ------------------------------------------------------------
 
 fid = mopen(char(OutputFilename), 'wt');
 
 mfprintf(fid, '#include <stdint.h>\n\n');
-mfprintf(fid, 'int32_t coeff_lp[][%i] = { \n', FirOrder);
+mfprintf(fid, 'int32_t coeff_%s[][%i] = { \n',FilterType, FirOrder);
 
 for i=0:Cmax
     
