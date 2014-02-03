@@ -4,10 +4,15 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.ui.PlatformUI;
 
 import soundgates.impl.AtomicSoundComponentImpl;
+import soundgates.provider.custom.CustomPropertyInputDialog;
 
 public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorderedShapeEditPart {
 
@@ -86,7 +91,8 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 
 	public void refreshGraphic() {
 		try{
-			getFigure().setToolTip(new Label(createToolTip()));
+			figure.setToolTip(new Label(createToolTip()));
+			
 		}
 		catch(Exception e){
 			
@@ -104,6 +110,18 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		catch(Exception e){
 			
 		}
+	}
+
+	
+	@Override
+	public void performRequest(Request req) {
+	    if(req.getType() == RequestConstants.REQ_OPEN) {
+			Dialog dialog = new CustomPropertyInputDialog(PlatformUI
+					.getWorkbench().getDisplay().getActiveShell(),
+					"dialogTitle", "dialogMessage", "initialValue", null,
+					getAtomicSoundComponentImpl());
+			dialog.open();
+	    }
 	}
 	
 }
