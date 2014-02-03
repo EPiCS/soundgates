@@ -170,7 +170,7 @@ architecture Behavioral of hwt_fir is
     signal sourceaddr   : std_logic_vector(31 downto 0);
     signal destaddr     : std_logic_vector(31 downto 0);
     
-    signal process_state : integer range 0 to 4;
+    signal process_state : integer range 0 to 7;
     
     signal x_i          : signed(23 downto 0);     -- 24 bit internal input  sample
     signal y_i          : signed(23 downto 0);     -- 24 bit internal output sample
@@ -225,9 +225,8 @@ begin
     -----------------------------------
     
     x_i               <= signed(sample_in(31 downto 8));
---    sample_out        <= std_logic_vector(y_i) & X"11" when y_i(23) = '1' else
---                         std_logic_vector(y_i) & X"00";
-    sample_out        <= std_logic_vector(y_i) & X"00";
+    sample_out        <= std_logic_vector(y_i) & X"11" when y_i(23) = '1' else
+                         std_logic_vector(y_i) & X"00";
     
     sourceaddr        <= hwtio.argv(0);
     destaddr          <= hwtio.argv(1);
@@ -444,23 +443,23 @@ begin
                     case process_state is
 
                     -- Read one sample from local memory
-                    when 0 =>                        
+                    when 0 =>
+                        sample_in     <= reverse_vector(i_RAMData_fir); -- not sure here                    
                         process_state <= 1;
                     -- delay 1
                     when 1 =>
-                        sample_in     <= reverse_vector(i_RAMData_fir); -- not sure here
                         process_state <= 2;
                     when 2 =>
                         fir_ce        <= '1';
-                        process_state <= 3;
-                    when 3 =>                        
                         o_RAMWE_fir   <= '1';
-                        process_state <= 4;                        
-                    -- Write sample back to local memory
-                    when 4 =>
+                        process_state <= 3;
+                    when 3 =>
                         ptr           <= ptr + 1;
                         sample_count  <= sample_count - 1;
-                        process_state <= 0;
+                        process_state <= 4;
+                    -- Write sample back to local memory
+                    when 4 =>                        
+                        process_state <= 5;
                     when others =>
                         process_state <= 0;
                     end case;

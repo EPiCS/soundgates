@@ -66,9 +66,6 @@ public:
 #else
 
 class FIR_HW: public FIR{
-private:
-
-    int32_t** m_coeff;
 
 public:
     FIR_HW(std::vector<std::string>);
