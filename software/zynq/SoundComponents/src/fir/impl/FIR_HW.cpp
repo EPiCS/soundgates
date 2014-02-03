@@ -7,6 +7,12 @@
 
 #include "FIR_HW.hpp"
 
+#ifndef ZYNQ
+
+/* do nothing */
+
+#else
+
 FIR_HW::FIR_HW(std::vector<std::string> params) : FIR(params), m_HWTSlot(FIR::name) {
 
 }
@@ -53,3 +59,5 @@ void FIR_HW::process(){
     mbox_put(&m_CtrlStart, FIR_HWT_START);
     mbox_get(&m_CtrlStop);
 }
+
+#endif
