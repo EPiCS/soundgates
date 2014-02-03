@@ -8,28 +8,18 @@
 
 #include "SineSoundComponent_HW.h"
 
-
-SineSoundComponent_HW::SineSoundComponent_HW(std::vector<std::string> params)
-    : SineSoundComponent(params),
-    slot(SineSoundComponent::name) {
-
-    m_LocalBuffer = new char[Synthesizer::config::bytesPerBlock];
-
-}
-
-SineSoundComponent_HW::~SineSoundComponent_HW(){
-    delete m_LocalBuffer;
-}
-
 #ifndef ZYNQ
 
-void SineSoundComponent_HW::init(){
+SineSoundComponent_HW::SineSoundComponent_HW(std::vector<std::string> params) : SineSoundComponent(params){
+}
 
-    m_SoundOut_1_Port->init();
-}
-void SineSoundComponent_HW::process(){
-    /* do nothing */
-}
+SineSoundComponent_HW::~SineSoundComponent_HW(){}
+
+
+
+void SineSoundComponent_HW::init(){ }
+
+void SineSoundComponent_HW::process(){ }
 
 #else
 

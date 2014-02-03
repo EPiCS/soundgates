@@ -13,7 +13,7 @@
 
 #include <HWSlot.h>
 #include <HWTParameters.h>
-#define ZYNQ
+
 #ifdef ZYNQ
 
 extern "C"{
@@ -51,15 +51,8 @@ public:
 
 
 class SineSoundComponent_HW : public SineSoundComponent {
-private:
-    char*  m_LocalBuffer;
 
 public:
-
-    HWSlot slot;
-
-    /* Parameter struct: 1 src address, 1 argument */
-    HWTParameters<1, 2>::ParamtStruct_t m_HWTParams;
 
     SineSoundComponent_HW(std::vector<std::string>);
     virtual ~SineSoundComponent_HW();

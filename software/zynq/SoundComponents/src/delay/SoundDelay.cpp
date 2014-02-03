@@ -48,6 +48,7 @@ SoundDelayComponent::~SoundDelayComponent() {
 
 void SoundDelayComponent::init(void){
     m_SoundOut_1_Port->init();
+
     m_DelayIn_1_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(delayValue,m_DelayIn_1_Port)));
 }
 
@@ -55,16 +56,11 @@ void SoundDelayComponent::process(void){
 
 	size_t offset = 0;
 
-	BufferedLinkPtr soundInLink  = boost::static_pointer_cast<BufferedLink>(m_SoundIn_2_Port->getLink());
-	BufferedLinkPtr soundOutLink = boost::static_pointer_cast<BufferedLink>(m_SoundOut_1_Port->getLink());
-	//ControlLinkPtr  delayLink    = boost::static_pointer_cast<ControlLink>(m_DelayIn_2_Port->getLink());
-
-	int* readbuffer  = (int*)(soundInLink->getReadBuffer());
-	int* writebuffer = (int*)(soundOutLink->getWriteBuffer());
+	int* readbuffer  = (int*)(m_SoundIn_2_Port->getReadBuffer());
+	int* writebuffer = (int*)(m_SoundOut_1_Port->getWriteBuffer());
 
 	// size_t delay = delayToSampleCount(delayLink->getNextControlData());	/*< delay in bytes */
 	size_t delay = delayToSampleCount(delayValue);	/*< delay in bytes */
-
 
 	memcpy(m_pWritePtr, readbuffer, Synthesizer::config::bytesPerBlock);
 
