@@ -13,7 +13,7 @@ public class HandshakeThread extends Thread {
 	String componentList = "";
 	public HandshakeThread(List<AtomicSoundComponent> ioComponents){
 		for (AtomicSoundComponent component : ioComponents){
-			componentList += "/" + component.getName() + " \"f\" [" + component.getFloatProperties().get("MinValue") + ":" + component.getFloatProperties().get("MaxValue") + "]";
+			componentList += component.getName() + " \"f\" [" + component.getFloatProperties().get("MinValue") + ":" + component.getFloatProperties().get("MaxValue") + "]";
 			if (!(ioComponents.indexOf(component) == ioComponents.size() - 1)){
 				componentList += "||";
 			}
