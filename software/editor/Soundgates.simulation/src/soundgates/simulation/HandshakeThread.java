@@ -18,6 +18,7 @@ public class HandshakeThread extends Thread {
 				componentList += "||";
 			}
 		}
+		componentList += "\n";
 	}
 	
 	public void stopMe(){
@@ -31,14 +32,22 @@ public class HandshakeThread extends Thread {
 		try {
 			server = new ServerSocket(50050);
 			while(!stop){
-				Socket socket = server.accept();
-				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				out.write(componentList.getBytes());
-				socket.close();
+				try {
+					Socket socket = server.accept();
+					DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+					out.write(componentList.getBytes());
+					System.out.println("Sent data to " + socket.getInetAddress() + ":" + socket.getPort());
+					System.out.println(componentList);
+					socket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			server.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.err.println("Server socket exception");
 			e.printStackTrace();
 		}
 		
