@@ -41,7 +41,6 @@ import soundgates.Port;
 import soundgates.diagram.edit.policies.PortItemSemanticEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
-import soundgates.impl.PortImpl;
 
 /**
  * @generated
@@ -193,7 +192,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		contentPane = setupContentPane(shape);
 		return figure;
 	}
-
+	
 	public String createToolTip(){
 		Port port = getPort();
 		return "Name: "+port.getName()+"\nDirection: "+port.getDirection()+"\nType: "+port.getDataType();
@@ -334,7 +333,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public class PortFigure extends RectangleFigure {
 
@@ -344,9 +343,20 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		public PortFigure() {
 			this.setFill(false);
 		}
+		
+		@Override
+		public IFigure getToolTip() {			
+			return new Label(createToolTip());
+		}
 
 	}
-
+	
+	@Override
+	public void notifyChanged(Notification notification) {
+		// TODO Auto-generated method stub
+		super.notifyChanged(notification);
+	}
+	
 	@Override
 	public void activate() {
 		super.activate();
@@ -387,7 +397,6 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 			Port port = getPort();
 			
 			refreshConnections();
-			getFigure().setToolTip(new Label(createToolTip()));
 			
 			if ((port.getDirection() == Direction.OUT && getPort().getOutgoingConnection().size() == 0)
 					|| (port.getDirection() == Direction.IN && getPort().getIncomingConnection() == null)) {

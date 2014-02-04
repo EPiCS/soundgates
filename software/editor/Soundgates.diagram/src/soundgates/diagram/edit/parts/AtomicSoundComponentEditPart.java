@@ -190,7 +190,6 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 		figure.setLayoutManager(new StackLayout());
 		IFigure shape = createNodeShape();
 		figure.add(shape);
-		figure.setToolTip(new Label(createToolTip()));
 		contentPane = setupContentPane(shape);
 		return figure;
 	}
@@ -265,7 +264,7 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public class AtomicSoundComponentFigure extends RectangleFigure {
 
@@ -312,6 +311,11 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 		 */
 		public WrappingLabel getFigureAtomicSoundComponentNameFigure() {
 			return fFigureAtomicSoundComponentNameFigure;
+		}
+		
+		@Override
+		public IFigure getToolTip() {			
+			return new Label(createToolTip());
 		}
 
 	}

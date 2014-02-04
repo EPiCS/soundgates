@@ -266,7 +266,7 @@ public class AtomicSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public class AtomicSoundComponentFigure extends RectangleFigure {
 
@@ -315,6 +315,10 @@ public class AtomicSoundComponent2EditPart extends
 			return fFigureAtomicSoundComponentNameFigure;
 		}
 
+		@Override
+		public IFigure getToolTip() {			
+			return new Label(createToolTip());
+		}
 	}
 
 }

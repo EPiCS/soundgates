@@ -1,10 +1,6 @@
 package soundgates.diagram.edit.parts;
 
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -20,8 +16,6 @@ import soundgates.Direction;
 import soundgates.provider.custom.CustomPropertyInputDialog;
 
 public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorderedShapeEditPart {
-
-	private Adapter adapter;
 	
 	protected int[] inputPortsXPositions; 
 	protected int[] outputPortsXPositions;
@@ -97,65 +91,6 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		
 		return stringBuffer.toString();
 	}
-	
-	@Override
-	public void activate() {
-		super.activate();
-		adapter = new Adapter() {
-
-			@Override
-			public void setTarget(Notifier newTarget) {
-
-			}
-
-			@Override
-			public void notifyChanged(Notification notification) {
-				refreshGraphic();
-			}
-
-			@Override
-			public boolean isAdapterForType(Object type) {
-				return false;
-			}
-
-			@Override
-			public Notifier getTarget() {
-				return null;
-			}
-		};
-
-		try{
-			getAtomicSoundComponent().eAdapters().add(adapter);
-			refreshGraphic();
-		}
-		catch(Exception e){
-			
-		}
-	}
-
-	public void refreshGraphic() {
-		try{
-			figure.setToolTip(new Label(createToolTip()));
-			
-		}
-		catch(Exception e){
-			
-		}
-
-	}
-	
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		try{
-			getAtomicSoundComponent().eAdapters().remove(adapter);
-			refreshGraphic();
-		}
-		catch(Exception e){
-			
-		}
-	}
-
 	
 	@Override
 	public void performRequest(Request req) {
