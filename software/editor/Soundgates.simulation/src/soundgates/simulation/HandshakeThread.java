@@ -2,6 +2,7 @@ package soundgates.simulation;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -30,7 +31,9 @@ public class HandshakeThread extends Thread {
 		super.run();
 		ServerSocket server;
 		try {
-			server = new ServerSocket(50050);
+			server = new ServerSocket();
+			server.setReuseAddress(true);
+			server.bind(new InetSocketAddress(50050));
 			while(!stop){
 				try {
 					Socket socket = server.accept();

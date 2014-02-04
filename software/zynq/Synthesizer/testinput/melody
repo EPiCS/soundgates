@@ -2,7 +2,7 @@
 
 function playNote(){
 	
-	oscsend localhost 50500 /sin f $1; oscsend localhost 50500 /trigger f 1; sleep $2 ;oscsend localhost 50500 /trigger f 0;
+	oscsend localhost 50050 /sin f $1; oscsend localhost 50050 /trigger f 1; sleep $2 ;oscsend localhost 50500 /trigger f 0;
 }
 
 declare -A notes
