@@ -7,6 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
@@ -32,6 +35,8 @@ public class CosmicSensorManager implements SensorEventListener {
 
     private final float deltaRotation = 0.001f;
 
+    CharacteristicVectorStore charVectors;
+
 
     public static CosmicSensorManager getInstance(Context context) {
         if(instance == null) {
@@ -52,6 +57,14 @@ public class CosmicSensorManager implements SensorEventListener {
         quaternion = new float[4];
 
         maxLux = 30;
+
+        charVectors = new CharacteristicVectorStore();
+        charVectors.addCharacteristicVector(new Vector3d(1,0,0),  "East");
+        charVectors.addCharacteristicVector(new Vector3d(-1,0,0), "West");
+        charVectors.addCharacteristicVector(new Vector3d(0,1,0),  "North");
+        charVectors.addCharacteristicVector(new Vector3d(0,-1,0), "South");
+        charVectors.addCharacteristicVector(new Vector3d(0,0,1),  "Up");
+        charVectors.addCharacteristicVector(new Vector3d(0,0,-1), "Down");
     }
 
     private void initListeners() {
@@ -68,6 +81,35 @@ public class CosmicSensorManager implements SensorEventListener {
                 sensorManager.SENSOR_DELAY_FASTEST);
     }
 
+    private class CharacteristicVector {
+        public Vector3d vector;
+        public String description;
+
+        public CharacteristicVector(Vector3d vector, String description) {
+            this.vector = vector;
+            this.description = description;
+        }
+    }
+
+    private class CharacteristicVectorStore {
+        public List<CharacteristicVector> list;
+
+        public CharacteristicVectorStore() {
+            list = new ArrayList<CharacteristicVector>();
+        }
+
+        public void addCharacteristicVector(Vector3d v, String desc) {
+            list.add(new CharacteristicVector(v, desc));
+        }
+
+        public Vector3d[] getVector3dAsArray() {
+            Vector3d[] arr = new Vector3d[list.size()];
+            for(int i = 0; i < list.size(); ++i)
+                arr[i] = list.get(i).vector;
+            return arr;
+        }
+    }
+
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         switch(sensorEvent.sensor.getType()) {
@@ -81,34 +123,18 @@ public class CosmicSensorManager implements SensorEventListener {
                 if(v.length() < 0.6 * 9.81)
                     return;
 
-                Vector3d[] charVectors = {
-                        new Vector3d(1,0,0),
-                        new Vector3d(-1,0,0),
-                        new Vector3d(0,1,0),
-                        new Vector3d(0,-1,0),
-                        new Vector3d(0,0,1),
-                        new Vector3d(0,0,-1)
-                };
-
-                String[] description = {
-                        "East",
-                        "West",
-                        "North",
-                        "South",
-                        "Up",
-                        "Down"
-                };
-
                 float[] resultVec = new float[4];
                 float[] R = new float[16];
                 float[] RInv = new float[16];
 
                 android.hardware.SensorManager.getRotationMatrixFromVector(R, rotationVector);
-                android.opengl.Matrix.invertM(RInv, 0, R, 0);
-                android.opengl.Matrix.multiplyMV(resultVec, 0, RInv, 0, v.to4dFloatVector(), 0);
+                //android.opengl.Matrix.invertM(RInv, 0, R, 0);
+                android.opengl.Matrix.multiplyMV(resultVec, 0, R, 0, v.to4dFloatVector(), 0);
 
                 Vector3d vWorld = new Vector3d(resultVec[0], resultVec[1], resultVec[2]);
-                Log.d(LOG_TAG, "Linear Acceleration Vector v="+vWorld+" quantized to " + description[vWorld.quantize(charVectors)]);
+                Vector3d[] vectors = this.charVectors.getVector3dAsArray();
+                String desc = this.charVectors.list.get(vWorld.quantize(vectors)).description;
+                Log.d(LOG_TAG, "Linear Acceleration Vector v="+vWorld+" quantized to " + desc);
 
                 break;
             case Sensor.TYPE_ROTATION_VECTOR:
@@ -137,7 +163,7 @@ public class CosmicSensorManager implements SensorEventListener {
 
                 //Log.i(LOG_TAG, "Rotary Switch: " + ((attitude+Math.PI/2) * 100 / Math.PI));
                 float pHeading = (float)((heading+Math.PI) / (2 * Math.PI));
-                float offset = 0.5f;
+                float offset = 0.75f;
                 if(pHeading+offset > 1)
                     pHeading = pHeading+offset - 1;
                 else
