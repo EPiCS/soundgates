@@ -1,16 +1,21 @@
 package soundgates.diagram.edit.parts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
+import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
+import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.PlatformUI;
 
+import soundgates.Direction;
 import soundgates.impl.AtomicSoundComponentImpl;
 import soundgates.provider.custom.CustomPropertyInputDialog;
 
@@ -18,8 +23,20 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 
 	private Adapter adapter;
 	
+	protected int[] inputPortsXPositions; 
+	protected int[] outputPortsXPositions;
+	protected int componentWidth;
+	
+	protected int currentInputPort=0;
+	protected int currentOutputPort=0;
+	
 	public AtomicSoundComponentAbstractEditPart(View view) {
 		super(view);
+		
+		ComponentLayouter componentLayouter = new ComponentLayouter(getAtomicSoundComponentImpl());
+		inputPortsXPositions = componentLayouter.getInputPortsXPositions();
+		outputPortsXPositions = componentLayouter.getOutputPortsXPositions();
+		componentWidth = componentLayouter.getComponentWidth();
 	}
 
 	public AtomicSoundComponentImpl getAtomicSoundComponentImpl() {
@@ -28,6 +45,33 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		else 
 			return null;
 	}
+
+	protected boolean addFixedChild(EditPart childEditPart) {
+		if (childEditPart instanceof PortEditPart) {
+			
+			SoundgatesBorderItemLocator locator;
+			
+			if (((PortEditPart) childEditPart).getPortImpl().getDirection()==Direction.IN){
+				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPortImpl().getName());
+				currentInputPort++;
+			}
+			else{
+				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPortImpl().getName());
+				currentOutputPort++;
+			}
+			getBorderedFigure().getBorderItemContainer().add(((PortEditPart) childEditPart).getFigure(),locator);
+
+			return true;
+		}
+		return false;
+	}
+	
+	protected NodeFigure createNodePlate() {
+		DefaultSizeNodeFigure result = 
+				new DefaultSizeNodeFigure(componentWidth, ComponentLayouter.componentHeight);
+		return result;
+	}
+	
 	
 	public String createToolTip(){
 		AtomicSoundComponentImpl atomicSoundComponentImpl = getAtomicSoundComponentImpl();
