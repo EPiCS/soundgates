@@ -7,6 +7,9 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -27,6 +30,8 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicyWithCustomReparent;
 import org.eclipse.swt.graphics.Color;
 
+import soundgates.Direction;
+import soundgates.Port;
 import soundgates.diagram.edit.policies.AtomicSoundComponentCanonicalEditPolicy;
 import soundgates.diagram.edit.policies.AtomicSoundComponentItemSemanticEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
@@ -36,6 +41,17 @@ import soundgates.diagram.part.SoundgatesVisualIDRegistry;
  */
 public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEditPart{
 
+	private static final int portSize = 10;
+	private static final int distanceFromBorder = 10;
+	private static final int distanceBetweenPorts = 90;
+	
+	private int maxPortsNumber;
+	private int[] inputPortsXPositions; 
+	private int[] outputPortsXPositions;
+	private int currentInputPort=0;
+	private int currentOutputPort=0;
+	
+	
 	/**
 	 * @generated
 	 */
@@ -56,6 +72,7 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 	 */
 	public AtomicSoundComponentEditPart(View view) {
 		super(view);
+		computePortsXPositions();
 	}
 
 	/**
@@ -124,7 +141,7 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof AtomicSoundComponentNameEditPart) {
@@ -134,14 +151,27 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 			return true;
 		}
 		if (childEditPart instanceof PortEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			getBorderedFigure().getBorderItemContainer().add(
-					((PortEditPart) childEditPart).getFigure(), locator);
+			
+			SoundgatesBorderItemLocator locator;
+			
+			if (((PortEditPart) childEditPart).getPortImpl().getDirection()==Direction.IN){
+				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPortImpl().getName());
+				currentInputPort++;
+			}
+			else{
+				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPortImpl().getName());
+				currentOutputPort++;
+			}
+			getBorderedFigure().getBorderItemContainer().add(((PortEditPart) childEditPart).getFigure(),locator);
+
 			return true;
 		}
 		return false;
 	}
+	
+//	public int computeXpos(){
+//		
+//	}
 
 	/**
 	 * @generated
@@ -192,10 +222,14 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 	 * @generated
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(40, 40);
+		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(computeWidth(), 40);
 		return result;
 	}
-
+	
+	protected int computeWidth(){
+		return 2*distanceFromBorder + maxPortsNumber*portSize + (maxPortsNumber-1)*distanceBetweenPorts; 
+	}
+	
 	/**
 	 * Creates figure for this edit part.
 	 * 
@@ -332,7 +366,136 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 		public WrappingLabel getFigureAtomicSoundComponentNameFigure() {
 			return fFigureAtomicSoundComponentNameFigure;
 		}
+
 	}
 	
+	public void computePortsXPositions(){
+		int inputPorts = 0;
+		int outputPorts = 0;
+		char sideWithMorePorts;
+		for (Port port : getAtomicSoundComponentImpl().getPorts()){
+			if(port.getDirection()==Direction.IN)
+				inputPorts++;
+			else 
+				outputPorts++;
+		}
+		if(inputPorts>outputPorts){
+			maxPortsNumber = inputPorts;
+			sideWithMorePorts='i';
+		}
+		else if (inputPorts<outputPorts){
+			maxPortsNumber = outputPorts;
+			sideWithMorePorts='o';
+		}
+		else {
+			maxPortsNumber = inputPorts;
+			sideWithMorePorts = 'b';
+		}
+		
+		inputPortsXPositions = new int[inputPorts];
+		outputPortsXPositions = new int[outputPorts];
+		
+		int portWithDistance = portSize + distanceBetweenPorts;
+		
+		int tmpPos = distanceFromBorder;
+		if(sideWithMorePorts=='i'){
+			for(int i=0; i<inputPorts; i++){
+				inputPortsXPositions[i]=tmpPos;
+				tmpPos += portWithDistance;
+			}
+			
+			int emptyCellsAtStart = (inputPorts-outputPorts)/2;
+			tmpPos = distanceFromBorder + portWithDistance*emptyCellsAtStart;
+			for(int i=0; i<outputPorts; i++){
+				outputPortsXPositions[i]=tmpPos;
+				tmpPos += portWithDistance;
+			}
+		}
+		else if(sideWithMorePorts=='o'){
+			for(int i=0; i<outputPorts; i++){
+				outputPortsXPositions[i]=tmpPos;
+				tmpPos += portWithDistance;
+			}
+			
+			int emptyCellsAtStart = (outputPorts-inputPorts)/2;
+			tmpPos = distanceFromBorder + portWithDistance*emptyCellsAtStart;
+			for(int i=0; i<inputPorts; i++){
+				inputPortsXPositions[i]=tmpPos;
+				tmpPos += portWithDistance;
+			}
+		}else if(sideWithMorePorts=='b'){
+			for(int i=0; i<outputPorts; i++){
+				outputPortsXPositions[i]=tmpPos;
+				inputPortsXPositions[i]=tmpPos;
+				tmpPos += portWithDistance;
+			}			
+		}
+	}
+	
+	class SoundgatesBorderItemLocator extends BorderItemLocator{
+		
+		private boolean secondStart = false;
+		private int offset;
+		
+		String name;
+		
+		public SoundgatesBorderItemLocator(IFigure parentFigure,
+				int preferredSide, int offset, String name) {
+			super(parentFigure, preferredSide);
+			this.offset=offset;
+			this.name=name;
+		}
+		
+		protected Point getPreferredLocation(int side, IFigure borderItem) {
+			Rectangle bounds = getParentBorder();
+			int parentFigureWidth = bounds.width;
+			int parentFigureHeight = bounds.height;
+			int parentFigureX = bounds.x;
+			int parentFigureY = bounds.y;
+			int x = parentFigureX;
+			int y = parentFigureY;
 
+			Dimension borderItemSize = getSize(borderItem);
+
+			if (side == PositionConstants.WEST) {
+				x = parentFigureX - borderItemSize.width
+					+ getBorderItemOffset().width;
+				y += parentFigureHeight / 2;
+			} else if (side == PositionConstants.EAST) {
+				x = parentFigureX + parentFigureWidth - getBorderItemOffset().width;
+				y += parentFigureHeight / 2;
+			} else if (side == PositionConstants.NORTH) {
+				y = parentFigureY - borderItemSize.height;
+//				x += parentFigureWidth/2;
+				x = parentFigureX + offset;
+			} else if (side == PositionConstants.SOUTH) {
+//				x += parentFigureWidth/2;
+				x = parentFigureX + offset;
+				y = parentFigureY + parentFigureHeight;
+					
+			}
+			return new Point(x, y);
+		}
+		
+		@Override
+		protected Point getPreferredLocation(IFigure borderItem) {
+			getParentFigure().validate();
+			if(getParentFigure().getBounds().x!=0 && getParentFigure().getBounds().y!=0){
+				if(!secondStart){
+					secondStart=true;
+					setConstraint(new Rectangle(0,0,0,0));
+					relocate(borderItem);
+				}
+			}
+			Point p = super.getPreferredLocation(borderItem);
+			return p;
+		}
+
+		@Override
+		public void relocate(IFigure borderItem) {
+		System.out.println(name);
+			super.relocate(borderItem);
+		}
+		
+	}
 }

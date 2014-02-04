@@ -25,11 +25,6 @@ import org.eclipse.swt.widgets.Text;
 import soundgates.AtomicSoundComponent;
 
 public class CustomPropertyInputDialog extends Dialog {
-	// TODO Funktioniert im Diagramm Editor noch nicht korrekt (schmeißt
-	// exception)
-	// TODO Änderungen werden in EMF nicht registriert (kein speichern
-	// möglich)
-	// Funktioniert aber wenn man noch was anderes ändert
 
 	Object atomicSoundComponentObject;
 	Map<String, Text> inputTexts;

@@ -144,9 +144,20 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	protected void addBorderItem(IFigure borderItemContainer,
 			IBorderItemEditPart borderItemEditPart) {
 		if (borderItemEditPart instanceof PortNameEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			locator.setBorderItemOffset(new Dimension(-20, -20));
+//			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),PositionConstants.SOUTH);
+//			locator.setBorderItemOffset(new Dimension(-20, -20));
+			
+			BorderItemLocator locator;
+			if(getPortImpl().getDirection()==Direction.IN){
+				locator = new BorderItemLocator(getMainFigure(),PositionConstants.NORTH);
+				locator.setBorderItemOffset(new Dimension(-20, 20));
+			}
+			else{
+				locator = new BorderItemLocator(getMainFigure(),PositionConstants.SOUTH);
+				locator.setBorderItemOffset(new Dimension(-20, -20));
+			}
+			
+			
 			borderItemContainer.add(borderItemEditPart.getFigure(), locator);
 		} else {
 			super.addBorderItem(borderItemContainer, borderItemEditPart);
