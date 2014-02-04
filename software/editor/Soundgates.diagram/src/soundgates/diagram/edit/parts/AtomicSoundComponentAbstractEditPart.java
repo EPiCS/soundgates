@@ -15,8 +15,8 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.PlatformUI;
 
+import soundgates.AtomicSoundComponent;
 import soundgates.Direction;
-import soundgates.impl.AtomicSoundComponentImpl;
 import soundgates.provider.custom.CustomPropertyInputDialog;
 
 public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorderedShapeEditPart {
@@ -33,15 +33,15 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	public AtomicSoundComponentAbstractEditPart(View view) {
 		super(view);
 		
-		ComponentLayouter componentLayouter = new ComponentLayouter(getAtomicSoundComponentImpl());
+		ComponentLayouter componentLayouter = new ComponentLayouter(getAtomicSoundComponent());
 		inputPortsXPositions = componentLayouter.getInputPortsXPositions();
 		outputPortsXPositions = componentLayouter.getOutputPortsXPositions();
 		componentWidth = componentLayouter.getComponentWidth();
 	}
 
-	public AtomicSoundComponentImpl getAtomicSoundComponentImpl() {
-		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof AtomicSoundComponentImpl)
-			return (AtomicSoundComponentImpl) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+	public AtomicSoundComponent getAtomicSoundComponent() {
+		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof AtomicSoundComponent)
+			return (AtomicSoundComponent) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
 		else 
 			return null;
 	}
@@ -51,12 +51,12 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 			
 			SoundgatesBorderItemLocator locator;
 			
-			if (((PortEditPart) childEditPart).getPortImpl().getDirection()==Direction.IN){
-				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPortImpl().getName());
+			if (((PortEditPart) childEditPart).getPort().getDirection()==Direction.IN){
+				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPort().getName());
 				currentInputPort++;
 			}
 			else{
-				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPortImpl().getName());
+				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPort().getName());
 				currentOutputPort++;
 			}
 			getBorderedFigure().getBorderItemContainer().add(((PortEditPart) childEditPart).getFigure(),locator);
@@ -74,13 +74,13 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	
 	
 	public String createToolTip(){
-		AtomicSoundComponentImpl atomicSoundComponentImpl = getAtomicSoundComponentImpl();
+		AtomicSoundComponent atomicSoundComponent = getAtomicSoundComponent();
 		
 		StringBuffer stringBuffer = new StringBuffer();
-		for(String key : atomicSoundComponentImpl.getStringProperties().keySet()){
+		for(String key : atomicSoundComponent.getStringProperties().keySet()){
 			if(key.equals("implType")){
 				String implType;
-				if(atomicSoundComponentImpl.getStringProperties().get(key).equals("hw"))
+				if(atomicSoundComponent.getStringProperties().get(key).equals("hw"))
 					implType = "Hardware ";
 				else
 					implType = "Software ";
@@ -88,11 +88,11 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 				stringBuffer.append("Implementation"+": "+implType+"\n");
 			}
 		}
-		for(String key : atomicSoundComponentImpl.getFloatProperties().keySet()){
-			stringBuffer.append(key+": "+atomicSoundComponentImpl.getFloatProperties().get(key)+"\n");
+		for(String key : atomicSoundComponent.getFloatProperties().keySet()){
+			stringBuffer.append(key+": "+atomicSoundComponent.getFloatProperties().get(key)+"\n");
 		}
-		for(String key : atomicSoundComponentImpl.getUserStringProperties().keySet()){
-			stringBuffer.append(key+": "+atomicSoundComponentImpl.getUserStringProperties().get(key)+"\n");
+		for(String key : atomicSoundComponent.getUserStringProperties().keySet()){
+			stringBuffer.append(key+": "+atomicSoundComponent.getUserStringProperties().get(key)+"\n");
 		}
 		
 		return stringBuffer.toString();
@@ -125,7 +125,7 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		};
 
 		try{
-			getAtomicSoundComponentImpl().eAdapters().add(adapter);
+			getAtomicSoundComponent().eAdapters().add(adapter);
 			refreshGraphic();
 		}
 		catch(Exception e){
@@ -148,7 +148,7 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	public void deactivate() {
 		super.deactivate();
 		try{
-			getAtomicSoundComponentImpl().eAdapters().remove(adapter);
+			getAtomicSoundComponent().eAdapters().remove(adapter);
 			refreshGraphic();
 		}
 		catch(Exception e){
@@ -163,7 +163,7 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 			Dialog dialog = new CustomPropertyInputDialog(PlatformUI
 					.getWorkbench().getDisplay().getActiveShell(),
 					"dialogTitle", "dialogMessage", "initialValue", null,
-					getAtomicSoundComponentImpl());
+					getAtomicSoundComponent());
 			dialog.open();
 	    }
 	}

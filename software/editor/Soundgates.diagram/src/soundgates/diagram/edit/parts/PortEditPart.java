@@ -37,6 +37,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 
 import soundgates.Direction;
+import soundgates.Port;
 import soundgates.diagram.edit.policies.PortItemSemanticEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
@@ -148,7 +149,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 //			locator.setBorderItemOffset(new Dimension(-20, -20));
 			
 			BorderItemLocator locator;
-			if(getPortImpl().getDirection()==Direction.IN){
+			if(getPort().getDirection()==Direction.IN){
 				locator = new BorderItemLocator(getMainFigure(),PositionConstants.NORTH);
 				locator.setBorderItemOffset(new Dimension(-20, 20));
 			}
@@ -194,8 +195,8 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	public String createToolTip(){
-		PortImpl portImpl = getPortImpl();
-		return "Name: "+portImpl.getName()+"\nDirection: "+portImpl.getDirection()+"\nType: "+portImpl.getDataType();
+		Port port = getPort();
+		return "Name: "+port.getName()+"\nDirection: "+port.getDirection()+"\nType: "+port.getDataType();
 	}
 	
 	/**
@@ -373,7 +374,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		};
 
 		try{
-			getPortImpl().eAdapters().add(adapter);
+			getPort().eAdapters().add(adapter);
 			refreshGraphic();
 		}
 		catch(Exception e){
@@ -383,13 +384,13 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 
 	public void refreshGraphic() {
 		try{
-			PortImpl portImpl = getPortImpl();
+			Port port = getPort();
 			
 			refreshConnections();
 			getFigure().setToolTip(new Label(createToolTip()));
 			
-			if ((portImpl.getDirection() == Direction.OUT && getPortImpl().getOutgoingConnection().size() == 0)
-					|| (portImpl.getDirection() == Direction.IN && getPortImpl().getIncomingConnection() == null)) {
+			if ((port.getDirection() == Direction.OUT && getPort().getOutgoingConnection().size() == 0)
+					|| (port.getDirection() == Direction.IN && getPort().getIncomingConnection() == null)) {
 				setForegroundColor(new Color(null, 255, 0, 0));
 				getPortNameEditPart().getFigure().setVisible(true);
 			} else{
@@ -418,9 +419,9 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 
 	}
 
-	public PortImpl getPortImpl() {
-		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof PortImpl)
-			return (PortImpl) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+	public Port getPort() {
+		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof Port)
+			return (Port) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
 		else 
 			return null;
 	}
@@ -438,7 +439,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	public void deactivate() {
 		super.deactivate();
 		try{
-			getPortImpl().eAdapters().remove(adapter);
+			getPort().eAdapters().remove(adapter);
 			refreshGraphic();
 		}
 		catch(Exception e){

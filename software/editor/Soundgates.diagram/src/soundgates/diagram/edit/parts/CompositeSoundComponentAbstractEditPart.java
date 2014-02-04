@@ -6,14 +6,27 @@ import org.eclipse.gmf.runtime.diagram.ui.figures.ResizableCompartmentFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ShapeImpl;
 
+import soundgates.CompositeSoundComponent;
 import soundgates.diagram.part.SoundgatesDiagramUpdater;
 import soundgates.impl.PatchImpl;
 
 public abstract class CompositeSoundComponentAbstractEditPart extends
 			AbstractBorderedShapeEditPart{
 
+	protected int[] inputPortsXPositions; 
+	protected int[] outputPortsXPositions;
+	protected int componentWidth;
+	
+	protected int currentInputPort=0;
+	protected int currentOutputPort=0;
+	
 	public CompositeSoundComponentAbstractEditPart(View view) {
 		super(view);
+		
+		ComponentLayouter componentLayouter = new ComponentLayouter(getCompositeSoundComponent());
+		inputPortsXPositions = componentLayouter.getInputPortsXPositions();
+		outputPortsXPositions = componentLayouter.getOutputPortsXPositions();
+		componentWidth = componentLayouter.getComponentWidth();
 	}
 	
 	public void refreshContainer(){		 
@@ -72,4 +85,10 @@ public abstract class CompositeSoundComponentAbstractEditPart extends
 		compartmentFigure.collapse();
 	}
 	
+	public CompositeSoundComponent getCompositeSoundComponent() {
+		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof CompositeSoundComponent)
+			return (CompositeSoundComponent) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+		else 
+			return null;
+	}
 }

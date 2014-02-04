@@ -1,8 +1,8 @@
 package soundgates.diagram.edit.parts;
 
-import soundgates.AtomicSoundComponent;
 import soundgates.Direction;
 import soundgates.Port;
+import soundgates.SoundComponent;
 
 public class ComponentLayouter {
 	private static final int portSize = 10;
@@ -16,8 +16,8 @@ public class ComponentLayouter {
 	private int[] inputPortsXPositions;
 	private int[] outputPortsXPositions;
 	
-	public ComponentLayouter(AtomicSoundComponent atomicSoundComponent){
-		computePortsXPositions(atomicSoundComponent);
+	public ComponentLayouter(SoundComponent soundComponent){
+		computePortsXPositions(soundComponent);
 	}
 	
 	public int getMaxPortsNumber(){
@@ -43,11 +43,11 @@ public class ComponentLayouter {
 	
 	}
 	
-	private void computePortsXPositions(AtomicSoundComponent atomicSoundComponent){
+	private void computePortsXPositions(SoundComponent soundComponent){
 		int inputPorts = 0;
 		int outputPorts = 0;
 		char sideWithMorePorts;
-		for (Port port : atomicSoundComponent.getPorts()){
+		for (Port port : soundComponent.getPorts()){
 			if(port.getDirection()==Direction.IN)
 				inputPorts++;
 			else 
