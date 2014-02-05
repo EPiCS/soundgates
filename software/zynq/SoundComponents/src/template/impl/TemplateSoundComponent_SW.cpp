@@ -19,8 +19,8 @@ void TemplateSoundComponent_SW::process()
 {
 	float sampleAdder = 0.0;
 
-	// Access the control value
-	float controlValue = m_TemplateControlIn_1_Port->pop();
+	// Access the control value. We implemented a callback method in the superclass which handles control values.
+	float controlValue = this->val;
 
 	// Components that produce sound need to do so for a number of samples in one processing step
 	// This is done by iterating from 0 to blocksize

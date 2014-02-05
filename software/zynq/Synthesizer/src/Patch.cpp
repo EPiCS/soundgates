@@ -39,17 +39,12 @@ vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 void Patch::createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot){
 
 	SoundComponents::ImplType impltype;
+	bool useHWThreads = SoundgatesConfig::getInstance().useHWThreads();
 
 	SoundComponentLoader& loader = SoundComponentLoader::getInstance();
-	if(Synthesizer::config::useHWThreads){
-	    /* Create hw threads if demanded */
-	    impltype = (slot < 0) ? SoundComponents::SW : SoundComponents::HW;
 
-	}else{
-	    /* ignore hw threads */
-	    impltype = SoundComponents::SW;
-	}
-
+	/* Create hw threads if demanded */
+    impltype = ((slot < 0) || !useHWThreads) ? SoundComponents::SW : SoundComponents::HW;
 
 	if(impltype == SoundComponents::HW){
 	    HWThreadManager::getInstance().declareSlot(type, slot);
@@ -70,7 +65,7 @@ void Patch::createSoundComponent(int uid, const std::string& type, std::vector<s
 
 void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
-	LOG_DEBUG("Creating link from node " << sourceid << " to Node " << destid);
+	LOG_DEBUG("Creating link from node " << sourceid << ":" << srcport << " to Node " << destid << ":" << destport);
 
 	SoundComponentPtr source;
 	SoundComponentPtr destination;
@@ -171,10 +166,12 @@ void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
 void Patch::initialize(void){
 
-    #ifdef ZYNQ
-    reconos_init();
-    #endif
 
+    if(SoundgatesConfig::getInstance().useHWThreads()){
+        #ifdef ZYNQ
+        reconos_init();
+        #endif
+	}
 
 	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
 	        iter != m_ComponentsVector.end(); ++iter ){
@@ -182,6 +179,15 @@ void Patch::initialize(void){
         SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
 
         sndcomponent->init();
+	}
+
+	// Second initialization phase (e.g. Const blocks need be initialized at the end to reliably propagate values)
+	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+	        iter != m_ComponentsVector.end(); ++iter ){
+
+        SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
+
+        sndcomponent->initLater();
 	}
 
 	jobIter         = m_ComponentsVector.begin();

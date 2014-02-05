@@ -23,6 +23,7 @@ private:
 public:
 
 	SquareSoundComponent_SW(std::vector<std::string>);
+	~SquareSoundComponent_SW();
 
 	void init();
 	void process();

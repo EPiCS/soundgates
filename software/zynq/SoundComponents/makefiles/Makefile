@@ -2,16 +2,22 @@ SoundComponents += add \
 				  adsr \
 				  const	\
 				  delay \
+				  fir \
 				  mixer\
 				  noise \
 				  output \
 				  sine \
-				  cmult \
+				  mulsc \
 				  output \
 				  square \
 				  dummysink \
-				sampleplayer \
-				template
+				  sampleplayer \
+                  soundToControl \
+				  template \
+			      timer \
+				  saw \
+				  pwm \
+				  fir 
 
 
 SRCDIR = ../src

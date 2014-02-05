@@ -33,6 +33,7 @@ public:
 
 	void init(void);
 	void process(void);
+	void initLater();
 };
 
 #endif /* NOISESOUNDCOMPONENT_H_ */

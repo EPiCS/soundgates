@@ -151,6 +151,8 @@ architecture Behavioral of hwt_nco is
     
     signal nco_data      : signed(31 downto 0);
     
+    signal state_inner_process : std_logic;
+    
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
@@ -257,6 +259,7 @@ begin
             osif_ctrl_signal <= (others => '0');
             nco_ce       <= '0';
             o_RAMWE_nco  <= '0';
+            state_inner_process <= '0';
             
             done := False;
               
@@ -313,11 +316,16 @@ begin
                 
             when STATE_PROCESS =>
                 if sample_count > 0 then
-                    
-                    nco_ce        <= '1'; -- ein takt früher
-                    o_RAMWE_nco   <= '1';
-                    o_RAMAddr_nco <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
-                    sample_count  <= sample_count - 1;
+                    case state_inner_process is
+                        when '0' =>
+                            o_RAMWE_nco   <= '1';
+                            nco_ce        <= '1'; -- ein takt früher
+                            state_inner_process          <= '1';
+                        when '1' =>
+                            o_RAMAddr_nco       <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
+                            sample_count        <= sample_count - 1;
+                            state_inner_process <= '0';                    
+                    end case;
                 else
                     -- Samples have been generated
                     o_RAMAddr_nco <= (others => '0');

@@ -196,3 +196,4 @@ fields: self.pcores   : list of MHSPCore objects
                 pcore = self.getPcore(instance_name)
                 self.pcores.remove(pcore)
 
+
