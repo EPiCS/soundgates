@@ -12,7 +12,12 @@
 		<Device>
 			<Implementation type="sw" name="pwm">
 				<PortMapping PortName="SoundIn" PortNumber="1"/>
-				<PortMapping PortName="SoundIn" PortNumber="2"/>
+				<PortMapping PortName="SoundIn2" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="hw" name="pwm">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="SoundIn2" PortNumber="2"/>
 				<PortMapping PortName="SoundOut" PortNumber="1"/>
 			</Implementation>
 		</Device>
