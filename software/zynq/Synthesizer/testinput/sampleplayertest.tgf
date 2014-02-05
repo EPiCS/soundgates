@@ -1,79 +1,28 @@
 1 input/sw/'/1/multipush1/1/1 f'
 2 input/sw/'/1/multipush1/2/1 f'
-3 input/sw/'/1/multipush1/3/1 f'
-4 input/sw/'/1/multipush1/4/1 f'
-5 input/sw/'/1/multipush1/5/1 f'
 
-6 input/sw/'/1/multipush1/1/2 f'
-7 input/sw/'/1/multipush1/2/2 f'
-8 input/sw/'/1/multipush1/3/2 f'
-9 input/sw/'/1/multipush1/4/2 f'
-10 input/sw/'/1/multipush1/5/2 f'
 
 11 input/sw/'/1/volume1 f'
 12 input/sw/'/1/volume2 f'
-13 input/sw/'/1/volume3 f'
-14 input/sw/'/1/volume4 f'
-15 input/sw/'/1/volume5 f'
-16 input/sw/'/1/volume6 f'
-17 input/sw/'/1/volume7 f'
-18 input/sw/'/1/volume8 f'
-19 input/sw/'/1/volume9 f'
-20 input/sw/'/1/volume10 f'
 
 30 smplply/sw/'./testinput/sounds/daft/1.wav','preload_decompress'
 31 smplply/sw/'./testinput/sounds/daft/2.wav','preload_decompress'
-32 smplply/sw/'./testinput/sounds/daft/3.wav','preload_decompress'
-33 smplply/sw/'./testinput/sounds/daft/4.wav','preload_decompress'
-34 smplply/sw/'./testinput/sounds/daft/5.wav','preload_decompress'
-35 smplply/sw/'./testinput/sounds/daft/6.wav','preload_decompress'
-36 smplply/sw/'./testinput/sounds/daft/7.wav','preload_decompress'
-37 smplply/sw/'./testinput/sounds/daft/8.wav','preload_decompress'
-38 smplply/sw/'./testinput/sounds/daft/9.wav','preload_decompress'
-39 smplply/sw/'./testinput/sounds/daft/10.wav','preload_decompress'
 
-56 mixer/sw/'10'
-
+56 mixer/sw
+57 delay/sw
 60 dac/sw
 
 61 dummysink/sw
 62 dummysink/sw
-63 dummysink/sw
-64 dummysink/sw
-65 dummysink/sw
-66 dummysink/sw
-67 dummysink/sw
-68 dummysink/sw
-69 dummysink/sw
-70 dummysink/sw
 
 #
 
-11 56 '1, 11'
-12 56 '1, 12'
-13 56 '1, 13'
-14 56 '1, 14'
-15 56 '1, 15'
-16 56 '1, 16'
-17 56 '1, 17'
-18 56 '1, 18'
-19 56 '1, 19'
-20 56 '1, 20'
-
-
-
 #
-1 30 '1,1'
-2 31 '1,1'
-3 32 '1,1'
-4 33 '1,1'
-5 34 '1,1'
+1 30 '1,1' 
+2 31 '1,1' 
 
-6 35 '1,1'
-7 36 '1,1'
-8 37 '1,1'
-9 38 '1,1'
-10 39 '1,1'
+11 56 '1,3'
+12 57 '1,1'
 
 30 56 '1,1'
 30 61 '2,1'
@@ -81,28 +30,5 @@
 31 56 '1,2'
 31 62 '2,1'
 
-32 56 '1,3'
-32 63 '2,1'
-
-33 56 '1,4'
-33 64 '2,1'
-
-34 56 '1,5'
-34 65 '2,1'
-
-35 56 '1,6'
-35 66 '2,1'
-
-36 56 '1,7'
-36 67 '2,1'
-
-37 56 '1,8'
-37 68 '2,1'
-
-38 56 '1,9'
-38 69 '2,1'
-
-39 56 '1,10'
-39 70 '2,1'
-
-56 60 '1,1'
+56 57 '1,2'
+57 60 '1,1'

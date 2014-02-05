@@ -22,7 +22,6 @@ class Mixer: SoundComponentImpl
 public:
 
 	DECLARE_COMPONENTNAME
-	;
 
 	DECLARE_PORT3(SoundPort, SoundIn, 1);
 	DECLARE_PORT3(SoundPort, SoundIn, 2);
@@ -35,6 +34,10 @@ public:
 
 	Mixer(std::vector<std::string> params);
 	virtual ~Mixer();
+
+	virtual void init() = 0;
+	virtual void process() = 0;
+
 };
 
 class OnBiasChange: public ICallbackFunctor
@@ -43,13 +46,14 @@ private:
 	Mixer& m_ObjRef;
 public:
 	OnBiasChange(Mixer& ref) :
-			m_ObjRef(ref)
-	{
+			m_ObjRef(ref){
+
 	}
 
 	void operator()()
 	{
 		float val = m_ObjRef.m_BiasIn_3_Port->pop();
+
 		if (val < 0)
 		{
 			m_ObjRef.m_bias = 0.0f;

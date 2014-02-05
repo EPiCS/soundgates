@@ -7,31 +7,52 @@
 
 #include "FIR_SW.hpp"
 
-FIR_SW::FIR_SW(std::vector<std::string> params) : FIR(params)
-{
-	// implementation specific initialization stuff here
+FIR_SW::FIR_SW(std::vector<std::string> params) : FIR(params){
+
 }
 
-// The actual software processing
-// In this example, we take an incoming control value and write it to each sample on the sound output
-// and take an incoming sound signal, average over the samples and write it to the control output
-void FIR_SW::process()
-{
-	float sampleAdder = 0.0;
+void FIR_SW::init(){
 
-	// Access the control value. We implemented a callback method in the superclass which handles control values.
-	float controlValue = 5;
+    std::cout << "Init in SW FIR" << std::endl;
+    m_SoundOut_1_Port->init();
+    m_CutOffFrequency_2_Port->registerCallback( \
+            ICallbackPtr(new OnValueChange<>(m_CutOffFrequency, m_CutOffFrequency_2_Port)));
 
-	// Components that produce sound need to do so for a number of samples in one processing step
-	// This is done by iterating from 0 to blocksize
+}
+
+void FIR_SW::process(){
+
+    /* Coefficients are in Q1.30 format */
+    /* Samples are assumed to be in Q1.30 format */
+
+    int64_t acc = 0;     /*< accumulator, result is Q2.60  */
+
+    int32_t *inputp;    /*< Filter input sample */
+
+    int32_t* coeff = coeff_lp[((int)m_CutOffFrequency)];
+
+    int32_t sample;
+
+	memcpy(&m_LocalBuffer[N_FIR_COEFF - 1], m_SoundIn_1_Port->getReadBuffer(), Synthesizer::config::bytesPerBlock);
+
 	for (int i = 0; i < Synthesizer::config::blocksize; i++ ) {
-		m_SoundOut_1_Port->writeSample(controlValue, i);
 
-		// if we want to access the i-th sample on an incoming sound port, we do that like this:
-		int sample = (*m_SoundIn_2_Port)[i];
+		acc     = 0;
+		sample  = 0;
+	    inputp = &m_LocalBuffer[N_FIR_COEFF - 1 + i];
 
-		sampleAdder += sample;
+		for (int k = 0; k < N_FIR_COEFF; k++ ) {
+		    acc += (int64_t) coeff[k] * (*inputp--);  // Q0.30 * Q1.30 = Q2.60  //DO not touch!
+		}
+
+		sample = (int32_t) (acc >> 30);
+
+		/* Accumulator is in Q1.47 format */
+		m_SoundOut_1_Port->writeSample(sample, i);
+
 	}
 
-	sampleAdder /= Synthesizer::config::blocksize;
+	memmove( &m_LocalBuffer[0],
+	         &m_LocalBuffer[Synthesizer::config::blocksize],
+	         (N_FIR_COEFF - 1) * sizeof(int32_t));
 }

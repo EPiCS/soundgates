@@ -7,21 +7,17 @@
 
 #include "MixerSW.h"
 
-Mixer_SW::Mixer_SW(std::vector<std::string> params) :
-		Mixer(params)
-{
+Mixer_SW::Mixer_SW(std::vector<std::string> params) : Mixer(params){
 
 }
 
-Mixer_SW::~Mixer_SW()
-{
+Mixer_SW::~Mixer_SW(){
 }
 
-void Mixer_SW::init()
-{
+void Mixer_SW::init(){
 
 	/* */
-	m_BiasIn_3_Port->registerCallback((ICallbackPtr(new OnBiasChange(*this))));
+	m_BiasIn_3_Port->registerCallback(ICallbackPtr(new OnBiasChange(*this)));
 	m_SoundOut_1_Port->init();
 
 }
@@ -46,5 +42,14 @@ void Mixer_SW::process()
 
 		m_SoundOut_1_Port->writeSample(outsample, i);
 	}
+
+//    int32_t sample = 0;
+//
+//    for (int i = 0; i < Synthesizer::config::blocksize; i++){
+//
+//        sample = ((*m_SoundIn_1_Port)[i] * m_bias + (*m_SoundIn_2_Port)[i] * (1.0 - m_bias));
+//
+//        m_SoundOut_1_Port->writeSample(sample, i);
+//    }
 }
 

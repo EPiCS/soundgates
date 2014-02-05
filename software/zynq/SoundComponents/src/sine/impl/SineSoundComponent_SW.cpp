@@ -83,7 +83,7 @@ void SineSoundComponent_SW::process()
 		for (int i = 0; i < Synthesizer::config::blocksize; i++)
 		{
 
-			m_SoundOut_1_Port->writeSample(sine_lookup(m_Phase) * INT_MAX, i);
+			m_SoundOut_1_Port->writeSample(sine_lookup(m_Phase) * (1 << 30), i);  //  Q1.30
 
 			m_Phase += m_PhaseIncr;
 

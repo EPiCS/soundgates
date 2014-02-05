@@ -18,6 +18,8 @@ MultiplyControl_SW::~MultiplyControl_SW() {
 
 void MultiplyControl_SW::process(){
 
+//    Fixed point implementation
+
 //    int fixpt = (int)(m_ValueIn_2_Port->pop() * (1 << 31));
 //
 //    int64_t pcm;  /* 64 bit result type */
@@ -28,6 +30,9 @@ void MultiplyControl_SW::process(){
 //        m_SoundOut_1_Port->writeSample((int)pcm, i);
 //        pcm = 0;
 //    }
+
+
+//    Floating point implementation
 
      float bias = m_ValueIn_2_Port->pop();
 
