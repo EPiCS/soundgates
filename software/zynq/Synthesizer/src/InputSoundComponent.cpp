@@ -8,15 +8,11 @@
 
 #include "InputSoundComponent.h"
 
-InputSoundComponent::InputSoundComponent(vector<string> parameters){
+InputSoundComponent::InputSoundComponent(vector<string> parameters) : SoundComponentImpl(parameters){
 
 	if(parameters.size() > 0){
-		setupOSCAddress(parameters.at(0));
 
-		for(unsigned int i=1; i < parameters.size(); i++){
-
-		    setupRange(parameters[i]);
-		}
+		setupOSCAddress(parameters[0]);
 	}
 }
 
@@ -30,9 +26,10 @@ std::pair<float, float>& InputSoundComponent::getRange(int typTagIndex){
     return m_Ranges[typTagIndex];
 }
 
-void InputSoundComponent::setupRange(std::string range){
+std::pair<float, float> InputSoundComponent::getRangeFromString(std::string range){
 
     std::vector<string> rangeArgs;
+    // Change format: [min:max]
 
     boost::trim(range);
 
@@ -41,31 +38,55 @@ void InputSoundComponent::setupRange(std::string range){
 
     boost::split(rangeArgs, range, boost::is_any_of(":"));
 
-    if(rangeArgs.size() > 1){
+    float min = 0.0, max = 1.0;
 
-        float min = boost::lexical_cast<float>(rangeArgs[0]);
-        float max = boost::lexical_cast<float>(rangeArgs[1]);
+    if(rangeArgs.size() > 0){
 
-        m_Ranges.push_back(std::pair<float, float>(min, max));
+        boost::trim(rangeArgs[0]);
+        boost::trim(rangeArgs[1]);
+
+        try{
+            min = boost::lexical_cast<float>(rangeArgs[0]);
+            max = boost::lexical_cast<float>(rangeArgs[1]);
+        }catch(const boost::bad_lexical_cast &){
+
+            LOG_ERROR("Cannot cast range arguments. Mapping to range [0:1]:" <<  range);
+
+            min = 0.0;
+            max = 1.0;
+        }
+
+        return std::pair<float, float>(min, max);
     }
+
+    return std::pair<float, float>(min, max);
 }
 
-void InputSoundComponent::setupOSCAddress(string oscaddress){
+void InputSoundComponent::setupOSCAddress(const std::string& oscaddress){
 
-	this->m_OSCAddresses = oscaddress;
+	m_OSCAddresses = boost::trim_copy(oscaddress);
 
 	std::vector<std::string> oscparts;
-	std::vector<PortPtr>& outports = getOutports();
+	std::vector<PortPtr>&    outports = getOutports();
 
-	boost::trim(m_OSCAddresses);
 	boost::split(oscparts, m_OSCAddresses, boost::is_any_of(" "));
 
-	if(oscparts.size() > 1){
-		m_OSCAddresses = oscparts[0];
-		m_OSCTypeTag   = oscparts[1];
+	if(oscparts.size() > 0){
 
-		boost::erase_first(m_OSCTypeTag, "\"");
-		boost::erase_last(m_OSCTypeTag, "\"");
+		m_OSCAddresses = boost::trim_copy(oscparts[0]);
+
+		m_OSCTypeTag   = boost::trim_copy(oscparts[1]);
+
+		std::vector<std::string>& params = getParameters();
+
+        for(uint32_t i = 0; i < m_OSCTypeTag.size(); i++){
+
+            if(i + 2 > params.size()){
+                m_Ranges.push_back(std::pair<float, float>(0.0, 1.0));
+            }else{
+                m_Ranges.push_back(getRangeFromString(params[i + 1]));
+            }
+        }
 	}
 
 	for(int i = 0; i < (int) m_OSCTypeTag.size(); i++){

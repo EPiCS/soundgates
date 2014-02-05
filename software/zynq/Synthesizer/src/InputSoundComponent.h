@@ -48,8 +48,11 @@ private:
 	std::string m_OSCAddresses;
 	std::string m_OSCTypeTag;
 	std::vector<std::pair<float, float> > m_Ranges;
-	void setupOSCAddress(string oscaddress);
+	void setupOSCAddress(const std::string& oscaddress);
 	void setupRange(std::string range);
+
+	std::pair<float, float> getRangeFromString(std::string);
+
 public:
 
 	InputSoundComponent() { }
