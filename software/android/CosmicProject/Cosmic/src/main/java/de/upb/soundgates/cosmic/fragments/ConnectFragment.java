@@ -53,36 +53,25 @@ public class ConnectFragment extends Fragment implements View.OnClickListener, A
         CosmicPreferences prefs = CosmicPreferences.getInstance(getActivity());
 
         Set<String> hosts = prefs.getStringSet("hosts");
-        String[] hostarray = new String[hosts.size()];
-        hosts.toArray(hostarray);
+        String[] hostArray = new String[hosts.size()];
+        hosts.toArray(hostArray);
 
         Set<String> ports = prefs.getStringSet("ports");
-        String[] portarray = new String[ports.size()];
-        ports.toArray(portarray);
+        String[] portArray = new String[ports.size()];
+        ports.toArray(portArray);
 
         ipTextView = (AutoCompleteTextView) rootView.findViewById(R.id.ip_edittext);
-        /*ipTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    ipTextView.showDropDown();
-                }
-            }
-        });*/
+        if(hostArray.length > 0)
+            ipTextView.setText(hostArray[hostArray.length-1]);
 
-        ArrayAdapter<String> hostAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, hostarray);
+        ArrayAdapter<String> hostAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, hostArray);
         ipTextView.setAdapter(hostAdapter);
 
         portTextView = (AutoCompleteTextView) rootView.findViewById(R.id.port_edittext);
-        /*portTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    portTextView.showDropDown();
-                }
-            }
-        });*/
-        ArrayAdapter<String> portAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, portarray);
+        if(portArray.length > 0)
+            portTextView.setText(portArray[portArray.length-1]);
+
+        ArrayAdapter<String> portAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, portArray);
         portTextView.setAdapter(portAdapter);
 
         Button connectButton = (Button) rootView.findViewById(R.id.connect_button);

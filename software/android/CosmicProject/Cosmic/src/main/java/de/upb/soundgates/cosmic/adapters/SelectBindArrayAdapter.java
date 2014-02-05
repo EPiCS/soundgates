@@ -87,8 +87,11 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
                     String im_str = parent.getItemAtPosition(position).toString();
                     InteractionMethod im_id = null;
 
+                    // Mapping from description of interaction technique to model values
                     if(im_str.equals(context.getResources().getString(R.string.seekBar))) {
                         im_id = InteractionMethod.SEEKBAR;
+                    } else if(im_str.equals(context.getResources().getString(R.string.button))) {
+                        im_id = InteractionMethod.BUTTON;
                     } else if(im_str.equals(context.getResources().getString(R.string.tilt))) {
                         im_id = InteractionMethod.TILT;
                     } else if(im_str.equals(context.getResources().getString(R.string.shake))) {

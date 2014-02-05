@@ -2,6 +2,7 @@ package de.upb.soundgates.cosmic.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+import de.upb.soundgates.cosmic.rows.InteractionButtonRow;
 import de.upb.soundgates.cosmic.rows.InteractionLightRow;
 import de.upb.soundgates.cosmic.rows.InteractionRow;
 import de.upb.soundgates.cosmic.rows.InteractionSeekBarRow;
@@ -55,6 +57,7 @@ public class InteractionFragment extends ListFragment {
     private class OSCMessageAdapter extends BaseAdapter {
         final List<InteractionRow> rows;
 
+        // create rows for interaction according to model
         OSCMessageAdapter(List<OSCMessage> msgList) {
             rows = new ArrayList<InteractionRow>(msgList.size());
 
@@ -63,6 +66,9 @@ public class InteractionFragment extends ListFragment {
                 {
                     case SEEKBAR:
                         rows.add(new InteractionSeekBarRow(inflater, msg));
+                        break;
+                    case BUTTON:
+                        rows.add(new InteractionButtonRow(inflater, msg));
                         break;
                     case TILT:
                         rows.add(new InteractionTiltRow(inflater, msg));
@@ -74,6 +80,7 @@ public class InteractionFragment extends ListFragment {
                         rows.add(new InteractionLightRow(inflater, msg));
                         break;
                 }
+                //Log.d("InteractionFragment", msg.toString());
             }
         }
 

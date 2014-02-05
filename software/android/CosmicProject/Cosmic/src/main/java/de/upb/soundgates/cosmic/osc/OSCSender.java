@@ -75,6 +75,8 @@ public class OSCSender extends AsyncTask<OSCMessage, Void, Boolean> {
         }
 
         new OSCSender().execute(msgArray);
+        for(de.upb.soundgates.cosmic.osc.OSCMessage msg : messages)
+            Log.d(LOG_TAG, msg.toString());
     }
 
     @Override
