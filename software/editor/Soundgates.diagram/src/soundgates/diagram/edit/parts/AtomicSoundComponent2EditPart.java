@@ -3,7 +3,6 @@ package soundgates.diagram.edit.parts;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
@@ -18,10 +17,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPo
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.FlowLayoutEditPolicy;
-import org.eclipse.gmf.runtime.diagram.ui.figures.BorderItemLocator;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
-import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicyWithCustomReparent;
@@ -60,7 +57,7 @@ public class AtomicSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
 		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
@@ -75,7 +72,8 @@ public class AtomicSoundComponent2EditPart extends
 				new AtomicSoundComponent2CanonicalEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		 removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
 	}
 
 	/**
@@ -125,7 +123,7 @@ public class AtomicSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof AtomicSoundComponentName2EditPart) {
@@ -135,27 +133,15 @@ public class AtomicSoundComponent2EditPart extends
 			return true;
 		}
 		if (childEditPart instanceof PortEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			getBorderedFigure().getBorderItemContainer().add(
-					((PortEditPart) childEditPart).getFigure(), locator);
-			return true;
+			return super.addFixedChild(childEditPart);
 		}
 		return false;
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
-//		if (childEditPart instanceof AtomicSoundComponentName2EditPart) {
-//			return true;
-//		}
-//		if (childEditPart instanceof PortEditPart) {
-//			getBorderedFigure().getBorderItemContainer().remove(
-//					((PortEditPart) childEditPart).getFigure());
-//			return true;
-//		}
 		return false;
 	}
 
@@ -170,13 +156,9 @@ public class AtomicSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void removeChildVisual(EditPart childEditPart) {
-//		if (removeFixedChild(childEditPart)) {
-//			return;
-//		}
-//		super.removeChildVisual(childEditPart);
 	}
 
 	/**
@@ -190,11 +172,10 @@ public class AtomicSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(40, 40);
-		return result;
+		return super.createNodePlate();
 	}
 
 	/**
@@ -285,7 +266,7 @@ public class AtomicSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public class AtomicSoundComponentFigure extends RectangleFigure {
 
@@ -334,6 +315,10 @@ public class AtomicSoundComponent2EditPart extends
 			return fFigureAtomicSoundComponentNameFigure;
 		}
 
+		@Override
+		public IFigure getToolTip() {			
+			return new Label(createToolTip());
+		}
 	}
 
 }

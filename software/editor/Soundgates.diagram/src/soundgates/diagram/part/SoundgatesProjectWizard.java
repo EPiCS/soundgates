@@ -50,6 +50,8 @@ public class SoundgatesProjectWizard extends Wizard implements INewWizard {
 				project.open(monitor);
 				IFolder xmlfolder = project.getFolder("soundcomponents");
 				xmlfolder.create(true, true, monitor);
+				IFolder wavefolder = project.getFolder("wave");
+				wavefolder.create(true, true, monitor);
 			}
 		};
 		try {

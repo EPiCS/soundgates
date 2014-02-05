@@ -8,8 +8,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.ITreeBranchEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 
+import soundgates.Connection;
 import soundgates.DataType;
-import soundgates.impl.LinkImpl;
 
 public abstract class ConnectionAbstractEditPart extends ConnectionNodeEditPart 
 	implements ITreeBranchEditPart{
@@ -47,7 +47,7 @@ public abstract class ConnectionAbstractEditPart extends ConnectionNodeEditPart
 		};
 
 		try{
-			getLinkImpl().eAdapters().add(adapter);
+			getConnection().eAdapters().add(adapter);
 			refreshGraphic();
 		}
 		catch(Exception e){
@@ -57,9 +57,9 @@ public abstract class ConnectionAbstractEditPart extends ConnectionNodeEditPart
 
 	public void refreshGraphic() {
 		try{
-			LinkImpl linkImpl = getLinkImpl();
+			Connection connection = getConnection();
 			
-			if(linkImpl.getSource().getDataType()==DataType.SOUND){
+			if(connection.getSource().getDataType()==DataType.SOUND){
 				setForegroundColor(new Color(null, 0, 0, 0));
 			}
 			else{
@@ -73,9 +73,9 @@ public abstract class ConnectionAbstractEditPart extends ConnectionNodeEditPart
 
 	}
 
-	public LinkImpl getLinkImpl() {
-		if (((org.eclipse.gmf.runtime.notation.Connector) getModel()).getElement() instanceof LinkImpl)
-			return (LinkImpl) ((org.eclipse.gmf.runtime.notation.Connector) getModel()).getElement();
+	public Connection getConnection() {
+		if (((org.eclipse.gmf.runtime.notation.Connector) getModel()).getElement() instanceof Connection)
+			return (Connection) ((org.eclipse.gmf.runtime.notation.Connector) getModel()).getElement();
 		else 
 			return null;
 	}
@@ -84,7 +84,7 @@ public abstract class ConnectionAbstractEditPart extends ConnectionNodeEditPart
 	public void deactivate() {
 		super.deactivate();
 		try{
-			getLinkImpl().eAdapters().remove(adapter);
+			getConnection().eAdapters().remove(adapter);
 			refreshGraphic();
 		}
 		catch(Exception e){

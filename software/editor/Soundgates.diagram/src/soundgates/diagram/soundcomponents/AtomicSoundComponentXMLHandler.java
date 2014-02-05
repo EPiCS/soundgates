@@ -65,7 +65,6 @@ public class AtomicSoundComponentXMLHandler{
 					try {
 						AtomicSoundComponent soundComponent = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
 						String type = element.getElementsByTagName("Type").item(0).getTextContent();
-						soundComponent.setName(type);
 						soundComponent.setType(type);				
 						
 						NodeList portList = element.getElementsByTagName("Port");						
@@ -166,9 +165,9 @@ public class AtomicSoundComponentXMLHandler{
 							}
 						}
 						
-						if(soundComponent.getStringProperties().get("possibleImplType").contains("hw"))
-							soundComponent.getStringProperties().put("implType", "hw");
-						else
+//						if(soundComponent.getStringProperties().get("possibleImplType").contains("hw"))
+//							soundComponent.getStringProperties().put("implType", "hw");
+//						else
 							soundComponent.getStringProperties().put("implType", "sw");
 						
 						library.addComponent(soundComponent);

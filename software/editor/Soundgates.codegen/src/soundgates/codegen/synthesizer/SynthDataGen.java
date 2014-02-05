@@ -22,24 +22,30 @@ import soundgates.Patch;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.SoundgatesFactory;
+import soundgates.codegen.BidirectionalMap;
 import soundgates.codegen.CodeGenHelper;
 import soundgates.codegen.zipExporter.ZipExporter;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 
 public class SynthDataGen {
-	private HashMap<SoundComponent, Integer> uniqueIds;
-	private HashMap<SoundComponent, String> implTypes;
+	private BidirectionalMap<AtomicSoundComponent, Integer> uniqueIds;
+	private HashMap<AtomicSoundComponent, String> implTypes;
+	private HashMap<AtomicSoundComponent, Integer> hwSlots;
+	private LinkedList<AtomicSoundComponent> hardwareComponents;
+	private LinkedList<AtomicSoundComponent> softwareComponents;
 	private HashMap<String, String> fileNamesHashes; //original file name, hashed name
 	private int uniqueCounter = 0;
-	private int hwSlot = 0;
 	private String projectPath;
 	public final static String binariesFolderName="binaries";
 	
 	public void generateSynthData(Patch patch, IFile file, String projectPath){
 		SynthData synthData = new SynthData();
-		uniqueIds = new HashMap<SoundComponent, Integer>();
-		implTypes = new HashMap<SoundComponent, String>();
+		uniqueIds = new BidirectionalMap<AtomicSoundComponent, Integer>();
+		implTypes = new HashMap<AtomicSoundComponent, String>();
+		hwSlots = new HashMap<AtomicSoundComponent, Integer>();
+		hardwareComponents = new LinkedList<>();
+		softwareComponents = new LinkedList<>();
 		fileNamesHashes = new HashMap<String, String>();
 		this.projectPath = projectPath;
 
@@ -55,16 +61,24 @@ public class SynthDataGen {
 		}
 		
 		for (Element element : patch.getElements()) {
-			if(element instanceof AtomicSoundComponent)
-				synthData.addSynthData(handleAtomicSoundComponent((AtomicSoundComponent) element));
-		} 
+			if(element instanceof AtomicSoundComponent){
+				storeImplType((AtomicSoundComponent) element);
+			}
+		}
+		assignUniqueIdsAndHardwareSlotToComponents();
+		
+
+		for(int i=0; i<uniqueIds.size(); i++){			
+			synthData.addSynthData(handleAtomicSoundComponent(uniqueIds.getKey(i)));
+		}
+		
 		for (Element element : patch.getElements()) {
 			if (element instanceof Link)
 				synthData.addSynthData(handleLink((Link) element));
 		} 
 		createFiles(synthData.getRepresentation(), file);	
 	}
-	
+
 	private void createFiles(String text, IFile file){
 		
 		try {
@@ -95,32 +109,92 @@ public class SynthDataGen {
 		}
 	}
 	
-	public SynthData handleAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
+	private void storeImplType(AtomicSoundComponent atomicSoundComponent){
+		String implType = atomicSoundComponent.getStringProperties().get("implType");
 		
-		SynthData data = new SynthData();
-		
-		if (!uniqueIds.containsKey(atomicSoundComponent)){
-			uniqueIds.put(atomicSoundComponent, uniqueCounter++);
-		}		
-					
-		String type = atomicSoundComponent.getType();
-		String implName = atomicSoundComponent.getStringProperties().
-				get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
-		String implType = atomicSoundComponent.getStringProperties().get("implType");		
-
-		if(atomicSoundComponent.getType().equals("IO")){
-			addIOComponentToData(data,atomicSoundComponent,type,implName,implType);					
-		}		
-		else if(atomicSoundComponent.getType().equals("WavePlayer")){
-			addWavePlayerComponentToData(data, atomicSoundComponent, type, implName, implType);
-		}
-		else{			
-			addStandardComponentToData(data, atomicSoundComponent, type, implName, implType);
-		}
+		if(implType.equals("sw"))
+			softwareComponents.add(atomicSoundComponent);
+		else 
+			hardwareComponents.add(atomicSoundComponent);
 		
 		implTypes.put(atomicSoundComponent, implType);
+	}
+	
+	private void assignUniqueIdsAndHardwareSlotToComponents(){
+		// assign ids to software components
+		for(AtomicSoundComponent atomicSoundComponent : softwareComponents){
+			if (!uniqueIds.containsKey(atomicSoundComponent)){
+				uniqueIds.put(atomicSoundComponent, uniqueCounter++);				
+			}	
+		}
+		/* assign ids to hardware components		 
+		 * 
+		 * Correct:
+		 * 4 sin/hw(0)
+		 * 5 sin/hw(1)
+		 * 
+		 * Not correct:
+		 * 4 sin/hw(0)
+		 * 5 ----
+		 * 6 sin/hw(1)
+		 * 
+		 */
+		HashMap<String,LinkedList<AtomicSoundComponent>> componentsOfType = new HashMap<>();
+		int hwSlot = 0;
+		
+		for(AtomicSoundComponent atomicSoundComponent : hardwareComponents){
+			String type = atomicSoundComponent.getType();
+			
+			if(componentsOfType.containsKey(type)){
+				componentsOfType.get(type).add(atomicSoundComponent);
+			}
+			else{
+				LinkedList<AtomicSoundComponent> list = new LinkedList<>();
+				list.add(atomicSoundComponent);
+				componentsOfType.put(type, list);
+			}
+		}	
+		
+		for(String type : componentsOfType.keySet()){
+			for(AtomicSoundComponent atomicSoundComponent : componentsOfType.get(type)){
+				if (!uniqueIds.containsKey(atomicSoundComponent)){
+					uniqueIds.put(atomicSoundComponent, uniqueCounter++);
+				}
+				hwSlots.put(atomicSoundComponent, hwSlot++);
+			}
+		}
+		
+	}
+	
+	private String getImplName(AtomicSoundComponent atomicSoundComponent){
+		return atomicSoundComponent.getStringProperties().
+				get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
+	}
+	
+	private SynthData handleAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
+		
+		SynthData data = new SynthData();
+					
+		int uniqueId = uniqueIds.getValue(atomicSoundComponent);
+		String type = atomicSoundComponent.getType();
+		String implName = getImplName(atomicSoundComponent);
+		String implType = implTypes.get(atomicSoundComponent);
+		
+		int hwSlot;
 		if(implType.equals("hw"))
-			hwSlot++;
+			hwSlot = hwSlots.get(atomicSoundComponent);
+		else 
+			hwSlot = -1;
+		
+		if(atomicSoundComponent.getType().equals("IO")){
+			addIOComponentToData(data, atomicSoundComponent, uniqueId, type, implName, implType, hwSlot);					
+		}		
+		else if(atomicSoundComponent.getType().equals("WavePlayer")){
+			addWavePlayerComponentToData(data, atomicSoundComponent, uniqueId, type, implName, implType,hwSlot);
+		}
+		else{			
+			addStandardComponentToData(data, atomicSoundComponent, uniqueId, type, implName, implType,hwSlot);
+		}	
 			
 		return data;
 	}
@@ -143,7 +217,15 @@ public class SynthDataGen {
 	}
 	
 	
-	public void addWavePlayerComponentToData(SynthData data, AtomicSoundComponent atomicSoundComponent, String type, String implName, String implType){
+	private void addWavePlayerComponentToData(
+			SynthData data, 
+			AtomicSoundComponent atomicSoundComponent, 
+			int uniqueId,
+			String type, 
+			String implName, 
+			String implType, 
+			int hwSlot){
+		
 		// save the file patch from the wave player component into the hash map with its hash value 
 		// replace it with the hashed file path	
 		
@@ -156,7 +238,7 @@ public class SynthDataGen {
 		String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
 		String filePath = projectPath+"/"+AtomicSoundComponentLibrary.waveFolderName+"/"+relativeFileName;
 		File tmpFile = new File(filePath);
-		String id = getIdOfAtomicSoundComponent(atomicSoundComponent);
+		String id = getXMLIdOfAtomicSoundComponent(atomicSoundComponent);
 		String newFileName = id +"_" + tmpFile.getName();				
 		
 		fileNamesHashes.put(filePath, newFileName);
@@ -167,10 +249,17 @@ public class SynthDataGen {
 		atomicSoundComponent.getUserStringProperties().put("FileName",newFileNameWithPath);
 		
 		String value = generateValueString(atomicSoundComponent);			
-		data.addComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, value, hwSlot);
+		data.addComponent(uniqueId, type, implName, implType, value, hwSlot);
 	}
 	
-	public void addIOComponentToData(SynthData data, AtomicSoundComponent atomicSoundComponent, String type, String implName, String implType){
+	private void addIOComponentToData(
+			SynthData data, 
+			AtomicSoundComponent atomicSoundComponent, 
+			int uniqueId,
+			String type, 
+			String implName, 
+			String implType, 
+			int hwSlot){
 		
 		/*  Format: 
 		 *   
@@ -184,22 +273,30 @@ public class SynthDataGen {
 				       ":" + atomicSoundComponent.getFloatProperties().get("MaxValue") +
 				       "]";
 		
-		data.addIOComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, "", hwSlot, oscAddress, oscDataType, range);
+		data.addIOComponent(uniqueId, type, implName, implType, "", hwSlot, oscAddress, oscDataType, range);
 	} 
 	
-	public void addStandardComponentToData(SynthData data, AtomicSoundComponent atomicSoundComponent, String type, String implName, String implType){
+	private void addStandardComponentToData(
+			SynthData data, 
+			AtomicSoundComponent atomicSoundComponent, 
+			int uniqueId,
+			String type, 
+			String implName, 
+			String implType, 
+			int hwSlot){
+		
 		String value = generateValueString(atomicSoundComponent);			
-		data.addComponent(uniqueIds.get(atomicSoundComponent), type, implName, implType, value, hwSlot);
+		data.addComponent(uniqueId, type, implName, implType, value, hwSlot);
 	}
 	
-	public SynthData handleLink(Link link){
+	private SynthData handleLink(Link link){
 		SynthData data = new SynthData();
 		
 		SoundComponent sourceComponent = link.getSource().getComponent();
 		SoundComponent targetComponent = link.getTarget().getComponent();
 		
-		int source = uniqueIds.get(sourceComponent);
-		int sink = uniqueIds.get(targetComponent);
+		int source = uniqueIds.getValue((AtomicSoundComponent) sourceComponent);
+		int sink = uniqueIds.getValue((AtomicSoundComponent) targetComponent);
 
 		HashMap<Port,Integer> sourcePortMappings =  CodeGenHelper.parsePortMappings((AtomicSoundComponent) sourceComponent, 
 				AtomicSoundComponentXMLHandler.DEVICE_PREFIX_PORT_MAPPINGS + implTypes.get(sourceComponent) );
@@ -314,7 +411,7 @@ public class SynthDataGen {
 		return patch;
 	}
 	
-	public Port getPortCopy(SoundComponent soundComponentCopy, Port oldPort){
+	private Port getPortCopy(SoundComponent soundComponentCopy, Port oldPort){
 		for (Port newPort : soundComponentCopy.getPorts()){
 			if(oldPort.getName().equals(newPort.getName()))
 				return newPort;
@@ -322,7 +419,7 @@ public class SynthDataGen {
 		return null;
 	}
 	
-	public CompositeSoundComponent copyCompositeSoundComponent(CompositeSoundComponent originalCompositeSoundComponent){
+	private CompositeSoundComponent copyCompositeSoundComponent(CompositeSoundComponent originalCompositeSoundComponent){
 		CompositeSoundComponent newCompositeSoundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
 		newCompositeSoundComponent.setName(originalCompositeSoundComponent.getName());
 		
@@ -387,7 +484,7 @@ public class SynthDataGen {
 		return newCompositeSoundComponent;
 	}
 	
-	public Link getLinkCopy(Link link, HashMap<SoundComponent,SoundComponent> soundComponentCopies){
+	private Link getLinkCopy(Link link, HashMap<SoundComponent,SoundComponent> soundComponentCopies){
 		Link newLink = SoundgatesFactory.eINSTANCE.createLink();
 		
 		//find component copies and the corresponding ports
@@ -403,12 +500,8 @@ public class SynthDataGen {
 		return newLink;
 	}
 	
-	public String getIdOfAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
+	private String getXMLIdOfAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
 		return ((XMIResource) atomicSoundComponent.eResource()).getID(atomicSoundComponent);
-	}
-	
-	public HashMap<String,String> getFileNamesHashes(){
-		return fileNamesHashes;
 	}
 	
 }

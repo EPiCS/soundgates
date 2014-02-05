@@ -1,6 +1,7 @@
 package soundgates.diagram.soundcomponents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -13,6 +14,7 @@ import soundgates.AtomicSoundComponent;
 public class AtomicSoundComponentLibrary{
 
 	private static AtomicSoundComponentLibrary instance;
+	public static HashMap<String,Integer> diagramAndTypeToCounter = new HashMap<>();
 	private TreeMap<String, AtomicSoundComponent> components;
 	private static IFolder xmlfolder;
 	public final static String waveFolderName = "wave";
@@ -30,6 +32,31 @@ public class AtomicSoundComponentLibrary{
 		components = new TreeMap<String, AtomicSoundComponent>();
 	}
 
+	public static String getNumberedName(String concreteType, String fileName){
+		// compute key 
+		// key = resource + type
+		String name; 
+		String key = fileName + concreteType;
+		if(diagramAndTypeToCounter.containsKey(key)){
+			int number = diagramAndTypeToCounter.get(key);
+			
+			if(concreteType.equals("IO"))
+				name = "/" + concreteType + Integer.toString(number);
+			else
+				name = concreteType + Integer.toString(number);
+			
+			diagramAndTypeToCounter.put(key, number+1);
+		}
+		else{
+			if(concreteType.equals("IO"))
+				name = "/" + concreteType + Integer.toString(1);
+			else
+				name = concreteType + Integer.toString(1);
+			diagramAndTypeToCounter.put(key, 2);
+		}
+		return name;
+	}
+	
 	public void addComponent(AtomicSoundComponent component) {
 		this.components.put(component.getType(), component);
 	}
