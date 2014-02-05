@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
-	<Type>NumericSubtraction</Type>
+	<Type>ControlSubtraction</Type>
 	<Ports>
 		<Port Name="Minuend" Direction="IN" DataType="CONTROL"/>
 		<Port Name="Subtrahend" Direction="IN" DataType="CONTROL"/>
