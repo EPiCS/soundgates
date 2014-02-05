@@ -93,7 +93,9 @@ public class Codegen {
 			Port targetPort = delegation.getTarget();
 			
 			if (sourcePort.getDirection().equals(Direction.IN)){
-				compositeComponentPortMappings.put(sourcePort, inlets++);
+				if (!compositeComponentPortMappings.containsKey(sourcePort)){
+					compositeComponentPortMappings.put(sourcePort, inlets++);
+				}
 			}
 			
 			if (targetPort.getDirection().equals(Direction.OUT)){
@@ -217,19 +219,24 @@ public class Codegen {
 		
 	}
 	
+	private String generateObject(Diagram diagram, SoundComponent comp){
+		Shape shape = findCoords(diagram, comp);
+
+		int x = 0;
+		int y = 0;
+		if (shape.getLayoutConstraint() instanceof Bounds){
+			x = ((Bounds)shape.getLayoutConstraint()).getX();
+			y = ((Bounds)shape.getLayoutConstraint()).getY();
+		}
+		return "#X obj " + x + " " + y + " "+ getUniqueName(comp) + ";\n";
+	}
+	
 	private void printPatch(List<SoundComponent> componentList, List<Link> linkList, Diagram diagram) throws CoreException{
 		IFile file = pdCodeFolder.getFile("patch.pd");
 		String result = "#N canvas 621 551 450 300 10; \n";
 		for (SoundComponent comp : componentList){
-			Shape shape = findCoords(diagram, comp);
 
-			int x = 0;
-			int y = 0;
-			if (shape.getLayoutConstraint() instanceof Bounds){
-				x = ((Bounds)shape.getLayoutConstraint()).getX();
-				y = ((Bounds)shape.getLayoutConstraint()).getY();
-			}
-			result += "#X obj " + x + " " + y + " "+ getUniqueName(comp) + ";\n";
+			result += generateObject(diagram, comp);
 		}		
 		result += handleLinks(linkList, componentList);
 		result += addControlLogic(componentList);
@@ -380,22 +387,27 @@ public class Codegen {
 		String result = "";
 		
 		int createdObjects = 0;
+
+		HashMap<Port, Integer> createdInPort = new HashMap<Port, Integer>();
 		
 		for (Delegation delegation : delegationList){
 			Port sourcePort = delegation.getSource();
 			Port targetPort = delegation.getTarget();
 			
 			if (sourcePort.getDirection().equals(Direction.IN)){
-				// use the port mapping as x coordinate to get puredate to use that number for the inlet
-				result += "#X obj " + compositeComponentPortMappings.get(sourcePort) + " 0 inlet";
-				createdObjects++;
-				if (sourcePort.getDataType().equals(DataType.SOUND)){
-					result += "~";
+				if (!createdInPort.containsKey(sourcePort)){
+					// use the port mapping as x coordinate to get puredate to use that number for the inlet
+					result += "#X obj " + compositeComponentPortMappings.get(sourcePort) + " 0 inlet";
+					createdObjects++;
+					if (sourcePort.getDataType().equals(DataType.SOUND)){
+						result += "~";
+					}
+					result += ";\n";
+					createdInPort.put(sourcePort, componentList.size() + createdObjects - 1);
 				}
-				result += ";\n";
 				
 				SoundComponent targetComponent = targetPort.getComponent();
-				result += "#X connect " + (componentList.size() + createdObjects - 1) + " 0 ";
+				result += "#X connect " + createdInPort.get(sourcePort) + " 0 ";
 				result += componentList.indexOf(targetPort.getComponent()) + " ";
 				if (targetComponent instanceof AtomicSoundComponent){
 					result += CodeGenHelper.parsePortMappings((AtomicSoundComponent) targetComponent, 
