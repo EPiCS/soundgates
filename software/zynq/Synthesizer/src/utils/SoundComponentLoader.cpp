@@ -154,7 +154,7 @@ SoundComponentImplPtr SoundComponentLoader::createFromString(const std::string& 
 
 	}else{
 
-		LOG_DEBUG("Creating component from library of type " << type);
+		LOG_DEBUG("Creating component from library of type " << type << " with implementation " << SoundComponents::ImplTypeNames[impltype]);
 
 		char *liberror;
 		void* libhndl;

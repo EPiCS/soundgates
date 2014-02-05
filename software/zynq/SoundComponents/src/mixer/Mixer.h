@@ -9,48 +9,64 @@
 #define MIXER_H_
 
 #include <sstream>
+#include <limits.h>
 
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
 #include <SoundPort.h>
 #include <ControlPort.h>
 
-#define MIXER_MAX_PORT_NUMBER 10
-
-class Mixer : SoundComponentImpl {
+class Mixer: SoundComponentImpl
+{
 
 public:
 
-    DECLARE_COMPONENTNAME;
+	DECLARE_COMPONENTNAME
 
-    DECLARE_PORT3(SoundPort, SoundIn, 1);
-    DECLARE_PORT3(SoundPort, SoundIn, 2);
-    DECLARE_PORT3(SoundPort, SoundIn, 3);
-    DECLARE_PORT3(SoundPort, SoundIn, 4);
-    DECLARE_PORT3(SoundPort, SoundIn, 5);
-    DECLARE_PORT3(SoundPort, SoundIn, 6);
-    DECLARE_PORT3(SoundPort, SoundIn, 7);
-    DECLARE_PORT3(SoundPort, SoundIn, 8);
-    DECLARE_PORT3(SoundPort, SoundIn, 9);
-    DECLARE_PORT3(SoundPort, SoundIn, 10);
+	DECLARE_PORT3(SoundPort, SoundIn, 1);
+	DECLARE_PORT3(SoundPort, SoundIn, 2);
 
-    DECLARE_PORT3(ControlPort, BiasIn, 11);
-    DECLARE_PORT3(ControlPort, BiasIn, 12);
-    DECLARE_PORT3(ControlPort, BiasIn, 13);
-    DECLARE_PORT3(ControlPort, BiasIn, 14);
-    DECLARE_PORT3(ControlPort, BiasIn, 15);
-    DECLARE_PORT3(ControlPort, BiasIn, 16);
-    DECLARE_PORT3(ControlPort, BiasIn, 17);
-    DECLARE_PORT3(ControlPort, BiasIn, 18);
-    DECLARE_PORT3(ControlPort, BiasIn, 19);
-    DECLARE_PORT3(ControlPort, BiasIn, 20);
+	DECLARE_PORT3(ControlPort, BiasIn, 3);
 
-    DECLARE_PORT3(SoundPort, SoundOut, 1);
+	DECLARE_PORT3(SoundPort, SoundOut, 1);
 
-    int m_nPorts;
+	float m_bias;
 
-    Mixer(std::vector<std::string> params);
-    virtual ~Mixer();
+	Mixer(std::vector<std::string> params);
+	virtual ~Mixer();
+
+	virtual void init() = 0;
+	virtual void process() = 0;
+
+};
+
+class OnBiasChange: public ICallbackFunctor
+{
+private:
+	Mixer& m_ObjRef;
+public:
+	OnBiasChange(Mixer& ref) :
+			m_ObjRef(ref){
+
+	}
+
+	void operator()()
+	{
+		float val = m_ObjRef.m_BiasIn_3_Port->pop();
+
+		if (val < 0)
+		{
+			m_ObjRef.m_bias = 0.0f;
+		}
+		else if (val > 1)
+		{
+			m_ObjRef.m_bias = 1.0f;
+		}
+		else
+		{
+			m_ObjRef.m_bias = val;
+		}
+	}
 };
 
 #endif /* MIXER_H_ */

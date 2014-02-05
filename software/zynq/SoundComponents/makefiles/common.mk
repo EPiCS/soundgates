@@ -9,34 +9,29 @@ endif
 CXX=g++
 CC_ARM=$(XILINX_BIN_PATH)/arm-xilinx-linux-gnueabi-g++
 CXXFLAGS=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC -isystem"../../../Libraries/x86_64/include"
-CFLAGS_ARM=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC #-I"../../libraries/arm/include" 
+CFLAGS_ARM=-Wall -Wno-unused-variable $(DEBUGLEVEL) -DZYNQ -fPIC -isystem"../../../Libraries/arm/include" 
 
-ifdef $(target)
+ifndef target
+target=x86_64
+endif
 
 ifeq ($(target), arm)		# For Zynq
 @echo 'Setting target platform: arm'
 CC=$(CC_ARM)
-CFLAGS_ARM=$(CFLAGS_ARM)
-else ifeq ($(target), x86)	# For host pc platform
-CFLAGS=$(CXXFLAGS)
-CC=$(CXX)
-else	# Fallback
-
+CFLAGS=$(CFLAGS_ARM)
+else ifeq ($(target), x86_64)	# For host pc platform
 CFLAGS=$(CXXFLAGS)
 CC=$(CXX)
 endif
 
-else #Fallback
-CFLAGS=$(CXXFLAGS)
-CC=$(CXX)
-endif
-
-#LDFLAGS_ARM=-L"../../libraries/boost_1_54/arm/lib"
+CLINKER_FLAGS=-g3 -shared -L"../../../Libraries/$(target)/lib"
 
 SYNTHSIZER_CORE_LIB=../../libsynthesizercore
 
 # Common compile rule
 %.o: %.cpp
+#	@echo 'Compiling for target $(target)'
+#	@echo 'Fallback $(FALLBACK)'
 	$(CC) $(CFLAGS) -I$(SYNTHSIZER_CORE_LIB)/include -c $< -o $@
 	
 %.o: impl/%.cpp

@@ -7,21 +7,14 @@
 
 #include "SoundgatesConfig.h"
 
-SoundgatesConfig* SoundgatesConfig::instance = 0;
-
-SoundgatesConfig* SoundgatesConfig::getInstance()
-{
-	if (instance == 0)
-	{
-		instance = new SoundgatesConfig();
-	}
-	return instance;
-}
-
 SoundgatesConfig::SoundgatesConfig()
 {
 	this->initialized = false;
 	this->cfgPath = "";
+	m_useHWThreads = false;
+}
+
+SoundgatesConfig::~SoundgatesConfig(){
 
 }
 
@@ -56,7 +49,18 @@ void SoundgatesConfig::loadDefault()
 	// Desired sample rate for the system. Not all rates might be supported
 	configValues[CFG_SAMPLE_RATE] = 44100;
 	alsadevicename = "plughw:0,0";
+
+	m_useHWThreads = false;
+
 	initialized = true;
+
+}
+
+bool SoundgatesConfig::useHWThreads(){
+    return m_useHWThreads;
+}
+void SoundgatesConfig::setUseHWThreads(bool value){
+    m_useHWThreads = value;
 }
 
 string SoundgatesConfig::getAlsaDevicename()

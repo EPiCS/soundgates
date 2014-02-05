@@ -61,6 +61,9 @@ void TemplateSoundComponent::init()
 {
 	// You can init() sound output ports to clear their buffers
 	m_TemplateSoundOut_2_Port->init();
+
+	// Control values can trigger a callback function when they change.
+	m_TemplateControlIn_1_Port->registerCallback(ICallbackPtr(new OnChange(*this)));
 }
 
 // ::process is not implemented here but in the SW subclass!

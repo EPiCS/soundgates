@@ -15,19 +15,25 @@ Class/Function however should not be documented here.
 
 
 import struct
+import sys
+
+outputfilename = 'raw_audio.out'
 
 def do_convert(filename):
     """ """
     try:
         f_in  = open(filename, 'r')
-        f_out = open('raw_audio.out', 'wb')
+        f_out = open(outputfilename, 'wb')
 
         sample = 0
 
         for line in f_in:
-            sample = int(line)
-            data = struct.pack("i", sample) # pack integer in a binary string
-            f_out.write(data)
+	    try:
+            	sample = int(line)
+            	data = struct.pack("i", sample) # pack integer in a binary string
+            	f_out.write(data)
+	    except:
+		print "Cannot convert: " + line
 
     finally:
         f_in.close()
@@ -38,5 +44,5 @@ def do_convert(filename):
 if __name__=='__main__':
     print "Converting..."
 
-    do_convert("sine.out")
-    print "done"
+    do_convert(sys.argv[1])
+    print "done. Written to " + outputfilename

@@ -11,10 +11,7 @@
 #include "../Mixer.h"
 
 class Mixer_SW : public Mixer {
-private:
 
-    void getReadBuffer(int* readbuffer[MIXER_MAX_PORT_NUMBER]);
-    void getBiasLevel(float* biasLevel);
 public:
     Mixer_SW(std::vector<std::string> params);
     virtual ~Mixer_SW();

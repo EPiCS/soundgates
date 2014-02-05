@@ -32,7 +32,7 @@ void RPCService::startService(void){
 
 		m_pRPCserver = new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt()
 											.registryP(&m_rpcregistry)
-											.portNumber(50500));
+											.portNumber(50050));
 
 		m_rpcserver_thread = boost::thread(&xmlrpc_c::serverAbyss::run, m_pRPCserver);
 

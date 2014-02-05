@@ -24,6 +24,7 @@ public:
 
     float m_PhaseIncr;
     float m_Frequency;
+    bool  m_active;
 
     DECLARE_COMPONENTNAME;
 
@@ -55,6 +56,15 @@ public:
             LOG_INFO("Frequency changed: " << freq)
             m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement(freq);
             m_ObjRef.m_Frequency = freq;
+            if (freq == 0)
+            {
+            	LOG_INFO("Sine generator turned off. Reset phase to 0");
+            	m_ObjRef.m_active = false;
+            }
+            else
+            {
+            	m_ObjRef.m_active = true;
+            }
         }
     }
 };

@@ -20,8 +20,9 @@ SoundComponentImpl::~SoundComponentImpl(){ }
 PortPtr SoundComponentImpl::getInport(unsigned int number){
 
 	if(m_Inports.size() < number){
-
-		throw std::out_of_range("Port number out of range");
+		std::stringstream s;
+		s << "In Port number out of range: " << number;
+		throw std::out_of_range(s.str().c_str());
 	}
 
 	return m_Inports[(number - 1)];
@@ -30,8 +31,9 @@ PortPtr SoundComponentImpl::getInport(unsigned int number){
 PortPtr SoundComponentImpl::getOutport(unsigned int number){
 
 	if(m_Outports.size() < number){
-
-	    throw std::out_of_range("Port number out of range");
+		std::stringstream s;
+		s << "Out Port number out of range: " << number;
+	    throw std::out_of_range(s.str().c_str());
 	}
 
 	return m_Outports[(number - 1)];
@@ -47,3 +49,8 @@ std::vector<PortPtr>& SoundComponentImpl::getOutports(){
 
     return m_Outports;
 }
+
+void SoundComponentImpl::initLater()
+{
+}
+

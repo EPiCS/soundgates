@@ -13,6 +13,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <boost/smart_ptr.hpp>
+#include <sstream>
 
 #include "Port.h"
 
@@ -129,6 +130,7 @@ public:
 
 	virtual void init() = 0;
 	virtual void process() = 0;
+	virtual void initLater();
 
 };
 

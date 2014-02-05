@@ -1,0 +1,22 @@
+1 input/sw/'/io f'
+2 sine/sw
+3 input/sw/'/lower f'
+4 input/sw/'/upper f'
+5 soundtocontrol/sw
+6 sine/sw
+7 dac/sw
+
+# io to change frequeny of first sin  
+1 2 '1,1'
+
+# const to set soundtocontrol mappings
+3 5 '1,1'
+4 5 '1,2'
+
+# first sin into soundtocontrol
+2 5 '1,3'
+
+# control the second sin
+5 6 '1,1'
+
+6 7 '1,1'

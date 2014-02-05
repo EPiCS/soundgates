@@ -16,18 +16,20 @@
 #include <ControlLink.h>
 #include <ControlPort.h>
 #include <BufferedLink.h>
+#include <Listener.h>
 
 class SoundDelayComponent: public SoundComponentImpl {
 
 private:
 
+	float delayValue;
 	int   m_DelaySlotSize;      /*< maximum number of samples for delay buffer */
 
-	char* m_pDelaySlot;			/*< sample buffer for delay */
-	char* m_pLastDelaySlot;		/*< pointer to the last delay slot */
+	int* m_pDelaySlot;			/*< sample buffer for delay */
+	int* m_pLastDelaySlot;		/*< pointer to the last delay slot */
 
-	char* m_pReadPtr;			/* read pointer for ring buffer  */
-	char* m_pWritePtr;			/* write pointer for ring buffer */
+	int* m_pReadPtr;			/* read pointer for ring buffer  */
+	int* m_pWritePtr;			/* write pointer for ring buffer */
 
 	inline int delayToSampleCount(float);
 
@@ -35,8 +37,8 @@ public:
 
 	DECLARE_COMPONENTNAME
 
-	DECLARE_PORT3(SoundPort, SoundIn, 1);
-	DECLARE_PORT3(ControlPort, DelayIn, 2);
+	DECLARE_PORT3(ControlPort, DelayIn, 1);
+	DECLARE_PORT3(SoundPort, SoundIn, 2);
 	DECLARE_PORT3(SoundPort, SoundOut, 1);
 
 	SoundDelayComponent(std::vector<std::string> params);
