@@ -5,7 +5,7 @@
 		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
-		<UserStringProperty InitialValue="file.wav" Name="FileName"/>
+		<UserStringProperty InitialValue="Enter file name relative to wave directory" Name="FileName"/>
 	</Properties>
 	<Code>
 		<Simulation/>

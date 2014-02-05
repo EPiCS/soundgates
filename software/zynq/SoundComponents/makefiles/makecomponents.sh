@@ -57,5 +57,10 @@ make clean
 make all
 cd ..
 
+cd pwm
+make clean
+make all
+cd ..
+
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH_OLD
 export LD_LIBRARY_PATH

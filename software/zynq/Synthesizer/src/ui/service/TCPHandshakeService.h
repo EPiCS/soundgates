@@ -20,6 +20,7 @@
 #include <arpa/inet.h>
 
 #include <boost/thread/thread.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "../UIService.h"
 #include "../../Patch.h"

@@ -19,6 +19,8 @@ SamplePlayer::SamplePlayer(std::vector<std::string> params) : SoundComponentImpl
 
     CREATE_AND_REGISTER_PORT3(SamplePlayer, Out, SoundPort, SoundOut_Left, 1);
     CREATE_AND_REGISTER_PORT3(SamplePlayer, Out, SoundPort, SoundOut_Right, 2);
+
+    trigger = 0;
 }
 
 SamplePlayer::~SamplePlayer() { }

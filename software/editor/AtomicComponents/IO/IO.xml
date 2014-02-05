@@ -5,7 +5,7 @@
 	</Ports>
 	<Properties>
 		<FloatProperty InitialValue="0" Name="MinValue"/>
-		<FloatProperty InitialValue="0" Name="MaxValue"/>
+		<FloatProperty InitialValue="1" Name="MaxValue"/>
 	</Properties>
 	<Code>
 		<Simulation/>

@@ -14,7 +14,7 @@
 
 #include "ControlPort.h"
 
-template<typename C, typename P = ControlPortPtr, typename V = float>
+template<typename V = float, typename P = ControlPortPtr>
 class OnValueChange: public ICallbackFunctor {
 private:
     V&  m_pValueRef;

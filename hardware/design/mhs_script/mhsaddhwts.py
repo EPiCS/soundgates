@@ -14,9 +14,6 @@
 #                 Markus Happe, University of Paderborn
 #                 Christoph Rüthing, University of Paderborn
 #   description:  Script to add the ReconOS cores and HWTs to an mhs.
-#    
-#   PG - Soundgates Modifications:
-#   - 
 # 
 # ======================================================================
 
@@ -33,37 +30,48 @@ OSIF_INTC_MEM_SIZE = 0x10000
 PROC_CONTROL_BASE_ADDR = 0x6FE00000
 PROC_CONTROL_MEM_SIZE = 0x10000
 
-def hwt_reconf(name, num, version="1.00.a"):
+#set default to zynq
+
+HWT_BUS = "axi_hwt"
+MEMORY_BUS = "axi_acp"
+
+DEFAULT_CLK = "processing_system7_0_FCLK_CLK0"
+DEFAULT_RST = "processing_system7_0_FCLK_RESET0_N"
+DEFAULT_RST_POLARITY = 0 # 0 for egative, 1 for positive
+
+def hwt_reconf(name, num, version, use_mem, num_static_hwts):
 	instance = mhstools.MHSPCore(name)
 	instance.addEntry("PARAMETER", "INSTANCE", "hwt_reconf_%d" % (num - num_static_hwts))
 	instance.addEntry("PARAMETER", "HW_VER", version)
 	instance.addEntry("BUS_INTERFACE", "OSIF_FIFO_Sw2Hw", "reconos_osif_fifo_%d_sw2hw_FIFO_S" % num)
 	instance.addEntry("BUS_INTERFACE", "OSIF_FIFO_Hw2Sw", "reconos_osif_fifo_%d_hw2sw_FIFO_M" % num)
-	instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Hwt2Mem", "reconos_memif_fifo_%d_hwt2mem_FIFO_M" % num)
-	instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Mem2Hwt", "reconos_memif_fifo_%d_mem2hwt_FIFO_S" % num)
+	if use_mem:
+		instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Hwt2Mem", "reconos_memif_fifo_%d_hwt2mem_FIFO_M" % num)
+		instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Mem2Hwt", "reconos_memif_fifo_%d_mem2hwt_FIFO_S" % num)
 	instance.addEntry("PORT", "HWT_Clk", DEFAULT_CLK)
 	instance.addEntry("PORT", "HWT_Rst", "reconos_proc_control_0_PROC_Hwt_Rst_%d" % num)
 	return instance
 
-def hwt_static(name, num, version="1.00.a"):
+def hwt_static(name, num, version, use_mem):
 	instance = mhstools.MHSPCore(name)
 	instance.addEntry("PARAMETER", "INSTANCE", "hwt_static_%d" % num)
 	instance.addEntry("PARAMETER", "HW_VER", version)
 	instance.addEntry("BUS_INTERFACE", "OSIF_FIFO_Sw2Hw", "reconos_osif_fifo_%d_sw2hw_FIFO_S" % num)
 	instance.addEntry("BUS_INTERFACE", "OSIF_FIFO_Hw2Sw", "reconos_osif_fifo_%d_hw2sw_FIFO_M" % num)
-	instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Hwt2Mem", "reconos_memif_fifo_%d_hwt2mem_FIFO_M" % num)
-	instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Mem2Hwt", "reconos_memif_fifo_%d_mem2hwt_FIFO_S" % num)
+	if use_mem:
+		instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Hwt2Mem", "reconos_memif_fifo_%d_hwt2mem_FIFO_M" % num)
+		instance.addEntry("BUS_INTERFACE", "MEMIF_FIFO_Mem2Hwt", "reconos_memif_fifo_%d_mem2hwt_FIFO_S" % num)
 	instance.addEntry("PORT", "HWT_Clk", DEFAULT_CLK)
 	instance.addEntry("PORT", "HWT_Rst", "reconos_proc_control_0_PROC_Hwt_Rst_%d" % num)
 	return instance
 
 def osif_fifo(num, direction):
 	instance = mhstools.MHSPCore("reconos_fifo")
-        instance.addEntry("PARAMETER", "INSTANCE", "reconos_osif_fifo_%d_" % num + direction)
-        instance.addEntry("PARAMETER", "HW_VER", "1.00.a")
-        instance.addEntry("PARAMETER", "C_FIFO_DEPTH", DEFAULT_OSIF_FIFO_DEPTH)
-        instance.addEntry("BUS_INTERFACE", "FIFO_M", "reconos_osif_fifo_%d_" % num + direction + "_FIFO_M")
-        instance.addEntry("BUS_INTERFACE", "FIFO_S", "reconos_osif_fifo_%d_" % num + direction + "_FIFO_S")
+	instance.addEntry("PARAMETER", "INSTANCE", "reconos_osif_fifo_%d_" % num + direction)
+	instance.addEntry("PARAMETER", "HW_VER", "1.00.a")
+	instance.addEntry("PARAMETER", "C_FIFO_DEPTH", DEFAULT_OSIF_FIFO_DEPTH)
+	instance.addEntry("BUS_INTERFACE", "FIFO_M", "reconos_osif_fifo_%d_" % num + direction + "_FIFO_M")
+	instance.addEntry("BUS_INTERFACE", "FIFO_S", "reconos_osif_fifo_%d_" % num + direction + "_FIFO_S")
 	if direction == "hw2sw":
 		instance.addEntry("PORT", "FIFO_Has_Data", "reconos_osif_fifo_%d_" % num + direction + "_FIFO_Has_Data")
 	instance.addEntry("PORT", "FIFO_Rst", "reconos_proc_control_0_PROC_Hwt_Rst_%d" % num)
@@ -210,18 +218,10 @@ def memory_controller(use_mmu):
 	instance.addEntry("PORT", "MEMCTRL_Clk", DEFAULT_CLK)
 	instance.addEntry("PORT", "MEMCTRL_Rst", "reconos_proc_control_0_PROC_Sys_Rst")
 	return instance
-	
-def axi_interconnect():
-	instance = mhstools.MHSPCore("axi_interconnect")
-	instance.addEntry("PARAMETER", "INSTANCE" "axi_acp")
-    instance.addEntry("PARAMETER", "HW_VER" "1.06.a")
-    instance.addEntry("PORT", "INTERCONNECT_ACLK", "processing_system7_0_FCLK_CLK0")
-    instance.addEntry("PORT", "INTERCONNECT_ARESETN", "processing_system7_0_FCLK_RESET0_N_0")
-	return instance
 
 
 def print_help():
-	sys.stderr.write("Usage: mhsaddhwts.py [-nommu] [-reconf] <architecture> <system.mhs> <num_static_hwts> <num_reconf_regions> <hwt0_directory>[#<count>] <hwt1_directory>[#<count>] ...\n")
+	sys.stderr.write("Usage: mhsaddhwts.py [-nommu] [-reconf] [-nomem] <architecture> <system.mhs> <num_static_hwts> <num_reconf_regions> <hwt0_version>[#<count>] <hwt1_version>[#<count>] ...\n")
 	sys.stderr.write("Output: new mhs-file with added ReconOS system and hardware threads.\n")
 
 
@@ -283,154 +283,175 @@ fields: self.name
 					self.slots.append(int(hwt_str[start:]))
 					self.count += 1
 
-        def __str__(self):
-                return "HWT: " + self.name + ", Version: " + self.version + ", Count: " + str(self.count) + ", Reconfigurable: " + str(self.is_reconf)
+		def __str__(self):
+			return "HWT: " + self.name + ", Version: " + self.version + ", Count: " + str(self.count) + ", Reconfigurable: " + str(self.is_reconf)
 
 
-# at first parse all parameters
-if len(sys.argv) < 6:
-	print_help()
-	sys.exit(1)
-
-arg_pos = 1
-
-if sys.argv[arg_pos] == "-nommu":
-	use_mmu = False
-	arg_pos += 1
-else:
-	use_mmu = True
-
-if sys.argv[arg_pos] == "-reconf":
-	use_reconf = True
-	arg_pos += 1
-else:
-	use_reconf = False
-
-arch = sys.argv[arg_pos]
-mhs = mhstools.MHS(sys.argv[arg_pos + 1])
-num_static_hwts = int(sys.argv[arg_pos + 2])
-num_reconf_regions = int(sys.argv[arg_pos + 3])
-hwts_str = sys.argv[arg_pos + 4:]
-
-
-if arch == "zynq":
-	HWT_BUS = "axi_hwt"
-	MEMORY_BUS = "axi_acp"
-
-	DEFAULT_CLK = "processing_system7_0_FCLK_CLK0"
-	DEFAULT_RST = "processing_system7_0_FCLK_RESET0_N_0"
-	DEFAULT_RST_POLARITY = 0 # 0 for negative, 1 for positive
-elif arch == "microblaze":
-	HWT_BUS = "axi_sys"
-	MEMORY_BUS = "axi_mem"
-
-	DEFAULT_CLK = "clk_100_0000MHzMMCM0"
-	DEFAULT_RST = "proc_sys_reset_0_Peripheral_aresetn"
-	DEFAULT_RST_POLARITY = 0 # 0 for negative, 1 for positive
-else:
-	sys.stderr.write("ERROR: Architecture not supported\n")
-	sys.exit(1)
-
-
-# insert reconos system
-
-if num_static_hwts < 1 and num_reconf_regions < 1:
-	sys.stderr.write("ERROR: you must specify at least 1 hardware thread\n")
-	sys.exit(1)
-
-num_hwts = num_static_hwts + num_reconf_regions
-
-
-# parse HWT string
-hwts = []
-for i in range(len(hwts_str)):
-	if use_reconf and i == len(hwts_str) - 1:
-		hwts.append(HWT(hwts_str[i], True))
-	else:
-		hwts.append(HWT(hwts_str[i], False))
-
-
-# insert HWTs
-count = 0
-
-# for each hardware thread that is not reconfigurable add an mem interface and a fifo interface
-for i in range(len(hwts)):
-	if not hwts[i].is_reconf:
-		for j in range(hwts[i].count):
-			mhs.addPCore(hwt_static(hwts[i].name, count, hwts[i].version))
-			mhs.addPCore(osif_fifo(count, "sw2hw"))
-			mhs.addPCore(osif_fifo(count, "hw2sw"))
-			mhs.addPCore(memif_fifo(count, "hwt2mem"))
-			mhs.addPCore(memif_fifo(count, "mem2hwt"))
-			count += 1
-
-
-for j in range(num_reconf_regions):
-	for i in range(len(hwts)):
-		if hwts[i].is_reconf:
-			if hwts[i].slots.count(j) == 0 and hwts[i].count != 0:
-				mhs.addPCore(hwt_reconf("reconos_hwt_idle", count, "1.00.a"))
-			else:
-				mhs.addPCore(hwt_reconf(hwts[i].name, count, hwts[i].version))
-
-			mhs.addPCore(osif_fifo(count, "sw2hw"))
-			mhs.addPCore(osif_fifo(count, "hw2sw"))
-			mhs.addPCore(memif_fifo(count, "hwt2mem"))
-			mhs.addPCore(memif_fifo(count, "mem2hwt"))
-			
-			count += 1
-
-# add osif
-mhs.addPCore(osif(num_hwts))
-mhs.addPCore(osif_intc(num_hwts))
-
-# insert proc control
-mhs.addPCore(proc_control(num_hwts, use_mmu))
-
-# add memory subsystem
-mhs.addPCore(arbiter(num_hwts))
-mhs.addPCore(burst_converter())
-if use_mmu:
-	mhs.addPCore(mmu(arch))
-mhs.addPCore(memory_controller(use_mmu))
-
-# Added
-# add axi_interconnect
-mhs.addPcore(axi_interconnect())
-
-
-if arch == "zynq":
-	ps7 = mhs.getPCore("processing_system7_0")
-	if ps7 is None:
-		sys.stderr.write("ERROR: no processing system found\n")
-		sys.exit(1)
-	# Added
-	ps7.addEntry("PORT", "IRQ_F2P", "reconos_proc_control_0_PROC_Pgf_Int & reconos_osif_intc_0_OSIF_INTC_Out & axi_iic_0_IIC2INTC_Irpt & int_1 & int_2 & int_3 & int_4")
-	ps7.addEntry("BUS_INTERFACE", "S_AXI_ACP", "axi_acp")
-	ps7.addEntry("PARAMETER", "C_INTERCONNECT_S_AXI_ACP_MASTERS", "reconos_memif_memory_controller_0.M_AXI")
-	ps7.addEntry("PORT", "S_AXI_ACP_ACLK", "processing_system7_0_FCLK_CLK0")
+def main():
 	
-elif arch == "microblaze":
-	intc = mhs.getPCore("microblaze_0_intc")
-	if intc is None:
-		sys.stderr.write("ERROR: no interupt controller found\n")
+	# at first parse all parameters
+	if len(sys.argv) < 6:
+		print_help()
 		sys.exit(1)
-
-	intr = intc.getValue("INTR")
-	if use_mmu:
-		intr = "reconos_proc_control_0_PROC_Pgf_Int & reconos_osif_intc_0_OSIF_INTC_Out & " + intr
+	
+	arg_pos = 1
+	
+	if sys.argv[arg_pos] == "-nommu":
+		use_mmu = False
+		arg_pos += 1
 	else:
-		intr = "reconos_osif_intc_0_OSIF_INTC_Out & " + intr
-	intc.setValue("INTR", intr)
-
-	memctrl = mhs.getPCore("DDR3_SDRAM")
-	if intc is None:
-		sys.stderr.write("ERROR: no memory controller found\n")
+		use_mmu = True
+	
+	if sys.argv[arg_pos] == "-reconf":
+		use_reconf = True
+		arg_pos += 1
+	else:
+		use_reconf = False
+	
+	if sys.argv[arg_pos] == "-nomem":
+		use_mem = False
+		use_mmu = False
+		arg_pos += 1
+	else:
+		use_mem = True
+	
+	arch = sys.argv[arg_pos]
+	mhs = mhstools.MHS(sys.argv[arg_pos + 1])
+	num_static_hwts = int(sys.argv[arg_pos + 2])
+	num_reconf_regions = int(sys.argv[arg_pos + 3])
+	hwts_str = sys.argv[arg_pos + 4:]
+	
+	
+	if arch == "zynq":
+		HWT_BUS = "axi_hwt"
+		MEMORY_BUS = "axi_acp"
+	
+		DEFAULT_CLK = "processing_system7_0_FCLK_CLK0"
+		DEFAULT_RST = "processing_system7_0_FCLK_RESET0_N"
+		DEFAULT_RST_POLARITY = 0 # 0 for egative, 1 for positive
+	elif arch == "microblaze":
+		HWT_BUS = "axi_sys"
+		MEMORY_BUS = "axi_mem"
+	
+		DEFAULT_CLK = "clk_100_0000MHzMMCM0"
+		DEFAULT_RST = "proc_sys_reset_0_Peripheral_aresetn"
+		DEFAULT_RST_POLARITY = 0 # 0 for egative, 1 for positive
+	else:
+		sys.stderr.write("ERROR: Architecture not supported\n")
 		sys.exit(1)
+	
+	
+	# insert reconos system
+	
+	if num_static_hwts < 1 and num_reconf_regions < 1:
+		sys.stderr.write("ERROR: you must specify at least 1 hardware thread\n")
+		sys.exit(1)
+	
+	num_hwts = num_static_hwts + num_reconf_regions
+	
+	
+	# parse HWT string
+	hwts = []
+	for i in range(len(hwts_str)):
+		if use_reconf and i == len(hwts_str) - 1:
+			hwts.append(HWT(hwts_str[i], True))
+		else:
+			hwts.append(HWT(hwts_str[i], False))
+	
+	
+	# insert HWTs
+	count = 0
+	
+	
+	# add all static hardware threads
+	for i in range(len(hwts)):
+		if not hwts[i].is_reconf:
+			for j in range(hwts[i].count):
+				mhs.addPCore(hwt_static(hwts[i].name, count, hwts[i].version, use_mem))
+				mhs.addPCore(osif_fifo(count, "sw2hw"))
+				mhs.addPCore(osif_fifo(count, "hw2sw"))
+				if use_mem:
+					mhs.addPCore(memif_fifo(count, "hwt2mem"))
+					mhs.addPCore(memif_fifo(count, "mem2hwt"))
+				count += 1
+	
+	# add all reconfigurable hardware threads
+	for j in range(num_reconf_regions):
+		for i in range(len(hwts)):
+			if hwts[i].is_reconf:
+				if hwts[i].slots.count(j) == 0 and hwts[i].count != 0:
+					mhs.addPCore(hwt_reconf("reconos_hwt_idle", count, "1.00.a", use_mem, num_static_hwts))
+				else:
+					mhs.addPCore(hwt_reconf(hwts[i].name, count, hwts[i].version, use_mem, num_static_hwts))
+	
+				mhs.addPCore(osif_fifo(count, "sw2hw"))
+				mhs.addPCore(osif_fifo(count, "hw2sw"))
+				mhs.addPCore(memif_fifo(count, "hwt2mem"))
+				mhs.addPCore(memif_fifo(count, "mem2hwt"))
+				
+				count += 1
+	
+	# add osif
+	mhs.addPCore(osif(num_hwts))
+	mhs.addPCore(osif_intc(num_hwts))
+	
+	# insert proc control
+	mhs.addPCore(proc_control(num_hwts, use_mmu))
+	
+	# add memory subsystem
+	if use_mem:
+		mhs.addPCore(arbiter(num_hwts))
+		mhs.addPCore(burst_converter())
+		if use_mmu:
+			mhs.addPCore(mmu(arch))
+		mhs.addPCore(memory_controller(use_mmu))
+	
+	
+	if arch == "zynq":
+		ps7 = mhs.getPCore("processing_system7_0")
+		
+		assert isinstance(ps7, mhstools.MHSPCore)
+		
+		if ps7 is None:
+			sys.stderr.write("ERROR: no processing system found\n")
+			sys.exit(1)
+	
+		if use_mem:
+			# append instead overwrite
+			#ps7.addEntry("PORT", "IRQ_F2P", "reconos_proc_control_0_PROC_Pgf_Int & reconos_osif_intc_0_OSIF_INTC_Out")
+			curIRQ = ps7.getValue("IRQ_F2P");
+			curIRQ = curIRQ + " & reconos_proc_control_0_PROC_Pgf_Int & reconos_osif_intc_0_OSIF_INTC_Out";
+			ps7.setValue("IRQ_F2P", curIRQ);
+			ps7.addEntry("BUS_INTERFACE", "S_AXI_ACP", "axi_acp")
+					
+			ps7.addEntry("PARAMETER", "C_INTERCONNECT_S_AXI_ACP_MASTERS", "reconos_memif_memory_controller_0.M_AXI")
+		else:
+			ps7.addEntry("PORT", "IRQ_F2P", "reconos_osif_intc_0_OSIF_INTC_Out")
+	
+	elif arch == "microblaze":
+		intc = mhs.getPCore("microblaze_0_intc")
+		if intc is None:
+			sys.stderr.write("ERROR: no interupt controller found\n")
+			sys.exit(1)
+	
+		intr = intc.getValue("INTR")
+		if use_mmu:
+			intr = "reconos_proc_control_0_PROC_Pgf_Int & reconos_osif_intc_0_OSIF_INTC_Out & " + intr
+		else:
+			intr = "reconos_osif_intc_0_OSIF_INTC_Out & " + intr
+		intc.setValue("INTR", intr)
+	
+		memctrl = mhs.getPCore("DDR3_SDRAM")
+		if intc is None:
+			sys.stderr.write("ERROR: no memory controller found\n")
+			sys.exit(1)
+	
+		memslv = memctrl.getValue("C_INTERCONNECT_S_AXI_MASTERS")
+		memslv = "reconos_memif_memory_controller_0.M_AXI & " + memslv
+		memctrl.setValue("C_INTERCONNECT_S_AXI_MASTERS", memslv)
 
-	memslv = memctrl.getValue("C_INTERCONNECT_S_AXI_MASTERS")
-	memslv = "reconos_memif_memory_controller_0.M_AXI & " + memslv
-	memctrl.setValue("C_INTERCONNECT_S_AXI_MASTERS", memslv)
 
+	sys.stdout.write(str(mhs))
 
-sys.stdout.write(str(mhs))
+if __name__ == "__main__":
+	main()

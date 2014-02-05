@@ -1,0 +1,10 @@
+#N canvas 0 49 718 849 10;
+#X text 0 0 inports Minuend Subtrahend;
+#X text 0 0 outports Difference;
+#X obj 76 102 -~;
+#X obj 62 19 inlet~;
+#X obj 67 134 outlet~;
+#X obj 120 18 inlet;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 5 0 2 1;

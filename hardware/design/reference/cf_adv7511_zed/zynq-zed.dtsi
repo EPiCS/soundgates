@@ -1,0 +1,26 @@
+/include/ "zynq.dtsi"
+
+/ {
+	model = "Xilinx Zynq ZED";
+	memory {
+		device_type = "memory";
+		reg = <0x000000000 0x20000000>;
+	};
+
+	chosen {
+		bootargs = "console=ttyPS0,115200 root=/dev/nfs rw nfsroot=192.168.1.106:/exports/rootfs_archlinux,tcp ip=192.168.1.99:::255.255.255.0:zynq:eth0:off earlyprintk";
+		linux,stdout-path = "/amba@0/uart@E0001000";
+	};
+};
+
+&eth {
+	phy-handle = <&phy0>;
+	phy-mode = "rgmii-id";
+
+	phy0: phy@0 {
+		compatible = "marvell,88e1510";
+		device_type = "ethernet-phy";
+		reg = <0x0>;
+		marvell,reg-init=<3 16 0xff00 0x1e 3 17 0xfff0 0x0a>;
+	};
+};

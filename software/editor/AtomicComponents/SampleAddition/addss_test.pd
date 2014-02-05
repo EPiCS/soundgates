@@ -1,0 +1,8 @@
+#N canvas 0 49 718 849 10;
+#X obj 170 145 addss_patch;
+#X obj 169 90 osc~ 440;
+#X obj 249 91 osc~ 880;
+#X obj 166 198 dac~;
+#X connect 0 0 3 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;

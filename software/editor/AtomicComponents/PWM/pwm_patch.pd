@@ -1,0 +1,10 @@
+#N canvas 1440 49 958 1149 10;
+#X text -12 652 inports SoundIn SoundIn2;
+#X text -8 682 outports SoundOut;
+#X obj 91 192 inlet~;
+#X obj 250 207 inlet~;
+#X obj 98 274 expr~ if ($v1 > $v2 \, 1 \, -1);
+#X obj 120 347 outlet~;
+#X connect 2 0 4 0;
+#X connect 3 0 4 1;
+#X connect 4 0 5 0;

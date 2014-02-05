@@ -11,17 +11,46 @@
 InputSoundComponent::InputSoundComponent(vector<string> parameters){
 
 	if(parameters.size() > 0){
-		setup(parameters.at(0));
+		setupOSCAddress(parameters.at(0));
+
+		for(unsigned int i=1; i < parameters.size(); i++){
+
+		    setupRange(parameters[i]);
+		}
 	}
 }
 
 InputSoundComponent::InputSoundComponent(string oscaddresses){
 
-	setup(oscaddresses);
+	setupOSCAddress(oscaddresses);
 }
 
+std::pair<float, float>& InputSoundComponent::getRange(int typTagIndex){
 
-void InputSoundComponent::setup(string oscaddress){
+    return m_Ranges[typTagIndex];
+}
+
+void InputSoundComponent::setupRange(std::string range){
+
+    std::vector<string> rangeArgs;
+
+    boost::trim(range);
+
+    boost::erase_first(range, "[");
+    boost::erase_last(range, "]");
+
+    boost::split(rangeArgs, range, boost::is_any_of(":"));
+
+    if(rangeArgs.size() > 1){
+
+        float min = boost::lexical_cast<float>(rangeArgs[0]);
+        float max = boost::lexical_cast<float>(rangeArgs[1]);
+
+        m_Ranges.push_back(std::pair<float, float>(min, max));
+    }
+}
+
+void InputSoundComponent::setupOSCAddress(string oscaddress){
 
 	this->m_OSCAddresses = oscaddress;
 

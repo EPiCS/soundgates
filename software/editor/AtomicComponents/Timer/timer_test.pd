@@ -1,13 +1,21 @@
-#N canvas 720 49 718 261 10;
-#X obj 175 159 timer_patch;
-#X msg 104 161 1;
-#X msg 241 104 1000;
-#X obj 65 197 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#N canvas 1440 49 958 1149 10;
+#X obj 83 116 timer_patch;
+#X floatatom 224 95 5 0 0 0 - - -;
+#X msg 75 64 1;
+#X obj 82 223 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 195 216 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
-#X connect 0 0 4 0;
-#X connect 0 0 1 0;
-#X connect 1 0 0 0;
-#X connect 1 0 3 0;
-#X connect 2 0 0 1;
+#X msg 118 62 1;
+#X msg 158 64 0;
+#X obj 113 17 loadbang;
+#X msg 224 45 1000;
+#X obj 95 189 sel 1;
+#X connect 0 0 8 0;
+#X connect 1 0 0 2;
+#X connect 2 0 0 0;
+#X connect 4 0 0 1;
+#X connect 5 0 0 1;
+#X connect 6 0 2 0;
+#X connect 6 0 4 0;
+#X connect 6 0 7 0;
+#X connect 7 0 1 0;
+#X connect 8 0 3 0;

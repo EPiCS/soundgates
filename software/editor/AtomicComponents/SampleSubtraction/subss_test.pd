@@ -1,0 +1,8 @@
+#N canvas 1440 49 958 1149 10;
+#X obj 123 108 subss_patch;
+#X obj 111 61 osc~ 440;
+#X obj 141 175 dac~;
+#X obj 176 61 osc~ 441;
+#X connect 0 0 2 0;
+#X connect 1 0 0 0;
+#X connect 3 0 0 1;

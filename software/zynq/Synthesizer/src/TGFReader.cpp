@@ -37,15 +37,17 @@ void TGFReader::read(Patch* patch, string filename){
 		return;
 	}
 
-	boost::regex nodexpr("([0-9]+) ([a-z]+)/([a-z]+)(\\(([0-9]+)\\))?(/('.*',?)+)? *");
+	boost::regex nodexpr("([0-9]+)[[:space:]]+([a-z]+)/([a-z]+)(\\(([0-9]+)\\))?(/('.*',?)+)?");
 
-	boost::regex edgeexpr("([0-9]+) ([0-9]+) '([0-9]+),([0-9]+)' *");
+	boost::regex edgeexpr("([0-9]+)[[:space:]]+([0-9]+)[[:space:]]+'[[:space:]]*([0-9]+)[[:space:]]*,[[:space:]]*([0-9]+)[[:space:]]*'");
 
 	boost::smatch match;
 
 	while(sgfile){
 
 		getline(sgfile, line);
+
+		boost::trim(line);
 
 		/* match node */
 		if (boost::regex_match(line, match, nodexpr)){

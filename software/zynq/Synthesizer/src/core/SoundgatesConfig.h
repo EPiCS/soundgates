@@ -21,22 +21,38 @@ typedef enum
 class SoundgatesConfig
 {
 public:
-	static SoundgatesConfig* getInstance();
-	void load(string path);
+
+    static SoundgatesConfig& getInstance(){
+
+        static SoundgatesConfig instance;
+        return instance;
+    }
+	virtual ~SoundgatesConfig();
+
+
+    void load(string path);
 	void loadDefault();
 	double getConf(SoundgatesConfValue);
+
 	string getAlsaDevicename();
 	void setAlsaDevicename(string s);
 
+    bool useHWThreads();
+    void setUseHWThreads(bool);
+
+
 private:
+
 	SoundgatesConfig();
-	~SoundgatesConfig();
+
+	bool   m_useHWThreads;
 
 	double configValues[CFG_NUM_CONFIG_FIELDS];
 	string alsadevicename;
 	static SoundgatesConfig* instance;
 	bool initialized;
 	string cfgPath;
+
 };
 
 #endif /* SOUNDGATESCONFIG_HPP_ */

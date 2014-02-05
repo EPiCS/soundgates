@@ -8,7 +8,7 @@
 #include "SineSoundComponent_SW.h"
 #include "SineLookupTable.hpp"
 
-double my_sine_lookup(double x)
+double sine_lookup(double x)
 {
 	while (x < 0)
 	{
@@ -67,26 +67,38 @@ double my_sine(double x)
 	return result;
 }
 
-SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) : SineSoundComponent(params){
+SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) :
+		SineSoundComponent(params)
+{
 
 	m_Phase = 0.0;
 }
 
-void SineSoundComponent_SW::process() {
+void SineSoundComponent_SW::process()
+{
 
-	for (int i = 0; i < Synthesizer::config::blocksize; i++) {
+	if (this->m_active)
+	{
 
-#ifdef ZYNQ
-		m_SoundOut_1_Port->writeSample(my_sine_lookup(m_Phase) * INT_MAX, i);
-#else
-		m_SoundOut_1_Port->writeSample(sin(m_Phase) * INT_MAX, i);
-#endif
-
-		m_Phase += m_PhaseIncr;
-
-		if (m_Phase >= M_PI * 2)
+		for (int i = 0; i < Synthesizer::config::blocksize; i++)
 		{
-		    m_Phase -= M_PI * 2;
+
+			m_SoundOut_1_Port->writeSample(sine_lookup(m_Phase) * (1 << 30), i);  //  Q1.30
+
+			m_Phase += m_PhaseIncr;
+
+			if (m_Phase >= M_PI * 2)
+			{
+				m_Phase -= M_PI * 2;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < Synthesizer::config::blocksize; i++)
+		{
+			m_SoundOut_1_Port->writeSample(0, i);
+
 		}
 	}
 
