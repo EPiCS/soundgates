@@ -119,9 +119,13 @@ void* TCPHandshakeService::tcpHandshakeThread(){
       unsigned int clientAddrLen;     /* Length of client address data structure */
 
       /* Create socket for incoming connections */
-      if ((serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
+      if ((serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0){
           LOG_ERROR("socket() failed");
 
+          setServiceState(ui::STOPPED);
+
+          return NULL;
+      }
       /* Construct local address structure */
       memset(&serverAddr, 0, sizeof(serverAddr));           /* Zero out structure */
       serverAddr.sin_family         = AF_INET;              /* Internet address family */
@@ -129,21 +133,35 @@ void* TCPHandshakeService::tcpHandshakeThread(){
       serverAddr.sin_port           = htons(atoi(Synthesizer::config::port));          /* Local port */
 
       /* Bind to the local address */
-      if (bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0)
+      if (bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0){
           LOG_ERROR("bind() failed");
 
+          setServiceState(ui::STOPPED);
+
+          return NULL;
+      }
       /* Mark the socket so it will listen for incoming connections */
-      if (listen(serverSock, TCP_HANDSHAKE_MAXPENDING) < 0)
+      if (listen(serverSock, TCP_HANDSHAKE_MAXPENDING) < 0){
+
           LOG_ERROR("listen() failed");
 
-      while (getServiceState() == ui::RUNNING)
-      {
-          /* Set the size of the in-out parameter */
-          clientAddrLen = sizeof(clientAddr);
+          setServiceState(ui::STOPPED);
+
+          return NULL;
+      }
+
+      /* Set the size of the in-out parameter */
+      clientAddrLen = sizeof(clientAddr);
+
+      LOG_DEBUG("TCP handshake ready");
+
+      while (getServiceState() == ui::RUNNING){
+
 
           /* Wait for a client to connect */
-          if ((clientSock = accept(serverSock, (struct sockaddr *) &clientAddr, &clientAddrLen)) < 0)
+          if ((clientSock = accept(serverSock, (struct sockaddr *) &clientAddr, &clientAddrLen)) < 0){
               LOG_ERROR("accept() failed");
+          }
 
           LOG_DEBUG("Handling client: " << inet_ntoa(clientAddr.sin_addr));
 
