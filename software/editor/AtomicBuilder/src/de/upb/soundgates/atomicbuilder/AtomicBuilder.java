@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -30,7 +31,7 @@ public class AtomicBuilder {
 		}
 		if (args.length == 0){
 			System.out.println("Usage:");
-			System.out.println("\t -r <sourceFolder> <destinationFolder>");
+			System.out.println("\t --folder <sourceFolder> <destinationFolder>");
 			System.out.println("or");
 			System.out.println("\t <pdFile> <templateFile> <destinationFile>");
 		}
@@ -40,7 +41,7 @@ public class AtomicBuilder {
 				File destinationFolder = new File(args[2]);
 				for (final File sub : sourceFolder.listFiles()){
 					if (sub.isDirectory()){
-						File pdFile = getFileFromFolder(sub, "pd");
+						File pdFile = getFileFromFolder(sub, "_patch.pd");
 						File xmlFile = getFileFromFolder(sub, "xml");
 							try {
 								generate(new File(destinationFolder, xmlFile.getName().replaceAll("(\\..*)$", "") + ".xml"), pdFile, xmlFile);
@@ -50,7 +51,6 @@ public class AtomicBuilder {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						
 					}
 				}
 			} else {
@@ -84,7 +84,8 @@ public class AtomicBuilder {
 		return null;
 	}
 
-	private static void output(Document templateDoc, File destination) throws TransformerException {
+	private static void output(Document templateDoc, File destination) throws TransformerException, IOException {
+		destination.createNewFile();
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(templateDoc);
@@ -136,37 +137,108 @@ public class AtomicBuilder {
 		return dBuilder.parse(templateFile);
 	}
 
+	private static void executeReplacements(List<String> codeLines, PureDataInfo pdInfo){
+		List<String> connects = new ArrayList<String>();
+		List<String> onlyObjects = new ArrayList<String>();
+		
+		//find counted pd code lines
+		for (String line : codeLines){
+				onlyObjects.add(line);
+		}
+		
+		//find connections
+		for (String line : codeLines){
+			if (line.contains("#X connect")){
+				
+				connects.add(line);
+
+			}
+		}
+
+		//find messages with no outgoing links
+		for(String connectLine : connects){
+			String [] connect = connectLine.split(" ");
+			int sourceObjectNumber = Integer.parseInt(connect[2]);
+			int targetObjectNumber = Integer.parseInt(connect[4]);
+			String targetObject = getObject(codeLines, targetObjectNumber);
+			if (targetObject.contains("#X msg")){
+				String [] message = targetObject.split(" ");
+				
+				//find only messages with no links to them
+				boolean hasOutgoingLinks = false;
+				for(String tmpConnectLine : connects){
+					String [] tmpConnect = tmpConnectLine.split(" ");
+					if (Integer.parseInt(tmpConnect[2]) == targetObjectNumber){
+						hasOutgoingLinks = true;
+						break;
+					}
+				}
+				
+				if (!hasOutgoingLinks){
+					String selector = message [4];
+					if (selector.equals("replace")){
+						int atomToReplace = Integer.parseInt(message[5]);
+						String replacement = "@" + message[6];
+						
+						String [] toManipulate = getObject(codeLines, sourceObjectNumber).split(" ");
+						int offset = 3;
+						//TODO: check if other offsets are needed, 3 is correct for messages, objects and comments
+						toManipulate[atomToReplace + offset] = replacement;
+						
+						String manipulatedLine = "";
+						for (String part : toManipulate)
+							manipulatedLine += part + " ";
+						pdInfo.addProperty(message[6]);
+						setObject(codeLines, sourceObjectNumber, manipulatedLine);
+					}
+				}
+
+			}
+		}
+	}
+	
+	private static void setObject(List<String> pdCodeLines, int objectId, String object){
+		int counter = 0;
+		int lineNumber = 0;
+		for (String line : pdCodeLines){
+			if (!line.contains("#N")){
+				if (counter == objectId){
+					pdCodeLines.set(lineNumber, object);
+					return;
+				}
+				counter++;
+			}
+			lineNumber++;
+		}
+	}
+	
+	private static String getObject(List<String> pdCodeLines, int objectId){
+		int counter = 0;
+		for (String line : pdCodeLines){
+			if (!line.contains("#N")){
+				if (counter == objectId){
+					return line;
+				}
+				counter++;
+			}
+		}
+		return null;
+	}
+	
 	private static PureDataInfo readPureDataCode(File pdFile) throws IOException {
 		FileReader fileReader = new FileReader(pdFile);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		StringBuilder code = new StringBuilder();
 		String read = "";
-		boolean manipulateNextLine = false;
-		int manipulationIndex = 0;
-		String manipulationValue = "";
 		PureDataInfo result = new PureDataInfo();
+		List<String> codeLines = new ArrayList<String>();
 		while((read = bufferedReader.readLine()) != null){
 			if (!read.contains(";")){
 				read += bufferedReader.readLine();
 			}
 			read = read.split(";")[0];
-			if (manipulateNextLine){
-				String [] splitLine = read.split(" ");
-				splitLine[manipulationIndex] = "@" + manipulationValue;
-				read = "";
-				for (String single : splitLine){
-					read += single + " "; 
-				}
-				manipulateNextLine = false;
-			}
 			if (read.contains("#X text")){
 				String [] splitLine = read.split(" ");
-				if (splitLine.length >= 6 && splitLine[4].equals("replace")){
-					manipulateNextLine = true;
-					manipulationIndex = Integer.parseInt(splitLine[5]) + 1;
-					manipulationValue = splitLine[6];
-					result.addProperty(manipulationValue);
-				} else if (splitLine.length >= 5 && splitLine[4].equals("inports")){
+				if (splitLine.length >= 5 && splitLine[4].equals("inports")){
 					for (int i = 5; i < splitLine.length; i++){
 						result.addInputDefinition(splitLine[i]);
 					}
@@ -176,10 +248,17 @@ public class AtomicBuilder {
 					}
 				}
 			}
-			code.append(read + ";" + System.lineSeparator());
+			codeLines.add(read);
 		}
+		
 		bufferedReader.close();
-		result.setCode(code.toString());
+		
+		StringBuilder resultingCode = new StringBuilder();
+		executeReplacements(codeLines, result);
+		for (String line : codeLines){
+			resultingCode.append(line + ";" + System.lineSeparator());
+		}
+		result.setCode(resultingCode.toString());
 		return result;
 	}
 

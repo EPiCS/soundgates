@@ -4,16 +4,24 @@
 	<Type>Multiplication</Type>
 	<Ports>
 		<Port Name="SoundIn" Direction="IN" DataType="SOUND"/>
-		<Port Name="Multiplier" Direction="IN" DataType="FLOAT"/>
+		<Port Name="Multiplier" Direction="IN" DataType="CONTROL"/>
 		<Port Name="SoundOut" Direction="OUT" DataType="SOUND"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
-		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="mulss">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="Multiplier" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="mulss">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="Multiplier" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

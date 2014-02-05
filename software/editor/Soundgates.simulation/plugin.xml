@@ -11,14 +11,14 @@
                label="Simulation toolbar">
             <command
                   commandId="Soundgates.simulation.StartSimulation"
-                  icon="symbols/media-playback-start.png"
+                  icon="symbols/run.gif"
                   label="Start Simulation"
                   style="push"
                   tooltip="Start the simulation">
             </command>
             <command
                   commandId="Soundgates.simulation.StopSimulation"
-                  icon="symbols/media-playback-stop.png"
+                  icon="symbols/stop.gif"
                   label="Stop Simulation"
                   style="push"
                   tooltip="Stop the simulation">

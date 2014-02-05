@@ -1,0 +1,11 @@
+#N canvas 1440 49 958 1149 10;
+#X obj 154 133 mixer_patch;
+#X obj 127 61 osc~ 220;
+#X obj 250 61 osc~ 440;
+#X obj 158 202 dac~;
+#X floatatom 174 96 5 0 0 0 - - -;
+#X connect 0 0 3 0;
+#X connect 0 0 3 1;
+#X connect 1 0 0 0;
+#X connect 2 0 0 2;
+#X connect 4 0 0 1;

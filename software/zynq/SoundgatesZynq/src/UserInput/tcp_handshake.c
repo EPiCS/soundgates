@@ -52,11 +52,11 @@ void tcp_client_handler(int clientSock)
     /* Receive message from client */
     if ((recvMsgSize = recv(clientSock, recvMsgBuf, BUFSIZE, 0)) < 0)
         error_handler("recv() failed");
-    
+
     /* Terminate received message  */
     recvMsgBuf[recvMsgSize] = '\0';
     
-    printf("Received: \"%s\" (%d bytes)\n", recvMsgBuf, recvMsgSize);    
+    printf("Received: \"%s\" (%d bytes)\n", recvMsgBuf, recvMsgSize);
     
     if (recvMsgSize > 0)
     {

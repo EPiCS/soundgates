@@ -128,7 +128,7 @@ public class Tester {
 		if (atomicSoundComponent.getType().equals("WavePlayer")){
 			// test file references
 			String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
-			String filePath = projectPath+"/"+relativeFileName;
+			String filePath = projectPath+"/" +AtomicSoundComponentLibrary.waveFolderName + "/"+relativeFileName;
 			File testFile = new File(filePath);
 			if(!testFile.exists()){
 				MessageDialogs.fileNotFound(filePath);

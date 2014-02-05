@@ -25,6 +25,7 @@ import soundgates.SoundgatesFactory;
 import soundgates.codegen.BidirectionalMap;
 import soundgates.codegen.CodeGenHelper;
 import soundgates.codegen.zipExporter.ZipExporter;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 
 public class SynthDataGen {
@@ -235,7 +236,7 @@ public class SynthDataGen {
 		 *  newFileName = "_2ZvxcIEcEeO2Uor-dy1FkA_file.wav"
 		 */
 		String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
-		String filePath = projectPath+"/"+relativeFileName;
+		String filePath = projectPath+"/"+AtomicSoundComponentLibrary.waveFolderName+"/"+relativeFileName;
 		File tmpFile = new File(filePath);
 		String id = getXMLIdOfAtomicSoundComponent(atomicSoundComponent);
 		String newFileName = id +"_" + tmpFile.getName();				

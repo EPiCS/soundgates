@@ -3,17 +3,25 @@
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>NumericSineGenerator</Type>
 	<Ports>
-		<Port Name="Resolution" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Frequency" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port Name="Resolution" Direction="IN" DataType="CONTROL"/>
+		<Port Name="Frequency" Direction="IN" DataType="CONTROL"/>
+		<Port Name="Output" Direction="OUT" DataType="CONTROL"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
-		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="num_sine">
+				<PortMapping PortName="Resolution" PortNumber="1"/>
+				<PortMapping PortName="Frequency" PortNumber="2"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="num_sine">
+				<PortMapping PortName="Resolution" PortNumber="1"/>
+				<PortMapping PortName="Frequency" PortNumber="2"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

@@ -1,0 +1,5 @@
+#N canvas 0 49 718 849 10;
+#X obj 126 133 outlet~;
+#X obj 131 55 noise~;
+#X text 233 50 outports Samples;
+#X connect 1 0 0 0;
