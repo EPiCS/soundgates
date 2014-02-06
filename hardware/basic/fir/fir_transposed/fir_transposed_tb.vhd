@@ -40,42 +40,45 @@ ARCHITECTURE behavior OF fir_transposed_tb IS
     signal rst   : std_logic    := '0';
     signal ce    : std_logic    := '1';
 
-    constant scaling : real := 14.0;
+    constant scaling : real := 15.0;
  
     constant coefficients : mem16(FIR_ORDER downto 0) := ( 
-        to_signed(-22, 16),
-        to_signed(-20, 16),
-        to_signed(-15, 16),
-        to_signed(1, 16),
-        to_signed(38, 16),
-        to_signed(108, 16),
-        to_signed(217, 16),
-        to_signed(367, 16),
-        to_signed(553, 16),
-        to_signed(763, 16),
-        to_signed(979, 16),
-        to_signed(1180, 16),
-        to_signed(1343, 16),
-        to_signed(1449, 16),
-        to_signed(1486, 16),
-        to_signed(1449, 16),
-        to_signed(1343, 16),
-        to_signed(1180, 16),
-        to_signed(979, 16),
-        to_signed(763, 16),
-        to_signed(553, 16),
-        to_signed(367, 16),
-        to_signed(217, 16),
-        to_signed(108, 16),
-        to_signed(38, 16),
-        to_signed(1, 16),
-        to_signed(-15, 16),
-        to_signed(-20, 16),
-        to_signed(-22, 16)
+        to_signed(45, 16),
+        to_signed(39, 16),
+        to_signed(30, 16),
+        to_signed(-1, 16),
+        to_signed(-76, 16),
+        to_signed(-215, 16),
+        to_signed(-433, 16),
+        to_signed(-733, 16),
+        to_signed(-1106, 16),
+        to_signed(-1526, 16),
+        to_signed(-1959, 16),
+        to_signed(-2360, 16),
+        to_signed(-2686, 16),
+        to_signed(-2898, 16),
+        to_signed(29796, 16),
+        to_signed(-2898, 16),
+        to_signed(-2686, 16),
+        to_signed(-2360, 16),
+        to_signed(-1959, 16),
+        to_signed(-1526, 16),
+        to_signed(-1106, 16),
+        to_signed(-733, 16),
+        to_signed(-433, 16),
+        to_signed(-215, 16),
+        to_signed(-76, 16),
+        to_signed(-1, 16),
+        to_signed(30, 16),
+        to_signed(39, 16),
+        to_signed(45, 16)
     ); 
 
     signal x_i  : signed(23 downto 0);
     signal y_i  : signed(23 downto 0);
+    
+    
+    signal sample_out : std_logic_vector(31 downto 0);
     
     file stimulus   : TEXT is in  stim_filename;
     file outputfile : TEXT is out output_filename;
@@ -83,7 +86,11 @@ ARCHITECTURE behavior OF fir_transposed_tb IS
     constant clk_period : time := 10 ns;
     
 BEGIN
-
+    
+    sample_out  <= std_logic_vector(y_i) & X"11" when y_i(23) = '1' else
+                std_logic_vector(y_i) & X"00";
+    
+    
   -- Component Instantiation
     uut: fir 
     generic map (
@@ -112,7 +119,7 @@ BEGIN
         variable sound_in_l  : LINE;
         variable sound_out_l : LINE;
         variable sample_in   : integer;
-        variable sample_out  : integer;
+        
         variable tmp         : std_logic_vector(31 downto 0);
     BEGIN
         rst <= '1';
@@ -130,13 +137,7 @@ BEGIN
             tmp         := std_logic_vector(to_signed(sample_in, 32));
             x_i         <= signed(tmp(31 downto 8));
             
-            if y_i(23) = '1' then
-                sample_out  := to_integer(signed(std_logic_vector(y_i) & X"11"));
-            else
-                sample_out  := to_integer(signed(std_logic_vector(y_i) & X"00"));
-            end if;
-            
-            write(sound_out_l, sample_out);
+            write(sound_out_l, to_integer(signed(y_i)));
             writeline(outputfile, sound_out_l);
             wait until CLK = '1';
         end loop;
