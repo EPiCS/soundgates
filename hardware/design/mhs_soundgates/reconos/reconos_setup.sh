@@ -58,12 +58,9 @@ edk=${SOUNDGATES}/hardware/design/mhs_soundgates/project/edk_${RECONOS_ARCH}_${R
 
 # copy base design and pcores
 #cp -r ${RECONOS}/designs/${RECONOS_ARCH}_${RECONOS_OS}_${base_design} $edk
-echo "STACHURSK"
-pwd
-echo $edk
 
-cp -r ${SOUNDGATES}/hardware/design/reference/zynq_audio_adau1761 $edk
-cp -r ../reference/zynq_audio_adau1761 $edk
+cp -r ${SOUNDGATES}/hardware/design/reference/cf_adv7511_zed $edk
+#cp -r ../reference/cf_adv7511_zed $edk
 mkdir -p $edk/pcores
 cp -r ${RECONOS}/pcores/* $edk/pcores
 
