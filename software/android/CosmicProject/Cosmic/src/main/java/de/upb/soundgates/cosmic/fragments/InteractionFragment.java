@@ -17,6 +17,7 @@ import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 import de.upb.soundgates.cosmic.rows.InteractionButtonRow;
 import de.upb.soundgates.cosmic.rows.InteractionLightRow;
+import de.upb.soundgates.cosmic.rows.InteractionRotaryZRow;
 import de.upb.soundgates.cosmic.rows.InteractionRow;
 import de.upb.soundgates.cosmic.rows.InteractionSeekBarRow;
 import de.upb.soundgates.cosmic.rows.InteractionShakeRow;
@@ -72,6 +73,9 @@ public class InteractionFragment extends ListFragment {
                         break;
                     case TILT:
                         rows.add(new InteractionTiltRow(inflater, msg));
+                        break;
+                    case ROTARYZ:
+                        rows.add(new InteractionRotaryZRow(inflater, msg));
                         break;
                     case SHAKE:
                         rows.add(new InteractionShakeRow(inflater, msg));

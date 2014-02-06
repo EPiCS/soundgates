@@ -13,6 +13,7 @@ import de.upb.soundgates.cosmic.MainActivity;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.adapters.SelectBindArrayAdapter;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+import de.upb.soundgates.cosmic.sensor.AbstractSensorListener;
 
 /**
  * Created by posewsky on 03.12.13.
@@ -39,17 +40,14 @@ public class SelectFragment extends ListFragment {
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //unregister current Listeners
+                AbstractSensorListener.unregisterListeners();
+
                 for(Fragment f : getFragmentManager().getFragments()) {
                     if(f instanceof InteractionFragment) {
                         ((InteractionFragment)f).updateList();
                         break;
                     }
-                }
-
-                OSCMessageStore msg_store = OSCMessageStore.hasInstance();
-                if(msg_store != null)
-                {
-                    Log.d(LOG_TAG, msg_store.toStringFull());
                 }
 
                 ((MainActivity)getActivity()).mViewPager.setCurrentItem(2);

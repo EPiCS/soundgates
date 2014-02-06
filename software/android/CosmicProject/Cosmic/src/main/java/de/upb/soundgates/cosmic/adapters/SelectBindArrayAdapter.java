@@ -94,6 +94,8 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
                         im_id = InteractionMethod.BUTTON;
                     } else if(im_str.equals(context.getResources().getString(R.string.tilt))) {
                         im_id = InteractionMethod.TILT;
+                    } else if(im_str.equals(context.getResources().getString(R.string.rotaryZ))) {
+                        im_id = InteractionMethod.ROTARYZ;
                     } else if(im_str.equals(context.getResources().getString(R.string.shake))) {
                         im_id = InteractionMethod.SHAKE;
                     } else if(im_str.equals(context.getResources().getString(R.string.light))) {

@@ -73,7 +73,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-        CosmicSensorManager csm = CosmicSensorManager.getInstance(this);
+        //CosmicSensorManager csm = CosmicSensorManager.getInstance(this);
     }
 
     @Override

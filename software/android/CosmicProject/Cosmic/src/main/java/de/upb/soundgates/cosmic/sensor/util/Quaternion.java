@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic.sensor;
+package de.upb.soundgates.cosmic.sensor.util;
 
 /**
 * Created by Thorbjörn Posewsky on 01.02.14.
@@ -27,7 +27,7 @@ public class Quaternion {
         this.z = z;
     }
 
-    double getHeading() {
+    public double getHeading() {
         double sqw = w*w;
         double sqx = x*x;
         double sqy = y*y;
@@ -41,7 +41,7 @@ public class Quaternion {
         return Math.atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw);
     }
 
-    double getAttitude() {
+    public double getAttitude() {
         double sqw = w*w;
         double sqx = x*x;
         double sqy = y*y;
@@ -55,7 +55,7 @@ public class Quaternion {
         return Math.asin(2 * test / unit);
     }
 
-    double getBank() {
+    public double getBank() {
         double sqw = w*w;
         double sqx = x*x;
         double sqy = y*y;

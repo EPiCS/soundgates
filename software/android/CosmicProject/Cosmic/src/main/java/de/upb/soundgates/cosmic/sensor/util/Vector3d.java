@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic.sensor;
+package de.upb.soundgates.cosmic.sensor.util;
 
 /**
 * Created by Thorbjörn Posewsky on 01.02.14.
@@ -21,6 +21,12 @@ public class Vector3d {
         float yDist = y - v.y;
         float zDist = z - v.z;
         return (float)Math.sqrt(xDist*xDist + yDist*yDist + zDist*zDist);
+    }
+
+    public boolean componentLessDeltaTest(Vector3d v, float delta) {
+        return (Math.abs(x - v.x) < delta &&
+                Math.abs(y - v.y) < delta &&
+                Math.abs(z - v.z) < delta);
     }
 
     public void normalize() {
@@ -49,6 +55,14 @@ public class Vector3d {
         }
 
         return minIndex;//charVectors[minIndex];
+    }
+
+    public float[] toFloatVector() {
+        float ret[] = new float[3];
+        ret[0] = x;
+        ret[1] = y;
+        ret[2] = z;
+        return ret;
     }
 
     public float[] to4dFloatVector() {

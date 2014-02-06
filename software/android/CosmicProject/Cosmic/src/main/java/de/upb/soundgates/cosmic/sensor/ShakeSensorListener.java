@@ -3,10 +3,8 @@ package de.upb.soundgates.cosmic.sensor;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 
-import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.sensor.util.Vector3d;
 
 /**
  * Created by Thorbjörn Posewsky on 05.02.14.

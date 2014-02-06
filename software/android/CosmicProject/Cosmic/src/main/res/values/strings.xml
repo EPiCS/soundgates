@@ -23,6 +23,7 @@
         <item>@string/seekBar</item>
         <item>@string/button</item>
         <item>@string/tilt</item>
+        <item>@string/rotaryZ</item>
         <item>@string/shake</item>
         <item>@string/light</item>
     </string-array>
@@ -30,6 +31,7 @@
     <string name="seekBar">Slider</string>
     <string name="button">Button</string>
     <string name="tilt">Tilt</string>
+    <string name="rotaryZ">Rotary Switch</string>
     <string name="shake">Shake</string>
     <string name="light">Light</string>
     <string name="lightCalibrate">Calibrate</string>

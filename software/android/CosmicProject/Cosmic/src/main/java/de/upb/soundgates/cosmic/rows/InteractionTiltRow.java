@@ -65,7 +65,7 @@ public class InteractionTiltRow implements InteractionRow {
 
         // actually setup the view
         holder.msgText.setText(msg.getPath());
-        //holder.tiltValue.setText();
+        //holder.shakeIndicator.setText();
 
         return view;
     }
