@@ -24,7 +24,7 @@ def main():
     except getopt.GetoptError:
         usage()
         sys.exit(2)
-    base_design = "zynq_audio_adau1761"
+    base_design = None
     component_path = None
     for opt, arg in opts:
         if opt == '-h':
@@ -42,6 +42,11 @@ def main():
             assert False, "unhandled option"
     # Search for HW components
     clean()
+    if base_design is None:
+        # Base Design was not set by argument. Trying to find it.
+        base_design = os.getenv('SOUNDGATES')
+        base_design = os.path.join(base_design,'hardware/design/reference/zynq_audio_adau1761')
+        print "Found Base_Design in: ", base_design
     print 'COMPONENT PATH:'
     print component_path
     tgf = TGF(inputfile, component_path)

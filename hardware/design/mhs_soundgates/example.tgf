@@ -47,8 +47,8 @@
 69 dummysink/sw
 70 dummysink/sw
 
-101 sin/hw(1)
-102 sin/hw(2) 
+101 sine/hw(1)
+102 sine/hw(2) 
 102 adsr/hw(3)
 
 #

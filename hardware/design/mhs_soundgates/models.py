@@ -94,8 +94,25 @@ class TGF(object):
     
     def reconosSetup(self):
         # Executes the reconos_setup script
-        subprocess.call(['reconos/reconos_setup.sh', 'project/setup_zynq'])
+        subprocess.call(['reconos/reconos_setup_original.sh', 'project/setup_zynq'])
         
+    def directScript(self):
+        #mhsaddhwts.py <architecture> <system.mhs> <num_static_hwts> <num_reconf_regions> <hwt0_directory>[#<count>] <hwt1_directory>[#<count>]
+        arch = "zynq"
+        mhs_path = "reconos/basedesign_audio_reconos.mhs"
+        num_static_hwts = str(self.getComponentCount())
+        num_reconf = 0
+        implementations = ''
+        used_components = set()
+        for c in self.Components:
+            if(c.getType() not in used_components):
+                used_components.add(c.getType())
+                if c.getImplementation() is None:
+                    print 'Error: Could not find ' + c.Id + ' inside of the components.csv'
+                    sys.exit(1)
+                implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())+ ' ' 
+        implementations = implementations + '"'
+        subprocess.call(['reconos/mhsaddhwts.py', arch, mhs_path, num_static_hwts, num_reconf, implementations])
 
     def getLibrary(self):
         return self.Library
