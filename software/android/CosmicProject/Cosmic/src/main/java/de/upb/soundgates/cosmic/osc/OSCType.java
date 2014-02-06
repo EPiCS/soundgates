@@ -18,6 +18,14 @@ public class OSCType {
         this.MAX_VALUE  = maxValue;
     }
 
+    public void setValue(float p) {
+        value = p;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
     public void setValueAsPercent(float p) {
         value = (MAX_VALUE - MIN_VALUE) * p + MIN_VALUE;
     }

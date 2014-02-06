@@ -100,7 +100,6 @@ public class InteractionRotaryZRow implements InteractionRow {
                 listener.setStartOfRotation();
             }
         });
-        //holder.shakeIndicator.setText();
 
         return view;
     }

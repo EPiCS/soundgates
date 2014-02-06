@@ -135,7 +135,7 @@ public class InteractionButtonRow implements InteractionRow {
 
                 try {
                     float parsedValue = Float.parseFloat(value);
-                    msg.getTypes().get(0).value = parsedValue;
+                    msg.setValue(parsedValue);
                     OSCSender.send(msg);
                 } catch (NumberFormatException nfe) {
                     return false;

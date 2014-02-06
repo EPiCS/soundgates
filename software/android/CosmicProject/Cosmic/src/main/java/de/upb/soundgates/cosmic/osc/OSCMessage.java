@@ -75,17 +75,38 @@ public class OSCMessage extends Observable {
 
     public LinkedList<OSCType> getTypes() { return types; }
 
-    public void setValueAsPercent(float value) {
-        OSCType arg = getTypes().get(0);
-        arg.setValueAsPercent(value);
+    public void setValue(float value) {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            arg.setValue(value);
+            setChanged();
+            notifyObservers(value);
+        }
+    }
 
-        setChanged();
-        notifyObservers(value);
+    public float getValue() {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            return arg.getValue();
+        }
+        return Float.NaN;
+    }
+
+    public void setValueAsPercent(float value) {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            arg.setValueAsPercent(value);
+            setChanged();
+            notifyObservers(value);
+        }
     }
 
     public float getValueAsPercent() {
-        OSCType arg = getTypes().get(0);
-        return arg.getValueAsPercent();
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            return arg.getValueAsPercent();
+        }
+        return Float.NaN;
     }
 
     public boolean isSelected() {

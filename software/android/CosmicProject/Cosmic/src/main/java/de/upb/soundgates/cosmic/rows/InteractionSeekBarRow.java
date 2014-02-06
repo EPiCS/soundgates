@@ -114,7 +114,7 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-            msg.getTypes().get(0).value = ((MinMaxSeekBar)seekBar).getFloatValue();
+            msg.setValue(((MinMaxSeekBar)seekBar).getFloatValue());
             OSCSender.send(msg);
         }
 
