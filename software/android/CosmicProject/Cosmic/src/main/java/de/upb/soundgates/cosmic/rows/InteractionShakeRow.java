@@ -1,5 +1,6 @@
 package de.upb.soundgates.cosmic.rows;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,9 @@ import java.util.Observable;
 import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
+import de.upb.soundgates.cosmic.osc.OSCSender;
+import de.upb.soundgates.cosmic.sensor.AbstractSensorListener;
+import de.upb.soundgates.cosmic.sensor.ShakeSensorListener;
 
 /**
  * Created by posewsky on 10.01.14.
@@ -17,10 +21,14 @@ import de.upb.soundgates.cosmic.osc.OSCMessage;
 public class InteractionShakeRow implements InteractionRow {
     private final OSCMessage msg;
     private final LayoutInflater inflater;
+    private final ShakeSensorListener listener;
 
     @Override
     public void update(Observable observable, Object o) {
-
+        msg.setValueAsPercent(1);
+        OSCSender.send(msg);
+        msg.setValueAsPercent(0);
+        OSCSender.send(msg);
     }
 
     private static class ViewHolder {
@@ -37,6 +45,9 @@ public class InteractionShakeRow implements InteractionRow {
     public InteractionShakeRow(LayoutInflater inflater, OSCMessage msg) {
         this.inflater = inflater;
         this.msg = msg;
+
+        this.listener = new ShakeSensorListener(inflater.getContext());
+        this.listener.addObserver(this);
     }
 
 

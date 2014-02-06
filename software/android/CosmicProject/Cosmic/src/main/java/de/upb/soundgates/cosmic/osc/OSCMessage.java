@@ -83,6 +83,11 @@ public class OSCMessage extends Observable {
         notifyObservers(value);
     }
 
+    public float getValueAsPercent() {
+        OSCType arg = getTypes().get(0);
+        return arg.getValueAsPercent();
+    }
+
     public boolean isSelected() {
         return selected;
     }

@@ -58,6 +58,7 @@ public class InteractionLightRow implements InteractionRow {
         this.msg = msg;
         this.holder = null;
 
+        // request status updates from msg (model)
         msg.addObserver(this);
     }
 

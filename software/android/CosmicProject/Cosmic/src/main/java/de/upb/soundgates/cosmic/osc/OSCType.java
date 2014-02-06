@@ -22,6 +22,10 @@ public class OSCType {
         value = (MAX_VALUE - MIN_VALUE) * p + MIN_VALUE;
     }
 
+    public float getValueAsPercent() {
+        return (value - MIN_VALUE) * 100f / (MAX_VALUE - MIN_VALUE);
+    }
+
     public static OSCType newInstance(OSCMessage msg, char typeTag) {
         switch(typeTag)
         {

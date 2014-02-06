@@ -122,6 +122,10 @@ public class CosmicSensorManager implements SensorEventListener {
 
                 if(v.length() < 0.6 * 9.81)
                     return;
+                /*else
+                {
+                    updateModel(InteractionMethod.SHAKE, 1.0f);
+                }*/
 
                 float[] resultVec = new float[4];
                 float[] R = new float[16];

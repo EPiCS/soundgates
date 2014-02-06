@@ -80,7 +80,6 @@ public class InteractionFragment extends ListFragment {
                         rows.add(new InteractionLightRow(inflater, msg));
                         break;
                 }
-                //Log.d("InteractionFragment", msg.toString());
             }
         }
 
