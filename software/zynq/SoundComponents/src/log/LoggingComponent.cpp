@@ -19,13 +19,11 @@ EXPORT_SOUNDCOMPONENT_SW_ONLY(LoggingComponent);
 LoggingComponent::LoggingComponent(std::vector<std::string> params) :
 		SoundComponentImpl(params)
 {
+
+
 	active = false;
-	std::stringstream str;
-	str << params[0];
-	str >> prefix;
-	str.str("");
-	str << params[1];
-	str >> filename;
+	prefix = params.at(0);
+	filename = params.at(1);
 
 	file.open(filename.c_str());
 
