@@ -48,7 +48,8 @@ def main():
     clean()
     if base_design is None:
         # Base Design was not set by argument. Setting it to default value.
-        base_design = "zynq_audio_adau1761"
+        base_design = "cf_adv7511_zed"
+        print 'Info: I am trying to use the base design ', base_design
     # Search for HW components
     tgf = TGF(inputfile, component_path, base_design)
     # Create setup_zynq file

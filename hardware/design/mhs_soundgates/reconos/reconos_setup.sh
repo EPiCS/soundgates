@@ -54,13 +54,12 @@ num_hwts=$(($num_static_hwts+$num_reconf_regions))
 echo "Copying base design and ReconOS hardware ..."
 
 #mkdir ../project/edk_${RECONOS_ARCH}_${RECONOS_OS}
-edk=${SOUNDGATES}/hardware/design/mhs_soundgates/project/edk_${RECONOS_ARCH}_${RECONOS_OS}
+edk=${SOUNDGATES}/hardware/design/mhs_soundgates/project/edk_soundgates
 
 # copy base design and pcores
 #cp -r ${RECONOS}/designs/${RECONOS_ARCH}_${RECONOS_OS}_${base_design} $edk
 
-cp -r ${SOUNDGATES}/hardware/design/reference/cf_adv7511_zed $edk
-#cp -r ../reference/cf_adv7511_zed $edk
+cp -r ${SOUNDGATES}/hardware/design/reference/$base_design $edk
 mkdir -p $edk/pcores
 cp -r ${RECONOS}/pcores/* $edk/pcores
 
