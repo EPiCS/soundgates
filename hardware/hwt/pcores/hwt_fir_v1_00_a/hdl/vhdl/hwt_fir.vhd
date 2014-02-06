@@ -106,8 +106,7 @@ architecture Behavioral of hwt_fir is
     
     ----------------------------------------------------------------
     -- Common sound component signals, constants and types
-    ----------------------------------------------------------------
-    
+    ----------------------------------------------------------------    
     constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
@@ -130,8 +129,7 @@ architecture Behavioral of hwt_fir is
     
     signal osif_ctrl_signal : std_logic_vector(31 downto 0);
     signal ignore : std_logic_vector(31 downto 0);
-    
-    
+        
     constant o_RAMAddr_max : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) := (others=>'1');
 
 	shared variable local_ram : LOCAL_MEMORY_T;
@@ -295,8 +293,7 @@ begin
     -----------------------------------------------------------------
     o_RAMAddr_fir  <= std_logic_vector(TO_UNSIGNED(ptr, C_LOCAL_RAM_ADDRESS_WIDTH));
     
-    o_RAMData_fir  <= reverse_vector(sample_out);
-
+    o_RAMData_fir  <= sample_out;
     
     uut: fir
     generic map (
@@ -444,22 +441,21 @@ begin
 
                     -- Read one sample from local memory
                     when 0 =>
-                        sample_in     <= reverse_vector(i_RAMData_fir); -- not sure here                    
-                        process_state <= 1;
-                    -- delay 1
-                    when 1 =>
+                        sample_in     <= i_RAMData_fir; -- not sure here                    
                         process_state <= 2;
                     when 2 =>
                         fir_ce        <= '1';
                         o_RAMWE_fir   <= '1';
                         process_state <= 3;
-                    when 3 =>
-                        ptr           <= ptr + 1;
+                    when 3 =>                        
                         sample_count  <= sample_count - 1;
                         process_state <= 4;
                     -- Write sample back to local memory
-                    when 4 =>                        
+                    when 4 =>
+                        ptr           <= ptr + 1;
                         process_state <= 5;
+                    when 5 =>
+                        process_state <= 6;
                     when others =>
                         process_state <= 0;
                     end case;
