@@ -45,7 +45,6 @@ void FIR_SW::process(){
 		}
 
 		sample = (int32_t) (acc >> 30);
-        std::cout << "WritePtr approaches end of buffer: reset" << std::endl;
 
 		/* Accumulator is in Q1.47 format */
 		m_SoundOut_1_Port->writeSample(sample, i);
