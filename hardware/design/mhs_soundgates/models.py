@@ -13,29 +13,36 @@ import sys
 
 class TGF(object):
     '''
-    This class contains every Hardware component.
+    This class contains every Hardware component and is responsible for creating the XPS project.
     '''    
-    def __init__(self, tgf_file, component_path):
+    def __init__(self, tgf_file, component_path, base_design):
         '''
         Constructor
         '''
         self.Library = Library(component_path)
+        self.BaseDesign = base_design
         self.Components = []
-        print 'Parsing tfl: ', tgf_file
+        print 'Info: Parsing tfl: ', tgf_file
         with open(tgf_file, "r") as f:
             for line in f:
                 if ( self.isHardwareComponent(line) ):
                     comp = HardwareComponent(line, self.Library)
                     self.Components.append(comp)
-        print 'Found ', len(self.Components) , ' Hardware components'
+        print 'Info: Found ', len(self.Components) , ' Hardware components'
                     
     def printComponents(self):
-        print 'Component count: ', self.getComponentCount()
-        print 'Printing Hardware Components: '
+        '''
+        Prints every hardware component which has been found inside of the tgf file. 
+        '''
+        print 'Info: Component count: ', self.getComponentCount()
+        print 'Info: Printing Hardware Components: '
         for c in self.Components:
             c.printStatus()
     
     def getUniqueComponentCount(self):
+        '''
+        Returns the number of distinct hardware components.
+        '''
         components = []
         for c in self.Components:
             components.append(c.getName())
@@ -43,6 +50,9 @@ class TGF(object):
         return len(unique)
     
     def getUniqueComponents(self):
+        '''
+        Returns a list of unique hardware components.
+        '''
         components = []
         for c in self.Components:
             components.append(c.getName())
@@ -50,19 +60,28 @@ class TGF(object):
         return unique
             
     def getComponentCount(self):
+        '''
+        Returns the number of Hardware Components from the specified tgf file
+        '''
         return len(self.Components)
                     
     def isHardwareComponent(self, line):
+        '''
+        Returns if the specified line from the tgf file accords to a hardware component
+        '''
         words = line.split(' ')
         for w in words:
             if not (w.find("hw") == -1):
                 return True
         return False
     
-    def createSetupFile(self, base_design):
+    def createSetupFile(self):
+        '''
+        Creates the setup_zynq file which is needed by the reconos mhs creator.
+        '''
         path = "project/setup_zynq"
         # Prepare content
-        base_design = 'base_design=' + base_design
+        base_design = 'base_design=' + self.BaseDesign
         num_static_hwts = 'num_static_hwts=' + str(self.getComponentCount())
         implementations = 'static_hwts="'
         used_components = set()
@@ -92,16 +111,22 @@ class TGF(object):
 
     
     def linkComponents(self):
-        # Link every component into the project folder
+        '''
+        Every pcore has to be linked into the project folder
+        '''
+        # Delegating the linking to the hardware components
         for c in self.Components:
             c.export(self.Library)
             
-    
+
     def reconosSetup(self):
         # Executes the reconos_setup script
         subprocess.call(['reconos/reconos_setup.sh', 'project/setup_zynq'])
         
     def directScript(self):
+        '''
+        Can be used to skip the reconos_setup.sh script. But actually it is not fully implemented :/
+        '''
         #mhsaddhwts.py <architecture> <system.mhs> <num_static_hwts> <num_reconf_regions> <hwt0_directory>[#<count>] <hwt1_directory>[#<count>]
         arch = "zynq"
         mhs_path = "reconos/basedesign_audio_reconos.mhs"
@@ -126,7 +151,7 @@ class HardwareComponent(object):
     '''
     Represents a Component which is used by the current Patch
     '''
-    
+    # Class variables
     c_dict = dict()
     linked_set = set()
     
@@ -163,12 +188,16 @@ class HardwareComponent(object):
         print ''
         
     def export(self, library):
+        '''
+        Every distinct hardware pcore has to be linked exactly one time into the project folder.
+        That's why we need the Class variable "linked_set"
+        '''
         if self.Type in HardwareComponent.linked_set:
             return
         else:
             HardwareComponent.linked_set.add(self.Type) 
             src = library.getPath(self.Type)
-            dst = 'project/' + self.Implementation
+            dst = os.path.join('project/', self.Implementation)
             if (os.path.isdir(dst)):
                 os.unlink(dst)
             os.symlink(src, dst)
@@ -225,8 +254,8 @@ class LibraryComponent(object):
         self.Implementation = implementation
         if componentPath is None:
             componentPath = os.getenv("SOUNDGATES")
-            componentPath = componentPath + '/hardware/hwt/pcores/'
-        self.Path = componentPath + self.getImplementation() # os.path.join(soundgates, '/hardware/hwt/pcores/'+self.getImplementation())
+            componentPath = os.path.join(componentPath, 'hardware/hwt/pcores/')
+        self.Path = os.path.join(componentPath, self.getImplementation())
         self.Count = 0
 
     def getAbbreviation(self):
