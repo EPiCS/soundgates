@@ -64,15 +64,20 @@ class TGF(object):
         # Prepare content
         base_design = 'base_design=' + base_design
         num_static_hwts = 'num_static_hwts=' + str(self.getComponentCount())
-        implementations = 'static_hwts = "'
+        implementations = 'static_hwts="'
         used_components = set()
+        first = True
         for c in self.Components:
             if(c.getType() not in used_components):
                 used_components.add(c.getType())
                 if c.getImplementation() is None:
                     print 'Error: Could not find ' + c.Id + ' inside of the components.csv'
                     sys.exit(1)
-                implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())+ ' ' 
+                if first:
+                    implementations = implementations + c.getImplementation() + '#' + str(c.getComponentCount())
+                    first = False
+                else:
+                    implementations = implementations + ' ' + c.getImplementation() + '#' + str(c.getComponentCount())
         implementations = implementations + '"'
         # Check preconditions
         if not (os.path.exists("project")):
@@ -83,7 +88,7 @@ class TGF(object):
         with open(path, 'a') as f:
             f.write(base_design + '\n')
             f.write(num_static_hwts+ '\n')
-            f.write(implementations)
+            f.write(implementations + '\n')
 
     
     def linkComponents(self):
@@ -94,7 +99,7 @@ class TGF(object):
     
     def reconosSetup(self):
         # Executes the reconos_setup script
-        subprocess.call(['reconos/reconos_setup_original.sh', 'project/setup_zynq'])
+        subprocess.call(['reconos/reconos_setup.sh', 'project/setup_zynq'])
         
     def directScript(self):
         #mhsaddhwts.py <architecture> <system.mhs> <num_static_hwts> <num_reconf_regions> <hwt0_directory>[#<count>] <hwt1_directory>[#<count>]

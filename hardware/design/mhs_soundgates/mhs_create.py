@@ -44,11 +44,11 @@ def main():
     clean()
     if base_design is None:
         # Base Design was not set by argument. Trying to find it.
-        base_design = os.getenv('SOUNDGATES')
-        base_design = os.path.join(base_design,'hardware/design/reference/zynq_audio_adau1761')
-        print "Found Base_Design in: ", base_design
-    print 'COMPONENT PATH:'
-    print component_path
+        #base_design = os.getenv('SOUNDGATES')
+        #base_design = os.path.join(base_design,'hardware/design/reference/zynq_audio_adau1761')
+        base_design = "zynq_audio_adau1761"
+        print "Info: Found Base Design in: ", base_design
+    print 'Info: Using component path:', component_path
     tgf = TGF(inputfile, component_path)
     # Create setup_zynq file
     tgf.createSetupFile(base_design)
@@ -59,7 +59,7 @@ def main():
     tgf.reconosSetup()
     
 def clean():
-    print "Cleaning project folder"
+    print "Info: Cleaning project folder"
     if (os.path.exists("project")):
         shutil.rmtree('project/')
         
@@ -72,7 +72,7 @@ def checkReconOs():
 
 def usage():
     print 'This script creates a mhs file out of the TGF'
-    print 'Usage: test.py -i <patch.tgf> [-c <path-to-component-implementations>] [-b <name-of-the-base-design>]'
+    print 'Usage: mhs_create.py -i <patch.tgf> [-c <path-to-component-implementations>] [-b <name-of-the-base-design>]'
     
 
 if __name__ == "__main__":
