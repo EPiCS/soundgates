@@ -22,20 +22,14 @@ void DebuggingSoundComponent_SW::process()
 
 	/* Calculate difference between last execution and now */
 	m_TurnaroundDuration = now - m_LastExecutionTime;
-
-	/* Resolve IP */
-	using boost::asio::ip::tcp;
+	/* Create udp objects */
+	using boost::asio::ip::udp;
 	boost::asio::io_service io_service;
-	tcp::resolver resolver( io_service );
-	tcp::resolver::query query("127.0.0.1", "1338");
-	tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
-	tcp::resolver::iterator end;
-	/* Create Socket */
-	tcp::socket socket(io_service);
-	boost::system::error_code error = boost::asio::error::host_not_found;
-	socket.connect(*endpoint_iterator++, error);
-	if (error)
-		throw boost::system::system_error(error);
+	udp::resolver resolver(io_service);
+	udp::resolver::query query(udp::v4(), "localhost", "1338");
+    udp::endpoint receiver_endpoint = *resolver.resolve(query);
+    udp::socket socket(io_service);
+    socket.open(udp::v4());
 
 	/* Write input directly to output and send it via UDP to localhost server*/
 	for (int i = 0; i < Synthesizer::config::blocksize; i++ ) {
@@ -44,9 +38,7 @@ void DebuggingSoundComponent_SW::process()
 		/* Send value to server */
 		boost::array<char, sizeof(int)> send_buf;
 		std::copy(reinterpret_cast<char*>(&valueA), reinterpret_cast<char*>(&valueA) + sizeof(int), &send_buf[0]);
-		//socket.send_to(boost::asio::buffer( send_buf ), *iterator);
-		socket.send( boost::asio::buffer( send_buf) );
-		//boost::asio::write(socket, boost::asio::buffer( send_buf));
+	    socket.send_to( boost::asio::buffer(send_buf), receiver_endpoint );
 	}
 	socket.close();
 	m_LastExecutionTime = boost::posix_time::microsec_clock::universal_time();
