@@ -7,14 +7,14 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gmf.runtime.diagram.ui.figures.BorderItemLocator;
 
-public class SoundgatesBorderItemLocator extends BorderItemLocator{	
+public class SoundgatesPortBorderItemLocator extends BorderItemLocator{	
 	
 	private boolean secondStart = false;
 	private int offset;
 	
 	String name;	
 
-	public SoundgatesBorderItemLocator(IFigure parentFigure,
+	public SoundgatesPortBorderItemLocator(IFigure parentFigure,
 			int preferredSide, int offset, String name) {
 		super(parentFigure, preferredSide);
 		this.offset=offset;

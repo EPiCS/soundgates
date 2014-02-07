@@ -671,7 +671,7 @@ public class PortNameEditPart extends LabelEditPart implements
 		 * @generated NOT
 		 */
 		public PortNameFigure() {
-
+			this.setFont(THIS_FONT);
 		}
 
 		/**
@@ -682,5 +682,12 @@ public class PortNameEditPart extends LabelEditPart implements
 		}
 
 	}
+
+	/**
+	 * @generated
+	 */
+	static final Font THIS_FONT = new Font(Display.getCurrent(), Display
+			.getDefault().getSystemFont().getFontData()[0].getName(), 8,
+			SWT.NORMAL);
 
 }

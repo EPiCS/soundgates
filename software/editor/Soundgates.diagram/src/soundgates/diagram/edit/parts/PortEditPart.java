@@ -157,11 +157,11 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 			if (getPort().getDirection() == Direction.IN) {
 				locator = new BorderItemLocator(getMainFigure(),
 						PositionConstants.NORTH);
-				locator.setBorderItemOffset(new Dimension(-20, 20));
+				locator.setBorderItemOffset(new Dimension(0, 10));
 			} else {
 				locator = new BorderItemLocator(getMainFigure(),
 						PositionConstants.SOUTH);
-				locator.setBorderItemOffset(new Dimension(-20, -20));
+				locator.setBorderItemOffset(new Dimension(-10, -10));
 			}
 
 			borderItemContainer.add(borderItemEditPart.getFigure(), locator);

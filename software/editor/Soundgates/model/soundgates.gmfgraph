@@ -12,7 +12,9 @@
       </actualFigure>
     </descriptors>
     <descriptors name="PortNameFigure">
-      <actualFigure xsi:type="gmfgraph:Label" name="PortNameLabel" text="port"/>
+      <actualFigure xsi:type="gmfgraph:Label" name="PortNameLabel" text="port">
+        <font xsi:type="gmfgraph:BasicFont" faceName="" height="1"/>
+      </actualFigure>
       <accessors accessor="getFigurePortNameLabel" figure="//@figures.0/@descriptors.1/@actualFigure"/>
     </descriptors>
     <descriptors name="PortOutgoingConnectionFigure">
