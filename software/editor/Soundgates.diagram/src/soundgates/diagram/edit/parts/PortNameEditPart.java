@@ -669,7 +669,7 @@ public class PortNameEditPart extends LabelEditPart implements
 		 * @generated
 		 */
 		public PortNameFigure() {
-			this.setText("ENTER A NAME");
+			
 		}
 
 		/**

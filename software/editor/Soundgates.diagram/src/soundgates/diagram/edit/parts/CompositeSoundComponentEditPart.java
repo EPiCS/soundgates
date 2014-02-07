@@ -334,9 +334,6 @@ CompositeSoundComponentAbstractEditPart {
 
 			fFigureCompositeSoundComponentNameFigure = new WrappingLabel();
 
-			fFigureCompositeSoundComponentNameFigure
-					.setText("ENTER A NAME");
-
 			this.add(fFigureCompositeSoundComponentNameFigure, BorderLayout.TOP);
 
 			fFigureComponentCompartmentFigure = new RectangleFigure();

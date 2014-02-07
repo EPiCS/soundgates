@@ -63,6 +63,10 @@ public class PortCreateCommand extends EditElementCommand {
 		owner.getPorts().add(newElement);
 
 		doConfigure(newElement, monitor, info);
+		
+		if(owner instanceof CompositeSoundComponent){
+			newElement.setName("defaultPortName");
+		}
 
 		((CreateElementRequest) getRequest()).setNewElement(newElement);
 		return CommandResult.newOKCommandResult(newElement);
