@@ -19,6 +19,7 @@
 #include "../../Patch.h"
 #include "../../core/Synthesizer.h"
 #include "../../InputSoundComponent.h"
+#include "../../core/SoundgatesConfig.h"
 
 
 using namespace std;

@@ -24,8 +24,8 @@ namespace sndc = SoundComponents;
 
 
 SoundComponentLoader::SoundComponentLoader(){
-	this->m_SndComponentRepository = NULL;
-	this->m_IsInitialized 		   = false;
+	m_SndComponentRepository = NULL;
+	m_IsInitialized 		   = false;
 
 	/* Register create function for predefined components */
 

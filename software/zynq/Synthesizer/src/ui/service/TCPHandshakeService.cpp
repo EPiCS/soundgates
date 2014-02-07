@@ -126,11 +126,14 @@ void* TCPHandshakeService::tcpHandshakeThread(){
 
           return NULL;
       }
+
+      std::string port = SoundgatesConfig::getInstance().get<std::string>(SoundgatesConfig::CFG_DEFAULT_TCP_PORT);
+
       /* Construct local address structure */
       memset(&serverAddr, 0, sizeof(serverAddr));           /* Zero out structure */
       serverAddr.sin_family         = AF_INET;              /* Internet address family */
       serverAddr.sin_addr.s_addr    = htonl(INADDR_ANY);    /* Any incoming interface */
-      serverAddr.sin_port           = htons(atoi(Synthesizer::config::port));          /* Local port */
+      serverAddr.sin_port           = htons(boost::lexical_cast<int>(port));          /* Local port */
 
       /* Bind to the local address */
       if (bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0){
