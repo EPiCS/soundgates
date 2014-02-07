@@ -92,7 +92,7 @@
                class="soundgates.diagram.actions.ExportCompositeSoundComponentAction"
                enablesFor="1"
                id="Soundgates.diagram.action.ExportCompositeAction"
-               label="Export Composite Sound Component"
+               label="Export Composite Sound Component as XML"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
          <action
@@ -111,7 +111,7 @@
                class="soundgates.diagram.actions.ExportPatchAction"
                enablesFor="1"
                id="Soundgates.diagram.action.ExportPatchAction"
-               label="Export Patch"
+               label="Export Patch as XML"
                menubarPath="Soundgates.codegen.menu/group">
          </action>
          <action

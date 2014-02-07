@@ -9,7 +9,7 @@
             objectClass="org.eclipse.core.resources.IFile">
          <menu
                id="Soundgates.codegen.menu"
-               label="Soundgates code generation"
+               label="Soundgates"
                path="additions">
             <separator
                   name="group">
@@ -19,14 +19,14 @@
                class="soundgates.codegen.actions.CodegenAction"
                enablesFor="1"
                id="Soundgates.codegen.action"
-               label="Generate PureData code"
+               label="Generate PureData Code"
                menubarPath="Soundgates.codegen.menu/group">
          </action>
          <action
                class="soundgates.codegen.actions.SynthDataGenAction"
                enablesFor="1"
                id="Soundgates.codegen.action"
-               label="Generate device code"
+               label="Generate Synthesizer Input"
                menubarPath="Soundgates.codegen.menu/group">
          </action>
       </objectContribution>
