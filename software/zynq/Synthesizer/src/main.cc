@@ -55,9 +55,9 @@ int main( int argc, const char* argv[])
 	core.add_options()
     ("plugin-search-dir,s", po::value<std::string>(), "Path to the sound components")
     ("hw-support,h", po::value<bool>(), "Run with hardware threads")
-    ("port,p", po::value<std::string>(), "Run with hardware threads")
+    ("port", po::value<std::string>(), "Run with hardware threads")
     ("alsadevice,a", po::value<std::string>(), "ALSA device name")
-    ("patch-file", po::value<std::string>(), "ALSA device name");
+    ("patch-file,p", po::value<std::string>(), "Patch file");
 
 
 //	po::options_description hidden("Hidden options");
