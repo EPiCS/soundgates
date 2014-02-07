@@ -231,12 +231,12 @@ public class SynthDataGen {
 		
 		/*  Example: 
 		 *   
-		 *  fileName = "wave\file.wav"
+		 *  fileName = "samples\file.wav"
 		 *  id = "_2ZvxcIEcEeO2Uor-dy1FkA"
 		 *  newFileName = "_2ZvxcIEcEeO2Uor-dy1FkA_file.wav"
 		 */
 		String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
-		String filePath = projectPath+"/"+AtomicSoundComponentLibrary.waveFolderName+"/"+relativeFileName;
+		String filePath = projectPath+"/"+AtomicSoundComponentLibrary.samplesFolderName+"/"+relativeFileName;
 		File tmpFile = new File(filePath);
 		String id = getXMLIdOfAtomicSoundComponent(atomicSoundComponent);
 		String newFileName = id +"_" + tmpFile.getName();				
