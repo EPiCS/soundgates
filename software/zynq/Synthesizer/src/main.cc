@@ -1,5 +1,5 @@
 /*
- * Empty C++ Application
+ * Synthesizer main application
  */
 
 #include <string>
@@ -31,8 +31,9 @@ static Patch patch;
 
 int main( int argc, const char* argv[])
 {
-	SoundgatesConfig::getInstance().loadDefault();
+    SoundgatesConfig& config = SoundgatesConfig::getInstance();
 
+    config.load("./config/config.xml");
 
 	/* Register signal handler after starting rpc service, because
 	 * this service currently defines its own signal handler */
@@ -41,24 +42,43 @@ int main( int argc, const char* argv[])
 		LOG_ERROR("Could not register termination handler");
 	}
 
+	/* --------------------------------------------------------------------------------- */
+	/* Command line options                                                              */
+	/* --------------------------------------------------------------------------------- */
 
-	po::options_description desc("Allowed options");
-	desc.add_options()
-	    ("help,h", "prints help message")
-	    ("verbose", "verbose output")
-	    ("soundcomponents,s", po::value<std::string>()->required(), "Path to the sound components")
-	    ("hw", po::value<bool>()->default_value(false), "Run with hardware threads")
-	    ("patch-file,p", po::value<std::string>()->required(), "Patch file")
-	    ("alsadevice,a", po::value<std::string>()->default_value("plughw:0,0"), "ALSA device name")
-	;
+	po::options_description general("General");
+	general.add_options()
+	("help", "prints help message")
+	("verbose", "verbose output");
+
+	po::options_description core("core");
+	core.add_options()
+    ("plugin-search-dir,s", po::value<std::string>(), "Path to the sound components")
+    ("hw-support,h", po::value<bool>(), "Run with hardware threads")
+    ("port,p", po::value<std::string>(), "Run with hardware threads")
+    ("alsadevice,a", po::value<std::string>(), "ALSA device name")
+    ("patch-file", po::value<std::string>(), "ALSA device name");
+
+
+//	po::options_description hidden("Hidden options");
+//	hidden.add_options()
+//    ("patch-file,p", po::value<std::string>()->required(), "Patch file");
+
+	po::positional_options_description positional;
+	positional.add("patch-file", 1);
+
+	po::options_description cmdline_options;
+    cmdline_options.add(general).add(core);
 
 	po::variables_map vm;
+	/* --------------------------------------------------------------------------------- */
+	/* --------------------------------------------------------------------------------- */
 
 	try{
-	     po::store(po::parse_command_line(argc, argv, desc), vm);
+	     po::store(po::command_line_parser(argc, argv).options(cmdline_options).positional(positional).run(), vm);
 
-	      if ( vm.count("help") ){
-	        std::cout << desc << std::endl;
+	      if ( vm.count("help") || argc == 1){
+	        std::cout << cmdline_options << std::endl;
 	        return EXIT_SUCCESS;
 	      }
 
@@ -66,26 +86,39 @@ int main( int argc, const char* argv[])
 	                      // there are any problems
 	    } catch(po::required_option& e){
 
-	      std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+	      LOG_ERROR(e.what());
 
 	      return EXIT_FAILURE;
 	    }
 	    catch(po::error& e) {
-	      std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+
+	        LOG_ERROR(e.what());
 
 	      return EXIT_FAILURE;
 	    }
 
-	SoundgatesConfig::getInstance().setUseHWThreads(vm["hw"].as<bool>());
+	/* Overwrite config options */
+	if(vm.count("hw-support")){
+	    config.put(SoundgatesConfig::CFG_USE_HW_THREADS, vm["hw"].as<bool>());
+	}
+	if(vm.count("alsadevice")){
+	    config.put(SoundgatesConfig::CFG_DEVICE_NAME, vm["alsadevice"].as<std::string>());
+	}
+	if(vm.count("plugin-search-dir")){
+	    config.put(SoundgatesConfig::CFG_DEFAULT_PLUGIN_PATH, vm["plugin-search-dir"].as<std::string>());
+	}
+	if(vm.count("port")){
+	    config.put(SoundgatesConfig::CFG_DEFAULT_TCP_PORT, vm["port"].as<std::string>());
+	    config.put(SoundgatesConfig::CFG_DEFAULT_UDP_PORT, vm["port"].as<std::string>());
+	}
 
-    LOG_INFO("Hardware thread support: " << SoundgatesConfig::getInstance().useHWThreads());
-
+    LOG_INFO("Hardware thread support: " << config.get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS));
 	TGFReader reader;
 
-	SoundgatesConfig::getInstance().setAlsaDevicename(vm["alsadevice"].as<std::string>());
-    SoundComponentLoader::getInstance().initialize(vm["soundcomponents"].as<std::string>());
+    SoundComponentLoader::getInstance().initialize(config.get<std::string>(SoundgatesConfig::CFG_DEFAULT_PLUGIN_PATH));
 
     reader.read(&patch, vm["patch-file"].as<std::string>());
+
 //	ui::UIService* xmlrpcservice = (ui::UIService*) new ui::RPCService(patch);
 	ui::UIService* oscservice    = (ui::UIService*) new ui::OSCService(patch);
 	ui::UIService* tcphandshake  = (ui::UIService*) new ui::TCPHandshakeService(patch);

@@ -2,7 +2,7 @@
  * SoundgatesConfig.hpp
  *
  *  Created on: 10.12.2013
- *      Author: gwue
+ *      Author: gwue, lfu
  */
 
 #ifndef SOUNDGATESCONFIG_HPP_
@@ -10,16 +10,17 @@
 
 #include <string>
 #include <iostream>
+#include <map>
+#include <exception>
 
-using std::string;
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
-typedef enum
-{
-	CFG_SOUND_BUFFER_SIZE = 0, CFG_ALSA_CHUNKS, CFG_SAMPLE_RATE, CFG_NUM_CONFIG_FIELDS,
-} SoundgatesConfValue;
+#include "Synthesizer.h"
 
-class SoundgatesConfig
-{
+class SoundgatesConfig{
+
 public:
 
     static SoundgatesConfig& getInstance(){
@@ -27,31 +28,66 @@ public:
         static SoundgatesConfig instance;
         return instance;
     }
+
 	virtual ~SoundgatesConfig();
 
+	enum ConfigValue{
 
-    void load(string path);
-	void loadDefault();
-	double getConf(SoundgatesConfValue);
+	    /* Alsa related configuration values */
+	    CFG_SOUND_BUFFER_SIZE,
+	    CFG_ALSA_CHUNKS,
+	    CFG_DEVICE_NAME,
+	    /* Network related configuration values */
+	    CFG_DEFAULT_TCP_PORT,
+	    CFG_DEFAULT_UDP_PORT,
 
-	string getAlsaDevicename();
-	void setAlsaDevicename(string s);
+	    /* Hardware related configuration values */
+	    CFG_USE_HW_THREADS,
 
-    bool useHWThreads();
-    void setUseHWThreads(bool);
+	    /* Synthesizer related configuration values */
+	    CFG_DEFAULT_PLUGIN_PATH,
+
+	};
+
+
+    void load(const std::string& path);
+
+    template <typename F>
+	F get(ConfigValue v){
+
+        if(m_Initialized){
+              try {
+                  return m_PropertyTree.get<F>(m_EnumMap[v]);
+              } catch (std::exception &e) {
+                  LOG_ERROR("Could not load configuration value: " << m_EnumMap[v]);
+                  LOG_ERROR(e.what());
+              }
+          }
+          return F();
+    }
+    template <typename Type>
+    void put(ConfigValue v, const Type &value){
+
+        try{
+            m_PropertyTree.put(m_EnumMap[v], value);
+
+        }catch(boost::property_tree::ptree_bad_data &e){
+            LOG_ERROR(e.what());
+        }
+    }
 
 
 private:
 
 	SoundgatesConfig();
 
-	bool   m_useHWThreads;
+	std::map<ConfigValue, std::string> m_EnumMap;
 
-	double configValues[CFG_NUM_CONFIG_FIELDS];
-	string alsadevicename;
-	static SoundgatesConfig* instance;
-	bool initialized;
-	string cfgPath;
+    boost::property_tree::ptree m_PropertyTree;
+
+	bool m_Initialized;
+
+	void loadDefault();
 
 };
 

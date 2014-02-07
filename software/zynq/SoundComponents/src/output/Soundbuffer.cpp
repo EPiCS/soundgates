@@ -9,10 +9,10 @@
 
 Soundbuffer::Soundbuffer()
 {
-	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
-	this->SOUNDBUFFERSIZE = (int) (cfg.getConf(CFG_SOUND_BUFFER_SIZE));
-	this->ALSACHARS = (int) (cfg.getConf(CFG_ALSA_CHUNKS));
-	unsigned int samplerate = (unsigned int) (cfg.getConf(CFG_SAMPLE_RATE));
+	SoundgatesConfig& cfg   = SoundgatesConfig::getInstance();
+	this->SOUNDBUFFERSIZE   = cfg.get<int>(SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);;
+	this->ALSACHARS         = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
+	unsigned int samplerate = Synthesizer::config::samplerate;
 
 	this->buffer = (char*) malloc(this->SOUNDBUFFERSIZE * sizeof(char));
 
@@ -32,7 +32,7 @@ Soundbuffer::Soundbuffer()
 
 	snd_pcm_stream_t stream = SND_PCM_STREAM_PLAYBACK;
 
-	string devName = cfg.getAlsaDevicename();
+	std::string devName = cfg.get<std::string>(SoundgatesConfig::CFG_DEVICE_NAME);
 
 	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0)) < 0)
 	{
@@ -109,8 +109,7 @@ Soundbuffer::Soundbuffer()
 	}
 	if ((err = snd_pcm_prepare(this->pcm_handle)) < 0)
 	{
-		fprintf(stderr, "cannot prepare audio interface for use (%s)\n",
-				snd_strerror(err));
+		fprintf(stderr, "cannot prepare audio interface for use (%s)\n", snd_strerror(err));
 		this->sane = false;
 	}
 

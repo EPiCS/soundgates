@@ -47,8 +47,8 @@ void OSCService::startService(){
 	LOG_DEBUG("Starting osc handler service");
 
 	int err;
-
-	m_LoServerThread = lo_server_thread_new(Synthesizer::config::port, NULL);
+	std::string port = SoundgatesConfig::getInstance().get<std::string>(SoundgatesConfig::CFG_DEFAULT_UDP_PORT);
+	m_LoServerThread = lo_server_thread_new(port.c_str(), NULL);
 
 	vector<InputSoundComponentPtr>& inputs =  m_pPatch.getInputSoundComponents();
 	LOG_DEBUG("Registering #" <<  inputs.size() << " components");
