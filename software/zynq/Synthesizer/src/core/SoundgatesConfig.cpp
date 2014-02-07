@@ -7,68 +7,57 @@
 
 #include "SoundgatesConfig.h"
 
-SoundgatesConfig::SoundgatesConfig()
-{
-	this->initialized = false;
-	this->cfgPath = "";
-	m_useHWThreads = false;
+SoundgatesConfig::SoundgatesConfig(){
+	m_Initialized = false;
+
 }
 
 SoundgatesConfig::~SoundgatesConfig(){
 
 }
 
-double SoundgatesConfig::getConf(SoundgatesConfValue v)
-{
-	if (!initialized)
-	{
-		std::cerr << "Configuration was not initialized before reading! Using defaults"
-				<< std::endl;
-		this->loadDefault();
-	}
+void SoundgatesConfig::load(const std::string& path){
 
-	return configValues[v];
+    m_EnumMap[CFG_SOUND_BUFFER_SIZE]   = "synthesizer.alsa.buffersize";
+    m_EnumMap[CFG_ALSA_CHUNKS]         = "synthesizer.alsa.chunks";
+    m_EnumMap[CFG_DEVICE_NAME]         = "synthesizer.alsa.devicename";
+    m_EnumMap[CFG_USE_HW_THREADS]      = "synthesizer.core.hwt_support";
+    m_EnumMap[CFG_DEFAULT_TCP_PORT]    = "synthesizer.core.ports.udp";
+    m_EnumMap[CFG_DEFAULT_UDP_PORT]    = "synthesizer.core.ports.tcp";
+    m_EnumMap[CFG_DEFAULT_PLUGIN_PATH] = "synthesizer.plugins.searchdir";
+
+    try{
+
+        loadDefault();
+
+        read_xml(path, m_PropertyTree);
+
+    }catch(boost::property_tree::xml_parser_error &e){
+
+        LOG_ERROR(e.what());
+
+        m_Initialized = false;
+
+        return;
+    }
+
+    m_Initialized = true;
 }
 
-void SoundgatesConfig::load(string path)
-{
-	//TODO NOT YET IMPLEMENTED
-	throw 0;
-}
+void SoundgatesConfig::loadDefault(){
 
-void SoundgatesConfig::loadDefault()
-{
-	// How large to create the ALSA Buffer.
-	// Adds slightly to latency but increases robustness against buffer underruns
-	// Non power of twos might lead to unexpected results!
-	configValues[CFG_SOUND_BUFFER_SIZE] = 16384;
-	// How many bytes need to be collected before sending data to ALSA
-	// To low values may lead to artifacts in the sound output
-	// Non power of twos might lead to unexpected results!
-	configValues[CFG_ALSA_CHUNKS] = 1024;
-	// Desired sample rate for the system. Not all rates might be supported
-	configValues[CFG_SAMPLE_RATE] = 44100;
-	alsadevicename = "plughw:0,0";
+	m_Initialized = false;
 
-	m_useHWThreads = false;
+	/* Alsa related configuration values */
+	m_PropertyTree.put(m_EnumMap[CFG_ALSA_CHUNKS],         1024);
+	m_PropertyTree.put(m_EnumMap[CFG_SOUND_BUFFER_SIZE],   16384);
+	m_PropertyTree.put(m_EnumMap[CFG_DEVICE_NAME],         "plughw:0,0");
 
-	initialized = true;
+	/* Synthesizer realted configuration values */
+	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_TCP_PORT],    "50050");
+	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_UDP_PORT],    "50050");
 
-}
+	m_PropertyTree.put(m_EnumMap[CFG_USE_HW_THREADS],      false);
+	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_PLUGIN_PATH], "./plugin");
 
-bool SoundgatesConfig::useHWThreads(){
-    return m_useHWThreads;
-}
-void SoundgatesConfig::setUseHWThreads(bool value){
-    m_useHWThreads = value;
-}
-
-string SoundgatesConfig::getAlsaDevicename()
-{
-	return this->alsadevicename;
-}
-
-void SoundgatesConfig::setAlsaDevicename(string s)
-{
-	this->alsadevicename = s;
 }

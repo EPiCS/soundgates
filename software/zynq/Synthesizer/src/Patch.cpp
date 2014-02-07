@@ -39,7 +39,7 @@ vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 void Patch::createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot){
 
 	SoundComponents::ImplType impltype;
-	bool useHWThreads = SoundgatesConfig::getInstance().useHWThreads();
+	bool useHWThreads = SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS);
 
 	SoundComponentLoader& loader = SoundComponentLoader::getInstance();
 
@@ -167,7 +167,7 @@ void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 void Patch::initialize(void){
 
 
-    if(SoundgatesConfig::getInstance().useHWThreads()){
+    if(SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS)){
         #ifdef ZYNQ
         reconos_init();
         #endif

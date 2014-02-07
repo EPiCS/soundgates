@@ -1,8 +1,8 @@
 /*
- * TemplateSoundComponent_SW.cpp
+ *  FIR_SW.cpp
  *
  *  Created on: Jan 23, 2014
- *      Author: gwue
+ *      Author: lfu
  */
 
 #include "FIR_SW.hpp"
