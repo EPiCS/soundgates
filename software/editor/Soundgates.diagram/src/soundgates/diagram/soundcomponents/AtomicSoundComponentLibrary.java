@@ -14,7 +14,7 @@ import soundgates.AtomicSoundComponent;
 public class AtomicSoundComponentLibrary{
 
 	private static AtomicSoundComponentLibrary instance;
-	public static HashMap<String,Integer> diagramAndTypeToCounter = new HashMap<>();
+	private static HashMap<String,Integer> diagramAndTypeToCounter = new HashMap<>();
 	private TreeMap<String, AtomicSoundComponent> components;
 	private static IFolder xmlfolder;
 	public final static String samplesFolderName = "samples";

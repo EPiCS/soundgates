@@ -62,6 +62,8 @@ public class CompositeSoundComponentCreateCommand extends EditElementCommand {
 			newElement = CompositeSoundComponentLibrary.getInstance().createCompositeSoundComponentInstance((String) name);
 		} else {
 			newElement = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
+			newElement.setName(CompositeSoundComponentLibrary.getNumberedName(
+					getElementToEdit().eResource().getURI().lastSegment()));
 		}
 		//---MYTOOL
 
