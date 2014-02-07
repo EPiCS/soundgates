@@ -33,7 +33,7 @@ class OSCService : public UIService{
 
 private:
 
-	Patch&	    m_pPatch;
+	Patch&	            m_pPatch;
 	lo_server_thread	m_LoServerThread;
 
 	void error(int num, const char *m, const char *path);

@@ -33,6 +33,7 @@
 #define TCP_HANDSHAKE_MAXPENDING 5
 
 #define TCP_HANDSHAKE_RECVMSG "getInteractiveComponents"
+#define TCP_HANDSHAKE_QUITMSG "quit"
 
 namespace ui {
 
@@ -43,6 +44,9 @@ private:
 
     boost::thread*  m_ServiceThread;
     Patch&          m_pPatch;
+
+
+    int             m_ServerSocket;     /* Socket descriptor for server            */
 
 public:
     TCPHandshakeService(Patch& patch);

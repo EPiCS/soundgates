@@ -72,11 +72,21 @@ void OSCService::startService(){
 }
 
 void OSCService::stopService(){
-	LOG_DEBUG("Stopping osc handler service");
+
+    int status = 0;
+
+
+    status = lo_server_thread_stop(m_LoServerThread);
+
+    if(status < 0){
+        LOG_ERROR("Error while stopping osc service: " << status);
+    }
 
 	lo_server_thread_free(m_LoServerThread);
 
 	setServiceState(STOPPED);
+
+	LOG_DEBUG("OSC serivce stopped");
 }
 
 
