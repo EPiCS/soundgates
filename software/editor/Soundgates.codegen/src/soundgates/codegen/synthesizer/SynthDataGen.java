@@ -82,7 +82,7 @@ public class SynthDataGen {
 	private void createFiles(String text, IFile file){
 		
 		try {
-			IFile newFile = file.getProject().getFile(file.getName().replace(".soundgates_diagram", ".tgf"));
+			IFile newFile = file.getProject().getFile(file.getName().replace(".sgd", ".tgf"));
 			
 			InputStream code = new ByteArrayInputStream(text.getBytes());
 			
@@ -92,7 +92,7 @@ public class SynthDataGen {
 			newFile.create(code, IResource.FORCE, null);			
 			
 			// export tgf and project as zip
-			String zipFileName = projectPath + "/" + file.getName().replace(".soundgates_diagram", ".zip");
+			String zipFileName = projectPath + "/" + file.getName().replace(".sgd", ".zip");
 			ZipExporter zipExporter = new ZipExporter(zipFileName);			
 			zipExporter.zipFile(newFile.getLocation().toPortableString(), newFile.getName());			
 			for(String fileName : fileNamesHashes.keySet()){

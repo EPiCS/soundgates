@@ -151,7 +151,7 @@ public class PatchImporter{
 	public static void createPatchFromXML(String newFilePath, String patchFile, String newFileName) throws IOException {  
 		  Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		  Map<String, Object> m = reg.getExtensionToFactoryMap();
-		  m.put(".soundgates_diagram", new SoundgatesFactoryImpl());
+		  m.put(".sgd", new SoundgatesFactoryImpl());
 
 		  Patch patch = getPatchXML(patchFile);
 		  

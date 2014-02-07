@@ -30,7 +30,7 @@ public class ExportPatchAction implements IObjectActionDelegate{
 
 			Patch patch = PatchExporter.getPatch(file.getFullPath().toPortableString());
 
-			String newFileName = file.getName().replace(".soundgates_diagram",".xml");
+			String newFileName = file.getName().replace(".sgd",".xml");
 			
 			if(file.getProject().getFile(newFileName).exists()){
 				if (!MessageDialogs.replaceExistingEMFFile(newFileName))
@@ -47,9 +47,9 @@ public class ExportPatchAction implements IObjectActionDelegate{
 				PatchExporter.exportToXML(
 						file.getParent().getLocation().toPortableString(), 	// folder						
 						patch,												// patch
-						file.getName().replace(".soundgates_diagram",""));			// name
+						file.getName().replace(".sgd",""));			// name
 								
-				MessageDialogs.patchtWasExported(file.getName().replace(".soundgates_diagram",".xml"));
+				MessageDialogs.patchtWasExported(file.getName().replace(".sgd",".xml"));
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();

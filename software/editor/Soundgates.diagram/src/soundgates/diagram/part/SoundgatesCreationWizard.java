@@ -97,7 +97,7 @@ public class SoundgatesCreationWizard extends Wizard implements INewWizard {
 	 */
 	public void addPages() {
 		diagramModelFilePage = new SoundgatesCreationWizardPage(
-				"DiagramModelFile", getSelection(), "soundgates_diagram"); //$NON-NLS-1$ //$NON-NLS-2$
+				"DiagramModelFile", getSelection(), "sgd"); //$NON-NLS-1$ //$NON-NLS-2$
 		diagramModelFilePage
 				.setTitle(Messages.SoundgatesCreationWizard_DiagramModelFilePageTitle);
 		diagramModelFilePage
