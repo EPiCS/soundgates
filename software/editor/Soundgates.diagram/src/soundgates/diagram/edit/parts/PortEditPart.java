@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.Color;
 import soundgates.Direction;
 import soundgates.Port;
 import soundgates.diagram.edit.policies.PortItemSemanticEditPolicy;
+import soundgates.diagram.edit.policies.SoundgatesConnectionHandleEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
 
@@ -72,7 +73,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
@@ -82,7 +83,10 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 				new PortItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		installEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE, 
+				new SoundgatesConnectionHandleEditPolicy(getPort()));
+		
 	}
 
 	/**
