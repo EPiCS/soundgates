@@ -11,14 +11,12 @@ import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
-import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
 import soundgates.AtomicSoundComponent;
-import soundgates.CompositeSoundComponent;
-import soundgates.Direction;
 import soundgates.DataType;
+import soundgates.Direction;
 import soundgates.Port;
 import soundgates.diagram.edit.commands.DelegationCreateCommand;
 import soundgates.diagram.edit.commands.DelegationReorientCommand;
@@ -47,7 +45,7 @@ public class PortItemSemanticEditPolicy extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {		
 		
