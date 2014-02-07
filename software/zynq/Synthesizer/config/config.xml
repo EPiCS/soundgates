@@ -9,8 +9,8 @@
     <core>
         <hwt_support>true</hwt_support>
         <ports>
-            <tcp>50500</tcp>
-            <udp>50500</udp>
+            <tcp>50050</tcp>
+            <udp>50050</udp>
         </ports>
     </core>
     
