@@ -52,7 +52,7 @@ public class DelegationCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
 		if (source == null && target == null) {
@@ -82,7 +82,7 @@ public class DelegationCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
@@ -91,9 +91,8 @@ public class DelegationCreateCommand extends EditElementCommand {
 					"Invalid arguments in create link command"); //$NON-NLS-1$
 		}
 
-		Delegation newElement = SoundgatesFactory.eINSTANCE.createDelegation();		
+		Delegation newElement = SoundgatesFactory.eINSTANCE.createDelegation();
 		
-//		getContainer().getDelegations().add(newElement);
 		
 		if (getSource().eContainer().eContents().contains(getTarget().eContainer()))
 			((CompositeSoundComponent) getSource().eContainer()).getDelegations().add(newElement);

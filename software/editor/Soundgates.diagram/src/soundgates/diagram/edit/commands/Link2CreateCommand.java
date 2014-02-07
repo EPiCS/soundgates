@@ -51,7 +51,7 @@ public class Link2CreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
 		if (source == null && target == null) {
@@ -88,10 +88,11 @@ public class Link2CreateCommand extends EditElementCommand {
 					"Invalid arguments in create link command"); //$NON-NLS-1$
 		}
 
-		Link newElement = SoundgatesFactory.eINSTANCE.createLink();		
-		CompositeSoundComponent comp = getSource().getComponent().getParentComponent();
+		Link newElement = SoundgatesFactory.eINSTANCE.createLink();
+		CompositeSoundComponent comp = getSource().getComponent()
+				.getParentComponent();
 		comp.getLinks().add(newElement);
-//		getContainer().getLinks().add(newElement);
+		//		getContainer().getLinks().add(newElement);
 		newElement.setSource(getSource());
 		newElement.setTarget(getTarget());
 		doConfigure(newElement, monitor, info);

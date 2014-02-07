@@ -53,17 +53,21 @@ public class CompositeSoundComponentCreateCommand extends EditElementCommand {
 	/**
 	 * @generated NOT
 	 */
-	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,IAdaptable info) throws ExecutionException {
+	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
+			IAdaptable info) throws ExecutionException {
 		CompositeSoundComponent newElement = null;
 
 		//MYTOOL TODO elemente aus XML lesen
 		Object name = this.getRequest().getParameter("name");
 		if (name != null) {
-			newElement = CompositeSoundComponentLibrary.getInstance().createCompositeSoundComponentInstance((String) name);
+			newElement = CompositeSoundComponentLibrary.getInstance()
+					.createCompositeSoundComponentInstance((String) name);
 		} else {
-			newElement = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
-			newElement.setName(CompositeSoundComponentLibrary.getNumberedName(
-					getElementToEdit().eResource().getURI().lastSegment()));
+			newElement = SoundgatesFactory.eINSTANCE
+					.createCompositeSoundComponent();
+			newElement.setName(CompositeSoundComponentLibrary
+					.getNumberedName(getElementToEdit().eResource().getURI()
+							.lastSegment()));
 		}
 		//---MYTOOL
 
@@ -76,7 +80,7 @@ public class CompositeSoundComponentCreateCommand extends EditElementCommand {
 
 		return CommandResult.newOKCommandResult(newElement);
 	}
-	
+
 	/**
 	 * @generated
 	 */

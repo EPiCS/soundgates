@@ -51,7 +51,7 @@ public class LinkCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
 		if (source == null && target == null) {

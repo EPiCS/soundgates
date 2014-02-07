@@ -666,10 +666,10 @@ public class PortNameEditPart extends LabelEditPart implements
 		private WrappingLabel fFigurePortNameLabel;
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		public PortNameFigure() {
-			
+
 		}
 
 		/**
