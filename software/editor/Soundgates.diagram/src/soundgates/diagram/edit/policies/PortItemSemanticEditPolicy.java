@@ -18,6 +18,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
 import soundgates.Direction;
+import soundgates.DataType;
 import soundgates.Port;
 import soundgates.diagram.edit.commands.DelegationCreateCommand;
 import soundgates.diagram.edit.commands.DelegationReorientCommand;
@@ -164,7 +165,12 @@ public class PortItemSemanticEditPolicy extends
 
 		EObject sourceContainer = req.getSource().eContainer().eContainer();
 		EObject targetContainer = req.getTarget().eContainer().eContainer();
-		linkAllowed = (sourceContainer == targetContainer) && ((Port) req.getTarget()).getDirection()==Direction.IN && ((Port) req.getTarget()).getIncomingConnection()==null; 
+		linkAllowed = (sourceContainer == targetContainer) && 
+						((Port) req.getTarget()).getDirection()==Direction.IN && 
+						((Port) req.getTarget()).getIncomingConnection()==null &&
+						(! (((Port) req.getSource()).getDataType()==DataType.SOUND && ((Port) req.getTarget()).getDataType()==DataType.CONTROL));
+						
+						
 		if(sourceContainer instanceof PatchImpl){
 			delegationAllowed = sourceContainer.eContents().contains(targetContainer);
 		}
@@ -175,7 +181,10 @@ public class PortItemSemanticEditPolicy extends
 			delegationAllowed = (sourceContainer.eContents().contains(targetContainer) || targetContainer.eContents().contains(sourceContainer));
 		}		
 		
-		delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==((Port) req.getSource()).getDirection() && ((Port) req.getTarget()).getIncomingConnection()==null;
+		delegationAllowed = delegationAllowed && 
+							((Port) req.getTarget()).getDirection()==((Port) req.getSource()).getDirection() && 
+							((Port) req.getTarget()).getIncomingConnection()==null &&
+							(! (((Port) req.getSource()).getDataType()==DataType.SOUND && ((Port) req.getTarget()).getDataType()==DataType.CONTROL));
 		
 		if (req.getTarget().eContainer() instanceof AtomicSoundComponent){
 			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.IN;
