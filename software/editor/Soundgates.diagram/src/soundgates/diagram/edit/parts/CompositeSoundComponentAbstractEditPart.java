@@ -86,8 +86,8 @@ public abstract class CompositeSoundComponentAbstractEditPart extends
 	}
 	
 	public CompositeSoundComponent getCompositeSoundComponent() {
-		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof CompositeSoundComponent)
-			return (CompositeSoundComponent) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+		if (((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement() instanceof CompositeSoundComponent)
+			return (CompositeSoundComponent) ((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement();
 		else 
 			return null;
 	}

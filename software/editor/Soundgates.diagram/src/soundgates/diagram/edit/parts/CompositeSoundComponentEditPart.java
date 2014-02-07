@@ -36,7 +36,7 @@ import soundgates.diagram.part.SoundgatesVisualIDRegistry;
  * @generated NOT
  */
 public class CompositeSoundComponentEditPart extends
-CompositeSoundComponentAbstractEditPart {
+		CompositeSoundComponentAbstractEditPart {
 
 	/**
 	 * @generated
@@ -334,7 +334,6 @@ CompositeSoundComponentAbstractEditPart {
 		private void createContents() {
 
 			fFigureCompositeSoundComponentNameFigure = new WrappingLabel();
-
 
 			this.add(fFigureCompositeSoundComponentNameFigure, BorderLayout.TOP);
 

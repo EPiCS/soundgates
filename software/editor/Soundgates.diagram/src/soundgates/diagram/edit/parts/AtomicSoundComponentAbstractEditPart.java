@@ -34,8 +34,8 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	}
 
 	public AtomicSoundComponent getAtomicSoundComponent() {
-		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof AtomicSoundComponent)
-			return (AtomicSoundComponent) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+		if (((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement() instanceof AtomicSoundComponent)
+			return (AtomicSoundComponent) ((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement();
 		else 
 			return null;
 	}

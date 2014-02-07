@@ -70,9 +70,9 @@ public class LinkCreateCommand extends EditElementCommand {
 		if (getContainer() == null) {
 			return false;
 		}
-		if(source instanceof Port){
-			if ( ((Port) source).getDirection()==Direction.IN)
-				return false;				
+		if (source instanceof Port) {
+			if (((Port) source).getDirection() == Direction.IN)
+				return false;
 		}
 		return SoundgatesBaseItemSemanticEditPolicy.getLinkConstraints()
 				.canCreateLink_4001(getContainer(), getSource(), getTarget());

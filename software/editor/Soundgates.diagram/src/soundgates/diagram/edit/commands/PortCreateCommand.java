@@ -46,10 +46,11 @@ public class PortCreateCommand extends EditElementCommand {
 	 * @generated NOT
 	 */
 	public boolean canExecute() {
-		
-		if(getElementToEdit() instanceof CompositeSoundComponent)
+
+		if (getElementToEdit() instanceof CompositeSoundComponent)
 			return true;
-		else return false;
+		else
+			return false;
 	}
 
 	/**
@@ -63,8 +64,8 @@ public class PortCreateCommand extends EditElementCommand {
 		owner.getPorts().add(newElement);
 
 		doConfigure(newElement, monitor, info);
-		
-		if(owner instanceof CompositeSoundComponent){
+
+		if (owner instanceof CompositeSoundComponent) {
 			newElement.setName("defaultPortName");
 		}
 

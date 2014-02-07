@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
@@ -149,20 +150,20 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	protected void addBorderItem(IFigure borderItemContainer,
 			IBorderItemEditPart borderItemEditPart) {
 		if (borderItemEditPart instanceof PortNameEditPart) {
-//			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),PositionConstants.SOUTH);
-//			locator.setBorderItemOffset(new Dimension(-20, -20));
-			
+			//			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),PositionConstants.SOUTH);
+			//			locator.setBorderItemOffset(new Dimension(-20, -20));
+
 			BorderItemLocator locator;
-			if(getPort().getDirection()==Direction.IN){
-				locator = new BorderItemLocator(getMainFigure(),PositionConstants.NORTH);
+			if (getPort().getDirection() == Direction.IN) {
+				locator = new BorderItemLocator(getMainFigure(),
+						PositionConstants.NORTH);
 				locator.setBorderItemOffset(new Dimension(-20, 20));
-			}
-			else{
-				locator = new BorderItemLocator(getMainFigure(),PositionConstants.SOUTH);
+			} else {
+				locator = new BorderItemLocator(getMainFigure(),
+						PositionConstants.SOUTH);
 				locator.setBorderItemOffset(new Dimension(-20, -20));
 			}
-			
-			
+
 			borderItemContainer.add(borderItemEditPart.getFigure(), locator);
 		} else {
 			super.addBorderItem(borderItemContainer, borderItemEditPart);
@@ -348,6 +349,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		 */
 		public PortFigure() {
 			this.setFill(false);
+			this.setForegroundColor(ColorConstants.black);
 		}
 
 		@Override
@@ -435,8 +437,8 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	public Port getPort() {
-		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof Port)
-			return (Port) ((org.eclipse.gmf.runtime.notation.Shape) getModel())
+		if (((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement() instanceof Port)
+			return (Port) ((org.eclipse.gmf.runtime.notation.Node) getModel())
 					.getElement();
 		else
 			return null;
