@@ -56,7 +56,7 @@ void OSCService::startService(){
 	lo_server_thread_add_method(m_LoServerThread, NULL, NULL, genericOSCHandler, NULL);
 
 	for(vector<InputSoundComponentPtr>::iterator iter = inputs.begin(); iter != inputs.end(); ++iter){
-	    LOG_DEBUG("Registering listener for address: " << (*iter)->getOscAddress().c_str());
+	    LOG_DEBUG("Registering listener for address: " << (*iter)->getOscAddress() << " " << (*iter)->getOscTypeTag());
 		lo_server_thread_add_method(m_LoServerThread,
 								(*iter)->getOscAddress().c_str(),
 								(*iter)->getOscTypeTag().c_str(),

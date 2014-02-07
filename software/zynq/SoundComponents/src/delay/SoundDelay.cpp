@@ -93,7 +93,6 @@ void SoundDelayComponent::process(void){
 
 	/* reset pointer if its out of range */
 	if(m_pWritePtr > m_pLastDelaySlot){
-		std::cout << "WritePtr approaches end of buffer: reset" << std::endl;
 		m_pWritePtr = m_pDelaySlot;
 	}
 }

@@ -4,6 +4,7 @@
 #include <math.h>
 #include <cstdlib>
 #include <limits.h>
+#include <stdint.h>
 #include <string.h>
 
 extern "C"{
@@ -12,7 +13,9 @@ extern "C"{
 }
 
 #include "SineLookupTable.hpp"
-#include "fir_coeff_lp_.hpp"
+
+extern int32_t coeff_lp[][29];
+
 
 #define FIR_HWT_START 0x0F
 #define FIR_HWT_STOP  0xF0
@@ -31,7 +34,7 @@ struct reconos_hwt      m_ReconOSThread;
 
 #define N_FIR_COEFF 29		// Number of filter coefficients
 
-#define AMPLITURE   0.8		// Max amplitude
+#define AMPLITURE   0.5		// Max amplitude
 
 #define BLOCK_SIZE	64		// Block size
 
@@ -77,10 +80,15 @@ int main(int argc, char* argv[]){
 	
     uint32_t hwt_args[31];
     
-    hwt_args[0] = (uint32_t) srcbuffer;
+    hwt_args[0] = (uint32_t) srcbuffer;;
     hwt_args[1] = (uint32_t) destbuffer;
 	
-	memcpy(&hwt_args[2], &coeff_lp[cutoff], N_FIR_COEFF);
+	memcpy(&hwt_args[2], &coeff_lp[cutoff], N_FIR_COEFF * sizeof(uint32_t));
+		
+	for(int k = 0; k < N_FIR_COEFF; k++){
+		
+		std::cout << "Coeff " << k << ": " << (int32_t) hwt_args[2 + k]  << " : " << coeff_lp[cutoff][k] << std::endl;
+	}
 	
 	std::cout << "Calculating input for " << f1 << " Hz" << std::endl;
 	
@@ -89,8 +97,7 @@ int main(int argc, char* argv[]){
 	for(i = 0; i < SAMPLE_RATE; i++){
 		
 		input[i] = (int32_t) (sine_lookup(phase) * AMPLITURE * INT_MAX);
-		
-		
+				
 		phase += phaseIncr;
 
 		if (phase >= M_PI * 2){
@@ -109,8 +116,6 @@ int main(int argc, char* argv[]){
 		uint32_t sample =  (int32_t) (sine_lookup(phase) * AMPLITURE * INT_MAX);
 		
 		input[i] += sample;
-		
-		std::cout << input[i] << std::endl;
 		
 		phase += phaseIncr;
 
@@ -138,17 +143,17 @@ int main(int argc, char* argv[]){
     reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &hwt_args[0]);
 
     reconos_hwt_create(&m_ReconOSThread, 0, NULL);
-
+		
     for(i = 0; i < SAMPLE_RATE; i+=64){
-		
+			
 		memcpy(srcbuffer, &input[i], BLOCK_SIZE * sizeof(int32_t));
-		
+			
         mbox_put(&mb_start, FIR_HWT_START);
 
         mbox_get(&mb_stop);
 
         for(j = 0; j < BLOCK_SIZE; j++){
-            std::cout << ((int*)destbuffer)[j] << std::endl;
+            std::cout << destbuffer[j] << std::endl;
         }
     }
     std::cout << "Exit" << std::endl;
@@ -156,5 +161,6 @@ int main(int argc, char* argv[]){
     delete srcbuffer;
 	delete destbuffer;
 	delete input;
+
     return 0;
 }

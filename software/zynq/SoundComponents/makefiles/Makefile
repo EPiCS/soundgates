@@ -17,7 +17,8 @@ SoundComponents += add \
 			      timer \
 				  saw \
 				  pwm \
-				  fir 
+				  fir \
+				  debugging
 
 
 SRCDIR = ../src
