@@ -43,9 +43,9 @@ private:
 
 	virtual ~SoundComponentLoader();
 
-	bool 		 m_IsInitialized;
+	bool 		m_IsInitialized;
 
-	std::string* m_SndComponentRepository;
+	std::string m_SndComponentRepository;
 
 	std::map<std::string, SoundComponentImpl*(*)(std::vector<std::string>)> m_PredefinedComponentsCreateFn;
 

@@ -33,7 +33,6 @@
 #define TCP_HANDSHAKE_MAXPENDING 5
 
 #define TCP_HANDSHAKE_RECVMSG "getInteractiveComponents"
-#define TCP_HANDSHAKE_QUITMSG "quit"
 
 namespace ui {
 
@@ -46,7 +45,7 @@ private:
     Patch&          m_pPatch;
 
 
-    int             m_ServerSocket;     /* Socket descriptor for server            */
+    int             m_ServerSocket;
 
 public:
     TCPHandshakeService(Patch& patch);

@@ -24,8 +24,8 @@ namespace sndc = SoundComponents;
 
 
 SoundComponentLoader::SoundComponentLoader(){
-	m_SndComponentRepository = NULL;
-	m_IsInitialized 		   = false;
+	m_SndComponentRepository = "";
+	m_IsInitialized 		 = false;
 
 	/* Register create function for predefined components */
 
@@ -38,7 +38,7 @@ SoundComponentLoader::~SoundComponentLoader(){ }
 
 void SoundComponentLoader::initialize(const std::string& repository){
 
-	this->m_SndComponentRepository = new std::string(repository);
+	m_SndComponentRepository = repository;
 
 	if(!m_IsInitialized){
 

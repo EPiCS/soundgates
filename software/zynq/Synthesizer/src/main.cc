@@ -136,9 +136,9 @@ void SynthesizerTerminate(int sig){
 
     ui::UIManager::getInstance().stopAllServices();
 
-	SoundComponentLoader::getInstance().finailize();
-
     patch.dispose();
+
+	SoundComponentLoader::getInstance().finailize();
 
     std::exit(EXIT_SUCCESS);
 }
