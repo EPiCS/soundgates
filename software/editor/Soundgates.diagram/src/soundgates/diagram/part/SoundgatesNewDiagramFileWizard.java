@@ -83,7 +83,7 @@ public class SoundgatesNewDiagramFileWizard extends Wizard {
 		}
 		myFileCreationPage.setContainerFullPath(filePath);
 		myFileCreationPage.setFileName(SoundgatesDiagramEditorUtil
-				.getUniqueFileName(filePath, fileName, "soundgates_diagram")); //$NON-NLS-1$
+				.getUniqueFileName(filePath, fileName, "sgd")); //$NON-NLS-1$
 
 		diagramRootElementSelectionPage = new DiagramRootElementSelectionPage(
 				Messages.SoundgatesNewDiagramFileWizard_RootSelectionPageName);

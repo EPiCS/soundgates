@@ -32,7 +32,7 @@ public class ImportPatchAction implements IObjectActionDelegate{
 			 if (selectedObject instanceof IResource){
 					IResource xmlFile = (IResource) selectedObject;	
 					
-					String newFileName = xmlFile.getName().replace(".xml", ".soundgates_diagram");
+					String newFileName = xmlFile.getName().replace(".xml", ".sgd");
 					
 					IProject iProject = xmlFile.getProject();		
 					
@@ -51,7 +51,7 @@ public class ImportPatchAction implements IObjectActionDelegate{
 					AtomicSoundComponentLibrary.setXMLFolder(iProject.getFolder("soundcomponents"));
 					CompositeSoundComponentLibrary.setXMLFolder(iProject.getFolder("soundcomponents"));				
 					
-					String newFilePath = iProject.getLocation() + "/" + xmlFile.getName().replace(".xml", ".soundgates_diagram");
+					String newFilePath = iProject.getLocation() + "/" + xmlFile.getName().replace(".xml", ".sgd");
 					
 					try {
 						PatchImporter.createPatchFromXML(newFilePath, xmlFile.getLocation().toPortableString(), newFileName);					

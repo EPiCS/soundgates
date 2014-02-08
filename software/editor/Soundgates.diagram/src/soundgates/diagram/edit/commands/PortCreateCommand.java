@@ -43,17 +43,18 @@ public class PortCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
-		
-		if(getElementToEdit() instanceof CompositeSoundComponent)
+
+		if (getElementToEdit() instanceof CompositeSoundComponent)
 			return true;
-		else return false;
+		else
+			return false;
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
@@ -63,6 +64,10 @@ public class PortCreateCommand extends EditElementCommand {
 		owner.getPorts().add(newElement);
 
 		doConfigure(newElement, monitor, info);
+
+		if (owner instanceof CompositeSoundComponent) {
+			newElement.setName("defaultPortName");
+		}
 
 		((CreateElementRequest) getRequest()).setNewElement(newElement);
 		return CommandResult.newOKCommandResult(newElement);

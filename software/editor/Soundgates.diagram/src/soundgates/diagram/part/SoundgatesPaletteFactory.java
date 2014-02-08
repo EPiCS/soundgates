@@ -31,7 +31,8 @@ public class SoundgatesPaletteFactory {
 	 * @generated NOT
 	 */
 	public void fillPalette(PaletteRoot paletteRoot) {
-		PaletteToolbar standardGroup = ((PaletteToolbar)paletteRoot.getChildren().get(0));
+		PaletteToolbar standardGroup = ((PaletteToolbar) paletteRoot
+				.getChildren().get(0));
 		paletteRoot.add(createComponents1Group());
 		paletteRoot.add(createComponents2Group());
 		paletteRoot.add(createPorts2Group());
@@ -115,7 +116,8 @@ public class SoundgatesPaletteFactory {
 		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
 		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
-		NodeToolEntry entry = new NodeToolEntry("New composite sound component",
+		NodeToolEntry entry = new NodeToolEntry(
+				"New composite sound component",
 				Messages.CompositeSoundComponent2CreationTool_desc, types);
 		entry.setId("createCompositeSoundComponent2CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesElementTypes

@@ -1,0 +1,1136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:soundgates="soundgates">
+  <soundgates:Patch xmi:id="_Ycwd8I59EeOtlJKqyB1GFw">
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_FzQSkI6FEeOFuPnwyxizHA" name="Timer" type="Timer">
+      <ports xmi:type="soundgates:Port" xmi:id="_FzQSkY6FEeOFuPnwyxizHA" name="TriggerIn" incomingConnection="_3HAuUI6JEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_FzQSko6FEeOFuPnwyxizHA" name="Loop" incomingConnection="_qlzwMI6MEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_FzQSk46FEeOFuPnwyxizHA" name="Delay" incomingConnection="_iFyWIJAcEeOm-reFv6LIXw"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_FzQSlI6FEeOFuPnwyxizHA" name="TriggerOut" outgoingConnection="_7AVGEI6FEeOFuPnwyxizHA _7u6qYI6FEeOFuPnwyxizHA _8nTD4I6FEeOFuPnwyxizHA _f7kCwI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSlY6FEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSlo6FEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;2&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSl46FEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSmI6FEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSmY6FEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSmo6FEeOFuPnwyxizHA" key="deviceProp__name" value="timer"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSm46FEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSnI6FEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_FzQSnY6FEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_IOIZkI6FEeOFuPnwyxizHA" name="/drumset/speed" type="IO">
+      <ports xmi:type="soundgates:Port" xmi:id="_IOJAoI6FEeOFuPnwyxizHA" name="Value" outgoingConnection="_iFyWIJAcEeOm-reFv6LIXw _jW_fUJAcEeOm-reFv6LIXw _kRKokJAcEeOm-reFv6LIXw _lo20QJAcEeOm-reFv6LIXw _sQE_4JAcEeOm-reFv6LIXw" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_IOJAoY6FEeOFuPnwyxizHA" key="MinValue" value="250.0"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_IOJAoo6FEeOFuPnwyxizHA" key="MaxValue" value="2000.0"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJAo46FEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJApI6FEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJApY6FEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJApo6FEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJAp46FEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJAqI6FEeOFuPnwyxizHA" key="deviceProp__name" value="input"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJAqY6FEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJAqo6FEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_IOJAq46FEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_1qPLII6FEeOFuPnwyxizHA" name="Timer" type="Timer">
+      <ports xmi:type="soundgates:Port" xmi:id="_1qPLIY6FEeOFuPnwyxizHA" name="TriggerIn" incomingConnection="_7AVGEI6FEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_1qPLIo6FEeOFuPnwyxizHA" name="Loop" incomingConnection="_Hs3qII6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_1qPLI46FEeOFuPnwyxizHA" name="Delay" incomingConnection="_qy708I6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_1qPLJI6FEeOFuPnwyxizHA" name="TriggerOut" outgoingConnection="_0MrLgI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLJY6FEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLJo6FEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;2&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLJ46FEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLKI6FEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLKY6FEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLKo6FEeOFuPnwyxizHA" key="deviceProp__name" value="timer"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLK46FEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLLI6FEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_1qPLLY6FEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_2UVRAI6FEeOFuPnwyxizHA" name="Timer" type="Timer">
+      <ports xmi:type="soundgates:Port" xmi:id="_2UVRAY6FEeOFuPnwyxizHA" name="TriggerIn" incomingConnection="_7u6qYI6FEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_2UVRAo6FEeOFuPnwyxizHA" name="Loop" incomingConnection="_ITSJ4I6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_2UVRA46FEeOFuPnwyxizHA" name="Delay" incomingConnection="_rmFJII6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_2UVRBI6FEeOFuPnwyxizHA" name="TriggerOut" outgoingConnection="_05i4kI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UVRBY6FEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4EI6FEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;2&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4EY6FEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4Eo6FEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4E46FEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4FI6FEeOFuPnwyxizHA" key="deviceProp__name" value="timer"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4FY6FEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4Fo6FEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2UV4F46FEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_29e7sI6FEeOFuPnwyxizHA" name="Timer" type="Timer">
+      <ports xmi:type="soundgates:Port" xmi:id="_29e7sY6FEeOFuPnwyxizHA" name="TriggerIn" incomingConnection="_8nTD4I6FEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_29e7so6FEeOFuPnwyxizHA" name="Loop" incomingConnection="_J4sogI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_29e7s46FEeOFuPnwyxizHA" name="Delay" incomingConnection="_tImEwI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_29e7tI6FEeOFuPnwyxizHA" name="TriggerOut" outgoingConnection="_1lA3cI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7tY6FEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7to6FEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;2&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7t46FEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7uI6FEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7uY6FEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7uo6FEeOFuPnwyxizHA" key="deviceProp__name" value="timer"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7u46FEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7vI6FEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_29e7vY6FEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_7AVGEI6FEeOFuPnwyxizHA" source="_FzQSlI6FEeOFuPnwyxizHA" target="_1qPLIY6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_7u6qYI6FEeOFuPnwyxizHA" source="_FzQSlI6FEeOFuPnwyxizHA" target="_2UVRAY6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_8nTD4I6FEeOFuPnwyxizHA" source="_FzQSlI6FEeOFuPnwyxizHA" target="_29e7sY6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_GM5sMI6GEeOFuPnwyxizHA" name="Constant" type="Constant">
+      <ports xmi:type="soundgates:Port" xmi:id="_GM5sMY6GEeOFuPnwyxizHA" name="Value" outgoingConnection="_Hs3qII6GEeOFuPnwyxizHA _ITSJ4I6GEeOFuPnwyxizHA _J4sogI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_GM5sMo6GEeOFuPnwyxizHA" key="Value" value="0.0"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sM46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sNI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sNY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;Value&quot;|Tag=&quot;@Value&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sNo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sN46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sOI6GEeOFuPnwyxizHA" key="deviceProp__name" value="const"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sOY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sOo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_GM5sO46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_Hs3qII6GEeOFuPnwyxizHA" source="_GM5sMY6GEeOFuPnwyxizHA" target="_1qPLIo6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_ITSJ4I6GEeOFuPnwyxizHA" source="_GM5sMY6GEeOFuPnwyxizHA" target="_2UVRAo6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_J4sogI6GEeOFuPnwyxizHA" source="_GM5sMY6GEeOFuPnwyxizHA" target="_29e7so6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_Tci9UI6GEeOFuPnwyxizHA" name="ControlMultiplication" type="ControlMultiplication">
+      <ports xmi:type="soundgates:Port" xmi:id="_Tci9UY6GEeOFuPnwyxizHA" name="Multiplicand" incomingConnection="_jW_fUJAcEeOm-reFv6LIXw"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_Tci9Uo6GEeOFuPnwyxizHA" name="Multiplier" incomingConnection="_nFiWII6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_Tci9U46GEeOFuPnwyxizHA" name="Product" outgoingConnection="_qy708I6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9VI6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 63 127 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 77 70 *;&#xA;#X text 0 0 inports Multiplicand Multiplier;&#xA;#X text 0 0 outports Product;&#xA;#X obj 126 48 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9VY6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9Vo6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9V46GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 63 127 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 77 70 *;&#xA;#X text 0 0 inports Multiplicand Multiplier;&#xA;#X text 0 0 outports Product;&#xA;#X obj 126 48 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9WI6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9WY6GEeOFuPnwyxizHA" key="deviceProp__name" value="mulcc"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9Wo6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9W46GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tci9XI6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_Tzs5EI6GEeOFuPnwyxizHA" name="ControlMultiplication" type="ControlMultiplication">
+      <ports xmi:type="soundgates:Port" xmi:id="_Tzs5EY6GEeOFuPnwyxizHA" name="Multiplicand" incomingConnection="_kRKokJAcEeOm-reFv6LIXw"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_Tzs5Eo6GEeOFuPnwyxizHA" name="Multiplier" incomingConnection="_nx7iEI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_Tzs5E46GEeOFuPnwyxizHA" name="Product" outgoingConnection="_rmFJII6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5FI6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 63 127 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 77 70 *;&#xA;#X text 0 0 inports Multiplicand Multiplier;&#xA;#X text 0 0 outports Product;&#xA;#X obj 126 48 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5FY6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5Fo6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5F46GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 63 127 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 77 70 *;&#xA;#X text 0 0 inports Multiplicand Multiplier;&#xA;#X text 0 0 outports Product;&#xA;#X obj 126 48 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5GI6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5GY6GEeOFuPnwyxizHA" key="deviceProp__name" value="mulcc"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5Go6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5G46GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Tzs5HI6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_UD54QI6GEeOFuPnwyxizHA" name="ControlMultiplication" type="ControlMultiplication">
+      <ports xmi:type="soundgates:Port" xmi:id="_UD54QY6GEeOFuPnwyxizHA" name="Multiplicand" incomingConnection="_lo20QJAcEeOm-reFv6LIXw"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_UD54Qo6GEeOFuPnwyxizHA" name="Multiplier" incomingConnection="_oTHjkI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_UD54Q46GEeOFuPnwyxizHA" name="Product" outgoingConnection="_tImEwI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54RI6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 63 127 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 77 70 *;&#xA;#X text 0 0 inports Multiplicand Multiplier;&#xA;#X text 0 0 outports Product;&#xA;#X obj 126 48 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54RY6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54Ro6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54R46GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 63 127 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 77 70 *;&#xA;#X text 0 0 inports Multiplicand Multiplier;&#xA;#X text 0 0 outports Product;&#xA;#X obj 126 48 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54SI6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54SY6GEeOFuPnwyxizHA" key="deviceProp__name" value="mulcc"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54So6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54S46GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Multiplicand&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Multiplier&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Product&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_UD54TI6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_U4IxkI6GEeOFuPnwyxizHA" name="Constant" type="Constant">
+      <ports xmi:type="soundgates:Port" xmi:id="_U4IxkY6GEeOFuPnwyxizHA" name="Value" outgoingConnection="_nFiWII6GEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_U4Ixko6GEeOFuPnwyxizHA" key="Value" value="0.25"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4Ixk46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4IxlI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4IxlY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;Value&quot;|Tag=&quot;@Value&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4Ixlo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4Ixl46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4IxmI6GEeOFuPnwyxizHA" key="deviceProp__name" value="const"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4IxmY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4Ixmo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_U4Ixm46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_VPLYkI6GEeOFuPnwyxizHA" name="Constant" type="Constant">
+      <ports xmi:type="soundgates:Port" xmi:id="_VPLYkY6GEeOFuPnwyxizHA" name="Value" outgoingConnection="_nx7iEI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_VPLYko6GEeOFuPnwyxizHA" key="Value" value="0.5"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYk46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYlI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYlY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;Value&quot;|Tag=&quot;@Value&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYlo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYl46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYmI6GEeOFuPnwyxizHA" key="deviceProp__name" value="const"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYmY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYmo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_VPLYm46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_Ve5PkI6GEeOFuPnwyxizHA" name="Constant" type="Constant">
+      <ports xmi:type="soundgates:Port" xmi:id="_Ve5PkY6GEeOFuPnwyxizHA" name="Value" outgoingConnection="_oTHjkI6GEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_Ve5Pko6GEeOFuPnwyxizHA" key="Value" value="0.75"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5Pk46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5PlI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5PlY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;Value&quot;|Tag=&quot;@Value&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5Plo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5Pl46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5PmI6GEeOFuPnwyxizHA" key="deviceProp__name" value="const"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5PmY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5Pmo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_Ve5Pm46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_eaAJYI6GEeOFuPnwyxizHA" name="WavePlayer" type="WavePlayer">
+      <ports xmi:type="soundgates:Port" xmi:id="_eaAJYY6GEeOFuPnwyxizHA" name="Trigger" incomingConnection="_f7kCwI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_eaAJYo6GEeOFuPnwyxizHA" name="Output" outgoingConnection="_5RfwQI6GEeOFuPnwyxizHA" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJY46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJZI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJZY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;FileName&quot;|Tag=&quot;@FileName&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJZo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJZ46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJaI6GEeOFuPnwyxizHA" key="deviceProp__name" value="smplply"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJaY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJao6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJa46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+      <userStringProperties xmi:type="soundgates:EStringToEString" xmi:id="_eaAJbI6GEeOFuPnwyxizHA" key="FileName" value="snaredrum20.wav"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_f7kCwI6GEeOFuPnwyxizHA" source="_FzQSlI6FEeOFuPnwyxizHA" target="_eaAJYY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_nFiWII6GEeOFuPnwyxizHA" source="_U4IxkY6GEeOFuPnwyxizHA" target="_Tci9Uo6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_nx7iEI6GEeOFuPnwyxizHA" source="_VPLYkY6GEeOFuPnwyxizHA" target="_Tzs5Eo6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_oTHjkI6GEeOFuPnwyxizHA" source="_Ve5PkY6GEeOFuPnwyxizHA" target="_UD54Qo6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_qy708I6GEeOFuPnwyxizHA" source="_Tci9U46GEeOFuPnwyxizHA" target="_1qPLI46FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_rmFJII6GEeOFuPnwyxizHA" source="_Tzs5E46GEeOFuPnwyxizHA" target="_2UVRA46FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_tImEwI6GEeOFuPnwyxizHA" source="_UD54Q46GEeOFuPnwyxizHA" target="_29e7s46FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_vCHyMI6GEeOFuPnwyxizHA" name="WavePlayer" type="WavePlayer">
+      <ports xmi:type="soundgates:Port" xmi:id="_vCHyMY6GEeOFuPnwyxizHA" name="Trigger" incomingConnection="_0MrLgI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_vCHyMo6GEeOFuPnwyxizHA" name="Output" outgoingConnection="_55VzYI6GEeOFuPnwyxizHA" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyM46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyNI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyNY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;FileName&quot;|Tag=&quot;@FileName&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyNo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyN46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyOI6GEeOFuPnwyxizHA" key="deviceProp__name" value="smplply"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyOY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyOo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyO46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+      <userStringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vCHyPI6GEeOFuPnwyxizHA" key="FileName" value="bassdrum5.wav"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_vd-nwI6GEeOFuPnwyxizHA" name="WavePlayer" type="WavePlayer">
+      <ports xmi:type="soundgates:Port" xmi:id="_vd-nwY6GEeOFuPnwyxizHA" name="Trigger" incomingConnection="_05i4kI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_vd-nwo6GEeOFuPnwyxizHA" name="Output" outgoingConnection="_6zOowI6GEeOFuPnwyxizHA" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nw46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nxI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nxY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;FileName&quot;|Tag=&quot;@FileName&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nxo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nx46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nyI6GEeOFuPnwyxizHA" key="deviceProp__name" value="smplply"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd-nyY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd_O0I6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd_O0Y6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+      <userStringProperties xmi:type="soundgates:EStringToEString" xmi:id="_vd_O0o6GEeOFuPnwyxizHA" key="FileName" value="hihat4.wav"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_v5YxYI6GEeOFuPnwyxizHA" name="WavePlayer" type="WavePlayer">
+      <ports xmi:type="soundgates:Port" xmi:id="_v5YxYY6GEeOFuPnwyxizHA" name="Trigger" incomingConnection="_1lA3cI6GEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_v5YxYo6GEeOFuPnwyxizHA" name="Output" outgoingConnection="_7qu4gI6GEeOFuPnwyxizHA" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxY46GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxZI6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxZY6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;FileName&quot;|Tag=&quot;@FileName&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxZo6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxZ46GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxaI6GEeOFuPnwyxizHA" key="deviceProp__name" value="smplply"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxaY6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5Yxao6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5Yxa46GEeOFuPnwyxizHA" key="implType" value="hw"/>
+      <userStringProperties xmi:type="soundgates:EStringToEString" xmi:id="_v5YxbI6GEeOFuPnwyxizHA" key="FileName" value="bassdrum17.wav"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_0MrLgI6GEeOFuPnwyxizHA" source="_1qPLJI6FEeOFuPnwyxizHA" target="_vCHyMY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_05i4kI6GEeOFuPnwyxizHA" source="_2UVRBI6FEeOFuPnwyxizHA" target="_vd-nwY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_1lA3cI6GEeOFuPnwyxizHA" source="_29e7tI6FEeOFuPnwyxizHA" target="_v5YxYY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_2_eqUI6GEeOFuPnwyxizHA" name="SampleAddition" type="SampleAddition">
+      <ports xmi:type="soundgates:Port" xmi:id="_2_eqUY6GEeOFuPnwyxizHA" name="Summand1" incomingConnection="_5RfwQI6GEeOFuPnwyxizHA" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_2_eqUo6GEeOFuPnwyxizHA" name="Summand2" incomingConnection="_55VzYI6GEeOFuPnwyxizHA" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_2_eqU46GEeOFuPnwyxizHA" name="Result" outgoingConnection="_8Yad4I6GEeOFuPnwyxizHA" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_eqVI6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_eqVY6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRYI6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRYY6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRYo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRY46GEeOFuPnwyxizHA" key="deviceProp__name" value="addss"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRZI6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRZY6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_2_fRZo6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_3vhnMI6GEeOFuPnwyxizHA" name="SampleAddition" type="SampleAddition">
+      <ports xmi:type="soundgates:Port" xmi:id="_3vhnMY6GEeOFuPnwyxizHA" name="Summand1" incomingConnection="_8Yad4I6GEeOFuPnwyxizHA" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_3vhnMo6GEeOFuPnwyxizHA" name="Summand2" incomingConnection="_6zOowI6GEeOFuPnwyxizHA" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_3vhnM46GEeOFuPnwyxizHA" name="Result" outgoingConnection="_9b234I6GEeOFuPnwyxizHA" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnNI6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnNY6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnNo6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnN46GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnOI6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnOY6GEeOFuPnwyxizHA" key="deviceProp__name" value="addss"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnOo6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnO46GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_3vhnPI6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_4Vxu4I6GEeOFuPnwyxizHA" name="SampleAddition" type="SampleAddition">
+      <ports xmi:type="soundgates:Port" xmi:id="_4Vxu4Y6GEeOFuPnwyxizHA" name="Summand1" incomingConnection="_9b234I6GEeOFuPnwyxizHA" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_4Vxu4o6GEeOFuPnwyxizHA" name="Summand2" incomingConnection="_7qu4gI6GEeOFuPnwyxizHA" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_4Vxu446GEeOFuPnwyxizHA" name="Result" outgoingConnection="_Vn5rcI9TEeOMRsyo6DgD1g" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4Vxu5I6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4Vxu5Y6GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4Vxu5o6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4VyV8I6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4VyV8Y6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4VyV8o6GEeOFuPnwyxizHA" key="deviceProp__name" value="addss"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4VyV846GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4VyV9I6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_4VyV9Y6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_5RfwQI6GEeOFuPnwyxizHA" source="_eaAJYo6GEeOFuPnwyxizHA" target="_2_eqUY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_55VzYI6GEeOFuPnwyxizHA" source="_vCHyMo6GEeOFuPnwyxizHA" target="_2_eqUo6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_6zOowI6GEeOFuPnwyxizHA" source="_vd-nwo6GEeOFuPnwyxizHA" target="_3vhnMo6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_7qu4gI6GEeOFuPnwyxizHA" source="_v5YxYo6GEeOFuPnwyxizHA" target="_4Vxu4o6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_8Yad4I6GEeOFuPnwyxizHA" source="_2_eqU46GEeOFuPnwyxizHA" target="_3vhnMY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_9b234I6GEeOFuPnwyxizHA" source="_3vhnM46GEeOFuPnwyxizHA" target="_4Vxu4Y6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_-T0aoI6GEeOFuPnwyxizHA" name="SoundOutput" type="SoundOutput">
+      <ports xmi:type="soundgates:Port" xmi:id="_-T0aoY6GEeOFuPnwyxizHA" name="Sound" incomingConnection="_XFLhwI9TEeOMRsyo6DgD1g" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0aoo6GEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 110 539 450 300 10;&#xA;#X obj 47 28 inlet~;&#xA;#X obj 47 89 dac~;&#xA;#X connect 0 0 1 0;&#xA;#X connect 0 0 1 1;&#xA;#X text 0 0 inports Sound;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0ao46GEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Sound&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0apI6GEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0apY6GEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 110 539 450 300 10;&#xA;#X obj 47 28 inlet~;&#xA;#X obj 47 89 dac~;&#xA;#X connect 0 0 1 0;&#xA;#X connect 0 0 1 1;&#xA;#X text 0 0 inports Sound;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0apo6GEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Sound&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0ap46GEeOFuPnwyxizHA" key="deviceProp__name" value="dac"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0aqI6GEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0aqY6GEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Sound&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_-T0aqo6GEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_ZW8CsI6HEeOFuPnwyxizHA" name="/drumset/start" type="IO">
+      <ports xmi:type="soundgates:Port" xmi:id="_ZW8CsY6HEeOFuPnwyxizHA" name="Value" outgoingConnection="_3HAuUI6JEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_ZW8Cso6HEeOFuPnwyxizHA" key="MinValue" value="0.0"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_ZW8Cs46HEeOFuPnwyxizHA" key="MaxValue" value="1.0"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8CtI6HEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8CtY6HEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8Cto6HEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8Ct46HEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8CuI6HEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8CuY6HEeOFuPnwyxizHA" key="deviceProp__name" value="input"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8pwI6HEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8pwY6HEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ZW8pwo6HEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_3HAuUI6JEeOFuPnwyxizHA" source="_ZW8CsY6HEeOFuPnwyxizHA" target="_FzQSkY6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_DPj_EI6LEeOFuPnwyxizHA" name="Timer" type="Timer">
+      <ports xmi:type="soundgates:Port" xmi:id="_DPj_EY6LEeOFuPnwyxizHA" name="TriggerIn" incomingConnection="_RQb40I6LEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_DPj_Eo6LEeOFuPnwyxizHA" name="Loop" incomingConnection="_SY1EQI6LEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_DPj_E46LEeOFuPnwyxizHA" name="Delay" incomingConnection="_mN2t8I6LEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_DPj_FI6LEeOFuPnwyxizHA" name="TriggerOut" outgoingConnection="_bI1kgI6PEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_FY6LEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_Fo6LEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;2&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_F46LEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_GI6LEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 959 83 958 1064 12;&#xA;#X text 28 16 outports TriggerOut;&#xA;#X obj 48 79 inlet trigger;&#xA;#X obj 198 79 inlet mode;&#xA;#X obj 302 78 inlet delay;&#xA;#X obj 225 382 outlet trigger;&#xA;#X obj 67 123 trigger bang;&#xA;#X obj 225 234 delay;&#xA;#X obj 252 121 t b;&#xA;#X obj 187 169 spigot;&#xA;#X msg 247 320 1;&#xA;#X obj 310 135 sel 0;&#xA;#X text 79 34 inports TriggerIn Loop Delay;&#xA;#X connect 1 0 5 0;&#xA;#X connect 2 0 8 1;&#xA;#X connect 3 0 10 0;&#xA;#X connect 5 0 6 0;&#xA;#X connect 6 0 7 0;&#xA;#X connect 6 0 9 0;&#xA;#X connect 7 0 8 0;&#xA;#X connect 8 0 6 0;&#xA;#X connect 9 0 4 0;&#xA;#X connect 10 1 6 1;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_GY6LEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_Go6LEeOFuPnwyxizHA" key="deviceProp__name" value="timer"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_G46LEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_HI6LEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;TriggerIn&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Loop&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Delay&quot;|PortNumber=&quot;3&quot;||PortName=&quot;TriggerOut&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_DPj_HY6LEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_PIpF4I6LEeOFuPnwyxizHA" name="/drumset/snares" type="IO">
+      <ports xmi:type="soundgates:Port" xmi:id="_PIpF4Y6LEeOFuPnwyxizHA" name="Value" outgoingConnection="_RQb40I6LEeOFuPnwyxizHA _SY1EQI6LEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_PIpF4o6LEeOFuPnwyxizHA" key="MinValue" value="0.0"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_PIpF446LEeOFuPnwyxizHA" key="MaxValue" value="1.0"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF5I6LEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF5Y6LEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF5o6LEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF546LEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF6I6LEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF6Y6LEeOFuPnwyxizHA" key="deviceProp__name" value="input"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF6o6LEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF646LEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_PIpF7I6LEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_RQb40I6LEeOFuPnwyxizHA" source="_PIpF4Y6LEeOFuPnwyxizHA" target="_DPj_EY6LEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_SY1EQI6LEeOFuPnwyxizHA" source="_PIpF4Y6LEeOFuPnwyxizHA" target="_DPj_Eo6LEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_dFxvII6LEeOFuPnwyxizHA" name="Constant" type="Constant">
+      <ports xmi:type="soundgates:Port" xmi:id="_dFxvIY6LEeOFuPnwyxizHA" name="Value" outgoingConnection="_k1bicI6LEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_dFxvIo6LEeOFuPnwyxizHA" key="Value" value="8.0"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFxvI46LEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFxvJI6LEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFxvJY6LEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;Value&quot;|Tag=&quot;@Value&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFxvJo6LEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X obj 39 152 outlet;&#xA;#X obj -16 33 loadbang;&#xA;#X text 0 0 outports Value;&#xA;#X msg 25 95 float @Value ;&#xA;#X msg 132 126 replace 2 Value;&#xA;#X connect 1 0 3 0;&#xA;#X connect 3 0 0 0;&#xA;#X connect 3 0 4 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFxvJ46LEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFyWMI6LEeOFuPnwyxizHA" key="deviceProp__name" value="const"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFyWMY6LEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFyWMo6LEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_dFyWM46LEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_gGS50I6LEeOFuPnwyxizHA" name="ControlDivision" type="ControlDivision">
+      <ports xmi:type="soundgates:Port" xmi:id="_gGS50Y6LEeOFuPnwyxizHA" name="Dividend" incomingConnection="_sQE_4JAcEeOm-reFv6LIXw"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_gGS50o6LEeOFuPnwyxizHA" name="Divisor" incomingConnection="_k1bicI6LEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_gGS5046LEeOFuPnwyxizHA" name="Quotient" outgoingConnection="_mN2t8I6LEeOFuPnwyxizHA" direction="OUT"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS51I6LEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 65 103 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 74 76 /;&#xA;#X text 0 0 inports Dividend Divisor;&#xA;#X text 0 0 outports Quotient;&#xA;#X obj 133 43 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS51Y6LEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Dividend&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Divisor&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Quotient&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS51o6LEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS5146LEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 2 79 450 300 10;&#xA;#X obj 62 19 inlet;&#xA;#X obj 65 103 outlet;&#xA;#X obj 120 18 inlet;&#xA;#X obj 74 76 /;&#xA;#X text 0 0 inports Dividend Divisor;&#xA;#X text 0 0 outports Quotient;&#xA;#X obj 133 43 trigger bang;&#xA;#X connect 0 0 3 0;&#xA;#X connect 0 0 6 0;&#xA;#X connect 2 0 3 1;&#xA;#X connect 2 0 6 0;&#xA;#X connect 3 0 1 0;&#xA;#X connect 6 0 3 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS52I6LEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Dividend&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Divisor&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Quotient&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS52Y6LEeOFuPnwyxizHA" key="deviceProp__name" value="divcc"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS52o6LEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS5246LEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Dividend&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Divisor&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Quotient&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_gGS53I6LEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_k1bicI6LEeOFuPnwyxizHA" source="_dFxvIY6LEeOFuPnwyxizHA" target="_gGS50o6LEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_mN2t8I6LEeOFuPnwyxizHA" source="_gGS5046LEeOFuPnwyxizHA" target="_DPj_E46LEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_oXuIAI6MEeOFuPnwyxizHA" name="/drumset/loop" type="IO">
+      <ports xmi:type="soundgates:Port" xmi:id="_oXuIAY6MEeOFuPnwyxizHA" name="Value" outgoingConnection="_qlzwMI6MEeOFuPnwyxizHA" direction="OUT"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_oXuIAo6MEeOFuPnwyxizHA" key="MinValue" value="0.0"/>
+      <floatProperties xmi:type="soundgates:EStringToEFloatObject" xmi:id="_oXuIA46MEeOFuPnwyxizHA" key="MaxValue" value="1.0"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuIBI6MEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuIBY6MEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Value&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuIBo6MEeOFuPnwyxizHA" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuIB46MEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 0 0 outports Value;&#xA;#X obj 49 90 outlet;&#xA;#X obj 45 50 r @ComponentName;&#xA;#X connect 2 0 1 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuICI6MEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuICY6MEeOFuPnwyxizHA" key="deviceProp__name" value="input"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuICo6MEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuIC46MEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Value&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_oXuIDI6MEeOFuPnwyxizHA" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_qlzwMI6MEeOFuPnwyxizHA" source="_oXuIAY6MEeOFuPnwyxizHA" target="_FzQSko6FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_YBmt0I6PEeOFuPnwyxizHA" name="WavePlayer" type="WavePlayer">
+      <ports xmi:type="soundgates:Port" xmi:id="_YBmt0Y6PEeOFuPnwyxizHA" name="Trigger" incomingConnection="_bI1kgI6PEeOFuPnwyxizHA"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_YBmt0o6PEeOFuPnwyxizHA" name="Output" outgoingConnection="_aoyycI9TEeOMRsyo6DgD1g" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt046PEeOFuPnwyxizHA" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt1I6PEeOFuPnwyxizHA" key="codeGenProp__portMappings" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt1Y6PEeOFuPnwyxizHA" key="codeGenProp__propMappings" value="PropName=&quot;FileName&quot;|Tag=&quot;@FileName&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt1o6PEeOFuPnwyxizHA" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 261 56 click here to open wav file;&#xA;#X obj 214 381 readsf~ 1;&#xA;#X obj 213 427 outlet~;&#xA;#X text 155 471 outports Output;&#xA;#X obj 44 67 inlet trigger;&#xA;#X obj 47 115 sel 1;&#xA;#X msg 266 286 start;&#xA;#X msg 334 344 print;&#xA;#X msg 292 235 replace 2 FileName;&#xA;#X text 156 505 inports Trigger;&#xA;#X msg 214 343 open \$1/\$2;&#xA;#X obj 145 338 print;&#xA;#X obj 155 267 pack s s;&#xA;#X msg 290 190 symbol @FileName ;&#xA;#X msg 129 202 symbol ../wave;&#xA;#X obj 241 153 t b b b;&#xA;#X connect 1 0 2 0;&#xA;#X connect 4 0 5 0;&#xA;#X connect 5 0 11 0;&#xA;#X connect 5 0 15 0;&#xA;#X connect 6 0 1 0;&#xA;#X connect 7 0 1 0;&#xA;#X connect 10 0 1 0;&#xA;#X connect 10 0 11 0;&#xA;#X connect 12 0 10 0;&#xA;#X connect 12 0 11 0;&#xA;#X connect 13 0 8 0;&#xA;#X connect 13 0 12 1;&#xA;#X connect 14 0 12 0;&#xA;#X connect 15 0 6 0;&#xA;#X connect 15 1 14 0;&#xA;#X connect 15 2 13 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt146PEeOFuPnwyxizHA" key="deviceProp__portMappings_hw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt2I6PEeOFuPnwyxizHA" key="deviceProp__name" value="smplply"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt2Y6PEeOFuPnwyxizHA" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt2o6PEeOFuPnwyxizHA" key="deviceProp__portMappings_sw" value="PortName=&quot;Trigger&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Output&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt246PEeOFuPnwyxizHA" key="implType" value="hw"/>
+      <userStringProperties xmi:type="soundgates:EStringToEString" xmi:id="_YBmt3I6PEeOFuPnwyxizHA" key="FileName" value="snaredrum3.wav"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_bI1kgI6PEeOFuPnwyxizHA" source="_DPj_FI6LEeOFuPnwyxizHA" target="_YBmt0Y6PEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:AtomicSoundComponent" xmi:id="_ThcVQI9TEeOMRsyo6DgD1g" name="SampleAddition" type="SampleAddition">
+      <ports xmi:type="soundgates:Port" xmi:id="_ThcVQY9TEeOMRsyo6DgD1g" name="Summand1" incomingConnection="_Vn5rcI9TEeOMRsyo6DgD1g" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_ThcVQo9TEeOMRsyo6DgD1g" name="Summand2" incomingConnection="_aoyycI9TEeOMRsyo6DgD1g" dataType="SOUND"/>
+      <ports xmi:type="soundgates:Port" xmi:id="_ThcVQ49TEeOMRsyo6DgD1g" name="Result" outgoingConnection="_XFLhwI9TEeOMRsyo6DgD1g" direction="OUT" dataType="SOUND"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVRI9TEeOMRsyo6DgD1g" key="codeGenProp__pdcode" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVRY9TEeOMRsyo6DgD1g" key="codeGenProp__portMappings" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;0&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;0&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVRo9TEeOMRsyo6DgD1g" key="codeGenProp__propMappings" value=""/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVR49TEeOMRsyo6DgD1g" key="codeGenProp_Simulation" value="#N canvas 0 49 718 849 10;&#xA;#X text 116 0 inports Summand1 Summand2;&#xA;#X text 0 0 outports Result;&#xA;#X obj 62 19 inlet~;&#xA;#X obj 120 18 inlet~;&#xA;#X obj 74 76 +~;&#xA;#X obj 62 103 outlet~;&#xA;#X connect 2 0 4 0;&#xA;#X connect 3 0 4 1;&#xA;#X connect 4 0 5 0;&#xA;"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVSI9TEeOMRsyo6DgD1g" key="deviceProp__portMappings_hw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVSY9TEeOMRsyo6DgD1g" key="deviceProp__name" value="addss"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVSo9TEeOMRsyo6DgD1g" key="possibleImplType" value="hw|sw"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVS49TEeOMRsyo6DgD1g" key="deviceProp__portMappings_sw" value="PortName=&quot;Summand1&quot;|PortNumber=&quot;1&quot;||PortName=&quot;Summand2&quot;|PortNumber=&quot;2&quot;||PortName=&quot;Result&quot;|PortNumber=&quot;1&quot;||"/>
+      <stringProperties xmi:type="soundgates:EStringToEString" xmi:id="_ThcVTI9TEeOMRsyo6DgD1g" key="implType" value="hw"/>
+    </elements>
+    <elements xmi:type="soundgates:Link" xmi:id="_Vn5rcI9TEeOMRsyo6DgD1g" source="_4Vxu446GEeOFuPnwyxizHA" target="_ThcVQY9TEeOMRsyo6DgD1g"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_XFLhwI9TEeOMRsyo6DgD1g" source="_ThcVQ49TEeOMRsyo6DgD1g" target="_-T0aoY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_aoyycI9TEeOMRsyo6DgD1g" source="_YBmt0o6PEeOFuPnwyxizHA" target="_ThcVQo9TEeOMRsyo6DgD1g"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_iFyWIJAcEeOm-reFv6LIXw" source="_IOJAoI6FEeOFuPnwyxizHA" target="_FzQSk46FEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_jW_fUJAcEeOm-reFv6LIXw" source="_IOJAoI6FEeOFuPnwyxizHA" target="_Tci9UY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_kRKokJAcEeOm-reFv6LIXw" source="_IOJAoI6FEeOFuPnwyxizHA" target="_Tzs5EY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_lo20QJAcEeOm-reFv6LIXw" source="_IOJAoI6FEeOFuPnwyxizHA" target="_UD54QY6GEeOFuPnwyxizHA"/>
+    <elements xmi:type="soundgates:Link" xmi:id="_sQE_4JAcEeOm-reFv6LIXw" source="_IOJAoI6FEeOFuPnwyxizHA" target="_gGS50Y6LEeOFuPnwyxizHA"/>
+  </soundgates:Patch>
+  <notation:Diagram xmi:id="_Yc3LoI59EeOtlJKqyB1GFw" type="Soundgates" element="_Ycwd8I59EeOtlJKqyB1GFw" name="drumset.soundgates_diagram" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_FzTV4I6FEeOFuPnwyxizHA" type="2001" element="_FzQSkI6FEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_FzT88I6FEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_FzYOYI6FEeOFuPnwyxizHA" type="3001" element="_FzQSkY6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_FzY1cI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_FzY1cY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FzYOYY6FEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_FzZcgI6FEeOFuPnwyxizHA" type="3001" element="_FzQSko6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_FzaDkI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_FzaqoI6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FzZcgY6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_FzaqoY6FEeOFuPnwyxizHA" type="3001" element="_FzQSk46FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_FzbRsI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Fzb4wI6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Fzaqoo6FEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_Fzcf0I6FEeOFuPnwyxizHA" type="3001" element="_FzQSlI6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_FzdG4I6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_FzdG4Y6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Fzcf0Y6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FzTV4Y6FEeOFuPnwyxizHA" x="520" y="780"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_IOLc4I6FEeOFuPnwyxizHA" type="2001" element="_IOIZkI6FEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_IOMD8I6FEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_IOPuUI6FEeOFuPnwyxizHA" type="3001" element="_IOJAoI6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_IOQVYI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_IOQVYY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_IOPuUY6FEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_IOLc4Y6FEeOFuPnwyxizHA" x="376" y="100"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_1qRnYI6FEeOFuPnwyxizHA" type="2001" element="_1qPLII6FEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_1qRnYo6FEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_1qV40I6FEeOFuPnwyxizHA" type="3001" element="_1qPLIY6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_1qXG8I6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_1qXG8Y6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1qV40Y6FEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_1qXuAI6FEeOFuPnwyxizHA" type="3001" element="_1qPLIo6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_1qYVEI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_1qYVEY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1qXuAY6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_1qY8II6FEeOFuPnwyxizHA" type="3001" element="_1qPLI46FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_1qZjMI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_1qZjMY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1qY8IY6FEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_1qaKQI6FEeOFuPnwyxizHA" type="3001" element="_1qPLJI6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_1qaxUI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_1qbYYI6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1qaKQY6FEeOFuPnwyxizHA" x="120" y="39"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1qRnYY6FEeOFuPnwyxizHA" x="800" y="925"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_2UXtQI6FEeOFuPnwyxizHA" type="2001" element="_2UVRAI6FEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_2UYUUI6FEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_2UclwI6FEeOFuPnwyxizHA" type="3001" element="_2UVRAY6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2UdM0I6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2Udz4I6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2UclwY6FEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_2Uea8I6FEeOFuPnwyxizHA" type="3001" element="_2UVRAo6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2UfCAI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2UfCAY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2Uea8Y6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_2UfpEI6FEeOFuPnwyxizHA" type="3001" element="_2UVRA46FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2UgQII6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2UgQIY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2UfpEY6FEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_2UheQI6FEeOFuPnwyxizHA" type="3001" element="_2UVRBI6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2UiFUI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2UiFUY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2UheQY6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2UXtQY6FEeOFuPnwyxizHA" x="1242" y="934"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_29hX8I6FEeOFuPnwyxizHA" type="2001" element="_29e7sI6FEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_29h_AI6FEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_29mQcI6FEeOFuPnwyxizHA" type="3001" element="_29e7sY6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_29m3gI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_29m3gY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_29mQcY6FEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_29nekI6FEeOFuPnwyxizHA" type="3001" element="_29e7so6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_29ossI6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_29ossY6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_29nekY6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_29pTwI6FEeOFuPnwyxizHA" type="3001" element="_29e7s46FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_29p60I6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_29p60Y6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_29pTwY6FEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_29qh4I6FEeOFuPnwyxizHA" type="3001" element="_29e7tI6FEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_29rI8I6FEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_29rI8Y6FEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_29qh4Y6FEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_29hX8Y6FEeOFuPnwyxizHA" x="1630" y="930"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_GM_y0I6GEeOFuPnwyxizHA" type="2001" element="_GM5sMI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_GNAZ4I6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_GNEEQI6GEeOFuPnwyxizHA" type="3001" element="_GM5sMY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_GNErUI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_GNErUY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GNEEQY6GEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GM_y0Y6GEeOFuPnwyxizHA" x="855" y="680"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_TckygI6GEeOFuPnwyxizHA" type="2001" element="_Tci9UI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_TclZkI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_TcqSEI6GEeOFuPnwyxizHA" type="3001" element="_Tci9UY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_Tcq5II6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Tcq5IY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TcqSEY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_TcrgMI6GEeOFuPnwyxizHA" type="3001" element="_Tci9Uo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_TcsHQI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_TcsuUI6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TcrgMY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_TctVYI6GEeOFuPnwyxizHA" type="3001" element="_Tci9U46GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_TcujgI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_TcujgY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Tct8cI6GEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TckygY6GEeOFuPnwyxizHA" x="1055" y="580"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_TzvVUI6GEeOFuPnwyxizHA" type="2001" element="_Tzs5EI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_TzwjcI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_TzzmwI6GEeOFuPnwyxizHA" type="3001" element="_Tzs5EY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_Tz0N0I6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Tz004I6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TzzmwY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_Tz1b8I6GEeOFuPnwyxizHA" type="3001" element="_Tzs5Eo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_Tz2DAI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Tz2DAY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Tz1b8Y6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_Tz2qEI6GEeOFuPnwyxizHA" type="3001" element="_Tzs5E46GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_Tz34MI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Tz34MY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Tz2qEY6GEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TzvVUY6GEeOFuPnwyxizHA" x="1340" y="585"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_UD8UgI6GEeOFuPnwyxizHA" type="2001" element="_UD54QI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_UD87kI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_UEAl8I6GEeOFuPnwyxizHA" type="3001" element="_UD54QY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_UEBNAI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_UEBNAY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UEAl8Y6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_UECbII6GEeOFuPnwyxizHA" type="3001" element="_UD54Qo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_UECbIo6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_UECbI46GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UECbIY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_UEDCMI6GEeOFuPnwyxizHA" type="3001" element="_UD54Q46GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_UEDpQI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_UEEQUI6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UEDCMY6GEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_UD8UgY6GEeOFuPnwyxizHA" x="1620" y="590"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_U4LN0I6GEeOFuPnwyxizHA" type="2001" element="_U4IxkI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_U4L04I6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_U4PfQI6GEeOFuPnwyxizHA" type="3001" element="_U4IxkY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_U4RUcI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_U4RUcY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_U4PfQY6GEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_U4LN0Y6GEeOFuPnwyxizHA" x="1150" y="310"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_VPh94I6GEeOFuPnwyxizHA" type="2001" element="_VPLYkI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_VPh94o6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_VPkaII6GEeOFuPnwyxizHA" type="3001" element="_VPLYkY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_VPkaIo6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_VPlBMI6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VPkaIY6GEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VPh94Y6GEeOFuPnwyxizHA" x="1380" y="310"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_Ve7r0I6GEeOFuPnwyxizHA" type="2001" element="_Ve5PkI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_Ve8S4I6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_Ve_WMI6GEeOFuPnwyxizHA" type="3001" element="_Ve5PkY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_Ve_9QY6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_VfAkUI6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Ve_9QI6GEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Ve7r0Y6GEeOFuPnwyxizHA" x="1610" y="310"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_eaB-kI6GEeOFuPnwyxizHA" type="2001" element="_eaAJYI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_eaCloI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_eaG3EI6GEeOFuPnwyxizHA" type="3001" element="_eaAJYY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_eaG3Eo6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_eaHeII6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eaG3EY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_eaHeIY6GEeOFuPnwyxizHA" type="3001" element="_eaAJYo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_eaIsQI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_eaIsQY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eaHeIo6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_eaB-kY6GEeOFuPnwyxizHA" x="680" y="1150"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_vCKOcI6GEeOFuPnwyxizHA" type="2001" element="_vCHyMI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_vCK1gI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_vCPG8I6GEeOFuPnwyxizHA" type="3001" element="_vCHyMY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_vCPuAI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_vCPuAY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vCPG8Y6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_vCQVEI6GEeOFuPnwyxizHA" type="3001" element="_vCHyMo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_vCRjMI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_vCRjMY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vCQVEY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vCKOcY6GEeOFuPnwyxizHA" x="904" y="1156"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_veBEAI6GEeOFuPnwyxizHA" type="2001" element="_vd-nwI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_veCSII6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_veF8gI6GEeOFuPnwyxizHA" type="3001" element="_vd-nwY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_veGjkI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_veGjkY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_veF8gY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_veHKoI6GEeOFuPnwyxizHA" type="3001" element="_vd-nwo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_veHxsI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_veHxsY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_veHKoY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_veBEAY6GEeOFuPnwyxizHA" x="1230" y="1156"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_v5amkI6GEeOFuPnwyxizHA" type="2001" element="_v5YxYI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_v5b0sI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_v5e4AI6GEeOFuPnwyxizHA" type="3001" element="_v5YxYY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_v5ffEI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_v5gGII6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_v5e4AY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_v5gtMI6GEeOFuPnwyxizHA" type="3001" element="_v5YxYo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_v5hUQI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_v5hUQY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_v5gtMY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_v5amkY6GEeOFuPnwyxizHA" x="1620" y="1140"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_2_hGkI6GEeOFuPnwyxizHA" type="2001" element="_2_eqUI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_2_htoI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_2_lYAI6GEeOFuPnwyxizHA" type="3001" element="_2_eqUY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2_l_EI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2_l_EY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2_lYAY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_2_nNMI6GEeOFuPnwyxizHA" type="3001" element="_2_eqUo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2_n0QI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2_obUI6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2_nNMY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_2_pCYI6GEeOFuPnwyxizHA" type="3001" element="_2_eqU46GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_2_ppcI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_2_ppcY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2_pCYY6GEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2_hGkY6GEeOFuPnwyxizHA" x="855" y="1390"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_3vkDcI6GEeOFuPnwyxizHA" type="2001" element="_3vhnMI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_3vkqgI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_3vnt0I6GEeOFuPnwyxizHA" type="3001" element="_3vhnMY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_3voU4I6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_3vo78I6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3vnt0Y6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_3vo78Y6GEeOFuPnwyxizHA" type="3001" element="_3vhnMo6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_3vqKEI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_3vqKEY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3vo78o6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_3vqxII6GEeOFuPnwyxizHA" type="3001" element="_3vhnM46GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_3vrYMI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_3vrYMY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3vqxIY6GEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3vkDcY6GEeOFuPnwyxizHA" x="1110" y="1610"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_4V0yMI6GEeOFuPnwyxizHA" type="2001" element="_4Vxu4I6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_4V1ZQI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_4V5DoI6GEeOFuPnwyxizHA" type="3001" element="_4Vxu4Y6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_4V5qsI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_4V5qsY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4V5DoY6GEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_4V6RwI6GEeOFuPnwyxizHA" type="3001" element="_4Vxu4o6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_4V640I6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_4V640Y6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4V6RwY6GEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_4V7f4I6GEeOFuPnwyxizHA" type="3001" element="_4Vxu446GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_4V8G8I6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_4V8G8Y6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4V7f4Y6GEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4V0yMY6GEeOFuPnwyxizHA" x="1375" y="1735"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_-T3d8I6GEeOFuPnwyxizHA" type="2001" element="_-T0aoI6GEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_-T4FAI6GEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_-T7IUI6GEeOFuPnwyxizHA" type="3001" element="_-T0aoY6GEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_-T7vYI6GEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_-T7vYY6GEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-T7IUY6GEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-T3d8Y6GEeOFuPnwyxizHA" x="1480" y="1955"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_ZW-e8I6HEeOFuPnwyxizHA" type="2001" element="_ZW8CsI6HEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_ZW_GAI6HEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_ZXDXcI6HEeOFuPnwyxizHA" type="3001" element="_ZW8CsY6HEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_ZXD-gI6HEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ZXD-gY6HEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZXDXcY6HEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZW-e8Y6HEeOFuPnwyxizHA" x="86" y="108"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_DPo3kI6LEeOFuPnwyxizHA" type="2001" element="_DPj_EI6LEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_DPpeoI6LEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_DPsh8I6LEeOFuPnwyxizHA" type="3001" element="_DPj_EY6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_DPtJAI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_DPtJAY6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_DPsh8Y6LEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_DPtwEI6LEeOFuPnwyxizHA" type="3001" element="_DPj_Eo6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_DPu-MI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_DPu-MY6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_DPtwEY6LEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_DPvlQI6LEeOFuPnwyxizHA" type="3001" element="_DPj_E46LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_DPwMUI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_DPwMUY6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_DPvlQY6LEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_DPwzYI6LEeOFuPnwyxizHA" type="3001" element="_DPj_FI6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_DPxacI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_DPxacY6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_DPwzYY6LEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_DPo3kY6LEeOFuPnwyxizHA" x="2100" y="735"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_PIq7EI6LEeOFuPnwyxizHA" type="2001" element="_PIpF4I6LEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_PIriII6LEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_PIvMgI6LEeOFuPnwyxizHA" type="3001" element="_PIpF4Y6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_PIvzkI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_PIvzkY6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PIvMgY6LEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PIq7EY6LEeOFuPnwyxizHA" x="2000" y="478"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_dF0LYI6LEeOFuPnwyxizHA" type="2001" element="_dFxvII6LEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_dF0ycI6LEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_dF31wI6LEeOFuPnwyxizHA" type="3001" element="_dFxvIY6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_dF4c0I6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_dF4c0Y6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dF31wY6LEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dF0LYY6LEeOFuPnwyxizHA" x="2358" y="256"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_gGVWEI6LEeOFuPnwyxizHA" type="2001" element="_gGS50I6LEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_gGV9II6LEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_gGZngI6LEeOFuPnwyxizHA" type="3001" element="_gGS50Y6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_gGaOkI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_gGaOkY6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gGZngY6LEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_gGa1oI6LEeOFuPnwyxizHA" type="3001" element="_gGS50o6LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_gGbcsI6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_gGcDwI6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gGa1oY6LEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_gGcq0I6LEeOFuPnwyxizHA" type="3001" element="_gGS5046LEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_gGdR4I6LEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_gGdR4Y6LEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gGcq0Y6LEeOFuPnwyxizHA" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gGVWEY6LEeOFuPnwyxizHA" x="2302" y="494"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_oXzAgI6MEeOFuPnwyxizHA" type="2001" element="_oXuIAI6MEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_oXznkI6MEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_oX3R8I6MEeOFuPnwyxizHA" type="3001" element="_oXuIAY6MEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_oX35AI6MEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_oX35AY6MEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_oX3R8Y6MEeOFuPnwyxizHA"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_oXzAgY6MEeOFuPnwyxizHA" x="235" y="105"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_YBsNYI6PEeOFuPnwyxizHA" type="2001" element="_YBmt0I6PEeOFuPnwyxizHA" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_YBs0cI6PEeOFuPnwyxizHA" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_YBwe0I6PEeOFuPnwyxizHA" type="3001" element="_YBmt0Y6PEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_YBxF4I6PEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_YBxF4Y6PEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YBwe0Y6PEeOFuPnwyxizHA" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_YBxs8I6PEeOFuPnwyxizHA" type="3001" element="_YBmt0o6PEeOFuPnwyxizHA" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_YByUAI6PEeOFuPnwyxizHA" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_YByUAY6PEeOFuPnwyxizHA" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YBxs8Y6PEeOFuPnwyxizHA" x="-1" y="-11"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YBsNYY6PEeOFuPnwyxizHA" x="2054" y="1110"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_TjHJMI9TEeOMRsyo6DgD1g" type="2001" element="_ThcVQI9TEeOMRsyo6DgD1g" fontName="Sans">
+      <children xmi:type="notation:DecorationNode" xmi:id="_TjN24I9TEeOMRsyo6DgD1g" type="5002"/>
+      <children xmi:type="notation:Shape" xmi:id="_TjVysI9TEeOMRsyo6DgD1g" type="3001" element="_ThcVQY9TEeOMRsyo6DgD1g" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_TjWZwI9TEeOMRsyo6DgD1g" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_TjWZwY9TEeOMRsyo6DgD1g" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TjVysY9TEeOMRsyo6DgD1g" x="-9" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_TjXn4I9TEeOMRsyo6DgD1g" type="3001" element="_ThcVQo9TEeOMRsyo6DgD1g" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_TjXn4o9TEeOMRsyo6DgD1g" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_TjYO8I9TEeOMRsyo6DgD1g" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TjXn4Y9TEeOMRsyo6DgD1g" x="-1" y="-11"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_TjYO8Y9TEeOMRsyo6DgD1g" type="3001" element="_ThcVQ49TEeOMRsyo6DgD1g" fontName="Sans">
+        <children xmi:type="notation:DecorationNode" xmi:id="_TjY2AY9TEeOMRsyo6DgD1g" type="5001">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_TjY2Ao9TEeOMRsyo6DgD1g" y="5"/>
+        </children>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TjY2AI9TEeOMRsyo6DgD1g" x="1" y="-9"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_TjHJMY9TEeOMRsyo6DgD1g" x="1515" y="1830"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_Yc3LoY59EeOtlJKqyB1GFw"/>
+    <edges xmi:type="notation:Connector" xmi:id="_7AXiUI6FEeOFuPnwyxizHA" type="4001" element="_7AVGEI6FEeOFuPnwyxizHA" source="_Fzcf0I6FEeOFuPnwyxizHA" target="_1qV40I6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_7AXiUY6FEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_7AXiUo6FEeOFuPnwyxizHA" points="[0, 0, -62, -61]$[63, 60, 1, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7AdB4I6FEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7AdB4Y6FEeOFuPnwyxizHA" id="(0.8,0.3)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_7u9GoI6FEeOFuPnwyxizHA" type="4001" element="_7u6qYI6FEeOFuPnwyxizHA" source="_Fzcf0I6FEeOFuPnwyxizHA" target="_2UclwI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_7u9GoY6FEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_7u9Goo6FEeOFuPnwyxizHA" points="[0, 0, -582, -116]$[185, 50, -397, -66]$[479, 50, -103, -66]$[577, 112, -5, -4]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7vB_II6FEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_8nVgII6FEeOFuPnwyxizHA" type="4001" element="_8nTD4I6FEeOFuPnwyxizHA" source="_Fzcf0I6FEeOFuPnwyxizHA" target="_29mQcI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_8nVgIY6FEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_8nVgIo6FEeOFuPnwyxizHA" points="[0, 0, -973, -110]$[269, 30, -704, -80]$[849, 30, -124, -80]$[968, 107, -5, -3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8na_sI6FEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8na_sY6FEeOFuPnwyxizHA" id="(0.8,0.3)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_Hs6tcI6GEeOFuPnwyxizHA" type="4001" element="_Hs3qII6GEeOFuPnwyxizHA" source="_GNEEQI6GEeOFuPnwyxizHA" target="_1qXuAI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_Hs6tcY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Hs6tco6GEeOFuPnwyxizHA" points="[0, 0, 51, -165]$[-52, 165, -1, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_HtANAI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_HtA0EI6GEeOFuPnwyxizHA" id="(0.2,0.5)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_ITUmII6GEeOFuPnwyxizHA" type="4001" element="_ITSJ4I6GEeOFuPnwyxizHA" source="_GNEEQI6GEeOFuPnwyxizHA" target="_2Uea8I6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_ITUmIY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ITUmIo6GEeOFuPnwyxizHA" points="[0, 0, -363, -321]$[357, 316, -6, -5]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ITZeoI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_J4vEwI6GEeOFuPnwyxizHA" type="4001" element="_J4sogI6GEeOFuPnwyxizHA" source="_GNEEQI6GEeOFuPnwyxizHA" target="_29nekI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_J4vr0I6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_J4vr0Y6GEeOFuPnwyxizHA" points="[0, 0, -761, -317]$[440, 65, -321, -252]$[756, 313, -5, -4]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_J41LYI6GEeOFuPnwyxizHA" id="(0.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_f7mfAI6GEeOFuPnwyxizHA" type="4001" element="_f7kCwI6GEeOFuPnwyxizHA" source="_Fzcf0I6FEeOFuPnwyxizHA" target="_eaG3EI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_f7mfAY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_f7mfAo6GEeOFuPnwyxizHA" points="[0, 0, -10, -166]$[11, 168, 1, 2]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_f7rXgI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_nFkyYI6GEeOFuPnwyxizHA" type="4001" element="_nFiWII6GEeOFuPnwyxizHA" source="_U4PfQI6GEeOFuPnwyxizHA" target="_TcrgMI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_nFkyYY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_nFkyYo6GEeOFuPnwyxizHA" points="[0, 0, 19, -88]$[-19, 87, 0, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_nFqR8I6GEeOFuPnwyxizHA" id="(0.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_nFqR8Y6GEeOFuPnwyxizHA" id="(0.8,0.1)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_nx9-UI6GEeOFuPnwyxizHA" type="4001" element="_nx7iEI6GEeOFuPnwyxizHA" source="_VPkaII6GEeOFuPnwyxizHA" target="_Tz1b8I6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_nx9-UY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_nx9-Uo6GEeOFuPnwyxizHA" points="[0, 0, 13, -90]$[-14, 90, -1, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_nyC20I6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_nyC20Y6GEeOFuPnwyxizHA" id="(0.2,0.7)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_oTJ_0I6GEeOFuPnwyxizHA" type="4001" element="_oTHjkI6GEeOFuPnwyxizHA" source="_Ve_WMI6GEeOFuPnwyxizHA" target="_UECbII6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_oTJ_0Y6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_oTJ_0o6GEeOFuPnwyxizHA" points="[0, 0, 35, -76]$[-35, 76, 0, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_oTORQI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_oTO4UI6GEeOFuPnwyxizHA" id="(0.0,0.5)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_qy-RMI6GEeOFuPnwyxizHA" type="4001" element="_qy708I6GEeOFuPnwyxizHA" source="_TctVYI6GEeOFuPnwyxizHA" target="_1qY8II6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_qy-RMY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_qy-RMo6GEeOFuPnwyxizHA" points="[-1, 5, 39, -155]$[-42, 160, -2, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_qzDJsI6GEeOFuPnwyxizHA" id="(1.0,0.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_rmIMcI6GEeOFuPnwyxizHA" type="4001" element="_rmFJII6GEeOFuPnwyxizHA" source="_Tz2qEI6GEeOFuPnwyxizHA" target="_2UfpEI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_rmIMcY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_rmIMco6GEeOFuPnwyxizHA" points="[0, 0, -52, -148]$[51, 148, -1, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_rmMd4I6GEeOFuPnwyxizHA" id="(0.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_rmMd4Y6GEeOFuPnwyxizHA" id="(0.2,0.5)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_tIn58I6GEeOFuPnwyxizHA" type="4001" element="_tImEwI6GEeOFuPnwyxizHA" source="_UEDCMI6GEeOFuPnwyxizHA" target="_29pTwI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_tIohAI6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_tIohAY6GEeOFuPnwyxizHA" points="[0, 0, -101, -142]$[100, 141, -1, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tItZgI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tItZgY6GEeOFuPnwyxizHA" id="(0.2,0.1)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_0MtnwI6GEeOFuPnwyxizHA" type="4001" element="_0MrLgI6GEeOFuPnwyxizHA" source="_1qaKQI6FEeOFuPnwyxizHA" target="_vCPG8I6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_0MtnwY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_0Mtnwo6GEeOFuPnwyxizHA" points="[2, 0, 4, -88]$[-3, 87, -1, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_0MygQI6GEeOFuPnwyxizHA" id="(0.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_0MygQY6GEeOFuPnwyxizHA" id="(0.2,0.3)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_05lU0I6GEeOFuPnwyxizHA" type="4001" element="_05i4kI6GEeOFuPnwyxizHA" source="_2UheQI6FEeOFuPnwyxizHA" target="_veF8gI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_05lU0Y6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_05lU0o6GEeOFuPnwyxizHA" points="[0, 0, 61, -83]$[-61, 83, 0, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_05qNUI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_05qNUY6GEeOFuPnwyxizHA" id="(0.0,0.1)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_1lDTsI6GEeOFuPnwyxizHA" type="4001" element="_1lA3cI6GEeOFuPnwyxizHA" source="_29qh4I6FEeOFuPnwyxizHA" target="_v5e4AI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_1lDTsY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1lDTso6GEeOFuPnwyxizHA" points="[0, 0, 58, -79]$[-58, 76, 0, -3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1lIzQI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_5RhlcI6GEeOFuPnwyxizHA" type="4001" element="_5RfwQI6GEeOFuPnwyxizHA" source="_eaHeIY6GEeOFuPnwyxizHA" target="_2_lYAI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_5RhlcY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_5Rhlco6GEeOFuPnwyxizHA" points="[0, 0, -85, -94]$[82, 94, -3, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5RkBsI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_55YPoI6GEeOFuPnwyxizHA" type="4001" element="_55VzYI6GEeOFuPnwyxizHA" source="_vCQVEI6GEeOFuPnwyxizHA" target="_2_nNMI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_55YPoY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_55YPoo6GEeOFuPnwyxizHA" points="[0, 0, -23, -91]$[22, 88, -1, -3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_55dIII6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_6zRsEI6GEeOFuPnwyxizHA" type="4001" element="_6zOowI6GEeOFuPnwyxizHA" source="_veHKoI6GEeOFuPnwyxizHA" target="_3vo78Y6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_6zRsEY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_6zRsEo6GEeOFuPnwyxizHA" points="[0, 0, 13, -201]$[-13, 203, 0, 2]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6zWkkI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_7qxUwI6GEeOFuPnwyxizHA" type="4001" element="_7qu4gI6GEeOFuPnwyxizHA" source="_v5gtMI6GEeOFuPnwyxizHA" target="_4V6RwI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_7qxUwY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_7qxUwo6GEeOFuPnwyxizHA" points="[0, 0, 75, -271]$[-75, 269, 0, -2]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7q2NQI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_8YdhMI6GEeOFuPnwyxizHA" type="4001" element="_8Yad4I6GEeOFuPnwyxizHA" source="_2_pCYI6GEeOFuPnwyxizHA" target="_3vnt0I6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_8YdhMY6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_8YdhMo6GEeOFuPnwyxizHA" points="[0, 0, -125, -84]$[128, 84, 3, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8YhyoI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_9b5UII6GEeOFuPnwyxizHA" type="4001" element="_9b234I6GEeOFuPnwyxizHA" source="_3vqxII6GEeOFuPnwyxizHA" target="_4V5DoI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_9b57MI6GEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_9b57MY6GEeOFuPnwyxizHA" points="[0, 0, -131, -35]$[131, 34, 0, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_9b-MoI6GEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_9b-MoY6GEeOFuPnwyxizHA" id="(0.7,0.2)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_3HCjgI6JEeOFuPnwyxizHA" type="4001" element="_3HAuUI6JEeOFuPnwyxizHA" source="_ZXDXcI6HEeOFuPnwyxizHA" target="_FzYOYI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_3HCjgY6JEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_3HCjgo6JEeOFuPnwyxizHA" points="[0, 0, -231, -300]$[231, 300, 0, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_3HFm0I6JEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_3HFm0Y6JEeOFuPnwyxizHA" id="(0.3,0.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_RQeVEI6LEeOFuPnwyxizHA" type="4001" element="_RQb40I6LEeOFuPnwyxizHA" source="_PIvMgI6LEeOFuPnwyxizHA" target="_DPsh8I6LEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_RQeVEY6LEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_RQeVEo6LEeOFuPnwyxizHA" points="[0, 0, -49, -104]$[50, 105, 1, 1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_RQimgI6LEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_RQimgY6LEeOFuPnwyxizHA" id="(0.8,0.8)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_SY4HkI6LEeOFuPnwyxizHA" type="4001" element="_SY1EQI6LEeOFuPnwyxizHA" source="_PIvMgI6LEeOFuPnwyxizHA" target="_DPtwEI6LEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_SY4HkY6LEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_SY4Hko6LEeOFuPnwyxizHA" points="[0, 0, -96, -102]$[95, 101, -1, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_SY9AEI6LEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_SY9AEY6LEeOFuPnwyxizHA" id="(0.2,0.4)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_k1elwI6LEeOFuPnwyxizHA" type="4001" element="_k1bicI6LEeOFuPnwyxizHA" source="_dF31wI6LEeOFuPnwyxizHA" target="_gGa1oI6LEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_k1elwY6LEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_k1elwo6LEeOFuPnwyxizHA" points="[0, 0, -19, -93]$[22, 93, 3, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_k1i3MI6LEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_mN5KMI6LEeOFuPnwyxizHA" type="4001" element="_mN2t8I6LEeOFuPnwyxizHA" source="_gGcq0I6LEeOFuPnwyxizHA" target="_DPvlQI6LEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_mN5KMY6LEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_mN5KMo6LEeOFuPnwyxizHA" points="[-3, 0, 0, -96]$[-3, 97, 0, 1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_mN-CsI6LEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_mN-CsY6LEeOFuPnwyxizHA" id="(0.6,0.8)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_ql2McI6MEeOFuPnwyxizHA" type="4001" element="_qlzwMI6MEeOFuPnwyxizHA" source="_oX3R8I6MEeOFuPnwyxizHA" target="_FzZcgI6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_ql2McY6MEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ql2Mco6MEeOFuPnwyxizHA" points="[0, 0, -189, -310]$[188, 309, -1, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ql7E8I6MEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ql7E8Y6MEeOFuPnwyxizHA" id="(0.2,0.3)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_bI4AwI6PEeOFuPnwyxizHA" type="4001" element="_bI1kgI6PEeOFuPnwyxizHA" source="_DPwzYI6LEeOFuPnwyxizHA" target="_YBwe0I6PEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_bI4AwY6PEeOFuPnwyxizHA" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_bI4Awo6PEeOFuPnwyxizHA" points="[0, 0, 76, -161]$[-75, 158, 1, -3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bI9gUI6PEeOFuPnwyxizHA" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_Vn8HsI9TEeOMRsyo6DgD1g" type="4001" element="_Vn5rcI9TEeOMRsyo6DgD1g" source="_4V7f4I6GEeOFuPnwyxizHA" target="_TjVysI9TEeOMRsyo6DgD1g">
+      <styles xmi:type="notation:FontStyle" xmi:id="_Vn8HsY9TEeOMRsyo6DgD1g" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Vn8Hso9TEeOMRsyo6DgD1g" points="[0, 0, -697, -24]$[698, 21, 1, -3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_VoBnQI9TEeOMRsyo6DgD1g" id="(0.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_VoBnQY9TEeOMRsyo6DgD1g" id="(0.3,0.2)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_XFN-AI9TEeOMRsyo6DgD1g" type="4001" element="_XFLhwI9TEeOMRsyo6DgD1g" source="_TjYO8Y9TEeOMRsyo6DgD1g" target="_-T7IUI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_XFOlEI9TEeOMRsyo6DgD1g" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XFOlEY9TEeOMRsyo6DgD1g" points="[0, 0, 744, -82]$[-743, 91, 1, 9]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_XFRoYI9TEeOMRsyo6DgD1g" id="(0.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_ao2c0I9TEeOMRsyo6DgD1g" type="4001" element="_aoyycI9TEeOMRsyo6DgD1g" source="_YBxs8I6PEeOFuPnwyxizHA" target="_TjXn4I9TEeOMRsyo6DgD1g">
+      <styles xmi:type="notation:FontStyle" xmi:id="_ao2c0Y9TEeOMRsyo6DgD1g" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ao2c0o9TEeOMRsyo6DgD1g" points="[0, 0, 139, -482]$[-139, 485, 0, 3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ao8jcI9TEeOMRsyo6DgD1g" id="(1.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ao8jcY9TEeOMRsyo6DgD1g" id="(0.8,0.6)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_iF1ZcJAcEeOm-reFv6LIXw" type="4001" element="_iFyWIJAcEeOm-reFv6LIXw" source="_IOPuUI6FEeOFuPnwyxizHA" target="_FzaqoY6FEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_iF1ZcZAcEeOm-reFv6LIXw" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_iF1ZcpAcEeOm-reFv6LIXw" points="[0, 0, -169, -314]$[169, 311, 0, -3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_iF7gEJAcEeOm-reFv6LIXw" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_jXCioJAcEeOm-reFv6LIXw" type="4001" element="_jW_fUJAcEeOm-reFv6LIXw" source="_IOPuUI6FEeOFuPnwyxizHA" target="_TcqSEI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_jXCioZAcEeOm-reFv6LIXw" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_jXCiopAcEeOm-reFv6LIXw" points="[0, 0, -688, -423]$[388, 235, -300, -188]$[686, 422, -2, -1]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_jXHbIJAcEeOm-reFv6LIXw" id="(0.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_jXHbIZAcEeOm-reFv6LIXw" id="(0.9,0.1)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_kRNE0JAcEeOm-reFv6LIXw" type="4001" element="_kRKokJAcEeOm-reFv6LIXw" source="_IOPuUI6FEeOFuPnwyxizHA" target="_TzzmwI6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_kRNE0ZAcEeOm-reFv6LIXw" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_kRNE0pAcEeOm-reFv6LIXw" points="[0, 0, -479, -216]$[480, 219, 1, 3]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_kRSkYJAcEeOm-reFv6LIXw" id="(1.0,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_lo53kJAcEeOm-reFv6LIXw" type="4001" element="_lo20QJAcEeOm-reFv6LIXw" source="_IOPuUI6FEeOFuPnwyxizHA" target="_UEAl8I6GEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_lo53kZAcEeOm-reFv6LIXw" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_lo53kpAcEeOm-reFv6LIXw" points="[0, 0, -626, -220]$[627, 220, 1, 0]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_lo-wEJAcEeOm-reFv6LIXw" id="(0.0,1.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_lo_XIJAcEeOm-reFv6LIXw" id="(0.8,0.7)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_sQHcIJAcEeOm-reFv6LIXw" type="4001" element="_sQE_4JAcEeOm-reFv6LIXw" source="_IOPuUI6FEeOFuPnwyxizHA" target="_gGZngI6LEeOFuPnwyxizHA">
+      <styles xmi:type="notation:FontStyle" xmi:id="_sQHcIZAcEeOm-reFv6LIXw" fontName="Sans"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_sQHcIpAcEeOm-reFv6LIXw" points="[0, 0, -965, -171]$[966, 173, 1, 2]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_sQMUoJAcEeOm-reFv6LIXw" id="(0.0,1.0)"/>
+    </edges>
+  </notation:Diagram>
+</xmi:XMI>

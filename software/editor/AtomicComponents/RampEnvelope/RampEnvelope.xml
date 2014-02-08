@@ -4,6 +4,7 @@
 		<Port DataType="SOUND" Direction="IN" Name="SamplesIn"/>
 		<Port DataType="CONTROL" Direction="IN" Name="RisingTime"/>
 		<Port DataType="CONTROL" Direction="IN" Name="FallingTime"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Trigger"/>
 		<Port DataType="SOUND" Direction="OUT" Name="SamplesOut"/>
 	</Ports>
 	<Properties>
@@ -13,20 +14,16 @@
 		<Device>
 			<Implementation type="hw" name="ramp">
 				<PortMapping PortName="SamplesIn" PortNumber="1"/>
-				<PortMapping PortName="Inkrement" PortNumber="2"/>
-				<PortMapping PortName="Dekrement" PortNumber="3"/>
-				<PortMapping PortName="StartAmplitude" PortNumber="4"/>
-				<PortMapping PortName="UpperAmplitude" PortNumber="5"/>
-				<PortMapping PortName="EndAmplitude" PortNumber="6"/>
+				<PortMapping PortName="RisingTime" PortNumber="2"/>
+				<PortMapping PortName="FallingTime" PortNumber="3"/>
+				<PortMapping PortName="Trigger" PortNumber="4"/>
 				<PortMapping PortName="SamplesOut" PortNumber="1"/>
 			</Implementation>
 			<Implementation type="sw" name="ramp">
 				<PortMapping PortName="SamplesIn" PortNumber="1"/>
-				<PortMapping PortName="Inkrement" PortNumber="2"/>
-				<PortMapping PortName="Dekrement" PortNumber="3"/>
-				<PortMapping PortName="StartAmplitude" PortNumber="4"/>
-				<PortMapping PortName="UpperAmplitude" PortNumber="5"/>
-				<PortMapping PortName="EndAmplitude" PortNumber="6"/>
+				<PortMapping PortName="RisingTime" PortNumber="2"/>
+				<PortMapping PortName="FallingTime" PortNumber="3"/>
+				<PortMapping PortName="Trigger" PortNumber="4"/>
 				<PortMapping PortName="SamplesOut" PortNumber="1"/>
 			</Implementation>
 		</Device>

@@ -11,12 +11,11 @@ import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
-import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
 import soundgates.AtomicSoundComponent;
-import soundgates.CompositeSoundComponent;
+import soundgates.DataType;
 import soundgates.Direction;
 import soundgates.Port;
 import soundgates.diagram.edit.commands.DelegationCreateCommand;
@@ -46,19 +45,20 @@ public class PortItemSemanticEditPolicy extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	protected Command getDestroyElementCommand(DestroyElementRequest req) {		
-		
+	protected Command getDestroyElementCommand(DestroyElementRequest req) {
+
 		View view = (View) getHost().getModel();
-		
+
 		if (view.getElement().eContainer() instanceof AtomicSoundComponent)
 			return null;
-		else{
+		else {
 			CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
 					getEditingDomain(), null);
 			cmd.setTransactionNestingEnabled(false);
-			for (Iterator<?> it = view.getTargetEdges().iterator(); it.hasNext();) {
+			for (Iterator<?> it = view.getTargetEdges().iterator(); it
+					.hasNext();) {
 				Edge incomingLink = (Edge) it.next();
 				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == LinkEditPart.VISUAL_ID) {
 					DestroyElementRequest r = new DestroyElementRequest(
@@ -82,7 +82,8 @@ public class PortItemSemanticEditPolicy extends
 					continue;
 				}
 			}
-			for (Iterator<?> it = view.getSourceEdges().iterator(); it.hasNext();) {
+			for (Iterator<?> it = view.getSourceEdges().iterator(); it
+					.hasNext();) {
 				Edge outgoingLink = (Edge) it.next();
 				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == LinkEditPart.VISUAL_ID) {
 					DestroyElementRequest r = new DestroyElementRequest(
@@ -154,7 +155,7 @@ public class PortItemSemanticEditPolicy extends
 	 */
 	protected Command getCompleteCreateRelationshipCommand(
 			CreateRelationshipRequest req) {
-		
+
 		boolean patch;
 		boolean linkAllowed;
 		boolean delegationAllowed;
@@ -164,32 +165,48 @@ public class PortItemSemanticEditPolicy extends
 
 		EObject sourceContainer = req.getSource().eContainer().eContainer();
 		EObject targetContainer = req.getTarget().eContainer().eContainer();
-		linkAllowed = (sourceContainer == targetContainer) && ((Port) req.getTarget()).getDirection()==Direction.IN && ((Port) req.getTarget()).getIncomingConnection()==null; 
-		if(sourceContainer instanceof PatchImpl){
-			delegationAllowed = sourceContainer.eContents().contains(targetContainer);
+		linkAllowed = (sourceContainer == targetContainer)
+				&& ((Port) req.getTarget()).getDirection() == Direction.IN
+				&& ((Port) req.getTarget()).getIncomingConnection() == null
+				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
+						.getTarget()).getDataType() == DataType.CONTROL));
+
+		if (sourceContainer instanceof PatchImpl) {
+			delegationAllowed = sourceContainer.eContents().contains(
+					targetContainer);
+		} else if (targetContainer instanceof PatchImpl) {
+			delegationAllowed = targetContainer.eContents().contains(
+					sourceContainer);
+		} else {
+			delegationAllowed = (sourceContainer.eContents().contains(
+					targetContainer) || targetContainer.eContents().contains(
+					sourceContainer));
 		}
-		else if(targetContainer instanceof PatchImpl){
-			delegationAllowed = targetContainer.eContents().contains(sourceContainer);
+
+		delegationAllowed = delegationAllowed
+				&& ((Port) req.getTarget()).getDirection() == ((Port) req
+						.getSource()).getDirection()
+				&& ((Port) req.getTarget()).getIncomingConnection() == null
+				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
+						.getTarget()).getDataType() == DataType.CONTROL));
+
+		if (req.getTarget().eContainer() instanceof AtomicSoundComponent) {
+			delegationAllowed = delegationAllowed
+					&& ((Port) req.getTarget()).getDirection() == Direction.IN;
 		}
-		else {
-			delegationAllowed = (sourceContainer.eContents().contains(targetContainer) || targetContainer.eContents().contains(sourceContainer));
-		}		
-		
-		delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==((Port) req.getSource()).getDirection() && ((Port) req.getTarget()).getIncomingConnection()==null;
-		
-		if (req.getTarget().eContainer() instanceof AtomicSoundComponent){
-			delegationAllowed = delegationAllowed && ((Port) req.getTarget()).getDirection()==Direction.IN;
-		}	
-		
-		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch && linkAllowed) {
+
+		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch
+				&& linkAllowed) {
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
-		if (SoundgatesElementTypes.Link_4002 == req.getElementType() && !patch && linkAllowed) {
+		if (SoundgatesElementTypes.Link_4002 == req.getElementType() && !patch
+				&& linkAllowed) {
 			return getGEFWrapper(new Link2CreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
-		if (SoundgatesElementTypes.Delegation_4003 == req.getElementType() && delegationAllowed) {
+		if (SoundgatesElementTypes.Delegation_4003 == req.getElementType()
+				&& delegationAllowed) {
 			return getGEFWrapper(new DelegationCreateCommand(req,
 					req.getSource(), req.getTarget()));
 		}

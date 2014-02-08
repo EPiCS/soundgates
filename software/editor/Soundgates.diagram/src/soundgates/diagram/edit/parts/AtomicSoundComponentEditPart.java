@@ -3,6 +3,7 @@ package soundgates.diagram.edit.parts;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
@@ -11,14 +12,17 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.FlowLayoutEditPolicy;
+import org.eclipse.gmf.runtime.diagram.ui.figures.BorderItemLocator;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
+import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicyWithCustomReparent;
@@ -29,10 +33,11 @@ import soundgates.diagram.edit.policies.AtomicSoundComponentItemSemanticEditPoli
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 
 /**
- * @generated
+ * @generated NOT
  */
-public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEditPart{	
-	
+public class AtomicSoundComponentEditPart extends
+		AtomicSoundComponentAbstractEditPart {
+
 	/**
 	 * @generated
 	 */
@@ -71,7 +76,7 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 				new AtomicSoundComponentCanonicalEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-		 removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
 		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
 	}
 
@@ -132,7 +137,7 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 			return true;
 		}
 		if (childEditPart instanceof PortEditPart) {
-			return super.addFixedChild(childEditPart); 
+			return super.addFixedChild(childEditPart);
 		}
 		return false;
 	}
@@ -176,7 +181,7 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 	protected NodeFigure createNodePlate() {
 		return super.createNodePlate();
 	}
-	
+
 	/**
 	 * Creates figure for this edit part.
 	 * 
@@ -312,12 +317,12 @@ public class AtomicSoundComponentEditPart extends AtomicSoundComponentAbstractEd
 		public WrappingLabel getFigureAtomicSoundComponentNameFigure() {
 			return fFigureAtomicSoundComponentNameFigure;
 		}
-		
+
 		@Override
-		public IFigure getToolTip() {			
+		public IFigure getToolTip() {
 			return new Label(createToolTip());
 		}
 
 	}
-	
+
 }

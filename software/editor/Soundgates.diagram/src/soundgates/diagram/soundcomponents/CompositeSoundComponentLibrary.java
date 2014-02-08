@@ -2,6 +2,7 @@ package soundgates.diagram.soundcomponents;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -18,6 +19,8 @@ public class CompositeSoundComponentLibrary{
 	private static CompositeSoundComponentLibrary instance;
 	private static TreeMap<String, CompositeSoundComponent> components;
 	private static IFolder xmlfolder;
+	private static HashMap<String,Integer> diagramToCounter = new HashMap<>();
+	public static final String defaultName="CompositeComponent";
 
 	public static CompositeSoundComponentLibrary getInstance() {
 		if (instance == null) {
@@ -32,6 +35,18 @@ public class CompositeSoundComponentLibrary{
 		components = new TreeMap<String, CompositeSoundComponent>();
 	}
 
+	public static String getNumberedName(String fileName){
+		if(diagramToCounter.containsKey(fileName)){
+			int number = diagramToCounter.get(fileName);
+			diagramToCounter.put(fileName, number+1);
+			return defaultName + Integer.toString(number);		
+		}
+		else{
+			diagramToCounter.put(fileName, 2);
+			return defaultName+"1";
+		}
+	}
+	
 	public void addComponent(CompositeSoundComponent component) {
 		components.put(component.getName(), component);
 	}

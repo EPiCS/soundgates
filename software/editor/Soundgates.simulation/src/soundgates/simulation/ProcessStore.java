@@ -44,7 +44,7 @@ public class ProcessStore {
 			while (it.hasNext()){
 				Object next = it.next();
 				IFile modelFile;
-				if (next instanceof IFile && ((modelFile = ((IFile)next)).getName().endsWith(".soundgates_diagram"))){
+				if (next instanceof IFile && ((modelFile = ((IFile)next)).getName().endsWith(".sgd"))){
 					IProject project = ((IResource)next).getProject();
 					
 					Codegen codegen = new Codegen();

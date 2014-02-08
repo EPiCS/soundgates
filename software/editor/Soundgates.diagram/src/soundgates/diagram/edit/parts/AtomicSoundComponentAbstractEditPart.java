@@ -34,8 +34,8 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	}
 
 	public AtomicSoundComponent getAtomicSoundComponent() {
-		if (((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement() instanceof AtomicSoundComponent)
-			return (AtomicSoundComponent) ((org.eclipse.gmf.runtime.notation.Shape) getModel()).getElement();
+		if (((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement() instanceof AtomicSoundComponent)
+			return (AtomicSoundComponent) ((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement();
 		else 
 			return null;
 	}
@@ -43,14 +43,14 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof PortEditPart) {
 			
-			SoundgatesBorderItemLocator locator;
+			SoundgatesPortBorderItemLocator locator;
 			
 			if (((PortEditPart) childEditPart).getPort().getDirection()==Direction.IN){
-				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPort().getName());
+				locator = new SoundgatesPortBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPort().getName());
 				currentInputPort++;
 			}
 			else{
-				locator = new SoundgatesBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPort().getName());
+				locator = new SoundgatesPortBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPort().getName());
 				currentOutputPort++;
 			}
 			getBorderedFigure().getBorderItemContainer().add(((PortEditPart) childEditPart).getFigure(),locator);

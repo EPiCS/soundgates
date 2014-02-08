@@ -1,8 +1,8 @@
 /*
- * TemplateSoundComponent_SW.cpp
+ *  FIR_SW.cpp
  *
  *  Created on: Jan 23, 2014
- *      Author: gwue
+ *      Author: lfu
  */
 
 #include "FIR_SW.hpp"
@@ -45,7 +45,6 @@ void FIR_SW::process(){
 		}
 
 		sample = (int32_t) (acc >> 30);
-        std::cout << "WritePtr approaches end of buffer: reset" << std::endl;
 
 		/* Accumulator is in Q1.47 format */
 		m_SoundOut_1_Port->writeSample(sample, i);

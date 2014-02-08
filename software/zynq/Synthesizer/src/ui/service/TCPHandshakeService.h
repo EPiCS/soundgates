@@ -25,14 +25,15 @@
 #include "../UIService.h"
 #include "../../Patch.h"
 #include "../../InputSoundComponent.h"
-
 #include "../../core/Synthesizer.h"
+#include "../../core/SoundgatesConfig.h"
 
 #define TCP_HANDSHAKE_BUFSIZE 200
 #define TCP_HANDSHAKE_OSC_MSG_DELIMITER "||"
 #define TCP_HANDSHAKE_MAXPENDING 5
 
 #define TCP_HANDSHAKE_RECVMSG "getInteractiveComponents"
+#define TCP_HANDSHAKE_QUITMSG "quit"
 
 namespace ui {
 
@@ -43,6 +44,9 @@ private:
 
     boost::thread*  m_ServiceThread;
     Patch&          m_pPatch;
+
+
+    int             m_ServerSocket;     /* Socket descriptor for server            */
 
 public:
     TCPHandshakeService(Patch& patch);
