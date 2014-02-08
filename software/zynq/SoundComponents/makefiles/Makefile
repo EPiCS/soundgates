@@ -1,5 +1,6 @@
 SoundComponents += addss \
 				  addsc \
+				  addcc \
 				  adsr \
 				  const	\
 				  delay \
