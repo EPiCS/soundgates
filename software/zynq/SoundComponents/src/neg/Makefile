@@ -1,10 +1,10 @@
 -include ../../makefiles/common.mk
 
-OBJECTS += ControlAddControlComponent.o
+OBJECTS += NegationComponent.o
 
-all: libaddcc.so
+all: libneg.so
 
-libaddcc.so: $(OBJECTS)
+libneg.so: $(OBJECTS)
 	@echo $(target)
 	$(CC) $(CLINKER_FLAGS) -o $@  $(OBJECTS)
 

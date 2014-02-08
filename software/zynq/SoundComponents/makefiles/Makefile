@@ -12,6 +12,7 @@ SoundComponents += addss \
 				  mulcc \
 				  mulsc \
 				  mulss \
+				  neg \
 				  output \
 				  square \
 				  dummysink \

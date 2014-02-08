@@ -7,7 +7,7 @@
 
 #include "NegationComponent.h"
 
-DEFINE_COMPONENTNAME(ControlAddControlComponent, "neg");
+DEFINE_COMPONENTNAME(NegationComponent, "neg");
 
 EXPORT_SOUNDCOMPONENT_NO_IMPL(NegationComponent);
 
@@ -52,11 +52,11 @@ public:
 	}
 };
 
-void ControlAddControlComponent::init(void)
+void NegationComponent::init(void)
 {
 	m_ControlIn_1_Port->registerCallback(ICallbackPtr(new OnChange(*this)));
 }
 
-void ControlAddControlComponent::process(void)
+void NegationComponent::process(void)
 {
 }
