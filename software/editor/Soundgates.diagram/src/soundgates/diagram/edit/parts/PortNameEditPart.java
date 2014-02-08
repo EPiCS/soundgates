@@ -44,9 +44,11 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 
+import org.eclipse.swt.widgets.Display;
 import soundgates.diagram.edit.policies.SoundgatesTextSelectionEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
@@ -567,7 +569,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	 * @generated
 	 */
 	private View getFontStyleOwnerView() {
-		return getPrimaryView();
+		return (View) getModel();
 	}
 
 	/**
@@ -666,10 +668,10 @@ public class PortNameEditPart extends LabelEditPart implements
 		private WrappingLabel fFigurePortNameLabel;
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		public PortNameFigure() {
-			this.setText("ENTER A NAME");
+			this.setFont(THIS_FONT);
 		}
 
 		/**
@@ -680,5 +682,12 @@ public class PortNameEditPart extends LabelEditPart implements
 		}
 
 	}
+
+	/**
+	 * @generated
+	 */
+	static final Font THIS_FONT = new Font(Display.getCurrent(), Display
+			.getDefault().getSystemFont().getFontData()[0].getName(), 8,
+			SWT.NORMAL);
 
 }

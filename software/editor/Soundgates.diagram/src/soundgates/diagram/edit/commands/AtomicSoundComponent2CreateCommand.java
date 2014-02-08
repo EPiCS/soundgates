@@ -49,7 +49,7 @@ public class AtomicSoundComponent2CreateCommand extends EditElementCommand {
 		return true;
 
 	}
-	
+
 	/**
 	 * @generated NOT
 	 */
@@ -67,11 +67,11 @@ public class AtomicSoundComponent2CreateCommand extends EditElementCommand {
 					.createAtomicSoundComponent();
 		}
 		//---MYTOOL
-		
+
 		newElement.setName(AtomicSoundComponentLibrary.getNumberedName(
-								(String)concreteType, 
-								getElementToEdit().eResource().getURI().lastSegment()));
-		
+				(String) concreteType, getElementToEdit().eResource().getURI()
+						.lastSegment()));
+
 		CompositeSoundComponent owner = (CompositeSoundComponent) getElementToEdit();
 		owner.getEmbeddedComponents().add(newElement);
 

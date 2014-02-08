@@ -1,10 +1,10 @@
 -include ../../makefiles/common.mk
 
-OBJECTS += SoundAddComponent.o
+OBJECTS += SoundAddControlComponent.o
 
-all: libadd.so
+all: libaddsc.so
 
-libadd.so: $(OBJECTS)
+libaddsc.so: $(OBJECTS)
 	@echo $(target)
 	$(CC) $(CLINKER_FLAGS) -o $@  $(OBJECTS)
 

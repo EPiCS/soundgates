@@ -3,6 +3,8 @@ package soundgates.diagram.edit.parts;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.PolylineDecoration;
 import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ITreeBranchEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.PolylineConnectionEx;
 import org.eclipse.gmf.runtime.notation.View;
@@ -10,10 +12,10 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.diagram.edit.policies.LinkItemSemanticEditPolicy;
 
 /**
- * @generated
+ * @generated NOT
  */
 public class LinkEditPart extends ConnectionAbstractEditPart {
-	
+
 	/**
 	 * @generated
 	 */
@@ -73,7 +75,7 @@ public class LinkEditPart extends ConnectionAbstractEditPart {
 		private RotatableDecoration createTargetDecoration() {
 			PolylineDecoration df = new PolylineDecoration();
 			return df;
-		}	
+		}
 	}
 
 }

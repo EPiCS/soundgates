@@ -17,7 +17,7 @@ public class SoundgatesUriEditorInputTester extends PropertyTester {
 			return false;
 		}
 		URIEditorInput editorInput = (URIEditorInput) receiver;
-		return "soundgates_diagram".equals(editorInput.getURI().fileExtension()); //$NON-NLS-1$
+		return "sgd".equals(editorInput.getURI().fileExtension()); //$NON-NLS-1$
 	}
 
 }

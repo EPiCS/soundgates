@@ -872,14 +872,16 @@ public class SoundgatesDiagramUpdater {
 		}
 	};
 
-	public static void refreshContainer(EObject container) throws ExecutionException {
-			List<CanonicalEditPolicy> editPolicies = CanonicalEditPolicy
-					.getRegisteredEditPolicies(container);
-			for (Iterator<CanonicalEditPolicy> it = editPolicies.iterator(); it.hasNext();) {
-				CanonicalEditPolicy nextEditPolicy = (CanonicalEditPolicy) it
-						.next();
-				nextEditPolicy.refresh();
+	public static void refreshContainer(EObject container)
+			throws ExecutionException {
+		List<CanonicalEditPolicy> editPolicies = CanonicalEditPolicy
+				.getRegisteredEditPolicies(container);
+		for (Iterator<CanonicalEditPolicy> it = editPolicies.iterator(); it
+				.hasNext();) {
+			CanonicalEditPolicy nextEditPolicy = (CanonicalEditPolicy) it
+					.next();
+			nextEditPolicy.refresh();
 		}
 	}
-	
+
 }

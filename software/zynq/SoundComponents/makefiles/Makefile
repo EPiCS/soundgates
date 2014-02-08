@@ -1,4 +1,6 @@
-SoundComponents += add \
+SoundComponents += addss \
+				  addsc \
+				  addcc \
 				  adsr \
 				  const	\
 				  delay \
@@ -7,7 +9,10 @@ SoundComponents += add \
 				  noise \
 				  output \
 				  sine \
+				  mulcc \
 				  mulsc \
+				  mulss \
+				  neg \
 				  output \
 				  square \
 				  dummysink \

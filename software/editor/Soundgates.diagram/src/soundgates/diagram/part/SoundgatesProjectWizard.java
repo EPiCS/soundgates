@@ -15,6 +15,8 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
+
 public class SoundgatesProjectWizard extends Wizard implements INewWizard {
 
 	private SoundgatesProjectWizardPage page;
@@ -50,7 +52,7 @@ public class SoundgatesProjectWizard extends Wizard implements INewWizard {
 				project.open(monitor);
 				IFolder xmlfolder = project.getFolder("soundcomponents");
 				xmlfolder.create(true, true, monitor);
-				IFolder wavefolder = project.getFolder("wave");
+				IFolder wavefolder = project.getFolder(AtomicSoundComponentLibrary.samplesFolderName);
 				wavefolder.create(true, true, monitor);
 			}
 		};
