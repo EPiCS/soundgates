@@ -1,4 +1,5 @@
-SoundComponents += add \
+SoundComponents += addss \
+				  addsc \
 				  adsr \
 				  const	\
 				  delay \
