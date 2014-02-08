@@ -8,7 +8,7 @@
 #include "SoundAddComponent.h"
 
 
-DEFINE_COMPONENTNAME(SoundAddComponent, "add");
+DEFINE_COMPONENTNAME(SoundAddComponent, "addss");
 
 EXPORT_SOUNDCOMPONENT_NO_IMPL(SoundAddComponent);
 

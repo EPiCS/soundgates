@@ -2,9 +2,9 @@
 
 OBJECTS += SoundAddComponent.o
 
-all: libadd.so
+all: libaddss.so
 
-libadd.so: $(OBJECTS)
+libaddss.so: $(OBJECTS)
 	@echo $(target)
 	$(CC) $(CLINKER_FLAGS) -o $@  $(OBJECTS)
 
