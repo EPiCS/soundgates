@@ -278,8 +278,10 @@ void Patch::stop(){
 
 		m_PatchState = Synthesizer::state::stopped;
 
-		/* Joint worker threads */
+		/* Join worker threads */
 		m_WorkerThreads.join_all();
+
+
 		LOG_DEBUG("Joining all worker threads");
 	}
 }
