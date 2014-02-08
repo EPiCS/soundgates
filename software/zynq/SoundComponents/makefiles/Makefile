@@ -9,6 +9,7 @@ SoundComponents += addss \
 				  noise \
 				  output \
 				  sine \
+				  mulcc \
 				  mulsc \
 				  mulss \
 				  output \
