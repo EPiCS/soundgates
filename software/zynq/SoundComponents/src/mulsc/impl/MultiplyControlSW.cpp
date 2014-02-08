@@ -34,11 +34,9 @@ void MultiplyControl_SW::process(){
 
 //    Floating point implementation
 
-     float bias = m_ValueIn_2_Port->pop();
-
      for(int i = 0; i < Synthesizer::config::blocksize; i++){
 
-         m_SoundOut_1_Port->writeSample((*m_SoundIn_1_Port)[i]  * bias, i);
+         m_SoundOut_1_Port->writeSample((*m_SoundIn_1_Port)[i]  * multValue, i);
 
      }
 }

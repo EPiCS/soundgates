@@ -4,6 +4,9 @@ SoundComponents += addss \
 				  adsr \
 				  const	\
 				  delay \
+				  divss \
+				  divsc \
+				  divcc \
 				  fir \
 				  mixer\
 				  noise \
@@ -15,6 +18,9 @@ SoundComponents += addss \
 				  neg \
 				  output \
 				  square \
+				  subcc \
+				  subsc \
+				  subss \
 				  dummysink \
 				  sampleplayer \
                   soundToControl \
