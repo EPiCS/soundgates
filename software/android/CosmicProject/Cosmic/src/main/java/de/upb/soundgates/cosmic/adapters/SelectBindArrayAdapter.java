@@ -123,6 +123,9 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
             }
         });
         holder.spinner.setActivated(holder.checkbox.isActivated());
+        InteractionMethod im = list.get(position).getInteractionMethod();
+        if(im != null)
+            holder.spinner.setSelection(im.ordinal());
         holder.spinner.setAdapter(adapter);
 
         return view;
