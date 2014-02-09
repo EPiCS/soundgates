@@ -127,7 +127,7 @@ void* TCPHandshakeService::tcpHandshakeThread(){
       serverAddr.sin_family         = AF_INET;              /* Internet address family */
       serverAddr.sin_addr.s_addr    = htonl(INADDR_ANY);    /* Any incoming interface */
       SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
-      serverAddr.sin_port           = cfg.get<int>(SoundgatesConfig::CFG_DEFAULT_TCP_PORT);          /* Local port */
+      serverAddr.sin_port           = htons(cfg.get<in_port_t>(SoundgatesConfig::CFG_DEFAULT_TCP_PORT));          /* Local port */
 
       /* Bind to the local address */
       if (bind(serverSock, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0){
