@@ -32,8 +32,7 @@ void MultiplyControl_SW::process(){
 //    }
 
 
-//    Floating point implementation
-
+//     LOG_DEBUG("Mult: " << multValue);
      for(int i = 0; i < Synthesizer::config::blocksize; i++){
 
          m_SoundOut_1_Port->writeSample((*m_SoundIn_1_Port)[i]  * multValue, i);

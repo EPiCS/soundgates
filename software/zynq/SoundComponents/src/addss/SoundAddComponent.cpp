@@ -28,8 +28,25 @@ void SoundAddComponent::init(void){ /* do nothing */ }
 
 void SoundAddComponent::process(void){
 
-	for(int i = 0; i < Synthesizer::config::blocksize; i++){
+    int sample;
 
-	    m_SoundOut_1_Port->writeSample((*m_SoundIn_1_Port)[i] + (*m_SoundIn_2_Port)[i], i);
+	for(int i = 0; i < Synthesizer::config::blocksize; i++){
+	    // Fixme: fixed point addition ohne bereichsüberläufe
+
+	    /*float a = (*m_SoundIn_1_Port)[i];
+	    float b = (*m_SoundIn_2_Port)[i];*/
+
+	    sample = (*m_SoundIn_1_Port)[i] + (*m_SoundIn_2_Port)[i];
+
+	    /*if (sample > (1 << 30)){
+	        sample = (1 << 30);
+	    }
+
+	    if(sample < (- (1 << 30))){
+	        sample = -(1 << 30);
+	    }*/
+
+	    m_SoundOut_1_Port->writeSample(sample, i);
+
 	}
 }
