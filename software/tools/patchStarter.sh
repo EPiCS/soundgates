@@ -1,19 +1,18 @@
 #!/bin/bash
 
-# no longer needed, should reside in the same folder
-#PROJPATH=$1
-PROJPATH=$(dirname $0)
+SCRIPTPATH=$(readlink -f "$0")
+PROJPATH=$(dirname "$SCRIPTPATH")
+TGFPATH=/tmp/soundgates
 
 # extract zip file to working directory
-rm -r -f /tmp/soundgates 
-mkdir /tmp/soundgates
-cp $1 /tmp/soundgates
-cd /tmp/soundgates
+rm -r -f $TGFPATH 
+mkdir $TGFPATH
+cp $1 $TGFPATH
+cd $TGFPATH
 unzip *.zip
 TGF=`ls *.tgf`
 
 export LD_LIBRARY_PATH="$PROJPATH/lib"
-$PROJPATH/Synthesizer.elf --patch-file=./$TGF --alsadevice=plughw:1,0
+cd $PROJPATH
+$PROJPATH/Synthesizer.elf --patch-file=$TGFPATH/$TGF
 
-#export LD_LIBRARY_PATH="/home/gwue/git/synthesizer/pg-soundgates/software/zynq/Libraries/x86_64/lib"
-#/home/gwue/git/synthesizer/pg-soundgates/software/zynq/Synthesizer/Release/Synthesizer.elf --soundcomponents=/home/gwue/git/synthesizer/pg-soundgates/software/zynq/SoundComponents/result/ --patch-file=./$TGF --alsadevice=plughw:1,0
