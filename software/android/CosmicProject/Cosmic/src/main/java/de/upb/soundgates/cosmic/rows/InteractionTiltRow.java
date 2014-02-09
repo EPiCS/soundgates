@@ -74,7 +74,7 @@ public class InteractionTiltRow implements InteractionRow {
 
         // no convertView so create a new one
         if (convertView == null) {
-            ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.interaction_row_rotaryz, null);
+            ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.interaction_row_tilt, null);
 
             holder = new ViewHolder(
                     (TextView) viewGroup.findViewById(R.id.msg),

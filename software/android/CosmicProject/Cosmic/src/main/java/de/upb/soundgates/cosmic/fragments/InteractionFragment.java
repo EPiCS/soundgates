@@ -63,7 +63,8 @@ public class InteractionFragment extends ListFragment {
             rows = new ArrayList<InteractionRow>(msgList.size());
 
             for (OSCMessage msg : msgList) {
-                switch (msg.getInteractionMethod())
+                InteractionMethod im = msg.getInteractionMethod();
+                switch (im)
                 {
                     case SEEKBAR:
                         rows.add(new InteractionSeekBarRow(inflater, msg));

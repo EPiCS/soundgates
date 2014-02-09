@@ -76,55 +76,55 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
                     });
             view.setTag(viewHolder);
             viewHolder.checkbox.setTag(list.get(position));
-
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-                    R.array.interaction_technique, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            viewHolder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String im_str = parent.getItemAtPosition(position).toString();
-                    InteractionMethod im_id = null;
-
-                    // Mapping from description of interaction technique to model values
-                    if(im_str.equals(context.getResources().getString(R.string.seekBar))) {
-                        im_id = InteractionMethod.SEEKBAR;
-                    } else if(im_str.equals(context.getResources().getString(R.string.button))) {
-                        im_id = InteractionMethod.BUTTON;
-                    } else if(im_str.equals(context.getResources().getString(R.string.tilt))) {
-                        im_id = InteractionMethod.TILT;
-                    } else if(im_str.equals(context.getResources().getString(R.string.rotaryZ))) {
-                        im_id = InteractionMethod.ROTARYZ;
-                    } else if(im_str.equals(context.getResources().getString(R.string.shake))) {
-                        im_id = InteractionMethod.SHAKE;
-                    } else if(im_str.equals(context.getResources().getString(R.string.light))) {
-                        im_id = InteractionMethod.LIGHT;
-                    } else {
-                        String err = "Interaction method " + im_str + " unknown";
-                        Log.e("SelectBindArrayAdapter", err);
-                        System.exit(-1);
-                    }
-
-                    OSCMessage msg = (OSCMessage) viewHolder.checkbox.getTag();
-                    msg.setInteractionMethod(im_id);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-            viewHolder.spinner.setActivated(viewHolder.checkbox.isActivated());
-            viewHolder.spinner.setAdapter(adapter);
         } else {
             view = convertView;
             ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
         }
 
-        ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag();
         holder.text.setText(list.get(position).getPath());
         holder.checkbox.setChecked(list.get(position).isSelected());
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.interaction_technique, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String im_str = parent.getItemAtPosition(position).toString();
+                InteractionMethod im_id = null;
+
+                // Mapping from description of interaction technique to model values
+                if(im_str.equals(context.getResources().getString(R.string.seekBar))) {
+                    im_id = InteractionMethod.SEEKBAR;
+                } else if(im_str.equals(context.getResources().getString(R.string.button))) {
+                    im_id = InteractionMethod.BUTTON;
+                } else if(im_str.equals(context.getResources().getString(R.string.tilt))) {
+                    im_id = InteractionMethod.TILT;
+                } else if(im_str.equals(context.getResources().getString(R.string.rotaryZ))) {
+                    im_id = InteractionMethod.ROTARYZ;
+                } else if(im_str.equals(context.getResources().getString(R.string.shake))) {
+                    im_id = InteractionMethod.SHAKE;
+                } else if(im_str.equals(context.getResources().getString(R.string.light))) {
+                    im_id = InteractionMethod.LIGHT;
+                } else {
+                    String err = "Interaction method " + im_str + " unknown";
+                    Log.e("SelectBindArrayAdapter", err);
+                    System.exit(-1);
+                }
+
+                OSCMessage msg = (OSCMessage) holder.checkbox.getTag();
+                msg.setInteractionMethod(im_id);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        holder.spinner.setActivated(holder.checkbox.isActivated());
+        holder.spinner.setAdapter(adapter);
+
         return view;
     }
 }
