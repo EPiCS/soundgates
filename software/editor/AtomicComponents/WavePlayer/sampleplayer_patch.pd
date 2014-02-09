@@ -13,7 +13,7 @@
 #X obj 145 338 print;
 #X obj 155 267 pack s s;
 #X msg 290 190 symbol FileName.wav;
-#X msg 129 202 symbol ../wave;
+#X msg 129 202 symbol ../samples;
 #X obj 241 153 t b b b;
 #X connect 1 0 2 0;
 #X connect 4 0 5 0;
