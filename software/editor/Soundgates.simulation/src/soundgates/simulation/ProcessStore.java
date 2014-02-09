@@ -1,19 +1,13 @@
 package soundgates.simulation;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import soundgates.Patch;
 import soundgates.codegen.CodeGenHelper;
@@ -21,6 +15,7 @@ import soundgates.codegen.simulation.Codegen;
 
 public class ProcessStore {
 	static public Process currentPureDataProcess = null;
+	static public Codegen currentCodeGen = null;
 	static public HandshakeThread handShakeThread = null;
 	
 	static public void killSimulation(){
@@ -32,46 +27,28 @@ public class ProcessStore {
 			ProcessStore.handShakeThread.stopMe();
 			ProcessStore.handShakeThread = null;
 		}
+		if (currentCodeGen != null){
+			currentCodeGen = null;
+		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	static public void startSimulation(ExecutionEvent event){
+	static public void startSimulation(IFile modelFile){
 		killSimulation();
-		try {
-			IStructuredSelection structuredSelection = (IStructuredSelection) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-			Iterator it = structuredSelection.iterator();
-			
-			while (it.hasNext()){
-				Object next = it.next();
-				IFile modelFile;
-				if (next instanceof IFile && ((modelFile = ((IFile)next)).getName().endsWith(".sgd"))){
-					IProject project = ((IResource)next).getProject();
-					
-					Codegen codegen = new Codegen();
-					
+		currentCodeGen = new Codegen();
 					try {
+						IProject project = modelFile.getProject();
 						Patch patch = CodeGenHelper.getPatch(modelFile.getFullPath().toOSString());
 						Diagram diagram = CodeGenHelper.getDiagram(modelFile.getFullPath().toOSString());
-						codegen.generate(patch, diagram, project);
+						currentCodeGen.generate(patch, diagram, project);
 						modelFile.getParent().refreshLocal(1, null);
-						ControlDialog dialog = new ControlDialog(HandlerUtil.getActiveShell(event));
-
-						dialog.setIoComponents(codegen.getIoComponents());
-						dialog.create();
-						(ProcessStore.handShakeThread = new HandshakeThread(codegen.getIoComponents())).start();
+						
+						(ProcessStore.handShakeThread = new HandshakeThread(currentCodeGen.getIoComponents())).start();
 						simulate(project);
-						dialog.open();
 					} catch (Exception e) {				
 						e.printStackTrace();
 					}
 					
-					
-				}
-			}
-			
-		} catch (Exception err) {
-			err.printStackTrace();
-		}
+				
 	}
 	
 	private static void simulate(IProject project) throws IOException{

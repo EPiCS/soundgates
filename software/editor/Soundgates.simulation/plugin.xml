@@ -23,6 +23,11 @@
                   style="push"
                   tooltip="Stop the simulation">
             </command>
+            <command
+                  commandId="Soundgates.simulation.ShowControls"
+                  label="Show controls"
+                  style="push">
+            </command>
          </toolbar>
       </menuContribution>
    </extension>
@@ -37,6 +42,11 @@
             defaultHandler="soundgates.simulation.StopSimulationHandler"
             id="Soundgates.simulation.StopSimulation"
             name="Stop Simulation">
+      </command>
+      <command
+            defaultHandler="soundgates.simulation.ControlSimulationHandler"
+            id="Soundgates.simulation.ShowControls"
+            name="Show controls">
       </command>
    </extension>
    <extension
