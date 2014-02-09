@@ -98,12 +98,16 @@ void TCPHandshakeService::tcpClientHandler(int clientSock){
 
             send_all(clientSock,  msg.c_str(), msg.size());
 
-        }
-        else{
+        } else if(!strncmp(TCP_HANDSHAKE_QUIT, recvMsgBuf, sizeof(TCP_HANDSHAKE_QUIT))) {
+        	LOG_DEBUG("Quit message received. Shutting down TCP Handshake!");
+
+        	setServiceState(ui::STOPPED);
+        } else{
             sendMsgBuf = (char*) malloc(TCP_HANDSHAKE_BUFSIZE * sizeof(char));
             sendMsgSize = snprintf(sendMsgBuf, TCP_HANDSHAKE_BUFSIZE, "Unknown command:\"%s\"\n", recvMsgBuf);
             fprintf(stderr, "%s", sendMsgBuf);
             send_all(clientSock, sendMsgBuf, sendMsgSize);
+            free(sendMsgBuf);
         }
     }
 
@@ -121,6 +125,11 @@ void* TCPHandshakeService::tcpHandshakeThread(){
       /* Create socket for incoming connections */
       if ((serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
           LOG_ERROR("socket() failed");
+
+      int on = 1;
+      if(setsockopt(serverSock, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof(on))) {
+    	  LOG_ERROR("setsockopt() failed");
+      }
 
       /* Construct local address structure */
       memset(&serverAddr, 0, sizeof(serverAddr));           /* Zero out structure */

@@ -33,6 +33,7 @@
 #define TCP_HANDSHAKE_MAXPENDING 5
 
 #define TCP_HANDSHAKE_RECVMSG "getInteractiveComponents"
+#define TCP_HANDSHAKE_QUIT	  "quit"
 
 namespace ui {
 

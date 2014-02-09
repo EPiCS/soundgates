@@ -132,7 +132,43 @@ int main( int argc, const char* argv[])
 	return 0;
 }
 
+void terminateTCPHandshake() {
+	int sockfd;
+	struct sockaddr_in serv_addr;
+	struct hostent *server;
+
+	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
+
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd < 0) {
+		LOG_ERROR("terminateTCPHandshake: ERROR opening socket");
+		exit(1);
+	}
+
+	server = gethostbyname("localhost");
+	if (server == NULL) {
+		LOG_ERROR("terminateTCPHandshake: ERROR localhost not found?\n");
+		exit(1);
+	}
+
+	bzero((char *) &serv_addr, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+	serv_addr.sin_port = htons(cfg.get<in_port_t>(SoundgatesConfig::CFG_DEFAULT_TCP_PORT));
+
+	/* Now connect to the server */
+	if (connect(sockfd,(sockaddr*)&serv_addr,sizeof(serv_addr)) < 0) {
+		LOG_ERROR("terminateTCPHandshake: ERROR connecting");
+		exit(1);
+	}
+
+	char *buffer = TCP_HANDSHAKE_QUIT;
+	write(sockfd,buffer,strlen(buffer));
+}
+
 void SynthesizerTerminate(int sig){
+	// send tcp handshake the quit message
+	terminateTCPHandshake();
 
     ui::UIManager::getInstance().stopAllServices();
 
