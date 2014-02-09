@@ -18,7 +18,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ShapeImpl;
 import org.eclipse.ui.internal.dialogs.TreeManager.CheckListener;
 
@@ -201,32 +203,33 @@ public class Codegen {
 		printCompositeSoundComponent(compositeSoundComponent, componentList, linkList, delegationList);
 	}
 	
-	private Shape findCoords(Diagram diagram, SoundComponent component){
+	private Node findCoords(Diagram diagram, SoundComponent component){
 		TreeIterator<EObject> iter = diagram.eAllContents();
 		while (iter.hasNext()){
 			
 			EObject current = iter.next();
-			if (current instanceof Shape){
-				Shape shape = (Shape) current;
-				XMIResource shapeRes = (XMIResource)shape.getElement().eResource(); 
+			if (current instanceof Node){
+				Node node = (Node) current;
+				XMIResource nodeRes = (XMIResource)node.getElement().eResource();
 				XMIResource compRes = (XMIResource)component.eResource();
-				if (shapeRes.getID(shape.getElement()).equals(compRes.getID(component))){
-					return shape;
-				}			
+				if (nodeRes.getID(((Node) current).getElement()).equals(compRes.getID(component))){
+					return node;
+				}	
 			}
+
 		}
 		return null;
 		
 	}
 	
 	private String generateObject(Diagram diagram, SoundComponent comp){
-		Shape shape = findCoords(diagram, comp);
+		Node node = findCoords(diagram, comp);
 
 		int x = 0;
 		int y = 0;
-		if (shape.getLayoutConstraint() instanceof Bounds){
-			x = ((Bounds)shape.getLayoutConstraint()).getX();
-			y = ((Bounds)shape.getLayoutConstraint()).getY();
+		if (node != null && node.getLayoutConstraint() instanceof Bounds){
+			x = ((Bounds)node.getLayoutConstraint()).getX();
+			y = ((Bounds)node.getLayoutConstraint()).getY();
 		}
 		return "#X obj " + x + " " + y + " "+ getUniqueName(comp) + ";\n";
 	}
