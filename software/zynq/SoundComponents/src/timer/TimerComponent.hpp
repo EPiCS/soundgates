@@ -71,7 +71,7 @@ public:
 
             m_ObjRef.m_TriggeredOnce = false;
 
-            LOG_DEBUG("Timer triggered" << m_ObjRef.myid );
+    //        LOG_DEBUG("Timer triggered" << m_ObjRef.myid );
         }
     };
 

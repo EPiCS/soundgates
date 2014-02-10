@@ -25,7 +25,7 @@ void TimerComponent_SW::process(){
             m_TriggeredOnce = (m_Loop) ? false : true ;
             m_TriggerOut_1_Port->push(1.0f);
 
-            LOG_DEBUG("Timer elapsed " << myid );
+            //LOG_DEBUG("Timer elapsed " << myid );
         }
     }
 }

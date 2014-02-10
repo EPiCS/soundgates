@@ -19,7 +19,7 @@ void Ramp_SW::OnTrigger::operator()() {
     case Ramp_SW::RELEASE:
 
         if (trigger > 0) {
-            LOG_DEBUG("Ramp Triggered" << m_ObjRef->myid);
+//            LOG_DEBUG("Ramp Triggered" << m_ObjRef->myid);
             m_ObjRef->m_ADSRState = Ramp_SW::CLICK_SUPPRESSION;
         }
 
