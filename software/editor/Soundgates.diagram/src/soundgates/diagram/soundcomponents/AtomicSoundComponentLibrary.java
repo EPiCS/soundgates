@@ -15,6 +15,7 @@ public class AtomicSoundComponentLibrary{
 
 	private static AtomicSoundComponentLibrary instance;
 	private static HashMap<String,Integer> diagramAndTypeToCounter = new HashMap<>();
+	public static HashMap<String,String> typeToCategory = new HashMap<>();
 	private TreeMap<String, AtomicSoundComponent> components;
 	private static IFolder xmlfolder;
 	public final static String samplesFolderName = "samples";
