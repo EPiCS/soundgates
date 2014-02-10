@@ -46,7 +46,7 @@ public:
 
 	void operator()()
 	{
-		m_ObjRef.value1 = (int) m_ObjRef.m_ControlIn_1_Port->pop();
+		m_ObjRef.value1 = m_ObjRef.m_ControlIn_1_Port->pop();
 		m_ObjRef.valueResult = m_ObjRef.value1 * m_ObjRef.value2;
 		m_ObjRef.m_ControlOut_1_Port->push(m_ObjRef.valueResult);
 	}
@@ -63,7 +63,7 @@ public:
 
 	void operator()()
 	{
-		m_ObjRef.value2 = (int) m_ObjRef.m_ControlIn_1_Port->pop();
+		m_ObjRef.value2 = m_ObjRef.m_ControlIn_2_Port->pop();
 		m_ObjRef.valueResult = m_ObjRef.value1 * m_ObjRef.value2;
 		m_ObjRef.m_ControlOut_1_Port->push(m_ObjRef.valueResult);
 	}
