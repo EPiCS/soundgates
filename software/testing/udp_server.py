@@ -18,7 +18,7 @@ PORT=1338
 
 
 class DebuggingServer(object):
-    MAX_INDEX = 63
+    MAX_INDEX = 44100
     
     def __init__(self, ip, port):
         self.Ip = ip
@@ -43,14 +43,24 @@ class DebuggingServer(object):
 
     def receive(self):
         sample_arr = []
+        sample_count = 0
         while 1:
             # Receive 5 Bytes
+#             data, addr = self.Socket.recvfrom( 5 )
+#             pcm_int = unpack_from('i', data,0)
+#             received_index = unpack_from('c', data,4)
+#             received_index = ord(received_index[0])
+#             sample_arr.insert( received_index+1, pcm_int )
+#             if(received_index == self.MAX_INDEX):
+#                 arr = np.asanyarray(sample_arr, dtype=np.int32)
+#                 self.Queue.put(np.asanyarray(arr))
             data, addr = self.Socket.recvfrom( 5 )
             pcm_int = unpack_from('i', data,0)
-            received_index = unpack_from('c', data,4)
-            received_index = ord(received_index[0])
-            sample_arr.insert( received_index+1, pcm_int )
-            if(received_index == self.MAX_INDEX):
+            #received_index = unpack_from('c', data,4)
+            #received_index = ord(received_index[0])
+            sample_arr.append( pcm_int )
+            sample_count += 1
+            if(sample_count == self.MAX_INDEX):
                 arr = np.asanyarray(sample_arr, dtype=np.int32)
                 self.Queue.put(np.asanyarray(arr))
                 
