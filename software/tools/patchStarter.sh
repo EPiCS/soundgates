@@ -6,8 +6,8 @@ PROJPATH=$(dirname "$SCRIPTPATH")
 TGFPATH=$PROJPATH
 
 # extract zip file to working directory
-rm -r -f $TGFPATH 
-mkdir $TGFPATH
+#rm -r -f $TGFPATH 
+#mkdir $TGFPATH
 cp $1 $TGFPATH
 cd $TGFPATH
 unzip *.zip
