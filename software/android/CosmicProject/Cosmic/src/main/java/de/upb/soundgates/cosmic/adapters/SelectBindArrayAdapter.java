@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 
 import de.upb.soundgates.cosmic.InteractionMethod;
@@ -25,11 +26,22 @@ import de.upb.soundgates.cosmic.osc.OSCMessage;
 public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
     private final List<OSCMessage> list;
     private final Activity context;
+    private String[] spinnerStrings;
+
+    static {
+
+    }
 
     public SelectBindArrayAdapter(Activity context, List<OSCMessage> list) {
         super(context, R.layout.select2_row, list);
         this.context = context;
         this.list = list;
+
+        String[] arrInteractionTechnique = context.getResources().getStringArray(R.array.interaction_technique);
+        this.spinnerStrings = new String[arrInteractionTechnique.length+1];
+        spinnerStrings[0] = "- Choose Interaction Method -";
+        for(int i = 1; i < spinnerStrings.length; ++i)
+            spinnerStrings[i] = arrInteractionTechnique[i-1];
     }
 
     static class ViewHolder {
@@ -76,8 +88,7 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
         holder.text.setText(list.get(position).getPath());
         holder.checkbox.setChecked(list.get(position).isSelected());
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-                R.array.interaction_technique, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerStrings);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.spinner.setOnItemSelectedListener(
         new AdapterView.OnItemSelectedListener() {
@@ -85,6 +96,12 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String im_str = parent.getItemAtPosition(position).toString();
                 InteractionMethod im_id = null;
+
+                if(im_str.equals("- Choose Interaction Method -")) {
+                    OSCMessage msg = (OSCMessage) holder.checkbox.getTag();
+                    holder.spinner.setSelection(1+msg.getInteractionMethod().ordinal());
+                    return;
+                }
 
                 // Mapping from description of interaction technique to model values
                 if(im_str.equals(context.getResources().getString(R.string.seekBar))) {
@@ -117,7 +134,7 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
         holder.spinner.setActivated(holder.checkbox.isActivated());
         InteractionMethod im = ((OSCMessage) holder.checkbox.getTag()).getInteractionMethod();//list.get(position).getInteractionMethod();
         if(im != null) {
-            holder.spinner.setSelection(im.ordinal());
+            holder.spinner.setSelection(1+im.ordinal());
         }
         holder.spinner.setAdapter(adapter);
 
