@@ -72,6 +72,7 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		AtomicSoundComponent atomicSoundComponent = getAtomicSoundComponent();
 		
 		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("Type: "+atomicSoundComponent.getType() +"\n");
 		for(String key : atomicSoundComponent.getStringProperties().keySet()){
 			if(key.equals("implType")){
 				String implType;
