@@ -54,6 +54,7 @@ public class OSCMessage extends Observable {
         this.path       = path;
         this.types      = new LinkedList<OSCType>();
         this.selected   = false;
+        this.interactionMethod = InteractionMethod.values()[0];
     }
 
     public String toString() {

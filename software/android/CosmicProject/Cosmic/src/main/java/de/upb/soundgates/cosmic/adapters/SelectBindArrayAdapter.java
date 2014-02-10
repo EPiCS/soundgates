@@ -7,29 +7,20 @@ package de.upb.soundgates.cosmic.adapters;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import de.upb.soundgates.cosmic.InteractionMethod;
-import de.upb.soundgates.cosmic.MainActivity;
-import de.upb.soundgates.cosmic.MinMaxSeekBar;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
-import de.upb.soundgates.cosmic.osc.OSCMessageStore;
-import de.upb.soundgates.cosmic.osc.OSCSender;
-import de.upb.soundgates.cosmic.osc.OSCType;
 
 public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
     private final List<OSCMessage> list;
@@ -88,7 +79,8 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
                 R.array.interaction_technique, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        holder.spinner.setOnItemSelectedListener(
+        new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String im_str = parent.getItemAtPosition(position).toString();
@@ -123,9 +115,10 @@ public class SelectBindArrayAdapter extends ArrayAdapter<OSCMessage> {
             }
         });
         holder.spinner.setActivated(holder.checkbox.isActivated());
-        InteractionMethod im = list.get(position).getInteractionMethod();
-        if(im != null)
+        InteractionMethod im = ((OSCMessage) holder.checkbox.getTag()).getInteractionMethod();//list.get(position).getInteractionMethod();
+        if(im != null) {
             holder.spinner.setSelection(im.ordinal());
+        }
         holder.spinner.setAdapter(adapter);
 
         return view;
