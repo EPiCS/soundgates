@@ -5,6 +5,7 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPar
 import org.eclipse.gmf.runtime.diagram.ui.figures.ResizableCompartmentFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ShapeImpl;
+import org.eclipse.swt.graphics.Color;
 
 import soundgates.CompositeSoundComponent;
 import soundgates.diagram.part.SoundgatesDiagramUpdater;
@@ -43,6 +44,7 @@ public abstract class CompositeSoundComponentAbstractEditPart extends
 	public void activate() {
 		super.activate();
 		refreshContainer();
+		setForegroundColor(new Color(null,0,0,0));
 	}
 	
 	public ResizableCompartmentFigure getCompartmentFigure(){
