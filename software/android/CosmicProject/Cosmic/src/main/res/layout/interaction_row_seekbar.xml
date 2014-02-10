@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
@@ -71,7 +71,7 @@
             android:text="H"
             android:id="@+id/button_h"
             android:layout_weight="0.14285" />
-    </LinearLayout>
+    </LinearLayout>-->
 
 
 </LinearLayout>

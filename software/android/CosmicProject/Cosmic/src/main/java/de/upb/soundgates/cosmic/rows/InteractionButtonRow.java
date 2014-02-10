@@ -70,8 +70,6 @@ public class InteractionButtonRow implements InteractionRow {
                     (EditText) viewGroup.findViewById(R.id.onReleaseValue)
             );
 
-            Log.d("getView", "convertView == null, " + msg.toString());
-
             viewGroup.setTag(holder);
 
             view = viewGroup;

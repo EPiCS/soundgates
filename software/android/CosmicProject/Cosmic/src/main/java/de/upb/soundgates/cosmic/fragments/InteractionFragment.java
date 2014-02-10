@@ -63,10 +63,11 @@ public class InteractionFragment extends ListFragment {
             getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int i) {
-                    if(i == SCROLL_STATE_IDLE)
+                    if(i == SCROLL_STATE_IDLE) {
                         isScrolling = false;
-                    else
+                    } else {
                         isScrolling = true;
+                    }
                 }
 
                 @Override
@@ -118,6 +119,12 @@ public class InteractionFragment extends ListFragment {
         @Override
         public int getItemViewType(int position) {
             return rows.get(position).getViewType();
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            Log.d("areAllItemsEnabled", isScrolling+"");
+            return isScrolling;
         }
 
         public int getCount() {

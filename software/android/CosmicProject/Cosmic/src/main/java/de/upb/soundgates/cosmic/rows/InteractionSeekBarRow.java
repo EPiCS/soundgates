@@ -1,9 +1,7 @@
 package de.upb.soundgates.cosmic.rows;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,32 +33,32 @@ public class InteractionSeekBarRow implements InteractionRow{
     private static class ViewHolder {
         final TextView text;
         final MinMaxSeekBar seekbar;
-        final Button button_c;
+        /*final Button button_c;
         final Button button_d;
         final Button button_e;
         final Button button_f;
         final Button button_g;
         final Button button_a;
-        final Button button_h;
+        final Button button_h;*/
 
         private ViewHolder(TextView msgText,
-                           MinMaxSeekBar seekbar,
+                           MinMaxSeekBar seekbar/*,
                            Button button_c,
                            Button button_d,
                            Button button_e,
                            Button button_f,
                            Button button_g,
                            Button button_a,
-                           Button button_h) {
+                           Button button_h*/) {
             this.text = msgText;
             this.seekbar = seekbar;
-            this.button_c= button_c;
+            /*this.button_c= button_c;
             this.button_d= button_d;
             this.button_e= button_e;
             this.button_f= button_f;
             this.button_g= button_g;
             this.button_a= button_a;
-            this.button_h= button_h;
+            this.button_h= button_h;*/
         }
     }
 
@@ -82,14 +80,14 @@ public class InteractionSeekBarRow implements InteractionRow{
 
             holder = new ViewHolder(
                     (TextView) viewGroup.findViewById(R.id.msg),
-                    (MinMaxSeekBar) viewGroup.findViewById(R.id.seekBar),
+                    (MinMaxSeekBar) viewGroup.findViewById(R.id.seekBar)/*,
                     (Button) viewGroup.findViewById(R.id.button_c),
                     (Button) viewGroup.findViewById(R.id.button_d),
                     (Button) viewGroup.findViewById(R.id.button_e),
                     (Button) viewGroup.findViewById(R.id.button_f),
                     (Button) viewGroup.findViewById(R.id.button_g),
                     (Button) viewGroup.findViewById(R.id.button_a),
-                    (Button) viewGroup.findViewById(R.id.button_h)
+                    (Button) viewGroup.findViewById(R.id.button_h)*/
             );
 
             viewGroup.setTag(holder);
@@ -108,21 +106,23 @@ public class InteractionSeekBarRow implements InteractionRow{
         OSCType t = msg.getTypes().get(0);
         holder.seekbar.setMinimumValue(t.MIN_VALUE);
         holder.seekbar.setMaximumValue(t.MAX_VALUE);
-        holder.seekbar.setFloatValue(t.getValue());
+        holder.seekbar.setFloatValue(0);
         holder.seekbar.setOnSeekBarChangeListener(new OnMinMaxSeekBarChangeListener());
 
         return view;
     }
 
     class OnMinMaxSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
-        public OnMinMaxSeekBarChangeListener() {}
+        private boolean touch;
+
+        public OnMinMaxSeekBarChangeListener(){
+            touch = false;
+        }
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-            /*Activity a = (Activity) inflater.getContext();
-            InteractionFragment f = (InteractionFragment)a.getFragmentManager().findFragmentById(R.id.interaction_main);
-            if(f.isScrolling())
-                return;*/
+            if(!touch)
+                return;
 
             msg.setValue(((MinMaxSeekBar)seekBar).getFloatValue());
             OSCSender.send(msg);
@@ -130,12 +130,12 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
+            touch = true;
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
+            touch = false;
         }
     }
 
