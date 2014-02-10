@@ -16,6 +16,7 @@ public class OSCType {
         this.typeTag    = typeTag;
         this.MIN_VALUE  = minValue;
         this.MAX_VALUE  = maxValue;
+        this.value      = minValue;
     }
 
     public void setValue(float p) {
@@ -70,6 +71,6 @@ public class OSCType {
     }
 
     public String toString() {
-        return typeTag + "[" + MIN_VALUE + ":" + MAX_VALUE + "]";
+        return typeTag + "=" + value + " " + "[" + MIN_VALUE + ":" + MAX_VALUE + "]";
     }
 }

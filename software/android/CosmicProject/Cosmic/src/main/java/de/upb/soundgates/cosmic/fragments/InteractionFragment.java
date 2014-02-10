@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import de.upb.soundgates.cosmic.rows.InteractionTiltRow;
  */
 public class InteractionFragment extends ListFragment {
     private LayoutInflater inflater;
+    private boolean isScrolling;
 
     public static InteractionFragment newInstance() {
         InteractionFragment fragment = new InteractionFragment();
@@ -35,7 +37,13 @@ public class InteractionFragment extends ListFragment {
         return fragment;
     }
 
-    public InteractionFragment() {}
+    public InteractionFragment() {
+        isScrolling = false;
+    }
+
+    public boolean isScrolling() {
+        return isScrolling;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +60,20 @@ public class InteractionFragment extends ListFragment {
         {
             OSCMessageAdapter adapter = new OSCMessageAdapter(msg_store.getSelectedOSCMessageAsList());
             setListAdapter(adapter);
+            getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int i) {
+                    if(i == SCROLL_STATE_IDLE)
+                        isScrolling = false;
+                    else
+                        isScrolling = true;
+                }
+
+                @Override
+                public void onScroll(AbsListView absListView, int i, int i2, int i3) {
+
+                }
+            });
         }
     }
 

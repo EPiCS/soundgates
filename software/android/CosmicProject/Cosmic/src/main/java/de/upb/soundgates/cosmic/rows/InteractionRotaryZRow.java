@@ -30,6 +30,7 @@ public class InteractionRotaryZRow implements InteractionRow {
     public void update(Observable observable, Object o) {
         final float rotation = listener.getRotationWithOffsetInPercent();
         msg.setValueAsPercent(rotation);
+        Log.d("RotaryZ", rotation+"");
         OSCSender.send(msg);
         if(holder != null) {
             // Using AsyncTask.onPostExecute to update UI (UI-Updates must happen on UI thread)

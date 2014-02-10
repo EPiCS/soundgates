@@ -1,6 +1,7 @@
 package de.upb.soundgates.cosmic.rows;
 
-import android.util.Log;
+import android.app.Activity;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,13 +10,12 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.LinkedList;
 import java.util.Observable;
 
 import de.upb.soundgates.cosmic.InteractionMethod;
-import de.upb.soundgates.cosmic.MainActivity;
 import de.upb.soundgates.cosmic.MinMaxSeekBar;
 import de.upb.soundgates.cosmic.R;
+import de.upb.soundgates.cosmic.fragments.InteractionFragment;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCSender;
 import de.upb.soundgates.cosmic.osc.OSCType;
@@ -102,8 +102,14 @@ public class InteractionSeekBarRow implements InteractionRow{
         }
 
         // actually setup the view
-        configureMinMaxSeekBar(holder);
+        //configureMinMaxSeekBar(holder);
         holder.text.setText(msg.getPath());
+
+        OSCType t = msg.getTypes().get(0);
+        holder.seekbar.setMinimumValue(t.MIN_VALUE);
+        holder.seekbar.setMaximumValue(t.MAX_VALUE);
+        holder.seekbar.setFloatValue(0);
+        holder.seekbar.setOnSeekBarChangeListener(new OnMinMaxSeekBarChangeListener());
 
         return view;
     }
@@ -113,6 +119,11 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            /*Activity a = (Activity) inflater.getContext();
+            InteractionFragment f = (InteractionFragment)a.getFragmentManager().findFragmentById(R.id.interaction_main);
+            if(f.isScrolling())
+                return;*/
+
             msg.setValue(((MinMaxSeekBar)seekBar).getFloatValue());
             OSCSender.send(msg);
         }
@@ -136,8 +147,9 @@ public class InteractionSeekBarRow implements InteractionRow{
             OSCType t = msg.getTypes().get(0);
             viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
             viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
+            viewHolder.seekbar.setFloatValue(t.MIN_VALUE);
         }
-
+        /*
         View.OnTouchListener otl = (new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -181,7 +193,7 @@ public class InteractionSeekBarRow implements InteractionRow{
         viewHolder.button_f.setOnTouchListener(otl);
         viewHolder.button_g.setOnTouchListener(otl);
         viewHolder.button_a.setOnTouchListener(otl);
-        viewHolder.button_h.setOnTouchListener(otl);
+        viewHolder.button_h.setOnTouchListener(otl);*/
     }
 
     @Override
