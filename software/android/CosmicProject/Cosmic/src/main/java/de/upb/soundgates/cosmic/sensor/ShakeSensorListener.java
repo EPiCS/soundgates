@@ -23,7 +23,7 @@ public class ShakeSensorListener extends AbstractSensorListener {
         super(context, Sensor.TYPE_LINEAR_ACCELERATION);
 
         acc = new Vector3d(0,0,0);
-        threshold = 0.6f * 9.81f;
+        threshold = 0.6f * 9.81f * 10;
 
         charVectors = new CharacteristicVectorStore();
         charVectors.addCharacteristicVector(new Vector3d(1,0,0),  "East");
