@@ -92,8 +92,6 @@ public class InteractionSeekBarRow implements InteractionRow{
                     (Button) viewGroup.findViewById(R.id.button_h)
             );
 
-            configureMinMaxSeekBar(holder);
-
             viewGroup.setTag(holder);
 
             view = viewGroup;
@@ -104,6 +102,7 @@ public class InteractionSeekBarRow implements InteractionRow{
         }
 
         // actually setup the view
+        configureMinMaxSeekBar(holder);
         holder.text.setText(msg.getPath());
 
         return view;
