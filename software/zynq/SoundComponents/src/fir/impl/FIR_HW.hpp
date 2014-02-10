@@ -52,7 +52,7 @@ public:
 
         void operator()(){
             // The first new control value can be accessed like this.
-            float val = m_ObjRef.m_CutOffFrequency_1_Port->pop();
+            float val = m_ObjRef.m_CutOffFrequency_2_Port->pop();
 
             m_ObjRef.m_CutOffFrequency  = val;
 
