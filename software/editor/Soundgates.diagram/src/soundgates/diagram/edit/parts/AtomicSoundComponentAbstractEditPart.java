@@ -9,6 +9,7 @@ import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.PlatformUI;
 
 import soundgates.AtomicSoundComponent;
@@ -101,6 +102,12 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 					getAtomicSoundComponent());
 			dialog.open();
 	    }
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		setForegroundColor(new Color(null,0,0,0));
 	}
 	
 }
