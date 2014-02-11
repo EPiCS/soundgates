@@ -44,7 +44,7 @@ public:
 
 	void operator()()
 	{
-		m_ObjRef.valueToAdd = (int) m_ObjRef.m_ControlIn_2_Port->pop();
+		m_ObjRef.valueToAdd = m_ObjRef.m_ControlIn_2_Port->pop();
 
 	}
 };

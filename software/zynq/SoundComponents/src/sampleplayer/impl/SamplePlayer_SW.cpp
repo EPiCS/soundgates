@@ -208,7 +208,7 @@ void SamplePlayer_SW::init() {
     memset(writeLeftPortPtr,  0, Synthesizer::config::bytesPerBlock);
 //    memset(writeRightPortPtr, 0, Synthesizer::config::bytesPerBlock);
 
-    m_Trigger_1_Port->registerCallback(ICallbackPtr(new OnValueChange<int, ControlPortPtr>(trigger, m_Trigger_1_Port)));
+    m_Trigger_1_Port->registerCallback(ICallbackPtr(new OnValueChange<int, ControlPortPtr>(m_DoPlayback, m_Trigger_1_Port)));
 //   audio_resample_close(resmplCtx);
 //   av_free(m_CodecCtx);
 //   av_free(m_Decoded_Frame);
@@ -222,7 +222,7 @@ void SamplePlayer_SW::process() {
 
     //int trigger = (int) m_Trigger_1_Port->pop();
 
-    if(trigger || (m_CurrentPlaybackOffset > 0 && m_CurrentPlaybackOffset < m_DecompressedDataSize)){
+    if(m_DoPlayback || (m_CurrentPlaybackOffset > 0 && m_CurrentPlaybackOffset < m_DecompressedDataSize)){
 
     switch(m_CodecCtx->channels){
 
@@ -265,6 +265,7 @@ void SamplePlayer_SW::process() {
 
         if(m_CurrentPlaybackOffset >= m_DecompressedDataSize){
             m_CurrentPlaybackOffset = 0;
+            m_DoPlayback = 0;
         }
 
     }else{
@@ -272,5 +273,6 @@ void SamplePlayer_SW::process() {
          memset(writeLeftPortPtr,  0, Synthesizer::config::bytesPerBlock);
 //         memset(writeRightPortPtr, 0, Synthesizer::config::bytesPerBlock);
          m_CurrentPlaybackOffset = 0;
+         m_DoPlayback = 0;
      }
 }

@@ -27,7 +27,7 @@ public:
     DECLARE_PORT3(SoundPort, SoundOut_Right, 2);
     DECLARE_PORT3(ControlPort, Trigger, 1);
 
-    int trigger;
+    int m_DoPlayback;
 
     SamplePlayer(std::vector<std::string> params);
     virtual ~SamplePlayer();

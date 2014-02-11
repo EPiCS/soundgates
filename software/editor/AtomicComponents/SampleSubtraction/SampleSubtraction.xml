@@ -2,6 +2,7 @@
 
 <AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>SampleSubtraction</Type>
+	<Category>Arithmetic</Category>
 	<Ports>
 		<Port Name="Minuend" Direction="IN" DataType="SOUND"/>
 		<Port Name="Subtrahend" Direction="IN" DataType="SOUND"/>

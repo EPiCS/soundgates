@@ -44,7 +44,7 @@ public:
 
 	void operator()()
 	{
-		m_ObjRef.valueToSub = (int) m_ObjRef.m_ControlIn_2_Port->pop();
+		m_ObjRef.valueToSub = m_ObjRef.m_ControlIn_2_Port->pop();
 
 	}
 };
