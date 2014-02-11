@@ -12,7 +12,11 @@ def m(mid):
 
 frequencies = [27.5]
 
-target = Address('192.168.1.108',50050)
+target = Address('192.168.1.56',50050) # OSC Target (where the synthesizer runs)
+
+TCP_IP = '192.168.1.56'  # TCP Handshake (this computers IP here)
+TCP_PORT = 50052
+BUFFER_SIZE = 1024
 
 for i in range(1,88):
 	frequencies.append( frequencies[i-1] * 1.059463094 )# 1.059463094 = 12th root of 2
@@ -24,9 +28,6 @@ boogie = [ m(60), m(64), m(67), m(69), m(70), m(69), m(67), m(64) ]
 key = 0
 offset = 0
 
-TCP_IP = '192.168.1.108'
-TCP_PORT = 50052
-BUFFER_SIZE = 1024
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP,TCP_PORT))
