@@ -44,6 +44,6 @@ public class PatchEditPart extends DiagramEditPart {
 				new CreationEditPolicyWithCustomReparent(
 						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
 		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.DRAG_DROP_ROLE);
 	}
-
 }
