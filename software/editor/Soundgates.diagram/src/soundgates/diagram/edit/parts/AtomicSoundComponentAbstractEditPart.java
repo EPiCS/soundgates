@@ -72,25 +72,29 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		AtomicSoundComponent atomicSoundComponent = getAtomicSoundComponent();
 		
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append("Type: "+atomicSoundComponent.getType() +"\n");
-		for(String key : atomicSoundComponent.getStringProperties().keySet()){
-			if(key.equals("implType")){
-				String implType;
-				if(atomicSoundComponent.getStringProperties().get(key).equals("hw"))
-					implType = "Hardware ";
-				else
-					implType = "Software ";
-				
-				stringBuffer.append("Implementation"+": "+implType+"\n");
+		try{
+			stringBuffer.append("Type: "+atomicSoundComponent.getType() +"\n");
+			for(String key : atomicSoundComponent.getStringProperties().keySet()){
+				if(key.equals("implType")){
+					String implType;
+					if(atomicSoundComponent.getStringProperties().get(key).equals("hw"))
+						implType = "Hardware ";
+					else
+						implType = "Software ";
+					
+					stringBuffer.append("Implementation"+": "+implType+"\n");
+				}
+			}
+			for(String key : atomicSoundComponent.getFloatProperties().keySet()){
+				stringBuffer.append(key+": "+atomicSoundComponent.getFloatProperties().get(key)+"\n");
+			}
+			for(String key : atomicSoundComponent.getUserStringProperties().keySet()){
+				stringBuffer.append(key+": "+atomicSoundComponent.getUserStringProperties().get(key)+"\n");
 			}
 		}
-		for(String key : atomicSoundComponent.getFloatProperties().keySet()){
-			stringBuffer.append(key+": "+atomicSoundComponent.getFloatProperties().get(key)+"\n");
+		catch(Exception e){
+			
 		}
-		for(String key : atomicSoundComponent.getUserStringProperties().keySet()){
-			stringBuffer.append(key+": "+atomicSoundComponent.getUserStringProperties().get(key)+"\n");
-		}
-		
 		return stringBuffer.toString();
 	}
 	
