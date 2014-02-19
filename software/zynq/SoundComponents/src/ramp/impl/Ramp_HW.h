@@ -16,7 +16,8 @@
 #include <stdint.h>
 
 #ifdef ZYNQ
-
+enum eADSRStateType { IDLE, PROCESS };
+#define FINISHED 0x0F0;
 extern "C"{
     #include <reconos/reconos.h>
     #include <reconos/mbox.h>
@@ -28,6 +29,7 @@ extern "C"{
 class Ramp_HW : public Ramp{
 private:
 
+	enum eADSRStateType m_ADSRState;
     HWSlot slot;
 
     /* Parameter struct: 1 src address, 1 argument */

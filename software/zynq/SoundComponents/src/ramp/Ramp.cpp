@@ -7,11 +7,12 @@
 
 #include "Ramp.h"
 #include "impl/Ramp_SW.h"
+#include "impl/Ramp_HW.h"
 
 /* Define component name */
 DEFINE_COMPONENTNAME(Ramp, "ramp")
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(Ramp);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(Ramp)
 
 Ramp::Ramp(std::vector<std::string> params) : SoundComponentImpl(params) {
 
