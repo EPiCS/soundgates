@@ -25,7 +25,6 @@ import soundgates.SoundgatesPackage;
  * <ul>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getFloatProperties <em>Float Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getIntegerProperties <em>Integer Properties</em>}</li>
- *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getBooleanProperties <em>Boolean Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getStringProperties <em>String Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getUserStringProperties <em>User String Properties</em>}</li>
  *   <li>{@link soundgates.impl.AtomicSoundComponentImpl#getType <em>Type</em>}</li>
@@ -54,16 +53,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	 * @ordered
 	 */
 	protected EMap<String, Integer> integerProperties;
-
-	/**
-	 * The cached value of the '{@link #getBooleanProperties() <em>Boolean Properties</em>}' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBooleanProperties()
-	 * @generated
-	 * @ordered
-	 */
-	protected EMap<String, Boolean> booleanProperties;
 
 	/**
 	 * The cached value of the '{@link #getStringProperties() <em>String Properties</em>}' map.
@@ -153,18 +142,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EMap<String, Boolean> getBooleanProperties() {
-		if (booleanProperties == null) {
-			booleanProperties = new EcoreEMap<String,Boolean>(SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT, EStringToEBooleanObjectImpl.class, this, SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES);
-		}
-		return booleanProperties;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EMap<String, String> getStringProperties() {
 		if (stringProperties == null) {
 			stringProperties = new EcoreEMap<String,String>(SoundgatesPackage.Literals.ESTRING_TO_ESTRING, EStringToEStringImpl.class, this, SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES);
@@ -209,8 +186,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return ((InternalEList<?>)getFloatProperties()).basicRemove(otherEnd, msgs);
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
 				return ((InternalEList<?>)getIntegerProperties()).basicRemove(otherEnd, msgs);
-			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
-				return ((InternalEList<?>)getBooleanProperties()).basicRemove(otherEnd, msgs);
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				return ((InternalEList<?>)getStringProperties()).basicRemove(otherEnd, msgs);
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
@@ -233,9 +208,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
 				if (coreType) return getIntegerProperties();
 				else return getIntegerProperties().map();
-			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
-				if (coreType) return getBooleanProperties();
-				else return getBooleanProperties().map();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				if (coreType) return getStringProperties();
 				else return getStringProperties().map();
@@ -262,9 +234,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
 				((EStructuralFeature.Setting)getIntegerProperties()).set(newValue);
 				return;
-			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
-				((EStructuralFeature.Setting)getBooleanProperties()).set(newValue);
-				return;
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__TYPE:
 				setType((String)newValue);
 				return;
@@ -285,9 +254,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return;
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
 				getIntegerProperties().clear();
-				return;
-			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
-				getBooleanProperties().clear();
 				return;
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				getStringProperties().clear();
@@ -311,8 +277,6 @@ public class AtomicSoundComponentImpl extends SoundComponentImpl implements Atom
 				return floatProperties != null && !floatProperties.isEmpty();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
 				return integerProperties != null && !integerProperties.isEmpty();
-			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
-				return booleanProperties != null && !booleanProperties.isEmpty();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 				return stringProperties != null && !stringProperties.isEmpty();
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:

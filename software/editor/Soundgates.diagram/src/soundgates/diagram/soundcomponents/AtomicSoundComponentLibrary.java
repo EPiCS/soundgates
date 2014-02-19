@@ -15,10 +15,16 @@ public class AtomicSoundComponentLibrary{
 
 	private static AtomicSoundComponentLibrary instance;
 	private static HashMap<String,Integer> diagramAndTypeToCounter = new HashMap<>();
-	public static HashMap<String,String> typeToCategory = new HashMap<>();
 	private TreeMap<String, AtomicSoundComponent> components;
 	private static IFolder xmlfolder;
+	
+	public static HashMap<String,String> typeToCategory = new HashMap<>();	
+	
 	public final static String samplesFolderName = "samples";
+	public final static String wavePlayerComponentType = "WavePlayer";
+	public final static String IOComponentType = "IO";
+	public final static String soundOutputType = "SoundOutput"; 
+	public final static String implementationTypeProperty = "Implementation";	
 
 	public static AtomicSoundComponentLibrary getInstance() {
 		if (instance == null) {
@@ -41,7 +47,7 @@ public class AtomicSoundComponentLibrary{
 		if(diagramAndTypeToCounter.containsKey(key)){
 			int number = diagramAndTypeToCounter.get(key);
 			
-			if(concreteType.equals("IO"))
+			if(concreteType.equals(IOComponentType))
 				name = "/" + concreteType + Integer.toString(number);
 			else
 				name = concreteType + Integer.toString(number);
@@ -49,7 +55,7 @@ public class AtomicSoundComponentLibrary{
 			diagramAndTypeToCounter.put(key, number+1);
 		}
 		else{
-			if(concreteType.equals("IO"))
+			if(concreteType.equals(IOComponentType))
 				name = "/" + concreteType + Integer.toString(1);
 			else
 				name = concreteType + Integer.toString(1);

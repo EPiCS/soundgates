@@ -40,7 +40,8 @@ public class SynthDataGenAction implements IObjectActionDelegate{
 				
 				Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
 						
-				Tester tester = new Tester();				
+				Tester tester = new Tester();
+				tester.setProjectPath(projectPath);
 				if(tester.testPatch(patch) == false)
 					return;				
 				

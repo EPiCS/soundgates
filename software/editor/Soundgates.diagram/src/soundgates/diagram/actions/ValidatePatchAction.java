@@ -28,9 +28,11 @@ public class ValidatePatchAction implements IObjectActionDelegate{
 		while (files.hasNext()) {
 			IFile file = (IFile) files.next();		
 
-			PatchExporter patchExporter = new PatchExporter();
-			Patch patch = patchExporter.getPatch(file.getFullPath().toPortableString());
+			String projectPath = file.getProject().getLocation().toPortableString();
+			
+			Patch patch = PatchExporter.getPatch(file.getFullPath().toPortableString());
 			Tester tester = new Tester();
+			tester.setProjectPath(projectPath);
 			
 			if(tester.testPatch(patch)) 
 				MessageDialogs.patchValidationTrue();

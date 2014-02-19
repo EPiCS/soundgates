@@ -50,7 +50,6 @@ public class CustomPropertiesPropertyDescriptor extends PropertyDescriptor {
 			@Override
 			public String getText(Object object) {
 				List<String> keys = new ArrayList<String>();
-				keys.addAll(ats.getBooleanProperties().keySet());
 				keys.addAll(ats.getIntegerProperties().keySet());
 				keys.addAll(ats.getFloatProperties().keySet());
 				keys.addAll(ats.getUserStringProperties().keySet());
@@ -58,19 +57,10 @@ public class CustomPropertiesPropertyDescriptor extends PropertyDescriptor {
 				Iterator<String> it = keys.iterator();
 				String result = "";
 				
-				String implType = ats.getStringProperties().get("implType");
-				if(implType.equals("hw"))
-					result = "Implementation: Hardware; ";
-				else
-					result = "Implementation: Software; ";
-				
 				while (it.hasNext()) {
 					String s = it.next();					
 					if (ats.getFloatProperties().containsKey(s)) {
 						Float value = ats.getFloatProperties().get(s);
-						result = result + s + ": " + value + "; ";
-					} else if (ats.getBooleanProperties().containsKey(s)) {
-						Boolean value = ats.getBooleanProperties().get(s);
 						result = result + s + ": " + value + "; ";
 					} else if (ats.getIntegerProperties().containsKey(s)) {
 						Integer value = ats.getIntegerProperties().get(s);

@@ -36,30 +36,12 @@ public class Exporter {
 			properties.appendChild(floatProperty);
 		}
 		
-		//boolean properties
-		for(int i=0; i<atomicSoundComponent.getBooleanProperties().size(); i++){						
-			Element booleanProperty = doc.createElement("BoolProperty");						
-			booleanProperty.setAttribute("Name",atomicSoundComponent.getBooleanProperties().get(i).getKey().toString());
-			booleanProperty.setAttribute("Value",atomicSoundComponent.getBooleanProperties().get(i).getValue().toString());						
-			properties.appendChild(booleanProperty);
-		}
-		
 		//user string properties
 		for(int i=0; i<atomicSoundComponent.getUserStringProperties().size(); i++){						
 			Element userStringProperty = doc.createElement("UserStringProperty");						
 			userStringProperty.setAttribute("Name",atomicSoundComponent.getUserStringProperties().get(i).getKey().toString());
 			userStringProperty.setAttribute("Value",atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());						
 			properties.appendChild(userStringProperty);
-		}
-		
-		//string property - impl type
-		for(int i=0; i<atomicSoundComponent.getStringProperties().size(); i++){
-			if(atomicSoundComponent.getStringProperties().get(i).getKey().equals("implType")){
-				Element stringProperty = doc.createElement("StringProperty");						
-				stringProperty.setAttribute("Name",atomicSoundComponent.getStringProperties().get(i).getKey().toString());
-				stringProperty.setAttribute("Value",atomicSoundComponent.getStringProperties().get(i).getValue().toString());						
-				properties.appendChild(stringProperty);
-			}			
 		}
 		atomicSoundComponentElement.appendChild(properties);
 		

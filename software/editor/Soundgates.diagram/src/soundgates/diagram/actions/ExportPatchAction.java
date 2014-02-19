@@ -38,7 +38,8 @@ public class ExportPatchAction implements IObjectActionDelegate{
 			}
 			
 			Tester tester = new Tester();
-			
+			String projectPath = file.getProject().getLocation().toPortableString();
+			tester.setProjectPath(projectPath);
 			if(tester.testPatch(patch) == false)
 				return;
 			

@@ -15,6 +15,7 @@ import soundgates.CompositeSoundComponent;
 import soundgates.diagram.XMLexport.Tester;
 import soundgates.diagram.edit.parts.CompositeSoundComponentAbstractEditPart;
 import soundgates.diagram.messageDialogs.MessageDialogs;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 
 
@@ -31,6 +32,7 @@ public class ValidateCompositeSoundComponentAction implements IObjectActionDeleg
 				CompositeSoundComponent compositeSoundComponent =  (CompositeSoundComponent) ((Shape) editPart.getModel()).getElement();
 				 
 			 	Tester patchTester = new Tester();
+			 	patchTester.setProjectPath(AtomicSoundComponentLibrary.getProjectPath());
 			 	boolean accepted = patchTester.testCompositeSoundComponent(compositeSoundComponent, true);
 			 	if(accepted) MessageDialogs.compositeSoundComponentValidationTrue(compositeSoundComponent.getName());
 			 	

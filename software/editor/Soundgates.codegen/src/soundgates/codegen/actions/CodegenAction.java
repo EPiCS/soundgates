@@ -40,7 +40,9 @@ public class CodegenAction implements IObjectActionDelegate{
 			try {
 				Patch patch = CodeGenHelper.getPatch(file.getFullPath().toPortableString());
 				Diagram diagram = CodeGenHelper.getDiagram(file.getFullPath().toPortableString());
-				Tester tester = new Tester();				
+				Tester tester = new Tester();	
+				String projectPath = file.getProject().getLocation().toPortableString();
+				tester.setProjectPath(projectPath);
 				if(tester.testPatch(patch) == false)
 					return;	
 				

@@ -62,6 +62,11 @@ public class AtomicSoundComponentXMLHandler{
 				for (int i = 0; i < nList.getLength(); i++) {
 					Node nNode = nList.item(i);
 					Element element = (Element) nNode;
+					
+					//possible impl types
+					boolean sw = false;
+					boolean hw = false;
+					
 					try {
 						AtomicSoundComponent soundComponent = SoundgatesFactory.eINSTANCE.createAtomicSoundComponent();
 						String type = element.getElementsByTagName("Type").item(0).getTextContent();
@@ -154,12 +159,8 @@ public class AtomicSoundComponentXMLHandler{
 												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME, implName);
 //												soundComponent.getStringProperties().put(DEVICE_PREFIX_PROP_MAPPINGS + implType, propMappings.toString());
 											
-												// put "sw", "hw" or "sw/hw" for possibleImplType
-												if(!soundComponent.getStringProperties().containsKey("possibleImplType"))
-													soundComponent.getStringProperties().put("possibleImplType", implType);
-												else
-													soundComponent.getStringProperties().put("possibleImplType", 
-															soundComponent.getStringProperties().get("possibleImplType")+"|"+implType);
+												if(implType.equals("sw")) sw=true;
+												else if(implType.equals("hw")) hw=true;
 											}
 										}	
 
@@ -173,12 +174,16 @@ public class AtomicSoundComponentXMLHandler{
 									
 								}
 							}
-						}
-						
-//						if(soundComponent.getStringProperties().get("possibleImplType").contains("hw"))
-//							soundComponent.getStringProperties().put("implType", "hw");
-//						else
-							soundComponent.getStringProperties().put("implType", "sw");
+						}						
+
+						// add possible impl types
+						String options = "";
+						if(sw  & !hw) 		options = "Software"; 
+						else if(!sw &  hw)  options = "Hardware"; 
+						else if(sw  & hw) 	options = "Software|Hardware";
+						soundComponent.getStringProperties().put("ImplementationOptions", options);
+						// set default impl type
+						soundComponent.getUserStringProperties().put(AtomicSoundComponentLibrary.implementationTypeProperty, "Software");
 						
 						library.addComponent(soundComponent);
 						

@@ -74,17 +74,6 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 		StringBuffer stringBuffer = new StringBuffer();
 		try{
 			stringBuffer.append("Type: "+atomicSoundComponent.getType() +"\n");
-			for(String key : atomicSoundComponent.getStringProperties().keySet()){
-				if(key.equals("implType")){
-					String implType;
-					if(atomicSoundComponent.getStringProperties().get(key).equals("hw"))
-						implType = "Hardware ";
-					else
-						implType = "Software ";
-					
-					stringBuffer.append("Implementation"+": "+implType+"\n");
-				}
-			}
 			for(String key : atomicSoundComponent.getFloatProperties().keySet()){
 				stringBuffer.append(key+": "+atomicSoundComponent.getFloatProperties().get(key)+"\n");
 			}

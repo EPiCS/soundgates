@@ -35,6 +35,7 @@ import soundgates.Patch;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.codegen.CodeGenHelper;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentXMLHandler;
 
 public class Codegen {
@@ -129,7 +130,7 @@ public class Codegen {
 				pdCodeText = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.CODEGEN_PREFIX_PDCODE);				
 			}
 			
-			if (atomicSoundComponent.getType().equals("IO")){
+			if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.IOComponentType)){
 				pdCodeText = pdCodeText.replaceAll("@ComponentName", atomicSoundComponent.getName());
 			}
 			
@@ -253,7 +254,7 @@ public class Codegen {
 		for(SoundComponent ioComponent : componentList){
 			if (ioComponent instanceof AtomicSoundComponent){
 				AtomicSoundComponent atomic = (AtomicSoundComponent) ioComponent;
-				if (atomic.getType().equals("IO")){
+				if (atomic.getType().equals(AtomicSoundComponentLibrary.IOComponentType)){
 					ioComponents.add(atomic);
 				}
 			}
@@ -451,8 +452,6 @@ public class Codegen {
 
 	
 	private String propertySearch(AtomicSoundComponent atomicSoundComponent, String propName) throws Exception{
-		if (atomicSoundComponent.getBooleanProperties().containsKey(propName))
-			return atomicSoundComponent.getBooleanProperties().get(propName).toString();
 		if (atomicSoundComponent.getIntegerProperties().containsKey(propName))
 			return atomicSoundComponent.getIntegerProperties().get(propName).toString();
 		if (atomicSoundComponent.getFloatProperties().containsKey(propName))

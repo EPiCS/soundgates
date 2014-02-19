@@ -413,7 +413,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAtomicSoundComponent_BooleanProperties() {
+	public EReference getAtomicSoundComponent_StringProperties() {
 		return (EReference)atomicSoundComponentEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -422,7 +422,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAtomicSoundComponent_StringProperties() {
+	public EReference getAtomicSoundComponent_UserStringProperties() {
 		return (EReference)atomicSoundComponentEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -431,17 +431,8 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAtomicSoundComponent_UserStringProperties() {
-		return (EReference)atomicSoundComponentEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getAtomicSoundComponent_Type() {
-		return (EAttribute)atomicSoundComponentEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)atomicSoundComponentEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -670,7 +661,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		atomicSoundComponentEClass = createEClass(ATOMIC_SOUND_COMPONENT);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__FLOAT_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES);
-		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES);
 		createEAttribute(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__TYPE);
@@ -769,7 +759,6 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEClass(atomicSoundComponentEClass, AtomicSoundComponent.class, "AtomicSoundComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAtomicSoundComponent_FloatProperties(), this.getEStringToEFloatObject(), null, "floatProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_IntegerProperties(), this.getEStringToEIntegerObject(), null, "integerProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAtomicSoundComponent_BooleanProperties(), this.getEStringToEBooleanObject(), null, "booleanProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_StringProperties(), this.getEStringToEString(), null, "stringProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_UserStringProperties(), this.getEStringToEString(), null, "userStringProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAtomicSoundComponent_Type(), ecorePackage.getEString(), "type", null, 1, 1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

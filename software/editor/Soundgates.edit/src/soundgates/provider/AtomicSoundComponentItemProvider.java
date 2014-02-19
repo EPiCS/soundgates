@@ -125,7 +125,6 @@ public class AtomicSoundComponentItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__FLOAT_PROPERTIES);
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES);
-			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES);
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES);
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES);
 		}
@@ -187,7 +186,6 @@ public class AtomicSoundComponentItemProvider
 				return;
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__FLOAT_PROPERTIES:
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
-			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -216,11 +214,6 @@ public class AtomicSoundComponentItemProvider
 			(createChildParameter
 				(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES,
 				 SoundgatesFactory.eINSTANCE.create(SoundgatesPackage.Literals.ESTRING_TO_EINTEGER_OBJECT)));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES,
-				 SoundgatesFactory.eINSTANCE.create(SoundgatesPackage.Literals.ESTRING_TO_EBOOLEAN_OBJECT)));
 
 		newChildDescriptors.add
 			(createChildParameter

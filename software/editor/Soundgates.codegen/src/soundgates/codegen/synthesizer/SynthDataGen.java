@@ -110,11 +110,16 @@ public class SynthDataGen {
 	}
 	
 	private void storeImplType(AtomicSoundComponent atomicSoundComponent){
-		String implType = atomicSoundComponent.getStringProperties().get("implType");
+		String implType = atomicSoundComponent.getUserStringProperties().get(AtomicSoundComponentLibrary.implementationTypeProperty);
+
+		if(implType.equals("Software"))
+			implType = "sw";
+		else if(implType.equals("Hardware"))
+			implType = "hw";		
 		
 		if(implType.equals("sw"))
 			softwareComponents.add(atomicSoundComponent);
-		else 
+		else if(implType.equals("hw"))
 			hardwareComponents.add(atomicSoundComponent);
 		
 		implTypes.put(atomicSoundComponent, implType);
@@ -186,10 +191,13 @@ public class SynthDataGen {
 		else 
 			hwSlot = -1;
 		
-		if(atomicSoundComponent.getType().equals("IO")){
+		//remove the userStringProperty for impl type from the component
+		atomicSoundComponent.getUserStringProperties().remove(AtomicSoundComponentLibrary.implementationTypeProperty);
+		
+		if(atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.IOComponentType)){
 			addIOComponentToData(data, atomicSoundComponent, uniqueId, type, implName, implType, hwSlot);					
 		}		
-		else if(atomicSoundComponent.getType().equals("WavePlayer")){
+		else if(atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.wavePlayerComponentType)){
 			addWavePlayerComponentToData(data, atomicSoundComponent, uniqueId, type, implName, implType,hwSlot);
 		}
 		else{			

@@ -22,10 +22,9 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class Tester {
 	
-	String projectPath = AtomicSoundComponentLibrary.getProjectPath();
-	LinkedList<String> ioComponentNames = new LinkedList<>();
-	LinkedList<AtomicSoundComponent> ioComponents = new LinkedList<>();
-	LinkedList<CompositeSoundComponent> compositeSoundComponents =
+	private String projectPath;
+	private LinkedList<String> ioComponentNames = new LinkedList<>();
+	private LinkedList<CompositeSoundComponent> compositeSoundComponents =
 			new LinkedList<CompositeSoundComponent>();
 
 	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
@@ -108,7 +107,7 @@ public class Tester {
 	public boolean testAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
 
 		// test names of IO components
-		if (atomicSoundComponent.getType().equals("IO")){
+		if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.IOComponentType)){
 			for(String existingName : ioComponentNames){
 				if(existingName.equals(atomicSoundComponent.getName())){
 						MessageDialogs.ioComponentsMustHaveUniqueNames();
@@ -125,7 +124,7 @@ public class Tester {
 			ioComponentNames.add(atomicSoundComponent.getName());			
 		}		
 		
-		if (atomicSoundComponent.getType().equals("WavePlayer")){
+		if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.wavePlayerComponentType)){
 			// test file references
 			String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
 			String filePath = projectPath+"/" +AtomicSoundComponentLibrary.samplesFolderName + "/"+relativeFileName;
@@ -294,12 +293,12 @@ public class Tester {
 		}
 		for(SoundComponent soundComponent : components){
 			if(soundComponent instanceof AtomicSoundComponent){
-				if(((AtomicSoundComponent) soundComponent).getType().equals("IO") )
+				if(((AtomicSoundComponent) soundComponent).getType().equals(AtomicSoundComponentLibrary.IOComponentType) )
 				{
 					MessageDialogs.compositeSoundComponentContaintsIOBlock(name);
 					return false;
 				}
-				else if(((AtomicSoundComponent) soundComponent).getType().equals("SoundOutput"))
+				else if(((AtomicSoundComponent) soundComponent).getType().equals(AtomicSoundComponentLibrary.soundOutputType))
 				{
 					MessageDialogs.compositeSoundComponentContaintsSoundOutputBlock(name);
 					return false;
@@ -310,5 +309,8 @@ public class Tester {
 		return true;
 	}
 	
+	public void setProjectPath(String projectPath) {
+		this.projectPath = projectPath;
+	}
 	
 }

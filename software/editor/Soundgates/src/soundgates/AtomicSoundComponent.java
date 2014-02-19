@@ -18,7 +18,6 @@ import org.eclipse.emf.common.util.EMap;
  * <ul>
  *   <li>{@link soundgates.AtomicSoundComponent#getFloatProperties <em>Float Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getIntegerProperties <em>Integer Properties</em>}</li>
- *   <li>{@link soundgates.AtomicSoundComponent#getBooleanProperties <em>Boolean Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getStringProperties <em>String Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getUserStringProperties <em>User String Properties</em>}</li>
  *   <li>{@link soundgates.AtomicSoundComponent#getType <em>Type</em>}</li>
@@ -63,23 +62,6 @@ public interface AtomicSoundComponent extends SoundComponent {
 	 * @generated
 	 */
 	EMap<String, Integer> getIntegerProperties();
-
-	/**
-	 * Returns the value of the '<em><b>Boolean Properties</b></em>' map.
-	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link java.lang.Boolean},
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Boolean Properties</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Boolean Properties</em>' map.
-	 * @see soundgates.SoundgatesPackage#getAtomicSoundComponent_BooleanProperties()
-	 * @model mapType="soundgates.EStringToEBooleanObject<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EBooleanObject>"
-	 * @generated
-	 */
-	EMap<String, Boolean> getBooleanProperties();
 
 	/**
 	 * Returns the value of the '<em><b>String Properties</b></em>' map.

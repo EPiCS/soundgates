@@ -380,22 +380,13 @@ public interface SoundgatesPackage extends EPackage {
 	int ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Boolean Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>String Properties</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 3;
+	int ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>User String Properties</b></em>' map.
@@ -404,7 +395,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 4;
+	int ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES = SOUND_COMPONENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -413,7 +404,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT__TYPE = SOUND_COMPONENT_FEATURE_COUNT + 5;
+	int ATOMIC_SOUND_COMPONENT__TYPE = SOUND_COMPONENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Atomic Sound Component</em>' class.
@@ -422,7 +413,7 @@ public interface SoundgatesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 6;
+	int ATOMIC_SOUND_COMPONENT_FEATURE_COUNT = SOUND_COMPONENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link soundgates.impl.ConnectionImpl <em>Connection</em>}' class.
@@ -929,17 +920,6 @@ public interface SoundgatesPackage extends EPackage {
 	EReference getAtomicSoundComponent_IntegerProperties();
 
 	/**
-	 * Returns the meta object for the map '{@link soundgates.AtomicSoundComponent#getBooleanProperties <em>Boolean Properties</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Boolean Properties</em>'.
-	 * @see soundgates.AtomicSoundComponent#getBooleanProperties()
-	 * @see #getAtomicSoundComponent()
-	 * @generated
-	 */
-	EReference getAtomicSoundComponent_BooleanProperties();
-
-	/**
 	 * Returns the meta object for the map '{@link soundgates.AtomicSoundComponent#getStringProperties <em>String Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1383,14 +1363,6 @@ public interface SoundgatesPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES = eINSTANCE.getAtomicSoundComponent_IntegerProperties();
-
-		/**
-		 * The meta object literal for the '<em><b>Boolean Properties</b></em>' map feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES = eINSTANCE.getAtomicSoundComponent_BooleanProperties();
 
 		/**
 		 * The meta object literal for the '<em><b>String Properties</b></em>' map feature.

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class CustomPropertyInputDialog extends Dialog {
 
 	Object atomicSoundComponentObject;
 	Map<String, Text> inputTexts;
-	Map<String, Button> boolButtons;
+	Map<String, List<Button>> optionButtons;
 	Map<String, String> errorMessages = new HashMap<String, String>();
 
 	public CustomPropertyInputDialog(Shell parentShell, String dialogTitle,
@@ -37,7 +38,7 @@ public class CustomPropertyInputDialog extends Dialog {
 		super(parentShell);
 		this.atomicSoundComponentObject = object;
 		this.inputTexts = new HashMap<String, Text>();
-		this.boolButtons = new HashMap<String, Button>();
+		this.optionButtons = new HashMap<String, List<Button>>();
 	}
 
 	@Override
@@ -48,8 +49,6 @@ public class CustomPropertyInputDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 
 		List<String> keysSorted = new ArrayList<String>();
-		keysSorted.addAll(getAtomicSoundComponent().getBooleanProperties()
-				.keySet());
 		keysSorted.addAll(getAtomicSoundComponent().getIntegerProperties()
 				.keySet());
 		keysSorted.addAll(getAtomicSoundComponent().getFloatProperties()
@@ -59,42 +58,11 @@ public class CustomPropertyInputDialog extends Dialog {
 
 		Collections.sort(keysSorted);
 		Iterator<String> it = keysSorted.iterator();
-	
-
-		
-		//Implementation type
-		Label implLabel = new Label(composite, SWT.WRAP);
-		implLabel.setText("Implementation");
-		
-		String possibleImplTypes = getAtomicSoundComponent().getStringProperties().get("possibleImplType");
-		
-		Composite implRadioGroup = (Composite) super
-				.createDialogArea(composite);
-		implRadioGroup.setLayout(new RowLayout());
-		
-		if(possibleImplTypes.contains("hw")){
-			Button buttonHardware = new Button(implRadioGroup, SWT.RADIO);
-			buttonHardware.setText("Hardware");			
-			boolButtons.put("ImplementationHW", buttonHardware);
-			if (getAtomicSoundComponent().getStringProperties().get("implType").equals("hw")) {
-				buttonHardware.setSelection(true);
-			}
-		}
-		if(possibleImplTypes.contains("sw")){	
-			Button buttonSoftware = new Button(implRadioGroup, SWT.RADIO);
-			buttonSoftware.setText("Software");	
-			boolButtons.put("ImplementationSW", buttonSoftware);
-			if (getAtomicSoundComponent().getStringProperties().get("implType").equals("sw")) {
-				buttonSoftware.setSelection(true);
-			}
-		}
 		
 		while (it.hasNext()) {
 			final String key = it.next();
 			String desc = key;
 			final boolean f = getAtomicSoundComponent().getFloatProperties()
-					.containsKey(key);
-			final boolean b = getAtomicSoundComponent().getBooleanProperties()
 					.containsKey(key);
 			final boolean i = getAtomicSoundComponent().getIntegerProperties()
 					.containsKey(key);
@@ -102,54 +70,59 @@ public class CustomPropertyInputDialog extends Dialog {
 					.containsKey(key);
 
 			Label label = new Label(composite, SWT.WRAP);
-
 			
-			
-			if (b) {
-				Composite radioGroup = (Composite) super
-						.createDialogArea(composite);
-				radioGroup.setLayout(new RowLayout());
-				Button buttonTrue = new Button(radioGroup, SWT.RADIO);
-				buttonTrue.setText("True");
-				Button buttonFalse = new Button(radioGroup, SWT.RADIO);
-				buttonFalse.setText("False");
-
-				if (getAtomicSoundComponent().getBooleanProperties().get(key)) {
-					buttonTrue.setSelection(true);
-				} else {
-					buttonFalse.setSelection(true);
+			if (s) {
+				
+				// has the property options?				
+				if(getAtomicSoundComponent().getStringProperties().containsKey(key+"Options")){
+					
+					String possibleOptionsString = getAtomicSoundComponent().getStringProperties().get(key+"Options");	
+					String[] possibleOptions = possibleOptionsString.split("\\|");						
+					
+					Composite implRadioGroup = (Composite) super.createDialogArea(composite);
+					implRadioGroup.setLayout(new RowLayout());					
+										
+					List<Button> buttons = new LinkedList<Button>();
+					for(String option : possibleOptions){
+						Button optionButton = new Button(implRadioGroup, SWT.RADIO);
+						optionButton.setText(option);						
+						if (getAtomicSoundComponent().getUserStringProperties().get(key).equals(option)) {
+							optionButton.setSelection(true);
+						}
+						buttons.add(optionButton);
+					}
+					optionButtons.put(key, buttons);
 				}
+				else //the user can type the value of the property
+				{
+					Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
 
-				boolButtons.put(key, buttonTrue);
-
-				desc = desc + " (Bool)";
-			} else {
-				Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
-
-				if (i) {
-					text.setText(getAtomicSoundComponent()
-							.getIntegerProperties().get(key).toString());
-					desc = desc + " (Int)";
-				} else if (f) {
-					text.setText(getAtomicSoundComponent().getFloatProperties()
-							.get(key).toString());
-					desc = desc + " (Float)";
-				} else if (s) {
 					text.setText(getAtomicSoundComponent().getUserStringProperties()
 							.get(key).toString());
 					desc = desc + " (String)";
-				}
-				
-				text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-						| GridData.HORIZONTAL_ALIGN_FILL));
-				text.addModifyListener(new ModifyListener() {
-					public void modifyText(ModifyEvent e) {
-						validateInput(key, b, i, f);
+					text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+							| GridData.HORIZONTAL_ALIGN_FILL));
 
-					}
-				});
-				inputTexts.put(key, text);
+					inputTexts.put(key, text);
+				}
 			}
+			if(f) {
+				Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
+
+					text.setText(getAtomicSoundComponent().getFloatProperties()
+							.get(key).toString());
+					desc = desc + " (Float)";
+					text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+							| GridData.HORIZONTAL_ALIGN_FILL));
+					text.addModifyListener(new ModifyListener() {
+						public void modifyText(ModifyEvent e) {
+							validateInput(key, i, f);
+
+						}
+					});
+					inputTexts.put(key, text);
+			}			
+			
 			label.setText(desc);
 		}
 
@@ -161,8 +134,6 @@ public class CustomPropertyInputDialog extends Dialog {
 	protected void okPressed() {
 		try {
 			List<String> keys = new ArrayList<String>();
-			keys.addAll(getAtomicSoundComponent().getBooleanProperties()
-					.keySet());
 			keys.addAll(getAtomicSoundComponent().getIntegerProperties()
 					.keySet());
 			keys.addAll(getAtomicSoundComponent().getFloatProperties().
@@ -170,43 +141,18 @@ public class CustomPropertyInputDialog extends Dialog {
 			keys.addAll(getAtomicSoundComponent().getUserStringProperties().
 					keySet());
 			Iterator<String> it = keys.iterator();
-			
-			try{
-				
-				// Implementation type
-				if(boolButtons.containsKey("ImplementationHW")){
-					Boolean implTypeHW = boolButtons.get("ImplementationHW").getSelection();
-					if(implTypeHW)
-						getAtomicSoundComponent().getStringProperties().put("implType", "hw");
-				}
-				if(boolButtons.containsKey("ImplementationSW")){
-					Boolean implTypeSW = boolButtons.get("ImplementationSW").getSelection();
-					if(implTypeSW)
-						getAtomicSoundComponent().getStringProperties().put("implType", "sw");
-				}
-			}
-			catch (Exception e) {
-			}
 				
 			while (it.hasNext()) {			
 					
 				try{
+					// TODO hier wird eine exception im Diagram Editor
+					// geworfen.
+					// Funktioniert durch Abfangen der Exception so, ist
+					// aber
+					// ein dreckicker Hack. Man sollte hier ein GMF Command
+					// absetzen
 					String desc = it.next();
-						
-						if (getAtomicSoundComponent().getBooleanProperties()
-								.containsKey(desc)) {
-	
-							Boolean value = boolButtons.get(desc).getSelection();
-							getAtomicSoundComponent().getBooleanProperties().put(
-									desc, value);
-	
-							// TODO hier wird eine exception im Diagram Editor
-							// geworfen.
-							// Funktioniert durch Abfangen der Exception so, ist
-							// aber
-							// ein dreckicker Hack. Man sollte hier ein GMF Command
-							// absetzen
-						}
+					
 						if (getAtomicSoundComponent().getIntegerProperties()
 								.containsKey(desc)) {
 							Integer value = Integer.parseInt(inputTexts.get(desc)
@@ -224,7 +170,18 @@ public class CustomPropertyInputDialog extends Dialog {
 						
 						if (getAtomicSoundComponent().getUserStringProperties()
 								.containsKey(desc)) {
-							String value = inputTexts.get(desc).getText();
+							String value = "";
+							if(inputTexts.containsKey(desc))
+								value = inputTexts.get(desc).getText();
+							else if(optionButtons.containsKey(desc)){
+								List<Button> buttons = optionButtons.get(desc);
+								for(Button tmpButton : buttons){
+									if(tmpButton.getSelection()){
+										value = tmpButton.getText();
+										break;
+									}
+								}
+							}
 							getAtomicSoundComponent().getUserStringProperties().put(
 									desc, value);
 						}
@@ -239,12 +196,10 @@ public class CustomPropertyInputDialog extends Dialog {
 		super.okPressed();
 	}
 
-	protected void validateInput(String key, boolean b, boolean i, boolean f) {
+	protected void validateInput(String key, boolean i, boolean f) {
 		String input = inputTexts.get(key).getText();
 		try {
-			if (b) {
-				Boolean.parseBoolean(input);
-			} else if (i) {
+			if (i) {
 				Integer.parseInt(input);
 			} else if (f) {
 				Float.parseFloat(input);
