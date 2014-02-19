@@ -8,6 +8,7 @@ import org.eclipse.gmf.runtime.diagram.ui.editpolicies.ConnectionHandleEditPolic
 import org.eclipse.gmf.runtime.diagram.ui.handles.ConnectionHandle;
 import org.eclipse.gmf.runtime.diagram.ui.handles.ConnectionHandle.HandleDirection;
 
+import soundgates.CompositeSoundComponent;
 import soundgates.Direction;
 import soundgates.Port;
 
@@ -29,18 +30,36 @@ public class SoundgatesConnectionHandleEditPolicy extends ConnectionHandleEditPo
 		
 		String tooltip;
 		
-		
-		if(port.getDirection()==Direction.IN){
-			tooltip = buildTooltip(HandleDirection.INCOMING);
-			if (tooltip != null) {
-				list.add(new ConnectionHandle((IGraphicalEditPart) getHost(),
-					HandleDirection.INCOMING, tooltip));
-			}
-		}else{	
+		// composite
+		if(port.getComponent() instanceof CompositeSoundComponent){				
 			tooltip = buildTooltip(HandleDirection.OUTGOING);
 			if (tooltip != null) {
 				list.add(new ConnectionHandle((IGraphicalEditPart) getHost(),
 					HandleDirection.OUTGOING, tooltip));
+			}
+			if(port.getIncomingConnection()==null){
+				tooltip = buildTooltip(HandleDirection.INCOMING);
+				if (tooltip != null) {
+					list.add(new ConnectionHandle((IGraphicalEditPart) getHost(),
+						HandleDirection.INCOMING, tooltip));
+				}
+			}
+		}
+		//atomic
+		else{
+			if(port.getDirection()==Direction.IN  && port.getIncomingConnection()==null){
+				tooltip = buildTooltip(HandleDirection.INCOMING);
+				if (tooltip != null) {
+					list.add(new ConnectionHandle((IGraphicalEditPart) getHost(),
+						HandleDirection.INCOMING, tooltip));
+				}
+			}
+			else if(port.getDirection()==Direction.OUT){
+				tooltip = buildTooltip(HandleDirection.OUTGOING);
+				if (tooltip != null) {
+					list.add(new ConnectionHandle((IGraphicalEditPart) getHost(),
+						HandleDirection.OUTGOING, tooltip));
+				}			
 			}
 		}
 
