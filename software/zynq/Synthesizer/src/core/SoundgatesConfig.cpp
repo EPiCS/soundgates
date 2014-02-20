@@ -26,7 +26,8 @@ void SoundgatesConfig::load(const std::string& path){
     m_EnumMap[CFG_DEFAULT_UDP_PORT]    = "synthesizer.core.ports.tcp";
     m_EnumMap[CFG_DEFAULT_PLUGIN_PATH] = "synthesizer.plugins.searchdir";
 
-    m_EnumMap[CFG_DEBUGGING_PORT]	   = "synthesizer.logging.port";
+    m_EnumMap[CFG_LOGGING_ADDRESS]	   = "synthesizer.logging.address";
+    m_EnumMap[CFG_LOGGING_PORT]	   = "synthesizer.logging.port";
     m_EnumMap[CFG_LOGGING_ENABLED]	   = "synthesizer.logging.enabled";
 
     try{
@@ -59,7 +60,8 @@ void SoundgatesConfig::loadDefault(){
 	/* Synthesizer realted configuration values */
 	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_TCP_PORT],    "50050");
 	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_UDP_PORT],    "50050");
-	m_PropertyTree.put(m_EnumMap[CFG_DEBUGGING_PORT],	   "1338");
+	m_PropertyTree.put(m_EnumMap[CFG_LOGGING_ADDRESS],	   "localhost");
+	m_PropertyTree.put(m_EnumMap[CFG_LOGGING_PORT],	   "1338");
 
 	m_PropertyTree.put(m_EnumMap[CFG_USE_HW_THREADS],      false);
 	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_PLUGIN_PATH], "./plugin");
