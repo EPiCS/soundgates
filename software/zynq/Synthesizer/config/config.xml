@@ -3,7 +3,7 @@
     <alsa>
         <buffersize>16384</buffersize>
         <chunks>1024</chunks>
-        <devicename>plughw:0,0</devicename>
+        <devicename>plughw:1,0</devicename>
     </alsa>
     
     <core>
@@ -17,5 +17,10 @@
     <plugins>
         <searchdir>../SoundComponents/result</searchdir>
     </plugins>
+    
+    <logging>
+    	<enabled>true</enabled>
+    	<port>1338</port>
+    </logging>
     
 </synthesizer>

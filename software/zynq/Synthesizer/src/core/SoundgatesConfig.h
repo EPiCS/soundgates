@@ -40,6 +40,7 @@ public:
 	    /* Network related configuration values */
 	    CFG_DEFAULT_TCP_PORT,
 	    CFG_DEFAULT_UDP_PORT,
+	    CFG_DEBUGGING_PORT,
 
 	    /* Hardware related configuration values */
 	    CFG_USE_HW_THREADS,
@@ -47,6 +48,8 @@ public:
 	    /* Synthesizer related configuration values */
 	    CFG_DEFAULT_PLUGIN_PATH,
 
+		/* Value logging enabled */
+	    CFG_LOGGING_ENABLED
 	};
 
 

@@ -8,8 +8,11 @@
 #include "SoundComponent.h"
 
 
+#include "SoundComponentDebugging.h"
+
 SoundComponent::SoundComponent(int uid, SoundComponentImplPtr delegate) : Node(uid){
 
+	this->logging_enabled = SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_LOGGING_ENABLED);
 	m_pDelegate = delegate;
 
 }
@@ -17,7 +20,15 @@ SoundComponent::SoundComponent(int uid, SoundComponentImplPtr delegate) : Node(u
 SoundComponent::~SoundComponent(){ }
 
 void SoundComponent::run(){
-    m_pDelegate->process();
+
+	if (logging_enabled) {
+		SoundComponentDebugging::log_preprocessing(this);
+		m_pDelegate->process();
+		SoundComponentDebugging::log_postprocessing(this);
+	}
+	else {
+		m_pDelegate->process();
+	}
 }
 
 void SoundComponent::init() {
