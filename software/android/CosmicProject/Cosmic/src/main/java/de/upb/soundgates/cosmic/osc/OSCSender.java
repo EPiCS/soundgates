@@ -11,27 +11,20 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import de.upb.soundgates.cosmic.AsyncTaskListener;
+import de.upb.soundgates.cosmic.CosmicPreferences;
 
 /**
  * Created by posewsky on 15.11.13.
  */
-public class OSCSender extends AsyncTask<Void, Void, Boolean> {
-    protected String host;
-    protected int port;
-
+public class OSCSender extends AsyncTask<OSCMessage, Void, Boolean> {
+    public static final String LOG_TAG = "Cosmic - OSCSender";
     protected OSCPortOut sender;
-    protected OSCMessage msg;
 
     private String error;
 
-    public OSCSender(String host, int port, OSCMessage msg) {
+    private OSCSender() {
         super();
 
-        this.host = host;
-        this.port = port;
-
-        this.msg  = msg;
         sender    = null;
 
         error     = null;
@@ -43,11 +36,62 @@ public class OSCSender extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
+    public static void send(de.upb.soundgates.cosmic.osc.OSCMessage... messages) {
+        int count = messages.length;
+        OSCMessage msgArray[] = new OSCMessage[count];
+
+        for(int i = 0; i < count; ++i) {
+            de.upb.soundgates.cosmic.osc.OSCMessage msg = messages[i];
+            OSCMessage packedMsg;
+
+            int numParams = msg.getTypes().size();
+
+            if(numParams > 0) {
+                Object[] args = new Object[numParams];
+
+                for(int j = 0; j < numParams; ++j)
+                {
+                    OSCType param = msg.getTypes().get(j);
+                    switch(param.getTypeTag())
+                    {
+                        case 'i':
+                            args[0] = new Integer((int)param.value);
+                            break;
+                        case 'f':
+                            args[0] = new Float(param.value);
+                            break;
+                        default:
+                            Log.e(LOG_TAG, "TypeTag not recognized");
+                            return;
+                    }
+                }
+
+                packedMsg = new com.illposed.osc.OSCMessage(msg.getPath(),args);
+            } else {
+                packedMsg = new com.illposed.osc.OSCMessage(msg.getPath());
+            }
+
+            msgArray[i] = packedMsg;
+        }
+
+        new OSCSender().execute(msgArray);
+        for(de.upb.soundgates.cosmic.osc.OSCMessage msg : messages)
+            Log.d(LOG_TAG, msg.toStringFull());
+    }
+
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    protected Boolean doInBackground(OSCMessage... messages) {
+        String host = null;
+        int port = -1;
+
         try {
+            CosmicPreferences prefs = CosmicPreferences.getInstance(null);
+            host = prefs.getString("current_host");
+            port = prefs.getInt("current_port");
+
             sender = new OSCPortOut(InetAddress.getByName(host), port);
-            sender.send(msg);
+            for (OSCMessage msg : messages)
+                sender.send(msg);
             return true;
         } catch (SocketException e) {
             error = e.toString();
@@ -66,8 +110,8 @@ public class OSCSender extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         if(success)
-            Log.d("OSCSender", "gesendet");
+            Log.d(LOG_TAG, "gesendet");
         else
-            Log.e("OSCSender", error);
+            Log.e(LOG_TAG, error);
     }
 }
