@@ -20,6 +20,7 @@
     
     <logging>
     	<enabled>true</enabled>
+    	<address>localhost</address>
     	<port>1338</port>
     </logging>
     
