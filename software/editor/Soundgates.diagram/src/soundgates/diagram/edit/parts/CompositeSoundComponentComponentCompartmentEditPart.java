@@ -3,7 +3,6 @@ package soundgates.diagram.edit.parts;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeCompartmentEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.ResizableCompartmentEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.figures.ResizableCompartmentFigure;
@@ -13,6 +12,7 @@ import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicy
 
 import soundgates.diagram.edit.policies.CompositeSoundComponentComponentCompartmentCanonicalEditPolicy;
 import soundgates.diagram.edit.policies.CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy;
+import soundgates.diagram.edit.policies.SoundgatesDragDropEditPolicy;
 import soundgates.diagram.part.Messages;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 
@@ -65,7 +65,7 @@ public class CompositeSoundComponentComponentCompartmentEditPart extends
 				new CreationEditPolicyWithCustomReparent(
 						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
 		installEditPolicy(EditPolicyRoles.DRAG_DROP_ROLE,
-				new DragDropEditPolicy());
+				new SoundgatesDragDropEditPolicy());
 		installEditPolicy(
 				EditPolicyRoles.CANONICAL_ROLE,
 				new CompositeSoundComponentComponentCompartmentCanonicalEditPolicy());
@@ -79,5 +79,4 @@ public class CompositeSoundComponentComponentCompartmentEditPart extends
 			super.setRatio(ratio);
 		}
 	}
-
 }

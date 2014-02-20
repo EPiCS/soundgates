@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#Files etc...
+SOUNDGATES_EDK=/home/soundgates/git/reconos_zynq/demos/soundgates/edk_zynq_linux/
+RECONOS_REPO=/home/soundgates/git/reconos_zynq/
+SOUNDGATES_REPO=/home/soundgates/git/pg-soundgates/
+ZEDBOARD_REPO=/home/soundgates/git/zedboard/
+ADI_LINUX_REPO=/home/soundgates/git/adi-linux/
+XILINX_LINUX_REPO=/home/soundgates/git/linux-xlnx/
+XILINX_UBOOT_REPO=/home/soundgates/git/u-boot-xlnx/
+ZYNC_REPO=/home/soundgates/zynq/
+RECONOS_REPO_TOOLS=${RECONOS_REPO}tools/
+WORKING_DIR=/tmp/
+
+#ZedBoard communication stuff
+MINICOM_DEVICE=/dev/ttyACM0
+MINICOM_BAUDRATE=115200
+LINUX_USER=root
+LINUX_PASSWORD=root
+ZEDBOARD_IP=192.168.1.99
+ZEDBOARD_NETMASK=255.255.255.0
+ZEDBOARD_GATEWAY=192.168.1.1
+NFS_ROOT_IP=192.168.1.100
+NFS_EXPORT=/exports/archlinux_zedboard_repo
+
+#Executables
+EXECUTABLE_DTC=${ADI_LINUX_REPO}scripts/dtc/dtc
+
+#Input Files
+#INPUT_DEVICE_TREE=${SOUNDGATES_REPO}hardware/design/reference/zynq_audio_adau1761/zynq-zed.dts #should work
+
+INPUT_DEVICE_TREE=${ADI_LINUX_REPO}arch/arm/boot/dts/zynq-zed-adv7511.dts
+INPUT_DEVICE_TREE_INCLUDES="${ADI_LINUX_REPO}arch/arm/boot/dts/zynq-zed.dtsi
+${ADI_LINUX_REPO}arch/arm/boot/dts/zynq.dtsi"
+INPUT_UIMAGE=${ADI_LINUX_REPO}arch/arm/boot/uImage
+INPUT_INIT=${RECONOS_REPO}cache/os_boot/ps7_init.tcl
+INPUT_UBOOT=${XILINX_UBOOT_REPO}u-boot
+INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/design/reference/zynq_audio_adau1761/implementation/download.bit #should work
+#INPUT_INITIAL_BITSTREAM=${RECONOS_REPO}demos/soundgates/edk_zynq_linux/implementation/download.bit # works
+INPUT_BITSTREAM=${RECONOS_REPO}demos/soundgates/edk_zynq_linux/implementation/download.bit
+
+#Intermediate Files
+DEVICE_TREE_BLOB=${WORKING_DIR}devicetree/devicetree.dtb

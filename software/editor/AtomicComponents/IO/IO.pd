@@ -1,5 +1,0 @@
-#N canvas 1131 357 450 300 10;
-#X text 0 0 outports Value;
-#X obj 49 90 outlet;
-#X obj 45 50 r @ComponentName;
-#X connect 2 0 1 0;

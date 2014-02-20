@@ -12,7 +12,7 @@ import soundgates.SoundComponent;
 
 public class Exporter {
 	
-	public Element getAtomicSoundComponentElement(Document doc, AtomicSoundComponent atomicSoundComponent, String elementName, int componentCounter){	
+	public static Element getAtomicSoundComponentElement(Document doc, AtomicSoundComponent atomicSoundComponent, String elementName, int componentCounter){	
 		
 		Element atomicSoundComponentElement = doc.createElement(elementName);				
 		atomicSoundComponentElement.setAttribute("Type", atomicSoundComponent.getType());
@@ -43,12 +43,30 @@ public class Exporter {
 			booleanProperty.setAttribute("Value",atomicSoundComponent.getBooleanProperties().get(i).getValue().toString());						
 			properties.appendChild(booleanProperty);
 		}
+		
+		//user string properties
+		for(int i=0; i<atomicSoundComponent.getUserStringProperties().size(); i++){						
+			Element userStringProperty = doc.createElement("UserStringProperty");						
+			userStringProperty.setAttribute("Name",atomicSoundComponent.getUserStringProperties().get(i).getKey().toString());
+			userStringProperty.setAttribute("Value",atomicSoundComponent.getUserStringProperties().get(i).getValue().toString());						
+			properties.appendChild(userStringProperty);
+		}
+		
+		//string property - impl type
+		for(int i=0; i<atomicSoundComponent.getStringProperties().size(); i++){
+			if(atomicSoundComponent.getStringProperties().get(i).getKey().equals("implType")){
+				Element stringProperty = doc.createElement("StringProperty");						
+				stringProperty.setAttribute("Name",atomicSoundComponent.getStringProperties().get(i).getKey().toString());
+				stringProperty.setAttribute("Value",atomicSoundComponent.getStringProperties().get(i).getValue().toString());						
+				properties.appendChild(stringProperty);
+			}			
+		}
 		atomicSoundComponentElement.appendChild(properties);
 		
 		return atomicSoundComponentElement;
 	}
 	
-	public Element getCompositeSoundComponentElement(Document doc, CompositeSoundComponent compositeSoundComponent, String elementName, int componentCounter){	
+	public static Element getCompositeSoundComponentElement(Document doc, CompositeSoundComponent compositeSoundComponent, String elementName, int componentCounter){	
 
 		Element compositeSoundComponentElement = doc.createElement(elementName);		
 		compositeSoundComponentElement.setAttribute("Name", compositeSoundComponent.getName());
@@ -56,7 +74,7 @@ public class Exporter {
 		return compositeSoundComponentElement;
 	}
 	
-	public Element getLinkElement(Document doc, Link link, HashMap<SoundComponent,Integer> componentsHashMap){
+	public static Element getLinkElement(Document doc, Link link, HashMap<SoundComponent,Integer> componentsHashMap){
 		Element linkElement = doc.createElement("Link");
 	
 		linkElement.setAttribute("SourceComponent", Integer.toString(componentsHashMap.get(link.getSource().getComponent())));

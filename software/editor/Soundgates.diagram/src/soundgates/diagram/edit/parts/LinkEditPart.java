@@ -12,10 +12,9 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.diagram.edit.policies.LinkItemSemanticEditPolicy;
 
 /**
- * @generated
+ * @generated NOT
  */
-public class LinkEditPart extends ConnectionNodeEditPart implements
-		ITreeBranchEditPart {
+public class LinkEditPart extends ConnectionAbstractEditPart {
 
 	/**
 	 * @generated
@@ -77,7 +76,6 @@ public class LinkEditPart extends ConnectionNodeEditPart implements
 			PolylineDecoration df = new PolylineDecoration();
 			return df;
 		}
-
 	}
 
 }

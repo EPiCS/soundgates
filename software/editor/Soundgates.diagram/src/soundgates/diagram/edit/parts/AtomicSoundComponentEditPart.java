@@ -2,6 +2,7 @@ package soundgates.diagram.edit.parts;
 
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
@@ -14,7 +15,6 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
@@ -33,9 +33,10 @@ import soundgates.diagram.edit.policies.AtomicSoundComponentItemSemanticEditPoli
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 
 /**
- * @generated
+ * @generated NOT
  */
-public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart {
+public class AtomicSoundComponentEditPart extends
+		AtomicSoundComponentAbstractEditPart {
 
 	/**
 	 * @generated
@@ -60,7 +61,7 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
 		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
@@ -75,7 +76,8 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 				new AtomicSoundComponentCanonicalEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
 	}
 
 	/**
@@ -125,7 +127,7 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof AtomicSoundComponentNameEditPart) {
@@ -135,27 +137,15 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 			return true;
 		}
 		if (childEditPart instanceof PortEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			getBorderedFigure().getBorderItemContainer().add(
-					((PortEditPart) childEditPart).getFigure(), locator);
-			return true;
+			return super.addFixedChild(childEditPart);
 		}
 		return false;
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
-//		if (childEditPart instanceof AtomicSoundComponentNameEditPart) {
-//			return true;
-//		}
-//		if (childEditPart instanceof PortEditPart) {
-//			getBorderedFigure().getBorderItemContainer().remove(
-//					((PortEditPart) childEditPart).getFigure());
-//			return true;
-//		}
 		return false;
 	}
 
@@ -170,13 +160,9 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void removeChildVisual(EditPart childEditPart) {
-//		if (removeFixedChild(childEditPart)) {
-//			return;
-//		}
-//		super.removeChildVisual(childEditPart);
 	}
 
 	/**
@@ -190,11 +176,10 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(40, 40);
-		return result;
+		return super.createNodePlate();
 	}
 
 	/**
@@ -203,7 +188,7 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 	 * Body of this method does not depend on settings in generation model
 	 * so you may safely remove <i>generated</i> tag and modify it.
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createMainFigure() {
 		NodeFigure figure = createNodePlate();
@@ -284,7 +269,7 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public class AtomicSoundComponentFigure extends RectangleFigure {
 
@@ -332,5 +317,12 @@ public class AtomicSoundComponentEditPart extends AbstractBorderedShapeEditPart 
 		public WrappingLabel getFigureAtomicSoundComponentNameFigure() {
 			return fFigureAtomicSoundComponentNameFigure;
 		}
+
+		@Override
+		public IFigure getToolTip() {
+			return new Label(createToolTip());
+		}
+
 	}
+
 }

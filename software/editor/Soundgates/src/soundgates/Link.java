@@ -14,8 +14,7 @@ package soundgates;
  *
  *
  * @see soundgates.SoundgatesPackage#getLink()
- * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='PortDirection'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL PortDirection='not (self.source.direction=self.target.direction)'"
+ * @model
  * @generated
  */
 public interface Link extends Connection, Element {

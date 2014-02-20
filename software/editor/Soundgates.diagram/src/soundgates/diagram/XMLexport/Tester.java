@@ -1,9 +1,15 @@
 package soundgates.diagram.XMLexport;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+
 import org.eclipse.emf.common.util.EList;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
+import soundgates.DataType;
 import soundgates.Delegation;
 import soundgates.Direction;
 import soundgates.Link;
@@ -11,11 +17,20 @@ import soundgates.Patch;
 import soundgates.Port;
 import soundgates.SoundComponent;
 import soundgates.diagram.messageDialogs.MessageDialogs;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 public class Tester {
 	
+	String projectPath = AtomicSoundComponentLibrary.getProjectPath();
+	LinkedList<String> ioComponentNames = new LinkedList<>();
+	LinkedList<AtomicSoundComponent> ioComponents = new LinkedList<>();
+	LinkedList<CompositeSoundComponent> compositeSoundComponents =
+			new LinkedList<CompositeSoundComponent>();
+
 	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
+		
+		LinkedList<Link> links = new LinkedList<>();
 		
 		// test name
 		if (compositeSoundComponent.getName()==null || "".equals(compositeSoundComponent.getName())){
@@ -27,6 +42,26 @@ public class Tester {
 		for(Link link : compositeSoundComponent.getLinks()){
 			if(testLink(compositeSoundComponent, link) == false)
 				return false;
+			else
+				links.add(link);
+		}
+		
+		// test containers of links
+		boolean modelChanged = false;
+		for(Link link : links){
+			if(!(link.getSource().getComponent().eContainer()==compositeSoundComponent)){
+				compositeSoundComponent.getLinks().remove(link);
+				setCorrectContainerForLink(link, compositeSoundComponents);
+				modelChanged = true;
+			}
+		}
+		
+		if(modelChanged){
+			try {
+				compositeSoundComponent.eResource().save(Collections.EMPTY_MAP);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		// test delegations
@@ -36,18 +71,12 @@ public class Tester {
 		}
 		
 		// test ports
-		boolean inport = false;
 		boolean outport = false;
 		for(Port port : compositeSoundComponent.getPorts()){			
 			if ( testCompositeSoundComponentPort(port, compositeSoundComponent, testCurrentComponent) == false )
 				return false;
 			
-			if(port.getDirection()==Direction.IN) inport = true;
 			if(port.getDirection()==Direction.OUT) outport = true;
-		}
-		if(!inport){
-			MessageDialogs.compositeSoundComponentHasNoInPort(compositeSoundComponent.getName());
-			return false;
 		}
 		if(!outport){
 			MessageDialogs.compositeSoundComponentHasNoOutPort(compositeSoundComponent.getName());
@@ -64,6 +93,8 @@ public class Tester {
 			if(soundComponent instanceof CompositeSoundComponent){
 				if (testCompositeSoundComponent((CompositeSoundComponent) soundComponent, false) == false)
 					return false;
+				else
+					compositeSoundComponents.add((CompositeSoundComponent) soundComponent);
 			}
 			else if(soundComponent instanceof AtomicSoundComponent){
 				if (testAtomicSoundComponent((AtomicSoundComponent) soundComponent) == false)
@@ -76,10 +107,33 @@ public class Tester {
 
 	public boolean testAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
 
-		// test ports
-		for(Port port : atomicSoundComponent.getPorts()){			
-			if ( testAtomicSoundComponentPort(port, atomicSoundComponent) == false )
+		// test names of IO components
+		if (atomicSoundComponent.getType().equals("IO")){
+			for(String existingName : ioComponentNames){
+				if(existingName.equals(atomicSoundComponent.getName())){
+						MessageDialogs.ioComponentsMustHaveUniqueNames();
+						return false;
+				}
+			}			
+			
+			if(atomicSoundComponent.getFloatProperties().get("MinValue") >
+			  	atomicSoundComponent.getFloatProperties().get("MaxValue")){
+				MessageDialogs.minValueGreaterThanMaxValue(atomicSoundComponent.getName());
 				return false;
+			}
+				
+			ioComponentNames.add(atomicSoundComponent.getName());			
+		}		
+		
+		if (atomicSoundComponent.getType().equals("WavePlayer")){
+			// test file references
+			String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
+			String filePath = projectPath+"/" +AtomicSoundComponentLibrary.samplesFolderName + "/"+relativeFileName;
+			File testFile = new File(filePath);
+			if(!testFile.exists()){
+				MessageDialogs.fileNotFound(filePath);
+				return false;
+			}
 		}
 
 		return true;
@@ -92,57 +146,17 @@ public class Tester {
 			return false;
 		}
 		
-		if(!testCurrentComponent){
-			if(port.getDirection() == Direction.IN)
-			{
-				if (port.getIncomingConnection()==null){
-					MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
-					return false;
-				}			
-			}
-			if(port.getDirection() == Direction.OUT)
-			{
-				if(port.getOutgoingConnection().size()==0){
-					MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	public boolean testAtomicSoundComponentPort(Port port, AtomicSoundComponent parentComponent){		
-		if(port.getDirection() == Direction.IN)
-		{
-			if(port.getOutgoingConnection().size()>0){
-				MessageDialogs.inPortHasOutgoingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-			if (port.getIncomingConnection()==null){
-				MessageDialogs.portHasNoIncomingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-		}
-		if(port.getDirection() == Direction.OUT)
-		{
-			if(port.getIncomingConnection() != null){
-				MessageDialogs.outPortHasIncomingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-			if(port.getOutgoingConnection().size()==0){
-				MessageDialogs.portHasNoOutgoingConnection(parentComponent.getName(), port.getName());
-				return false;
-			}
-		}
 		return true;
 	}
 		
 	public boolean testPatch(Patch patch){
 		
+		LinkedList<Link> links = new LinkedList<Link>();				
+				
 		for(soundgates.Element element : patch.getElements()){			
 			
 			// atomic components
-			if(element instanceof AtomicSoundComponent){					
+			if(element instanceof AtomicSoundComponent){				
 				if( testAtomicSoundComponent((AtomicSoundComponent) element) == false)
 					return false;
 			}
@@ -151,42 +165,78 @@ public class Tester {
 			else if(element instanceof CompositeSoundComponent){				
 				if( testCompositeSoundComponent((CompositeSoundComponent) element, false) == false)
 					return false;
+				
+				compositeSoundComponents.add((CompositeSoundComponent) element);
 			}
 			
 			// links
 			else if(element instanceof Link){
 				if (testLink(patch, (Link) element) == false)
 					return false;
-				
-				// test daty type?
+				links.add((Link) element);
 			}				
 		}
+		
+		// test containers of links
+		boolean modelChanged = false;
+		for(Link link : links){
+			if(!(link.getSource().getComponent().eContainer()==patch)){
+				patch.getElements().remove(link);
+				setCorrectContainerForLink(link, compositeSoundComponents);
+				modelChanged = true;
+			}
+		}
+		
+		if(modelChanged){
+			try {
+				patch.eResource().save(Collections.EMPTY_MAP);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+				
 		return true;
 	}
 	
+	
+
+	// this method changes the model
+	private void setCorrectContainerForLink(Link link,
+			LinkedList<CompositeSoundComponent> compositeSoundComponents){
+		
+		CompositeSoundComponent compositeSoundComponentContainer = 
+				link.getSource().getComponent().getParentComponent();
+		
+		for(CompositeSoundComponent compositeSoundComponent	: compositeSoundComponents){
+			if(compositeSoundComponent==compositeSoundComponentContainer){				
+				compositeSoundComponent.getLinks().add(link);
+			}
+		}
+	}
+
 	public boolean testLink(Object parent, Link link){
 		// test directions
-			
+		
+		String parentString;
+		if(parent instanceof Patch) parentString = "the patch";
+		else parentString = ((CompositeSoundComponent)parent).getName();
+		
 		if(link.getSource().getDirection()==Direction.IN)
-		{
-			String parentString;
-			if(parent instanceof Patch) parentString = "the patch";
-			else parentString = ((CompositeSoundComponent)parent).getName();
-			
-			MessageDialogs.inPortAsSource(parentString, link.getSource().getName());
-			
+		{			
+			MessageDialogs.inPortAsSource(parentString, link.getSource().getName());			
 			return false;
 		}
 		if(link.getTarget().getDirection()==Direction.OUT)
-		{
-			String parentString;
-			if(parent instanceof Patch) parentString = "the patch";
-			else parentString = ((CompositeSoundComponent)parent).getName();
-			
-			MessageDialogs.outPortAsTarget(parentString, link.getSource().getName());
-			
+		{		
+			MessageDialogs.outPortAsTarget(parentString, link.getSource().getName());			
 			return false;
 		}
+		
+		if(link.getSource().getDataType()==DataType.SOUND && link.getTarget().getDataType()==DataType.CONTROL){
+			MessageDialogs.soundToControlConnection(parentString, link.getSource().getName(), link.getTarget().getName());
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -201,6 +251,11 @@ public class Tester {
 				);
 			return false;
 		}		
+		
+		if(delegation.getSource().getDataType()==DataType.SOUND && delegation.getTarget().getDataType()==DataType.CONTROL){
+			MessageDialogs.soundToControlConnection(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
+			return false;
+		}
 		
 		// special case
 		if(parent.getPorts().contains(delegation.getTarget()) && 
@@ -254,4 +309,6 @@ public class Tester {
 			
 		return true;
 	}
+	
+	
 }

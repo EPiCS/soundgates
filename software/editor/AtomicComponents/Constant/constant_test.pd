@@ -1,0 +1,4 @@
+#N canvas 1440 49 958 1149 10;
+#X obj 214 135 constant_patch;
+#X floatatom 227 217 5 0 0 0 - - -;
+#X connect 0 0 1 0;

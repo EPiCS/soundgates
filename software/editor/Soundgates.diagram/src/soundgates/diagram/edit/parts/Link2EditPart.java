@@ -12,10 +12,9 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.diagram.edit.policies.Link2ItemSemanticEditPolicy;
 
 /**
- * @generated
+ * @generated NOT
  */
-public class Link2EditPart extends ConnectionNodeEditPart implements
-		ITreeBranchEditPart {
+public class Link2EditPart extends ConnectionAbstractEditPart {
 
 	/**
 	 * @generated

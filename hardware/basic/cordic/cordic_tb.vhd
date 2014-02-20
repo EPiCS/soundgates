@@ -31,10 +31,10 @@ use ieee.math_real.all;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 USE ieee.numeric_std.ALL;
+use STD.textio.all;
  
- 
-library soundgates;
-use soundgates.soundcomponents.all;
+library soundgates_v1_00_a;
+use soundgates_v1_00_a.soundgates_common_pkg.all;
 
 ENTITY cordic_tb IS
 END cordic_tb;
@@ -48,18 +48,13 @@ ARCHITECTURE behavior OF cordic_tb IS
          pipeline_stages : integer
     );
     PORT(
-         
-			x   : in signed(31 downto 0);
-			y   : in signed(31 downto 0);
-			phi : in  signed(31 downto 0);  -- 0 <= phi <= pi/2
-			sin : out signed(31 downto 0);
-			cos : out signed(31 downto 0);
-         
+    phi : in  signed(31 downto 0);  -- 0 <= phi <= pi/2
+    sin : out signed(31 downto 0);
+    cos : out signed(31 downto 0);
      clk : in std_logic;
      rst : in std_logic;
      ce  : in std_logic
-         
-        );
+     );
     END COMPONENT;
     
 
@@ -67,16 +62,7 @@ ARCHITECTURE behavior OF cordic_tb IS
    signal clk : std_logic := '0';
    signal rst : std_logic;
    signal ce  : std_logic;
-	
-	constant scaling : real := 27.0;
-	
-	constant x_init : integer := integer(real(1.0  * 2**SOUNDGATE_FIX_PT_SCALING));
-	constant y_init : integer := integer(real(0.0  * 2**SOUNDGATE_FIX_PT_SCALING));
-	
-	constant phi_init : signed(31 downto 0) := to_signed(0, 32);
-	
-   signal x 	: signed(31 downto 0) := to_signed(x_init, 32);
-   signal y 	: signed(31 downto 0) := to_signed(y_init, 32);
+   constant phi_init : signed(31 downto 0) := to_signed(0, 32);
    signal phi 	: signed(31 downto 0) := to_signed(0, 32);--phi_init;
 	
 
@@ -87,13 +73,16 @@ ARCHITECTURE behavior OF cordic_tb IS
    -- Clock period definitions
    constant clk_period : time := 10 ns;
    
-   constant cordic_p_stages : integer := 24;
+   constant cordic_p_stages : integer := 16;
+   constant standard_cordic_offset : integer := integer(real(MATH_PI * 2.0 * 2 ** SOUNDGATE_FIX_PT_SCALING));
 
+    constant f_sin  : integer := 2000; 	   -- in Hz
+    constant f_fpga : integer := 100000000; -- in Hz;
+    
+    constant phase_incr : signed(31 downto 0) := Get_Cordic_Phase_Increment(f_fpga, f_sin);
    -- simulation related signals
    
    signal init_done : std_logic := '0';
-      
-	signal count : integer := 0;
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
@@ -105,8 +94,6 @@ BEGIN
           clk => clk,
           rst => rst,
           ce => ce,
-          x => x,
-          y => y,
           phi => phi,
           sin => sin,
           cos => cos
@@ -120,14 +107,13 @@ BEGIN
 		clk <= '1';
 		wait for clk_period/2;
    end process;
+
    
+   -- Stimulus process
+   stim_proc: process
+
+   begin 
    
-   -- init process
-   
-   init_proc : process
-   
-   begin
-         
          wait for clk_period;
          
          rst <= '1';      
@@ -138,33 +124,15 @@ BEGIN
          ce  <= '1';
          
          init_done <= '1';
-                  
-         wait until true;
-         
-   end process;
-   
-   -- Stimulus process
-   stim_proc: process
-	
-		constant f_sin  : real := 440.0; 	   -- in Hz
-		constant f_fpga : real := 100000000.0; -- in Hz;
-		
-		constant stepsize : integer := integer(f_fpga / f_sin);
-		
-		constant phi_offset : real := real(MATH_PI * 2.0 / real(stepsize) * 2 ** SOUNDGATE_FIX_PT_SCALING);
-		constant phi_offset_scaled : signed(31 downto 0) := to_signed(integer(phi_offset), 32);
-		
-   begin         
-         count <= count + 1;
-         
-         if count >= 0 and count < stepsize  then -- 0 to 2*pi			
-            phi <= phi + phi_offset_scaled;
-         else
-            phi 	<= to_signed(0, 32);
-            count <= 0;
-         end if;			
-         
-         wait for clk_period;      
+         loop
+             if phi >= standard_cordic_offset then
+                phi <= phase_incr;
+             else
+                phi <= phi + phase_incr;
+             end if;
+             
+             wait for clk_period;
+         end loop;
    end process;
 
 END;

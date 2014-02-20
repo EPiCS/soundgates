@@ -1,0 +1,7 @@
+#N canvas 2400 49 958 361 10;
+#X obj 152 144 triangle_patch;
+#X floatatom 149 91 5 0 0 0 - - -;
+#X obj 158 206 dac~;
+#X connect 0 0 2 0;
+#X connect 0 0 2 1;
+#X connect 1 0 0 0;

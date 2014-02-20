@@ -14,8 +14,7 @@ package soundgates;
  *
  *
  * @see soundgates.SoundgatesPackage#getDelegation()
- * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='PortDirection'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL PortDirection='self.source.direction=self.target.direction'"
+ * @model
  * @generated
  */
 public interface Delegation extends Connection {

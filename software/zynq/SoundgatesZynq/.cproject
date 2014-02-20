@@ -6,19 +6,19 @@
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.562139402" name="Debug" parent="cdt.managedbuild.config.gnu.exe.debug">
 					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.562139402." name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1171149264" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1171149264" name="Linux GCC" nonInternalBuilderId="cdt.managedbuild.target.gnu.builder.exe.debug" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.914552364" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
-							<builder buildPath="${workspace_loc:/AlsaTesting}/Debug" enableAutoBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.debug.785198291" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
+							<builder autoBuildTarget="all" buildPath="${workspace_loc:/SoundgatesZynq}/Debug" cleanBuildTarget="clean" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.debug.435981059" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1541192479" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.181494615" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1524063516" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
@@ -27,6 +27,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1684599547" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1976124580" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1339432146" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1897331944" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="_TARGET_ZYNQ=0"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.441164451" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1859642099" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">
@@ -80,6 +83,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1771305116" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.exe.release.option.optimization.level.1785435474" name="Optimization Level" superClass="gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.release.option.debugging.level.162948172" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.62197030" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.523722666" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.2056878992" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release">
@@ -126,10 +130,13 @@
 							</tool>
 							<tool command="/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin/arm-xilinx-linux-gnueabi-gcc" id="cdt.managedbuild.tool.gnu.c.compiler.base.1480471349" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option id="gnu.c.compiler.option.include.paths.1241331548" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/soundgates/git/reconos_zynq/linux/lib/include"/>
+									<listOptionValue builtIn="false" value="../../lib/reconos/include"/>
 								</option>
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1132288644" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.512633327" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.2067303991" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="_TARGET_ZYNQ=1"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.948965963" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool command="/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin/arm-xilinx-linux-gnueabi-gcc" id="cdt.managedbuild.tool.gnu.c.linker.base.1532267967" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base">
@@ -173,57 +180,22 @@
 					</externalSetting>
 				</externalSettings>
 				<extensions>
-					<extension id="com.xilinx.sdk.managedbuilder.XELF.armlinux" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.autotools.core.ErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="xilinx.gnu.armlinux.exe.debug.1587291686.717770627" name="zedboaaard" parent="xilinx.gnu.armlinux.exe.debug" postbuildStep="cp ${ProjName}.elf /exports/rootfs_archlinux/home/soundgates/">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="xilinx.gnu.armlinux.exe.debug.1587291686.717770627" name="zedboaaard" parent="xilinx.gnu.armlinux.exe.debug.1587291686.717770627" postbuildStep="cp ${ProjName}.elf /exports/rootfs_archlinux/home/soundgates/">
 					<folderInfo id="xilinx.gnu.armlinux.exe.debug.1587291686.717770627." name="/" resourcePath="">
-						<toolChain id="xilinx.gnu.armlinux.exe.debug.toolchain.510092946" name="Xilinx ARM GNU/Linux Toolchain" nonInternalBuilderId="xilinx.gnu.armlinux.toolchain.builder.debug" superClass="xilinx.gnu.armlinux.exe.debug.toolchain">
-							<targetPlatform id="xilinx.armlinux.target.gnu.base.debug.1257592718" isAbstract="false" name="Debug Platform" superClass="xilinx.armlinux.target.gnu.base.debug"/>
-							<builder buildPath="${workspace_loc:/SynthesizerTEst}/Debug" enableAutoBuild="true" id="xilinx.gnu.armlinux.toolchain.builder.debug.52599723" keepEnvironmentInBuildfile="false" name="GNU make" superClass="xilinx.gnu.armlinux.toolchain.builder.debug"/>
-							<tool id="xilinx.gnu.armlinux.c.toolchain.assembler.debug.1431058174" name="ARM Linux gcc assembler" superClass="xilinx.gnu.armlinux.c.toolchain.assembler.debug">
-								<inputType id="xilinx.gnu.assembler.input.652341095" superClass="xilinx.gnu.assembler.input"/>
-							</tool>
-							<tool id="xilinx.gnu.armlinux.c.toolchain.compiler.debug.1584196507" name="ARM Linux gcc compiler" superClass="xilinx.gnu.armlinux.c.toolchain.compiler.debug">
-								<option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.1189749778" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="xilinx.gnu.compiler.option.debugging.level.167502737" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="xilinx.gnu.compiler.dircategory.includes.2098626224" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/soundgates/git/reconos_zynq/linux/lib/include"/>
-								</option>
-								<inputType id="xilinx.gnu.armlinux.c.compiler.input.587587643" name="C source files" superClass="xilinx.gnu.armlinux.c.compiler.input"/>
-							</tool>
-							<tool id="xilinx.gnu.armlinux.cxx.toolchain.compiler.debug.1370268855" name="ARM Linux g++ compiler" superClass="xilinx.gnu.armlinux.cxx.toolchain.compiler.debug">
-								<option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.664254954" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="xilinx.gnu.compiler.option.debugging.level.1590311481" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-							</tool>
-							<tool id="xilinx.gnu.armlinux.toolchain.archiver.1809921723" name="ARM Linux archiver" superClass="xilinx.gnu.armlinux.toolchain.archiver"/>
-							<tool id="xilinx.gnu.armlinux.c.toolchain.linker.debug.468983498" name="ARM Linux gcc linker" superClass="xilinx.gnu.armlinux.c.toolchain.linker.debug">
-								<option id="xilinx.gnu.c.link.option.paths.1750636700" name="Library search path (-L)" superClass="xilinx.gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/soundgates/git/reconos_zynq/linux/lib"/>
-								</option>
-								<option id="xilinx.gnu.c.link.option.libs.819131754" name="Libraries (-l)" superClass="xilinx.gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="pthread"/>
-									<listOptionValue builtIn="false" value="lo"/>
-									<listOptionValue builtIn="false" value="rt"/>
-									<listOptionValue builtIn="false" value="dl"/>
-									<listOptionValue builtIn="false" value="reconos"/>
-									<listOptionValue builtIn="false" value="asound"/>
-									<listOptionValue builtIn="false" value="m"/>
-								</option>
-								<inputType id="xilinx.gnu.linker.input.2078731119" superClass="xilinx.gnu.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-								<inputType id="xilinx.gnu.linker.input.lscript.412359731" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
-							</tool>
-							<tool id="xilinx.gnu.armlinux.cxx.toolchain.linker.debug.520439260" name="ARM Linux g++ linker" superClass="xilinx.gnu.armlinux.cxx.toolchain.linker.debug"/>
-							<tool id="xilinx.gnu.armlinux.size.debug.339017212" name="ARM Linux Print Size" superClass="xilinx.gnu.armlinux.size.debug"/>
+						<toolChain id="xilinx.gnu.armlinux.exe.debug.toolchain.510092946" name="Xilinx ARM GNU/Linux Toolchain" nonInternalBuilderId="xilinx.gnu.armlinux.toolchain.builder.debug">
+							<targetPlatform id="xilinx.armlinux.target.gnu.base.debug.1257592718" isAbstract="false" name="Debug Platform"/>
+							<builder buildPath="${workspace_loc:/SynthesizerTEst}/Debug" enableAutoBuild="true" id="xilinx.gnu.armlinux.toolchain.builder.debug.52599723" keepEnvironmentInBuildfile="false" name="GNU make"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
@@ -244,9 +216,7 @@
 		</configuration>
 		<configuration configurationName="Zynq"/>
 		<configuration configurationName="zedboaaard"/>
-		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/AlsaTesting"/>
-		</configuration>
+		<configuration configurationName="Debug"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">

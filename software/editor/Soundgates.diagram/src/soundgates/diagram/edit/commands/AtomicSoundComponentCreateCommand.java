@@ -68,6 +68,10 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 		}
 		//---MYTOOL
 
+		newElement.setName(AtomicSoundComponentLibrary.getNumberedName(
+				(String) concreteType, getElementToEdit().eResource().getURI()
+						.lastSegment()));
+
 		Patch owner = (Patch) getElementToEdit();
 		owner.getElements().add(newElement);
 
@@ -97,5 +101,4 @@ public class AtomicSoundComponentCreateCommand extends EditElementCommand {
 			configureCommand.execute(monitor, info);
 		}
 	}
-
 }

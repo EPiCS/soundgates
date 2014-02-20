@@ -83,7 +83,7 @@ public class SoundgatesNewDiagramFileWizard extends Wizard {
 		}
 		myFileCreationPage.setContainerFullPath(filePath);
 		myFileCreationPage.setFileName(SoundgatesDiagramEditorUtil
-				.getUniqueFileName(filePath, fileName, "soundgates_diagram")); //$NON-NLS-1$
+				.getUniqueFileName(filePath, fileName, "sgd")); //$NON-NLS-1$
 
 		diagramRootElementSelectionPage = new DiagramRootElementSelectionPage(
 				Messages.SoundgatesNewDiagramFileWizard_RootSelectionPageName);
@@ -137,6 +137,7 @@ public class SoundgatesNewDiagramFileWizard extends Wizard {
 						PatchEditPart.MODEL_ID,
 						SoundgatesDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT);
 				diagramResource.getContents().add(diagram);
+				diagramResource.getContents().add(diagram.getElement());
 				return CommandResult.newOKCommandResult();
 			}
 		};

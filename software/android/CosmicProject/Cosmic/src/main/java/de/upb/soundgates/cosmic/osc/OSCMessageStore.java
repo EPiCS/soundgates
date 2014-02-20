@@ -9,9 +9,25 @@ import java.util.List;
 public class OSCMessageStore {
     List<OSCMessage> store;
 
-    public OSCMessageStore() {
+    private OSCMessageStore() {
         store = new LinkedList<OSCMessage>();
     }
+
+
+    public static OSCMessageStore holder;
+    public static OSCMessageStore getInstance() {
+        if(holder == null) {
+            holder = new OSCMessageStore();
+        }
+        return holder;
+    }
+    public static OSCMessageStore hasInstance() {
+        return holder;
+    }
+    public static void removeInstance() {
+        holder = null;
+    }
+
 
     public List<OSCMessage> getOSCMessageAsList() {
         return store;
@@ -46,6 +62,13 @@ public class OSCMessageStore {
         String ret = "";
         for(OSCMessage msg : store)
             ret += msg + "\n";
+        return ret;
+    }
+
+    public String toStringFull() {
+        String ret = "";
+        for(OSCMessage msg : store)
+            ret += msg.toStringFull() + "\n";
         return ret;
     }
 }

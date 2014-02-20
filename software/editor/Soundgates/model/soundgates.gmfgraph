@@ -7,10 +7,14 @@
     <figures xsi:type="gmfgraph:PolylineDecoration" name="CompositeSoundComponentDelegationsTargetDecoration"/>
     <figures xsi:type="gmfgraph:PolylineDecoration" name="LinksTargetDecoration"/>
     <descriptors name="PortFigure">
-      <actualFigure xsi:type="gmfgraph:Rectangle" name="PortFigure" fill="false"/>
+      <actualFigure xsi:type="gmfgraph:Rectangle" name="PortFigure" fill="false">
+        <foregroundColor xsi:type="gmfgraph:ConstantColor" value="black"/>
+      </actualFigure>
     </descriptors>
     <descriptors name="PortNameFigure">
-      <actualFigure xsi:type="gmfgraph:Label" name="PortNameLabel" text="port"/>
+      <actualFigure xsi:type="gmfgraph:Label" name="PortNameLabel" text="port">
+        <font xsi:type="gmfgraph:BasicFont" faceName="" height="1"/>
+      </actualFigure>
       <accessors accessor="getFigurePortNameLabel" figure="//@figures.0/@descriptors.1/@actualFigure"/>
     </descriptors>
     <descriptors name="PortOutgoingConnectionFigure">
@@ -22,6 +26,7 @@
     <descriptors name="CompositeSoundComponentFigure">
       <actualFigure xsi:type="gmfgraph:Rectangle" name="CompositeSoundComponentFigure">
         <layout xsi:type="gmfgraph:BorderLayout"/>
+        <foregroundColor xsi:type="gmfgraph:ConstantColor" value="black"/>
         <children xsi:type="gmfgraph:Label" name="CompositeSoundComponentNameFigure" text="Composite Sound Component">
           <layoutData xsi:type="gmfgraph:BorderLayoutData" alignment="BEGINNING" vertical="true"/>
         </children>
@@ -41,6 +46,7 @@
     <descriptors name="AtomicSoundComponentFigure">
       <actualFigure xsi:type="gmfgraph:Rectangle" name="AtomicSoundComponentFigure">
         <layout xsi:type="gmfgraph:FlowLayout"/>
+        <foregroundColor xsi:type="gmfgraph:ConstantColor" value="black"/>
         <children xsi:type="gmfgraph:Label" name="AtomicSoundComponentNameFigure" text="Atomic Sound Component"/>
       </actualFigure>
       <accessors figure="//@figures.0/@descriptors.7/@actualFigure/@children.0"/>

@@ -1,0 +1,8 @@
+#N canvas 1440 49 958 1149 10;
+#X obj 123 108 subcc_patch;
+#X floatatom 114 62 5 0 0 0 - - -;
+#X floatatom 192 64 5 0 0 0 - - -;
+#X floatatom 125 180 5 0 0 0 - - -;
+#X connect 0 0 3 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;

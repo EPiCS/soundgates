@@ -21,11 +21,7 @@
 #include <unistd.h>
 
 #include "UserInput/tcp_handshake.h"
-#include "software_sound_components/software_sound_components.h"
-
-// Reconos imports
-#include <reconos.h>
-#include <mbox.h>
+#include "SoundComponents/software/software_sound_components.h"
 
 // Soundgates imports
 #include "Inputconverter.h"
@@ -33,6 +29,12 @@
 #include "SynthesizerCommon.h"
 #include "UserInput/osc_handler.h"
 #include "../../include/Samplebuffer.h"
+
+#if _TARGET_ZYNQ
+
+// Reconos imports
+#include <reconos.h>
+#include <mbox.h>
 
 // Memory
 #define TO_WORDS(x) ((x)/4)
@@ -380,6 +382,15 @@ int main(){
 	return 0;
 }
 
+#else
 
+int main()
+{
+	printf("Hello World\n");
+
+	return 0;
+}
+
+#endif
 
 

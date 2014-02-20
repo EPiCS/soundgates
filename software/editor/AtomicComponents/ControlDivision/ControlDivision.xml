@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>ControlDivision</Type>
+	<Category>Arithmetic</Category>
+	<Ports>
+		<Port Name="Dividend" Direction="IN" DataType="CONTROL"/>
+		<Port Name="Divisor" Direction="IN" DataType="CONTROL"/>
+		<Port Name="Quotient" Direction="OUT" DataType="CONTROL"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="divcc">
+				<PortMapping PortName="Dividend" PortNumber="1"/>
+				<PortMapping PortName="Divisor" PortNumber="2"/>
+				<PortMapping PortName="Quotient" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="divcc">
+				<PortMapping PortName="Dividend" PortNumber="1"/>
+				<PortMapping PortName="Divisor" PortNumber="2"/>
+				<PortMapping PortName="Quotient" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

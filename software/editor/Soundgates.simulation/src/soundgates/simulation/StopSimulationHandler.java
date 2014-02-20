@@ -7,12 +7,7 @@ public class StopSimulationHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		if (ProcessStore.currentPureDataProcess != null){
-			ProcessStore.currentPureDataProcess.destroy();
-			ProcessStore.currentPureDataProcess = null;
-			ProcessStore.handShakeThread.stopMe();
-			ProcessStore.handShakeThread = null;
-		}
+		ProcessStore.killSimulation();
 		return null;
 	}
 

@@ -12,10 +12,9 @@ import org.eclipse.gmf.runtime.notation.View;
 import soundgates.diagram.edit.policies.DelegationItemSemanticEditPolicy;
 
 /**
- * @generated
+ * @generated NOT
  */
-public class DelegationEditPart extends ConnectionNodeEditPart implements
-		ITreeBranchEditPart {
+public class DelegationEditPart extends ConnectionAbstractEditPart {
 
 	/**
 	 * @generated

@@ -138,7 +138,7 @@ public class SoundgatesDiagramEditorUtil {
 	 * This method should be called within a workspace modify operation since it creates resources.
 	 * @generated
 	 */
-	public static Resource createDiagram(URI diagramURI, URI modelURI,
+	public static Resource createDiagram(URI diagramURI,
 			IProgressMonitor progressMonitor) {
 		TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE
 				.createEditingDomain();
@@ -147,8 +147,6 @@ public class SoundgatesDiagramEditorUtil {
 				3);
 		final Resource diagramResource = editingDomain.getResourceSet()
 				.createResource(diagramURI);
-		final Resource modelResource = editingDomain.getResourceSet()
-				.createResource(modelURI);
 		final String diagramName = diagramURI.lastSegment();
 		AbstractTransactionalCommand command = new AbstractTransactionalCommand(
 				editingDomain,
@@ -158,7 +156,7 @@ public class SoundgatesDiagramEditorUtil {
 					IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
 				Patch model = createInitialModel();
-				attachModelToResource(model, modelResource);
+				attachModelToResource(model, diagramResource);
 
 				Diagram diagram = ViewService.createDiagram(model,
 						PatchEditPart.MODEL_ID,
@@ -170,9 +168,7 @@ public class SoundgatesDiagramEditorUtil {
 				}
 
 				try {
-					modelResource
-							.save(soundgates.diagram.part.SoundgatesDiagramEditorUtil
-									.getSaveOptions());
+
 					diagramResource
 							.save(soundgates.diagram.part.SoundgatesDiagramEditorUtil
 									.getSaveOptions());
@@ -191,7 +187,7 @@ public class SoundgatesDiagramEditorUtil {
 			SoundgatesDiagramEditorPlugin.getInstance().logError(
 					"Unable to create model and diagram", e); //$NON-NLS-1$
 		}
-		setCharset(WorkspaceSynchronizer.getFile(modelResource));
+
 		setCharset(WorkspaceSynchronizer.getFile(diagramResource));
 		return diagramResource;
 	}

@@ -19,7 +19,6 @@ import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
 import org.eclipse.gmf.runtime.common.ui.services.parser.IParserEditStatus;
 import org.eclipse.gmf.runtime.common.ui.services.parser.ParserEditStatus;
 import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
@@ -39,16 +38,17 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.directedit.TextDirectEditManager2;
 import org.eclipse.gmf.tooling.runtime.draw2d.labels.SimpleLabelDelegate;
-import org.eclipse.gmf.tooling.runtime.edit.policies.DefaultNodeLabelDragPolicy;
 import org.eclipse.gmf.tooling.runtime.edit.policies.labels.IRefreshableFeedbackEditPolicy;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 
+import org.eclipse.swt.widgets.Display;
 import soundgates.diagram.edit.policies.SoundgatesTextSelectionEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
@@ -569,7 +569,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	 * @generated
 	 */
 	private View getFontStyleOwnerView() {
-		return getPrimaryView();
+		return (View) getModel();
 	}
 
 	/**
@@ -668,10 +668,10 @@ public class PortNameEditPart extends LabelEditPart implements
 		private WrappingLabel fFigurePortNameLabel;
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		public PortNameFigure() {
-			this.setText("port");
+			this.setFont(THIS_FONT);
 		}
 
 		/**
@@ -682,5 +682,12 @@ public class PortNameEditPart extends LabelEditPart implements
 		}
 
 	}
+
+	/**
+	 * @generated
+	 */
+	static final Font THIS_FONT = new Font(Display.getCurrent(), Display
+			.getDefault().getSystemFont().getFontData()[0].getName(), 8,
+			SWT.NORMAL);
 
 }

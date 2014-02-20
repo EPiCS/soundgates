@@ -4,13 +4,13 @@
 
    <extension point="org.eclipse.team.core.fileTypes" id="repo-ftype">
       <?gmfgen generated="true"?>
-      <fileTypes type="text" extension="soundgates_diagram"/>
+      <fileTypes type="text" extension="sgd"/>
    </extension>
 
    <extension point="org.eclipse.emf.ecore.extension_parser" id="resource-factory">
       <?gmfgen generated="true"?>
       <parser
-         type="soundgates_diagram"
+         type="sgd"
          class="org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory">
       </parser>
    </extension>
@@ -21,7 +21,7 @@
          id="soundgates.diagram.part.SoundgatesDiagramEditorID"
          name="%editorName"
          icon="icons/obj16/SoundgatesDiagramFile.gif"
-         extensions="soundgates_diagram"
+         extensions="sgd"
          default="true"
          class="soundgates.diagram.part.SoundgatesDiagramEditor"
          matchingStrategy="soundgates.diagram.part.SoundgatesMatchingStrategy"
@@ -43,7 +43,7 @@
       <primaryWizard
             id="soundgates.diagram.part.SoundgatesProjectCreationWizardID">
       </primaryWizard>
-      <?gmfgen generated="true"?>
+      <?gmfgen generated="false"?>
   	  <wizard
   	     name="%newWizardName"
   	     icon="icons/obj16/SoundgatesDiagramFile.gif"
@@ -64,7 +64,7 @@
    </extension>
 
    <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
-      <?gmfgen generated="true"?>
+      <?gmfgen generated="false"?>
       <objectContribution
             id="Soundgates.diagram.InitDiagram"
             nameFilter="*.soundgates"
@@ -92,7 +92,7 @@
                class="soundgates.diagram.actions.ExportCompositeSoundComponentAction"
                enablesFor="1"
                id="Soundgates.diagram.action.ExportCompositeAction"
-               label="Export Composite Sound Component"
+               label="Export Composite Sound Component as XML"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
          <action
@@ -105,13 +105,13 @@
       <objectContribution
             adaptable="false"
             id="Soundgates.diagram.export.Patch"
-            nameFilter="*.soundgates"
+            nameFilter="*.sgd"
             objectClass="org.eclipse.core.resources.IFile">
          <action
                class="soundgates.diagram.actions.ExportPatchAction"
                enablesFor="1"
                id="Soundgates.diagram.action.ExportPatchAction"
-               label="Export Patch"
+               label="Export Patch as XML"
                menubarPath="Soundgates.codegen.menu/group">
          </action>
          <action
@@ -124,7 +124,8 @@
       </objectContribution>
       <objectContribution
             id="Soundgates.diagram.export.ImportPatch"
-            objectClass="org.eclipse.core.resources.IProject">
+            nameFilter="*.xml"
+            objectClass="org.eclipse.core.resources.IResource">
          <menu
                id="Soundgates.diagram.menu"
                label="Soundgates"
@@ -137,7 +138,18 @@
                class="soundgates.diagram.actions.ImportPatchAction"
                enablesFor="1"
                id="Soundgates.diagram.action.ImportPatchAction"
-               label="Import Patch from XML"
+               label="Create Patch from XML"
+               menubarPath="Soundgates.diagram.menu/group">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="Soundgates.diagram.HideElements"
+            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentAbstractEditPart">
+         <action
+               class="soundgates.diagram.actions.HideEmbeddedElementsAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.HideEmbeddedElementsAction"
+               label="Hide/Show Embedded Elements"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
       </objectContribution>
@@ -503,7 +515,7 @@
             <or>
 	           <and>
     	          <instanceof value="org.eclipse.core.resources.IFile"/>
-        	      <test property="org.eclipse.core.resources.extension" value="soundgates_diagram"/>
+        	      <test property="org.eclipse.core.resources.extension" value="sgd"/>
                </and>
                <instanceof value="soundgates.diagram.navigator.SoundgatesAbstractNavigatorItem"/>
             </or>
@@ -520,7 +532,7 @@
                <or>
 	              <and>
     	             <instanceof value="org.eclipse.core.resources.IFile"/>
-        	         <test property="org.eclipse.core.resources.extension" value="soundgates_diagram"/>
+        	         <test property="org.eclipse.core.resources.extension" value="sgd"/>
                   </and>
                   <instanceof value="soundgates.diagram.navigator.SoundgatesAbstractNavigatorItem"/>
                </or>

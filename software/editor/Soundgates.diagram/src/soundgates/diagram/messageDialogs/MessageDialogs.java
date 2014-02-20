@@ -4,6 +4,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 public class MessageDialogs {
 
+	
+	// --DIALOGS--
+	
 	public static boolean replaceExistingCompositeSoundComponentDialog(String name){	
 	
 	   MessageDialog dialog = new MessageDialog(
@@ -18,6 +21,20 @@ public class MessageDialogs {
 	   else return false;
 	}
 	
+	public static boolean replaceExistingEMFFile(String name){	
+		
+		   MessageDialog dialog = new MessageDialog(
+				      null, "File \""+name+"\" already exists", 
+				      null, "Do you want to replace the file \""+name+"\"?",
+				      MessageDialog.QUESTION,
+				      new String[] {"Yes", "No"},
+				      0); 
+		   
+		   int result =  dialog.open();
+		   if(result==0) return true;
+		   else return false;
+		}
+	
 	// --INFO--
 	
 	public static void compositeSoundComponentWasExported(String name){		
@@ -26,6 +43,10 @@ public class MessageDialogs {
 
 	public static void patchtWasExported(String name){		
 		MessageDialog.openInformation(null, "Success", "The patch was exported to file \""+name+"\"");	
+	}
+
+	public static void patchtWasImported(String name){		
+		MessageDialog.openInformation(null, "Success", "The patch was imported to file \""+name+"\"");	
 	}
 	
 	public static void compositeSoundComponentValidationTrue(String name) {		
@@ -53,6 +74,10 @@ public class MessageDialogs {
 	public static void portHasNoIncomingConnection(String parent, String name) {
 		MessageDialog.openWarning(null, "Port \""+name+"\" of \""+parent+"\"  has no incoming link", "Please create an incoming connection for the port \""+name+"\"");		
 	}
+	
+	public static void portHasNoDelegation(String parent, String name) {
+		MessageDialog.openWarning(null, "Port \""+name+"\" of \""+parent+"\"  has no delegation", "Please create a delegetion for the port \""+name+"\"");		
+	}
 		
 	public static void inPortHasOutgoingConnection(String parent, String name) {
 		MessageDialog.openWarning(null, "IN-port \""+name+"\" of \""+parent+"\"  has an outgoing link", "Please delete the outgoing connection from the port \""+name+"\"");		
@@ -77,10 +102,6 @@ public class MessageDialogs {
 	public static void delegation2Error(String parent, String source, String target) {		
 		MessageDialog.openWarning(null, "", "The delegation in \""+parent+"\" between the port \""+source+"\" and the port \""+target+"\" is incorrect" );		
 	}
-
-	public static void compositeSoundComponentHasNoInPort(String name) {		
-		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no IN-ports", "Please add at least one IN-port to the composite sound component \""+name+"\"");		
-	}
 	
 	public static void compositeSoundComponentHasNoOutPort(String name) {		
 		MessageDialog.openWarning(null, "Composite sound component \""+name+"\" has no OUT-ports", "Please add at least one OUT-port to the composite sound component \""+name+"\"");			
@@ -91,10 +112,47 @@ public class MessageDialogs {
 	}	
 	
 	public static void compositeSoundComponentContaintsIOBlock(String name) {		
-		MessageDialog.openWarning(null, "IO blocks in composite components are not allowed", "Please remove the IO block(s) from the composite sound component \""+name+"\"");		
+		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please remove the IO component(s) from the composite sound component \""+name+"\"");		
+	}
+	
+	public static void ioComponentsMustHaveUniqueNames() {		
+		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
 	}
 	
 	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		
 		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please remove the SoundOutput block(s) from the composite sound component \""+name+"\"");		
 	}
+	
+	public static void soundcomponentsFolderMissing(String projectName) {		
+		MessageDialog.openWarning(null, "No folder \"soundcomponents\" in the project", "Please add the folder \"soundcomponents\" to the project \""+projectName+"\"");		
+	}
+	
+	public static void atomicComponentMissing(String name) {		
+		MessageDialog.openWarning(null, "Missing atomic sound component", "The atomic sound component \""+name+"\" was not found in the folder \"soundcomponents\"");		
+	}
+	
+	public static void compositeComponentMissing(String name) {		
+		MessageDialog.openWarning(null, "Missing composite sound component", "The composite sound component \""+name+"\" was not found in the folder \"soundcomponents\" or its embedded component(s) are missing");		
+	}
+
+	public static void atomicComponentInCompositeComponentMissing(String name, String parentName) {		
+		MessageDialog.openWarning(null, "Missing atomic sound component", "The atomic sound component \""+name+"\" which is embedded in the composite sound component \""+parentName+"\" was not found in the folder \"soundcomponents\"");		
+	}
+	
+	public static void compositeComponentInCompositeComponentMissing(String name, String parentName) {		
+		MessageDialog.openWarning(null, "Missing composite sound component", "The composite sound component \""+name+"\" which is embedded in the composite sound component \""+parentName+"\" was not found in the folder \"soundcomponents\" or its embedded component(s) are missing");		
+	}
+
+	public static void minValueGreaterThanMaxValue(String name) {
+		MessageDialog.openWarning(null, "The minimum value of the IO component "+name+" is greater than its maximum value.","Please set correct values for the IO component "+name);		
+	}
+
+	public static void fileNotFound(String filePath) {
+		MessageDialog.openWarning(null, "File not found","File "+filePath+" not found");
+	}
+
+	public static void soundToControlConnection(String parent, String port1, String port2) {
+		MessageDialog.openWarning(null, "Wrong connection","A connection in \""+parent+"\" connects the sound port \""+port1+"\" with the control port \""+port2+"\"");
+	}
+
 }

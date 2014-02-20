@@ -1,0 +1,17 @@
+#N canvas 2400 49 958 558 10;
+#X obj 165 141 rampenvelope_patch;
+#X obj 161 227 dac~;
+#X obj 120 47 osc~ 440;
+#X msg 343 86 1;
+#X obj 167 192 *~ 0.2;
+#X msg 196 57 1000;
+#X msg 238 58 2000;
+#X obj 224 21 loadbang;
+#X connect 0 0 4 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 3;
+#X connect 4 0 1 0;
+#X connect 5 0 0 1;
+#X connect 6 0 0 2;
+#X connect 7 0 5 0;
+#X connect 7 0 6 0;

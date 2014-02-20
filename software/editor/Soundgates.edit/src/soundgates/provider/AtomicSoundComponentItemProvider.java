@@ -127,6 +127,7 @@ public class AtomicSoundComponentItemProvider
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES);
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES);
 			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES);
+			childrenFeatures.add(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES);
 		}
 		return childrenFeatures;
 	}
@@ -188,6 +189,7 @@ public class AtomicSoundComponentItemProvider
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES:
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES:
 			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES:
+			case SoundgatesPackage.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -224,6 +226,13 @@ public class AtomicSoundComponentItemProvider
 			(createChildParameter
 				(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES,
 				 SoundgatesFactory.eINSTANCE.create(SoundgatesPackage.Literals.ESTRING_TO_ESTRING)));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SoundgatesPackage.Literals.ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES,
+				 SoundgatesFactory.eINSTANCE.create(SoundgatesPackage.Literals.ESTRING_TO_ESTRING)));
 	}
+
+
 
 }

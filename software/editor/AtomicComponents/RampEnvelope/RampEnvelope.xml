@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Ramp</Type>
+	<Category>Envelope</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="SamplesIn"/>
+		<Port DataType="CONTROL" Direction="IN" Name="RisingTime"/>
+		<Port DataType="CONTROL" Direction="IN" Name="FallingTime"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Trigger"/>
+		<Port DataType="SOUND" Direction="OUT" Name="SamplesOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="ramp">
+				<PortMapping PortName="SamplesIn" PortNumber="1"/>
+				<PortMapping PortName="RisingTime" PortNumber="2"/>
+				<PortMapping PortName="FallingTime" PortNumber="3"/>
+				<PortMapping PortName="Trigger" PortNumber="4"/>
+				<PortMapping PortName="SamplesOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="ramp">
+				<PortMapping PortName="SamplesIn" PortNumber="1"/>
+				<PortMapping PortName="RisingTime" PortNumber="2"/>
+				<PortMapping PortName="FallingTime" PortNumber="3"/>
+				<PortMapping PortName="Trigger" PortNumber="4"/>
+				<PortMapping PortName="SamplesOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

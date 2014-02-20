@@ -37,11 +37,6 @@ public class SoundgatesCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	protected SoundgatesCreationWizardPage domainModelFilePage;
-
-	/**
-	 * @generated
-	 */
 	protected Resource diagram;
 
 	/**
@@ -98,36 +93,16 @@ public class SoundgatesCreationWizard extends Wizard implements INewWizard {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public void addPages() {
 		diagramModelFilePage = new SoundgatesCreationWizardPage(
-				"DiagramModelFile", getSelection(), "soundgates_diagram"); //$NON-NLS-1$ //$NON-NLS-2$
+				"DiagramModelFile", getSelection(), "sgd"); //$NON-NLS-1$ //$NON-NLS-2$
 		diagramModelFilePage
 				.setTitle(Messages.SoundgatesCreationWizard_DiagramModelFilePageTitle);
 		diagramModelFilePage
 				.setDescription(Messages.SoundgatesCreationWizard_DiagramModelFilePageDescription);
 		addPage(diagramModelFilePage);
-
-		domainModelFilePage = new SoundgatesCreationWizardPage(
-				"DomainModelFile", getSelection(), "soundgates") { //$NON-NLS-1$ //$NON-NLS-2$
-
-			public void setVisible(boolean visible) {
-				if (visible) {
-					String fileName = diagramModelFilePage.getFileName();
-					fileName = fileName.substring(0, fileName.length()
-							- ".soundgates_diagram".length()); //$NON-NLS-1$
-					setFileName(SoundgatesDiagramEditorUtil.getUniqueFileName(
-							getContainerFullPath(), fileName, "soundgates")); //$NON-NLS-1$
-				}
-				super.setVisible(visible);
-			}
-		};
-		domainModelFilePage
-				.setTitle(Messages.SoundgatesCreationWizard_DomainModelFilePageTitle);
-		domainModelFilePage
-				.setDescription(Messages.SoundgatesCreationWizard_DomainModelFilePageDescription);
-		addPage(domainModelFilePage);
 	}
 
 	/**
@@ -139,8 +114,7 @@ public class SoundgatesCreationWizard extends Wizard implements INewWizard {
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException, InterruptedException {
 				diagram = SoundgatesDiagramEditorUtil.createDiagram(
-						diagramModelFilePage.getURI(),
-						domainModelFilePage.getURI(), monitor);
+						diagramModelFilePage.getURI(), monitor);
 				if (isOpenNewlyCreatedDiagramEditor() && diagram != null) {
 					try {
 						SoundgatesDiagramEditorUtil.openDiagram(diagram);

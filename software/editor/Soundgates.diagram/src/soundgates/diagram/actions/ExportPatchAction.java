@@ -28,8 +28,15 @@ public class ExportPatchAction implements IObjectActionDelegate{
 		while (files.hasNext()) {
 			IFile file = (IFile) files.next();		
 
-			PatchExporter patchExporter = new PatchExporter();
-			Patch patch = patchExporter.getPatch(file.getFullPath().toPortableString());
+			Patch patch = PatchExporter.getPatch(file.getFullPath().toPortableString());
+
+			String newFileName = file.getName().replace(".sgd",".xml");
+			
+			if(file.getProject().getFile(newFileName).exists()){
+				if (!MessageDialogs.replaceExistingEMFFile(newFileName))
+					return;
+			}
+			
 			Tester tester = new Tester();
 			
 			if(tester.testPatch(patch) == false)
@@ -37,12 +44,12 @@ public class ExportPatchAction implements IObjectActionDelegate{
 			
 			try {
 				
-				patchExporter.exportToXML(
+				PatchExporter.exportToXML(
 						file.getParent().getLocation().toPortableString(), 	// folder						
 						patch,												// patch
-						file.getName().replace(".soundgates",""));			// name
+						file.getName().replace(".sgd",""));			// name
 								
-				MessageDialogs.patchtWasExported(file.getName().replace(".soundgates",".xml"));
+				MessageDialogs.patchtWasExported(file.getName().replace(".sgd",".xml"));
 				file.getParent().refreshLocal(1, null);
 			} catch (Exception e) {				
 				e.printStackTrace();

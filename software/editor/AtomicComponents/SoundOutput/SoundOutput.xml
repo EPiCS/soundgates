@@ -1,15 +1,18 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>SoundOutput</Type>
+	<Category>Sink</Category>
 	<Ports>
-		<Port Name="Sound" Direction="IN" DataType="SOUND"/>
+		<Port DataType="SOUND" Direction="IN" Name="Sound"/>
 	</Ports>
 	<Code>
-		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="dac">
+				<PortMapping PortName="Sound" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="dac">
+				<PortMapping PortName="Sound" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

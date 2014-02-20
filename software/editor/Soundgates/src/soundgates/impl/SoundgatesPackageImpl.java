@@ -431,8 +431,17 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAtomicSoundComponent_UserStringProperties() {
+		return (EReference)atomicSoundComponentEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getAtomicSoundComponent_Type() {
-		return (EAttribute)atomicSoundComponentEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)atomicSoundComponentEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -663,6 +672,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__INTEGER_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__BOOLEAN_PROPERTIES);
 		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__STRING_PROPERTIES);
+		createEReference(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__USER_STRING_PROPERTIES);
 		createEAttribute(atomicSoundComponentEClass, ATOMIC_SOUND_COMPONENT__TYPE);
 
 		connectionEClass = createEClass(CONNECTION);
@@ -761,6 +771,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		initEReference(getAtomicSoundComponent_IntegerProperties(), this.getEStringToEIntegerObject(), null, "integerProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_BooleanProperties(), this.getEStringToEBooleanObject(), null, "booleanProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicSoundComponent_StringProperties(), this.getEStringToEString(), null, "stringProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAtomicSoundComponent_UserStringProperties(), this.getEStringToEString(), null, "userStringProperties", null, 0, -1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAtomicSoundComponent_Type(), ecorePackage.getEString(), "type", null, 1, 1, AtomicSoundComponent.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionEClass, Connection.class, "Connection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -793,9 +804,7 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		addEEnumLiteral(directionEEnum, Direction.OUT);
 
 		initEEnum(dataTypeEEnum, DataType.class, "DataType");
-		addEEnumLiteral(dataTypeEEnum, DataType.FLOAT);
-		addEEnumLiteral(dataTypeEEnum, DataType.INTEGER);
-		addEEnumLiteral(dataTypeEEnum, DataType.BOOLEAN);
+		addEEnumLiteral(dataTypeEEnum, DataType.CONTROL);
 		addEEnumLiteral(dataTypeEEnum, DataType.SOUND);
 
 		// Create resource
@@ -822,25 +831,13 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 		   new String[] {
 			 "invocationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL",
 			 "validationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL"
-		   });								
+		   });					
 		addAnnotation
-		  (connectionEClass, 
+		  (portEClass, 
 		   source, 
 		   new String[] {
-			 "constraints", "PortKind"
-		   });				
-		addAnnotation
-		  (delegationEClass, 
-		   source, 
-		   new String[] {
-			 "constraints", "PortDirection"
-		   });				
-		addAnnotation
-		  (linkEClass, 
-		   source, 
-		   new String[] {
-			 "constraints", "PortDirection"
-		   });	
+			 "constraints", "UnconnectedPort"
+		   });						
 	}
 
 	/**
@@ -850,25 +847,13 @@ public class SoundgatesPackageImpl extends EPackageImpl implements SoundgatesPac
 	 * @generated
 	 */
 	protected void createOCLAnnotations() {
-		String source = "http://www.eclipse.org/emf/2002/Ecore/OCL";											
+		String source = "http://www.eclipse.org/emf/2002/Ecore/OCL";								
 		addAnnotation
-		  (connectionEClass, 
+		  (portEClass, 
 		   source, 
 		   new String[] {
-			 "PortKind", "self.source.kind=self.target.kind"
-		   });				
-		addAnnotation
-		  (delegationEClass, 
-		   source, 
-		   new String[] {
-			 "PortDirection", "self.source.direction=self.target.direction"
-		   });				
-		addAnnotation
-		  (linkEClass, 
-		   source, 
-		   new String[] {
-			 "PortDirection", "not (self.source.direction=self.target.direction)"
-		   });
+			 "UnconnectedPort", "if (self.direction=Direction::IN) then (not (self.incomingConnection=null)) else (self.outgoingConnection->size()>0) endif"
+		   });					
 	}
 
 } //SoundgatesPackageImpl

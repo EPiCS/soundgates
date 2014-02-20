@@ -5,13 +5,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.draw2d.FlowLayout;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -24,20 +28,19 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.BorderedBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.FlowLayoutEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.figures.BorderItemLocator;
-import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
-import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 
+import soundgates.Direction;
+import soundgates.Port;
 import soundgates.diagram.edit.policies.PortItemSemanticEditPolicy;
+import soundgates.diagram.edit.policies.SoundgatesConnectionHandleEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
 
@@ -45,6 +48,8 @@ import soundgates.diagram.providers.SoundgatesElementTypes;
  * @generated
  */
 public class PortEditPart extends BorderedBorderItemEditPart {
+
+	private Adapter adapter;
 
 	/**
 	 * @generated
@@ -69,7 +74,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
@@ -79,7 +84,11 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 				new PortItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+		installEditPolicy(
+				org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE,
+				new SoundgatesConnectionHandleEditPolicy(getPort()));
+
 	}
 
 	/**
@@ -136,14 +145,25 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addBorderItem(IFigure borderItemContainer,
 			IBorderItemEditPart borderItemEditPart) {
 		if (borderItemEditPart instanceof PortNameEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			locator.setBorderItemOffset(new Dimension(-20, -20));
+			//			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),PositionConstants.SOUTH);
+			//			locator.setBorderItemOffset(new Dimension(-20, -20));
+
+			BorderItemLocator locator;
+			if (getPort().getDirection() == Direction.IN) {
+				locator = new BorderItemLocator(getMainFigure(),
+						PositionConstants.NORTH);
+				locator.setBorderItemOffset(new Dimension(0, 10));
+			} else {
+				locator = new BorderItemLocator(getMainFigure(),
+						PositionConstants.SOUTH);
+				locator.setBorderItemOffset(new Dimension(-10, -10));
+			}
+
 			borderItemContainer.add(borderItemEditPart.getFigure(), locator);
 		} else {
 			super.addBorderItem(borderItemContainer, borderItemEditPart);
@@ -151,10 +171,10 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(20, 20);
+		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(10, 10);
 
 		//FIXME: workaround for #154536
 		result.getBounds().setSize(result.getPreferredSize());
@@ -167,15 +187,22 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	 * Body of this method does not depend on settings in generation model
 	 * so you may safely remove <i>generated</i> tag and modify it.
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createMainFigure() {
 		NodeFigure figure = createNodePlate();
 		figure.setLayoutManager(new StackLayout());
 		IFigure shape = createNodeShape();
 		figure.add(shape);
+		figure.setToolTip(new Label(createToolTip()));
 		contentPane = setupContentPane(shape);
 		return figure;
+	}
+
+	public String createToolTip() {
+		Port port = getPort();
+		return "Name: " + port.getName() + "\nDirection: "
+				+ port.getDirection() + "\nType: " + port.getDataType();
 	}
 
 	/**
@@ -313,7 +340,7 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public class PortFigure extends RectangleFigure {
 
@@ -322,8 +349,124 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 		 */
 		public PortFigure() {
 			this.setFill(false);
+			this.setForegroundColor(ColorConstants.black);
+		}
+
+		@Override
+		public IFigure getToolTip() {
+			return new Label(createToolTip());
 		}
 
 	}
 
+	@Override
+	public void notifyChanged(Notification notification) {
+		// TODO Auto-generated method stub
+		super.notifyChanged(notification);
+	}
+
+	@Override
+	public void activate() {
+		super.activate();
+		adapter = new Adapter() {
+
+			@Override
+			public void setTarget(Notifier newTarget) {
+
+			}
+
+			@Override
+			public void notifyChanged(Notification notification) {
+				refreshGraphic();
+			}
+
+			@Override
+			public boolean isAdapterForType(Object type) {
+				return false;
+			}
+
+			@Override
+			public Notifier getTarget() {
+				return null;
+			}
+		};
+
+		try {
+			getPort().eAdapters().add(adapter);
+			refreshGraphic();
+		} catch (Exception e) {
+
+		}
+	}
+
+	public void refreshGraphic() {
+		try {
+			Port port = getPort();
+
+			refreshConnections();
+
+			if ((port.getDirection() == Direction.OUT && getPort()
+					.getOutgoingConnection().size() == 0)
+					|| (port.getDirection() == Direction.IN && getPort()
+							.getIncomingConnection() == null)) {
+				setForegroundColor(new Color(null, 255, 0, 0));
+				getPortNameEditPart().getFigure().setVisible(true);
+			} else {
+				setForegroundColor(new Color(null, 0, 0, 0));
+				getPortNameEditPart().getFigure().setVisible(false);
+			}
+
+		} catch (Exception e) {
+
+		}
+
+	}
+
+	public void refreshConnections() {
+		for (Object editPart : getSourceConnections()) {
+			if (editPart instanceof ConnectionAbstractEditPart) {
+				((ConnectionAbstractEditPart) editPart).refreshGraphic();
+			}
+		}
+		for (Object editPart : getTargetConnections()) {
+			if (editPart instanceof ConnectionAbstractEditPart) {
+				((ConnectionAbstractEditPart) editPart).refreshGraphic();
+			}
+		}
+
+	}
+
+	public Port getPort() {
+		if (((org.eclipse.gmf.runtime.notation.Node) getModel()).getElement() instanceof Port)
+			return (Port) ((org.eclipse.gmf.runtime.notation.Node) getModel())
+					.getElement();
+		else
+			return null;
+	}
+
+	public PortNameEditPart getPortNameEditPart() {
+		for (Object editPart : getChildren()) {
+			if (editPart instanceof PortNameEditPart) {
+				return (PortNameEditPart) editPart;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		try {
+			getPort().eAdapters().remove(adapter);
+			refreshGraphic();
+		} catch (Exception e) {
+
+		}
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		refreshGraphic();
+	}
 }

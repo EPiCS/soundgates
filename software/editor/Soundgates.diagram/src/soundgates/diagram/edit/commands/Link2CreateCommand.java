@@ -51,7 +51,7 @@ public class Link2CreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
 		if (source == null && target == null) {
@@ -70,16 +70,16 @@ public class Link2CreateCommand extends EditElementCommand {
 		if (getContainer() == null) {
 			return false;
 		}
-		if(source instanceof Port){
-			if ( ((Port) source).getDirection()==Direction.IN)
-				return false;				
+		if (source instanceof Port) {
+			if (((Port) source).getDirection() == Direction.IN)
+				return false;
 		}
 		return SoundgatesBaseItemSemanticEditPolicy.getLinkConstraints()
 				.canCreateLink_4002(getContainer(), getSource(), getTarget());
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
@@ -89,7 +89,10 @@ public class Link2CreateCommand extends EditElementCommand {
 		}
 
 		Link newElement = SoundgatesFactory.eINSTANCE.createLink();
-		getContainer().getLinks().add(newElement);
+		CompositeSoundComponent comp = getSource().getComponent()
+				.getParentComponent();
+		comp.getLinks().add(newElement);
+		//		getContainer().getLinks().add(newElement);
 		newElement.setSource(getSource());
 		newElement.setTarget(getTarget());
 		doConfigure(newElement, monitor, info);

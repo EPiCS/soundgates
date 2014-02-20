@@ -11,10 +11,8 @@
     <eLiterals name="OUT" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="DataType">
-    <eLiterals name="FLOAT"/>
-    <eLiterals name="INTEGER" value="1"/>
-    <eLiterals name="BOOLEAN" value="2"/>
-    <eLiterals name="SOUND" value="3" literal="SOUND"/>
+    <eLiterals name="CONTROL"/>
+    <eLiterals name="SOUND" value="1" literal="SOUND"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Patch">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
@@ -37,6 +35,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//NamedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Ports"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UnconnectedPort"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+      <details key="UnconnectedPort" value="if (self.direction=Direction::IN) then (not (self.incomingConnection=null)) else (self.outgoingConnection->size()>0) endif"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connection"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingConnection" upperBound="-1"
         eType="#//Connection" eOpposite="#//Connection/source"/>
@@ -75,19 +82,12 @@
         eType="#//EStringToEBooleanObject" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stringProperties" upperBound="-1"
         eType="#//EStringToEString" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userStringProperties" upperBound="-1"
+        eType="#//EStringToEString" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Connection"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="PortKind"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
-      <details key="PortKind" value="self.source.kind=self.target.kind"/>
-    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
         eType="#//Port" eOpposite="#//Port/outgoingConnection"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
@@ -97,22 +97,10 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Delegation"/>
     </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="PortDirection"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
-      <details key="PortDirection" value="self.source.direction=self.target.direction"/>
-    </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//Connection #//Element">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Link"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="PortDirection"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
-      <details key="PortDirection" value="not (self.source.direction=self.target.direction)"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EStringToEFloatObject" instanceClassName="java.util.Map$Entry">

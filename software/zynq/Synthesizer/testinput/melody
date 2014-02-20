@@ -1,0 +1,151 @@
+#!/bin/bash
+
+function playNote(){
+	
+	oscsend localhost 50050 /sin f $1; oscsend localhost 50050 /trigger f 1; sleep $2 ;oscsend localhost 50500 /trigger f 0;
+}
+
+declare -A notes
+declare -A note_freq
+#notes["c"]=261.626
+#notes["d"]=293.665
+#notes["e"]=329.628
+#notes["f"]=349.228
+#notes["g"]=391.995
+#notes["a"]=440.0
+#notes["h"]=493.883
+
+note_freq[0]=130.81
+note_freq[1]=138.59
+note_freq[2]=146.83
+note_freq[3]=155.56
+note_freq[4]=164.81
+note_freq[5]=174.61
+note_freq[6]=185.00
+note_freq[7]=196.00
+note_freq[8]=207.65
+note_freq[9]=220.00
+note_freq[10]=233.08
+note_freq[11]=246.94
+note_freq[12]=261.63
+note_freq[13]=277.18
+note_freq[14]=293.66
+note_freq[15]=311.13
+note_freq[16]=329.63
+note_freq[17]=349.23
+note_freq[18]=369.99
+note_freq[19]=392.00
+note_freq[20]=415.30
+note_freq[21]=440.00
+note_freq[22]=466.16
+note_freq[23]=493.88
+note_freq[24]=523.25
+note_freq[25]=554.37
+note_freq[26]=587.33
+note_freq[27]=622.25
+note_freq[28]=659.26
+note_freq[29]=698.46
+note_freq[30]=739.99
+note_freq[31]=783.99
+note_freq[32]=830.61
+note_freq[33]=880.00
+note_freq[34]=932.33
+note_freq[35]=987.77
+note_freq[36]=1046.50
+note_freq[37]=0.0
+
+
+notes["c3"]=0
+notes["cs3"]=1
+notes["d_3"]=1
+notes["d3"]=2
+notes["ds3"]=3
+notes["e_3"]=3
+notes["e3"]=4
+notes["es3"]=5
+notes["f_3"]=4
+notes["f3"]=5
+notes["fs3"]=6
+notes["g_3"]=6
+notes["g3"]=7
+notes["gs3"]=8
+notes["a_3"]=8
+notes["a3"]=9
+notes["as3"]=10
+notes["b_3"]=10
+notes["b3"]=11
+notes["bs3"]=12
+notes["c_4"]=11
+notes["c4"]=12
+notes["cs4"]=13
+notes["d_4"]=13
+notes["d4"]=14
+notes["ds4"]=15
+notes["e_4"]=15
+notes["e4"]=16
+notes["es4"]=17
+notes["f_4"]=16
+notes["f4"]=17
+notes["fs4"]=18
+notes["g_4"]=18
+notes["g4"]=19
+notes["gs4"]=20
+notes["a_4"]=20
+notes["a4"]=21
+notes["as4"]=22
+notes["b_4"]=22
+notes["b4"]=23
+notes["bs4"]=24
+notes["c_5"]=23
+notes["c5"]=24
+notes["cs5"]=25
+notes["d_5"]=25
+notes["d5"]=26
+notes["ds5"]=27
+notes["e_5"]=27
+notes["e5"]=28
+notes["es5"]=29
+notes["f_5"]=28
+notes["f5"]=29
+notes["fs5"]=30,
+notes["g_5"]=30
+notes["g5"]=31
+notes["gs5"]=32
+notes["a_5"]=32
+notes["a5"]=33
+notes["as5"]=34
+notes["b_5"]=34
+notes["b5"]=35
+notes["bs5"]=36
+notes["c_6"]=35
+notes["c6"]=36
+notes["rest"]=37
+
+
+melody=( c4   g3   e3   a3   b3   b_3 a3   g3 e4 g4 a4   f4 g4   e4   c4 d4 b3   c4   g3   e3   a3   b3   b_3 a3   g3 e4 g4 a4   f4 g4   e4   c4 d4 b3  )
+melody2=(c3 rest g4 g_4 f4 ds4 rest e4 rest gs3 a3 c4 rest a3 c4 d4 c3 rest g4 g_4 f4 ds4 rest e4 rest c5 rest c5 c5 rest rest c3 rest g4 g_4 f4 ds4 rest e4 rest gs3 a3 c4 rest a3 c4 d4 c3 rest e_4 rest d4 rest c4 rest g3 g3 rest c3 rest)
+melody3=(c4 c4 rest c4 rest c4 d4 rest e4 c4 rest a3 g3 rest rest c4 c4 rest c4 rest c4 d4 e4 rest rest c4 c4 rest c4 rest c4 d4 rest e4 c4 rest a3 g3 rest rest e4 e4 rest e4 rest c4 e4 rest g4 rest rest g3 rest rest)
+
+delay=0.2
+
+# Play part 1
+for i in ${!melody[@]}
+do	
+	playNote ${note_freq[${notes[${melody["$i"]}]}]} $delay
+done
+
+# Play part 2 two times
+for i in ${!melody2[@]}
+do	
+	playNote ${note_freq[${notes[${melody2["$i"]}]}]} $delay
+done
+
+for i in ${!melody2[@]}
+do	
+	playNote ${note_freq[${notes[${melody2["$i"]}]}]} $delay
+done
+
+for i in ${!melody3[@]}
+do	
+	playNote ${note_freq[${notes[${melody3["$i"]}]}]} $delay
+done

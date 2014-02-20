@@ -38,16 +38,6 @@ public class Messages extends NLS {
 	/**
 	 * @generated
 	 */
-	public static String SoundgatesCreationWizard_DomainModelFilePageTitle;
-
-	/**
-	 * @generated
-	 */
-	public static String SoundgatesCreationWizard_DomainModelFilePageDescription;
-
-	/**
-	 * @generated
-	 */
 	public static String SoundgatesCreationWizardOpenEditorError;
 
 	/**

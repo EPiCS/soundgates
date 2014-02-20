@@ -1,0 +1,34 @@
+1 input/sw/'/1/multipush1/1/1 f'
+2 input/sw/'/1/multipush1/2/1 f'
+
+
+11 input/sw/'/1/volume1 f'
+12 input/sw/'/1/volume2 f'
+
+30 smplply/sw/'./testinput/sounds/daft/1.wav','preload_decompress'
+31 smplply/sw/'./testinput/sounds/daft/2.wav','preload_decompress'
+
+56 mixer/sw
+57 delay/sw
+60 dac/sw
+
+61 dummysink/sw
+62 dummysink/sw
+
+#
+
+#
+1 30 '1,1' 
+2 31 '1,1' 
+
+11 56 '1,3'
+12 57 '1,1'
+
+30 56 '1,1'
+30 61 '2,1'
+
+31 56 '1,2'
+31 62 '2,1'
+
+56 57 '1,2'
+57 60 '1,1'

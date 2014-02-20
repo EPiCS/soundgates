@@ -1,0 +1,15 @@
+#N canvas 2400 49 958 361 10;
+#X obj 248 37 loadbang;
+#X msg 152 -7 bang;
+#X msg 168 109 float 2000;
+#X msg 272 109 float 3000;
+#X obj 244 197 stoc_patch;
+#X floatatom 254 272 5 0 0 0 - - -;
+#X obj 465 22 osc~ 0.1;
+#X connect 0 0 2 0;
+#X connect 0 0 3 0;
+#X connect 1 0 0 0;
+#X connect 2 0 4 0;
+#X connect 3 0 4 1;
+#X connect 4 0 5 0;
+#X connect 6 0 4 2;

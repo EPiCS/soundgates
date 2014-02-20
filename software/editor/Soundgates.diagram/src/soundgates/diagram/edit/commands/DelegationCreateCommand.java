@@ -52,7 +52,7 @@ public class DelegationCreateCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
 		if (source == null && target == null) {
@@ -71,18 +71,19 @@ public class DelegationCreateCommand extends EditElementCommand {
 		if (getContainer() == null) {
 			return false;
 		}
-		if(source instanceof Port){		
-			
-			if( (source.eContainer() instanceof AtomicSoundComponent) && ((Port) source).getDirection()==Direction.IN )
-				return false;		
-		}	
+		if (source instanceof Port) {
+
+			if ((source.eContainer() instanceof AtomicSoundComponent)
+					&& ((Port) source).getDirection() == Direction.IN)
+				return false;
+		}
 		return SoundgatesBaseItemSemanticEditPolicy.getLinkConstraints()
 				.canCreateDelegation_4003(getContainer(), getSource(),
 						getTarget());
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor,
 			IAdaptable info) throws ExecutionException {
@@ -91,15 +92,16 @@ public class DelegationCreateCommand extends EditElementCommand {
 					"Invalid arguments in create link command"); //$NON-NLS-1$
 		}
 
-		Delegation newElement = SoundgatesFactory.eINSTANCE.createDelegation();		
-		
-//		getContainer().getDelegations().add(newElement);
-		
-		if (getSource().eContainer().eContents().contains(getTarget().eContainer()))
-			((CompositeSoundComponent) getSource().eContainer()).getDelegations().add(newElement);
+		Delegation newElement = SoundgatesFactory.eINSTANCE.createDelegation();
+
+		if (getSource().eContainer().eContents()
+				.contains(getTarget().eContainer()))
+			((CompositeSoundComponent) getSource().eContainer())
+					.getDelegations().add(newElement);
 		else
-			((CompositeSoundComponent) getTarget().eContainer()).getDelegations().add(newElement);
-		
+			((CompositeSoundComponent) getTarget().eContainer())
+					.getDelegations().add(newElement);
+
 		newElement.setSource(getSource());
 		newElement.setTarget(getTarget());
 		doConfigure(newElement, monitor, info);

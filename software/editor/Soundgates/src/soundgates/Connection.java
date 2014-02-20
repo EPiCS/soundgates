@@ -9,10 +9,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Connection</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Connection
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * <ul>
@@ -23,8 +19,6 @@ import org.eclipse.emf.ecore.EObject;
  *
  * @see soundgates.SoundgatesPackage#getConnection()
  * @model abstract="true"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='PortKind'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL PortKind='self.source.kind=self.target.kind'"
  * @generated
  */
 public interface Connection extends EObject {

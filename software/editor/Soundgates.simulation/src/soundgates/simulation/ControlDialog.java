@@ -9,8 +9,13 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -18,6 +23,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Slider;
+import org.eclipse.swt.widgets.Text;
 
 import soundgates.AtomicSoundComponent;
 
@@ -50,18 +56,36 @@ public class ControlDialog extends TitleAreaDialog {
 	  }
 	  
 	private void createIoControl(Composite container) {
+
+
+		GridData wide = new GridData();
+		wide.grabExcessHorizontalSpace = true;
+		wide.horizontalAlignment = GridData.FILL;
+		
+		GridData narrow = new GridData();
+		narrow.minimumWidth = 40;
+		narrow.widthHint = 70;
+		narrow.grabExcessHorizontalSpace = false;
+		narrow.horizontalAlignment = GridData.FILL;
+		
 		if (componentsToControl != null) {
 			for (final AtomicSoundComponent comp : componentsToControl) {
 				Label lblCompName = new Label(container, SWT.NONE);
 				lblCompName.setText(comp.getName());
 
-				GridData dataComp = new GridData();
-				dataComp.grabExcessHorizontalSpace = true;
-				dataComp.horizontalAlignment = GridData.FILL;
-
 				final Slider slider = new Slider(container, SWT.NONE);
-				int max = (int)(Math.round(comp.getFloatProperties().get("MaxValue") * 10000));
-				int min = (int)(Math.round(comp.getFloatProperties().get("MinValue") * 10000));
+				final Button pushButton = new Button(container, SWT.PUSH);
+				final Button highButton = new Button(container, SWT.PUSH);
+				final Button lowButton = new Button(container, SWT.PUSH);
+				final Text freeValue = new Text(container, SWT.SINGLE);
+				final Button freeButton = new Button(container, SWT.PUSH);
+				final Label lastSent = new Label(container, SWT.SINGLE);
+				
+				final float maximum = comp.getFloatProperties().get("MaxValue");
+				final float minimum = comp.getFloatProperties().get("MinValue");
+				
+				int max = (int)(Math.ceil(maximum * 10000));
+				int min = (int)(Math.floor(minimum * 10000));
 				float increment = (float)(max - min)/200;
 				final int incr = increment <= 1 ? 1 : Math.round(increment);
 				slider.setIncrement(incr);
@@ -74,15 +98,125 @@ public class ControlDialog extends TitleAreaDialog {
 						slider.getSelection();
 						try {
 							float value = (float)slider.getSelection() /10000;
-							sender.send(new OSCMessage("/" + comp.getName(), new Object[]{value}));
+							sender.send(new OSCMessage(comp.getName(), new Object[]{value}));
+							lastSent.setText("" + value);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				});
-				slider.setLayoutData(dataComp);
+				slider.setLayoutData(wide);
+				
+				lastSent.setLayoutData(narrow);
 
+				
+				pushButton.setLayoutData(narrow);
+				pushButton.setText("Push");
+				pushButton.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseUp(MouseEvent e) {
+						try {
+							sender.send(new OSCMessage(comp.getName(), new Object[]{minimum}));
+							lastSent.setText("" + minimum);
+						} catch (IOException ex) {
+							// TODO Auto-generated catch block
+							ex.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void mouseDown(MouseEvent e) {
+						try {
+							sender.send(new OSCMessage(comp.getName(), new Object[]{maximum}));
+							lastSent.setText("" + maximum);
+						} catch (IOException ex) {
+							// TODO Auto-generated catch block
+							ex.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void mouseDoubleClick(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+				highButton.setLayoutData(narrow);
+				highButton.setText("High (" + comp.getFloatProperties().get("MaxValue") + ")");
+				highButton.addListener(SWT.Selection, new Listener() {
+					
+					@Override
+					public void handleEvent(Event event) {
+						try {
+							sender.send(new OSCMessage(comp.getName(), new Object[]{maximum}));
+							lastSent.setText("" + maximum);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				lowButton.setLayoutData(narrow);
+				lowButton.setText("Low (" + comp.getFloatProperties().get("MinValue") + ")");
+				lowButton.addListener(SWT.Selection, new Listener() {
+					
+					@Override
+					public void handleEvent(Event event) {
+						try {
+							sender.send(new OSCMessage(comp.getName(), new Object[]{minimum}));
+							lastSent.setText("" + minimum);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				
+				freeButton.setLayoutData(narrow);
+				freeValue.setLayoutData(narrow);
+				freeValue.addFocusListener(new FocusListener() {
+					
+					@Override
+					public void focusLost(FocusEvent e) {
+						try{
+							Float.parseFloat(freeValue.getText());
+						} catch (NumberFormatException ex) {
+							freeValue.setText("NaN");
+						}
+					}
+					
+					@Override
+					public void focusGained(FocusEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+				freeButton.setLayoutData(narrow);
+				freeButton.setText("Send");
+				freeButton.addListener(SWT.Selection, new Listener() {
+					
+					@Override
+					public void handleEvent(Event event) {
+						// TODO Auto-generated method stub
+						try {
+							float value = Float.parseFloat(freeValue.getText());
+							sender.send(new OSCMessage(comp.getName(), new Object[]{value}));
+							lastSent.setText("" + value);
+						} catch (NumberFormatException e){
+							freeValue.setText("NaN");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				
 			}
 		}
 	}
@@ -92,7 +226,7 @@ public class ControlDialog extends TitleAreaDialog {
 	    Composite area = (Composite) super.createDialogArea(parent);
 	    Composite container = new Composite(area, SWT.NONE);
 	    container.setLayoutData(new GridData(GridData.FILL_BOTH));
-	    GridLayout layout = new GridLayout(2, true);
+	    GridLayout layout = new GridLayout(8, true);
 	    container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	    container.setLayout(layout);
 	    createIoControl(container);

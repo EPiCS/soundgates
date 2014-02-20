@@ -1,0 +1,26 @@
+Precompiles Bitstream
+
+-------------------
+Name:        
+	two_sine
+
+Description: 
+	Two sine numeric controlled oscillators
+
+Slots:
+
+	0 = 1. Sine oscillator
+	1 = 2. Sine oscillator
+
+-------------------
+
+Name:
+	one_fir_one_sine
+
+Description:
+	One sine osclillator and one fir filter (28. order)
+
+Slots:
+	0 = FIR filter
+	1 = Sine osclillator	
+

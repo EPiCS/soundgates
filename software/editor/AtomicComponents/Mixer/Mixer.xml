@@ -1,20 +1,28 @@
-<?xml version="1.0"?>
-
-<AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>Mixer</Type>
 	<Ports>
-		<Port Name="Waveform1" Direction="IN" DataType="SOUND"/>
-		<Port Name="Waveform2" Direction="IN" DataType="SOUND"/>
-		<Port Name="Bias" Direction="IN" DataType="FLOAT"/>
-		<Port Name="Output" Direction="OUT" DataType="SOUND"/>
+		<Port DataType="SOUND" Direction="IN" Name="Waveform1"/>
+		<Port DataType="SOUND" Direction="IN" Name="Waveform2"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Bias"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
 	</Ports>
 	<Properties>
 	</Properties>
 	<Code>
-		<Simulation>
-		</Simulation>
-		<Hardware>
-			VHDL Stuff
-		</Hardware>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="mixer">
+				<PortMapping PortName="Waveform1" PortNumber="1"/>
+				<PortMapping PortName="Waveform2" PortNumber="2"/>
+				<PortMapping PortName="Bias" PortNumber="3"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="mixer">
+				<PortMapping PortName="Waveform1" PortNumber="1"/>
+				<PortMapping PortName="Waveform2" PortNumber="2"/>
+				<PortMapping PortName="Bias" PortNumber="3"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+		</Device>
 	</Code>
 </AtomicSoundComponent>

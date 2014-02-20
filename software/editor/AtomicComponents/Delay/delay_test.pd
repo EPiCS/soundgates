@@ -1,0 +1,15 @@
+#N canvas 961 442 958 363 10;
+#X obj 58 213 dac~;
+#X floatatom 71 103 5 0 0 0 - - -;
+#X obj 176 163 tabplay~ G01-tab;
+#X obj 215 134 metro 1000;
+#X obj 215 98 loadbang;
+#X msg 288 101 bang;
+#X obj 71 156 delay_patch;
+#X connect 1 0 6 0;
+#X connect 2 0 0 1;
+#X connect 2 0 6 1;
+#X connect 3 0 2 0;
+#X connect 4 0 3 0;
+#X connect 5 0 3 0;
+#X connect 6 0 0 0;
