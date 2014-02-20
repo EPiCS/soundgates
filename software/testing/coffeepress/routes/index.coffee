@@ -2,8 +2,15 @@
 #
 # * GET home page.
 # 
-exports.index = (req, res) ->
-  res.render "index",
-    title: "Wat"
 
-  return
+executiondata = require('../model/executions')
+
+exports.index = (req, res) ->
+	console.log "HI"
+	group = "*"
+	executiondata.executionList group, (err, executionlist) ->
+  		res.render "index",
+    	title: "Wat"
+    	executions: executionlist
+  	return
+return

@@ -3,6 +3,7 @@
 Module dependencies.
 ###
 express = require("express")
+db = require("./model/db")
 routes = require("./routes")
 user = require("./routes/user")
 http = require("http")
