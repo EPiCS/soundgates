@@ -8,12 +8,12 @@ Schema = mongoose.Schema
 # Create Schema
 executionSchema = new Schema(
   timestamp: Number,
-  components: [
+  components: [{
     uid: String,
-    type: String,
-    samples: [],
-    execution_times: []
-  ]
+    type: { type: String },
+    samples: [Number],
+    execution_times: [Number]
+  }]
 )
 
 # Create model out of our schema

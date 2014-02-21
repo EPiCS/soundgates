@@ -2,6 +2,7 @@ extends layout
 
 title Starter Template for Bootstrap
 block content
+  // NAVBAR
   .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
     .container
       .navbar-header
@@ -27,6 +28,9 @@ block content
         | Use this document as a way to quickly start any new project&period;
         br
         | All you get is this text and a mostly barebones HTML document&period;
+      - each execution in executions
+          div.execution
+            p.= execution.components[0].uid
   // /.container
   #executions
         - each execution in executions
