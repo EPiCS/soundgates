@@ -1,5 +1,7 @@
 mongoose = require("mongoose")
-exports.executionList = executionlist = (gname, callback) ->
+
+exports.executionlist = executionlist = (gname, callback) ->
+  # Create Constructor
   Execution = mongoose.model("Execution")
   Execution.find
     timestamp: gname
@@ -10,7 +12,6 @@ exports.executionList = executionlist = (gname, callback) ->
       console.log executions
       callback "", executions
     return
-
   return
 # end Team.find
 # end exports.teamlist
