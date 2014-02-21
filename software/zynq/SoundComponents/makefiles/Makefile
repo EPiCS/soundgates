@@ -15,6 +15,7 @@ SoundComponents += addss \
 				  mulcc \
 				  mulsc \
 				  mulss \
+				  mux \
 				  neg \
 				  output \
 				  square \
