@@ -9,10 +9,10 @@ import android.widget.SeekBar;
  */
 public class MinMaxSeekBar extends SeekBar {
 
-    private final int SEEK_BAR_MAX_VALUE = 10000;
-    private final float INITIAL_MINIMUM_VALUE =  0.f;
-    private final float INITIAL_MAXIMUM_VALUE = 10.f;
-    private final float INITIAL_FLOAT_VALUE = 7.5f;
+    private final int SEEK_BAR_MAX_VALUE = 100000;
+    private final float INITIAL_MINIMUM_VALUE =  0.0f;
+    private final float INITIAL_MAXIMUM_VALUE =  0.01f;
+    private final float INITIAL_FLOAT_VALUE = INITIAL_MINIMUM_VALUE;
 
     private float minimumValue = INITIAL_MINIMUM_VALUE;
     private float maximumValue = INITIAL_MAXIMUM_VALUE;
