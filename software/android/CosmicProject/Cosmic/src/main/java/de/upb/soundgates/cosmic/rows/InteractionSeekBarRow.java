@@ -106,7 +106,7 @@ public class InteractionSeekBarRow implements InteractionRow{
         OSCType t = msg.getTypes().get(0);
         holder.seekbar.setMinimumValue(t.MIN_VALUE);
         holder.seekbar.setMaximumValue(t.MAX_VALUE);
-        holder.seekbar.setFloatValue(0);
+        holder.seekbar.setFloatValue(t.value);
         holder.seekbar.setOnSeekBarChangeListener(new OnMinMaxSeekBarChangeListener());
 
         return view;
