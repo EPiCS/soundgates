@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.upb.soundgates.editor.feature_1.0.0.qualifier.jar" id="de.upb.soundgates.editor.feature" version="1.0.0.qualifier">
+      <category name="de.upb.soundgates.category"/>
+   </feature>
+   <feature url="features/de.upb.soundgates.simulation.feature_1.0.0.qualifier.jar" id="de.upb.soundgates.simulation.feature" version="1.0.0.qualifier">
+      <category name="de.upb.soundgates.category"/>
+   </feature>
+   <category-def name="de.upb.soundgates.category" label="Soundgates Suite"/>
+</site>
