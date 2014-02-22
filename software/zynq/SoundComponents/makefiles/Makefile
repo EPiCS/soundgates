@@ -2,8 +2,10 @@ SoundComponents += addss \
 				  addsc \
 				  addcc \
 				  adsr \
+				  and \
 				  const	\
 				  delay \
+				  demux \
 				  divss \
 				  divsc \
 				  divcc \
