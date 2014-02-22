@@ -1,39 +1,101 @@
-extends layout
-
-title Starter Template for Bootstrap
-block content
-  // NAVBAR
-  .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='shortcut icon', href='../../assets/ico/favicon.ico')
+    body
+    .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#') Soundgates Debugger
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li.active
+              a(href='#') Home
+            li
+              a(href='#about') About
+            li
+              a(href='#contact') Contact
+        // /.nav-collapse
+      // /.container
+    // /.navbar
     .container
-      .navbar-header
-        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand(href='#') Soundgates Debugger
-      .collapse.navbar-collapse
-        ul.nav.navbar-nav
-          li.active
-            a(href='#') Home
-          li
-            a(href='#about') About
-          li
-            a(href='#contact') Contact
-      // /.nav-collapse
-  .container
-    .starter-template
-      h1 Bootstrap starter template
-      p.lead
-        | Use this document as a way to quickly start any new project&period;
-        br
-        | All you get is this text and a mostly barebones HTML document&period;
-      - each execution in executions
-          div.execution
-            p.= execution.components[0].uid
-  // /.container
-  #executions
-        - each execution in executions
-          div.execution
-            div.timestamp= execution.timestamp
-    
+      .row.row-offcanvas.row-offcanvas-right
+        .col-xs-12.col-sm-9
+          p.pull-right.visible-xs
+            button.btn.btn-primary.btn-xs(type='button', data-toggle='offcanvas') Toggle nav
+          .jumbotron
+            h1 Soundgates Debugger
+            p
+              | Some helping text&period;
+
+        //-   .row
+        //-     .col-6.col-sm-6.col-lg-4
+        //-       h2 Heading
+        //-       p
+        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
+        //-       p
+        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
+        //-     // /span
+        //-     .col-6.col-sm-6.col-lg-4
+        //-       h2 Heading
+        //-       p
+        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
+        //-       p
+        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
+        //-     // /span
+        //-     .col-6.col-sm-6.col-lg-4
+        //-       h2 Heading
+        //-       p
+        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
+        //-       p
+        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
+        //-     // /span
+        //-     .col-6.col-sm-6.col-lg-4
+        //-       h2 Heading
+        //-       p
+        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
+        //-       p
+        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
+        //-     // /span
+        //-     .col-6.col-sm-6.col-lg-4
+        //-       h2 Heading
+        //-       p
+        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
+        //-       p
+        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
+        //-     // /span
+        //-     .col-6.col-sm-6.col-lg-4
+        //-       h2 Heading
+        //-       p
+        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
+        //-       p
+        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
+        //-     // /span
+        //-   // /row
+        //- // /span
+        #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
+          .list-group
+          //- a.list-group-item.active(href='#') Link
+          - each execution in executions
+            a.list-group-item(href='#') #{execution.formattedTime}
+        // /span
+      // /row
+      hr
+      footer
+        p &copy; Soundgates 2014
+    // /.container
+    //
+       Bootstrap core JavaScript
+          ================================================== 
+    // Placed at the end of the document so the pages load faster
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/offcanvas.js')
