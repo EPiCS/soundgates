@@ -12,6 +12,7 @@ SoundComponents += addss \
 				  fir \
 				  mixer\
 				  noise \
+				  or \
 				  output \
 				  sine \
 				  mulcc \
