@@ -22,11 +22,9 @@ SoundComponent::~SoundComponent(){ }
 void SoundComponent::run() {
 
 	if (logging_enabled) {
-		SoundComponentLogging::mongotest();
-
-		SoundComponentLogging::log_preprocessing(this);
+		 SoundComponentLogging::getInstance().log_preprocessing(this);
 		m_pDelegate->process();
-		SoundComponentLogging::log_postprocessing(this);
+		 SoundComponentLogging::getInstance().log_postprocessing(this);
 	}
 	else {
 		m_pDelegate->process();

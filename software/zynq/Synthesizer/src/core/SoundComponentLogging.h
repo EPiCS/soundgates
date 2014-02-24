@@ -12,16 +12,40 @@
 #include "SoundPort.h"
 #include "ControlPort.h"
 #include <mongo/client/dbclient.h>
+#include <mongo/bson/bson.h>
 #include <iostream>
 
-namespace SoundComponentLogging
+class SoundComponentLogging
 {
 
-void mongotest();
+private:
+	bool connected, begun;
+	mongo::DBClientConnection mongoConnection;
+	// Identifier for a specific run. (Corresponds to the initialization timestamp)
+	string run_id;
+	SoundComponentLogging();
 
-void log_preprocessing(SoundComponent* component);
-void log_postprocessing(SoundComponent* component);
+	bool isConnected();
+	bool isStarted();
 
-}
+public:
+	static SoundComponentLogging& getInstance()
+	{
+		static SoundComponentLogging instance;
+		return instance;
+	}
+
+	virtual ~SoundComponentLogging();
+
+	void connect(std::string& address, int port);
+
+	/* Logs the beginning of a run and creates a run_id (unix timestamp)
+	 * Accepts an iterator over patch components
+	 */
+	void log_init(vector<SoundComponentPtr>::iterator begin,
+			vector<SoundComponentPtr>::iterator end);
+	void log_preprocessing(SoundComponent* component);
+	void log_postprocessing(SoundComponent* component);
+};
 
 #endif /* SOUNDCOMPONENTDEBUGGING_H_ */
