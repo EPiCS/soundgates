@@ -5,10 +5,24 @@
  *      Author: gwue
  */
 
-#include "SoundComponentDebugging.h"
+#include "SoundComponentLogging.h"
 
-namespace SoundComponentDebugging
+namespace SoundComponentLogging
 {
+void mongotest()
+{
+	try
+	{
+		mongo::DBClientConnection c;
+		c.connect("localhost");
+		std::cout << "connected ok" << std::endl;
+	} catch (const mongo::DBException &e)
+	{
+		std::cout << "caught " << e.what() << std::endl;
+
+	}
+}
+
 void log_preprocessing(SoundComponent* component)
 {
 

@@ -11,10 +11,13 @@
 #include "SoundComponent.h"
 #include "SoundPort.h"
 #include "ControlPort.h"
+#include <mongo/client/dbclient.h>
 #include <iostream>
 
-namespace SoundComponentDebugging
+namespace SoundComponentLogging
 {
+
+void mongotest();
 
 void log_preprocessing(SoundComponent* component);
 void log_postprocessing(SoundComponent* component);

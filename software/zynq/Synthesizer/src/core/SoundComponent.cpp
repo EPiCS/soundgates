@@ -8,7 +8,7 @@
 #include "SoundComponent.h"
 
 
-#include "SoundComponentDebugging.h"
+#include "SoundComponentLogging.h"
 
 SoundComponent::SoundComponent(int uid, SoundComponentImplPtr delegate) : Node(uid){
 
@@ -19,12 +19,14 @@ SoundComponent::SoundComponent(int uid, SoundComponentImplPtr delegate) : Node(u
 
 SoundComponent::~SoundComponent(){ }
 
-void SoundComponent::run(){
+void SoundComponent::run() {
 
 	if (logging_enabled) {
-		SoundComponentDebugging::log_preprocessing(this);
+		SoundComponentLogging::mongotest();
+
+		SoundComponentLogging::log_preprocessing(this);
 		m_pDelegate->process();
-		SoundComponentDebugging::log_postprocessing(this);
+		SoundComponentLogging::log_postprocessing(this);
 	}
 	else {
 		m_pDelegate->process();
