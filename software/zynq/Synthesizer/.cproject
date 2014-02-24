@@ -54,6 +54,7 @@
 								<option defaultValue="true" id="gnu.cpp.link.so.release.option.shared.2062843576" name="Shared (-shared)" superClass="gnu.cpp.link.so.release.option.shared" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.914057106" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="dl"/>
+									<listOptionValue builtIn="false" value="mongoclient"/>
 									<listOptionValue builtIn="false" value="lo"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 									<listOptionValue builtIn="false" value="boost_filesystem"/>

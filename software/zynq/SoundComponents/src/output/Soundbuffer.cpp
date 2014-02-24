@@ -9,9 +9,11 @@
 
 Soundbuffer::Soundbuffer()
 {
-	SoundgatesConfig& cfg   = SoundgatesConfig::getInstance();
-	this->SOUNDBUFFERSIZE   = cfg.get<int>(SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);;
-	this->ALSACHARS         = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
+	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
+	this->SOUNDBUFFERSIZE = cfg.get<int>(
+			SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
+	;
+	this->ALSACHARS = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
 	unsigned int samplerate = Synthesizer::config::samplerate;
 
 	this->buffer = (char*) malloc(this->SOUNDBUFFERSIZE * sizeof(char));
@@ -32,9 +34,11 @@ Soundbuffer::Soundbuffer()
 
 	snd_pcm_stream_t stream = SND_PCM_STREAM_PLAYBACK;
 
-	std::string devName = cfg.get<std::string>(SoundgatesConfig::CFG_DEVICE_NAME);
+	std::string devName = cfg.get<std::string>(
+			SoundgatesConfig::CFG_DEVICE_NAME);
 
-	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0)) < 0)
+	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0))
+			< 0)
 	{
 		fprintf(stderr, "cannot open audio device (%s)\n", snd_strerror(err));
 		this->sane = false;
@@ -46,7 +50,7 @@ Soundbuffer::Soundbuffer()
 		fprintf(stdout, "\n");
 	}
 
-	if ((err = snd_pcm_hw_params_malloc(&this->hw_params)) < 0)
+	if (this->sane && (err = snd_pcm_hw_params_malloc(&this->hw_params)) < 0)
 	{
 		fprintf(stderr,
 				"cannot allocate record hardware parameter structure (%s)\n",
@@ -54,14 +58,17 @@ Soundbuffer::Soundbuffer()
 		this->sane = false;
 	}
 
-	if ((err = snd_pcm_hw_params_any(this->pcm_handle, this->hw_params)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params_any(this->pcm_handle, this->hw_params))
+					< 0)
 	{
 		fprintf(stderr, "cannot initialize hardware parameter structure (%s)\n",
 				snd_strerror(err));
 		this->sane = false;
 	}
-	if ((err = snd_pcm_hw_params_set_access(this->pcm_handle, this->hw_params,
-			SND_PCM_ACCESS_RW_INTERLEAVED)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params_set_access(this->pcm_handle,
+					this->hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0)
 	{
 		fprintf(stderr, "cannot set access type (%s)\n", snd_strerror(err));
 		this->sane = false;
@@ -69,14 +76,16 @@ Soundbuffer::Soundbuffer()
 	//TODO only one format supported right now. should be made selectable in the future
 	// Currently, it is set to Unsigned Integer 32 Bit, Little Endian.
 	// If you change this here, every function that operates on sound data would need to be adjusted accordingly!
-	if ((err = snd_pcm_hw_params_set_format(this->pcm_handle, this->hw_params,
-			SND_PCM_FORMAT_S32_LE)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params_set_format(this->pcm_handle,
+					this->hw_params, SND_PCM_FORMAT_S32_LE)) < 0)
 	{
 		fprintf(stderr, "cannot set sample format (%s)\n", snd_strerror(err));
 		this->sane = false;
 	}
-	if ((err = snd_pcm_hw_params_set_buffer_size(this->pcm_handle,
-			this->hw_params, 2048)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params_set_buffer_size(this->pcm_handle,
+					this->hw_params, 2048)) < 0)
 	{
 		fprintf(stderr, "cannot set buffer size (%s)\n", snd_strerror(err));
 		this->sane = false;
@@ -84,8 +93,9 @@ Soundbuffer::Soundbuffer()
 
 	//TODO Handling for unsupported sampling rates
 	unsigned int exact_rate = samplerate;
-	if ((err = snd_pcm_hw_params_set_rate_near(this->pcm_handle,
-			this->hw_params, &exact_rate, 0)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params_set_rate_near(this->pcm_handle,
+					this->hw_params, &exact_rate, 0)) < 0)
 	{
 		fprintf(stderr, "cannot set sample rate (%s)\n", snd_strerror(err));
 		this->sane = false;
@@ -96,28 +106,35 @@ Soundbuffer::Soundbuffer()
 	}
 
 	// TODO For now, only one channel. Increase this to two channels in the future
-	if ((err = snd_pcm_hw_params_set_channels(this->pcm_handle, this->hw_params,
-			1)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params_set_channels(this->pcm_handle,
+					this->hw_params, 1)) < 0)
 	{
 		fprintf(stderr, "cannot set channel count (%s)\n", snd_strerror(err));
 		this->sane = false;
 	}
-	if ((err = snd_pcm_hw_params(this->pcm_handle, this->hw_params)) < 0)
+	if (this->sane
+			&& (err = snd_pcm_hw_params(this->pcm_handle, this->hw_params)) < 0)
 	{
 		fprintf(stderr, "cannot set parameters (%s)\n", snd_strerror(err));
 		this->sane = false;
 	}
-	if ((err = snd_pcm_prepare(this->pcm_handle)) < 0)
+	if (this->sane && (err = snd_pcm_prepare(this->pcm_handle)) < 0)
 	{
-		fprintf(stderr, "cannot prepare audio interface for use (%s)\n", snd_strerror(err));
+		fprintf(stderr, "cannot prepare audio interface for use (%s)\n",
+				snd_strerror(err));
 		this->sane = false;
 	}
 
 	// If no errors occured we can create our playback thread
-	//TODO uncomment this
-//	if (this->sane)
+	// Otherwise wait a few seconds, such that the user might be able to read
+	// error messages
+	if (this->sane)
 	{
 		this->bufferThread = boost::thread(&Soundbuffer::run, this);
+	}
+	else {
+		sleep(3);
 	}
 }
 
@@ -141,7 +158,7 @@ void Soundbuffer::run()
 			if (bufferUnderrun)
 			{
 				snd_pcm_prepare(this->pcm_handle);
-				bufferUnderrun =false;
+				bufferUnderrun = false;
 			}
 
 			nframes = 0;
@@ -149,13 +166,16 @@ void Soundbuffer::run()
 			// Wait for the audio device to become ready (or timeout after a second)
 			if ((err = snd_pcm_wait(this->pcm_handle, 1000)) < 0)
 			{
-				fprintf(stderr, "poll failed (%s): Most likely a buffer underrun occured\n", snd_strerror(err));
+				fprintf(stderr,
+						"poll failed (%s): Most likely a buffer underrun occured\n",
+						snd_strerror(err));
 				bufferUnderrun = true;
 				//	this->running = 0;
 			}
 
 			// Ask the audio device how many frames it can accept
-			if (!bufferUnderrun && (nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
+			if (!bufferUnderrun
+					&& (nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
 			{
 				fprintf(stderr, "unknown ALSA avail update return value (%s)\n",
 						snd_strerror(nframes));
@@ -210,11 +230,14 @@ char* Soundbuffer::getNextFrames()
 	// In that case we don't want to advance the readoffset past the writeoffset
 	// Write and read offset are allowed to be same. This would mean the buffer is completely filled.
 	// Therefore, don't check for equality here.
-	if ( 	(!ptr_return && (this->readoffset < this->writeoffset && nextReadOffset > this->writeoffset )) ||
-		 	(ptr_return  && (this->readoffset < this->writeoffset)))
+	if ((!ptr_return
+			&& (this->readoffset < this->writeoffset
+					&& nextReadOffset > this->writeoffset))
+			|| (ptr_return && (this->readoffset < this->writeoffset)))
 	{
 		std::cerr
-				<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:" << this->readoffset << "  WO:" << this->writeoffset
+				<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:"
+				<< this->readoffset << "  WO:" << this->writeoffset
 				<< std::endl;
 	}
 	else
@@ -292,6 +315,11 @@ void Soundbuffer::testPlayback()
 
 void Soundbuffer::fillbuffer(char* data, int size)
 {
+	if (!this->sane)
+	{
+		return;
+	}
+
 	if ((size & (size - 1)) != 0)
 	{
 		std::cerr << "You need to fill the buffer with array sizes x^2"

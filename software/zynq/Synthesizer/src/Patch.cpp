@@ -190,6 +190,15 @@ void Patch::initialize(void){
         sndcomponent->initLater();
 	}
 
+	// Connect and log to the database, if logging is enabled
+	if(SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_LOGGING_ENABLED)) {
+		string address = SoundgatesConfig::getInstance().get<string>(SoundgatesConfig::CFG_LOGGING_ADDRESS);
+		int port = SoundgatesConfig::getInstance().get<int>(SoundgatesConfig::CFG_LOGGING_PORT);
+		SoundComponentLogging::getInstance().connect(address,port);
+
+		SoundComponentLogging::getInstance().log_init(m_ComponentsVector.begin(), m_ComponentsVector.end());
+	}
+
 	jobIter         = m_ComponentsVector.begin();
 	jobsToProcess   = m_ComponentsVector.size();
 	m_PatchState    = Synthesizer::state::initialized;
