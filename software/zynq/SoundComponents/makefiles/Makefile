@@ -9,7 +9,11 @@ SoundComponents += addss \
 				  divss \
 				  divsc \
 				  divcc \
+				  dummysink \
+				  equalcc \
 				  fir \
+				  greatercc \
+				  lesscc \
 				  mixer\
 				  noise \
 				  or \
@@ -25,7 +29,6 @@ SoundComponents += addss \
 				  subcc \
 				  subsc \
 				  subss \
-				  dummysink \
 				  sampleplayer \
                   soundToControl \
 				  template \
