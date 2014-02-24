@@ -3,7 +3,11 @@ html
   head
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='/stylesheets/nv.d3.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/d3.js')
+    script(src='/javascripts/nv.d3.js')
+    script(src='/javascripts/simple_graph.js')
     link(rel='shortcut icon', href='../../assets/ico/favicon.ico')
     body
     .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
@@ -56,7 +60,9 @@ html
               div(class="panel-body")
                 p(style='white-space:pre;')
                   | Type: #{component.type}
-                  | 
+                - var uid = component.uid
+                div(id=uid)
+                  //- - createChart(0, uid)
 
         #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
           .list-group
