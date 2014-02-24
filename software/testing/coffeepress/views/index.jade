@@ -7,7 +7,7 @@ html
     link(rel='shortcut icon', href='../../assets/ico/favicon.ico')
     body
     .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
-      .container
+      .container-fluid
         .navbar-header
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
             span.sr-only Toggle navigation
@@ -35,55 +35,31 @@ html
             h1 Soundgates Debugger
             p
               | Some helping text&period;
+          //- ###############################
+          //- Following Code is DB dependent
+          //- ###############################
+          h2 Execution:
+          br
+          div(class="row")
+            div(class="col-md-4") Execution date:
+            div(class="col-md-8") #{executions[0].formattedTime}
+          div(class="row")
+           div(class="col-md-4") Turnaround time:
+           div(class="col-md-8") #{executions[0].turnaroundTime}
+          div(class="row")
+           div(class="col-md-4") Number of components:
+           div(class="col-md-8") #{executions[0].components.length}
+          br          
+          - each component in executions[0].components
+            div(class="panel panel-primary")
+              div(class="panel-heading") UID: #{component.uid}
+              div(class="panel-body")
+                p(style='white-space:pre;')
+                  | Type: #{component.type}
+                  | 
 
-        //-   .row
-        //-     .col-6.col-sm-6.col-lg-4
-        //-       h2 Heading
-        //-       p
-        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
-        //-       p
-        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
-        //-     // /span
-        //-     .col-6.col-sm-6.col-lg-4
-        //-       h2 Heading
-        //-       p
-        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
-        //-       p
-        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
-        //-     // /span
-        //-     .col-6.col-sm-6.col-lg-4
-        //-       h2 Heading
-        //-       p
-        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
-        //-       p
-        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
-        //-     // /span
-        //-     .col-6.col-sm-6.col-lg-4
-        //-       h2 Heading
-        //-       p
-        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
-        //-       p
-        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
-        //-     // /span
-        //-     .col-6.col-sm-6.col-lg-4
-        //-       h2 Heading
-        //-       p
-        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
-        //-       p
-        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
-        //-     // /span
-        //-     .col-6.col-sm-6.col-lg-4
-        //-       h2 Heading
-        //-       p
-        //-         | Donec id elit non mi porta gravida at eget metus&period; Fusce dapibus&comma; tellus ac cursus commodo&comma; tortor mauris condimentum nibh&comma; ut fermentum massa justo sit amet risus&period; Etiam porta sem malesuada magna mollis euismod&period; Donec sed odio dui&period;
-        //-       p
-        //-         a.btn.btn-default(href='#', role='button') View details &raquo;
-        //-     // /span
-        //-   // /row
-        //- // /span
         #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
           .list-group
-          //- a.list-group-item.active(href='#') Link
           - each execution in executions
             a.list-group-item(href='#') #{execution.formattedTime}
         // /span

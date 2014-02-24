@@ -22,7 +22,7 @@ getFormattedTime = (x) ->
 	hours = date.getHours()
 	minutes = date.getMinutes()
 	seconds = date.getSeconds()
-	return  datum + '.' + month + ' ' + hours + ':' + minutes + ':' + seconds;
+	return  datum + '.' + month + '.' + year + ' ' + hours + ':' + minutes + ':' + seconds;
 
 exports.index = (req, res) ->
 	Execution.find (err, executions, count) ->
