@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/lukas/uni/master/pg-soundgates/hardware/hwt/pcores/hwt_fir_v1_00_a/hdl/vhdl/ise/testbench_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="attributes" />
+            <top_module name="math_real" />
+            <top_module name="numeric_std" />
+            <top_module name="proc_common_pkg" />
+            <top_module name="reconos_pkg" />
+            <top_module name="soundgates_common_pkg" />
+            <top_module name="soundgates_reconos_pkg" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_misc" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="testbench" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="7" />
+   <wave_markers>
+      <marker time="4415000000" label="" />
+   </wave_markers>
+   <wvobject fp_name="/testbench/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="group28" type="group">
+      <obj_property name="label">interface</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="group215" type="group">
+         <obj_property name="label">MEM</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/testbench/mem_slave_from_hw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_slave_from_hw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">mem_slave_from_hw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_slave_from_hw_fill" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_slave_from_hw_fill[15:0]</obj_property>
+            <obj_property name="ObjectShortName">mem_slave_from_hw_fill[15:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_slave_from_hw_empty" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_slave_from_hw_empty</obj_property>
+            <obj_property name="ObjectShortName">mem_slave_from_hw_empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_slave_from_hw_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_slave_from_hw_re</obj_property>
+            <obj_property name="ObjectShortName">mem_slave_from_hw_re</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_master_to_hw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_master_to_hw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">mem_master_to_hw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_master_to_hw_rem" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_master_to_hw_rem[15:0]</obj_property>
+            <obj_property name="ObjectShortName">mem_master_to_hw_rem[15:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_master_to_hw_full" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_master_to_hw_full</obj_property>
+            <obj_property name="ObjectShortName">mem_master_to_hw_full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/mem_master_to_hw_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">mem_master_to_hw_we</obj_property>
+            <obj_property name="ObjectShortName">mem_master_to_hw_we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_hw2sw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_hw2sw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">memif_hw2sw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_sw2hw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_sw2hw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">memif_sw2hw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group73" type="group">
+         <obj_property name="label">PS</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/testbench/ps_slave_from_hw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_slave_from_hw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">ps_slave_from_hw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_slave_from_hw_fill" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_slave_from_hw_fill[15:0]</obj_property>
+            <obj_property name="ObjectShortName">ps_slave_from_hw_fill[15:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_slave_from_hw_empty" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_slave_from_hw_empty</obj_property>
+            <obj_property name="ObjectShortName">ps_slave_from_hw_empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_slave_from_hw_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_slave_from_hw_re</obj_property>
+            <obj_property name="ObjectShortName">ps_slave_from_hw_re</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_master_to_hw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_master_to_hw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">ps_master_to_hw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_master_to_hw_rem" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_master_to_hw_rem[15:0]</obj_property>
+            <obj_property name="ObjectShortName">ps_master_to_hw_rem[15:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_master_to_hw_full" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_master_to_hw_full</obj_property>
+            <obj_property name="ObjectShortName">ps_master_to_hw_full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/ps_master_to_hw_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">ps_master_to_hw_we</obj_property>
+            <obj_property name="ObjectShortName">ps_master_to_hw_we</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group35" type="group">
+         <obj_property name="label">osif</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/testbench/osif_fifo_sw2hw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_sw2hw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_sw2hw_data[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_sw2hw_fill" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_sw2hw_fill[15:0]</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_sw2hw_fill[15:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_sw2hw_empty" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_sw2hw_empty</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_sw2hw_empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_sw2hw_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_sw2hw_re</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_sw2hw_re</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_hw2sw_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_hw2sw_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_hw2sw_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_hw2sw_rem" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_hw2sw_rem[15:0]</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_hw2sw_rem[15:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_hw2sw_full" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_hw2sw_full</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_hw2sw_full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/osif_fifo_hw2sw_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">osif_fifo_hw2sw_we</obj_property>
+            <obj_property name="ObjectShortName">osif_fifo_hw2sw_we</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="group34" type="group">
+         <obj_property name="label">mem</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_hwt2mem_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_rem" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_hwt2mem_rem[15:0]</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_rem[15:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_full" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_hwt2mem_full</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_hwt2mem_we</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_mem2hwt_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_data[31:0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_fill" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_mem2hwt_fill[15:0]</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_fill[15:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_empty" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_mem2hwt_empty</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">memif_fifo_mem2hwt_re</obj_property>
+            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_re</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group33" type="group">
+      <obj_property name="label">UUT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/uut/coefficients_i16" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">coefficients_i16[28:0]</obj_property>
+         <obj_property name="ObjectShortName">coefficients_i16[28:0]</obj_property>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[28]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[28]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[28]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[27]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[27]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[27]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[26]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[26]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[26]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[25]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[25]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[25]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[24]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[24]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[24]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[23]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[23]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[23]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[22]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[22]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[22]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[21]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[21]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[21]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[20]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[20]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[20]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[19]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[19]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[19]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[18]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[18]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[18]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[17]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[17]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[17]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[16]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[16]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[16]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[15]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[15]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[15]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[14]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[14]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[14]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[13]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[13]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[13]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[12]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[12]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[12]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[11]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[11]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[11]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[10]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[10]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[10]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[9]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[9]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[9]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[8]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[8]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[8]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[7]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[7]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[7]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[6]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[6]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[6]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[5]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[5]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[5]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[4]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[4]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[4]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[3]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[3]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[3]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[2]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[2]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[2]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[1]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[1]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[1]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/coefficients_i16[0]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[0]</obj_property>
+            <obj_property name="ObjectShortName">coefficients_i16[0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/hwtio" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">hwtio</obj_property>
+         <obj_property name="ObjectShortName">hwtio</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <wvobject fp_name="/testbench/uut/hwtio.base_addr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.base_addr</obj_property>
+            <obj_property name="ObjectShortName">hwtio.base_addr</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/hwtio.f_step" type="other" db_ref_id="1">
+            <obj_property name="ElementShortName">.f_step</obj_property>
+            <obj_property name="ObjectShortName">hwtio.f_step</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/hwtio.argv" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.argv</obj_property>
+            <obj_property name="ObjectShortName">hwtio.argv</obj_property>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[0]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[0]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[0]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[1]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[1]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[1]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[2]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[2]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[2]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[3]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[3]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[3]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[4]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[4]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[4]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[5]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[5]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[5]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[6]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[6]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[6]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[7]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[7]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[7]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[8]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[8]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[8]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[9]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[9]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[9]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[10]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[10]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[10]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[11]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[11]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[11]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[12]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[12]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[12]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[13]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[13]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[13]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[14]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[14]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[14]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[15]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[15]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[15]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[16]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[16]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[16]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[17]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[17]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[17]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[18]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[18]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[18]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[19]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[19]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[19]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[20]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[20]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[20]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[21]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[21]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[21]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[22]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[22]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[22]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[23]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[23]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[23]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[24]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[24]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[24]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[25]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[25]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[25]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[26]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[26]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[26]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[27]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[27]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[27]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[28]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[28]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[28]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[29]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[29]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[29]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[30]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[30]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[30]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+            <wvobject fp_name="/testbench/uut/hwtio.argv[31]" type="array" db_ref_id="1">
+               <obj_property name="ElementShortName">[31]</obj_property>
+               <obj_property name="ObjectShortName">hwtio.argv[31]</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+            </wvobject>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/hw2sw_osifdata" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">hw2sw_osifdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">hw2sw_osifdata[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/hw2sw_osifhandle" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">hw2sw_osifhandle[31:0]</obj_property>
+         <obj_property name="ObjectShortName">hw2sw_osifhandle[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/osif_ctrl_signal" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">osif_ctrl_signal[31:0]</obj_property>
+         <obj_property name="ObjectShortName">osif_ctrl_signal[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/state" type="other" db_ref_id="1">
+         <obj_property name="ElementShortName">state</obj_property>
+         <obj_property name="ObjectShortName">state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/fir_ce" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fir_ce</obj_property>
+         <obj_property name="ObjectShortName">fir_ce</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group98" type="group">
+      <obj_property name="label">fifo hw2sw</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_s_fill" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_fill[15:0]</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_fill[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_m_rem" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_rem[15:0]</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_rem[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_s_empty" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_empty</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_empty</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_s_re" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_re</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_re</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_m_full" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_full</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_full</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_m_we" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_we</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_we</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo_has_data" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_has_data</obj_property>
+         <obj_property name="ObjectShortName">fifo_has_data</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo[0:31]</obj_property>
+         <obj_property name="ObjectShortName">fifo[0:31]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[0]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[0]</obj_property>
+            <obj_property name="ObjectShortName">fifo[0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[1]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[1]</obj_property>
+            <obj_property name="ObjectShortName">fifo[1]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[2]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[2]</obj_property>
+            <obj_property name="ObjectShortName">fifo[2]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[3]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[3]</obj_property>
+            <obj_property name="ObjectShortName">fifo[3]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[4]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[4]</obj_property>
+            <obj_property name="ObjectShortName">fifo[4]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[5]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[5]</obj_property>
+            <obj_property name="ObjectShortName">fifo[5]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[6]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[6]</obj_property>
+            <obj_property name="ObjectShortName">fifo[6]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[7]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[7]</obj_property>
+            <obj_property name="ObjectShortName">fifo[7]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[8]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[8]</obj_property>
+            <obj_property name="ObjectShortName">fifo[8]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[9]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[9]</obj_property>
+            <obj_property name="ObjectShortName">fifo[9]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[10]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[10]</obj_property>
+            <obj_property name="ObjectShortName">fifo[10]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[11]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[11]</obj_property>
+            <obj_property name="ObjectShortName">fifo[11]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[12]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[12]</obj_property>
+            <obj_property name="ObjectShortName">fifo[12]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[13]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[13]</obj_property>
+            <obj_property name="ObjectShortName">fifo[13]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[14]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[14]</obj_property>
+            <obj_property name="ObjectShortName">fifo[14]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[15]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[15]</obj_property>
+            <obj_property name="ObjectShortName">fifo[15]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[16]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[16]</obj_property>
+            <obj_property name="ObjectShortName">fifo[16]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[17]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[17]</obj_property>
+            <obj_property name="ObjectShortName">fifo[17]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[18]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[18]</obj_property>
+            <obj_property name="ObjectShortName">fifo[18]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[19]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[19]</obj_property>
+            <obj_property name="ObjectShortName">fifo[19]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[20]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[20]</obj_property>
+            <obj_property name="ObjectShortName">fifo[20]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[21]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[21]</obj_property>
+            <obj_property name="ObjectShortName">fifo[21]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[22]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[22]</obj_property>
+            <obj_property name="ObjectShortName">fifo[22]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[23]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[23]</obj_property>
+            <obj_property name="ObjectShortName">fifo[23]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[24]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[24]</obj_property>
+            <obj_property name="ObjectShortName">fifo[24]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[25]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[25]</obj_property>
+            <obj_property name="ObjectShortName">fifo[25]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[26]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[26]</obj_property>
+            <obj_property name="ObjectShortName">fifo[26]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[27]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[27]</obj_property>
+            <obj_property name="ObjectShortName">fifo[27]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[28]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[28]</obj_property>
+            <obj_property name="ObjectShortName">fifo[28]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[29]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[29]</obj_property>
+            <obj_property name="ObjectShortName">fifo[29]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[30]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[30]</obj_property>
+            <obj_property name="ObjectShortName">fifo[30]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_hw2sw/fifo[31]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[31]</obj_property>
+            <obj_property name="ObjectShortName">fifo[31]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/m_wrptr" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">m_wrptr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">m_wrptr[4:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/s_rdptr" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">s_rdptr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">s_rdptr[4:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/s_dout" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">s_dout[31:0]</obj_property>
+         <obj_property name="ObjectShortName">s_dout[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_hw2sw/m_din" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">m_din[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_din[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group94" type="group">
+      <obj_property name="label">fifo sw2hw</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_s_data" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_data[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_s_fill" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_fill[15:0]</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_fill[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_s_empty" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_empty</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_empty</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_m_full" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_full</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_full</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_s_re" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_s_re</obj_property>
+         <obj_property name="ObjectShortName">fifo_s_re</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_m_data" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_data[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_m_rem" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_rem[15:0]</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_rem[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_m_we" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_m_we</obj_property>
+         <obj_property name="ObjectShortName">fifo_m_we</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo_has_data" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo_has_data</obj_property>
+         <obj_property name="ObjectShortName">fifo_has_data</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">fifo[0:31]</obj_property>
+         <obj_property name="ObjectShortName">fifo[0:31]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[0]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[0]</obj_property>
+            <obj_property name="ObjectShortName">fifo[0]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[1]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[1]</obj_property>
+            <obj_property name="ObjectShortName">fifo[1]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[2]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[2]</obj_property>
+            <obj_property name="ObjectShortName">fifo[2]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[3]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[3]</obj_property>
+            <obj_property name="ObjectShortName">fifo[3]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[4]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[4]</obj_property>
+            <obj_property name="ObjectShortName">fifo[4]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[5]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[5]</obj_property>
+            <obj_property name="ObjectShortName">fifo[5]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[6]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[6]</obj_property>
+            <obj_property name="ObjectShortName">fifo[6]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[7]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[7]</obj_property>
+            <obj_property name="ObjectShortName">fifo[7]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[8]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[8]</obj_property>
+            <obj_property name="ObjectShortName">fifo[8]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[9]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[9]</obj_property>
+            <obj_property name="ObjectShortName">fifo[9]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[10]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[10]</obj_property>
+            <obj_property name="ObjectShortName">fifo[10]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[11]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[11]</obj_property>
+            <obj_property name="ObjectShortName">fifo[11]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[12]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[12]</obj_property>
+            <obj_property name="ObjectShortName">fifo[12]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[13]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[13]</obj_property>
+            <obj_property name="ObjectShortName">fifo[13]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[14]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[14]</obj_property>
+            <obj_property name="ObjectShortName">fifo[14]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[15]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[15]</obj_property>
+            <obj_property name="ObjectShortName">fifo[15]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[16]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[16]</obj_property>
+            <obj_property name="ObjectShortName">fifo[16]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[17]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[17]</obj_property>
+            <obj_property name="ObjectShortName">fifo[17]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[18]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[18]</obj_property>
+            <obj_property name="ObjectShortName">fifo[18]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[19]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[19]</obj_property>
+            <obj_property name="ObjectShortName">fifo[19]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[20]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[20]</obj_property>
+            <obj_property name="ObjectShortName">fifo[20]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[21]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[21]</obj_property>
+            <obj_property name="ObjectShortName">fifo[21]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[22]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[22]</obj_property>
+            <obj_property name="ObjectShortName">fifo[22]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[23]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[23]</obj_property>
+            <obj_property name="ObjectShortName">fifo[23]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[24]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[24]</obj_property>
+            <obj_property name="ObjectShortName">fifo[24]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[25]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[25]</obj_property>
+            <obj_property name="ObjectShortName">fifo[25]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[26]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[26]</obj_property>
+            <obj_property name="ObjectShortName">fifo[26]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[27]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[27]</obj_property>
+            <obj_property name="ObjectShortName">fifo[27]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[28]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[28]</obj_property>
+            <obj_property name="ObjectShortName">fifo[28]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[29]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[29]</obj_property>
+            <obj_property name="ObjectShortName">fifo[29]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[30]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[30]</obj_property>
+            <obj_property name="ObjectShortName">fifo[30]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/fifo32_osif_sw2hw/fifo[31]" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">[31]</obj_property>
+            <obj_property name="ObjectShortName">fifo[31]</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/m_wrptr" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">m_wrptr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">m_wrptr[4:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/s_rdptr" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">s_rdptr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">s_rdptr[4:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/s_dout" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">s_dout[31:0]</obj_property>
+         <obj_property name="ObjectShortName">s_dout[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/fifo32_osif_sw2hw/m_din" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">m_din[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_din[31:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group130" type="group">
+      <obj_property name="label">foo</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/uut/i_ram" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">i_ram</obj_property>
+         <obj_property name="ObjectShortName">i_ram</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/o_ram" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">o_ram</obj_property>
+         <obj_property name="ObjectShortName">o_ram</obj_property>
+         <wvobject fp_name="/testbench/uut/o_ram.addr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.addr</obj_property>
+            <obj_property name="ObjectShortName">o_ram.addr</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_ram.data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.data</obj_property>
+            <obj_property name="ObjectShortName">o_ram.data</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_ram.we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.we</obj_property>
+            <obj_property name="ObjectShortName">o_ram.we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_ram.count" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.count</obj_property>
+            <obj_property name="ObjectShortName">o_ram.count</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_ram.remote_addr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.remote_addr</obj_property>
+            <obj_property name="ObjectShortName">o_ram.remote_addr</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_ram.remainder" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.remainder</obj_property>
+            <obj_property name="ObjectShortName">o_ram.remainder</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_ram.step" type="other" db_ref_id="1">
+            <obj_property name="ElementShortName">.step</obj_property>
+            <obj_property name="ObjectShortName">o_ram.step</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/i_memif" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">i_memif</obj_property>
+         <obj_property name="ObjectShortName">i_memif</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/o_memif" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">o_memif</obj_property>
+         <obj_property name="ObjectShortName">o_memif</obj_property>
+         <wvobject fp_name="/testbench/uut/o_memif.s_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.s_re</obj_property>
+            <obj_property name="ObjectShortName">o_memif.s_re</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_memif.m_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_data</obj_property>
+            <obj_property name="ObjectShortName">o_memif.m_data</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_memif.m_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_we</obj_property>
+            <obj_property name="ObjectShortName">o_memif.m_we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_memif.step" type="other" db_ref_id="1">
+            <obj_property name="ElementShortName">.step</obj_property>
+            <obj_property name="ObjectShortName">o_memif.step</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_memif.void" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.void</obj_property>
+            <obj_property name="ObjectShortName">o_memif.void</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/i_osif" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">i_osif</obj_property>
+         <obj_property name="ObjectShortName">i_osif</obj_property>
+         <wvobject fp_name="/testbench/uut/i_osif.s_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.s_data</obj_property>
+            <obj_property name="ObjectShortName">i_osif.s_data</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.s_fill" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.s_fill</obj_property>
+            <obj_property name="ObjectShortName">i_osif.s_fill</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.s_empty" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.s_empty</obj_property>
+            <obj_property name="ObjectShortName">i_osif.s_empty</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.m_rem" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_rem</obj_property>
+            <obj_property name="ObjectShortName">i_osif.m_rem</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.m_full" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_full</obj_property>
+            <obj_property name="ObjectShortName">i_osif.m_full</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.s_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.s_re</obj_property>
+            <obj_property name="ObjectShortName">i_osif.s_re</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.m_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_we</obj_property>
+            <obj_property name="ObjectShortName">i_osif.m_we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.step" type="other" db_ref_id="1">
+            <obj_property name="ElementShortName">.step</obj_property>
+            <obj_property name="ObjectShortName">i_osif.step</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_osif.void" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.void</obj_property>
+            <obj_property name="ObjectShortName">i_osif.void</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/o_osif" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">o_osif</obj_property>
+         <obj_property name="ObjectShortName">o_osif</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+         <wvobject fp_name="/testbench/uut/o_osif.s_re" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.s_re</obj_property>
+            <obj_property name="ObjectShortName">o_osif.s_re</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_osif.m_data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_data</obj_property>
+            <obj_property name="ObjectShortName">o_osif.m_data</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_osif.m_we" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.m_we</obj_property>
+            <obj_property name="ObjectShortName">o_osif.m_we</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_osif.step" type="other" db_ref_id="1">
+            <obj_property name="ElementShortName">.step</obj_property>
+            <obj_property name="ObjectShortName">o_osif.step</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/o_osif.void" type="logic" db_ref_id="1">
+            <obj_property name="ElementShortName">.void</obj_property>
+            <obj_property name="ObjectShortName">o_osif.void</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+</wave_config>

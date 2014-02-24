@@ -40,26 +40,30 @@ end fir;
 
 architecture Behavioral of fir is
  
-    signal taps : mem24(FIR_ORDER downto 0) := (others => (others => '0'));
-    
+    signal taps   : mem24(FIR_ORDER + 1 downto 0) := (others => (others => '0'));
+    signal sample : signed(23 downto 0);
 begin
-
+    
     FIR_CHAIN : process (clk, rst, ce)
         variable tmp        : std_logic_vector(39 downto 0);
         variable tmp_scale  : std_logic_vector(23 downto 0);
     begin
         if rst = '1' then
             taps <= (others => (others => '0'));                
-        elsif rising_edge(clk) then            
+        elsif rising_edge(clk) then
            if ce = '1' then
+                
+                sample <= x_in;
+           
                 for i in 0 to FIR_ORDER loop                    
                     if i = 0 then
-                        tmp := std_logic_vector(x_in * coefficients(FIR_ORDER));
+                        tmp := std_logic_vector(sample * coefficients(FIR_ORDER));
                         taps(0) <= signed(tmp(39) & tmp(37 downto 15));
                     else    
-                        tmp       := std_logic_vector(x_in * coefficients(FIR_ORDER - i));
+                        tmp       := std_logic_vector(sample * coefficients(FIR_ORDER - i));
                         tmp_scale := tmp(39) & tmp(37 downto 15);   
                         tmp_scale := std_logic_vector(signed(tmp_scale) + taps(i - 1));       -- possible overflow error!
+                        
                         taps(i)   <= signed(tmp_scale);
                     end if;
                 end loop;          

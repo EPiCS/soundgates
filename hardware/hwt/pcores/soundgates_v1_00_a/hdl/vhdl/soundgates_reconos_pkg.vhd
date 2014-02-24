@@ -126,7 +126,7 @@ package body soundgates_reconos_pkg is
     variable patially_done : boolean := False;
     
     begin
-
+        done := false;
         case hwt_args.f_step is
                   
             when 0 => 
@@ -136,6 +136,10 @@ package body soundgates_reconos_pkg is
                if (patially_done) then
                 hwt_args.f_step <= 1;
                end if;
+            -- For simulation purposes write the number of expected hardware arguements here
+            -- Example: 15 arguements write "when 1 to 15 => ..."
+            -- For synthesis purposes write "when 1 to argc + 1 =>..." this becomes locally static during synthesis
+            --when 1 to 31 =>   -- argc + 1
             when 1 to (argc + 1) =>
 
                 memif_read_word(i_memif, o_memif, 
