@@ -132,6 +132,11 @@ std::string& InputSoundComponent::getOscAddress(){
 	return this->m_OSCAddresses;
 }
 
+const char* InputSoundComponent::getName()
+{
+	return "input";
+}
+
 int pushOSCMessageToInputsoundComponent(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *inputhndl){
 
 	InputSoundComponent* input = (InputSoundComponent*) inputhndl;

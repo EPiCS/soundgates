@@ -67,6 +67,7 @@ public:
 
 	void init() { /* do not implement */ }
 	void process() { /* do not implement */ }
+	virtual const char* getName();
 };
 
 
