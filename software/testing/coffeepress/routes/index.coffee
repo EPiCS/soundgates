@@ -7,8 +7,8 @@
 mongoose = require('mongoose')
 util = require('util')
 
-
 Execution = mongoose.model 'Execution'
+ExecutionList = mongoose.model 'ExecutionList'
 
 getJsDate = (x) ->
 	date = new Date( x*1000 )
@@ -25,14 +25,26 @@ getFormattedTime = (x) ->
 	return  datum + '.' + month + '.' + year + ' ' + hours + ':' + minutes + ':' + seconds;
 
 exports.index = (req, res) ->
-	Execution.find (err, executions, count) ->
-		for execution in executions
-			console.log "STARASRAAS"
-			execution.formattedTime = getFormattedTime(execution.timestamp)
-		res.render "index", title: "Stachursk.", executions: executions
-		console.log "HI"
-		for element in executions[0].components
-			console.dir element
-		console.log "STOP"
+	query = Execution.find()
+	query.select '-components'
+	query.exec ( err, executions ) ->
+  		return if err
+  		console.log executions
+  		for execution in executions
+  			# Preparing Data
+  			console.log "HAHALHADLDAH"
+  			execution.formattedTime = getFormattedTime(execution.timestamp)
+	    res.render "index", title: "Soundgates Debugger", executions: executions
 		return
 	return
+
+exports.getExecution = (req, res) ->
+    timestamp = req.params.id
+    console.log timestamp
+    query = Execution.find()
+    query.where('timestamp').equals(timestamp)
+    query.exec ( err, execution ) ->
+    	console.log err if err
+    	res.json execution
+    	return
+    return

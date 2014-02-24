@@ -7,7 +7,7 @@ Schema = mongoose.Schema
 
 # Create Schema
 executionSchema = new Schema(
-  timestamp: Number,
+  timestamp: String,
   components: [{
     uid: String,
     type: { type: String },
@@ -16,9 +16,14 @@ executionSchema = new Schema(
   }]
 )
 
+executionListSchema = new Schema(
+  timestamp: Number
+)
+
 # Create model out of our schema
 # At runtime it serves as a constructor to build instances
 mongoose.model 'Execution', executionSchema
+mongoose.model "ExecutionList", executionListSchema
 
 # Connect to the DB
 mongoose.connect "mongodb://localhost:27017/soundgates"

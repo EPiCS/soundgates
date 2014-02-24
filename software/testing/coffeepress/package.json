@@ -6,7 +6,8 @@
     "express": "3.4.8",
     "jade": "*",
     "connect": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "d3": "3",
   },
  "devDependencies":{
   "mocha": "*",

@@ -42,26 +42,27 @@ html
           //- ###############################
           //- Following Code is DB dependent
           //- ###############################
-          h2 Execution:
-          br
-          div(class="row")
-            div(class="col-md-4") Execution date:
-            div(class="col-md-8") #{executions[0].formattedTime}
-          div(class="row")
-           div(class="col-md-4") Turnaround time:
-           div(class="col-md-8") #{executions[0].turnaroundTime}
-          div(class="row")
-           div(class="col-md-4") Number of components:
-           div(class="col-md-8") #{executions[0].components.length}
-          br          
-          - each component in executions[0].components
-            div(class="panel panel-primary")
-              div(class="panel-heading") UID: #{component.uid}
-              div(class="panel-body")
-                p(style='white-space:pre;')
-                  | Type: #{component.type}
-                - var uid = component.uid
-                div(id=uid)
+          #execution
+          //- h2 Execution:
+          //- br
+          //- div(class="row")
+          //-   div(class="col-md-4") Execution date:
+          //-   div(class="col-md-8") #{executions[0].formattedTime}
+          //- div(class="row")
+          //-  div(class="col-md-4") Turnaround time:
+          //-  div(class="col-md-8") #{executions[0].turnaroundTime}
+          //- div(class="row")
+          //-  div(class="col-md-4") Number of components:
+          //-  div(class="col-md-8") #{executions[0].components.length}
+          //- br          
+          //- - each component in executions[0].components
+          //-   div(class="panel panel-primary")
+          //-     div(class="panel-heading") UID: #{component.uid}
+          //-     div(class="panel-body")
+          //-       p(style='white-space:pre;')
+          //-         | Type: #{component.type}
+          //-       - var uid = component.uid
+          //-       div(id=uid)
                   //- - createChart(0, uid)
 
         #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
