@@ -1,0 +1,87 @@
+/**
+ */
+package soundgatesComposite;
+
+import org.eclipse.emf.ecore.EFactory;
+
+/**
+ * <!-- begin-user-doc -->
+ * The <b>Factory</b> for the model.
+ * It provides a create method for each non-abstract class of the model.
+ * <!-- end-user-doc -->
+ * @see soundgatesComposite.SoundgatesCompositePackage
+ * @generated
+ */
+public interface SoundgatesCompositeFactory extends EFactory {
+	/**
+	 * The singleton instance of the factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	SoundgatesCompositeFactory eINSTANCE = soundgatesComposite.impl.SoundgatesCompositeFactoryImpl.init();
+
+	/**
+	 * Returns a new object of class '<em>Workbench</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Workbench</em>'.
+	 * @generated
+	 */
+	Workbench createWorkbench();
+
+	/**
+	 * Returns a new object of class '<em>Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port</em>'.
+	 * @generated
+	 */
+	Port createPort();
+
+	/**
+	 * Returns a new object of class '<em>Composite Sound Component</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Composite Sound Component</em>'.
+	 * @generated
+	 */
+	CompositeSoundComponent createCompositeSoundComponent();
+
+	/**
+	 * Returns a new object of class '<em>Atomic Sound Component</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Atomic Sound Component</em>'.
+	 * @generated
+	 */
+	AtomicSoundComponent createAtomicSoundComponent();
+
+	/**
+	 * Returns a new object of class '<em>Delegation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Delegation</em>'.
+	 * @generated
+	 */
+	Delegation createDelegation();
+
+	/**
+	 * Returns a new object of class '<em>Link</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Link</em>'.
+	 * @generated
+	 */
+	Link createLink();
+
+	/**
+	 * Returns the package supported by this factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the package supported by this factory.
+	 * @generated
+	 */
+	SoundgatesCompositePackage getSoundgatesCompositePackage();
+
+} //SoundgatesCompositeFactory

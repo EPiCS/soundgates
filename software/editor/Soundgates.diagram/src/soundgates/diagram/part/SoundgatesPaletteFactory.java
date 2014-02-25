@@ -1,7 +1,6 @@
 package soundgates.diagram.part;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,7 +59,6 @@ public class SoundgatesPaletteFactory {
 		paletteRoot.add(paletteSeparator);
 		
 		//composites
-		paletteRoot.add(createNewCompositeSoundComponents());
 		paletteRoot.add(createImportedCompositeSoundComponents());
 		
 		//separator
@@ -68,25 +66,6 @@ public class SoundgatesPaletteFactory {
 		paletteRoot.add(paletteSeparator2);
 		
 		paletteRoot.add(createConnections3Group());
-	}
-
-	/**
-	 * Creates "Create Composite Components" palette tool group
-	 * 
-	 * @generated NOT
-	 */
-	private PaletteContainer createNewCompositeSoundComponents() {
-		PaletteDrawer paletteContainer = new PaletteDrawer(
-				"Create Composite Sound Components");
-		paletteContainer.setId("createComponents2Group"); //$NON-NLS-1$
-
-		paletteContainer.add(createCompositeSoundComponent2CreationTool());
-
-		paletteContainer.add(createPort1CreationTool());
-
-		paletteContainer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
-		
-		return paletteContainer;
 	}
 	
 	/**
@@ -122,43 +101,9 @@ public class SoundgatesPaletteFactory {
 		paletteContainer.setId("createConnections3Group"); //$NON-NLS-1$
 		paletteContainer.setDescription(Messages.Connections3Group_desc);
 		paletteContainer.add(createLink1CreationTool());
-		paletteContainer.add(createDelegation2CreationTool());
 		
 		paletteContainer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		return paletteContainer;
-	}
-
-	/**
-	 * @generated NOT
-	 */
-	private ToolEntry createCompositeSoundComponent2CreationTool() {
-		ArrayList<IElementType> types = new ArrayList<IElementType>(2);
-		types.add(SoundgatesElementTypes.CompositeSoundComponent_2002);
-		types.add(SoundgatesElementTypes.CompositeSoundComponent_3003);
-		NodeToolEntry entry = new NodeToolEntry(
-				"New composite sound component",
-				Messages.CompositeSoundComponent2CreationTool_desc, types);
-		entry.setId("createCompositeSoundComponent2CreationTool"); //$NON-NLS-1$
-		entry.setSmallIcon(SoundgatesElementTypes
-				.getImageDescriptor(SoundgatesElementTypes.CompositeSoundComponent_2002));
-		entry.setLargeIcon(entry.getSmallIcon());
-
-		return entry;
-	}
-
-	/**
-	 * @generated NOT
-	 */
-	private ToolEntry createPort1CreationTool() {
-		NodeToolEntry entry = new NodeToolEntry(
-				"New Port",
-				Messages.Port1CreationTool_desc,
-				Collections.singletonList(SoundgatesElementTypes.Port_3001));
-		entry.setId("createPort1CreationTool"); //$NON-NLS-1$
-		entry.setSmallIcon(SoundgatesDiagramEditorPlugin
-				.findImageDescriptor("/Soundgates.edit/icons/toolspalette/PortIn.gif")); //$NON-NLS-1$
-		entry.setLargeIcon(entry.getSmallIcon());
-		return entry;
 	}
 
 	/**
@@ -173,19 +118,6 @@ public class SoundgatesPaletteFactory {
 				"A link connects two ports of sound components that are on the same level", 
 				types);
 		entry.setId("createLink1CreationTool"); //$NON-NLS-1$
-		return entry;
-	}
-
-	/**
-	 * @generated NOT
-	 */
-	private ToolEntry createDelegation2CreationTool() {
-		LinkToolEntry entry = new LinkToolEntry(
-				Messages.Delegation2CreationTool_title,
-				"A delegation connects a port of a composite sound component with a port of its embedded sound component",
-				Collections
-						.singletonList(SoundgatesElementTypes.Delegation_4003));
-		entry.setId("createDelegation2CreationTool"); //$NON-NLS-1$
 		return entry;
 	}
 

@@ -1,0 +1,7 @@
+# Tracing options for the SoundgatesComposite.diagram plug-in
+
+# Common issues
+SoundgatesComposite.diagram/debug=false
+
+# Visual IDs
+SoundgatesComposite.diagram/debug/visualID=false

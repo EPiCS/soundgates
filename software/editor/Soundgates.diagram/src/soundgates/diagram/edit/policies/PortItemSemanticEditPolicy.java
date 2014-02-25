@@ -18,10 +18,6 @@ import soundgates.AtomicSoundComponent;
 import soundgates.DataType;
 import soundgates.Direction;
 import soundgates.Port;
-import soundgates.diagram.edit.commands.DelegationCreateCommand;
-import soundgates.diagram.edit.commands.DelegationReorientCommand;
-import soundgates.diagram.edit.commands.Link2CreateCommand;
-import soundgates.diagram.edit.commands.Link2ReorientCommand;
 import soundgates.diagram.edit.commands.LinkCreateCommand;
 import soundgates.diagram.edit.commands.LinkReorientCommand;
 import soundgates.diagram.edit.parts.DelegationEditPart;
@@ -139,14 +135,6 @@ public class PortItemSemanticEditPolicy extends
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
-		if (SoundgatesElementTypes.Link_4002 == req.getElementType()) {
-			return getGEFWrapper(new Link2CreateCommand(req, req.getSource(),
-					req.getTarget()));
-		}
-		if (SoundgatesElementTypes.Delegation_4003 == req.getElementType()) {
-			return getGEFWrapper(new DelegationCreateCommand(req,
-					req.getSource(), req.getTarget()));
-		}
 		return null;
 	}
 
@@ -200,16 +188,6 @@ public class PortItemSemanticEditPolicy extends
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
-		if (SoundgatesElementTypes.Link_4002 == req.getElementType() && !patch
-				&& linkAllowed) {
-			return getGEFWrapper(new Link2CreateCommand(req, req.getSource(),
-					req.getTarget()));
-		}
-		if (SoundgatesElementTypes.Delegation_4003 == req.getElementType()
-				&& delegationAllowed) {
-			return getGEFWrapper(new DelegationCreateCommand(req,
-					req.getSource(), req.getTarget()));
-		}
 		return null;
 	}
 
@@ -224,10 +202,6 @@ public class PortItemSemanticEditPolicy extends
 		switch (getVisualID(req)) {
 		case LinkEditPart.VISUAL_ID:
 			return getGEFWrapper(new LinkReorientCommand(req));
-		case Link2EditPart.VISUAL_ID:
-			return getGEFWrapper(new Link2ReorientCommand(req));
-		case DelegationEditPart.VISUAL_ID:
-			return getGEFWrapper(new DelegationReorientCommand(req));
 		}
 		return super.getReorientRelationshipCommand(req);
 	}

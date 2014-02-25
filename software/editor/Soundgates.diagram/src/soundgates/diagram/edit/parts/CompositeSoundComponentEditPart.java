@@ -13,7 +13,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
@@ -338,7 +337,6 @@ public class CompositeSoundComponentEditPart extends
 			this.add(fFigureCompositeSoundComponentNameFigure, BorderLayout.TOP);
 
 			fFigureComponentCompartmentFigure = new RectangleFigure();
-
 			this.add(fFigureComponentCompartmentFigure, BorderLayout.CENTER);
 
 		}

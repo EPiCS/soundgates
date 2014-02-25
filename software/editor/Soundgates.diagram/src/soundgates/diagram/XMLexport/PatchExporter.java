@@ -50,9 +50,6 @@ public class PatchExporter extends Exporter{
 			// elements
 			Element elements = doc.createElement("Elements");
 			
-			// test and export of composite components
-			Tester patchTester = new Tester();
-			
 			for(soundgates.Element element : patchToExport.getElements()){
 				
 				// atomic components
@@ -64,15 +61,7 @@ public class PatchExporter extends Exporter{
 					componentCounter++;
 				}
 				// composite components
-				else if(element instanceof CompositeSoundComponent){
-					
-					CompositeSoundComponent compositeSoundComponent =
-							(CompositeSoundComponent) element;
-					
-					// if the composite sound component is not exported
-					if(patchTester.shouldWriteFileForCompositeSoundComponent(compositeSoundComponent.getName())){						
-						CompositeSoundComponentExporter.exportToXML(compositeSoundComponent);	
-					}
+				else if(element instanceof CompositeSoundComponent){							
 					
 					elements.appendChild(
 							getCompositeSoundComponentElement(doc, (CompositeSoundComponent)element, "CompositeSoundComponent", componentCounter)
