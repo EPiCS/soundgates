@@ -1,0 +1,7 @@
+#N canvas 2400 49 958 558 10;
+#X obj 71 105 io_patch;
+#X obj 54 55 s @ComponentName;
+#X floatatom 93 23 5 0 0 0 - - -;
+#X floatatom 76 156 5 0 0 0 - - -;
+#X connect 0 0 3 0;
+#X connect 2 0 1 0;
