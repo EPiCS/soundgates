@@ -141,7 +141,7 @@ architecture Behavioral of hwt_fir is
     -- Memory management
     ----------------------------------------------------------------
     
-    signal ptr     : natural range 0 to C_MAX_SAMPLE_COUNT-1;
+    signal ptr     : natural range 0 to C_MAX_SAMPLE_COUNT-1 := 0;
     
     ----------------------------------------------------------------
     -- Hardware arguements
@@ -378,10 +378,10 @@ begin
     
     
     FIR_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
-        variable done : boolean;            
+        variable done : boolean := False;            
     begin
         if rst = '1' then
-                    
+        
             osif_reset(o_osif);
 		    memif_reset(o_memif);
             ram_reset(o_ram);
@@ -389,20 +389,18 @@ begin
             hwtio_init(hwtio);
 
             osif_ctrl_signal    <= (others => '0');
-
+            
             state               <= STATE_IDLE;
             o_RAMWE_fir         <= '0';
+            fir_ce              <= '0';
             ptr                 <= 0;
-                        
             sample_count        <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);  -- number of samples processed
-            done := False;
-            
+          
         elsif rising_edge(clk) then
             
             fir_ce           <= '0';
             o_RAMWE_fir      <= '0';
-            osif_ctrl_signal <= ( others => '0');
-            
+                        
             case state is            
 
             when STATE_IDLE =>
@@ -411,13 +409,14 @@ begin
 
                 if done then
                     if osif_ctrl_signal = FIR_START then
-                        sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-                        state <= STATE_REFRESH_HWT_ARGS;
-
+                        sample_count     <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+                        state            <= STATE_REFRESH_HWT_ARGS;
+                        
                     elsif osif_ctrl_signal = FIR_EXIT then                        
-                        state   <= STATE_EXIT;
-
-                    end if;    
+                        state            <= STATE_EXIT;
+                    end if;
+                    
+                    osif_ctrl_signal <= ( others => '0');
                 end if;
 
             when STATE_REFRESH_HWT_ARGS =>               
@@ -429,33 +428,32 @@ begin
 
 			when STATE_READ_MEM => 
                 -- store input samples in local ram
-				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr, X"00000000",
-                            std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done);
+				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr, X"00000000", 
+                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done); -- always in bytes
 				if done then
-				    state <= STATE_PROCESS;
+				    state   <= STATE_PROCESS;
+                    ptr     <= 0;   -- start with the first sample
 			    end if;
 			 
             when STATE_PROCESS =>
                 if sample_count > 0 then
                     case process_state is
-
+                    
                     -- Read one sample from local memory
                     when 0 =>
-                        sample_in     <= i_RAMData_fir; -- not sure here                    
+                        sample_in     <= i_RAMData_fir; -- not sure here                  
+                        process_state <= 1;
+                    when 1 =>
+                        fir_ce        <= '1';           -- calculate one sample                 
                         process_state <= 2;
                     when 2 =>
-                        fir_ce        <= '1';
                         o_RAMWE_fir   <= '1';
-                        process_state <= 3;
-                    when 3 =>                        
                         sample_count  <= sample_count - 1;
-                        process_state <= 4;
-                    -- Write sample back to local memory
-                    when 4 =>
                         ptr           <= ptr + 1;
-                        process_state <= 5;
-                    when 5 =>
-                        process_state <= 6;
+                        process_state <= 3;
+                    -- delay
+                    when 3 =>
+                        process_state <= 4;
                     when others =>
                         process_state <= 0;
                     end case;

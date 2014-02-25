@@ -1,12 +1,12 @@
 /*
- * ADSRSoundComponent.h
+ * Ramp.h
  *
  *  Created on: Dec 10, 2013
  *      Author: lukas
  */
 
-#ifndef ADSRSOUNDCOMPONENT_H_
-#define ADSRSOUNDCOMPONENT_H_
+#ifndef RAMP_H_
+#define RAMP_H_
 
 
 #include <Synthesizer.h>
@@ -53,4 +53,4 @@ public:
 };
 
 
-#endif /* ADSRSOUNDCOMPONENT_H_ */
+#endif /* RAMP_H_ */

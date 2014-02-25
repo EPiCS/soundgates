@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>NOT</Type>
+	<Category>Logic</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="Value"/>
+		<Port DataType="CONTROL" Direction="OUT" Name="Negation"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation/>
+		<Device>
+			<Implementation type="sw" name="or">
+			    <PortMapping PortName="Value" PortNumber="1"/>
+			    <PortMapping PortName="Negation" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

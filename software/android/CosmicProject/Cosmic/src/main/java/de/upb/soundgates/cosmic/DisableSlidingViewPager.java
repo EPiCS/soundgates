@@ -20,7 +20,7 @@ public class DisableSlidingViewPager extends ViewPager {
 
     @Override
     protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
-        if (v.getId() == R.id.bind_main) {
+        if (v.getId() == R.id.interaction_main) {
             return true;
         }
         return super.canScroll(v, checkV, dx, x, y);

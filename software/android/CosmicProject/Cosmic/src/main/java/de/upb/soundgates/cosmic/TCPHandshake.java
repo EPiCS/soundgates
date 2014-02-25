@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import de.upb.soundgates.cosmic.listeners.AsyncTaskListener;
+
 /**
  * Created by posewsky on 08.11.13.
  */
@@ -62,6 +64,10 @@ public class TCPHandshake extends AsyncTask<Void, Void, Boolean> {
             out.flush();
 
             result = in.readLine();
+
+            if(result == null || result.length() == 0)
+                throw new IOException("Received=["+result+"]");
+
             Log.d(MainActivity.LOG_TAG, "empfangen: " + result);
 
             return true;

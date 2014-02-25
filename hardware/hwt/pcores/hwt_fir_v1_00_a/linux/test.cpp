@@ -142,7 +142,7 @@ int main(int argc, char* argv[]){
     reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
     reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &hwt_args[0]);
 
-    reconos_hwt_create(&m_ReconOSThread, 0, NULL);
+    reconos_hwt_create(&m_ReconOSThread, 1, NULL);
 		
     for(i = 0; i < SAMPLE_RATE; i+=64){
 			

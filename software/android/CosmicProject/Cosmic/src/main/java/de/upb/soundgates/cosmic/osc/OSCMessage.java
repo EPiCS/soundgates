@@ -1,15 +1,19 @@
 package de.upb.soundgates.cosmic.osc;
 
 import java.util.LinkedList;
+import java.util.Observable;
+
+import de.upb.soundgates.cosmic.InteractionMethod;
 
 /**
  * Created by posewsky on 12.11.13.
  */
 
-public class OSCMessage {
+public class OSCMessage extends Observable {
     protected String path;
     protected LinkedList<OSCType> types;
     protected boolean selected;
+    protected InteractionMethod interactionMethod;
 
     public static OSCMessage newInstance(String oscMsg) {
         String[] parts = oscMsg.split(" ");
@@ -20,7 +24,7 @@ public class OSCMessage {
             OSCMessage msg = new OSCMessage(parts[0]);
             String types = parts[1].replaceAll("\"", "");
             for(int i = 0; i < types.length(); ++i) {
-                OSCType type = OSCType.newInstance(types.charAt(i));
+                OSCType type = OSCType.newInstance(msg, types.charAt(i));
                 if(type == null)
                     return null;
 
@@ -35,7 +39,7 @@ public class OSCMessage {
                 if(range.length != 2)
                     return null;
 
-                OSCType type = OSCType.newInstance(types.charAt(i), range[0], range[1]);
+                OSCType type = OSCType.newInstance(msg, types.charAt(i), range[0], range[1]);
                 if(type == null)
                     return null;
 
@@ -50,22 +54,21 @@ public class OSCMessage {
         this.path       = path;
         this.types      = new LinkedList<OSCType>();
         this.selected   = false;
+        this.interactionMethod = InteractionMethod.values()[0];
     }
 
     public String toString() {
-        String ret = path;
-        /*for(OSCType t: types)
-            path += " " + t.toString();
-        path += " selected: " + isSelected();*/
         return path;
     }
 
     public String toStringFull() {
         String ret = path;
         for(OSCType t: types)
-            path += " " + t.toString();
-        path += " selected: " + isSelected();
-        return path;
+            ret += " " + t.toString();
+        ret += " selected: " + isSelected();
+        ret += " interaction method: " + getInteractionMethod();
+
+        return ret;
     }
 
     public String getPath() { return path; }
@@ -73,10 +76,47 @@ public class OSCMessage {
 
     public LinkedList<OSCType> getTypes() { return types; }
 
+    public void setValue(float value) {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            arg.setValue(value);
+            setChanged();
+            notifyObservers(value);
+        }
+    }
+
+    public float getValue() {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            return arg.getValue();
+        }
+        return Float.NaN;
+    }
+
+    public void setValueAsPercent(float value) {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            arg.setValueAsPercent(value);
+            setChanged();
+            notifyObservers(value);
+        }
+    }
+
+    public float getValueAsPercent() {
+        if(getTypes().size() > 0) {
+            OSCType arg = getTypes().get(0);
+            return arg.getValueAsPercent();
+        }
+        return Float.NaN;
+    }
+
     public boolean isSelected() {
         return selected;
     }
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public InteractionMethod getInteractionMethod() { return interactionMethod; }
+    public void setInteractionMethod(InteractionMethod id) { this.interactionMethod = id; }
 }
