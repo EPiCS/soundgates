@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: SoundgatesComposite.diagram; singleton:=true
+Bundle-SymbolicName: de.upb.soundgates.composite.diagram;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: soundgatesComposite.diagram.part.SoundgatesCompositeDiagramEditorPlugin
@@ -34,8 +34,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gmf.tooling.runtime;visibility:=reexport,
  org.eclipse.draw2d;visibility:=reexport,
  org.eclipse.gmf.runtime.draw2d.ui;visibility:=reexport,
- SoundgatesComposite;visibility:=reexport,
- SoundgatesComposite.edit;visibility:=reexport,
+ de.upb.soundgates.composite;visibility:=reexport,
+ de.upb.soundgates.composite.edit;visibility:=reexport,
  org.eclipse.ocl.ecore;visibility:=reexport,
  org.eclipse.gef;visibility:=reexport
 Bundle-ActivationPolicy: lazy

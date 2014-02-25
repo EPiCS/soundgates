@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: SoundgatesComposite.editor;singleton:=true
+Bundle-SymbolicName: de.upb.soundgates.composite.editor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: soundgatesComposite.presentation.SoundgatesCompositeEditorPlugin$Implementation
@@ -11,7 +11,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: soundgatesComposite.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
- SoundgatesComposite.edit;visibility:=reexport,
+ de.upb.soundgates.composite.edit;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport

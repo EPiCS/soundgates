@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Simulation
-Bundle-SymbolicName: Soundgates.simulation;singleton:=true
+Bundle-SymbolicName: de.upb.soundgates.simulation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: soundgates.simulation.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- Soundgates.codegen,
- Soundgates;bundle-version="1.0.0"
+ de.upb.soundgates.codegen,
+ de.upb.soundgates;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/javaoscfull.jar,

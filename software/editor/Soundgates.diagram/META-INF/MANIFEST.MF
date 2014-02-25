@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: Soundgates.diagram; singleton:=true
+Bundle-SymbolicName: de.upb.soundgates.diagram;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: soundgates.diagram.part.SoundgatesDiagramEditorPlugin
@@ -36,8 +36,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gmf.tooling.runtime;visibility:=reexport,
  org.eclipse.draw2d;visibility:=reexport,
  org.eclipse.gmf.runtime.draw2d.ui;visibility:=reexport,
- Soundgates;visibility:=reexport,
- Soundgates.edit;visibility:=reexport,
+ de.upb.soundgates;visibility:=reexport,
+ de.upb.soundgates.edit;visibility:=reexport,
  org.eclipse.gef;visibility:=reexport,
  org.eclipse.ocl.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
