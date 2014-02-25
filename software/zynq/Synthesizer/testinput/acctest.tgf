@@ -1,0 +1,11 @@
+1 input/sw/'/acc f','[0:100]'
+2 input/sw/'/reset f'
+4 accumulatorcc/sw
+7 sine/sw
+8 dac/sw
+
+#  
+1 4 '1,1'
+2 4 '1,2'
+4 7 '1,1'
+7 8 '1,1'
