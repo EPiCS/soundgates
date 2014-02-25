@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
-	<Type>RampEnvelope</Type>
+	<Type>Ramp</Type>
+	<Category>Envelope</Category>
 	<Ports>
 		<Port DataType="SOUND" Direction="IN" Name="SamplesIn"/>
 		<Port DataType="CONTROL" Direction="IN" Name="RisingTime"/>

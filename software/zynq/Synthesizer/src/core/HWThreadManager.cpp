@@ -7,7 +7,12 @@
 
 #include "HWThreadManager.h"
 
-HWThreadManager::HWThreadManager() { }
+
+
+HWThreadManager::HWThreadManager() {
+
+
+}
 
 HWThreadManager::~HWThreadManager() { }
 

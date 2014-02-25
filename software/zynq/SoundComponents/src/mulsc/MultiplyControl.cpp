@@ -29,5 +29,8 @@ MultiplyControl::~MultiplyControl() {
 }
 
 void MultiplyControl::init() {
+
+    LOG_DEBUG("Init multiply control");
+
 	m_ValueIn_2_Port->registerCallback(ICallbackPtr(new OnValueChange<float, ControlPortPtr>(multValue, m_ValueIn_2_Port)));
 }

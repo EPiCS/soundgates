@@ -29,7 +29,8 @@ SoundComponents += addss \
 				  saw \
 				  pwm \
 				  fir \
-				  log
+				  log \
+				  ramp
 
 
 SRCDIR = ../src

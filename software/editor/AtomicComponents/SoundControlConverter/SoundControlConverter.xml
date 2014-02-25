@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
 	<Type>Sound2Control</Type>
+	<Category>Control</Category>
 	<Ports>
 		<Port DataType="CONTROL" Direction="IN" Name="LowerMapping"/>
 		<Port DataType="CONTROL" Direction="IN" Name="UpperMapping"/>

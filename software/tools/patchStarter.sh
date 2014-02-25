@@ -2,11 +2,12 @@
 
 SCRIPTPATH=$(readlink -f "$0")
 PROJPATH=$(dirname "$SCRIPTPATH")
-TGFPATH=/tmp/soundgates
+#TGFPATH=/tmp/soundgates
+TGFPATH=$PROJPATH
 
 # extract zip file to working directory
-rm -r -f $TGFPATH 
-mkdir $TGFPATH
+#rm -r -f $TGFPATH 
+#mkdir $TGFPATH
 cp $1 $TGFPATH
 cd $TGFPATH
 unzip *.zip

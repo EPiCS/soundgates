@@ -9,6 +9,7 @@
 #define SOUNDADDCOMPONENT_H_
 
 #include <cassert>
+#include <climits>
 
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>

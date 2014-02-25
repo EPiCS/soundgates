@@ -8,10 +8,11 @@
 #include "SawtoothSoundComponent.h"
 
 #include "impl/SawtoothSoundComponent_SW.h"
+#include "impl/SawtoothSoundComponent_HW.h"
 
 DEFINE_COMPONENTNAME(SawtoothSoundComponent, "saw")
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(SawtoothSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(SawtoothSoundComponent);
 
 SawtoothSoundComponent::SawtoothSoundComponent(std::vector<std::string> params) :
 		SoundComponentImpl(params)
@@ -43,6 +44,6 @@ void SawtoothSoundComponent::init()
 double SawtoothSoundComponent::getPhaseIncrement(float frequency)
 {
 
-	return (2 * M_PI / Synthesizer::config::samplerate) * frequency;
+	return (2 / Synthesizer::config::samplerate) * frequency;
 
 }
