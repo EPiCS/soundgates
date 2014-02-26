@@ -1,27 +1,35 @@
-SoundComponents += addss \
+SoundComponents += accumulatorcc \
+                  addss \
 				  addsc \
 				  addcc \
 				  adsr \
+				  and \
 				  const	\
 				  delay \
+				  demux \
 				  divss \
 				  divsc \
 				  divcc \
+				  dummysink \
+				  equalcc \
 				  fir \
+				  greatercc \
+				  lesscc \
 				  mixer\
 				  noise \
+				  or \
 				  output \
 				  sine \
 				  mulcc \
 				  mulsc \
 				  mulss \
+				  mux \
 				  neg \
 				  output \
 				  square \
 				  subcc \
 				  subsc \
 				  subss \
-				  dummysink \
 				  sampleplayer \
                   soundToControl \
 				  template \
