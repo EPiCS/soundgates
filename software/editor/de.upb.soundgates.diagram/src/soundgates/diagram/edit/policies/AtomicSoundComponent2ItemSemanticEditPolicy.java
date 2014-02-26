@@ -5,6 +5,7 @@ import org.eclipse.gmf.runtime.common.core.command.ICompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 
+import soundgates.diagram.edit.commands.EmptyCommand;
 import soundgates.diagram.edit.commands.PortCreateCommand;
 import soundgates.diagram.providers.SoundgatesElementTypes;
 
@@ -36,13 +37,6 @@ public class AtomicSoundComponent2ItemSemanticEditPolicy extends
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
 			return new EmptyCommand();		
-	}
-
-	class EmptyCommand extends Command{
-		@Override
-		public boolean canExecute() {
-			return false;
-		}
 	}
 
 	/**

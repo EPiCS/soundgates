@@ -79,13 +79,13 @@
          <action
                class="soundgatesComposite.diagram.actions.ExportCompositeSoundComponentAction"
                enablesFor="1"
-               id="Soundgates.diagram.action.ExportCompositeAction"
+               id="Soundgates.composite.diagram.action.ExportCompositeAction"
                label="Export Composite Sound Component as XML"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
          <action
                class="soundgatesComposite.diagram.actions.ValidateCompositeSoundComponentAction"
-               id="Soundgates.diagram.action.ValidateCompositeAction"
+               id="Soundgates.composite.diagram.action.ValidateCompositeAction"
                label="Validate Composite Sound Component"
                menubarPath="Soundgates.diagram.menu/group">
          </action>

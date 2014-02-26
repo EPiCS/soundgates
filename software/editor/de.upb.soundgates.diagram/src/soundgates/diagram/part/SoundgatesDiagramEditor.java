@@ -19,6 +19,7 @@ import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.commands.Command;
@@ -59,8 +60,11 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.IShowInTargetList;
 import org.eclipse.ui.part.ShowInContext;
 
+import soundgates.diagram.edit.commands.EmptyCommand;
 import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartment2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponentComponentCompartmentEditPart;
 import soundgates.diagram.edit.parts.DelegationEditPart;
 import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.PortEditPart;
@@ -163,25 +167,32 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		
 		public boolean listContainsEditPartsNotToRemove(List objects){
 			for(Object object : objects){
-				if(		object instanceof PortEditPart ||
-						object instanceof AtomicSoundComponent2EditPart ||
-						object instanceof CompositeSoundComponent2EditPart ||
-						object instanceof Link2EditPart ||
+				if(	object instanceof PortEditPart)
+				{
+					if( !objects.contains(((EditPart)object).getParent()) )
+						return true;					
+				}
+				else if(object instanceof CompositeSoundComponent2EditPart || 
+						object instanceof AtomicSoundComponent2EditPart || 
+						object instanceof Link2EditPart || 
 						object instanceof DelegationEditPart)
-					return true;
+				{
+					EditPart parent = ((EditPart)object).getParent();
+					if(parent instanceof CompositeSoundComponentComponentCompartmentEditPart){
+						if( !objects.contains( ((CompositeSoundComponentComponentCompartmentEditPart) parent).getParent() ))
+							return true;
+					}
+					else if(parent instanceof CompositeSoundComponentComponentCompartment2EditPart){
+						if( !objects.contains( ((CompositeSoundComponentComponentCompartment2EditPart) parent).getParent() ))
+							return true;
+					}
+				
+				}
 			}
 			return false;
 		}
 
 	}
-	
-	class EmptyCommand extends Command{
-		@Override
-		public boolean canExecute() {
-			return false;
-		}
-	}
-
 	
 	/**
 	 * @generated

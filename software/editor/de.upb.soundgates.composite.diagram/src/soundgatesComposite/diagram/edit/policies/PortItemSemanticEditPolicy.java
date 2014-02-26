@@ -15,13 +15,12 @@ import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
 import soundgatesComposite.AtomicSoundComponent;
+import soundgatesComposite.CompositeSoundComponent;
 import soundgatesComposite.DataType;
 import soundgatesComposite.Direction;
 import soundgatesComposite.Port;
 import soundgatesComposite.diagram.edit.commands.DelegationCreateCommand;
-import soundgatesComposite.diagram.edit.commands.DelegationReorientCommand;
 import soundgatesComposite.diagram.edit.commands.LinkCreateCommand;
-import soundgatesComposite.diagram.edit.commands.LinkReorientCommand;
 import soundgatesComposite.diagram.edit.parts.DelegationEditPart;
 import soundgatesComposite.diagram.edit.parts.LinkEditPart;
 import soundgatesComposite.diagram.part.SoundgatesCompositeVisualIDRegistry;
@@ -43,15 +42,25 @@ public class PortItemSemanticEditPolicy
 				soundgatesComposite.diagram.providers.SoundgatesCompositeElementTypes.Port_3004);
 	}
 
+	class EmptyCommand extends Command{
+		@Override
+		public boolean canExecute() {
+			return false;
+		}
+	}
+	
 	/**
 	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
 
 		View view = (View) getHost().getModel();
-
+		
 		if (view.getElement().eContainer() instanceof AtomicSoundComponent)
-			return null;
+			return new EmptyCommand();
+		else if(view.getElement().eContainer() instanceof CompositeSoundComponent && 
+				view.getElement().eContainer().eContainer() instanceof CompositeSoundComponent)
+			return new EmptyCommand();
 		else {
 			CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
 					getEditingDomain(), null);

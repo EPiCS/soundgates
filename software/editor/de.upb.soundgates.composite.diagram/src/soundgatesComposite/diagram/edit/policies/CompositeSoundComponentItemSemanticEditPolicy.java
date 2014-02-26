@@ -14,6 +14,9 @@ import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.View;
 
+import soundgatesComposite.CompositeSoundComponent;
+import soundgatesComposite.diagram.edit.commands.EmptyCommand;
+
 /**
  * @generated
  */
@@ -42,24 +45,30 @@ public class CompositeSoundComponentItemSemanticEditPolicy
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
 		View view = (View) getHost().getModel();
-		CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
-				getEditingDomain(), null);
-		cmd.setTransactionNestingEnabled(false);
-		EAnnotation annotation = view.getEAnnotation("Shortcut"); //$NON-NLS-1$
-		if (annotation == null) {
-			// there are indirectly referenced children, need extra commands: false
-			addDestroyChildNodesCommand(cmd);
-			addDestroyShortcutsCommand(cmd, view);
-			// delete host element
-			cmd.add(new DestroyElementCommand(req));
-		} else {
-			cmd.add(new DeleteCommand(getEditingDomain(), view));
+		
+		if(view.getElement().eContainer() instanceof CompositeSoundComponent && 
+				view.getElement().eContainer().eContainer() instanceof CompositeSoundComponent)
+			return new EmptyCommand();
+		else{
+			CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
+					getEditingDomain(), null);
+			cmd.setTransactionNestingEnabled(false);
+			EAnnotation annotation = view.getEAnnotation("Shortcut"); //$NON-NLS-1$
+			if (annotation == null) {
+				// there are indirectly referenced children, need extra commands: false
+				addDestroyChildNodesCommand(cmd);
+				addDestroyShortcutsCommand(cmd, view);
+				// delete host element
+				cmd.add(new DestroyElementCommand(req));
+			} else {
+				cmd.add(new DeleteCommand(getEditingDomain(), view));
+			}
+			return getGEFWrapper(cmd.reduce());
 		}
-		return getGEFWrapper(cmd.reduce());
 	}
 
 	/**

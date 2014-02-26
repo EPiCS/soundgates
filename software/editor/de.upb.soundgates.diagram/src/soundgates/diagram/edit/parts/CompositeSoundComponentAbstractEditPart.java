@@ -1,13 +1,18 @@
 package soundgates.diagram.edit.parts;
 
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.figures.ResizableCompartmentFigure;
+import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
+import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ShapeImpl;
 import org.eclipse.swt.graphics.Color;
 
 import soundgates.CompositeSoundComponent;
+import soundgates.Direction;
 import soundgates.diagram.part.SoundgatesDiagramUpdater;
 import soundgates.impl.PatchImpl;
 
@@ -65,6 +70,31 @@ public abstract class CompositeSoundComponentAbstractEditPart extends
 		 return compartmentFigure;
 	}
 	
+	protected boolean addFixedChild(EditPart childEditPart) {
+		if (childEditPart instanceof PortEditPart) {
+			
+			SoundgatesPortBorderItemLocator locator;
+			
+			if (((PortEditPart) childEditPart).getPort().getDirection()==Direction.IN){
+				locator = new SoundgatesPortBorderItemLocator(getMainFigure(),PositionConstants.NORTH, inputPortsXPositions[currentInputPort], ((PortEditPart) childEditPart).getPort().getName());
+				currentInputPort++;
+			}
+			else{
+				locator = new SoundgatesPortBorderItemLocator(getMainFigure(),PositionConstants.SOUTH, outputPortsXPositions[currentOutputPort],  ((PortEditPart) childEditPart).getPort().getName());
+				currentOutputPort++;
+			}
+			getBorderedFigure().getBorderItemContainer().add(((PortEditPart) childEditPart).getFigure(),locator);
+
+			return true;
+		}
+		return false;
+	}
+	
+	protected NodeFigure createNodePlate() {
+		DefaultSizeNodeFigure result = 
+				new DefaultSizeNodeFigure(componentWidth, ComponentLayouter.componentHeight);
+		return result;
+	}
 	
 	public void expandOrCollapseCompartment(){
 		ResizableCompartmentFigure compartmentFigure = getCompartmentFigure();

@@ -10,6 +10,7 @@ import soundgates.AtomicSoundComponent;
 import soundgates.DataType;
 import soundgates.Direction;
 import soundgates.Port;
+import soundgates.diagram.edit.commands.EmptyCommand;
 import soundgates.diagram.edit.commands.LinkCreateCommand;
 import soundgates.diagram.edit.commands.LinkReorientCommand;
 import soundgates.diagram.edit.parts.LinkEditPart;
@@ -36,12 +37,6 @@ public class PortItemSemanticEditPolicy extends
 			return new EmptyCommand();		
 	}
 
-	class EmptyCommand extends Command{
-		@Override
-		public boolean canExecute() {
-			return false;
-		}
-	}
 	/**
 	 * @generated
 	 */

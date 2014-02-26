@@ -125,7 +125,7 @@ public class CompositeSoundComponentEditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof CompositeSoundComponentNameEditPart) {
@@ -143,11 +143,7 @@ public class CompositeSoundComponentEditPart extends
 			return true;
 		}
 		if (childEditPart instanceof PortEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			getBorderedFigure().getBorderItemContainer().add(
-					((PortEditPart) childEditPart).getFigure(), locator);
-			return true;
+			return super.addFixedChild(childEditPart);
 		}
 		return false;
 	}
@@ -208,11 +204,10 @@ public class CompositeSoundComponentEditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(40, 40);
-		return result;
+		return super.createNodePlate();
 	}
 
 	/**
