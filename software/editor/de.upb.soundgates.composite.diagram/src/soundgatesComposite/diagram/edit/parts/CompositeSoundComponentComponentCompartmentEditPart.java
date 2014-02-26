@@ -2,14 +2,17 @@ package soundgatesComposite.diagram.edit.parts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeCompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.ResizableCompartmentEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.figures.ResizableCompartmentFigure;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
+import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicyWithCustomReparent;
 
+import soundgatesComposite.diagram.edit.commands.EmptyCommand;
 import soundgatesComposite.diagram.edit.policies.CompositeSoundComponentComponentCompartmentCanonicalEditPolicy;
 import soundgatesComposite.diagram.edit.policies.CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy;
 import soundgatesComposite.diagram.edit.policies.SoundgatesDragDropEditPolicy;
@@ -77,6 +80,13 @@ public class CompositeSoundComponentComponentCompartmentEditPart extends
 		if (getFigure().getParent().getLayoutManager() instanceof ConstrainedToolbarLayout) {
 			super.setRatio(ratio);
 		}
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	protected Command getDestroyElementCommand(DestroyElementRequest req) {
+			return new EmptyCommand();		
 	}
 
 }

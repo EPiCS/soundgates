@@ -1,9 +1,7 @@
 package soundgatesComposite.diagram.edit.parts;
 
 import org.eclipse.draw2d.BorderLayout;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
@@ -14,16 +12,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.BorderItemSelectionEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
-import org.eclipse.gmf.runtime.diagram.ui.figures.BorderItemLocator;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
-import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicyWithCustomReparent;
@@ -146,38 +141,15 @@ public class CompositeSoundComponent2EditPart extends
 			return true;
 		}
 		if (childEditPart instanceof soundgatesComposite.diagram.edit.parts.PortEditPart) {
-			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
-			getBorderedFigure()
-					.getBorderItemContainer()
-					.add(((soundgatesComposite.diagram.edit.parts.PortEditPart) childEditPart)
-							.getFigure(), locator);
-			return true;
+			return super.addFixedChild(childEditPart);
 		}
 		return false;
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
-		if (childEditPart instanceof soundgatesComposite.diagram.edit.parts.CompositeSoundComponentName2EditPart) {
-			return true;
-		}
-		if (childEditPart instanceof soundgatesComposite.diagram.edit.parts.CompositeSoundComponentComponentCompartment2EditPart) {
-			IFigure pane = getPrimaryShape()
-					.getFigureComponentCompartmentFigure();
-			pane.remove(((soundgatesComposite.diagram.edit.parts.CompositeSoundComponentComponentCompartment2EditPart) childEditPart)
-					.getFigure());
-			return true;
-		}
-		if (childEditPart instanceof soundgatesComposite.diagram.edit.parts.PortEditPart) {
-			getBorderedFigure()
-					.getBorderItemContainer()
-					.remove(((soundgatesComposite.diagram.edit.parts.PortEditPart) childEditPart)
-							.getFigure());
-			return true;
-		}
 		return false;
 	}
 
@@ -215,11 +187,10 @@ public class CompositeSoundComponent2EditPart extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(40, 40);
-		return result;
+		return super.createNodePlate();
 	}
 
 	/**

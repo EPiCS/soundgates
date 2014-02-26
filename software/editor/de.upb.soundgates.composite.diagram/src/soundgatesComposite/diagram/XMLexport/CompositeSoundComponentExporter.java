@@ -58,8 +58,6 @@ public class CompositeSoundComponentExporter extends Exporter {
 			// embedded components elements
 			Element embeddedComponentsElement = doc.createElement("EmbeddedSoundComponents");
 			
-			Tester patchTester = new Tester();
-			
 			for(SoundComponent embComponent : compositeSoundComponentToExport.getEmbeddedComponents()){
 					
 				if(embComponent instanceof AtomicSoundComponent){					
@@ -80,10 +78,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 									"EmbeddedCompositeSoundComponent", 
 									componentCounter)
 							);
-				 	
-					if(patchTester.shouldWriteFileForCompositeSoundComponent(embComponent.getName())){						
-						exportToXML((CompositeSoundComponent) embComponent);	
-					}
+		
 				}
 				
 				embeddedComponentsHashMap.put(embComponent, componentCounter);
