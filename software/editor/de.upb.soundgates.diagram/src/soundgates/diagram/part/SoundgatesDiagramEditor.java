@@ -1,5 +1,7 @@
 package soundgates.diagram.part;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
@@ -17,16 +19,23 @@ import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
+import org.eclipse.gef.KeyHandler;
+import org.eclipse.gef.KeyStroke;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gmf.runtime.common.ui.services.marker.MarkerNavigationService;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
 import org.eclipse.gmf.runtime.diagram.ui.actions.ActionIds;
+import org.eclipse.gmf.runtime.diagram.ui.internal.actions.PromptingDeleteAction;
+import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramUIMessages;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocumentProvider;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -34,12 +43,15 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorMatchingStrategy;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.navigator.resources.ProjectExplorer;
@@ -47,6 +59,11 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.IShowInTargetList;
 import org.eclipse.ui.part.ShowInContext;
 
+import soundgates.diagram.edit.parts.AtomicSoundComponent2EditPart;
+import soundgates.diagram.edit.parts.CompositeSoundComponent2EditPart;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
+import soundgates.diagram.edit.parts.PortEditPart;
 import soundgates.diagram.navigator.SoundgatesNavigatorItem;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
@@ -106,6 +123,66 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		return root;
 	}
 
+	@Override
+	protected KeyHandler getKeyHandler() {
+		// TODO Auto-generated method stub
+		KeyHandler keyHandler =  super.getKeyHandler();
+		
+        ActionRegistry registry = getActionRegistry();
+        IAction action;
+
+        action = new SoundgatesPromptingDeleteAction(this);
+        action.setText(DiagramUIMessages.DiagramEditor_Delete_from_Diagram);
+        registry.registerAction(action);
+        getSelectionActions().add(action.getId());
+        
+        keyHandler.remove(KeyStroke.getPressed(SWT.DEL, 127, 0));
+        keyHandler.remove(KeyStroke.getPressed(SWT.DEL, 8, 0));
+        
+        keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+                getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+        keyHandler.put(KeyStroke.getPressed(SWT.BS, 8, 0),
+                getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+        
+        return keyHandler;
+	}
+	
+	class SoundgatesPromptingDeleteAction extends PromptingDeleteAction {
+
+		public SoundgatesPromptingDeleteAction(IWorkbenchPart part) {
+			super(part);
+		}
+		
+		@Override
+		public Command createCommand(List objects) {
+			if(listContainsEditPartsNotToRemove(objects))
+				return new EmptyCommand();
+			else
+				return super.createCommand(objects);
+		}
+		
+		public boolean listContainsEditPartsNotToRemove(List objects){
+			for(Object object : objects){
+				if(		object instanceof PortEditPart ||
+						object instanceof AtomicSoundComponent2EditPart ||
+						object instanceof CompositeSoundComponent2EditPart ||
+						object instanceof Link2EditPart ||
+						object instanceof DelegationEditPart)
+					return true;
+			}
+			return false;
+		}
+
+	}
+	
+	class EmptyCommand extends Command{
+		@Override
+		public boolean canExecute() {
+			return false;
+		}
+	}
+
+	
 	/**
 	 * @generated
 	 */

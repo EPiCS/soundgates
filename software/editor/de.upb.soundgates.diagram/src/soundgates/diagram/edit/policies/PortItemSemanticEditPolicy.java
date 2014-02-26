@@ -1,18 +1,10 @@
 package soundgates.diagram.edit.policies;
 
-import java.util.Iterator;
-
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gmf.runtime.diagram.core.commands.DeleteCommand;
-import org.eclipse.gmf.runtime.emf.commands.core.command.CompositeTransactionalCommand;
-import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
-import org.eclipse.gmf.runtime.notation.Edge;
-import org.eclipse.gmf.runtime.notation.View;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.DataType;
@@ -20,10 +12,7 @@ import soundgates.Direction;
 import soundgates.Port;
 import soundgates.diagram.edit.commands.LinkCreateCommand;
 import soundgates.diagram.edit.commands.LinkReorientCommand;
-import soundgates.diagram.edit.parts.DelegationEditPart;
-import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
-import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
 import soundgates.impl.PatchImpl;
 
@@ -44,78 +33,15 @@ public class PortItemSemanticEditPolicy extends
 	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
-
-		View view = (View) getHost().getModel();
-
-		if (view.getElement().eContainer() instanceof AtomicSoundComponent)
-			return null;
-		else {
-			CompositeTransactionalCommand cmd = new CompositeTransactionalCommand(
-					getEditingDomain(), null);
-			cmd.setTransactionNestingEnabled(false);
-			for (Iterator<?> it = view.getTargetEdges().iterator(); it
-					.hasNext();) {
-				Edge incomingLink = (Edge) it.next();
-				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == LinkEditPart.VISUAL_ID) {
-					DestroyElementRequest r = new DestroyElementRequest(
-							incomingLink.getElement(), false);
-					cmd.add(new DestroyElementCommand(r));
-					cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
-					continue;
-				}
-				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == Link2EditPart.VISUAL_ID) {
-					DestroyElementRequest r = new DestroyElementRequest(
-							incomingLink.getElement(), false);
-					cmd.add(new DestroyElementCommand(r));
-					cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
-					continue;
-				}
-				if (SoundgatesVisualIDRegistry.getVisualID(incomingLink) == DelegationEditPart.VISUAL_ID) {
-					DestroyElementRequest r = new DestroyElementRequest(
-							incomingLink.getElement(), false);
-					cmd.add(new DestroyElementCommand(r));
-					cmd.add(new DeleteCommand(getEditingDomain(), incomingLink));
-					continue;
-				}
-			}
-			for (Iterator<?> it = view.getSourceEdges().iterator(); it
-					.hasNext();) {
-				Edge outgoingLink = (Edge) it.next();
-				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == LinkEditPart.VISUAL_ID) {
-					DestroyElementRequest r = new DestroyElementRequest(
-							outgoingLink.getElement(), false);
-					cmd.add(new DestroyElementCommand(r));
-					cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
-					continue;
-				}
-				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == Link2EditPart.VISUAL_ID) {
-					DestroyElementRequest r = new DestroyElementRequest(
-							outgoingLink.getElement(), false);
-					cmd.add(new DestroyElementCommand(r));
-					cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
-					continue;
-				}
-				if (SoundgatesVisualIDRegistry.getVisualID(outgoingLink) == DelegationEditPart.VISUAL_ID) {
-					DestroyElementRequest r = new DestroyElementRequest(
-							outgoingLink.getElement(), false);
-					cmd.add(new DestroyElementCommand(r));
-					cmd.add(new DeleteCommand(getEditingDomain(), outgoingLink));
-					continue;
-				}
-			}
-			EAnnotation annotation = view.getEAnnotation("Shortcut"); //$NON-NLS-1$
-			if (annotation == null) {
-				// there are indirectly referenced children, need extra commands: false
-				addDestroyShortcutsCommand(cmd, view);
-				// delete host element
-				cmd.add(new DestroyElementCommand(req));
-			} else {
-				cmd.add(new DeleteCommand(getEditingDomain(), view));
-			}
-			return getGEFWrapper(cmd.reduce());
-		}
+			return new EmptyCommand();		
 	}
 
+	class EmptyCommand extends Command{
+		@Override
+		public boolean canExecute() {
+			return false;
+		}
+	}
 	/**
 	 * @generated
 	 */
