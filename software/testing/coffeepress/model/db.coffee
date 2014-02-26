@@ -7,26 +7,21 @@ Schema = mongoose.Schema
 
 # Create Schema
 executionSchema = new Schema(
-  timestamp: String,
+  timestamp: {type: Number},
   components: [{
     uid: String,
     type: { type: String },
-    samples: [Number],
+    control_ports: [ { name: String, values: [Number] } ]
+    input_samples: [ { name: String, values: [Number] } ]
+    output_samples: [ { name: String, values: [Number] } ]
     execution_times: [Number]
   }]
-)
-
-executionListSchema = new Schema(
-  timestamp: Number
 )
 
 # Create model out of our schema
 # At runtime it serves as a constructor to build instances
 mongoose.model 'Execution', executionSchema
-mongoose.model "ExecutionList", executionListSchema
 
 # Connect to the DB
 mongoose.connect "mongodb://localhost:27017/soundgates"
 
-#db = mongoose.connection
-#db.on 'error', console.error
