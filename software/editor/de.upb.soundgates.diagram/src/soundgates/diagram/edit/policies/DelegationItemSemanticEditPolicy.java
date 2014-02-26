@@ -1,7 +1,6 @@
 package soundgates.diagram.edit.policies;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 
 import soundgates.diagram.providers.SoundgatesElementTypes;
@@ -20,10 +19,17 @@ public class DelegationItemSemanticEditPolicy extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
-		return getGEFWrapper(new DestroyElementCommand(req));
+			return new EmptyCommand();		
+	}
+
+	class EmptyCommand extends Command{
+		@Override
+		public boolean canExecute() {
+			return false;
+		}
 	}
 
 }
