@@ -52,8 +52,7 @@ type hwtargs_t is array (0 to MAX_HWT_ARGS - 1) of std_logic_vector(DWORD_WIDTH 
 
 type hwtio_t is record    
     base_addr : std_logic_vector(DWORD_WIDTH - 1 downto 0);
-    f_step    : natural; 
-    argptr    : unsigned(4 downto 0);
+    f_step    : integer range 0 to MAX_HWT_ARGS + 2;
     argv      : hwtargs_t;   
 end record;
 
@@ -108,11 +107,11 @@ package body soundgates_reconos_pkg is
 
     procedure hwtio_init( signal   hwt_args : inout hwtio_t ) is
 
-    begin    
+    begin
+    
         hwt_args.f_step     <= 0;
         hwt_args.base_addr  <= (others => '0');
-        hwt_args.argptr     <= (others => '0');
-        hwt_args.argv       <= (others => (others => '0'));
+        
     end procedure hwtio_init;
 
     procedure get_hwt_args(
@@ -137,18 +136,18 @@ package body soundgates_reconos_pkg is
                if (patially_done) then
                 hwt_args.f_step <= 1;
                end if;
-            when 1 =>   -- argc + 1
-                if (hwt_args.argptr = to_unsigned(argc, 5)) then
-                    hwt_args.f_step <= 2;
-                else
-                    memif_read_word(i_memif, o_memif, 
-                                    std_logic_vector(unsigned(hwt_args.base_addr) + (SHIFT_LEFT(hwt_args.argptr, 2))), 
-                                    hwt_args.argv(to_integer(hwt_args.argptr)) , patially_done);
-                                    
-                    if (patially_done) then                    
-                        hwt_args.argptr <= hwt_args.argptr + 1;
-                    end if;
-                end if;            
+            -- For simulation purposes write the number of expected hardware arguements here
+            -- Example: 15 arguements write "when 1 to 15 => ..."
+            -- For synthesis purposes write "when 1 to argc + 1 =>..." this becomes locally static during synthesis
+            when 1 to 31 =>   -- argc + 1
+                memif_read_word(i_memif, o_memif, 
+                                std_logic_vector(unsigned(hwt_args.base_addr) + ((hwt_args.f_step-1) * 4)), 
+                                hwt_args.argv(hwt_args.f_step-1) , patially_done);
+                    
+                 if (patially_done) then
+                     hwt_args.f_step <= hwt_args.f_step + 1;
+                 end if;
+
             when others =>
                 done := True;
                 hwt_args.f_step <= 0;

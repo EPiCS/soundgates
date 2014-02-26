@@ -173,7 +173,7 @@ architecture Behavioral of hwt_fir is
     signal x_i          : signed(23 downto 0);     -- 24 bit internal input  sample
     signal y_i          : signed(23 downto 0);     -- 24 bit internal output sample
     
-    signal sample_in    : std_logic_vector(SAMPLE_WIDTH - 1 downto 0) := (others =>'0');
+    signal sample_in    : std_logic_vector(SAMPLE_WIDTH - 1 downto 0);
     signal sample_out   : std_logic_vector(SAMPLE_WIDTH - 1 downto 0);
 
     signal coefficients_i16  : mem16(FIR_ORDER downto 0);
@@ -294,6 +294,7 @@ begin
     o_RAMAddr_fir  <= std_logic_vector(TO_UNSIGNED(ptr, C_LOCAL_RAM_ADDRESS_WIDTH));
     
     o_RAMData_fir  <= sample_out;
+    sample_in      <= i_RAMData_fir;
     
     uut: fir
     generic map (
@@ -378,7 +379,7 @@ begin
     
     
     FIR_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
-        variable done : boolean := False;            
+        variable done : boolean;
     begin
         if rst = '1' then
         
@@ -391,8 +392,7 @@ begin
             osif_ctrl_signal    <= (others => '0');
             
             state               <= STATE_IDLE;
-            o_RAMWE_fir         <= '0';
-            fir_ce              <= '0';
+            done                := false;
             ptr                 <= 0;
             sample_count        <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);  -- number of samples processed
           
@@ -437,23 +437,18 @@ begin
 			 
             when STATE_PROCESS =>
                 if sample_count > 0 then
-                    case process_state is
-                    
+                    case process_state is                    
                     -- Read one sample from local memory
                     when 0 =>
-                        sample_in     <= i_RAMData_fir; -- not sure here                  
+                        fir_ce        <= '1';                        
                         process_state <= 1;
                     when 1 =>
-                        fir_ce        <= '1';           -- calculate one sample                 
-                        process_state <= 2;
-                    when 2 =>
                         o_RAMWE_fir   <= '1';
+                        process_state <= 2;
+                    when 2 =>                        
                         sample_count  <= sample_count - 1;
                         ptr           <= ptr + 1;
                         process_state <= 3;
-                    -- delay
-                    when 3 =>
-                        process_state <= 4;
                     when others =>
                         process_state <= 0;
                     end case;
@@ -484,28 +479,3 @@ begin
         end if;
     end process;
 end Behavioral;
-
--- ====================================
--- = RECONOS Function Library - Copy and Paste!
--- ====================================        
--- osif_mbox_put(i_osif, o_osif, MBOX_NAME, SOURCESIGNAL, ignore, done);
--- osif_mbox_get(i_osif, o_osif, MBOX_NAME, TARGETSIGNAL, done);
-
--- Read from shared memory:
-
--- Speicherzugriffe:
--- Wortzugriff:
--- memif_read_word(i_memif, o_memif, addr, TARGETSIGNAL, done);
--- memif_write_word(i_memif, o_memif, addr, SOURCESIGNAL, done);
-
--- Die Laenge ist bei Speicherzugriffen Byte adressiert!
--- memif_read(i_ram, o_ram, i_memif, o_memif, SRC_ADDR std_logic_vector(31 downto 0);
---            dst_addr std_logic_vector(31 downto 0);
---            BYTES std_logic_vector(23 downto 0);
---            done);
--- memif_write(i_ram, o_ram, i_memif, o_memif,
---             src_addr : in std_logic_vector(31 downto 0),
---             dst_addr : in std_logic_vector(31 downto 0);
---             len      : in std_logic_vector(23 downto 0);
---             done);
-
