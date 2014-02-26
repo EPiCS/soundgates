@@ -12,5 +12,17 @@
             class="soundgates.SoundgatesPackage"
             genModel="model/soundgates.genmodel"/>
    </extension>
+   <extension
+         id="soundgates_product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="Soundgates Development Environment">
+         <property
+               name="appName"
+               value="Soundgates Development Environment">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
