@@ -250,6 +250,9 @@ void Soundbuffer::run()
 
 Soundbuffer::~Soundbuffer()
 {
+	snd_pcm_hw_free(this->pcm_handle);
+	snd_pcm_close(this->pcm_handle);
+	free (this->buffer);
 }
 
 char* Soundbuffer::getNextFrames()
