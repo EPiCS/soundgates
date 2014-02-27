@@ -42,11 +42,6 @@ void RecordingSoundComponent::process()
 	// Therefore we call the start playback method here
 	this->buffer->startPlayback();
 	this->buffer->readbuffer(bufferArray,bufferSize);
-
-	std::stringstream ss;
-	for (int i =0; i < bufferSize; i++ ) {
-		ss << bufferArray[i];
-	}
 }
 
 void RecordingSoundComponent::init()

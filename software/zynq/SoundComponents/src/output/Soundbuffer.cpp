@@ -13,9 +13,12 @@ Soundbuffer::Soundbuffer(bool record)
 	this->SOUNDBUFFERSIZE = cfg.get<int>(
 			SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
 	;
+
 	this->ALSACHARS = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
 	unsigned int samplerate = Synthesizer::config::samplerate;
 
+	// It is important that ALSACHAR divides SOUNDBUFFERSIZE!
+	// Else we would access memory behind the buffer when sending data to the soundcard.
 	this->buffer = (char*) malloc(this->SOUNDBUFFERSIZE * sizeof(char));
 
 	int err;
@@ -35,6 +38,7 @@ Soundbuffer::Soundbuffer(bool record)
 
 	snd_pcm_stream_t stream;
 	std::string devName;
+
 	if (!recorder)
 	{
 		stream = SND_PCM_STREAM_PLAYBACK;
@@ -46,10 +50,12 @@ Soundbuffer::Soundbuffer(bool record)
 		devName = cfg.get<std::string>(SoundgatesConfig::CFG_DEVICE_NAME_IN);
 	}
 
+	// Open the audio device. Access is exclusive, i.e. this will fail if some other application is playing sound at the moment
 	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0))
 			< 0)
 	{
 		fprintf(stderr, "cannot open audio device (%s)\n", snd_strerror(err));
+		// Flag this object as not working.
 		this->sane = false;
 	}
 	else
@@ -88,6 +94,7 @@ Soundbuffer::Soundbuffer(bool record)
 		fprintf(stderr, "cannot set sample format (%s)\n", snd_strerror(err));
 		this->sane = false;
 	}
+	// This is the internal buffer size on the sound card.
 	if ((err = snd_pcm_hw_params_set_buffer_size(this->pcm_handle,
 			this->hw_params, 2048)) < 0)
 	{
@@ -120,6 +127,7 @@ Soundbuffer::Soundbuffer(bool record)
 		fprintf(stderr, "cannot set parameters (%s)\n", snd_strerror(err));
 		this->sane = false;
 	}
+	// snd_pcm_prepare initializes the device for recording/playback
 	if ((err = snd_pcm_prepare(this->pcm_handle)) < 0)
 	{
 		fprintf(stderr, "cannot prepare audio interface for use (%s)\n",
@@ -137,10 +145,18 @@ Soundbuffer::Soundbuffer(bool record)
 
 void Soundbuffer::run()
 {
+	// Number of frames that the soundcard can accept / has recorded
 	int nframes;
 	int err = 0;
+	// Flag if a bufferUnderrun (overrun when recording) occurred
 	bool bufferUnderrun = false;
+
+	// Prepare again (this does not hurt)
 	snd_pcm_prepare(this->pcm_handle);
+	// Additionally, we need to set the state to running, if we are a recorder.
+	// Otherwise ALSA will always return 0 when asked for the number of available frames.
+	if (this->recorder)
+		snd_pcm_start(this->pcm_handle);
 
 	while (this->running)
 	{
@@ -151,17 +167,19 @@ void Soundbuffer::run()
 		}
 		else
 		{
-			//If a buffer underrun occured, we need to reinitialize the ALSA device
+			//If a buffer underrun/overrun occured, we need to reinitialize the ALSA device and restart the recorder
 			if (bufferUnderrun)
 			{
 				snd_pcm_prepare(this->pcm_handle);
+				if (this->recorder)
+					snd_pcm_start(this->pcm_handle);
 				bufferUnderrun = false;
 			}
 
 			nframes = 0;
 
 			// Wait for the audio device to become ready (or timeout after a second)
-			if ((err = snd_pcm_wait(this->pcm_handle, 1000)) < 0)
+			if ((err = snd_pcm_wait(this->pcm_handle, 1000)) == 0)
 			{
 				fprintf(stderr,
 						"poll failed (%s): Most likely a buffer underrun occured\n",
@@ -170,25 +188,28 @@ void Soundbuffer::run()
 				//	this->running = 0;
 			}
 
-			// Ask the audio device how many frames it can accept
+			// Ask the audio device how many frames it can accept / has available
 			if (!bufferUnderrun
 					&& (nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
 			{
 				fprintf(stderr, "unknown ALSA avail update return value (%s)\n",
 						snd_strerror(nframes));
-				this->running = 0;
+				bufferUnderrun = true;
 			}
 
 			// Only write to the soundcard if alsa requested enough frames
-			if (!bufferUnderrun && (nframes >= this->alsaSamples))
+			if ((!bufferUnderrun && (nframes >= this->alsaSamples)))
 			{
 				this->mutex.lock();
+				// get a pointer to the right position in the ringbuffer
 				char* frames = this->getNextFrames();
 
 				if (!this->recorder)
 				{
 					// frames points to the "beginning" of the ringbuffer.
-					// Write data from here to alsa
+					// Write data from here to ALSA
+					// Don't write more frames, even if there were more available!
+					// Sending always chunks of the same size ensures that we never run past the end of our buffer
 					if ((err = snd_pcm_writei(this->pcm_handle, frames,
 							this->alsaSamples)) < 0)
 					{
@@ -255,10 +276,16 @@ char* Soundbuffer::getNextFrames()
 					&& nextReadOffset > this->writeoffset))
 			|| (ptr_return && (this->readoffset < this->writeoffset)))
 	{
-		std::cerr
-				<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:"
-				<< this->readoffset << "  WO:" << this->writeoffset
-				<< std::endl;
+		if (!this->recorder)
+			std::cerr
+					<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:"
+					<< this->readoffset << "  WO:" << this->writeoffset
+					<< std::endl;
+		else
+			std::cerr
+					<< "Record buffer is full! Will now overwrite previous samples again! RO:"
+					<< this->readoffset << "  WO:" << this->writeoffset
+					<< std::endl;
 	}
 	else
 	{
@@ -383,6 +410,7 @@ void Soundbuffer::fillbuffer(char* data, int size)
 		return;
 	}
 
+	// Block as long as the buffer can't accept new samples
 	while (!this->canAcceptData(size))
 	{
 		usleep(100);
@@ -435,6 +463,7 @@ bool Soundbuffer::canAcceptData(int size)
 
 int Soundbuffer::getFrameSize()
 {
+	// S32_LE and 1 channel is fixed at the moment, therefore the framesize is 4
 	return 4;
 }
 
@@ -454,7 +483,7 @@ public:
 	{
 		if (recorder)
 		{
-			return "Pathetic worm! You tried to write to an Input buffer!";
+			return "REPENT! You tried to write to an Input buffer!";
 		}
 		else
 		{
