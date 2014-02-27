@@ -38,7 +38,7 @@ SoundComponents += accumulatorcc \
 				  pwm \
 				  fir \
 				  log \
-				  ramp
+				  ramp 
 
 
 SRCDIR = ../src

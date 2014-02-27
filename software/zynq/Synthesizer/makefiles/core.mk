@@ -10,14 +10,14 @@ EXPORT_DIR=./libsynthesizercore
 # Compiler stuff
 CSYMBOLS=-DBOOST_LOG_DYN_LINK -DAPPLICATION_CONTEXT
 
-#CC=g++
-CC=$(XILINX_DIR)/arm-xilinx-linux-gnueabi-g++
+CC=g++
+#CC=$(XILINX_DIR)/arm-xilinx-linux-gnueabi-g++
 
-#CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../Libraries/x86_64/include"
-CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../Libraries/arm/include" 
+CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../Libraries/x86_64/include"
+#CFLAGS=-Wall -Wno-unused-variable -g3 -fPIC -O2 -isystem"../../Libraries/arm/include" 
 
-#LDFLAGS=-L"../../Libraries/boost_1_54/x86_64/lib"
-LDFLAGS=-L"../../Libraries/boost_1_54/arm/lib"
+LDFLAGS=-L"../../Libraries/boost_1_54/x86_64/lib"
+#LDFLAGS=-L"../../Libraries/boost_1_54/arm/lib"
 
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(C++_DEPS)),)

@@ -22,7 +22,7 @@ private:
 	boost::thread bufferThread;
 	boost::mutex mutex;
 
-	bool running, playing, sane;
+	bool running, playing, sane, recorder;
 
 	char* buffer;
 	int readoffset;
@@ -37,18 +37,42 @@ private:
 	void run();
 	char* getNextFrames();
 
+	/**
+	 * checks whether the output buffer can accept new data.
+	 * Can only be called if this->recorder == false
+	 */
 	bool canAcceptData(int size);
 
+	/**
+	 * Checks whether a component is a recorder or not depending on the parameter.
+	 * Throws an exception on failure.
+	 */
+	void probeDeviceType(bool recorder);
+
 public:
-	Soundbuffer();
+	Soundbuffer(bool record);
 	~Soundbuffer();
 
 	void startPlayback();
 	void stopThread();
 
+	/**
+	 * plays a testsequence
+	 * can only be called if this->recorder == false
+	 */
 	void testPlayback();
 
+	/**
+	 * fills the output buffer with data.
+	 * Can only be called if this->recorder == false
+	 */
 	void fillbuffer(char*, int size);
+
+	/**
+	 * reads the buffer on a recording device
+	 * Can only be called if this->recorder == true
+	 */
+	void readbuffer(char*, int size);
 
 	int getFrameSize();
 };

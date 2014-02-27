@@ -7,11 +7,13 @@
 
 #include "Soundbuffer.hpp"
 
-Soundbuffer::Soundbuffer()
+Soundbuffer::Soundbuffer(bool record)
 {
-	SoundgatesConfig& cfg   = SoundgatesConfig::getInstance();
-	this->SOUNDBUFFERSIZE   = cfg.get<int>(SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);;
-	this->ALSACHARS         = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
+	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
+	this->SOUNDBUFFERSIZE = cfg.get<int>(
+			SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
+	;
+	this->ALSACHARS = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
 	unsigned int samplerate = Synthesizer::config::samplerate;
 
 	this->buffer = (char*) malloc(this->SOUNDBUFFERSIZE * sizeof(char));
@@ -25,16 +27,27 @@ Soundbuffer::Soundbuffer()
 	this->playing = false;
 	this->writeoffset = 0;
 	this->readoffset = 0;
+	this->recorder = record;
 	for (int i = 0; i < SOUNDBUFFERSIZE; i++)
 	{
 		this->buffer[i] = 0;
 	}
 
-	snd_pcm_stream_t stream = SND_PCM_STREAM_PLAYBACK;
+	snd_pcm_stream_t stream;
+	std::string devName;
+	if (!recorder)
+	{
+		stream = SND_PCM_STREAM_PLAYBACK;
+		devName = cfg.get<std::string>(SoundgatesConfig::CFG_DEVICE_NAME);
+	}
+	else
+	{
+		stream = SND_PCM_STREAM_CAPTURE;
+		devName = cfg.get<std::string>(SoundgatesConfig::CFG_DEVICE_NAME_IN);
+	}
 
-	std::string devName = cfg.get<std::string>(SoundgatesConfig::CFG_DEVICE_NAME);
-
-	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0)) < 0)
+	if ((err = snd_pcm_open(&(this->pcm_handle), devName.c_str(), stream, 0))
+			< 0)
 	{
 		fprintf(stderr, "cannot open audio device (%s)\n", snd_strerror(err));
 		this->sane = false;
@@ -109,7 +122,8 @@ Soundbuffer::Soundbuffer()
 	}
 	if ((err = snd_pcm_prepare(this->pcm_handle)) < 0)
 	{
-		fprintf(stderr, "cannot prepare audio interface for use (%s)\n", snd_strerror(err));
+		fprintf(stderr, "cannot prepare audio interface for use (%s)\n",
+				snd_strerror(err));
 		this->sane = false;
 	}
 
@@ -141,7 +155,7 @@ void Soundbuffer::run()
 			if (bufferUnderrun)
 			{
 				snd_pcm_prepare(this->pcm_handle);
-				bufferUnderrun =false;
+				bufferUnderrun = false;
 			}
 
 			nframes = 0;
@@ -149,13 +163,16 @@ void Soundbuffer::run()
 			// Wait for the audio device to become ready (or timeout after a second)
 			if ((err = snd_pcm_wait(this->pcm_handle, 1000)) < 0)
 			{
-				fprintf(stderr, "poll failed (%s): Most likely a buffer underrun occured\n", snd_strerror(err));
+				fprintf(stderr,
+						"poll failed (%s): Most likely a buffer underrun occured\n",
+						snd_strerror(err));
 				bufferUnderrun = true;
 				//	this->running = 0;
 			}
 
 			// Ask the audio device how many frames it can accept
-			if (!bufferUnderrun && (nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
+			if (!bufferUnderrun
+					&& (nframes = snd_pcm_avail_update(this->pcm_handle)) < 0)
 			{
 				fprintf(stderr, "unknown ALSA avail update return value (%s)\n",
 						snd_strerror(nframes));
@@ -168,19 +185,39 @@ void Soundbuffer::run()
 				this->mutex.lock();
 				char* frames = this->getNextFrames();
 
-				if ((err = snd_pcm_writei(this->pcm_handle, frames,
-						this->alsaSamples)) < 0)
+				if (!this->recorder)
 				{
-					fprintf(stderr, "write to audio interface failed (%s)\n",
-							snd_strerror(err));
-					if (err == -32)
+					// frames points to the "beginning" of the ringbuffer.
+					// Write data from here to alsa
+					if ((err = snd_pcm_writei(this->pcm_handle, frames,
+							this->alsaSamples)) < 0)
 					{
-						bufferUnderrun = true;
+						fprintf(stderr,
+								"write to audio interface failed (%s)\n",
+								snd_strerror(err));
+						if (err == -32)
+						{
+							bufferUnderrun = true;
+						}
+						else
+						{
+							// Some other error, not just a buffer underrun
+							this->running = 0;
+						}
 					}
-					else
+				}
+				else
+				{
+					// frames points to the "end" of the ringbuffer
+					// read data from alsa and write it here
+					if ((err = snd_pcm_readi(this->pcm_handle, frames,
+							this->alsaSamples)) < 0)
 					{
-						// Some other error, not just a buffer underrun
-						this->running = 0;
+						fprintf(stderr,
+								"read from audio interface failed (%s)\n",
+								snd_strerror(err));
+						//TODO Check for the correct error value here
+						bufferUnderrun = true;
 					}
 				}
 				this->mutex.unlock();
@@ -210,11 +247,17 @@ char* Soundbuffer::getNextFrames()
 	// In that case we don't want to advance the readoffset past the writeoffset
 	// Write and read offset are allowed to be same. This would mean the buffer is completely filled.
 	// Therefore, don't check for equality here.
-	if ( 	(!ptr_return && (this->readoffset < this->writeoffset && nextReadOffset > this->writeoffset )) ||
-		 	(ptr_return  && (this->readoffset < this->writeoffset)))
+	//
+	// if this is a recording component, then we might have not pulled samples fast enough from the buffer
+	// and we would overwrite previously written ones
+	if ((!ptr_return
+			&& (this->readoffset < this->writeoffset
+					&& nextReadOffset > this->writeoffset))
+			|| (ptr_return && (this->readoffset < this->writeoffset)))
 	{
 		std::cerr
-				<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:" << this->readoffset << "  WO:" << this->writeoffset
+				<< "Buffer has run dry! This should not happen! Will now play previous samples again! RO:"
+				<< this->readoffset << "  WO:" << this->writeoffset
 				<< std::endl;
 	}
 	else
@@ -239,6 +282,8 @@ void Soundbuffer::stopThread()
 
 void Soundbuffer::testPlayback()
 {
+	probeDeviceType(false);
+
 	printf("Starting test playback!\n");
 	int err;
 	int nframes = 0;
@@ -290,8 +335,41 @@ void Soundbuffer::testPlayback()
 	printf("Stopping test playback!\n");
 }
 
+void Soundbuffer::readbuffer(char* data, int size)
+{
+	probeDeviceType(true);
+
+	if ((size & (size - 1)) != 0)
+	{
+		std::cerr << "You need to fill the buffer with array sizes x^2"
+				<< std::endl;
+		return;
+	}
+	if (size >= SOUNDBUFFERSIZE)
+	{
+		std::cerr << "Too many samples. Might be at most "
+				<< SOUNDBUFFERSIZE / 2 << std::endl;
+		return;
+	}
+
+	this->mutex.lock();
+	for (int i = 0; i < size; i++)
+	{
+		data[i] = this->buffer[this->writeoffset];
+		this->writeoffset++;
+		if (this->writeoffset >= SOUNDBUFFERSIZE)
+		{
+			this->writeoffset = 0;
+		}
+	}
+	this->mutex.unlock();
+
+}
+
 void Soundbuffer::fillbuffer(char* data, int size)
 {
+	probeDeviceType(false);
+
 	if ((size & (size - 1)) != 0)
 	{
 		std::cerr << "You need to fill the buffer with array sizes x^2"
@@ -321,11 +399,12 @@ void Soundbuffer::fillbuffer(char* data, int size)
 		}
 	}
 	this->mutex.unlock();
-
 }
 
 bool Soundbuffer::canAcceptData(int size)
 {
+	probeDeviceType(false);
+
 	int free;
 
 	this->mutex.lock();
@@ -357,4 +436,38 @@ bool Soundbuffer::canAcceptData(int size)
 int Soundbuffer::getFrameSize()
 {
 	return 4;
+}
+
+class WrongDirectionException: public std::exception
+{
+private:
+	bool recorder;
+public:
+	WrongDirectionException(bool recorder)
+	{
+		this->recorder = recorder;
+	}
+	virtual ~WrongDirectionException() throw ()
+	{
+	}
+	virtual const char* what() const throw ()
+	{
+		if (recorder)
+		{
+			return "Pathetic worm! You tried to write to an Input buffer!";
+		}
+		else
+		{
+			return "You FOOL! You cannot read from an Output buffer!";
+		}
+
+	}
+};
+
+void Soundbuffer::probeDeviceType(bool recorder)
+{
+	if (recorder != this->recorder)
+	{
+		throw WrongDirectionException(this->recorder);
+	}
 }
