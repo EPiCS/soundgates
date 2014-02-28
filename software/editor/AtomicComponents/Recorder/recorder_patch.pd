@@ -1,0 +1,9 @@
+#N canvas 0 49 718 849 10;
+#X obj 39 152 outlet;
+#X obj -16 33 loadbang;
+#X text 0 0 outports Value;
+#X msg 25 95 float 440;
+#X msg 132 126 replace 2 Value;
+#X connect 1 0 3 0;
+#X connect 3 0 0 0;
+#X connect 3 0 4 0;

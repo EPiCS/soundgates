@@ -7,7 +7,7 @@
 		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
 	</Ports>
 	<Properties>
-		<UserStringProperty InitialValue="lp" Name="lp/hp"/>
+		<UserStringProperty InitialValue="Lowpass" Name="FilterType" Options="Lowpass|Highpass"/>
 	</Properties>
 	<Code>
 		<Simulation/>

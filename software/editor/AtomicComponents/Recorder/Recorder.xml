@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Recorder</Type>
+	<Ports>
+		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
+	</Ports>
+	<Code>
+		<Simulation/>
+		<Device>
+			<Implementation type="hw" name="adc">
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation type="sw" name="adc">
+			    <PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>
