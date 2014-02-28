@@ -60,8 +60,8 @@ expandComponent = (component) ->
 
 __createDiagram = (component) ->
   console.log "Info: Creating compnent diagram for " + component.uid
-  console.dir component
-  chart = nv.addGraph ->
+  nv.addGraph ->
+    console.dir component
     chart = nv.models.lineChart()
             .margin(left: 20)
             .useInteractiveGuideline(true)
@@ -77,18 +77,53 @@ __createDiagram = (component) ->
     #Select the <svg> element you want to render the chart in.   
     #Populate the <svg> element with chart data...
     #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
-    
+    selector = __replaceRaute(component.uid)
+    selector = '#' + selector
+    console.log "DEBUG:"
+    data = __prepareSamples (component.input_samples[0].values)
+    console.dir data
+    d3.select(selector).append('svg').datum(data).call(chart)
     #Update the chart when window resizes.
-    nv.utils.windowResize ->
-      chart.update()
-      return 
+    #nv.utils.windowResize(chart.update);
+    #nv.utils.windowResize ->
+    #  chart.update()
+    #  return 
     return chart
-  selector = __replaceRaute(component.uid)
-  selector = '#' + selector
-  console.dir component.samples
-  d3.select(selector).append('svg').datum(component.samples).call chart #Finally, render the chart
-  chart.update()
 
+__prepareSamples = (samples) ->
+  data = []
+  for sample, i in samples
+      data.push {x:i, y: sample} 
+  return [{ values: data, key: 'Wave' }]
+ 
+#   //Data is represented as an array of {x,y} pairs.
+#   for (var i = 0; i < 100; i++) {
+#     sin.push({x: i, y: Math.sin(i/10)});
+#     sin2.push({x: i, y: Math.sin(i/10) *0.25 + 0.5});
+#     cos.push({x: i, y: .5 * Math.cos(i/10)});
+#   }
+ 
+#   //Line chart data should be sent as an array of series objects.
+#   return [
+#     {
+#       values: sin,      //values - represents the array of {x,y} data points
+#       key: 'Sine Wave', //key  - the name of the series.
+#       color: '#ff7f0e'  //color - optional: choose your own line color.
+#     },
+#     {
+#       values: cos,
+#       key: 'Cosine Wave',
+#       color: '#2ca02c'
+#     },
+#     {
+#       values: sin2,
+#       key: 'Another sine wave',
+#       color: '#7777ff',
+#       area: true      //area - set to true if you want this line to turn into a filled area chart.
+#     }
+#   ];
+# }
+  
 __replaceRaute = (text) ->
   return text.replace /#/g, '_'
 
