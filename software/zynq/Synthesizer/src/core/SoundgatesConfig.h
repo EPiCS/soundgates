@@ -37,6 +37,7 @@ public:
 	    CFG_SOUND_BUFFER_SIZE,
 	    CFG_ALSA_CHUNKS,
 	    CFG_DEVICE_NAME,
+	    CFG_DEVICE_NAME_IN,
 	    /* Network related configuration values */
 	    CFG_DEFAULT_TCP_PORT,
 	    CFG_DEFAULT_UDP_PORT,

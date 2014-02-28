@@ -48,7 +48,7 @@ void OutputSoundComponent::process()
 void OutputSoundComponent::init()
 {
 
-	this->buffer = new Soundbuffer();
+	this->buffer = new Soundbuffer(false);
 
 	std::cout << "Soundbuffer initialized" << std::endl;
 }

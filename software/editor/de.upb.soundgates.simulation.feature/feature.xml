@@ -20,13 +20,13 @@
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="Soundgates.codegen"/>
-      <import plugin="Soundgates" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.gmf.runtime.notation"/>
+      <import plugin="de.upb.soundgates.codegen"/>
+      <import plugin="de.upb.soundgates" version="1.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
-         id="Soundgates.simulation"
+         id="de.upb.soundgates.simulation"
          download-size="0"
          install-size="0"
          version="0.0.0"

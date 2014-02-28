@@ -21,6 +21,7 @@ void SoundgatesConfig::load(const std::string& path){
     m_EnumMap[CFG_SOUND_BUFFER_SIZE]   = "synthesizer.alsa.buffersize";
     m_EnumMap[CFG_ALSA_CHUNKS]         = "synthesizer.alsa.chunks";
     m_EnumMap[CFG_DEVICE_NAME]         = "synthesizer.alsa.devicename";
+    m_EnumMap[CFG_DEVICE_NAME_IN]	   = "synthesizer.alsa.devicename_in";
     m_EnumMap[CFG_USE_HW_THREADS]      = "synthesizer.core.hwt_support";
     m_EnumMap[CFG_DEFAULT_TCP_PORT]    = "synthesizer.core.ports.udp";
     m_EnumMap[CFG_DEFAULT_UDP_PORT]    = "synthesizer.core.ports.tcp";
@@ -52,6 +53,7 @@ void SoundgatesConfig::loadDefault(){
 	m_PropertyTree.put(m_EnumMap[CFG_ALSA_CHUNKS],         1024);
 	m_PropertyTree.put(m_EnumMap[CFG_SOUND_BUFFER_SIZE],   16384);
 	m_PropertyTree.put(m_EnumMap[CFG_DEVICE_NAME],         "plughw:0,0");
+	m_PropertyTree.put(m_EnumMap[CFG_DEVICE_NAME_IN],       "plughw:0,0");
 
 	/* Synthesizer realted configuration values */
 	m_PropertyTree.put(m_EnumMap[CFG_DEFAULT_TCP_PORT],    "50050");

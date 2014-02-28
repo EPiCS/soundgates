@@ -23,6 +23,8 @@
    <WVObjectSize size="7" />
    <wave_markers>
       <marker time="4415000000" label="" />
+      <marker time="7025000000" label="" />
+      <marker time="7075000000" label="" />
    </wave_markers>
    <wvobject fp_name="/testbench/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
@@ -209,6 +211,10 @@
    <wvobject fp_name="group33" type="group">
       <obj_property name="label">UUT</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/clk" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
       <wvobject fp_name="/testbench/uut/coefficients_i16" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">coefficients_i16[28:0]</obj_property>
          <obj_property name="ObjectShortName">coefficients_i16[28:0]</obj_property>
@@ -365,11 +371,14 @@
          <wvobject fp_name="/testbench/uut/hwtio.base_addr" type="array" db_ref_id="1">
             <obj_property name="ElementShortName">.base_addr</obj_property>
             <obj_property name="ObjectShortName">hwtio.base_addr</obj_property>
-            <obj_property name="Radix">HEXRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/testbench/uut/hwtio.f_step" type="other" db_ref_id="1">
             <obj_property name="ElementShortName">.f_step</obj_property>
             <obj_property name="ObjectShortName">hwtio.f_step</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/hwtio.argptr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.argptr</obj_property>
+            <obj_property name="ObjectShortName">hwtio.argptr</obj_property>
          </wvobject>
          <wvobject fp_name="/testbench/uut/hwtio.argv" type="array" db_ref_id="1">
             <obj_property name="ElementShortName">.argv</obj_property>
@@ -551,13 +560,46 @@
          <obj_property name="ObjectShortName">osif_ctrl_signal[31:0]</obj_property>
          <obj_property name="Radix">HEXRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/testbench/uut/state" type="other" db_ref_id="1">
-         <obj_property name="ElementShortName">state</obj_property>
-         <obj_property name="ObjectShortName">state</obj_property>
+      <wvobject fp_name="/testbench/uut/uut/sample" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">sample[23:0]</obj_property>
+         <obj_property name="ObjectShortName">sample[23:0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sample_in" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">sample_in[31:0]</obj_property>
+         <obj_property name="ObjectShortName">sample_in[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/uut/x_in" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">x_in[23:0]</obj_property>
+         <obj_property name="ObjectShortName">x_in[23:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/ptr" type="other" db_ref_id="1">
+         <obj_property name="ElementShortName">ptr</obj_property>
+         <obj_property name="ObjectShortName">ptr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/uut/y_out" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">y_out[23:0]</obj_property>
+         <obj_property name="ObjectShortName">y_out[23:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/o_ramwe_fir" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">o_ramwe_fir</obj_property>
+         <obj_property name="ObjectShortName">o_ramwe_fir</obj_property>
       </wvobject>
       <wvobject fp_name="/testbench/uut/fir_ce" type="logic" db_ref_id="1">
          <obj_property name="ElementShortName">fir_ce</obj_property>
          <obj_property name="ObjectShortName">fir_ce</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/state" type="other" db_ref_id="1">
+         <obj_property name="ElementShortName">state</obj_property>
+         <obj_property name="ObjectShortName">state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/uut/taps" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">taps[27:0]</obj_property>
+         <obj_property name="ObjectShortName">taps[27:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group98" type="group">
@@ -1014,6 +1056,36 @@
       <wvobject fp_name="/testbench/uut/i_ram" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">i_ram</obj_property>
          <obj_property name="ObjectShortName">i_ram</obj_property>
+         <wvobject fp_name="/testbench/uut/i_ram.addr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.addr</obj_property>
+            <obj_property name="ObjectShortName">i_ram.addr</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_ram.data" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.data</obj_property>
+            <obj_property name="ObjectShortName">i_ram.data</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_ram.count" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.count</obj_property>
+            <obj_property name="ObjectShortName">i_ram.count</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_ram.remote_addr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.remote_addr</obj_property>
+            <obj_property name="ObjectShortName">i_ram.remote_addr</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_ram.remainder" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">.remainder</obj_property>
+            <obj_property name="ObjectShortName">i_ram.remainder</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/i_ram.step" type="other" db_ref_id="1">
+            <obj_property name="ElementShortName">.step</obj_property>
+            <obj_property name="ObjectShortName">i_ram.step</obj_property>
+            <obj_property name="Radix">HEXRADIX</obj_property>
+         </wvobject>
       </wvobject>
       <wvobject fp_name="/testbench/uut/o_ram" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">o_ram</obj_property>
@@ -1035,7 +1107,7 @@
          <wvobject fp_name="/testbench/uut/o_ram.count" type="array" db_ref_id="1">
             <obj_property name="ElementShortName">.count</obj_property>
             <obj_property name="ObjectShortName">o_ram.count</obj_property>
-            <obj_property name="Radix">HEXRADIX</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/testbench/uut/o_ram.remote_addr" type="array" db_ref_id="1">
             <obj_property name="ElementShortName">.remote_addr</obj_property>

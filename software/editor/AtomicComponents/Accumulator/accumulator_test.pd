@@ -1,8 +1,11 @@
-#N canvas 2400 836 958 362 10;
+#N canvas 720 342 718 262 10;
 #X floatatom 227 217 5 0 0 0 - - -;
 #X obj 214 135 accumulator_patch;
 #X msg 313 57 2000;
 #X msg 214 57 1;
+#X obj 292 207 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
 #X connect 1 0 0 0;
+#X connect 1 0 4 0;
 #X connect 2 0 1 1;
 #X connect 3 0 1 0;

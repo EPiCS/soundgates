@@ -1,0 +1,15 @@
+1 input/sw/'/in1 f'
+2 input/sw/'/in2 f'
+4 lesscc/sw
+5 const/sw/'440.0f'
+6 mulcc/sw
+7 sine/sw
+8 dac/sw
+
+#  
+1 4 '1,1'
+2 4 '1,2'
+4 6 '1,1'
+5 6 '1,2'
+6 7 '1,1'
+7 8 '1,1'
