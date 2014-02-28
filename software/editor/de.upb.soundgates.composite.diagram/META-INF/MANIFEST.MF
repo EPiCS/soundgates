@@ -7,9 +7,11 @@ Bundle-ClassPath: .
 Bundle-Activator: soundgatesComposite.diagram.part.SoundgatesCompositeDiagramEditorPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Export-Package: soundgatesComposite.diagram.edit.parts, 
+Export-Package: soundgatesComposite.diagram.XMLexport,
+ soundgatesComposite.diagram.edit.parts,
  soundgatesComposite.diagram.part,
- soundgatesComposite.diagram.providers
+ soundgatesComposite.diagram.providers,
+ soundgatesComposite.diagram.soundcomponents
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.core.expressions,

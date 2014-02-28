@@ -5,14 +5,11 @@ import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.core.runtime.CoreException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -27,13 +24,11 @@ import soundgatesComposite.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 public class CompositeSoundComponentExporter extends Exporter {
 
-	public static void exportToXML(CompositeSoundComponent compositeSoundComponentToExport) {
-	
+	public static Document getDocForCompositeSoundComponent(CompositeSoundComponent compositeSoundComponentToExport){
 		try {
-
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
+	
 			HashMap<SoundComponent,Integer> embeddedComponentsHashMap = new HashMap<SoundComponent, Integer>();
 			int componentCounter = 0;
 			
@@ -42,7 +37,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 			Element rootElement = doc.createElement("CompositeSoundComponent");
 			rootElement.setAttribute("Name", compositeSoundComponentToExport.getName());
 			doc.appendChild(rootElement);
-
+	
 			// port elements
 			Element portsElement = doc.createElement("Ports");
 			for(Port port : compositeSoundComponentToExport.getPorts()){
@@ -70,7 +65,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 							);
 				}
 				else if(embComponent instanceof CompositeSoundComponent){
-
+	
 					embeddedComponentsElement.appendChild(
 							getCompositeSoundComponentElement(
 									doc, 
@@ -114,6 +109,18 @@ public class CompositeSoundComponentExporter extends Exporter {
 				delegationsElement.appendChild(delegationElement);
 			}
 			rootElement.appendChild(delegationsElement);
+			return doc;
+		}
+		catch(Exception e){
+			return null;
+		}
+	}
+	
+	public static void exportToXML(CompositeSoundComponent compositeSoundComponentToExport) {
+	
+		try {
+
+			Document doc = getDocForCompositeSoundComponent(compositeSoundComponentToExport);
 			
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -128,12 +135,8 @@ public class CompositeSoundComponentExporter extends Exporter {
 			MessageDialogs.compositeSoundComponentWasExported(compositeSoundComponentToExport.getName());	
 			
 			AtomicSoundComponentLibrary.getXMLFolder().refreshLocal(1, null);
-
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		} catch (TransformerException tfe) {
-			tfe.printStackTrace();
-		} catch (CoreException e) {
+		
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

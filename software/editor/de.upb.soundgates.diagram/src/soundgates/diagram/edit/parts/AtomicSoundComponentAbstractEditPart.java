@@ -16,7 +16,7 @@ import soundgates.AtomicSoundComponent;
 import soundgates.Direction;
 import soundgates.provider.custom.CustomPropertyInputDialog;
 
-public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorderedShapeEditPart {
+public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorderedShapeEditPart{
 	
 	protected int[] inputPortsXPositions; 
 	protected int[] outputPortsXPositions;

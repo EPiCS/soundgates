@@ -79,9 +79,15 @@
       </objectContribution>
       <objectContribution
             id="Soundgates.diagram.export.composite"
-            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentAbstractEditPart">
+            objectClass="soundgates.diagram.edit.parts.SelectableEditPartForCompositeCreation">
+         <action
+               class="soundgates.diagram.actions.CreateCompositeSoundComponentAction"
+               id="Soundgates.diagram.action.ExportCompositeAction"
+               label="Create a new Composite Sound Component from the selected Components"
+               menubarPath="Soundgates.diagram.editormenu/group">
+         </action>
          <menu
-               id="Soundgates.diagram.menu"
+               id="Soundgates.diagram.editormenu"
                label="Soundgates"
                path="additions">
             <separator
@@ -137,7 +143,7 @@
                enablesFor="1"
                id="Soundgates.diagram.action.HideEmbeddedElementsAction"
                label="Hide/Show Embedded Elements"
-               menubarPath="Soundgates.diagram.menu/group">
+               menubarPath="Soundgates.diagram.editormenu/group">
          </action>
       </objectContribution>
    </extension>

@@ -32,7 +32,7 @@ import soundgates.diagram.part.SoundgatesVisualIDRegistry;
  * @generated NOT
  */
 public class AtomicSoundComponentEditPart extends
-		AtomicSoundComponentAbstractEditPart {
+		AtomicSoundComponentAbstractEditPart implements SelectableEditPartForCompositeCreation  {
 
 	/**
 	 * @generated
