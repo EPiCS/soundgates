@@ -11,22 +11,32 @@
 #include "SoundComponent.h"
 #include "SoundPort.h"
 #include "ControlPort.h"
-#include <mongo/client/dbclient.h>
-#include <mongo/bson/bson.h>
 #include <iostream>
+
+#define MONGO_HAVE_STDINT
+#include <mongo.h>
 
 class SoundComponentLogging
 {
+	typedef struct
+	{
+		std::vector<ControlPort*> inControl;
+		std::vector<ControlPort*> outControl;
+		std::vector<SoundPort*> inSound;
+		std::vector<SoundPort*> outSound;
+	} AssortedPorts;
 
 private:
 	bool connected, begun;
-	mongo::DBClientConnection mongoConnection;
+	mongo mongoConnection;
 	// Identifier for a specific run. (Corresponds to the initialization timestamp)
 	string run_id;
 	SoundComponentLogging();
 
 	bool isConnected();
 	bool isStarted();
+
+	AssortedPorts getAssortedPorts(SoundComponent* component);
 
 public:
 	static SoundComponentLogging& getInstance()
