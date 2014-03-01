@@ -6,10 +6,14 @@ else
 DEBUGLEVEL = -g0 -O3
 endif
 
-CXX=g++
+LIBRARIES=../../../Libraries
+COMMON_CC_FLAGS=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC
+
 CC_ARM=$(XILINX_BIN_PATH)/arm-xilinx-linux-gnueabi-g++
-CXXFLAGS=-Wall -Wno-unused-variable $(DEBUGLEVEL) -fPIC -isystem"../../../Libraries/x86_64/include"
-CFLAGS_ARM=-Wall -rdynamic -Wno-unused-variable $(DEBUGLEVEL) -DZYNQ -fPIC -isystem"../../../Libraries/arm/include" 
+CXXFLAGS=$(COMMON_CC_FLAGS) -isystem"$(LIBRARIES)/x86_64/include"
+
+CFLAGS_ARM_OPT=-O3 -ffast-math -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=softfp -fpic
+CFLAGS_ARM=$(CFLAGS_ARM_OPT) -DZYNQ -isystem"$(LIBRARIES)/arm/include" 
 
 ifndef target
 target=x86_64

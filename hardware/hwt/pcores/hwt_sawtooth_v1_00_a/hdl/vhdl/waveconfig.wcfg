@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/home/lukas/uni/master/pg-soundgates/hardware/hwt/pcores/hwt_fir_v1_00_a/hdl/vhdl/ise/testbench_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="/home/lukas/uni/master/pg-soundgates/hardware/hwt/pcores/hwt_sawtooth_v1_00_a/hdl/vhdl/ise/testbench_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="attributes" />
             <top_module name="math_real" />
@@ -127,242 +127,37 @@
             <obj_property name="ObjectShortName">ps_master_to_hw_we</obj_property>
          </wvobject>
       </wvobject>
-      <wvobject fp_name="group35" type="group">
-         <obj_property name="label">osif</obj_property>
-         <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/testbench/osif_fifo_sw2hw_data" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_sw2hw_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_sw2hw_data[31:0]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_sw2hw_fill" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_sw2hw_fill[15:0]</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_sw2hw_fill[15:0]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_sw2hw_empty" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_sw2hw_empty</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_sw2hw_empty</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_sw2hw_re" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_sw2hw_re</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_sw2hw_re</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_hw2sw_data" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_hw2sw_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_hw2sw_data[31:0]</obj_property>
-            <obj_property name="Radix">HEXRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_hw2sw_rem" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_hw2sw_rem[15:0]</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_hw2sw_rem[15:0]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_hw2sw_full" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_hw2sw_full</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_hw2sw_full</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/osif_fifo_hw2sw_we" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">osif_fifo_hw2sw_we</obj_property>
-            <obj_property name="ObjectShortName">osif_fifo_hw2sw_we</obj_property>
-         </wvobject>
-      </wvobject>
-      <wvobject fp_name="group34" type="group">
-         <obj_property name="label">mem</obj_property>
-         <obj_property name="DisplayName">label</obj_property>
-         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_data" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_hwt2mem_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_data[31:0]</obj_property>
-            <obj_property name="Radix">HEXRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_rem" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_hwt2mem_rem[15:0]</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_rem[15:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_full" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_hwt2mem_full</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_full</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_hwt2mem_we" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_hwt2mem_we</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_hwt2mem_we</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_data" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_mem2hwt_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_data[31:0]</obj_property>
-            <obj_property name="Radix">HEXRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_fill" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_mem2hwt_fill[15:0]</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_fill[15:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_empty" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_mem2hwt_empty</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_empty</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/memif_fifo_mem2hwt_re" type="logic" db_ref_id="1">
-            <obj_property name="ElementShortName">memif_fifo_mem2hwt_re</obj_property>
-            <obj_property name="ObjectShortName">memif_fifo_mem2hwt_re</obj_property>
-         </wvobject>
-      </wvobject>
    </wvobject>
    <wvobject fp_name="group33" type="group">
       <obj_property name="label">UUT</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="group300" type="group">
+         <obj_property name="label">iface</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <wvobject fp_name="/testbench/uut/SAWTOOTH_INST/incr" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">incr[31:0]</obj_property>
+            <obj_property name="ObjectShortName">incr[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/SAWTOOTH_INST/offset" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">offset[31:0]</obj_property>
+            <obj_property name="ObjectShortName">offset[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/SAWTOOTH_INST/saw" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">saw[31:0]</obj_property>
+            <obj_property name="ObjectShortName">saw[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+         <wvobject fp_name="/testbench/uut/SAWTOOTH_INST/x" type="array" db_ref_id="1">
+            <obj_property name="ElementShortName">x[31:0]</obj_property>
+            <obj_property name="ObjectShortName">x[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         </wvobject>
+      </wvobject>
       <wvobject fp_name="/testbench/clk" type="logic" db_ref_id="1">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
-      </wvobject>
-      <wvobject fp_name="/testbench/uut/coefficients_i16" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">coefficients_i16[28:0]</obj_property>
-         <obj_property name="ObjectShortName">coefficients_i16[28:0]</obj_property>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[28]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[28]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[28]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[27]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[27]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[27]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[26]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[26]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[26]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[25]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[25]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[25]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[24]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[24]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[24]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[23]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[23]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[23]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[22]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[22]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[22]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[21]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[21]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[21]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[20]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[20]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[20]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[19]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[19]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[19]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[18]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[18]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[18]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[17]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[17]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[17]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[16]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[16]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[16]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[15]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[15]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[15]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[14]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[14]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[14]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[13]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[13]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[13]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[12]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[12]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[12]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[11]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[11]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[11]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[10]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[10]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[10]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[9]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[9]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[9]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[8]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[8]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[8]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[7]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[7]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[7]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[6]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[6]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[6]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[5]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[5]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[5]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[4]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[4]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[4]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[3]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[3]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[3]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[2]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[2]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[2]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[1]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[1]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[1]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
-         <wvobject fp_name="/testbench/uut/coefficients_i16[0]" type="array" db_ref_id="1">
-            <obj_property name="ElementShortName">[0]</obj_property>
-            <obj_property name="ObjectShortName">coefficients_i16[0]</obj_property>
-            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="/testbench/uut/hwtio" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">hwtio</obj_property>
@@ -559,28 +354,6 @@
          <obj_property name="ElementShortName">osif_ctrl_signal[31:0]</obj_property>
          <obj_property name="ObjectShortName">osif_ctrl_signal[31:0]</obj_property>
          <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/testbench/uut/FIR_INST/x_in" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">x_in[23:0]</obj_property>
-         <obj_property name="ObjectShortName">x_in[23:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/testbench/uut/FIR_INST/y_out" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">y_out[23:0]</obj_property>
-         <obj_property name="ObjectShortName">y_out[23:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/testbench/uut/ptr" type="other" db_ref_id="1">
-         <obj_property name="ElementShortName">ptr</obj_property>
-         <obj_property name="ObjectShortName">ptr</obj_property>
-      </wvobject>
-      <wvobject fp_name="/testbench/uut/o_ramwe_fir" type="logic" db_ref_id="1">
-         <obj_property name="ElementShortName">o_ramwe_fir</obj_property>
-         <obj_property name="ObjectShortName">o_ramwe_fir</obj_property>
-      </wvobject>
-      <wvobject fp_name="/testbench/uut/fir_ce" type="logic" db_ref_id="1">
-         <obj_property name="ElementShortName">fir_ce</obj_property>
-         <obj_property name="ObjectShortName">fir_ce</obj_property>
       </wvobject>
       <wvobject fp_name="/testbench/uut/state" type="other" db_ref_id="1">
          <obj_property name="ElementShortName">state</obj_property>

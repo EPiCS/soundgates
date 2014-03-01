@@ -18,6 +18,8 @@
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
 
+#include <boost/lexical_cast.hpp>
+
 class ConstSoundComponent: public SoundComponentImpl {
 
 private:

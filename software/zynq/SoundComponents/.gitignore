@@ -1,4 +1,5 @@
 *.o
+*.vect
 *.so
 result
 libsynthesizercore
