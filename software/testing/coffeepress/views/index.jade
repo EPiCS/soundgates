@@ -66,9 +66,9 @@ html
                   //- - createChart(0, uid)
 
         #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
-          .list-group
-          - each execution in executions
-            a.list-group-item(href='#') #{execution.formattedTime}
+          .list-group(id="list-group")
+            - each execution in executions
+              a.list-group-item(href='#', value = '#{execution.timestamp}') #{execution.formattedTime}
         // /span
       // /row
       hr

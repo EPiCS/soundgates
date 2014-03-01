@@ -11,6 +11,11 @@ readyFn = (jQuery) ->
   # Get the latest execution (expand is defined in expand.coffee)
   getLastExecution().done(expand)
 
+  # TODO: Add click methods for list group items
+  blah = $("#list-group").children(".list-group-item").each (index, element) =>
+        value = $(element).attr("value")
+        console.log value
+
   return
 
 # + ---------------------- +

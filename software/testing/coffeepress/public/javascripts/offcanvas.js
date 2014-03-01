@@ -3,12 +3,20 @@
   var expand, expandComponent, getExecution, getFormattedTime, getLastExecution, isInt, print, readyFn, removeEveryExecution, removeExecution, __calcAverageExecutionTime, __createDiagram, __getJsDate, __prepareSamples, __replaceRaute;
 
   readyFn = function(jQuery) {
+    var blah;
     console.log("Ready.");
     $("[data-toggle=offcanvas]").click(function() {
       console.log("Click on button ");
       $(".row-offcanvas").toggleClass("active");
     });
     getLastExecution().done(expand);
+    blah = $("#list-group").children(".list-group-item").each((function(_this) {
+      return function(index, element) {
+        var value;
+        value = $(element).attr("value");
+        return console.log(value);
+      };
+    })(this));
   };
 
   expand = function(execution) {
