@@ -69,7 +69,7 @@ exports.removeExecution = (req, res) ->
         return
     return
 
-exports.removeAlleExecutions = (req, res) ->
-    Execution.remove( err ) -> 
-        console.log "Info: Dropped database"
+exports.removeAllExecutions = (req, res) ->
+    Execution.find().remove().exec( err ) ->
+        res.send "Every execution has been deleted"
     return

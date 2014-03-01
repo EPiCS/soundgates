@@ -81,7 +81,7 @@ __createDiagram = (component) ->
     #Chart x-axis settings
     chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
     #Chart y-axis settings
-    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format(".02f")
+    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format("5.00f")
     
     #Select the <svg> element you want to render the chart in.   
     #Populate the <svg> element with chart data...

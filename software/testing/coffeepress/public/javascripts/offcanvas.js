@@ -60,7 +60,7 @@
         left: 20
       }).useInteractiveGuideline(true).transitionDuration(350).showLegend(true).showYAxis(true).showXAxis(true);
       chart.xAxis.axisLabel("Samples").tickFormat(d3.format(",r"));
-      chart.yAxis.axisLabel("Amplitude").tickFormat(d3.format(".02f"));
+      chart.yAxis.axisLabel("Amplitude").tickFormat(d3.format("5.00f"));
       selector = __replaceRaute(component.uid);
       selector = '#' + selector;
       d3.select(selector).append('svg').datum(draw_samples).call(chart);
