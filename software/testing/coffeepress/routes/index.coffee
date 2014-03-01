@@ -38,7 +38,7 @@ exports.index = (req, res) ->
 
 exports.getExecution = (req, res) ->
     timestamp = req.params.id
-    console.log timestamp
+    console.log "Info: Getting Execution with timestamp: " + timestamp
     query = Execution.find()
     query.where('timestamp').equals(timestamp)
     query.exec ( err, execution ) ->
@@ -59,4 +59,17 @@ exports.getLatestExecution = (req, res) ->
         else
             res.json execution[0]
         return
+    return
+
+exports.removeExecution = (req, res) ->
+    ts = req.params.id
+    Execution.findOnce({ timestamp: ts }).remove().exec( err, result ) ->
+        if err
+            console.log err
+        return
+    return
+
+exports.removeAlleExecutions = (req, res) ->
+    Execution.remove( err ) -> 
+        console.log "Info: Dropped database"
     return
