@@ -34,7 +34,7 @@ struct reconos_hwt      m_ReconOSThread;
 
 #define N_FIR_COEFF 29		// Number of filter coefficients
 
-#define AMPLITURE   0.5		// Max amplitude
+#define AMPLITURE   0.2		// Max amplitude
 
 #define BLOCK_SIZE	64		// Block size
 
@@ -76,17 +76,15 @@ int main(int argc, char* argv[]){
 	
 	float phase = 0.0, phaseIncr = 0.0;
 	
-    std::cout << "Cutoff set to: " << cutoff << std::endl;
-	
-    uint32_t hwt_args[31];
+	std::cout << "Cutoff set to: " << cutoff << std::endl;
+	uint32_t hwt_args[31];
     
-    hwt_args[0] = (uint32_t) srcbuffer;;
-    hwt_args[1] = (uint32_t) destbuffer;
+	hwt_args[0] = (uint32_t) srcbuffer;;
+	hwt_args[1] = (uint32_t) destbuffer;
 	
 	memcpy(&hwt_args[2], &coeff_lp[cutoff], N_FIR_COEFF * sizeof(uint32_t));
 		
 	for(int k = 0; k < N_FIR_COEFF; k++){
-		
 		std::cout << "Coeff " << k << ": " << (int32_t) hwt_args[2 + k]  << " : " << coeff_lp[cutoff][k] << std::endl;
 	}
 	
@@ -153,6 +151,7 @@ int main(int argc, char* argv[]){
         mbox_get(&mb_stop);
 
         for(j = 0; j < BLOCK_SIZE; j++){
+            
             std::cout << destbuffer[j] << std::endl;
         }
     }
