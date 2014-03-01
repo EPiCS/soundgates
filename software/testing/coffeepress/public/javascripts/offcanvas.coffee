@@ -51,7 +51,8 @@ expandComponent = (component) ->
   # Create Component Header
   panel = $('<div class="panel panel-primary"></div>').appendTo('#execution')
   $('<div class="panel-heading"/>').appendTo(panel).text('UID: ' + component.uid) 
-  $('<div class="panel-body"/>').appendTo(panel).text('Type: ' + component.type)
+  typ = $('<div class="panel-body"/>').appendTo(panel).text('Type: ' + component.type)
+  $('<p/>').appendTo(typ).text('Average Execution time: ' + __calcAverageExecutionTime component.execution_times )
   $('<div/>').appendTo(panel).attr('id', __replaceRaute(component.uid) )
   # Create diagram
   #d3.select('#execution').append('svg') 
@@ -105,6 +106,13 @@ __prepareSamples = (component) ->
         data[input_length + i].values.push {x:j, y: sample} 
 
   return data
+
+__calcAverageExecutionTime = (execution_times) ->
+  return "No data available" if execution_times.length == 0
+  result = 0
+  for time in execution_times
+    result = result + time
+  return result / execution_times.length
    
 __replaceRaute = (text) ->
   return text.replace /#/g, '_'
