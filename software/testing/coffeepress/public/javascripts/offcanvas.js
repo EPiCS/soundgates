@@ -41,9 +41,11 @@
   };
 
   __createDiagram = function(component) {
+    var draw_samples;
     console.log("Info: Creating compnent diagram for " + component.uid);
+    draw_samples = __prepareSamples(component);
     return nv.addGraph(function() {
-      var chart, data, selector;
+      var chart, selector;
       console.dir(component);
       chart = nv.models.lineChart().margin({
         left: 20
@@ -52,30 +54,53 @@
       chart.yAxis.axisLabel("Amplitude").tickFormat(d3.format(".02f"));
       selector = __replaceRaute(component.uid);
       selector = '#' + selector;
-      console.log("DEBUG:");
-      data = __prepareSamples(component.input_samples[0].values);
-      console.dir(data);
-      d3.select(selector).append('svg').datum(data).call(chart);
+      d3.select(selector).append('svg').datum(draw_samples).call(chart);
+      nv.utils.windowResize(chart.update);
+      nv.utils.windowResize(function() {
+        chart.update();
+      });
       return chart;
     });
   };
 
-  __prepareSamples = function(samples) {
-    var data, i, sample, _i, _len;
+  __prepareSamples = function(component) {
+    var data, i, input_length, j, port, sample, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
     data = [];
-    for (i = _i = 0, _len = samples.length; _i < _len; i = ++_i) {
-      sample = samples[i];
+    console.dir(component.input_samples);
+    input_length = component.input_samples.length;
+    _ref = component.input_samples;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      port = _ref[i];
       data.push({
-        x: i,
-        y: sample
+        key: 'Input port ' + i,
+        values: []
       });
-    }
-    return [
-      {
-        values: data,
-        key: 'Wave'
+      _ref1 = component.input_samples[i].values;
+      for (j = _j = 0, _len1 = _ref1.length; _j < _len1; j = ++_j) {
+        sample = _ref1[j];
+        data[i].values.push({
+          x: j,
+          y: sample
+        });
       }
-    ];
+    }
+    _ref2 = component.output_samples;
+    for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
+      port = _ref2[i];
+      data.push({
+        key: 'Output port ' + i,
+        values: []
+      });
+      _ref3 = component.output_samples[i].values;
+      for (j = _l = 0, _len3 = _ref3.length; _l < _len3; j = ++_l) {
+        sample = _ref3[j];
+        data[input_length + i].values.push({
+          x: j,
+          y: sample
+        });
+      }
+    }
+    return data;
   };
 
   __replaceRaute = function(text) {

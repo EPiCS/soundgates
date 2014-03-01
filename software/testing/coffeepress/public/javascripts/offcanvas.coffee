@@ -60,6 +60,9 @@ expandComponent = (component) ->
 
 __createDiagram = (component) ->
   console.log "Info: Creating compnent diagram for " + component.uid
+  # Prepare data
+  draw_samples = __prepareSamples component
+
   nv.addGraph ->
     console.dir component
     chart = nv.models.lineChart()
@@ -79,22 +82,29 @@ __createDiagram = (component) ->
     #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
     selector = __replaceRaute(component.uid)
     selector = '#' + selector
-    console.log "DEBUG:"
-    data = __prepareSamples (component.input_samples[0].values)
-    console.dir data
-    d3.select(selector).append('svg').datum(data).call(chart)
+    d3.select(selector).append('svg').datum(draw_samples).call(chart)
     #Update the chart when window resizes.
-    #nv.utils.windowResize(chart.update);
-    #nv.utils.windowResize ->
-    #  chart.update()
-    #  return 
+    nv.utils.windowResize(chart.update);
+    nv.utils.windowResize ->
+      chart.update()
+      return 
     return chart
 
-__prepareSamples = (samples) ->
+__prepareSamples = (component) ->
   data = []
-  for sample, i in samples
-      data.push {x:i, y: sample} 
-  return [{ values: data, key: 'Wave' }]
+  console.dir component.input_samples
+  input_length = component.input_samples.length
+  for port, i in component.input_samples
+      data.push { key: 'Input port ' + i, values: [] } 
+      for sample, j in component.input_samples[i].values
+        data[i].values.push {x:j, y: sample} 
+
+  for port, i in component.output_samples
+      data.push { key: 'Output port ' + i, values: [] } 
+      for sample, j in component.output_samples[i].values
+        data[input_length + i].values.push {x:j, y: sample} 
+
+  return data
  
 #   //Data is represented as an array of {x,y} pairs.
 #   for (var i = 0; i < 100; i++) {

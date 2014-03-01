@@ -9,7 +9,7 @@ step = 20
 print '['
 for x in range(0, 100):
 	if x < 99:
-		sys.stdout.write( str( math.sin(x) ) + ', ' )
+		sys.stdout.write( str( math.cos(x) ) + ', ' )
 	else:
-		sys.stdout.write( str( math.sin(x) ))
+		sys.stdout.write( str( math.cos(x) ))
 print ']'
