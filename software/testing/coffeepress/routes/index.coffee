@@ -89,11 +89,19 @@ exports.generateData = (req, res) ->
                     input_samples: [ ]
                     output_samples: [ { name: 'Output_Port', values: createSineSamples 0, 10 } ]
                     execution_times: [500, 450, 700]
+                },
+                {
+                    uid: "cosine#0"
+                    type: "SW"
+                    control_ports: [ { name: 'Control 1', values: [440, 300] } ]
+                    input_samples: [ { name: 'Input_Port', values: createSineSamples 0, 10 } ]
+                    output_samples: [ { name: 'Output_Port', values: createCosineSamples 0, 10 } ]
+                    execution_times: [500, 450, 700]
                 }
             ]
        }
     data_2 = {
-            timestamp: (Math.round(new Date().getTime() / 1000))
+            timestamp: (Math.round(new Date().getTime() / 1000) - 1000)
             components: [
                 {
                     uid: "cosine#0"

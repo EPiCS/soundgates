@@ -8,15 +8,22 @@ readyFn = (jQuery) ->
     console.log "Click on button "
     $(".row-offcanvas").toggleClass "active"
     return
-  # Get the latest execution (expand is defined in expand.coffee)
+  # Get the latest execution
   getLastExecution().done(expand)
 
   # TODO: Add click methods for list group items
-  blah = $("#list-group").children(".list-group-item").each (index, element) =>
-        value = $(element).attr("value")
-        console.log value
+  initializeDocument()
 
   return
+
+initializeDocument = () ->
+  $("#list-group").children(".list-group-item").each (index, element) =>
+      value = $(element).attr("value")
+      return
+  $("#generate_test").click(generateTestdata)
+  $("#remove_test").click(removeEveryExecution)
+  return
+
 
 # + ---------------------- +
 # |   Creating Functions   |
@@ -138,6 +145,13 @@ getExecution = (timestamp) ->
       url : '/execution/' + timestamp,
       type : "GET"
     })
+
+# Debugging methods
+generateTestdata = () ->
+  return $.ajax({
+    url : '/generate'
+    type : "GET"
+  })
 
 # TODO: add refresh method
 removeExecution = (timestamp) ->
