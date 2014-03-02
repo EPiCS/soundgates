@@ -36,6 +36,7 @@
     $('<div class="col-md-4"/>').appendTo(row_3).text("Number of Components:");
     $('<div class="col-md-8"/>').appendTo(row_3).text(execution.components.length);
     row_3 = $('<br>').appendTo('#execution');
+    console.log(execution.components);
     _ref = execution.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       c = _ref[_i];

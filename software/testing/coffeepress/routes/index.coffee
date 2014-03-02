@@ -31,7 +31,6 @@ exports.index = (req, res) ->
         for execution in executions
             # Preparing Data
             execution.formattedTime = getFormattedTime(execution.timestamp)
-        console.dir executions
         res.render "index", title: "Soundgates Debugger", executions: executions
         return
     return
@@ -80,28 +79,36 @@ exports.removeAllExecutions = (req, res) ->
 exports.generateData = (req, res) ->
     execution_arr = []
     data_1 = {
-            timestamp: (Math.round(new Date().getTime() / 1000))
+            timestamp: (Math.round(new Date().getTime() / 1000) - 1000)
             components: [
                 {
                     uid: "sine#0"
                     type: "SW"
                     control_ports: [ { name: 'Control 1', values: [440, 300] } ]
                     input_samples: [ ]
-                    output_samples: [ { name: 'Output_Port', values: createSineSamples 0, 10 } ]
+                    output_samples: [ { name: 'Output_Port', values: createSineSamples 0, 500 } ]
                     execution_times: [500, 450, 700]
                 },
                 {
                     uid: "cosine#0"
                     type: "SW"
                     control_ports: [ { name: 'Control 1', values: [440, 300] } ]
-                    input_samples: [ { name: 'Input_Port', values: createSineSamples 0, 10 } ]
-                    output_samples: [ { name: 'Output_Port', values: createCosineSamples 0, 10 } ]
+                    input_samples: [ { name: 'Input_Port', values: createSineSamples 0, 500 } ]
+                    output_samples: [ { name: 'Output_Port', values: createCosineSamples 0, 500 } ]
+                    execution_times: [500, 450, 700]
+                },
+                {
+                    uid: "saw#0"
+                    type: "HW"
+                    control_ports: [ { name: 'Control 1', values: [440, 300] } ]
+                    input_samples: [ ]
+                    output_samples: [ { name: 'Output_Port', values: createSawtoothSamples 0, 500 } ]
                     execution_times: [500, 450, 700]
                 }
             ]
        }
     data_2 = {
-            timestamp: (Math.round(new Date().getTime() / 1000) - 1000)
+            timestamp: (Math.round(new Date().getTime() / 1000))
             components: [
                 {
                     uid: "cosine#0"
@@ -118,9 +125,8 @@ exports.generateData = (req, res) ->
 
     for exec in execution_arr      
         execution = new Execution(exec)
-        console.log JSON.stringify execution, undefined, 2
         execution.save ( err ) ->
-            res.json exec
+            console.log "Info: Created testdata"
             return
 
 createSineSamples = ( begin, end ) ->
@@ -135,7 +141,7 @@ createCosineSamples = ( begin, end ) ->
         data.push Math.cos(i)
     return data
 
-createSawtoothSamples = ( begin, end, max_value = 1000 ) ->
+createSawtoothSamples = ( begin, end, max_value = 100 ) ->
     data = []
     for i in [ begin...end ]
         data.push i % max_value

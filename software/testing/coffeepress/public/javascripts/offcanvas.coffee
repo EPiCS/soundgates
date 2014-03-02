@@ -20,6 +20,7 @@ initializeDocument = () ->
   $("#list-group").children(".list-group-item").each (index, element) =>
       value = $(element).attr("value")
       return
+  # Add methods to buttons
   $("#generate_test").click(generateTestdata)
   $("#remove_test").click(removeEveryExecution)
   return
@@ -54,6 +55,7 @@ expand = (execution) ->
   # -   Graphs
   # ####################################
 
+  console.log execution.components
   for c in execution.components
     expandComponent(c)
 
