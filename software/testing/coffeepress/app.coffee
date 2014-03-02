@@ -23,9 +23,9 @@ app.use express.static(path.join(__dirname, "public"))
 # development only
 app.use express.errorHandler()  if "development" is app.get("env")
 app.get "/", routes.index
-app.get "/users", user.list
 app.get "/execution/latest", routes.getLatestExecution
 app.get "/execution/:id", routes.getExecution
+app.get "/generate", routes.generateData
 app.get "/remove/all", routes.removeAllExecutions
 app.get "/remove/:id", routes.removeExecution
 http.createServer(app).listen app.get("port"), ->

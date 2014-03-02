@@ -9,12 +9,12 @@ Schema = mongoose.Schema
 executionSchema = new Schema(
   timestamp: {type: Number},
   components: [{
-    uid: String,
+    uid: { type: String },
     type: { type: String },
-    control_ports: [ { name: String, values: [Number] } ]
-    input_samples: [ { name: String, values: [Number] } ]
-    output_samples: [ { name: String, values: [Number] } ]
-    execution_times: [Number]
+    control_ports: [ { name: String, values: [type: Number] } ]
+    input_samples: [ { name: String, values: [type: Number] } ]
+    output_samples: [ { name: String, values: [type: Number] } ]
+    execution_times: [type: Number]
   }]
 )
 
