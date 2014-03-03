@@ -208,7 +208,7 @@ void SoundComponentLogging::log_init(vector<SoundComponentPtr>::iterator begin,
 	bson_destroy(b);
 
 	//create the runtime array
-	runtimes = (time_t*) calloc(maxUid + 1, sizeof(time_t));
+	runtimes = (boost::posix_time::ptime*) calloc(maxUid + 1, sizeof(boost::posix_time::ptime));
 	num_runtimes = maxUid + 1;
 
 	this->begun = true;
@@ -221,7 +221,7 @@ void SoundComponentLogging::log_preprocessing(SoundComponent* component)
 		return;
 	}
 
-	runtimes[component->getUid()] = time(NULL);
+	runtimes[component->getUid()] = boost::posix_time::microsec_clock::local_time();
 
 }
 
@@ -281,7 +281,7 @@ void appendControlPortsPushBSON(bson* op,
 
 void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 {
-	time_t now = time(NULL);
+	 boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
 
 	if (!isStarted())
 	{
@@ -311,11 +311,10 @@ void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 
 	bson_append_start_object(op, "$push"); // push of execution times (once for the whole component)
 	{
-		time_t executionTime = now - runtimes[component->getUid()];
+		boost::posix_time::time_duration executionTime = now - runtimes[component->getUid()];
 		std::stringstream exec_ss;
 		exec_ss << DB_COMPONENTS << ".$." << DB_EXEC_TIMES;
-		bson_append_time_t(op, exec_ss.str().c_str(), executionTime);
-
+		bson_append_long(op, exec_ss.str().c_str(), executionTime.total_microseconds());
 	}
 	bson_append_finish_object(op); // end push of execution times
 	bson_finish(op);

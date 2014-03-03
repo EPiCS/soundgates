@@ -13,6 +13,8 @@
 #include "ControlPort.h"
 #include <iostream>
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 #define MONGO_HAVE_STDINT
 #include <mongo.h>
 
@@ -46,7 +48,7 @@ private:
 	// Time at which this run was started. Serves as an identifier
 	time_t timestamp;
 	// Array of runtimes of all components. Is initialized in log_init
-	time_t* runtimes;
+	boost::posix_time::ptime* runtimes;
 	int num_runtimes;
 
 	SoundComponentLogging();
