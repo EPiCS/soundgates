@@ -237,10 +237,10 @@ void appendSoundPortsPushBSON(bson* op,
 			stringstream ss;
 			if (isInput)
 				ss << DB_COMPONENTS << ".$." << DB_IN_SOUND_PORTS << "."
-						<< port_i << DB_PORT_VALUES;
+						<< port_i << "." << DB_PORT_VALUES;
 			else
 				ss << DB_COMPONENTS << ".$." << DB_OUT_SOUND_PORTS << "."
-						<< port_i << DB_PORT_VALUES;
+						<< port_i << "." << DB_PORT_VALUES;
 			bson_append_start_object(op, ss.str().c_str());
 			bson_append_start_array(op, "$each");
 			// Log our 64 samples from the component
@@ -268,10 +268,10 @@ void appendControlPortsPushBSON(bson* op,
 			stringstream ss;
 			if (isInput)
 				ss << DB_COMPONENTS << ".$." << DB_IN_CTRL_PORTS << "." << i
-						<< DB_PORT_VALUES;
+						<< "." << DB_PORT_VALUES;
 			else
 				ss << DB_COMPONENTS << ".$." << DB_OUT_CTRL_PORTS << "." << i
-						<< DB_PORT_VALUES;
+						<< "." << DB_PORT_VALUES;
 			// Get the control value on the current port and add it
 			bson_append_double(op, ss.str().c_str(), ports.at(i).first->pop());
 		}
@@ -325,6 +325,11 @@ void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 			MONGO_UPDATE_BASIC, 0) == MONGO_ERROR)
 	{
 		LOG_ERROR("Error updating the database: " << this->mongoConnection.err);
+
+		LOG_ERROR("CONDITION:");
+		bson_print(cond);
+		LOG_ERROR("OPERATION:");
+		bson_print(op);
 	}
 
 	bson_destroy(op);
