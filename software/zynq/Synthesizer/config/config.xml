@@ -19,9 +19,11 @@
     </plugins>
     
     <logging>
+    	<initDelay>1000</initDelay>
+    	<stopAfter>1000</stopAfter>
     	<enabled>true</enabled>
-    	<address>localhost</address>
-    	<port>1338</port>
+    	<address>192.168.1.101</address>
+    	<port>27017</port>
     </logging>
     
 </synthesizer>

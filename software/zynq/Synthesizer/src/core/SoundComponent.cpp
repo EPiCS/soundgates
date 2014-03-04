@@ -22,9 +22,16 @@ SoundComponent::~SoundComponent(){ }
 void SoundComponent::run() {
 
 	if (logging_enabled) {
-		 SoundComponentLogging::getInstance().log_preprocessing(this);
-		m_pDelegate->process();
-		 SoundComponentLogging::getInstance().log_postprocessing(this);
+		// Wait shortly before starting to log, to be able to set input paramteres before
+		if (SoundComponentLogging::getInstance().hasInitialDelayPassed())
+		{
+			SoundComponentLogging::getInstance().log_preprocessing(this);
+			m_pDelegate->process();
+			SoundComponentLogging::getInstance().log_postprocessing(this);
+			// Terminate the run after a given timelimit
+			if (SoundComponentLogging::getInstance().timelimitReached())
+				exit(0);
+		}
 	}
 	else {
 		m_pDelegate->process();

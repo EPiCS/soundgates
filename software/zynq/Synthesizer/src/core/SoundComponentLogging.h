@@ -18,7 +18,7 @@
 #define MONGO_HAVE_STDINT
 #include <mongo.h>
 
-#define DB_DB "db.executions"
+#define DB_DB "soundgates.executions"
 #define DB_TIMESTAMP "timestamp"
 #define DB_COMPONENTS  "components"
 #define DB_UID "uid"
@@ -47,9 +47,17 @@ private:
 	mongo mongoConnection;
 	// Time at which this run was started. Serves as an identifier
 	time_t timestamp;
+	// Used for inital delay and runtime check
+	boost::posix_time::ptime timestamp_micro;
 	// Array of runtimes of all components. Is initialized in log_init
 	boost::posix_time::ptime* runtimes;
 	int num_runtimes;
+
+	int initialDelay;
+	bool initialDelayPassed;
+	int runtimeLimit;
+	// Is incremented after each log_postprocessing
+	int samplesProcessed;
 
 	SoundComponentLogging();
 
@@ -83,6 +91,12 @@ public:
 	 * control buffers, and the elapsed time
 	 */
 	void log_postprocessing(SoundComponent* component);
+
+	bool hasInitialDelayPassed();
+
+	bool timelimitReached();
+
+	time_t getTimestamp();
 };
 
 #endif /* SOUNDCOMPONENTDEBUGGING_H_ */
