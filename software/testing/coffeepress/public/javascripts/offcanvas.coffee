@@ -13,6 +13,7 @@ readyFn = (jQuery) ->
 
   # TODO: Add click methods for list group items
   initializeDocument()
+  initializeButtons()
 
   return
 
@@ -20,10 +21,15 @@ initializeDocument = () ->
   $("#list-group").children(".list-group-item").each (index, element) =>
       value = $(element).attr("value")
       return
+  
+initializeButtons = () ->
   # Add methods to buttons
+  $("#refresh_test").click(getExecutionList)
   $("#generate_test").click(generateTestdata)
   $("#remove_test").click(removeEveryExecution)
   return
+
+
 
 
 # + ---------------------- +
@@ -73,53 +79,96 @@ expandComponent = (component) ->
   __createDiagram(component)
   return
 
+expandExecutions = ( executions ) ->
+  g = $("#list-group").empty()
+  for exec in executions
+    $('<a class="list-group-item">').appendTo(g).text(exec.formattedTime)
+  getLastExecution().done(expand)
+
+
 __createDiagram = (component) ->
   console.log "Info: Creating compnent diagram for " + component.uid
   # Prepare data
-  draw_samples = __prepareSamples component
-
-  nv.addGraph ->
-    console.dir component
-    chart = nv.models.lineChart()
-            .margin(left: 20)
-            .useInteractiveGuideline(true)
-            .transitionDuration(350)
-            .showLegend(true)
-            .showYAxis(true)
-            .showXAxis(true) #Show the x-axis
-    #Chart x-axis settings
-    chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
-    #Chart y-axis settings
-    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format("5.00f")
-    
-    #Select the <svg> element you want to render the chart in.   
-    #Populate the <svg> element with chart data...
-    #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
+  dataAscolumns = __prepareSamples component
+  if dataAscolumns.length > 0
     selector = __replaceRaute(component.uid)
     selector = '#' + selector
-    d3.select(selector).append('svg').datum(draw_samples).call(chart)
-    #Update the chart when window resizes.
-    nv.utils.windowResize(chart.update);
-    nv.utils.windowResize ->
-      chart.update()
-      return 
-    return chart
+    datarr = { columns: dataAscolumns }
+
+    chart = c3.generate({
+      bindto : selector,
+      data   : datarr
+      zoom   : { enabled: true} }) 
+  return
 
 __prepareSamples = (component) ->
-  data = []
-  console.dir component.input_samples
+  columns = []
   input_length = component.input_samples.length
   for port, i in component.input_samples
-      data.push { key: 'Input port ' + i, values: [] } 
-      for sample, j in component.input_samples[i].values
-        data[i].values.push {x:j, y: sample} 
+      c = []
+      c.push 'Input_' + i 
+      for sample in component.input_samples[i].values
+        c.push sample
+      columns.push c
 
   for port, i in component.output_samples
-      data.push { key: 'Output port ' + i, values: [] } 
-      for sample, j in component.output_samples[i].values
-        data[input_length + i].values.push {x:j, y: sample} 
+      c = []
+      c.push 'Output_' + i
+      for sample in component.output_samples[i].values
+        c.push sample
+      columns.push c
 
-  return data
+  return columns
+
+# ## ---- NVD3
+
+# __createDiagram = (component) ->
+#   console.log "Info: Creating compnent diagram for " + component.uid
+#   # Prepare data
+#   draw_samples = __prepareSamples component
+
+#   nv.addGraph ->
+#     console.dir component
+#     chart = nv.models.lineChart()
+#             .margin(left: 20)
+#             .useInteractiveGuideline(true)
+#             .transitionDuration(350)
+#             .showLegend(true)
+#             .showYAxis(true)
+#             .showXAxis(true) #Show the x-axis
+#     #Chart x-axis settings
+#     chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
+#     #Chart y-axis settings
+#     chart.yAxis.axisLabel("Amplitude").tickFormat d3.format("5.00f")
+    
+#     #Select the <svg> element you want to render the chart in.   
+#     #Populate the <svg> element with chart data...
+#     #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
+#     selector = __replaceRaute(component.uid)
+#     selector = '#' + selector
+#     d3.select(selector).append('svg').datum(draw_samples).call(chart)
+#     #Update the chart when window resizes.
+#     nv.utils.windowResize(chart.update);
+#     nv.utils.windowResize ->
+#       chart.update()
+#       return 
+#     return chart
+
+# __prepareSamples = (component) ->
+#   data = []
+#   console.dir component.input_samples
+#   input_length = component.input_samples.length
+#   for port, i in component.input_samples
+#       data.push { key: 'Input port ' + i, values: [] } 
+#       for sample, j in component.input_samples[i].values
+#         data[i].values.push {x:j, y: sample} 
+
+#   for port, i in component.output_samples
+#       data.push { key: 'Output port ' + i, values: [] } 
+#       for sample, j in component.output_samples[i].values
+#         data[input_length + i].values.push {x:j, y: sample} 
+
+#   return data
 
 __calcAverageExecutionTime = (execution_times) ->
   return "No data available" if execution_times.length == 0
@@ -148,11 +197,19 @@ getExecution = (timestamp) ->
       type : "GET"
     })
 
+getExecutionList = () ->
+  return $.ajax({
+      url : '/executions/list',
+      type : "GET"
+      success : expandExecutions ( executions )
+    })
+
 # Debugging methods
 generateTestdata = () ->
   return $.ajax({
-    url : '/generate'
+    url : '/generate',
     type : "GET"
+    success : getExecutionList
   })
 
 # TODO: add refresh method
@@ -161,6 +218,7 @@ removeExecution = (timestamp) ->
     return $.ajax({
       url : '/remove/' + timestamp,
       type : "GET"
+      success : getExecutionList
     })
 
 removeEveryExecution = () ->
@@ -168,8 +226,8 @@ removeEveryExecution = () ->
     return $.ajax({
       url : '/remove/all',
       type : "GET"
+      success : getExecutionList
     })
-
 
 # + ---------------------- +
 # |   Helper Funtctions    |

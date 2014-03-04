@@ -35,6 +35,21 @@ exports.index = (req, res) ->
         return
     return
 
+exports.getExecutionList = (req, res) ->
+    query = Execution.find()
+    query.select '-components'
+    query.exec ( err, executions ) ->
+        return if err
+        console.dir executions
+        for execution in executions
+            # Preparing Data
+            execution.formattedTime = getFormattedTime(execution.timestamp)
+        console.log "HIAOSDHOSAIDHIOASHDIOASHDIOASHD"
+        console.dir executions
+        res.json executions
+        return
+    return
+
 exports.getExecution = (req, res) ->
     timestamp = req.params.id
     console.log "Info: Getting Execution with timestamp: " + timestamp

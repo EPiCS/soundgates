@@ -4,10 +4,11 @@ html
     title Soundgates
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
-    link(rel='stylesheet', href='/stylesheets/nv.d3.css')
+    //- link(rel='stylesheet', href='/stylesheets/nv.d3.css')
+    link(rel='stylesheet', href='/stylesheets/c3.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/javascripts/d3.js')
-    script(src='/javascripts/nv.d3.js')      
+    script(src='/javascripts/c3.min.js')      
     link(rel='shortcut icon', href='../../assets/ico/favicon.ico')
     body
     .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
@@ -49,10 +50,13 @@ html
           .list-group(id="list-group")
             - each execution in executions
               a.list-group-item(href='#', value = '#{execution.timestamp}') #{execution.formattedTime}
-          button(id="generate_test", type="button", class="btn btn-primary") Generate Testdata
+          button(id="refresh_test", type="button", class="btn btn-primary") Refresh Executions
           br
           br
-          button(id="remove_test", type="button", class="btn btn-danger") Remove Data
+          button(id="generate_test", type="button", class="btn btn-info") Generate Testdata
+          br
+          br
+          button(id="remove_test", type="button", class="btn btn-danger") Remove Testdata
             //- a.list-group-item(href='/generate', value = 'generate') Generate Testdata
             //- a.list-group-item(href='/remove/all', value = 'RemoveAll') Remove All
         // /span

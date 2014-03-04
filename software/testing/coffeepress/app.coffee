@@ -24,6 +24,7 @@ app.use express.static(path.join(__dirname, "public"))
 app.use express.errorHandler()  if "development" is app.get("env")
 app.get "/", routes.index
 app.get "/execution/latest", routes.getLatestExecution
+app.get "/execution/list", routes.getExecutionList
 app.get "/execution/:id", routes.getExecution
 app.get "/generate", routes.generateData
 app.get "/remove/all", routes.removeAllExecutions
