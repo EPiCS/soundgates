@@ -45,6 +45,13 @@ SoundComponentLogging::SoundComponentLogging()
 	timestamp = 0;
 	connected = false;
 	begun = false;
+	initialDelay = SoundgatesConfig::getInstance().get<int>(
+			SoundgatesConfig::CFG_LOGGING_DELAY);
+	initialDelayPassed = false;
+	runtimeLimit = SoundgatesConfig::getInstance().get<int>(
+			SoundgatesConfig::CFG_LOGGING_RUNTIME);
+	samplesProcessed = 0;
+
 	mongo_init(&mongoConnection);
 }
 
@@ -104,7 +111,10 @@ void SoundComponentLogging::log_init(vector<SoundComponentPtr>::iterator begin,
 	bson_init(b);
 	time_t timestamp = time(NULL);
 	this->timestamp = timestamp;
-	bson_append_time_t(b, DB_TIMESTAMP, timestamp);
+	this->timestamp_micro = boost::posix_time::microsec_clock::local_time();
+
+	//bson_append_time_t(b, DB_TIMESTAMP, timestamp);
+	bson_append_long(b, DB_TIMESTAMP, timestamp);
 
 	bson_append_start_array(b, DB_COMPONENTS);
 	// Component counter
@@ -208,7 +218,8 @@ void SoundComponentLogging::log_init(vector<SoundComponentPtr>::iterator begin,
 	bson_destroy(b);
 
 	//create the runtime array
-	runtimes = (boost::posix_time::ptime*) calloc(maxUid + 1, sizeof(boost::posix_time::ptime));
+	runtimes = (boost::posix_time::ptime*) calloc(maxUid + 1,
+			sizeof(boost::posix_time::ptime));
 	num_runtimes = maxUid + 1;
 
 	this->begun = true;
@@ -221,7 +232,8 @@ void SoundComponentLogging::log_preprocessing(SoundComponent* component)
 		return;
 	}
 
-	runtimes[component->getUid()] = boost::posix_time::microsec_clock::local_time();
+	runtimes[component->getUid()] =
+			boost::posix_time::microsec_clock::local_time();
 
 }
 
@@ -281,7 +293,8 @@ void appendControlPortsPushBSON(bson* op,
 
 void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 {
-	 boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+	boost::posix_time::ptime now =
+			boost::posix_time::microsec_clock::local_time();
 
 	if (!isStarted())
 	{
@@ -293,7 +306,8 @@ void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 	bson_init(cond);
 	{
 		std::string uid = buildComponentName(component);
-		bson_append_time_t(cond, DB_TIMESTAMP, this->timestamp);
+		//bson_append_time_t(cond, DB_TIMESTAMP, this->timestamp);
+		bson_append_long(cond, DB_TIMESTAMP, this->timestamp);
 		std::stringstream comp_uid_ss;
 		comp_uid_ss << DB_COMPONENTS << "." << DB_UID;
 		bson_append_string(cond, comp_uid_ss.str().c_str(), uid.c_str());
@@ -311,10 +325,12 @@ void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 
 	bson_append_start_object(op, "$push"); // push of execution times (once for the whole component)
 	{
-		boost::posix_time::time_duration executionTime = now - runtimes[component->getUid()];
+		boost::posix_time::time_duration executionTime = now
+				- runtimes[component->getUid()];
 		std::stringstream exec_ss;
 		exec_ss << DB_COMPONENTS << ".$." << DB_EXEC_TIMES;
-		bson_append_long(op, exec_ss.str().c_str(), executionTime.total_microseconds());
+		bson_append_long(op, exec_ss.str().c_str(),
+				executionTime.total_microseconds());
 	}
 	bson_append_finish_object(op); // end push of execution times
 	bson_finish(op);
@@ -333,6 +349,8 @@ void SoundComponentLogging::log_postprocessing(SoundComponent* component)
 
 	bson_destroy(op);
 	bson_destroy(cond);
+
+	this->samplesProcessed += Synthesizer::config::blocksize;
 }
 
 SoundComponentLogging::AssortedPorts SoundComponentLogging::getAssortedPorts(
@@ -401,4 +419,37 @@ SoundComponentLogging::AssortedPorts SoundComponentLogging::getAssortedPorts(
 
 	}
 	return p;
+}
+
+time_t SoundComponentLogging::getTimestamp()
+{
+	return this->timestamp;
+}
+
+bool SoundComponentLogging::hasInitialDelayPassed()
+{
+	boost::posix_time::time_duration duration =
+			boost::posix_time::microsec_clock::local_time()
+					- this->timestamp_micro;
+
+	if (this->initialDelayPassed)
+	{
+		return true;
+	}
+	else if (duration.total_milliseconds() > this->initialDelay)
+	{
+		this->initialDelayPassed = true;
+		this->timestamp_micro = boost::posix_time::microsec_clock::local_time();
+		return true;
+	}
+	return false;
+}
+
+bool SoundComponentLogging::timelimitReached()
+{
+	float secondsPassed = this->samplesProcessed
+			/ (float) Synthesizer::config::samplerate;
+	float millisecondsPassed = secondsPassed * 1000;
+
+	return (millisecondsPassed > this->runtimeLimit);
 }
