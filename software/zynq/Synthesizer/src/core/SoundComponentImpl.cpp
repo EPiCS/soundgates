@@ -7,10 +7,12 @@
 
 #include "SoundComponentImpl.h"
 
-SoundComponentImpl::SoundComponentImpl(){ }
+SoundComponentImpl::SoundComponentImpl() {
+	implType = 0;
+}
 
 SoundComponentImpl::SoundComponentImpl(std::vector<std::string> parameters){
-
+	implType = 0;
 	this->m_Parameters = parameters;
 }
 
@@ -51,4 +53,11 @@ std::vector<PortPtr>& SoundComponentImpl::getOutports(){
 }
 
 void SoundComponentImpl::initLater(){
+}
+
+void SoundComponentImpl::setImplType(const char* t) {
+	this->implType = t;
+}
+const char* SoundComponentImpl::getImplType() {
+	return this->implType;
 }
