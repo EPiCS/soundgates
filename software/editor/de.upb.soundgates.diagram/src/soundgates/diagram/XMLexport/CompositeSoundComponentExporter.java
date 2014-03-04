@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
 import soundgates.Delegation;
+import soundgates.Direction;
 import soundgates.Link;
 import soundgates.Port;
 import soundgates.SoundComponent;
@@ -134,6 +135,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 		HashMap<SoundComponent,SoundComponent> componentCopies = new HashMap<SoundComponent,SoundComponent>();
 		
 		CompositeSoundComponent compositeSoundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
+		compositeSoundComponent.setName("NewCompositeSoundComponent");
 		LinkedList<Link> links = new LinkedList<>();
 		
 		for(soundgates.Element element : elements){
@@ -167,6 +169,45 @@ public class CompositeSoundComponentExporter extends Exporter {
 			newLink.setTarget(newTarget);
 			
 			compositeSoundComponent.getLinks().add(newLink);
+		}
+		
+		//create ports for the composite component and delegations
+		int portCounter = 1;
+		for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
+			for(Port port : soundComponent.getPorts()){
+				if(port.getDirection()==Direction.IN){
+					if(port.getIncomingConnection()==null){
+						
+						Port newPort = SoundgatesFactory.eINSTANCE.createPort();
+						newPort.setDirection(port.getDirection());
+						newPort.setDataType(port.getDataType());
+						newPort.setName("Port"+portCounter+"_"+port.getName());
+						
+						Delegation delegation = SoundgatesFactory.eINSTANCE.createDelegation();
+						delegation.setSource(newPort);
+						delegation.setTarget(port);
+						
+						compositeSoundComponent.getPorts().add(newPort);
+						compositeSoundComponent.getDelegations().add(delegation);
+					}
+				}
+				else if(port.getDirection()==Direction.OUT){
+					if (port.getOutgoingConnection().size()==0){
+						
+						Port newPort = SoundgatesFactory.eINSTANCE.createPort();
+						newPort.setDirection(port.getDirection());
+						newPort.setDataType(port.getDataType());
+						newPort.setName("Port"+portCounter+"_"+port.getName());
+						
+						Delegation delegation = SoundgatesFactory.eINSTANCE.createDelegation();
+						delegation.setSource(port);
+						delegation.setTarget(newPort);
+						
+						compositeSoundComponent.getPorts().add(newPort);
+						compositeSoundComponent.getDelegations().add(delegation);
+					}
+				}
+			}
 		}
 		
 		return compositeSoundComponent;
