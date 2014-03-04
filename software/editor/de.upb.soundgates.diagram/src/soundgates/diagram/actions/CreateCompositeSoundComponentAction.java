@@ -16,13 +16,14 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.w3c.dom.Document;
 
 import soundgates.diagram.XMLexport.CompositeSoundComponentExporter;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
-import soundgatesComposite.diagram.XMLexport.CompositeSoundComponentImporter;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
+import soundgatesComposite.diagram.XMLexport.CompositeSoundComponentImporter;
 
 
 
@@ -55,11 +56,14 @@ public class CreateCompositeSoundComponentAction implements IObjectActionDelegat
 			IPath location = project.getLocation();
 			String filePath = findNewFileName(location.toString());
 			
-			CompositeSoundComponentImporter.
-				createWorkbenchWithCompositeSoundComponentFromXML(						
-						filePath,						
-						CompositeSoundComponentExporter.
-						getCompositeSoundComponentXMLDocumentFromEditParts(selectedEditParts));
+			Document newCompositeSoundComponentXML = CompositeSoundComponentExporter.
+									getCompositeSoundComponentXMLDocumentFromEditParts(selectedEditParts);
+			
+			if(newCompositeSoundComponentXML!=null){
+				CompositeSoundComponentImporter.
+					createWorkbenchWithCompositeSoundComponentFromXML(						
+							filePath,newCompositeSoundComponentXML);
+			}
 			
 			project.refreshLocal(1, null);
 			

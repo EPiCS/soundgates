@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -12,6 +13,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.diagram.core.services.ViewService;
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -156,10 +160,24 @@ public class CompositeSoundComponentImporter{
 			  
 			  resource.getContents().add(diag);
 			  
-			  resource.save(Collections.EMPTY_MAP);			  
-			  
-//			  MessageDialogs.patchtWasImported(newFileName);
+			  resource.save(Collections.EMPTY_MAP);
+
+			  openDiagram(filePath);
 		  }
+	}
+	
+	private static void openDiagram(String filePath){
+		try {
+		  String[] segments = filePath.split("/");
+		  String name = segments[segments.length-1];
+		  IFile file = AtomicSoundComponentLibrary.getXMLFolder().getProject().getFile(name);
+		  
+		  IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		  
+		  IDE.openEditor(page, file, true);
+		} catch(Exception e){
+			 
+		}
 	}
 	
 }		
