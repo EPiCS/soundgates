@@ -83,7 +83,7 @@
          <action
                class="soundgates.diagram.actions.CreateCompositeSoundComponentAction"
                id="Soundgates.diagram.action.ExportCompositeAction"
-               label="Create a new Composite Sound Component from the selected Components"
+               label="Create new Composite Sound Component"
                menubarPath="Soundgates.diagram.editormenu/group">
          </action>
          <menu

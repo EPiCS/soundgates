@@ -77,37 +77,32 @@ public class CreateCompositeSoundComponentAction implements IObjectActionDelegat
 				CompositeSoundComponentImporter.
 					createWorkbenchWithCompositeSoundComponentFromXML(						
 							filePath,newCompositeSoundComponentXML);
-			}
-			
-			//save as xml
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(newCompositeSoundComponentXML);			
-			
-			String xmlFilePath = AtomicSoundComponentLibrary.getXMLFolder().getRawLocation().toString()+
-					"/"+componentNameWithExtension.replace(".sgcd", ".xml");
-			StreamResult result = new StreamResult(new File(xmlFilePath));
-			
-			transformer.transform(source, result);
-			
-			//refresh
-			Object[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors();
-			for(Object editor : editors){
-				if(editor instanceof SoundgatesDiagramEditor){
-					((SoundgatesDiagramEditor) editor).updatePalette();
+				
+				//save as xml
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(newCompositeSoundComponentXML);			
+				
+				String xmlFilePath = AtomicSoundComponentLibrary.getXMLFolder().getRawLocation().toString()+
+						"/"+componentNameWithExtension.replace(".sgcd", ".xml");
+				StreamResult result = new StreamResult(new File(xmlFilePath));
+				
+				transformer.transform(source, result);
+				
+				//refresh
+				Object[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors();
+				for(Object editor : editors){
+					if(editor instanceof SoundgatesDiagramEditor){
+						((SoundgatesDiagramEditor) editor).updatePalette();
+					}
 				}
+				
+				project.refreshLocal(2, null);
 			}
 			
-			project.refreshLocal(2, null);
-			
-		} catch (IOException e) {
+		} catch (IOException | TransformerException | CoreException e) {
 
-		} catch (CoreException e) {
-		} catch (TransformerConfigurationException e) {
-
-		} catch (TransformerException e) {
-			
-		}
+		} 
 	}
 
 	/**
