@@ -121,21 +121,21 @@ public class CompositeSoundComponentExporter extends Exporter {
 		}
 	}
 	
-	public static Document getCompositeSoundComponentXMLDocumentFromEditParts(List<EditPart> selectedEditParts){
+	public static Document getCompositeSoundComponentXMLDocumentFromEditParts(List<EditPart> selectedEditParts, String componentName){
 		LinkedList<soundgates.Element> elements = getElementsFromEditParts(selectedEditParts);
 		if(elements==null)
 			return null;
 		else
 			return CompositeSoundComponentExporter.getDocForCompositeSoundComponent(
-				createCompositeSoundComponentFromSelectedEditParts(elements));
+				createCompositeSoundComponentFromSelectedEditParts(elements,componentName));
 	}
 	
-	private static CompositeSoundComponent createCompositeSoundComponentFromSelectedEditParts(LinkedList<soundgates.Element> elements){		
+	private static CompositeSoundComponent createCompositeSoundComponentFromSelectedEditParts(LinkedList<soundgates.Element> elements, String componentName){		
 		
 		HashMap<SoundComponent,SoundComponent> componentCopies = new HashMap<SoundComponent,SoundComponent>();
 		
 		CompositeSoundComponent compositeSoundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
-		compositeSoundComponent.setName("NewCompositeSoundComponent");
+		compositeSoundComponent.setName(componentName);
 		LinkedList<Link> links = new LinkedList<>();
 		
 		for(soundgates.Element element : elements){
@@ -207,6 +207,7 @@ public class CompositeSoundComponentExporter extends Exporter {
 						compositeSoundComponent.getDelegations().add(delegation);
 					}
 				}
+				portCounter++;
 			}
 		}
 		

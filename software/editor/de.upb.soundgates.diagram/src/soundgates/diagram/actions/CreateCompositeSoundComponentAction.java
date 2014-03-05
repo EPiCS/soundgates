@@ -5,6 +5,13 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -22,6 +29,7 @@ import soundgates.diagram.XMLexport.CompositeSoundComponentExporter;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
+import soundgates.diagram.part.SoundgatesDiagramEditor;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgatesComposite.diagram.XMLexport.CompositeSoundComponentImporter;
 
@@ -50,26 +58,55 @@ public class CreateCompositeSoundComponentAction implements IObjectActionDelegat
 		try {
 			soundgatesComposite.diagram.soundcomponents.AtomicSoundComponentLibrary.
 				setXMLFolder(AtomicSoundComponentLibrary.getXMLFolder());			
-			
+			soundgatesComposite.diagram.soundcomponents.CompositeSoundComponentLibrary.
+				setXMLFolder(AtomicSoundComponentLibrary.getXMLFolder());	
 			
 			IProject project = AtomicSoundComponentLibrary.getXMLFolder().getProject();
 			IPath location = project.getLocation();
 			String filePath = findNewFileName(location.toString());
 			
-			Document newCompositeSoundComponentXML = CompositeSoundComponentExporter.
-									getCompositeSoundComponentXMLDocumentFromEditParts(selectedEditParts);
+			String[] segments =	filePath.split("/");
+			String componentNameWithExtension = segments[segments.length-1];
+			String componentName = componentNameWithExtension.replace(".sgcd", "");			
 			
+			Document newCompositeSoundComponentXML = CompositeSoundComponentExporter.
+									getCompositeSoundComponentXMLDocumentFromEditParts(selectedEditParts,componentName);
+			
+			//create workbench
 			if(newCompositeSoundComponentXML!=null){
 				CompositeSoundComponentImporter.
 					createWorkbenchWithCompositeSoundComponentFromXML(						
 							filePath,newCompositeSoundComponentXML);
 			}
 			
-			project.refreshLocal(1, null);
+			//save as xml
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(newCompositeSoundComponentXML);			
+			
+			String xmlFilePath = AtomicSoundComponentLibrary.getXMLFolder().getRawLocation().toString()+
+					"/"+componentNameWithExtension.replace(".sgcd", ".xml");
+			StreamResult result = new StreamResult(new File(xmlFilePath));
+			
+			transformer.transform(source, result);
+			
+			//refresh
+			Object[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors();
+			for(Object editor : editors){
+				if(editor instanceof SoundgatesDiagramEditor){
+					((SoundgatesDiagramEditor) editor).updatePalette();
+				}
+			}
+			
+			project.refreshLocal(2, null);
 			
 		} catch (IOException e) {
 
 		} catch (CoreException e) {
+		} catch (TransformerConfigurationException e) {
+
+		} catch (TransformerException e) {
+			
 		}
 	}
 
@@ -89,7 +126,7 @@ public class CreateCompositeSoundComponentAction implements IObjectActionDelegat
 		String filePath;
 		File test;
 		for(int i=1; i<=100; i++){
-			filePath = location+"/new" + i + ".sgcd";
+			filePath = location+"/NewCompositeSoundComponent" + i + ".sgcd";
 			test = new File(filePath);
 			if(!test.exists())
 				return filePath;

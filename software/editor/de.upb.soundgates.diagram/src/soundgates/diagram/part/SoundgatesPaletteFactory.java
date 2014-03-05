@@ -2,6 +2,7 @@ package soundgates.diagram.part;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.gef.Request;
@@ -25,11 +26,15 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 public class SoundgatesPaletteFactory {
 	
 	private HashMap<String,PaletteDrawer> categoryToPaletteDrawer = new HashMap<>();
+	private PaletteRoot paletteRoot;
+	private List<String> availableCompositeSoundComponents;
 
 	/**
 	 * @generated NOT
 	 */
 	public void fillPalette(PaletteRoot paletteRoot) {
+		
+		this.paletteRoot = paletteRoot;
 		
 		//atomics		
 		List<String> availableTypes = AtomicSoundComponentLibrary.getInstance().getAvailableTypes();		
@@ -78,17 +83,45 @@ public class SoundgatesPaletteFactory {
 				"Imported Composite Sound Components");
 		paletteContainer.setId("createImportedCompositeSoundComponents"); //$NON-NLS-1$
 		
-		List<String> availableComponents = CompositeSoundComponentLibrary
-				.getInstance().getAvailableComponents();
-		for (int i = 0; i < availableComponents.size(); i++) {
-			paletteContainer
-					.add(createConcreteCompositeNodeCreationTool(availableComponents
-							.get(i))); // MYTOOL
+		availableCompositeSoundComponents = CompositeSoundComponentLibrary.getInstance().getAvailableComponents();
+		for (int i = 0; i < availableCompositeSoundComponents.size(); i++) {
+			paletteContainer.add(createConcreteCompositeNodeCreationTool(availableCompositeSoundComponents.get(i))); 
 		}
 		
 		paletteContainer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 
 		return paletteContainer;
+	}
+	
+	public void updateImportedCompositeSoundComponents(){
+		for(Object object : paletteRoot.getChildren()){
+			if(object instanceof PaletteDrawer){
+				if(((PaletteDrawer) object).getId().equals("createImportedCompositeSoundComponents")){
+					List<String> newAvailableCompositeSoundComponents = getNewAvailableCompositeSoundComponents();
+					for (int i = 0; i < newAvailableCompositeSoundComponents.size(); i++) {
+						((PaletteDrawer) object).add(createConcreteCompositeNodeCreationTool(newAvailableCompositeSoundComponents.get(i))); 
+					}					
+				}
+			}
+		}
+	}
+	
+	private List<String> getNewAvailableCompositeSoundComponents(){
+		List<String> allAvailableCompositeSoundComponents = CompositeSoundComponentLibrary.getInstance().getAvailableComponents();
+		List<String> newAvailableCompositeSoundComponents = new LinkedList<String>();
+		for(String soundComponent : allAvailableCompositeSoundComponents){
+			if(!listContainsString(availableCompositeSoundComponents, soundComponent))
+				newAvailableCompositeSoundComponents.add(soundComponent);
+		}
+		availableCompositeSoundComponents = allAvailableCompositeSoundComponents;
+		return newAvailableCompositeSoundComponents;
+	}
+	
+	private boolean listContainsString(List<String> list, String string){
+		for(String s: list){
+			if(s.equals(string)) return true;
+		}
+		return false;
 	}
 
 	/**
