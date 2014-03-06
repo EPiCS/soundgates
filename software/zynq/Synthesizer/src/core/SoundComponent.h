@@ -29,13 +29,12 @@ class SoundComponent : public Node{
 
 private:
 
-    SoundComponentImplPtr     m_pDelegate;
+    SoundComponentImplPtr   m_pDelegate;
 
 public:
 
 	SoundComponent(int uid, SoundComponentImplPtr impl);
 	virtual ~SoundComponent();
-
 
 	void addOutgoingLink(LinkPtr link, unsigned int port);
 	void addIncomingLink(LinkPtr link, unsigned int port);

@@ -47,7 +47,7 @@ void Patch::createSoundComponent(int uid, const std::string& type, std::vector<s
     impltype = ((slot < 0) || !useHWThreads) ? SoundComponents::SW : SoundComponents::HW;
 
 	if(impltype == SoundComponents::HW){
-	    HWThreadManager::getInstance().declareSlot(type, slot);
+	    HWResourceManager::getInstance().declareSlot(type, slot);
 	}
 
 	SoundComponentImplPtr impl = loader.createFromString(type, impltype, parameters);
@@ -98,7 +98,7 @@ void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
     if(typeid(*srcPort) == typeid(*destPort)){
 
-        if(srcPort->getLink()){ /* Check if src has already an outgoid connection */
+        if(srcPort->getLink()){ /* Check if source has already an outgoing connection */
 
             LOG_DEBUG("Source port already connected, reusing connection");
 
@@ -166,12 +166,12 @@ void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
 void Patch::initialize(void){
 
-
+#ifdef ZYNQ
     if(SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS)){
-        #ifdef ZYNQ
+
         reconos_init();
-        #endif
 	}
+#endif
 
 	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
 	        iter != m_ComponentsVector.end(); ++iter ){
@@ -285,3 +285,57 @@ void Patch::stop(){
 		LOG_DEBUG("Joining all worker threads");
 	}
 }
+
+bool Patch::isRunning(){
+
+    return (m_PatchState == Synthesizer::state::running);
+
+}
+
+
+const NodePtr& Patch::getMasterSourceNode(){
+
+    /* Check if master source has already been set */
+    if(!m_MasterSourceNode){
+
+        m_MasterSourceNode = new Node(0x4FFFFFFF, Node::MASTER_SOURCE);
+
+        /* Get all Node which have no incoming connection */
+        BOOST_FOREACH(NodePtr node, m_ComponentsVector){
+
+            if(node->getIncomingLinks().size() < 1){
+
+                /* Connect master sink to this node by a simple link */
+                LinkPtr link = LinkPtr(new Link(m_MasterSourceNode, node));
+
+                m_MasterSourceNode->getOutgoingLinks().push_back(link);
+            }
+        }
+    }
+
+    return m_MasterSourceNode;
+}
+
+const NodePtr& Patch::getMasterSinkNode(){
+
+    /* Check if master source has already been set */
+    if(!m_MasterSinkNode){
+
+        m_MasterSinkNode = new Node(0x7FFFFFFF, Node::MASTER_SOURCE);
+
+        /* Get all Node which have no incoming connection */
+        BOOST_FOREACH(NodePtr node, m_ComponentsVector){
+
+            if(node->getOutgoingLinks().size() < 1){
+
+                /* Connect master sink to this node by a simple link */
+                LinkPtr link = LinkPtr(new Link(node, m_MasterSinkNode));
+
+                m_MasterSinkNode->getIncomingLinks().push_back(link);
+            }
+        }
+    }
+
+    return m_MasterSinkNode;
+}
+

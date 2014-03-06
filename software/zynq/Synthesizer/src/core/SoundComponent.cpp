@@ -29,26 +29,30 @@ void SoundComponent::addOutgoingLink(LinkPtr link, unsigned int port){
 
     try{
 
+        getOutgoingLinks().push_back(link);
+
         m_pDelegate->getOutport(port)->setLink(link);
 
     }catch(std::out_of_range& e){
+
         std::cerr << e.what();
-       // LOG_ERROR("Exception: " << e.what());
     }
 }
 
-void SoundComponent::addIncomingLink(LinkPtr link, unsigned int port){
+void SoundComponent::addIncomingLink(LinkPtr link, unsigned int port) {
 
-    try{
-          m_pDelegate->getInport(port)->setLink(link);
+    try {
 
-      }catch(std::out_of_range& e){
-          std::cerr << e.what();
-      }
+        getIncomingLinks().push_back(link);
+
+        m_pDelegate->getInport(port)->setLink(link);
+
+    } catch (std::out_of_range& e) {
+        std::cerr << e.what();
+    }
 }
 
 SoundComponentImplPtr SoundComponent::getDelegate(){
 
 	return m_pDelegate;
 }
-

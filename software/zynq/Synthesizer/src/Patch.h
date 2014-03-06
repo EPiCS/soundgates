@@ -25,6 +25,9 @@
 #include "core/HWThreadManager.h"
 #include "core/SoundgatesConfig.h"
 #include "utils/SoundComponenLoader.h"
+
+#include <boost/foreach.hpp>
+
 #ifdef ZYNQ
 
 #ifdef __cplusplus
@@ -57,9 +60,13 @@ private:
 	std::vector<ControlLinkPtr>			m_ControlLinksVector;   /*< Control links container */
 
 
-	boost::thread_group m_WorkerThreads;
+	NodePtr                             m_MasterSourceNode;
 
-	Synthesizer::state::ePatchState m_PatchState;
+	NodePtr                             m_MasterSinkNode;
+
+	boost::thread_group                 m_WorkerThreads;
+
+	Synthesizer::state::ePatchState     m_PatchState;
 
 	void initialize(void);
 
@@ -98,10 +105,15 @@ public:
 	void createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot = -1);
 	void createLink(int sourceid, int srcport, int destid, int destport);
 
+
+	const NodePtr& getMasterSourceNode();
+
+	const NodePtr& getMasterSinkNode();
+
 	std::vector<InputSoundComponentPtr>& getInputSoundComponents();
 	void switchBuffers();
 
-	bool isRunning(){ return (m_PatchState == Synthesizer::state::running); }
+	bool isRunning();
 
 	void run(void);
 	void stop(void);

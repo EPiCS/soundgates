@@ -1,12 +1,12 @@
 /*
- * HWThreadManager.h
+ * HWResourceManager.h
  *
  *  Created on: Jan 15, 2014
  *      Author: lukas
  */
 
-#ifndef HWTHREADMANAGER_H_
-#define HWTHREADMANAGER_H_
+#ifndef HWRESOURCEMANAGER_H_
+#define HWRESOURCEMANAGER_H_
 
 #include <map>
 #include <set>
@@ -14,7 +14,7 @@
 
 #include "Synthesizer.h"
 
-class HWThreadManager {
+class HWResourceManager {
 
 private:
 
@@ -24,13 +24,13 @@ private:
 
 public:
 
-    static HWThreadManager& getInstance(){
-        static HWThreadManager instance;
+    static HWResourceManager& getInstance(){
+        static HWResourceManager instance;
         return instance;
     }
 
-    HWThreadManager();
-    virtual ~HWThreadManager();
+    HWResourceManager();
+    virtual ~HWResourceManager();
 
     /**
      * Register a slot of a component

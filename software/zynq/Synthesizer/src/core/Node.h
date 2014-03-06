@@ -17,17 +17,35 @@ typedef boost::shared_ptr<Node>  NodePtr;
 
 class Node {
 
-private:
-
-	int uid;
-
 public:
 
+    enum NODE_TYPE { MASTER_SOURCE, MASTER_SINK, INTERMEDIATE};
+
 	Node(int uid);
+
+    Node(int, NODE_TYPE);
+
+
 	virtual ~Node();
 
 	int getUid();
+
+	NODE_TYPE getType();
+
 	bool operator==(const Node& other) const;
+
+	std::vector<LinkPtr>& getOutgoingLinks();
+	std::vector<LinkPtr>& getIncomingLinks();
+
+private:
+
+    int       m_uuid;
+
+    NODE_TYPE m_NodeType;
+
+    std::vector<LinkPtr>    m_IncomingLinks;
+
+    std::vector<LinkPtr>    m_OutgoingLinks;
 
 };
 

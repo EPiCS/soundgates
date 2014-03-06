@@ -1,22 +1,21 @@
 /*
- * HWThreadManager.cpp
+ * HWResourceManager.cpp
  *
  *  Created on: Jan 15, 2014
  *      Author: lukas
  */
 
-#include "HWThreadManager.h"
+#include "HWResourceManager.h"
 
 
 
-HWThreadManager::HWThreadManager() {
-
-
+HWResourceManager::HWResourceManager() {
 }
 
-HWThreadManager::~HWThreadManager() { }
+HWResourceManager::~HWResourceManager() {
+}
 
-void HWThreadManager::declareSlot(std::string name, unsigned int id){
+void HWResourceManager::declareSlot(std::string name, unsigned int id){
 
     if(id >= 0){
         boost::unique_lock<boost::mutex> lock;
@@ -29,7 +28,7 @@ void HWThreadManager::declareSlot(std::string name, unsigned int id){
     }
 }
 
-int HWThreadManager::getAvailableSlot(std::string name){
+int HWResourceManager::getAvailableSlot(std::string name){
 
     boost::unique_lock<boost::mutex> lock;
 
@@ -46,7 +45,7 @@ int HWThreadManager::getAvailableSlot(std::string name){
 }
 
 
-void HWThreadManager::freeSlot(std::string name, int id){
+void HWResourceManager::freeSlot(std::string name, int id){
     boost::unique_lock<boost::mutex> lock;
 
     if(!name.empty() && id >= 0){

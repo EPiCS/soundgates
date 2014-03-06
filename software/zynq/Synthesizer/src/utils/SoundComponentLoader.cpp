@@ -100,7 +100,7 @@ void SoundComponentLoader::loadLibrary(const std::string& filename){
 
 	char *liberror;
 
-	void* libhndl = dlopen(filename.c_str(), RTLD_LAZY);
+	void* libhndl = dlopen(filename.c_str(), RTLD_LAZY); //RTLD_LAZY
 
 	if(NULL == libhndl){
 
