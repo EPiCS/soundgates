@@ -173,7 +173,7 @@ architecture Behavioral of hwt_fir is
     signal x_i          : signed(23 downto 0);     -- 24 bit internal input  sample
     signal y_i          : signed(23 downto 0);     -- 24 bit internal output sample
     
-    signal sample_in    : std_logic_vector(SAMPLE_WIDTH - 1 downto 0);
+    signal sample_in    : std_logic_vector(SAMPLE_WIDTH - 1 downto 0) := (others => '0');
     signal sample_out   : std_logic_vector(SAMPLE_WIDTH - 1 downto 0);
 
     signal coefficients_i16  : mem16(FIR_ORDER downto 0);
@@ -294,9 +294,8 @@ begin
     o_RAMAddr_fir  <= std_logic_vector(TO_UNSIGNED(ptr, C_LOCAL_RAM_ADDRESS_WIDTH));
     
     o_RAMData_fir  <= sample_out;
-    sample_in      <= i_RAMData_fir;
-    
-    uut: fir
+        
+    FIR_INST : fir
     generic map (
         FIR_ORDER => FIR_ORDER
     )
@@ -377,6 +376,12 @@ begin
 		end if;
 	end process;
     
+    SAMPLE_IN_REG_PROC : process(clk)
+    begin
+        if rising_edge(clk) then
+            sample_in <= i_RAMData_fir;
+        end if;
+    end process;
     
     FIR_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
         variable done : boolean;
@@ -439,7 +444,7 @@ begin
                 if sample_count > 0 then
                     case process_state is                    
                     -- Read one sample from local memory
-                    when 0 =>
+                    when 0 =>                    
                         fir_ce        <= '1';                        
                         process_state <= 1;
                     when 1 =>

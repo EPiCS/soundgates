@@ -1,0 +1,12 @@
+#N canvas 720 308 718 227 10;
+#X floatatom 227 217 5 0 0 0 - - -;
+#X obj 214 135 mux_patch;
+#X floatatom 163 66 5 0 0 0 - - -;
+#X floatatom 220 60 5 0 0 0 - - -;
+#X msg 312 81 1;
+#X msg 268 81 0;
+#X connect 1 0 0 0;
+#X connect 2 0 1 0;
+#X connect 3 0 1 1;
+#X connect 4 0 1 2;
+#X connect 5 0 1 2;

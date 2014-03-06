@@ -57,9 +57,6 @@ entity hwt_sawtooth is
 		MEMIF_FIFO_Mem2Hwt_RE      : out std_logic;
 
 		HWT_Clk   : in  std_logic;
-		cscope1    : out  std_logic_vector(31 downto 0);
-		cscope2    : out  std_logic_vector(31 downto 0);
-		cscope3    : out  std_logic_vector(31 downto 0);
 		HWT_Rst   : in  std_logic
     );
 end hwt_sawtooth;
@@ -70,20 +67,16 @@ architecture Behavioral of hwt_sawtooth is
     -- Subcomponent declarations
     ----------------------------------------------------------------
     
-   component nco is
-	generic(
-		FPGA_FREQUENCY  : integer       := 100_000_000;
-		WAVEFORM        : WAVEFORM_TYPE := SAW
-	);
+   component sawtooth is
     Port ( 
-            clk          : in  std_logic;           
-            rst          : in  std_logic;
-            ce           : in  std_logic;
-            phase_offset : in  signed(31 downto 0);
-            phase_incr   : in  signed(31 downto 0);
-            data         : out signed(31 downto 0)
+        clk     : in  std_logic;
+        rst     : in  std_logic;
+        ce      : in  std_logic;
+        incr    : in  signed(31 downto 0); 
+        offset  : in  signed(31 downto 0);  
+        saw     : out signed(31 downto 0)
            );
-   end component nco;
+   end component sawtooth;
  
    signal clk   : std_logic;
 	signal rst   : std_logic;
@@ -176,9 +169,6 @@ begin
     destaddr    <= hwtio.argv(0);
     phaseoffset <= hwtio.argv(1);
     phaseincr   <= hwtio.argv(2);
-	 cscope1		 <= hwtio.argv(0);
-    cscope2 	 <= hwtio.argv(1);
-    cscope3  	 <= hwtio.argv(2);
 
     -----------------------------------
     -- Hard wirings
@@ -228,18 +218,14 @@ begin
            
 
     -- /ReconOS Stuff
-    nco_inst : nco
-    generic map(
-		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ,
-		WAVEFORM        => SAW
-	 )
+    SAWTOOTH_INST : sawtooth
     port map( 
-            clk          => clk,
-            rst          => rst,
-            ce           => nco_ce,
-            phase_offset => signed(phaseoffset),
-            phase_incr   => signed(phaseincr),
-            data         => nco_data
+            clk      => clk,
+            rst      => rst,
+            ce       => nco_ce,
+            offset   => signed(phaseoffset),
+            incr     => signed(phaseincr),
+            saw      => nco_data
             );
             
     local_ram_ctrl_1 : process (clk) is
@@ -258,8 +244,8 @@ begin
 		if (rising_edge(clk)) then		
 			if (o_RAMWE_nco = '1') then
 				local_ram(to_integer(unsigned(o_RAMAddr_nco))) := o_RAMData_nco;
-            --else      -- else not needed, because nco is not consuming any samples
-			--	i_RAMData_nco <= local_ram(conv_integer(unsigned(o_RAMAddr_nco)));
+            else
+				i_RAMData_nco <= local_ram(to_integer(unsigned(o_RAMAddr_nco)));
 			end if;
 		end if;
 	end process;    
@@ -280,10 +266,8 @@ begin
             o_RAMWE_nco         <= '0';
             state_inner_process <= '0';
             
-
             -- Initialize hwt args         
-            hwtio.f_step        <= 0;
-            hwtio.base_addr     <= (others => '0');
+            hwtio_init(hwtio);
 
             done := False;
               

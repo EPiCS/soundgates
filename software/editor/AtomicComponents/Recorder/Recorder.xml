@@ -6,9 +6,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="adc">
-				<PortMapping PortName="SoundOut" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="adc">
 			    <PortMapping PortName="SoundOut" PortNumber="1"/>
 			</Implementation>

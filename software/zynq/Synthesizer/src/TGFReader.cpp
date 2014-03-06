@@ -33,8 +33,8 @@ void TGFReader::read(Patch* patch, string filename){
 	ifstream sgfile(filename.c_str());
 
 	if(!sgfile.good()){
-		LOG_ERROR("input file does not exist");
-		return;
+		LOG_ERROR("Input file does not exist!");
+		std::exit(1);
 	}
 
 	boost::regex nodexpr("([0-9]+)[[:space:]]+([a-z]+)/([a-z]+)(\\(([0-9]+)\\))?(/('.*',?)+)?");
