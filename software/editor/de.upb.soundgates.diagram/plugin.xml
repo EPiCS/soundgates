@@ -146,6 +146,17 @@
                menubarPath="Soundgates.diagram.editormenu/group">
          </action>
       </objectContribution>
+      <objectContribution
+            id="Soundgates.diagram.VHDlExport"
+            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart">
+         <action
+               class="soundgates.diagram.actions.VHDLExportAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.VHDLExport"
+               label="Export VDHL file"
+               menubarPath="Soundgates.diagram.editormenu/group">
+         </action>
+      </objectContribution>
    </extension>
 	
    <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">
