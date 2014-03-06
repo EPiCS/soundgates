@@ -1,7 +1,13 @@
 package soundgates.diagram.actions;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Iterator;
+import java.util.LinkedList;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -14,7 +20,9 @@ import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
 import soundgates.Port;
 import soundgates.SoundComponent;
+import soundgates.VHDLPort;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
+import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 
 
@@ -29,11 +37,11 @@ public class VHDLExportAction implements IObjectActionDelegate{
 			 if (selectedObject instanceof CompositeSoundComponentEditPart){
 				 CompositeSoundComponentEditPart compositeSoundComponentAbstractEditPart =
 						 (CompositeSoundComponentEditPart) selectedObject;
-				 
+				
 				 CompositeSoundComponent compositeSoundComponent =
 						 compositeSoundComponentAbstractEditPart.getCompositeSoundComponent();			 
 				 
-				 print(compositeSoundComponent);
+				 saveTextToFile(getVHDLText(compositeSoundComponent),"NewVHDLFile.txt");
 			 }
 		}
 	}
@@ -50,19 +58,66 @@ public class VHDLExportAction implements IObjectActionDelegate{
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {		
 	}
 
-	private void print(CompositeSoundComponent compositeSoundComponent){
+	private String getVHDLText(CompositeSoundComponent compositeSoundComponent){
+		StringBuffer stringBuffer = new StringBuffer();
 		for (SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
 			if(soundComponent instanceof AtomicSoundComponent){
 				
-				System.out.println("Atomic component: Name: "+soundComponent.getName()+" Type: "+((AtomicSoundComponent) soundComponent).getType());
+				AtomicSoundComponent atomicSoundComponent =((AtomicSoundComponent) soundComponent);
+				
+				stringBuffer.append("Atomic component: Name: "+soundComponent.getName()+" Type: "+atomicSoundComponent.getType()+"\n");
 				for(Port port : soundComponent.getPorts()){
-					System.out.println("  Port: Name: "+port.getName()+" Direction: "+port.getDirection());
-				}
-				float v = ((AtomicSoundComponent) soundComponent).getFloatProperties().get("Value");
+					stringBuffer.append("  Port: Name: "+port.getName()+" Direction: "+port.getDirection());
+					if( getVHDLPortFromModelPort(atomicSoundComponent, port) !=null)
+						stringBuffer.append(" VHDLName: "+getVHDLPortFromModelPort(atomicSoundComponent, port).getVhdlName()+"\n");
+					else 
+						stringBuffer.append("\n");
+				}				
 			}
 			else if(soundComponent instanceof CompositeSoundComponent){
 				System.out.println("Composite component: Name: "+soundComponent.getName());
 			}
 		}
+		return stringBuffer.toString();
+	}
+	
+	private VHDLPort getVHDLPortFromModelPort(AtomicSoundComponent atomicSoundComponent, Port modelPort){
+		LinkedList<VHDLPort> vhdlPorts = AtomicSoundComponentLibrary.componentTypeToVHDLPortsList.get(atomicSoundComponent.getType());
+		for(VHDLPort vhdlPort : vhdlPorts){
+			if(vhdlPort.hasModelName())
+				if(vhdlPort.getModelName().equals(modelPort.getName())){
+					return vhdlPort;
+				}
+		}
+		return null;
+	}
+	
+	private Port getModelPortFromVHDLPort(AtomicSoundComponent atomicSoundComponent, VHDLPort vhdlPort){		
+		for(Port modelPort : atomicSoundComponent.getPorts()){
+			if(vhdlPort.getModelName().equals(modelPort.getName())){
+				return modelPort;
+			}
+		}
+		return null;
+	}
+	
+	private void saveTextToFile(String text, String fileName){	
+		
+		try {
+			IFile newFile = AtomicSoundComponentLibrary.getXMLFolder().getProject().getFile(fileName);
+			
+			InputStream code = new ByteArrayInputStream(text.getBytes());
+			
+			if(newFile.exists())
+				newFile.delete(true, null);
+			
+			newFile.create(code, IResource.FORCE, null);
+			
+			newFile.getParent().refreshLocal(1, null);
+			
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 }
