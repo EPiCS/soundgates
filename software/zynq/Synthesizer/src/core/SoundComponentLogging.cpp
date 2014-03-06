@@ -18,7 +18,7 @@ bool SoundComponentLogging::isConnected()
 {
 	if (!this->connected)
 	{
-		//	LOG_ERROR("No database connection!");
+		LOG_ERROR("No database connection! Please call connect() first");
 		return false;
 	}
 	return true;
@@ -103,7 +103,7 @@ void SoundComponentLogging::log_init(vector<SoundComponentPtr>::iterator begin,
 {
 	if (!isConnected())
 	{
-		return; //TODO return wieder einbauen
+		return;
 	}
 
 	bson b[1];
@@ -136,7 +136,7 @@ void SoundComponentLogging::log_init(vector<SoundComponentPtr>::iterator begin,
 		{
 			std::string uid = buildComponentName((*iter).get());
 			bson_append_string(b, DB_UID, uid.c_str());
-			bson_append_string(b, DB_TYPE, "sw"); //TODO HW/SW auslesen
+			bson_append_string(b, DB_TYPE, (*iter).get()->getDelegate()->getImplType());
 
 			bson_append_start_array(b, DB_IN_CTRL_PORTS); //TODO nur input control? Gewollt?
 			{

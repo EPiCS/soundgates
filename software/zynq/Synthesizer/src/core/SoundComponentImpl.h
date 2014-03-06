@@ -117,6 +117,7 @@ private:
 
 	std::vector<std::string> m_Parameters;
 
+	const char* implType;
 public:
 
 	SoundComponentImpl();
@@ -136,6 +137,9 @@ public:
 	virtual void initLater();
 	// Virtual function that is implemented in the subclasses by the DECLARE_ and DEFINE_COMPONENTNAME macros (see above)
 	virtual const char* getName() = 0;
+
+	void setImplType(const char* t);
+	const char* getImplType();
 
 };
 
