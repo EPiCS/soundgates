@@ -10,26 +10,29 @@ cd ${RECONOS_REPO}tools/environment
 source setup_reconos_toolchain.sh
 
 #Compile device tree
-mkdir -p ${WORKING_DIR}devicetree
+#mkdir -p ${WORKING_DIR}devicetree
 for file in $INPUT_DEVICE_TREE_INCLUDES
 do
     echo "copying dts include: ${file}"
     cp $file ${WORKING_DIR}devicetree
 done
 echo "copying dts: ${INPUT_DEVICE_TREE}"
-cp $INPUT_DEVICE_TREE ${WORKING_DIR}devicetree/device_tree.tmp
+#cp $INPUT_DEVICE_TREE ${WORKING_DIR}devicetree/device_tree.tmp # copy the whole folder, the new .dts includes some other file there
+cp -r $INPUT_DEVICE_TREE_FOLDER ${WORKING_DIR}
+DTFOLDER_NAME=`basename $INPUT_DEVICE_TREE_FOLDER`
 
 
 DT_TO_REPLACE='^\s*bootargs'
 DT_REPLACEMENT="		bootargs = \"console=ttyPS0,${MINICOM_BAUDRATE} root=/dev/nfs rw nfsroot=${NFS_ROOT_IP}:${NFS_EXPORT},tcp ip=${ZEDBOARD_IP}::${ZEDBOARD_GATEWAY}:${ZEDBOARD_NETMASK}:zynq:eth0:off earlyprintk\";"
 
-for file in ${WORKING_DIR}devicetree/*
+#for file in ${WORKING_DIR}devicetree/*
+for file in ${WORKING_DIR}/${DTFOLDER_NAME}/*
 do
     sed -i "/${DT_TO_REPLACE}/c\ ${DT_REPLACEMENT}" $file
 done
 
 echo "compiling devicetree"
-$EXECUTABLE_DTC -I dts -O dtb -o $DEVICE_TREE_BLOB ${WORKING_DIR}devicetree/device_tree.tmp
+$EXECUTABLE_DTC -I dts -O dtb -o $DEVICE_TREE_BLOB ${WORKING_DIR}/${DTFOLDER_NAME}/*.dts
 
 echo "Loading initial bitstream"
 echo "  FPGA Bitstream:             $INPUT_INITIAL_BITSTREAM"
