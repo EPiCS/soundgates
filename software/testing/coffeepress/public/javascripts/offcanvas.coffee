@@ -67,12 +67,6 @@ expand = (execution) ->
   # Adding AVG execution time
   div = $('#component_average_execution')
   console.dir div
-  col = { columns: __calcAverageExecutionTimeList(execution.components), type: 'donut' }
-  console.log JSON.stringify( col, 0, 2 )
-  fufu = c3.generate({
-    bindto : div,
-    data: col})
-    
      
 
 
@@ -118,41 +112,6 @@ expandComponent = (component) ->
   __createDiagram(component)
   return
 
-
-__createDiagram = (component) ->
-  console.log "Info: Creating compnent diagram for " + component.uid
-  # Prepare data
-  dataAscolumns = __prepareSamples component
-  if dataAscolumns.length > 0
-    selector = __replaceRaute(component.uid)
-    selector = '#' + selector
-    datarr = { columns: dataAscolumns }
-
-    chart = c3.generate({
-      bindto : selector,
-      data   : datarr
-      zoom   : { enabled: true} }) 
-  return
-
-__prepareSamples = (component) ->
-  columns = []
-  input_length = component.input_samples.length
-  for port, i in component.input_samples
-      c = []
-      c.push 'Input_' + i 
-      for sample in component.input_samples[i].values
-        c.push sample
-      columns.push c
-
-  for port, i in component.output_samples
-      c = []
-      c.push 'Output_' + i
-      for sample in component.output_samples[i].values
-        c.push sample
-      columns.push c
-
-  return columns
-
 __calcAverageExecutionTime = (execution_times) ->
   return "No data available" if execution_times.length == 0
   result = 0
@@ -168,6 +127,56 @@ __calcAverageExecutionTimeList = ( components ) ->
     data.push( __calcAverageExecutionTime( c.execution_times ) )
     res.push(data)
   return res
+
+# ## ---- NVD3
+
+__createDiagram = (component) ->
+  console.log "Info: Creating compnent diagram for " + component.uid
+  # Prepare data
+  draw_samples = __prepareSamples component
+
+  nv.addGraph ->
+    console.dir component
+    chart = nv.models.lineChart()
+            .margin(left: 20)
+            .useInteractiveGuideline(true)
+            .transitionDuration(350)
+            .showLegend(true)
+            .showYAxis(true)
+            .showXAxis(true) #Show the x-axis
+    #Chart x-axis settings
+    chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
+    #Chart y-axis settings
+    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format("5.00f")
+    
+    #Select the <svg> element you want to render the chart in.   
+    #Populate the <svg> element with chart data...
+    #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
+    selector = __replaceRaute(component.uid)
+    selector = '#' + selector
+    d3.select(selector).append('svg').datum(draw_samples).call(chart)
+    #Update the chart when window resizes.
+    nv.utils.windowResize(chart.update);
+    nv.utils.windowResize ->
+      chart.update()
+      return 
+    return chart
+
+__prepareSamples = (component) ->
+  data = []
+  console.dir component.input_samples
+  input_length = component.input_samples.length
+  for port, i in component.input_samples
+      data.push { key: 'Input port ' + i, values: [] } 
+      for sample, j in component.input_samples[i].values
+        data[i].values.push {x:j, y: sample} 
+
+  for port, i in component.output_samples
+      data.push { key: 'Output port ' + i, values: [] } 
+      for sample, j in component.output_samples[i].values
+        data[input_length + i].values.push {x:j, y: sample} 
+
+  return data
    
 __replaceRaute = (text) ->
   return text.replace /#/g, '_'
@@ -248,53 +257,36 @@ __getJsDate = (x) ->
 
 $(document).ready readyFn
 
-
-# ## ---- NVD3
-
 # __createDiagram = (component) ->
 #   console.log "Info: Creating compnent diagram for " + component.uid
 #   # Prepare data
-#   draw_samples = __prepareSamples component
-
-#   nv.addGraph ->
-#     console.dir component
-#     chart = nv.models.lineChart()
-#             .margin(left: 20)
-#             .useInteractiveGuideline(true)
-#             .transitionDuration(350)
-#             .showLegend(true)
-#             .showYAxis(true)
-#             .showXAxis(true) #Show the x-axis
-#     #Chart x-axis settings
-#     chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
-#     #Chart y-axis settings
-#     chart.yAxis.axisLabel("Amplitude").tickFormat d3.format("5.00f")
-    
-#     #Select the <svg> element you want to render the chart in.   
-#     #Populate the <svg> element with chart data...
-#     #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
+#   dataAscolumns = __prepareSamples component
+#   if dataAscolumns.length > 0
 #     selector = __replaceRaute(component.uid)
 #     selector = '#' + selector
-#     d3.select(selector).append('svg').datum(draw_samples).call(chart)
-#     #Update the chart when window resizes.
-#     nv.utils.windowResize(chart.update);
-#     nv.utils.windowResize ->
-#       chart.update()
-#       return 
-#     return chart
+#     datarr = { columns: dataAscolumns }
+
+#     chart = c3.generate({
+#       bindto : selector,
+#       data   : datarr
+#       zoom   : { enabled: true} }) 
+#   return
 
 # __prepareSamples = (component) ->
-#   data = []
-#   console.dir component.input_samples
+#   columns = []
 #   input_length = component.input_samples.length
 #   for port, i in component.input_samples
-#       data.push { key: 'Input port ' + i, values: [] } 
-#       for sample, j in component.input_samples[i].values
-#         data[i].values.push {x:j, y: sample} 
+#       c = []
+#       c.push 'Input_' + i 
+#       for sample in component.input_samples[i].values
+#         c.push sample
+#       columns.push c
 
 #   for port, i in component.output_samples
-#       data.push { key: 'Output port ' + i, values: [] } 
-#       for sample, j in component.output_samples[i].values
-#         data[input_length + i].values.push {x:j, y: sample} 
+#       c = []
+#       c.push 'Output_' + i
+#       for sample in component.output_samples[i].values
+#         c.push sample
+#       columns.push c
 
-#   return data
+#   return columns

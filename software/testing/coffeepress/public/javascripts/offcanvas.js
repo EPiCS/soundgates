@@ -47,22 +47,13 @@
   };
 
   expand = function(execution) {
-    var c, col, count, div, fufu, meta_info, row_1, row_2, row_3, _i, _len, _ref;
+    var c, count, div, meta_info, row_1, row_2, row_3, _i, _len, _ref;
     getComponentList(execution.timestamp).done(initComponentNavigation);
     count = execution.components.length;
     div = $('#component_count');
     $('<h1/>').text(count).appendTo(div);
     div = $('#component_average_execution');
     console.dir(div);
-    col = {
-      columns: __calcAverageExecutionTimeList(execution.components),
-      type: 'donut'
-    };
-    console.log(JSON.stringify(col, 0, 2));
-    fufu = c3.generate({
-      bindto: div,
-      data: col
-    });
     meta_info = $('#meta_information');
     execution.formattedTime = getFormattedTime(execution.timestamp);
     row_1 = $('<div class="row"></div>').appendTo('#execution');
@@ -93,57 +84,6 @@
     __createDiagram(component);
   };
 
-  __createDiagram = function(component) {
-    var chart, dataAscolumns, datarr, selector;
-    console.log("Info: Creating compnent diagram for " + component.uid);
-    dataAscolumns = __prepareSamples(component);
-    if (dataAscolumns.length > 0) {
-      selector = __replaceRaute(component.uid);
-      selector = '#' + selector;
-      datarr = {
-        columns: dataAscolumns
-      };
-      chart = c3.generate({
-        bindto: selector,
-        data: datarr,
-        zoom: {
-          enabled: true
-        }
-      });
-    }
-  };
-
-  __prepareSamples = function(component) {
-    var c, columns, i, input_length, port, sample, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
-    columns = [];
-    input_length = component.input_samples.length;
-    _ref = component.input_samples;
-    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-      port = _ref[i];
-      c = [];
-      c.push('Input_' + i);
-      _ref1 = component.input_samples[i].values;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        sample = _ref1[_j];
-        c.push(sample);
-      }
-      columns.push(c);
-    }
-    _ref2 = component.output_samples;
-    for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
-      port = _ref2[i];
-      c = [];
-      c.push('Output_' + i);
-      _ref3 = component.output_samples[i].values;
-      for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-        sample = _ref3[_l];
-        c.push(sample);
-      }
-      columns.push(c);
-    }
-    return columns;
-  };
-
   __calcAverageExecutionTime = function(execution_times) {
     var result, time, _i, _len;
     if (execution_times.length === 0) {
@@ -168,6 +108,69 @@
       res.push(data);
     }
     return res;
+  };
+
+  __createDiagram = function(component) {
+    var draw_samples;
+    console.log("Info: Creating compnent diagram for " + component.uid);
+    draw_samples = __prepareSamples(component);
+    return nv.addGraph(function() {
+      var chart, selector;
+      console.dir(component);
+      chart = nv.models.lineChart().margin({
+        left: 20
+      }).useInteractiveGuideline(true).transitionDuration(350).showLegend(true).showYAxis(true).showXAxis(true);
+      chart.xAxis.axisLabel("Samples").tickFormat(d3.format(",r"));
+      chart.yAxis.axisLabel("Amplitude").tickFormat(d3.format("5.00f"));
+      selector = __replaceRaute(component.uid);
+      selector = '#' + selector;
+      d3.select(selector).append('svg').datum(draw_samples).call(chart);
+      nv.utils.windowResize(chart.update);
+      nv.utils.windowResize(function() {
+        chart.update();
+      });
+      return chart;
+    });
+  };
+
+  __prepareSamples = function(component) {
+    var data, i, input_length, j, port, sample, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+    data = [];
+    console.dir(component.input_samples);
+    input_length = component.input_samples.length;
+    _ref = component.input_samples;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      port = _ref[i];
+      data.push({
+        key: 'Input port ' + i,
+        values: []
+      });
+      _ref1 = component.input_samples[i].values;
+      for (j = _j = 0, _len1 = _ref1.length; _j < _len1; j = ++_j) {
+        sample = _ref1[j];
+        data[i].values.push({
+          x: j,
+          y: sample
+        });
+      }
+    }
+    _ref2 = component.output_samples;
+    for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
+      port = _ref2[i];
+      data.push({
+        key: 'Output port ' + i,
+        values: []
+      });
+      _ref3 = component.output_samples[i].values;
+      for (j = _l = 0, _len3 = _ref3.length; _l < _len3; j = ++_l) {
+        sample = _ref3[j];
+        data[input_length + i].values.push({
+          x: j,
+          y: sample
+        });
+      }
+    }
+    return data;
   };
 
   __replaceRaute = function(text) {
