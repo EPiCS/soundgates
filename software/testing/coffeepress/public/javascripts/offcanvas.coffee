@@ -38,10 +38,21 @@ initComponentNavigation = ( components ) ->
   $('<li class="nav-header">').appendTo(nav).text("Components")
   for c in components
     li = $('<li>').appendTo(nav)
-    $('<a href="#">').appendTo(li).text(c.uid).fadeIn()
+    el = $('<a href="#">').appendTo(li).text(c.uid).fadeIn()
+    li.click ->
+      target = '#' + __replaceRaute $(this).children('a').text()
+      console.log "Scrolling to " + target
+      $("html, body").animate
+        scrollTop: $(target).position().top
+        , "slow"
 
 initializeButtons = () ->
   # Add methods to buttons
+  $("#refresh_test").click ->
+    $("html, body").animate
+        scrollTop: $('home').position().top
+        , "slow"
+    return
   $("#refresh_test").click(getExecutionList)
   $("#generate_test").click(generateTestdata)
   $("#remove_test").click(removeEveryExecution)
@@ -62,39 +73,51 @@ expand = (execution) ->
   # Adding component count
   count = execution.components.length
   div = $('#component_count')
-  $('<h1/>').text(count).appendTo(div)
+  $('<h1/>').text('#' + count).css("font-weight","Bold").appendTo(div)
+  $('<p/>').text('have been found').appendTo(div)
+  
+  # DONUT Chart
+  nv.addGraph ->
+    pie = nv.models.pieChart()
+      .x (d) -> d.label
+      .y (d) -> d.value
+      .showLabels(false)     #Display pie labels
+      .labelThreshold(.05)  #Configure the minimum slice size for labels to show up
+      .labelType("percent") #Configure what type of data to show in the label. Can be "key", "value" or "percent"
+      .donut(true)          #Turn on Donut mode. Makes pie chart look tasty!
+      .donutRatio(0.5)     #Configure how big you want the donut hole size to be.
+
+    data = __calcTypeImplementationDistribution execution.components
+    div = '#component_implementations'
+    d3.select(div).append('svg')
+        .datum(data)
+        .transition().duration(350)
+        .call(pie);
+    return pie
 
   # Adding AVG execution time
-  div = $('#component_average_execution')
-  console.dir div
-     
-
-
-  meta_info = $('#meta_information')
-  
-  execution.formattedTime = getFormattedTime execution.timestamp
-  # ####################################
-  # -   Header
-  # ####################################
-  row_1 = $('<div class="row"></div>').appendTo('#execution')
-  $('<div class="col-md-4"/>').appendTo(row_1).text("Execution date:")
-  $('<div class="col-md-8"/>').appendTo(row_1).text(execution.formattedTime)
-
-  row_2 = $('<div class="row"></div>').appendTo('#execution')
-  $('<div class="col-md-4"/>').appendTo(row_2).text("Turnaround time:")
-  $('<div class="col-md-8"/>').appendTo(row_2).text(execution.turnaround)
-
-  row_3 = $('<div class="row"></div>').appendTo('#execution')
-  $('<div class="col-md-4"/>').appendTo(row_3).text("Number of Components:")
-  $('<div class="col-md-8"/>').appendTo(row_3).text(execution.components.length)
-
-  row_3 = $('<br>').appendTo('#execution')
+  # BAR Chart
+  nv.addGraph ->
+    bar = nv.models.discreteBarChart()
+      .x (d) -> d.label
+      .y (d) -> d.value
+      .staggerLabels(true)    #Too many bars and not enough room? Try staggering labels.
+      .tooltips(false)        #Don't show tooltips
+      .showValues(true)       #...instead, show the bar value right on top of each bar.
+      .transitionDuration(350)
+    div = '#component_average_execution'
+    data = __calcAverageExecutionTimeList execution.components
+    d3.select(div).append('svg')
+        .attr('height',200)
+        .datum(data)
+        .transition().duration(350)
+        .call(bar);
+    return bar
 
   # ####################################
   # -   Graphs
   # ####################################
 
-  console.log execution.components
   for c in execution.components
     expandComponent(c)
 
@@ -102,15 +125,37 @@ expand = (execution) ->
 
 expandComponent = (component) ->
   # Create Component Header
-  panel = $('<div class="panel panel-primary"></div>').appendTo('#execution')
-  $('<div class="panel-heading"/>').appendTo(panel).text('UID: ' + component.uid) 
-  typ = $('<div class="panel-body"/>').appendTo(panel).text('Type: ' + component.type)
-  $('<p/>').appendTo(typ).text('Average Execution time: ' + __calcAverageExecutionTime component.execution_times )
-  $('<div/>').appendTo(panel).attr('id', __replaceRaute(component.uid) )
+  row = $('<div class="span12"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution')
+  card = $('<div class="card"/>').appendTo(row)
+  title = $('<h8 class="card-heading simple"/>').appendTo(card).text( 'UID: ' + component.uid )
+  body = $('<div class="card-body"/>').appendTo(card)
+  typ = $('<p/>').appendTo(body).text('Type: ' + component.type)
+  avg = $('<p/>').appendTo(body).text('Average Execution time: ' + __calcAverageExecutionTime component.execution_times )
+  $('<div/>').appendTo(body).attr('id', __replaceRaute(component.uid) + "_graphic" )
   # Create diagram
   #d3.select('#execution').append('svg') 
   __createDiagram(component)
   return
+
+__calcTypeImplementationDistribution = ( components ) ->
+  result = []
+  sw_components = 0
+  for c in components
+    sw_components += 1 if c.type is 'SW' or c.type is 'sw' or c.type is 'Sw'
+  #sw_percentage = (components.length / sw_components) if sw_components is not 0
+  sw_percentage = if sw_components > 0 then ( sw_components * 100 / components.length) else 0
+  hw_percentage = 100 - sw_percentage
+
+  sw = 
+    label: "SW"
+    value: sw_percentage
+  result.push sw
+  hw =
+    label: "HW"
+    value: hw_percentage
+  result.push hw
+
+  return result
 
 __calcAverageExecutionTime = (execution_times) ->
   return "No data available" if execution_times.length == 0
@@ -120,13 +165,13 @@ __calcAverageExecutionTime = (execution_times) ->
   return result / execution_times.length
 
 __calcAverageExecutionTimeList = ( components ) ->
-  res = []
+  result = [ { key: "Average Execution Time", values:[] }]
   for c in components
-    data = []
-    data.push( __replaceRaute(c.uid) )
-    data.push( __calcAverageExecutionTime( c.execution_times ) )
-    res.push(data)
-  return res
+    data = 
+      label: __replaceRaute c.uid
+      value: __calcAverageExecutionTime c.execution_times
+    result[0].values.push data
+  return result
 
 # ## ---- NVD3
 
@@ -136,7 +181,6 @@ __createDiagram = (component) ->
   draw_samples = __prepareSamples component
 
   nv.addGraph ->
-    console.dir component
     chart = nv.models.lineChart()
             .margin(left: 20)
             .useInteractiveGuideline(true)
@@ -153,7 +197,7 @@ __createDiagram = (component) ->
     #Populate the <svg> element with chart data...
     #d3.select("#chart svg").datum(myData).call chart #Finally, render the chart!
     selector = __replaceRaute(component.uid)
-    selector = '#' + selector
+    selector = '#' + selector + '_graphic'
     d3.select(selector).append('svg').datum(draw_samples).call(chart)
     #Update the chart when window resizes.
     nv.utils.windowResize(chart.update);

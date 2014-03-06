@@ -21,7 +21,7 @@ html
           .nav-collapse.collapse
             ul.nav
               li.active
-                a(href='#') Home
+                a(id='home', href='#') Home
               li
                 a(href='#about') About
               li
@@ -52,89 +52,27 @@ html
         .span9
           .hero-unit.shadow
             h1 Soundgates Debugger
-          .row-fluid(id="meta_information")
-            .span4
-              .card
-                h8.card-heading.simple Execution Date
-                .card-body(id="execution_date")
-                  h1.text-right
-                    <b>12:35</b>
-                  p.text-right
-                    | 2 / March / 2014
-            .span4
-              .card
-                h8.card-heading.simple Components
-                .card-body(id="component_count")
-            .span4
-              .card
-                h8.card-heading.simple Implementations
-                .card-body(id="component_implementations")
-            .span8
-              .card
-                h8.card-heading.simple Average Execution Time
-                .card-body(id="component_average_execution")
-          .hero-unit
-            #execution
-          .row-fluid
-            .span4
-              .card
-                h2.card-heading.simple Heading
-                .card-body
-                  p
-                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                  p
-                    a.btn(href='#') View details »
-            // /span
-            .span4
-              .card
-                h2.card-heading.simple Heading
-                .card-body
-                  p
-                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                  p
-                    a.btn(href='#') View details »
-            // /span
-            .span4
-              .card
-                h2.card-heading.simple Heading
-                .card-body
-                  p
-                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                  p
-                    a.btn(href='#') View details »
-            // /span
-          // /row
-          .row-fluid
-            .span4
-              .card
-                h2.card-heading.simple Heading
-                .card-body
-                  p
-                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                  p
-                    a.btn(href='#') View details »
-            // /span
-            .span4
-              .card
-                h2.card-heading.simple Heading
-                .card-body
-                  p
-                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                  p
-                    a.btn(href='#') View details »
-            // /span
-            .span4
-              .card
-                h2.card-heading.simple Heading
-                .card-body
-                  p
-                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                  p
-                    a.btn(href='#') View details »
-            // /span
-          // /row
-        // /span
-      // /row
+        .span3
+          .card
+            h8.card-heading.simple Execution Date
+            .card-body(id="execution_date")
+              h1.text-right
+                <b>12:35</b>
+              p.text-right
+                | 2 / March / 2014
+        .span3
+          .card
+            h8.card-heading.simple Components
+            .card-body(id="component_count")
+        .span3
+          .card
+            h8.card-heading.simple Implementations
+            .card-body(id="component_implementations")
+        .span9
+          .card
+            h8.card-heading.simple Average Execution Time
+            .card-body(id="component_average_execution")
+        #execution
       hr
   footer
     p © Soundgates 2014
