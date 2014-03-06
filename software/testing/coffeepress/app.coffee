@@ -26,6 +26,7 @@ app.get "/", routes.index
 app.get "/execution/latest", routes.getLatestExecution
 app.get "/execution/list", routes.getExecutionList
 app.get "/execution/:id", routes.getExecution
+app.get "/componentlist/:id", routes.getComponentList
 app.get "/generate", routes.generateData
 app.get "/remove/all", routes.removeAllExecutions
 app.get "/remove/:id", routes.removeExecution

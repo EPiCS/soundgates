@@ -44,9 +44,22 @@ exports.getExecutionList = (req, res) ->
         for execution in executions
             # Preparing Data
             execution.formattedTime = getFormattedTime(execution.timestamp)
-        console.log "HIAOSDHOSAIDHIOASHDIOASHDIOASHD"
         console.dir executions
         res.json executions
+        return
+    return
+
+exports.getComponentList = (req, res) ->
+    timestamp = req.params.id
+    console.log "Info: Getting Components with timestamp: " + timestamp
+    query = Execution.find()
+    query.where('timestamp').equals(timestamp)
+    query.select('components.uid')
+    query.exec ( err, component ) ->
+        if err
+            console.log err
+        else
+            res.json component[0].components
         return
     return
 
@@ -94,7 +107,7 @@ exports.removeAllExecutions = (req, res) ->
 exports.generateData = (req, res) ->
     execution_arr = []
     data_1 = {
-            timestamp: (Math.round(new Date().getTime() / 1000) - 1000)
+            timestamp: 1392916791
             components: [
                 {
                     uid: "sine#0"
