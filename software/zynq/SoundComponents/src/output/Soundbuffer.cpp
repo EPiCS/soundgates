@@ -12,8 +12,6 @@ Soundbuffer::Soundbuffer(bool record)
 	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
 	this->SOUNDBUFFERSIZE = cfg.get<int>(
 			SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
-	;
-
 	this->ALSACHARS = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
 	unsigned int samplerate = Synthesizer::config::samplerate;
 
@@ -430,6 +428,7 @@ void Soundbuffer::fillbuffer(char* data, int size)
 		}
 	}
 	this->mutex.unlock();
+
 }
 
 bool Soundbuffer::canAcceptData(int size)
