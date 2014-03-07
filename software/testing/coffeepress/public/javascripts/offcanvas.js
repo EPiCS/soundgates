@@ -72,7 +72,7 @@
         return d.label;
       }).y(function(d) {
         return d.value;
-      }).showLabels(false).labelThreshold(.05).labelType("percent").donut(true).donutRatio(0.5);
+      }).showLabels(false).labelThreshold(.05).labelType("percent").donut(true).donutRatio(0.5).color(['steelblue', 'lightgreen']);
       data = __calcTypeImplementationDistribution(execution.components);
       div = '#component_implementations';
       d3.select(div).append('svg').datum(data).transition().duration(350).call(pie);
@@ -101,7 +101,7 @@
     var avg, body, card, row, title, typ;
     row = $('<div class="span12"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution');
     card = $('<div class="card"/>').appendTo(row);
-    title = $('<h8 class="card-heading simple"/>').appendTo(card).text('UID: ' + component.uid);
+    title = $('<h2 class="card-heading"/>').appendTo(card).text('UID: ' + component.uid);
     body = $('<div class="card-body"/>').appendTo(card);
     typ = $('<p/>').appendTo(body).text('Type: ' + component.type);
     avg = $('<p/>').appendTo(body).text('Average Execution time: ' + __calcAverageExecutionTime(component.execution_times));

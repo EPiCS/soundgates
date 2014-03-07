@@ -86,6 +86,8 @@ expand = (execution) ->
       .labelType("percent") #Configure what type of data to show in the label. Can be "key", "value" or "percent"
       .donut(true)          #Turn on Donut mode. Makes pie chart look tasty!
       .donutRatio(0.5)     #Configure how big you want the donut hole size to be.
+      .color(['steelblue','lightgreen'])
+
 
     data = __calcTypeImplementationDistribution execution.components
     div = '#component_implementations'
@@ -125,9 +127,9 @@ expand = (execution) ->
 
 expandComponent = (component) ->
   # Create Component Header
-  row = $('<div class="span12"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution')
+  row = $('<div class="span10"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution')
   card = $('<div class="card"/>').appendTo(row)
-  title = $('<h8 class="card-heading simple"/>').appendTo(card).text( 'UID: ' + component.uid )
+  title = $('<h2 class="card-heading"/>').appendTo(card).text( 'UID: ' + component.uid )
   body = $('<div class="card-body"/>').appendTo(card)
   typ = $('<p/>').appendTo(body).text('Type: ' + component.type)
   avg = $('<p/>').appendTo(body).text('Average Execution time: ' + __calcAverageExecutionTime component.execution_times )

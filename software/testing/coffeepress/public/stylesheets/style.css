@@ -24,9 +24,13 @@ body
 }
 
 .card{
-  min-height:225px  
+  min-height:235px  
 }
 
 #component_average_execution{
   height: 250px
+}
+
+.card-heading.simple {
+  border-bottom: 0px;
 }
