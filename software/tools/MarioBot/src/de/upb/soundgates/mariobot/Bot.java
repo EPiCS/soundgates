@@ -2,11 +2,10 @@ package de.upb.soundgates.mariobot;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -22,6 +21,8 @@ import com.illposed.osc.OSCPortOut;
 
 public class Bot {
 
+	static final int CONFIG_QUANTIZE = 32;
+	static final float CONFIG_TEMPO_SCALE = 1.5f;
 	static float [] frequencies = new float [88];
 	
 	public static void main(String[] args) {
@@ -33,7 +34,7 @@ public class Bot {
 		
 		try {
 //			SeedData seedData = readMidiFile(new File("entchen.mid"));
-			SeedData seedData = readMidiFile(new File("sm3grass.mid"));
+			SeedData seedData = readMidiFile(new File(args[0]), Integer.parseInt(args[1]));
 			randomize(seedData);
 		} catch (InvalidMidiDataException e) {
 			// TODO Auto-generated catch block
@@ -81,9 +82,9 @@ public class Bot {
 			try {
 				sendFloat(sender, "frequency", frequencies[currentEvent.getPitch()]);
 				sendFloat(sender, "volume", 1);
-				Thread.sleep(currentEvent.getDuration());
+				Thread.sleep((long) (currentEvent.getDuration()*CONFIG_TEMPO_SCALE));
 				sendFloat(sender, "volume", 0);
-				Thread.sleep(currentEvent.getWaitingTime());
+				Thread.sleep((long) (currentEvent.getWaitingTime()*CONFIG_TEMPO_SCALE));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -103,13 +104,15 @@ public class Bot {
 	public static void sendFloat(OSCPortOut sender, String componentName, float value) throws IOException{
 		OSCMessage message = new OSCMessage("/" + componentName, new Object [] { value });
 		sender.send(message);
-		System.out.println("Sent: " + message.getAddress() + message.getArguments().toString());
+		System.out.println("Sent: " + message.getAddress() + Arrays.toString(message.getArguments()));
 	}
+	
+	
 	
 	public static final int NOTE_ON = 0x90;
     public static final int NOTE_OFF = 0x80;
     
-	static SeedData readMidiFile(File midi) throws InvalidMidiDataException, IOException{
+	static SeedData readMidiFile(File midi, int trackNumber) throws InvalidMidiDataException, IOException{
 		SeedData result = new SeedData();
 		
         Sequence sequence = MidiSystem.getSequence(midi);
@@ -151,7 +154,7 @@ public class Bot {
             System.out.println();
         }*/
         
-        Track track = sequence.getTracks()[1];
+        Track track = sequence.getTracks()[trackNumber];
         boolean lookingForNoteOn = true;
         
         
@@ -169,12 +172,20 @@ public class Bot {
         			currentNoteOnTick = event.getTick();
         			lookingForNoteOn = false;
         			System.out.println("\tKey: " + key + " Tick: " + currentNoteOnTick);
-        		} else if (!lookingForNoteOn && message.getCommand() == NOTE_OFF){
+        		} else if (!lookingForNoteOn && message.getCommand() == NOTE_OFF && message.getData1() == key){
         			System.out.println("Found expected NOTE_OFF");
-        			MusicalEvent me = new MusicalEvent(key, event.getTick() - currentNoteOnTick);
+        			
+        			long duration = event.getTick() - currentNoteOnTick;
+        			long waitingTime = currentNoteOnTick - lastNoteOffTick;
+        			
+        			duration = quantize(duration);
+        			waitingTime = quantize(waitingTime);
+        			
+        			MusicalEvent me = new MusicalEvent(key, duration);
+        			
         			
         			if (previousEvent != null){
-        				previousEvent.setWaitingTime(currentNoteOnTick - lastNoteOffTick);
+        				previousEvent.setWaitingTime(waitingTime);
         			}
         			result.add(me);
         			previousEvent = me;
@@ -190,5 +201,10 @@ public class Bot {
 		return result;
 
     }
+
+	private static long quantize(long value) {
+		long times = value / CONFIG_QUANTIZE;
+		return times*CONFIG_QUANTIZE;
+	}
 	
 }
