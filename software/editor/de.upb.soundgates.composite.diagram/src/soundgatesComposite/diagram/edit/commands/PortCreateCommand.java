@@ -47,9 +47,8 @@ public class PortCreateCommand extends EditElementCommand {
 	 * @generated NOT
 	 */
 	public boolean canExecute() {
-
-		if (getElementToEdit() instanceof CompositeSoundComponent &&
-				getElementToEdit().eContainer() instanceof Workbench)
+		
+		if (getElementToEdit() instanceof CompositeSoundComponent)
 			return true;
 		else
 			return false;
@@ -94,5 +93,7 @@ public class PortCreateCommand extends EditElementCommand {
 			configureCommand.execute(monitor, info);
 		}
 	}
+	
+	
 
 }
