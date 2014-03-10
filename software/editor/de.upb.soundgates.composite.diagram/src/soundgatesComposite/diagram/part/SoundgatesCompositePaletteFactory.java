@@ -155,7 +155,7 @@ public class SoundgatesCompositePaletteFactory {
 				Collections.singletonList(SoundgatesCompositeElementTypes.Port_3004));
 		entry.setId("createPort1CreationTool"); //$NON-NLS-1$
 		entry.setSmallIcon(SoundgatesCompositeDiagramEditorPlugin
-				.findImageDescriptor("/SoundgatesComposite.edit/icons/toolspalette/PortIn.gif")); //$NON-NLS-1$
+				.findImageDescriptor("/de.upb.soundgates.composite.edit/icons/toolspalette/PortIn.gif")); //$NON-NLS-1$
 		entry.setLargeIcon(entry.getSmallIcon());
 		return entry;
 	}
