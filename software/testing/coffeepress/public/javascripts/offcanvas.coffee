@@ -11,6 +11,20 @@ readyFn = (jQuery) ->
   # Get the latest execution
 
   # TODO: Add click methods for list group items
+
+  $("[data-clampedwidth]").each ->
+    elem = $(this)
+    parentPanel = elem.data("clampedwidth")
+    console.dir parentPanel
+    resizeFn = ->
+      sideBarNavWidth = $(parentPanel).width()
+      elem.css "width", sideBarNavWidth
+      console.log "Setting width to: " + sideBarNavWidth
+      return
+    resizeFn()
+    $(window).resize resizeFn
+    return
+
   initializeDocument()
   initializeButtons()
 
@@ -302,6 +316,7 @@ __getJsDate = (x) ->
     return date
 
 $(document).ready readyFn
+
 
 # __createDiagram = (component) ->
 #   console.log "Info: Creating compnent diagram for " + component.uid

@@ -4,6 +4,20 @@
 
   readyFn = function(jQuery) {
     console.log("Ready.");
+    $("[data-clampedwidth]").each(function() {
+      var elem, parentPanel, resizeFn;
+      elem = $(this);
+      parentPanel = elem.data("clampedwidth");
+      console.dir(parentPanel);
+      resizeFn = function() {
+        var sideBarNavWidth;
+        sideBarNavWidth = $(parentPanel).width();
+        elem.css("width", sideBarNavWidth);
+        console.log("Setting width to: " + sideBarNavWidth);
+      };
+      resizeFn();
+      $(window).resize(resizeFn);
+    });
     initializeDocument();
     initializeButtons();
   };
@@ -99,7 +113,7 @@
 
   expandComponent = function(component) {
     var avg, body, card, row, title, typ;
-    row = $('<div class="span12"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution');
+    row = $('<div class="span10"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution');
     card = $('<div class="card"/>').appendTo(row);
     title = $('<h2 class="card-heading"/>').appendTo(card).text('UID: ' + component.uid);
     body = $('<div class="card-body"/>').appendTo(card);

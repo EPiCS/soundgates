@@ -4,7 +4,7 @@ html
     title Soundgates
     link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:400,300,700')
     link(rel='stylesheet', href='/stylesheets/bootplus.min.css')
-    //- link(rel='stylesheet', href='/stylesheets/bootplus-responsive.min.css')
+    link(rel='stylesheet', href='/stylesheets/bootplus-responsive.min.css')
     link(rel='stylesheet', href='/stylesheets/nv.d3.css')
     //- link(rel='stylesheet', href='/stylesheets/c3.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
@@ -30,49 +30,51 @@ html
     .container-fluid
       .row-fluid
         .span2
-          .sidebar-nav
-            ul.nav.nav-list(id='nav_executions')
-              li.nav-header Executions
-              li.active
-                a(href='#') Link
-            ul.nav.nav-list(id='nav_components')
-              li.nav-header Components
-              li
-                a(href='#') Link
-            ul.nav.nav-list
-              li.nav-header Debugging
-              li
-                a(href='') Refresh
-              li
-                a(href='#') Generate
-              li
-                a(href='removeEveryExecution()') Remove
-          // /.well
-        // /span
+          .sidebar_parent
+            #sidebar.nav.nav-pills.nav-stacked.affix(data-clampedwidth=".sidebar_parent")
+              ul.nav.nav-list(id='nav_executions')
+                li.nav-header Executions
+                li.active
+                  a(href='#') Link
+              ul.nav.nav-list(id='nav_components')
+                li.nav-header Components
+                li
+                  a(href='#') Link
+              ul.nav.nav-list
+                li.nav-header Debugging
+                li
+                  a(href='') Refresh
+                li
+                  a(href='#') Generate
+                li
+                  a(href='removeEveryExecution()') Remove
+            // /.well
+          // /span
         .span10
           .hero-unit.shadow
             h1 Soundgates Debugger
-        .span3
-          .card
-            h8.card-heading.simple Execution Date
-            .card-body(id="execution_date")
-              h1.text-right
-                <b>12:35</b>
-              p.text-right
-                | 2 / March / 2014
-        .span3
-          .card
-            h8.card-heading.simple Components
-            .card-body(id="component_count")
-        .span4
-          .card
-            h8.card-heading.simple Implementations
-            .card-body(id="component_implementations")
-        .span10
-          .card
-            h8.card-heading.simple Average Execution Time
-            .card-body(id="component_average_execution")
-        #execution
+          .row-fluid
+            .span4
+              .card
+                h8.card-heading.simple Execution Date
+                .card-body(id="execution_date")
+                  h1.text-right
+                    <b>12:35</b>
+                  p.text-right
+                    | 2 / March / 2014
+            .span4
+              .card
+                h8.card-heading.simple Components
+                .card-body(id="component_count")
+            .span4
+              .card
+                h8.card-heading.simple Implementations
+                .card-body(id="component_implementations")
+            .span12
+              .card
+                h8.card-heading.simple Average Execution Time
+                .card-body(id="component_average_execution")
+            #execution
       hr
   footer
     p © Soundgates 2014
