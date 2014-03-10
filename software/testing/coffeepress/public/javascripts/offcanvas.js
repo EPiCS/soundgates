@@ -4,6 +4,11 @@
 
   readyFn = function(jQuery) {
     console.log("Ready.");
+    initializeDocument();
+    initializeButtons();
+  };
+
+  initializeDocument = function() {
     $("[data-clampedwidth]").each(function() {
       var elem, parentPanel, resizeFn;
       elem = $(this);
@@ -18,11 +23,6 @@
       resizeFn();
       $(window).resize(resizeFn);
     });
-    initializeDocument();
-    initializeButtons();
-  };
-
-  initializeDocument = function() {
     getExecutionList().done(initExecutionNavigation);
     return getLastExecution().done(expand);
   };
@@ -74,36 +74,50 @@
   };
 
   expand = function(execution) {
-    var c, count, div, _i, _len, _ref;
+    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, _i, _len, _ref;
     getComponentList(execution.timestamp).done(initComponentNavigation);
-    count = execution.components.length;
-    div = $('#component_count');
-    $('<h1/>').text('#' + count).css("font-weight", "Bold").appendTo(div);
-    $('<p/>').text('have been found').appendTo(div);
-    nv.addGraph(function() {
-      var data, pie;
-      pie = nv.models.pieChart().x(function(d) {
-        return d.label;
-      }).y(function(d) {
-        return d.value;
-      }).showLabels(false).labelThreshold(.05).labelType("percent").donut(true).donutRatio(0.5).color(['steelblue', 'lightgreen']);
-      data = __calcTypeImplementationDistribution(execution.components);
-      div = '#component_implementations';
-      d3.select(div).append('svg').datum(data).transition().duration(350).call(pie);
-      return pie;
-    });
-    nv.addGraph(function() {
-      var bar, data;
-      bar = nv.models.discreteBarChart().x(function(d) {
-        return d.label;
-      }).y(function(d) {
-        return d.value;
-      }).staggerLabels(true).tooltips(false).showValues(true).transitionDuration(350);
-      div = '#component_average_execution';
-      data = __calcAverageExecutionTimeList(execution.components);
-      d3.select(div).append('svg').attr('height', 200).datum(data).transition().duration(350).call(bar);
-      return bar;
-    });
+    expand_addDate = function(execution) {
+      console.log("addDate not implemented");
+    };
+    expand_addComponentCount = function(execution) {
+      var count, div;
+      count = execution.components.length;
+      div = $('#component_count');
+      $('<h1/>').text('#' + count).css("font-weight", "Bold").appendTo(div);
+      $('<p/>').text('have been found').appendTo(div);
+    };
+    expand_addImplementationDistribution = function(execution) {
+      nv.addGraph(function() {
+        var data, div, pie;
+        pie = nv.models.pieChart().x(function(d) {
+          return d.label;
+        }).y(function(d) {
+          return d.value;
+        }).showLabels(false).labelThreshold(.05).labelType("percent").donut(true).donutRatio(0.5).color(['steelblue', 'lightgreen']);
+        data = __calcTypeImplementationDistribution(execution.components);
+        div = '#component_implementations';
+        d3.select(div).append('svg').datum(data).transition().duration(350).call(pie);
+        return pie;
+      });
+    };
+    expand_addAverageExuction = function() {
+      nv.addGraph(function() {
+        var bar, data, div;
+        bar = nv.models.discreteBarChart().x(function(d) {
+          return d.label;
+        }).y(function(d) {
+          return d.value;
+        }).staggerLabels(true).tooltips(false).showValues(true).transitionDuration(350);
+        div = '#component_average_execution';
+        data = __calcAverageExecutionTimeList(execution.components);
+        d3.select(div).append('svg').attr('height', 200).datum(data).transition().duration(350).call(bar);
+        return bar;
+      });
+    };
+    expand_addDate(execution);
+    expand_addComponentCount(execution);
+    expand_addImplementationDistribution(execution);
+    expand_addAverageExuction(execution);
     _ref = execution.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       c = _ref[_i];

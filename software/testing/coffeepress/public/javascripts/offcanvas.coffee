@@ -2,16 +2,17 @@
 # |   Doc Starting         |
 # + ---------------------- +
 
+# Method is executed as soon document becomes ready
 readyFn = (jQuery) ->
   console.log "Ready."
-  # $("[data-toggle=offcanvas]").click ->
-  #   console.log "Click on button "
-  #   $(".row-offcanvas").toggleClass "active"
-  #   return
-  # Get the latest execution
 
-  # TODO: Add click methods for list group items
+  initializeDocument()
+  initializeButtons()
 
+  return
+
+initializeDocument = () ->
+  # Resize the Navigation Sidebar ( Bootstrap Bug )
   $("[data-clampedwidth]").each ->
     elem = $(this)
     parentPanel = elem.data("clampedwidth")
@@ -25,20 +26,12 @@ readyFn = (jQuery) ->
     $(window).resize resizeFn
     return
 
-  initializeDocument()
-  initializeButtons()
-
-  return
-
-initializeDocument = () ->
+  # Initialize Navigation Sidebar with every available execution
   getExecutionList().done(initExecutionNavigation)
+  # Get the latest execution and draw it
   getLastExecution().done(expand)
 
-  # $("#list-executions").children(".li").each (index, element) =>
-  #     # formValues = (elem.value for elem in $('.input'))
-  #     value = $(element).attr("value")
-  #     return
-
+# Initialize Navigation Sidebar with every available execution
 initExecutionNavigation = ( executions ) ->
   nav = $("#nav_executions").empty()
   $('<li class="nav-header">').appendTo(nav).text("Executions")
@@ -46,7 +39,12 @@ initExecutionNavigation = ( executions ) ->
     exec.formattedTime = getFormattedTime exec.timestamp
     li = $('<li>').appendTo(nav)
     $('<a href="#">').appendTo(li).text(exec.formattedTime).fadeIn()
+  # $("#list-executions").children(".li").each (index, element) =>
+  #     # formValues = (elem.value for elem in $('.input'))
+  #     value = $(element).attr("value")
+  #     return
 
+# Adds every used componend of the selected Execution to the sidebar
 initComponentNavigation = ( components ) ->
   nav = $("#nav_components").empty()
   $('<li class="nav-header">').appendTo(nav).text("Components")
@@ -74,66 +72,83 @@ initializeButtons = () ->
 
 
 
+# / ----------------------------------------------------------------------
+# Execution expander
+# / ----------------------------------------------------------------------
 
-# + ---------------------- +
-# |   Creating Functions   |
-# + ---------------------- +
-
-# Gets an execution and expands it inside of the document
 expand = (execution) ->
-  # Preprocessing
+# / ----------------------------------------------------------------------
+# Preprocessing
+
   getComponentList(execution.timestamp).done(initComponentNavigation)
 
-  # Adding component count
-  count = execution.components.length
-  div = $('#component_count')
-  $('<h1/>').text('#' + count).css("font-weight","Bold").appendTo(div)
-  $('<p/>').text('have been found').appendTo(div)
-  
-  # DONUT Chart
-  nv.addGraph ->
-    pie = nv.models.pieChart()
-      .x (d) -> d.label
-      .y (d) -> d.value
-      .showLabels(false)     #Display pie labels
-      .labelThreshold(.05)  #Configure the minimum slice size for labels to show up
-      .labelType("percent") #Configure what type of data to show in the label. Can be "key", "value" or "percent"
-      .donut(true)          #Turn on Donut mode. Makes pie chart look tasty!
-      .donutRatio(0.5)     #Configure how big you want the donut hole size to be.
-      .color(['steelblue','lightgreen'])
+# / ----------------------------------------------------------------------
+# Define expanding methods before calling
 
+  expand_addDate = ( execution ) ->
+    console.log "addDate not implemented"
+    return
 
-    data = __calcTypeImplementationDistribution execution.components
-    div = '#component_implementations'
-    d3.select(div).append('svg')
-        .datum(data)
-        .transition().duration(350)
-        .call(pie);
-    return pie
+  expand_addComponentCount = ( execution ) ->
+    count = execution.components.length
+    div = $('#component_count')
+    $('<h1/>').text('#' + count).css("font-weight","Bold").appendTo(div)
+    $('<p/>').text('have been found').appendTo(div)
+    return
 
-  # Adding AVG execution time
-  # BAR Chart
-  nv.addGraph ->
-    bar = nv.models.discreteBarChart()
-      .x (d) -> d.label
-      .y (d) -> d.value
-      .staggerLabels(true)    #Too many bars and not enough room? Try staggering labels.
-      .tooltips(false)        #Don't show tooltips
-      .showValues(true)       #...instead, show the bar value right on top of each bar.
-      .transitionDuration(350)
-    div = '#component_average_execution'
-    data = __calcAverageExecutionTimeList execution.components
-    d3.select(div).append('svg')
-        .attr('height',200)
-        .datum(data)
-        .transition().duration(350)
-        .call(bar);
-    return bar
+  expand_addImplementationDistribution = ( execution ) ->  
+    # DONUT Chart
+    nv.addGraph ->
+      pie = nv.models.pieChart()
+        .x (d) -> d.label
+        .y (d) -> d.value
+        .showLabels(false)
+        .labelThreshold(.05)
+        .labelType("percent")
+        .donut(true)
+        .donutRatio(0.5) #Configure how big you want the donut hole size to be.
+        .color(['steelblue','lightgreen'])
 
-  # ####################################
-  # -   Graphs
-  # ####################################
+      data = __calcTypeImplementationDistribution execution.components
+      div = '#component_implementations'
+      d3.select(div).append('svg')
+          .datum(data)
+          .transition().duration(350)
+          .call(pie);
+      return pie
+    return
 
+  expand_addAverageExuction = () ->
+    # Adding AVG execution time
+    # BAR Chart
+    nv.addGraph ->
+      bar = nv.models.discreteBarChart()
+        .x (d) -> d.label
+        .y (d) -> d.value
+        .staggerLabels(true)
+        .tooltips(false)
+        .showValues(true)
+        .transitionDuration(350)
+      div = '#component_average_execution'
+      data = __calcAverageExecutionTimeList execution.components
+      d3.select(div).append('svg')
+          .attr('height',200)
+          .datum(data)
+          .transition().duration(350)
+          .call(bar);
+      return bar
+    return
+
+# / ----------------------------------------------------------------------
+# Call expanding methods
+
+  expand_addDate execution
+  expand_addComponentCount execution
+  expand_addImplementationDistribution execution
+  expand_addAverageExuction execution
+
+# / ----------------------------------------------------------------------
+# Draw graphs
   for c in execution.components
     expandComponent(c)
 
