@@ -74,7 +74,7 @@ architecture Behavioral of hwt_sawtooth is
         ce      : in  std_logic;
         incr    : in  signed(31 downto 0); 
         offset  : in  signed(31 downto 0);  
-        data     : out signed(31 downto 0)
+        saw     : out signed(31 downto 0)
            );
    end component sawtooth;
  
@@ -225,7 +225,7 @@ begin
             ce       => nco_ce,
             offset   => signed(phaseoffset),
             incr     => signed(phaseincr),
-            data      => nco_data
+            saw      => nco_data
             );
             
     local_ram_ctrl_1 : process (clk) is
