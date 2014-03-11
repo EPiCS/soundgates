@@ -39,7 +39,12 @@ public class SeedData {
 		printAsTable(count);
 		for(MusicalEvent key : count.keySet()){
 			for(MusicalEvent key2 : count.get(key).keySet()){
-				count.get(key).put(key2, count.get(key).get(key2) / events.size());
+//				count.get(key).put(key2, count.get(key).get(key2) / events.size());
+				int counter = 0;
+				for (MusicalEvent key3 : count.get(key).keySet()){
+					counter += count.get(key).get(key3);
+				}
+				count.get(key).put(key2, count.get(key).get(key2) / counter);
 			}
 			System.out.println();
 		}

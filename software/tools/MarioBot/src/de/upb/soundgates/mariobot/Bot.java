@@ -22,7 +22,9 @@ import com.illposed.osc.OSCPortOut;
 public class Bot {
 
 	static final int CONFIG_QUANTIZE = 32;
-	static final float CONFIG_TEMPO_SCALE = 1.5f;
+	static final float CONFIG_TEMPO_SCALE = 2f;
+	static final float CONFIG_PRESS_PERCENTAGE = 0.6f;
+	static final int  CONFIG_IDENTICAL_RANDOMS = 3;
 	static float [] frequencies = new float [88];
 	
 	public static void main(String[] args) {
@@ -46,6 +48,9 @@ public class Bot {
 		
 	}
 
+	private static MusicalEvent lastPlayedEvent = null;
+	private static int lastPlayedCounter = 0;
+	
 	private static void randomize(SeedData seedData) throws SocketException, UnknownHostException {
 		HashMap<MusicalEvent, HashMap<MusicalEvent, Double>> data = seedData.getProbabilities();
 		
@@ -75,16 +80,31 @@ public class Bot {
 			if (nextElementCandidates.length > 0){
 				nextElement = nextElementCandidates[counter];	
 			} else {
+				System.out.print("No next event candidates found, need to choose at random...");
 				nextElement = (MusicalEvent) data.keySet().toArray()[random.nextInt(data.keySet().size())];
+
+				if (lastPlayedEvent == nextElement){
+					if (lastPlayedCounter < CONFIG_IDENTICAL_RANDOMS){
+						lastPlayedCounter++;	
+					} else {
+						while(nextElement == lastPlayedEvent){
+							nextElement = (MusicalEvent) data.keySet().toArray()[random.nextInt(data.keySet().size())];							
+						}
+					}
+				} else {
+					lastPlayedCounter = 0;
+				}
 			}
+			lastPlayedEvent = nextElement;
 		
 			//send it
 			try {
 				sendFloat(sender, "frequency", frequencies[currentEvent.getPitch()]);
 				sendFloat(sender, "volume", 1);
-				Thread.sleep((long) (currentEvent.getDuration()*CONFIG_TEMPO_SCALE));
+				
+				Thread.sleep((long) (currentEvent.getDuration() * CONFIG_PRESS_PERCENTAGE *CONFIG_TEMPO_SCALE));
 				sendFloat(sender, "volume", 0);
-				Thread.sleep((long) (currentEvent.getWaitingTime()*CONFIG_TEMPO_SCALE));
+				Thread.sleep((long) (currentEvent.getWaitingTime()*CONFIG_TEMPO_SCALE+currentEvent.getDuration()*(1-CONFIG_PRESS_PERCENTAGE)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
