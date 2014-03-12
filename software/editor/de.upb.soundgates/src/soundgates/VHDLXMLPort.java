@@ -1,16 +1,16 @@
 package soundgates;
 
-public class VHDLPort {
+public class VHDLXMLPort {
 
-	String modelName;
-	String vhdlName; 
-	Direction dir; 
-	String dataType; 
-	Range range; 
-	String sigis;
-	boolean isVector;
+	private String 		modelName;
+	private String 		vhdlName; 
+	private Direction 	dir; 
+	private String 		dataType; 
+	private Range 		range; 
+	private String 		sigis;
+	private boolean 	isVector;
 	
-	public VHDLPort(String vhdlName, Direction dir, String dataType){
+	public VHDLXMLPort(String vhdlName, Direction dir, String dataType){
 		this.vhdlName = vhdlName;
 		this.dir = dir;
 		this.dataType = dataType;	
