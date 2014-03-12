@@ -202,18 +202,61 @@ expand = (execution) ->
   return
 
 expandComponent = (component) ->
-  # Create Component Header
+  # Create Card
   row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left","0px").appendTo('#execution')
   card = $('<div class="card"/>').appendTo(row)
   title = $('<h2 class="card-heading"/>').appendTo(card).text( 'UID: ' + component.uid )
+  # Create Table
   body = $('<div class="card-body"/>').appendTo(card)
-  typ = $('<p/>').appendTo(body).text('Type: ' + component.type)
-  avg = $('<p/>').appendTo(body).text('Average Execution time: ' + __calcAverageExecutionTime component.execution_times )
+  table = $ "<table>"
+  table.addClass("table table-condensed table-hover").appendTo(body)
+  # Create Table Body
+  tbody = $ "<tbody>"
+  tbody.appendTo(table)
+  # Add line to Table body
+  tr = $ "<tr>"
+  tr.appendTo(tbody)
+  td = $ "<td>"
+  td.appendTo(tr).addClass("span3").text('Implementation type:')
+  td = $ "<td>"
+  td.appendTo(tr).addClass("span9").text(component.type)
+  # Add line to Table Body
+  tr = $ "<tr>"
+  tr.appendTo(tbody)
+  td = $ '<td>'
+  td.appendTo(tr).addClass("span3").text('Average execution time:')
+  avgtime = __calcAverageExecutionTime component.execution_times
+  td = $ '<td>'
+  td.appendTo(tr).addClass("span9").html(avgtime + ' &micros')
+  # Add information about samples
+  __addSampleInformation component,tbody
+  # Add diagram
   $('<div/>').appendTo(body).attr('id', __replaceRaute(component.uid) + "_graphic" )
   # Create diagram
-  #d3.select('#execution').append('svg') 
   __createDiagram(component)
   return
+
+__addSampleInformation = ( component, tbody ) ->
+  for input, i in component.input_samples
+    tr = $ "<tr>"
+    tr.appendTo(tbody)
+    td = $ "<td>"
+    title = "Input samples port #" + i + ":"
+    samples = input.values.length
+    td.appendTo(tr).addClass("span3").text(title)
+    td = $ "<td>"
+    td.appendTo(tr).addClass("span9").text(samples)
+  for output, i in component.output_samples
+    tr = $ "<tr>"
+    tr.appendTo(tbody)
+    td = $ "<td>"
+    title = "Output samples port #" + i + ":"
+    samples = output.values.length
+    td.appendTo(tr).addClass("span3").text(title)
+    td = $ "<td>"
+    td.appendTo(tr).addClass("span9").text(samples)
+  return
+
 
 __calcTypeImplementationDistribution = ( components ) ->
   result = []
