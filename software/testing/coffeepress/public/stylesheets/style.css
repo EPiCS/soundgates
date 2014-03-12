@@ -60,4 +60,9 @@ div.logo {
     align-items: center;    
 }
 
+.hideme
+{
+    opacity:0;
+}
+
 img.title { vertical-align: middle; height: 80px; width: 80px; margin-right: 4px; }

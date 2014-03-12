@@ -25,7 +25,30 @@ initializeDocument = () ->
     resizeFn()
     $(window).resize resizeFn
     return
+  # Margin hardcoded Bugfix
   $("#component_average_execution").parent().parent().css("margin-left", "0px")
+  # Every time the window is scrolled ... 
+  $(window).scroll ->
+    
+    # Check the location of each desired element 
+    $(".hideme").each (i) ->
+      bottom_of_object = $(this).position().top + $(this).outerHeight()
+      bottom_of_window = $(window).scrollTop() + $(window).height()
+      top_of_window = $(window).scrollTop() - $(window).height()
+      
+      # If the object is completely visible in the window, fade it it 
+      offset = 150
+      if bottom_of_window > bottom_of_object - offset
+        $(this).animate
+          opacity: "1"
+        , 500
+      # else if top_of_window > bottom_of_object - offset
+      #   $(this).animate
+      #     opacity: "1"
+      #   , 0
+      return
+
+    return
 
 
   # Initialize Navigation Sidebar with every available execution
@@ -180,7 +203,7 @@ expand = (execution) ->
 
 expandComponent = (component) ->
   # Create Component Header
-  row = $('<div class="span12"/>').attr("id", __replaceRaute(component.uid)).css("margin-left","0px").appendTo('#execution')
+  row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left","0px").appendTo('#execution')
   card = $('<div class="card"/>').appendTo(row)
   title = $('<h2 class="card-heading"/>').appendTo(card).text( 'UID: ' + component.uid )
   body = $('<div class="card-body"/>').appendTo(card)

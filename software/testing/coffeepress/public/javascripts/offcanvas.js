@@ -24,6 +24,20 @@
       $(window).resize(resizeFn);
     });
     $("#component_average_execution").parent().parent().css("margin-left", "0px");
+    $(window).scroll(function() {
+      $(".hideme").each(function(i) {
+        var bottom_of_object, bottom_of_window, offset, top_of_window;
+        bottom_of_object = $(this).position().top + $(this).outerHeight();
+        bottom_of_window = $(window).scrollTop() + $(window).height();
+        top_of_window = $(window).scrollTop() - $(window).height();
+        offset = 150;
+        if (bottom_of_window > bottom_of_object - offset) {
+          $(this).animate({
+            opacity: "1"
+          }, 500);
+        }
+      });
+    });
     getExecutionList().done(initExecutionNavigation);
     return getLastExecution().done(expand);
   };
@@ -156,7 +170,7 @@
 
   expandComponent = function(component) {
     var avg, body, card, row, title, typ;
-    row = $('<div class="span12"/>').attr("id", __replaceRaute(component.uid)).css("margin-left", "0px").appendTo('#execution');
+    row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left", "0px").appendTo('#execution');
     card = $('<div class="card"/>').appendTo(row);
     title = $('<h2 class="card-heading"/>').appendTo(card).text('UID: ' + component.uid);
     body = $('<div class="card-body"/>').appendTo(card);
