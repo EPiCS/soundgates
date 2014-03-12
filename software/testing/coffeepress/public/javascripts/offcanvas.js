@@ -373,7 +373,13 @@
     hours = date.getHours();
     minutes = date.getMinutes();
     seconds = date.getSeconds();
-    return datum + '.' + month + '.' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+    if (datum < 10) {
+      datum = "0" + datum;
+    }
+    if (month < 10) {
+      month = "0" + month;
+    }
+    return datum + '/' + month + '/' + year + ' - ' + hours + ':' + minutes + ':' + seconds;
   };
 
   __getJsDate = function(x) {
