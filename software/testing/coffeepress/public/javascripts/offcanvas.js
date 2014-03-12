@@ -175,7 +175,7 @@
     title = $('<h2 class="card-heading"/>').appendTo(card).text('UID: ' + component.uid);
     body = $('<div class="card-body"/>').appendTo(card);
     table = $("<table>");
-    table.addClass("table table-condensed table-hover").appendTo(body);
+    table.addClass("table table-condensed table-hover table-striped").appendTo(body);
     tbody = $("<tbody>");
     tbody.appendTo(table);
     tr = $("<tr>");

@@ -209,7 +209,7 @@ expandComponent = (component) ->
   # Create Table
   body = $('<div class="card-body"/>').appendTo(card)
   table = $ "<table>"
-  table.addClass("table table-condensed table-hover").appendTo(body)
+  table.addClass("table table-condensed table-hover table-striped").appendTo(body)
   # Create Table Body
   tbody = $ "<tbody>"
   tbody.appendTo(table)
