@@ -49,3 +49,15 @@ body
   top: auto;
   bottom: 200px;  /*//height of the footer*/
 }
+
+h1.title{
+  display:inline;
+  font-size: 80px;
+}
+
+div.logo {
+    display: flex; 
+    align-items: center;    
+}
+
+img.title { vertical-align: middle; height: 80px; width: 80px; margin-right: 4px; }
