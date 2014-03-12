@@ -31,7 +31,7 @@ html
       .row-fluid
         .span2
           .sidebar_parent
-            #sidebar.nav.nav-pills.nav-stacked.affix(data-clampedwidth=".sidebar_parent")
+            #sidebar.nav.nav-pills.nav-stacked.affix(data-clampedwidth=".sidebar_parent").shadow
               ul.nav.nav-list(id='nav_executions')
                 li.nav-header Executions
                 li.active
@@ -51,24 +51,24 @@ html
             // /.well
           // /span
         .span10
-          .hero-unit.shadow
+          .hero-unit
             .logo
               img.title(src="/assets/logo_150.png")
               h1.title Soundgates Debugger
           .row-fluid
-            .span4
+            .span3
               .card
                 h2.card-heading Execution Date
                 .card-body(id="execution_date")
-                  h1.text-right
-                    <b>12:35</b>
-                  p.text-right
-                    | 2 / March / 2014
-            .span4
+            .span3
               .card
                 h2.card-heading Components
                 .card-body(id="component_count")
-            .span4
+            .span3
+              .card
+                h2.card-heading Turnaround
+                .card-body(id="turnaround")
+            .span3
               .card
                 h2.card-heading Implementations
                 .card-body(id="component_implementations")

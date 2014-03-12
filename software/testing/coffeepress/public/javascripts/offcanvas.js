@@ -75,7 +75,7 @@
   };
 
   expand = function(execution) {
-    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, _i, _len, _ref;
+    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, _i, _len, _ref;
     getComponentList(execution.timestamp).done(initComponentNavigation);
     expand_addDate = function(execution) {
       var date, div, _getDate, _getHour;
@@ -89,6 +89,7 @@
         return d.getDate() + '/' + monthNames[d.getMonth()] + '/' + d.getFullYear();
       };
       div = $('#execution_date');
+      $('<br/>').appendTo(div);
       $('<h1 class="text-right"/>').text(_getHour(date)).css("font-weight", "Bold").appendTo(div);
       $('<p class="text-right"/>').text(_getDate(date)).appendTo(div);
     };
@@ -96,8 +97,22 @@
       var count, div;
       count = execution.components.length;
       div = $('#component_count');
+      $('<br/>').appendTo(div);
       $('<h1/>').text('#' + count).css("font-weight", "Bold").appendTo(div);
       $('<p/>').text('have been found').appendTo(div);
+    };
+    expand_addTurnaround = function(execution) {
+      var c, div, turn, _i, _len, _ref;
+      turn = 0;
+      _ref = execution.components;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        c = _ref[_i];
+        turn = turn + __calcAverageExecutionTime(c.execution_times);
+      }
+      div = $('#turnaround');
+      $('<br/>').appendTo(div);
+      $('<h1/>').html(turn + ' &micros').css("font-weight", "Bold").appendTo(div);
+      $('<p/>').text('does it take for one cycle').appendTo(div);
     };
     expand_addImplementationDistribution = function(execution) {
       nv.addGraph(function() {
@@ -130,6 +145,7 @@
     expand_addDate(execution);
     expand_addComponentCount(execution);
     expand_addImplementationDistribution(execution);
+    expand_addTurnaround(execution);
     expand_addAverageExuction(execution);
     _ref = execution.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {

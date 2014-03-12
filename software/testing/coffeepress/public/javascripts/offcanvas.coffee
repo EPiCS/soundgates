@@ -96,6 +96,7 @@ expand = (execution) ->
       "July", "August", "September", "October", "November", "December" ]
       return d.getDate() + '/' +  monthNames[d.getMonth()] + '/' + d.getFullYear()
     div = $('#execution_date')
+    $('<br/>').appendTo(div)
     $('<h1 class="text-right"/>').text(_getHour date).css("font-weight","Bold").appendTo(div)
     $('<p class="text-right"/>').text(_getDate date).appendTo(div)
     return
@@ -103,8 +104,19 @@ expand = (execution) ->
   expand_addComponentCount = ( execution ) ->
     count = execution.components.length
     div = $('#component_count')
+    $('<br/>').appendTo(div)
     $('<h1/>').text('#' + count).css("font-weight","Bold").appendTo(div)
     $('<p/>').text('have been found').appendTo(div)
+    return
+
+  expand_addTurnaround = ( execution ) ->
+    turn = 0
+    for c in execution.components
+      turn = turn + __calcAverageExecutionTime c.execution_times
+    div = $('#turnaround')
+    $('<br/>').appendTo(div)
+    $('<h1/>').html(turn + ' &micros').css("font-weight","Bold").appendTo(div)
+    $('<p/>').text('does it take for one cycle').appendTo(div)
     return
 
   expand_addImplementationDistribution = ( execution ) ->  
@@ -156,6 +168,7 @@ expand = (execution) ->
   expand_addDate execution
   expand_addComponentCount execution
   expand_addImplementationDistribution execution
+  expand_addTurnaround execution
   expand_addAverageExuction execution
 
 # / ----------------------------------------------------------------------
