@@ -78,7 +78,19 @@
     var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, _i, _len, _ref;
     getComponentList(execution.timestamp).done(initComponentNavigation);
     expand_addDate = function(execution) {
-      console.log("addDate not implemented");
+      var date, div, _getDate, _getHour;
+      date = __getJsDate(execution.timestamp);
+      _getHour = function(d) {
+        return d.getHours() + ":" + d.getMinutes();
+      };
+      _getDate = function(d) {
+        var monthNames;
+        monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return d.getDate() + '/' + monthNames[d.getMonth()] + '/' + d.getFullYear();
+      };
+      div = $('#execution_date');
+      $('<h1 class="text-right"/>').text(_getHour(date)).css("font-weight", "Bold").appendTo(div);
+      $('<p class="text-right"/>').text(_getDate(date)).appendTo(div);
     };
     expand_addComponentCount = function(execution) {
       var count, div;

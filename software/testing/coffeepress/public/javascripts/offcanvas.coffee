@@ -88,7 +88,16 @@ expand = (execution) ->
 # Define expanding methods before calling
 
   expand_addDate = ( execution ) ->
-    console.log "addDate not implemented"
+    date = __getJsDate execution.timestamp
+    _getHour = ( d ) ->
+      return d.getHours() + ":" + d.getMinutes()
+    _getDate = ( d ) ->
+      monthNames = [ "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December" ]
+      return d.getDate() + '/' +  monthNames[d.getMonth()] + '/' + d.getFullYear()
+    div = $('#execution_date')
+    $('<h1 class="text-right"/>').text(_getHour date).css("font-weight","Bold").appendTo(div)
+    $('<p class="text-right"/>').text(_getDate date).appendTo(div)
     return
 
   expand_addComponentCount = ( execution ) ->
