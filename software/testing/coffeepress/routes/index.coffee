@@ -38,6 +38,7 @@ exports.index = (req, res) ->
 exports.getExecutionList = (req, res) ->
     query = Execution.find()
     query.select '-components'
+    query.sort({ timestamp: -1})
     query.exec ( err, executions ) ->
         return if err
         console.dir executions
