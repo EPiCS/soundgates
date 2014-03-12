@@ -195,7 +195,9 @@
     td.appendTo(tr).addClass("span9").html(avgtime + ' &micros');
     __addSampleInformation(component, tbody);
     $('<div/>').appendTo(body).attr('id', __replaceRaute(component.uid) + "_graphic");
-    __createDiagram(component);
+    if ((component.input_samples[0] != null) || (component.output_samples[0] != null)) {
+      __createDiagram(component);
+    }
   };
 
   __addSampleInformation = function(component, tbody) {

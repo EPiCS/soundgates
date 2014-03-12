@@ -236,7 +236,8 @@ expandComponent = (component) ->
   # Add diagram
   $('<div/>').appendTo(body).attr('id', __replaceRaute(component.uid) + "_graphic" )
   # Create diagram
-  __createDiagram(component)
+  if component.input_samples[0]? or component.output_samples[0]?
+    __createDiagram(component)
   return
 
 __addSampleInformation = ( component, tbody ) ->
