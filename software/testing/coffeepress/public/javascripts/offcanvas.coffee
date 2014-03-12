@@ -27,6 +27,7 @@ initializeDocument = () ->
     return
   # Margin hardcoded Bugfix
   $("#component_average_execution").parent().parent().css("margin-left", "0px")
+
   # Every time the window is scrolled ... 
   $(window).scroll ->
     
@@ -312,7 +313,7 @@ __createDiagram = (component) ->
     #Chart x-axis settings
     chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
     #Chart y-axis settings
-    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format("5.00f")
+    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format(",.2f")
     
     #Select the <svg> element you want to render the chart in.   
     #Populate the <svg> element with chart data...
