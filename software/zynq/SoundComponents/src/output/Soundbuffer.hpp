@@ -13,8 +13,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <boost/thread.hpp>
 #include <SoundgatesConfig.h>
+
+#include <boost/thread.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 /**
  * This class encapsulates the ALSA driver, to play and record sound

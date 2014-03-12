@@ -56,7 +56,7 @@ void SoundDelayComponent::process(void){
 
 	size_t offset = 0;
 
-	int* readbuffer  = (int*)(m_SoundIn_2_Port->getReadBuffer());
+	int* readbuffer  = (int*)(m_SoundIn_2_Port->getBuffer());
 	int* writebuffer = (int*)(m_SoundOut_1_Port->getWriteBuffer());
 
 	// size_t delay = delayToSampleCount(delayLink->getNextControlData());	/*< delay in bytes */

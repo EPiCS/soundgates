@@ -19,7 +19,7 @@ Port::~Port(){ }
 
 int Port::getPortNumber(){
 
-	return this->m_PortNumber;
+	return m_PortNumber;
 }
 
 
@@ -30,7 +30,6 @@ LinkPtr Port::getLink(){
 void Port::setLink(LinkPtr link){
 	m_Link = link;
 }
-
 
 bool Port::operator==(const Port& other) const{
 

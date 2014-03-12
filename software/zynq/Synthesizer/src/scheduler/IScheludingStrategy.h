@@ -8,13 +8,19 @@
 #ifndef ISCHELUDINGSTRATEGY_H_
 #define ISCHELUDINGSTRATEGY_H_
 
+#include <vector>
+
+#include "StaticSchedule.h"
+
+#include "../core/Node.h"
+
 class IScheludingStrategy {
 public:
     virtual ~IScheludingStrategy();
 
     IScheludingStrategy();
 
-    virtual void CalculateSchedule() = 0;
+    virtual StaticSchedule CalculateSchedule(NodePtr root, NodePtr sink, const std::vector<NodePtr>& nodes) = 0;
 
 };
 

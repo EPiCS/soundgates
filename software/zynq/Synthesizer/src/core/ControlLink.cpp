@@ -7,9 +7,8 @@
 
 #include "ControlLink.h"
 
-ControlLink::ControlLink(NodePtr source, NodePtr destination) :
-    Link(source, destination){
-    LOG_DEBUG("Control link constructor called");
+ControlLink::ControlLink(NodePtr source, NodePtr destination) : Link(source, destination){
+
     m_ctrldata_0 = 0.0;
 }
 
@@ -19,12 +18,8 @@ ControlLink::~ControlLink() {
 
 
 void ControlLink::pushControlData(float data){
-    {boost::mutex::scoped_lock lock(m_mutex);
-
-//        if(m_ctrldata.size() < MAX_CONTROL_LINK_BUFFER_DEPTH){
-//            m_ctrldata.push_back(data);
-//        }
-
+    {
+        boost::lock_guard<boost::mutex> lock(m_mutex);
         m_ctrldata_0 = data;
     }
     m_notifysignal();
@@ -44,8 +39,6 @@ float ControlLink::getNextControlData(){
 //	}
 //
 //	return data;
-
-    boost::unique_lock<boost::mutex> lock(m_mutex);
     return m_ctrldata_0;
 }
 

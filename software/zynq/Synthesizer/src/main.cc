@@ -16,6 +16,7 @@
 #include "ui/UIService.h"
 #include "ui/service/RPCService.h"
 #include "ui/service/OSCService.h"
+#include "ui/service/NcursesUI.h"
 #include "ui/service/TCPHandshakeService.h"
 
 #include "utils/SoundComponenLoader.h"
@@ -120,12 +121,15 @@ int main( int argc, const char* argv[])
     reader.read(&patch, vm["patch-file"].as<std::string>());
 
 //	ui::UIService* xmlrpcservice = (ui::UIService*) new ui::RPCService(patch);
-	ui::UIService* oscservice    = (ui::UIService*) new ui::OSCService(patch);
+//	ui::UIManager::getInstance().registerService(xmlrpcservice, "xmlrpc", true);
+
+    ui::UIService* oscservice    = (ui::UIService*) new ui::OSCService(patch);
+    ui::UIService* ncursesui     = (ui::UIService*) new ui::NcursesUI(patch);
 	ui::UIService* tcphandshake  = (ui::UIService*) new ui::TCPHandshakeService(patch);
 
-//	ui::UIManager::getInstance().registerService(xmlrpcservice, "xmlrpc", true);
-	ui::UIManager::getInstance().registerService(oscservice, "oscservice", true);
-	ui::UIManager::getInstance().registerService(tcphandshake, "tcphandshake", true);
+	ui::UIManager::getInstance().registerService(oscservice,    "oscservice",   true);
+	ui::UIManager::getInstance().registerService(tcphandshake,  "tcphandshake", true);
+	ui::UIManager::getInstance().registerService(ncursesui,     "ncurses",      true);
 
 	patch.run();
 
@@ -162,8 +166,7 @@ void terminateTCPHandshake() {
 		exit(1);
 	}
 
-	char *buffer = TCP_HANDSHAKE_QUIT;
-	write(sockfd,buffer,strlen(buffer));
+	write(sockfd, TCP_HANDSHAKE_QUIT, sizeof(TCP_HANDSHAKE_QUIT));
 }
 
 void SynthesizerTerminate(int sig){

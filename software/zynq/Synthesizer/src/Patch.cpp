@@ -7,18 +7,22 @@
 
 #include "Patch.h"
 
-#include "SoundComponentWorker.h"
+#include "scheduler/algorithms/ASAPScheduler.h"
+#include "scheduler/SchedulingContext.h"
 
-Patch::Patch(){
+Patch::Patch()
+{
 	m_PatchState  	        = Synthesizer::state::created;
-	m_ComponentsProcessed   = 0;
-	jobsToProcess           = 0;
-	m_MaxWorkerThreads      = boost::thread::hardware_concurrency();
 }
 
 Patch::~Patch(){ }
 
-
+/**
+ *
+ * Returns a reference to a vector of input soundcomponents
+ *
+ * @return
+ */
 vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 
     if(!m_InputComponents.size()){
@@ -36,6 +40,15 @@ vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
 	return m_InputComponents;
 }
 
+/**
+ * Create and register a sound component
+ *
+ *
+ * @param uid unique identifier
+ * @param type component type
+ * @param parameters vector of parameters as string
+ * @param slot hardware slot where reconos can find the component
+ */
 void Patch::createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot){
 
 	SoundComponents::ImplType impltype;
@@ -65,102 +78,106 @@ void Patch::createSoundComponent(int uid, const std::string& type, std::vector<s
 
 void Patch::createLink(int sourceid, int srcport, int destid, int destport){
 
-	LOG_DEBUG("Creating link from node " << sourceid << ":" << srcport << " to Node " << destid << ":" << destport);
 
-	SoundComponentPtr source;
-	SoundComponentPtr destination;
+	SoundComponentPtr src;
+	SoundComponentPtr dst;
 
 	/* Get source and destination components */
-	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
-	        iter != m_ComponentsVector.end(); ++iter){
+	BOOST_FOREACH(SoundComponentPtr node, m_ComponentsVector){
 
-		if((*iter)->getUid() == sourceid){
-			source = (*iter);
-		}
-
-		if((*iter)->getUid() == destid) {
-			destination = (*iter);
-		}
+        if(node->getUid() == sourceid){
+            src = node;
+        }
+        if(node->getUid() == destid) {
+            dst = node;
+        }
 	}
 
 	/* Check if source and destination were found */
-	if(!source || !destination){
+	if(!src || !dst){
+
 	    throw std::invalid_argument("Could not create link between sound components: NULL pointer");
 	}
 
-	if(!source->getDelegate() || !destination->getDelegate() ){
+	if(!src->getDelegate() || !dst->getDelegate() ){
 
 	    throw std::invalid_argument("No delegate set.");
 	}
 
-	PortPtr srcPort  = source->getDelegate()->getOutport(srcport);
-	PortPtr destPort = destination->getDelegate()->getInport(destport);
+	PortPtr srcprt = src->getDelegate()->getOutport(srcport);
+	PortPtr dstprt = dst->getDelegate()->getInport(destport);
 
-    if(typeid(*srcPort) == typeid(*destPort)){
+	try{
 
-        if(srcPort->getLink()){ /* Check if source has already an outgoing connection */
+        if(typeid(*srcprt) == typeid(*dstprt))
+        {
 
-            LOG_DEBUG("Source port already connected, reusing connection");
+            if(srcprt->getLink()) /* Check if source has already an outgoing connection */
+            {
 
-            destination->addIncomingLink(srcPort->getLink(), destport);
+                LOG_DEBUG("Source port already connected, reusing connection");
+                dst->addLink(srcprt->getLink(), Link::IN);
+                dstprt->setLink(srcprt->getLink());
 
-        }else if(destPort->getLink()){  /* Check if destination port has already been linked */
-
-            LOG_ERROR("Destination port of component " << destid << "already connected");
-
-        }else{
-
-            LOG_DEBUG("Source port type "      << typeid(*srcPort).name());
-            LOG_DEBUG("Destination port type " << typeid(*destPort).name());
-
-            LinkPtr linkhdnl;
-
-            /* Create SoundLink */
-            if(typeid(*srcPort) == typeid(SoundPort)){
-
-                LOG_DEBUG("Creating buffered link");
-                BufferedLinkPtr link(new BufferedLink(
-                        boost::static_pointer_cast<Node>(source),
-                        boost::static_pointer_cast<Node>(destination),
-                        Synthesizer::config::bytesPerBlock));
-
-                m_BufferedLinksVector.push_back(link);
-
-                linkhdnl = link;
-
-            /* Create ControlLink */
-            }else if(typeid(*srcPort) == typeid(ControlPort)){
-
-                LOG_DEBUG("Creating control link");
-                ControlLinkPtr link(new ControlLink(
-                                       boost::static_pointer_cast<Node>(source),
-                                       boost::static_pointer_cast<Node>(destination)));
-
-                m_ControlLinksVector.push_back(link);
-
-                linkhdnl = link;
-            }else{
-
-                throw std::runtime_error("Could not determine port type");
             }
+            else
+            if(dstprt->getLink())  /* Check if destination port has already been linked */
+            {
 
-            try{
-                if(!linkhdnl){
-                    throw std::invalid_argument("Link not created");
+                throw std::invalid_argument("Destination port already connected!");
+            }
+            else{
+
+                if(typeid(*srcprt) == typeid(SoundPort))
+                {
+
+                    LOG_DEBUG("Creating sound link from node " << src->getUid() << ":" << srcprt->getPortNumber()
+                                << " to Node " << dst->getUid() << ":" << dstprt->getPortNumber());
+
+                    LinkPtr link(new BufferedLink(
+                            boost::static_pointer_cast<Node>(src),
+                            boost::static_pointer_cast<Node>(dst)));
+
+                    src->addLink(link, Link::OUT);
+                    dst->addLink(link, Link::IN);
+
+                    srcprt->setLink(link);
+                    dstprt->setLink(link);
                 }
-                source->addOutgoingLink(linkhdnl, srcport);
-                destination->addIncomingLink(linkhdnl, destport);
+                else
+                if(typeid(*srcprt) == typeid(ControlPort))
+                {
 
-            }catch(std::exception& e){
+                    LOG_DEBUG("Creating control link from node " << src->getUid() << ":" << srcprt->getPortNumber()
+                                << " to Node " << dst->getUid() << ":" << dstprt->getPortNumber());
 
-                LOG_ERROR("Exception: " << e.what());
+                    LinkPtr link(new ControlLink(
+                                           boost::static_pointer_cast<Node>(src),
+                                           boost::static_pointer_cast<Node>(dst)));
+
+                    src->addLink(link, Link::OUT);
+                    dst->addLink(link, Link::IN);
+
+                    srcprt->setLink(link);
+                    dstprt->setLink(link);
+                }
+                else
+                {
+                    throw std::runtime_error("Could not determine port type");
+                }
+
+
             }
         }
-    }
-    else{
+        else{
 
-        throw std::invalid_argument("Port type mismatch");
-    }
+            throw std::invalid_argument("Port type mismatch.");
+        }
+
+    }catch(std::exception& e){
+
+        LOG_ERROR("Exception: " << e.what());
+	}
 
 }
 
@@ -190,11 +207,15 @@ void Patch::initialize(void){
         sndcomponent->initLater();
 	}
 
-	jobIter         = m_ComponentsVector.begin();
-	jobsToProcess   = m_ComponentsVector.size();
 	m_PatchState    = Synthesizer::state::initialized;
 }
 
+/**
+ *
+ * Start the patch. If there patch was not initialized before,
+ * then initialize the patch and run it afterwards.
+ *
+ */
 void Patch::run(){
 
     if(Synthesizer::state::created == m_PatchState){
@@ -203,50 +224,53 @@ void Patch::run(){
 
 	if(Synthesizer::state::initialized == m_PatchState){
 
-		m_PatchState = Synthesizer::state::running;
+	    /*
+	     * Calculate schedule
+	     */
+	    std::vector<NodePtr> nodes;
+	    nodes.insert(nodes.begin(), m_ComponentsVector.begin(), m_ComponentsVector.end());
 
-		for(unsigned int i = 0; i < m_MaxWorkerThreads; i++){
-		    LOG_DEBUG("Creating worker thread: " << i);
+	    NodePtr root = getRootNode();
+	    NodePtr sink = getSinkNode();
 
-		    SoundComponentWorker worker(PatchPtr(this));
-		    m_WorkerThreads.create_thread(worker);
-		}
+	    SchedulingContext<ASAPScheduler> schedctx = SchedulingContext<ASAPScheduler>();
 
-		/* Create a thread that deals with the links ... */
-		m_WorkerThreads.create_thread(boost::bind(&Patch::switchBuffers, this));
+	    StaticSchedule schedule = schedctx.CalculateSchedule(root, sink, nodes);
 
-		while(isRunning()){
-		    boost::this_thread::sleep(boost::posix_time::seconds(1));
-		}
+        boost::thread_group             threadgroup;
+        boost::asio::io_service         node_io;
+        boost::asio::io_service         timer_io;
+        boost::asio::io_service::work   work(node_io);
+
+        for (std::size_t i = 0; i < boost::thread::hardware_concurrency(); i++) {
+            threadgroup.create_thread(
+                    boost::bind(
+                            static_cast<size_t (boost::asio::io_service::*)()>(&boost::asio::io_service::run), &node_io)
+            );
+        }
+        const int interrupt_interval = (1000 * 1000 / (Synthesizer::config::samplerate  / Synthesizer::config::blocksize)) + 1;
+
+        boost::asio::deadline_timer timer(timer_io, boost::posix_time::microseconds(interrupt_interval));
+
+        timer.async_wait(boost::bind(&StaticSchedule::timerInterrupt,
+                                    &schedule,
+                                    boost::asio::placeholders::error,
+                                    &timer, &node_io, &m_RuntimeInfo));
+
+	    schedule.printScheduleTable();
+
+	    timer_io.run();
+
 	}
 }
 
-void Patch::switchBuffers(){
-
-    while (isRunning()) {
-
-        boost::unique_lock<boost::mutex> lock(m_Mutex);
-        while (m_ComponentsProcessed < m_ComponentsVector.size()) {
-            m_OnComponentsProcessed.wait(lock); /* wait until all components were processed */
-        }
-
-        for (uint32_t i = m_BufferedLinksVector.size(); i != 0; --i) {
-
-            (m_BufferedLinksVector.at(i - 1))->switchBuffers();
-        }
-
-        {
-            boost::unique_lock<boost::mutex> lock(_m);  /* Let only one worker get a job at a time */
-            m_ComponentsProcessed = 0;
-            jobsToProcess = m_ComponentsVector.size();
-        }
-        m_OnBuffersProcessed.notify_all();
-    }
-
-    LOG_INFO("Worker thread finished: " << boost::this_thread::get_id());
-    m_OnBuffersProcessed.notify_all();
-}
-
+/**
+ *
+ * Clean up all components and initiate shutdown.
+ * This is different from "stop". The patch can not be resumed
+ * afterwards.
+ *
+ */
 void Patch::dispose(){
 
     /* stop path */
@@ -256,86 +280,104 @@ void Patch::dispose(){
     reconos_cleanup();
     #endif
 
-    for (vector<BufferedLinkPtr>::iterator iter = m_BufferedLinksVector.begin();
-                iter != m_BufferedLinksVector.end(); ++iter) {
-            (*iter).reset();
-    }
-
-    for (vector<ControlLinkPtr>::iterator iter = m_ControlLinksVector.begin();
-                iter != m_ControlLinksVector.end(); ++iter) {
-            (*iter).reset();
-    }
-
-    for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
-                iter != m_ComponentsVector.end(); ++iter){
-            (*iter).reset();
+    BOOST_FOREACH(SoundComponentPtr node, m_ComponentsVector){
+        node.reset();
     }
 }
 
+/**
+ *
+ * Stop the patch from executing.
+ * The patch will only stop when its currently executing,
+ * otherwise nothing will happen.
+ *
+ */
 void Patch::stop(){
 
 	if(Synthesizer::state::running == m_PatchState){
 
 		m_PatchState = Synthesizer::state::stopped;
-
-		/* Join worker threads */
-		m_WorkerThreads.join_all();
-
-
-		LOG_DEBUG("Joining all worker threads");
 	}
 }
 
+/**
+ *
+ * Indicates that the patch is currently in the "running" state
+ *
+ * @return bool true if the patch is running, false otherwise
+ */
 bool Patch::isRunning(){
 
     return (m_PatchState == Synthesizer::state::running);
 
 }
 
-
-const NodePtr& Patch::getMasterSourceNode(){
+/**
+ * Set and return root source node. A master source
+ * node acts as an artificial root node
+ *
+ *
+ * @return
+ */
+NodePtr Patch::getRootNode(){
 
     /* Check if master source has already been set */
-    if(!m_MasterSourceNode){
+    if(!m_RootNode){
 
-        m_MasterSourceNode = new Node(0x4FFFFFFF, Node::MASTER_SOURCE);
+        m_RootNode = NodePtr(new Node(0x4FFFFFFF, Node::MASTER_SOURCE));
 
         /* Get all Node which have no incoming connection */
         BOOST_FOREACH(NodePtr node, m_ComponentsVector){
 
-            if(node->getIncomingLinks().size() < 1){
+            LinkVector in = node->getLinks(Link::IN);
+
+            if(in.size() < 1){
 
                 /* Connect master sink to this node by a simple link */
-                LinkPtr link = LinkPtr(new Link(m_MasterSourceNode, node));
+                LinkPtr link = LinkPtr(new Link(m_RootNode, node));
 
-                m_MasterSourceNode->getOutgoingLinks().push_back(link);
+                m_RootNode->getLinks(Link::OUT).push_back(link);
+
+                in.push_back(link);
             }
         }
     }
 
-    return m_MasterSourceNode;
+    return m_RootNode;
 }
 
-const NodePtr& Patch::getMasterSinkNode(){
+/**
+ * Set and return master sink node. A master sink
+ * is a special node which is connected to all sinks
+ * in the system
+ *
+ *
+ * @return sink node
+ */
+NodePtr Patch::getSinkNode(){
 
     /* Check if master source has already been set */
-    if(!m_MasterSinkNode){
+    if(!m_SinkNode){
 
-        m_MasterSinkNode = new Node(0x7FFFFFFF, Node::MASTER_SOURCE);
+        m_SinkNode = NodePtr(new Node(0x7FFFFFFF, Node::MASTER_SOURCE));
 
         /* Get all Node which have no incoming connection */
         BOOST_FOREACH(NodePtr node, m_ComponentsVector){
 
-            if(node->getOutgoingLinks().size() < 1){
+            LinkVector out = node->getLinks(Link::OUT);
+
+            if(out.size() < 1){
 
                 /* Connect master sink to this node by a simple link */
-                LinkPtr link = LinkPtr(new Link(node, m_MasterSinkNode));
+                LinkPtr link = LinkPtr(new Link(node, m_SinkNode));
 
-                m_MasterSinkNode->getIncomingLinks().push_back(link);
+                m_SinkNode->getLinks(Link::IN).push_back(link);
+
+                out.push_back(link);
             }
         }
     }
 
-    return m_MasterSinkNode;
+    return m_SinkNode;
 }
 

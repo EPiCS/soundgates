@@ -12,9 +12,10 @@
 #include <string.h>
 #include <iostream>
 #include <stdexcept>
-#include <boost/smart_ptr.hpp>
 #include <sstream>
+#include <boost/smart_ptr.hpp>
 
+#include "Synthesizer.h"
 #include "Port.h"
 
 
@@ -96,10 +97,13 @@
         new TYPE(CLASSNAME::s_ ## PORTNAME ## _ ## PORTNUMBER);                     \
         get## DIRECTION ##ports().push_back(m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port);
 
-#define CREATE_AND_REGISTER_PORT3(CLASSNAME, DIRECTION, TYPE, PORTNAME, PORTNUMBER)  \
-        m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port = boost::shared_ptr<TYPE>(    \
-        new TYPE(CLASSNAME::s_ ## PORTNAME ## _ ## PORTNUMBER) );                    \
-        get## DIRECTION ##ports().push_back(m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port);
+#define CREATE_AND_REGISTER_PORT3(CLASSNAME, DIRECTION, TYPE, PORTNAME, PORTNUMBER)             \
+        /* Create smart pointer */                                                              \
+        m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port = boost::shared_ptr<TYPE>(               \
+        new TYPE(CLASSNAME::s_ ## PORTNAME ## _ ## PORTNUMBER) );                               \
+        /* Insert at given position */                                                          \
+        get## DIRECTION ##ports().insert(get## DIRECTION ##ports().begin() + (PORTNUMBER - 1),  \
+                                         m_ ## PORTNAME ## _ ## PORTNUMBER ## _ ## Port);       \
 
 
 class SoundComponentImpl;
@@ -121,8 +125,8 @@ public:
 
 	virtual ~SoundComponentImpl();
 
-	PortPtr getInport(unsigned int);
-	PortPtr getOutport(unsigned int);
+	PortPtr getInport(std::size_t);
+	PortPtr getOutport(std::size_t);
 
 	std::vector<PortPtr>& getInports();
 	std::vector<PortPtr>& getOutports();

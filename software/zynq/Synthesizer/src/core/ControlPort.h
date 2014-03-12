@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <boost/smart_ptr.hpp>
+#include <boost/foreach.hpp>
+
 #include "Port.h"
 #include "Synthesizer.h"
 #include "ICallbackFunctor.h"
@@ -22,7 +24,8 @@ class ControlPort : public Port{
 
 private:
 
-    std::vector<ICallbackPtr>* m_Callbacks;
+    std::vector<ICallbackPtr> m_Callbacks;
+
 public:
 
 	ControlPort(int portnumber);
@@ -59,7 +62,7 @@ public:
 	 *
 	 * @param functor
 	 */
-	void registerCallback(const ICallbackPtr&);
+	void registerCallback(const ICallbackPtr);
 
 };
 

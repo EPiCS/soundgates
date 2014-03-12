@@ -11,7 +11,9 @@
 #include <cstddef>
 #include <boost/smart_ptr.hpp>
 
+#include "Synthesizer.h"
 #include "Link.h"
+
 class BufferedLink;
 
 typedef boost::shared_ptr<BufferedLink>  BufferedLinkPtr;
@@ -20,21 +22,16 @@ class BufferedLink : public Link {
 
 private:
 
-	char*   m_ReadbufferPtr;
-	char*   m_WritebufferPtr;
-	size_t  m_Bufferdepth;
+	char    m_Buffer[Synthesizer::config::bytesPerBlock];
 
 public:
 
-	BufferedLink(NodePtr source, NodePtr dest, size_t bufferdepth);
-	virtual ~BufferedLink(void);
+	BufferedLink(NodePtr source, NodePtr dest) : Link(source, dest) { }
+	virtual ~BufferedLink(void){ }
 
-	void switchBuffers(void);
-
-	char* getReadBuffer(void);
-	char* getWriteBuffer(void);
-
-	size_t   getBufferDepth(void);
+	inline char* getBuffer(void){
+	    return (char*) &m_Buffer[0];
+	}
 };
 
 

@@ -22,11 +22,15 @@
 #include "core/BufferedLink.h"
 #include "core/SoundPort.h"
 #include "core/ControlPort.h"
-#include "core/HWThreadManager.h"
+#include "core/HWResourceManager.h"
 #include "core/SoundgatesConfig.h"
 #include "utils/SoundComponenLoader.h"
 
 #include <boost/foreach.hpp>
+
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #ifdef ZYNQ
 
@@ -47,6 +51,45 @@ class Patch;
 typedef boost::shared_ptr<Patch> PatchPtr;
 
 class Patch {
+public:
+
+    typedef struct {
+        /**
+         * @internal    Average task turnaround time
+         */
+        int64_t turnaround;
+        /**
+        * @internal    Number of times a schedule has been executed
+        */
+        int64_t taskcallcount;
+
+    }info_t;
+
+
+    Patch();
+    virtual ~Patch();
+
+    void createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot = -1);
+
+    void createLink(int sourceid, int srcport, int destid, int destport);
+
+    NodePtr getRootNode();
+
+    NodePtr getSinkNode();
+
+    std::vector<InputSoundComponentPtr>& getInputSoundComponents();
+
+    info_t getRuntimeInfo(){
+        return m_RuntimeInfo;
+    }
+
+    bool isRunning();
+
+    void run(void);
+
+    void stop(void);
+
+    void dispose();
 
 private:
 
@@ -55,69 +98,18 @@ private:
 
 	std::vector<SoundComponentPtr> 		m_ComponentsVector;     /*< Container holding all references to the sound components */
 
-	std::vector<BufferedLinkPtr>	    m_BufferedLinksVector;  /*< Buffered links container */
+	NodePtr                             m_RootNode;
 
-	std::vector<ControlLinkPtr>			m_ControlLinksVector;   /*< Control links container */
-
-
-	NodePtr                             m_MasterSourceNode;
-
-	NodePtr                             m_MasterSinkNode;
-
-	boost::thread_group                 m_WorkerThreads;
+	NodePtr                             m_SinkNode;
 
 	Synthesizer::state::ePatchState     m_PatchState;
 
+	info_t                              m_RuntimeInfo;
+
 	void initialize(void);
 
-	std::vector<SoundComponentPtr>::iterator jobIter;
-
-	unsigned int                        m_MaxWorkerThreads;
-
-public:
-
-	size_t                              m_ComponentsProcessed;
-	boost::mutex                        m_Mutex;
-	boost::mutex                        _m;
-	boost::condition_variable           m_OnComponentsProcessed;
-	boost::condition_variable           m_OnBuffersProcessed;
-	int                                 jobsToProcess;
 
 
-	SoundComponentPtr getJob(){
-	    boost::unique_lock<boost::mutex> lock(_m);  /* Let only one worker get a job at a time */
-
-	    SoundComponentPtr component = *jobIter;
-
-	    jobIter++;
-
-	    if(jobIter == m_ComponentsVector.end()){
-	        jobIter = m_ComponentsVector.begin();
-
-	    }
-
-	    return component;
-	}
-
-	Patch();
-	virtual ~Patch();
-
-	void createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot = -1);
-	void createLink(int sourceid, int srcport, int destid, int destport);
-
-
-	const NodePtr& getMasterSourceNode();
-
-	const NodePtr& getMasterSinkNode();
-
-	std::vector<InputSoundComponentPtr>& getInputSoundComponents();
-	void switchBuffers();
-
-	bool isRunning();
-
-	void run(void);
-	void stop(void);
-	void dispose();
 };
 
 #endif /* PATCH_H_ */

@@ -39,7 +39,7 @@ class OutputSoundComponent: public SoundComponentImpl
 {
 
 private:
-	Soundbuffer* buffer;
+	Soundbuffer m_Buffer;
 public:
 
 	DECLARE_COMPONENTNAME

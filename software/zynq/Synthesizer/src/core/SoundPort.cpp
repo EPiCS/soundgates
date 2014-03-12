@@ -15,42 +15,22 @@ SoundPort::~SoundPort() { }
 int SoundPort::init(){
 
     /* clear outgoing sample data */
-    clearWriteBuffer();
+    clearBuffer();
 
     return 0;
 }
 
-void SoundPort::clearWriteBuffer(){
+void SoundPort::writeSample(int32_t pcm_data, std::size_t nIndex){
 
-    char* writeBuffer;
-    if((writeBuffer =  getWriteBuffer())){
-        memset(writeBuffer, 0, Synthesizer::config::bytesPerBlock);
-    }
-}
+    BufferedLinkPtr link = boost::static_pointer_cast<BufferedLink>(getLink());
 
-char* SoundPort::getReadBuffer(){
+    if (link) {
 
-    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
-    if(soundlink){
-        return soundlink->getReadBuffer();
-    }
-    return NULL;
-}
-char* SoundPort::getWriteBuffer(){
+        int32_t* buffer = (int32_t*) link->getBuffer();
 
-    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
-    if (soundlink) {
-        return soundlink->getWriteBuffer();
-    }
-    return NULL;
-}
+        if (nIndex >= 0 && nIndex < (Synthesizer::config::blocksize)) {
+            buffer[nIndex] = pcm_data;
 
-void SoundPort::writeSample(int32_t pcm_data, uint32_t nIndex){
-    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
-
-    if (soundlink != NULL) {
-        if (nIndex >= 0 && (nIndex * Synthesizer::config::bytesPerSample) < soundlink->getBufferDepth()) {
-            ((int32_t*) soundlink->getWriteBuffer())[nIndex] = pcm_data;
         } else {
             LOG_ERROR("Index out of bounds, while writing to soundport");
         }
@@ -63,14 +43,18 @@ void SoundPort::writeSample(int32_t pcm_data, uint32_t nIndex){
 
 int SoundPort::operator[](size_t nIndex) {
 
-    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
+    BufferedLinkPtr link = boost::static_pointer_cast<BufferedLink>(getLink());
 
     /*
      * Check if index is not out of bound and port is connected
      */
-    if(soundlink){
-        if(nIndex >= 0 && (nIndex * Synthesizer::config::bytesPerSample) < soundlink->getBufferDepth()){
-            return ((int*)soundlink->getReadBuffer())[nIndex];
+    if (link) {
+
+        int32_t* buffer = (int32_t*) link->getBuffer();
+
+        if(nIndex >= 0 && nIndex < (Synthesizer::config::blocksize)){
+
+            return buffer[nIndex];
         }else{
             LOG_ERROR("Index out of bounds, while reading from soundport");
         }
@@ -91,7 +75,7 @@ SoundPort& SoundPort::operator= (SoundPort& rhs){
 
        if(rhslink && lhslink){
 
-           memcpy(lhslink->getWriteBuffer(), rhslink->getReadBuffer(), Synthesizer::config::bytesPerBlock);
+           memcpy(lhslink->getBuffer(), rhslink->getBuffer(), Synthesizer::config::bytesPerBlock);
        }
     }
 

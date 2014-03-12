@@ -32,7 +32,7 @@ void FIR_SW::process(){
 
     int32_t sample;
 
-	memcpy(&m_LocalBuffer[N_FIR_COEFF - 1], m_SoundIn_1_Port->getReadBuffer(), Synthesizer::config::bytesPerBlock);
+	memcpy(&m_LocalBuffer[N_FIR_COEFF - 1], m_SoundIn_1_Port->getBuffer(), Synthesizer::config::bytesPerBlock);
 
 	for (int i = 0; i < Synthesizer::config::blocksize; i++ ) {
 

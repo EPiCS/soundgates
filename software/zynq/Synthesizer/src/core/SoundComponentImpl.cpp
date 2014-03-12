@@ -7,36 +7,41 @@
 
 #include "SoundComponentImpl.h"
 
-SoundComponentImpl::SoundComponentImpl(){ }
+SoundComponentImpl::SoundComponentImpl(){
+
+    m_Outports.reserve(Synthesizer::config::nPortsMax);
+    m_Inports.reserve(Synthesizer::config::nPortsMax);
+
+}
 
 SoundComponentImpl::SoundComponentImpl(std::vector<std::string> parameters){
 
-	this->m_Parameters = parameters;
+	m_Parameters = parameters;
 }
 
 SoundComponentImpl::~SoundComponentImpl(){ }
 
 
-PortPtr SoundComponentImpl::getInport(unsigned int number){
+PortPtr SoundComponentImpl::getInport(std::size_t nIndex){
 
-	if(m_Inports.size() < number){
+	if(m_Inports.size() < nIndex){
 		std::stringstream s;
-		s << "In Port number out of range: " << number;
-		throw std::out_of_range(s.str().c_str());
+		s << "In Port number out of range: " << nIndex;
+		throw std::out_of_range(s.str());
 	}
 
-	return m_Inports[(number - 1)];
+	return m_Inports[(nIndex - 1)];
 }
 
-PortPtr SoundComponentImpl::getOutport(unsigned int number){
+PortPtr SoundComponentImpl::getOutport(std::size_t nIndex){
 
-	if(m_Outports.size() < number){
+	if(m_Outports.size() < nIndex){
 		std::stringstream s;
-		s << "Out Port number out of range: " << number;
-	    throw std::out_of_range(s.str().c_str());
+		s << "Out Port number out of range: " << nIndex;
+	    throw std::out_of_range(s.str());
 	}
 
-	return m_Outports[(number - 1)];
+	return m_Outports[(nIndex - 1)];
 }
 
 

@@ -8,9 +8,11 @@
 #ifndef NODE_H_
 #define NODE_H_
 
+#include <vector>
 #include <boost/smart_ptr.hpp>
 
 #include "Link.h"
+
 class Node;
 
 typedef boost::shared_ptr<Node>  NodePtr;
@@ -34,8 +36,7 @@ public:
 
 	bool operator==(const Node& other) const;
 
-	std::vector<LinkPtr>& getOutgoingLinks();
-	std::vector<LinkPtr>& getIncomingLinks();
+	std::vector<LinkPtr>& getLinks(Link::direction);
 
 private:
 

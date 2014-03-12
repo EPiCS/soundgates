@@ -61,20 +61,29 @@ void TGFReader::read(Patch* patch, string filename){
 			boost::split(paramtokens, params, boost::is_any_of(","));
 
 			normalize(paramtokens);
+			try{
 
-			if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW])){
+                if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::HW]))
+                {
+                    int slot = boost::lexical_cast<int>(match[5]);
 
-				int slot = boost::lexical_cast<int>(match[5]);
+                    patch->createSoundComponent(uid, type, paramtokens, slot);
+                }
+                else
+                if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::SW]))
+                {
+                    patch->createSoundComponent(uid, type, paramtokens);
+                }
+                else
+                {
+                    throw std::invalid_argument("Unknown implementation type.");
+                }
+			}
+			catch(std::exception& e)
+			{
+                LOG_ERROR("Exception: " << e.what());
 
-				patch->createSoundComponent(uid, type, paramtokens, slot);
-
-			}else if(!impltype.compare(SoundComponents::ImplTypeNames[SoundComponents::SW])){
-
-				patch->createSoundComponent(uid, type, paramtokens);
-
-			}else{
-
-			    throw std::invalid_argument("Unknown implementation type");
+                std::exit(1);
 			}
 		}
 
@@ -86,12 +95,14 @@ void TGFReader::read(Patch* patch, string filename){
 			int source_port = boost::lexical_cast<int>(match[3]);
 			int dest_port   = boost::lexical_cast<int>(match[4]);
 
-			try{
+			try
+			{
 			    patch->createLink(source_uid, source_port, dest_uid, dest_port);
 
-			}catch(std::exception& e){
-
+			}catch(std::exception& e)
+			{
 			    LOG_ERROR("Exception: " << e.what());
+			    std::exit(1);
 			}
 		}
 	}

@@ -57,6 +57,8 @@ void UIManager::stopService(const string& name){
 
 			service->stopService();
 		}
+
+		delete[] service;
 	}
 }
 

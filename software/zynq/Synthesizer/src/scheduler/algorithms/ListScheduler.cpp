@@ -27,12 +27,12 @@ float ListScheduler::getPriority(NodePtr){
 
 void ListScheduler::CalculateSchedule(){
 
-   for(Resource ){
-
-       if()
-
-       m_TimeIndex++;
-   }
+//   for(Resource ){
+//
+//       if()
+//
+//       m_TimeIndex++;
+//   }
 }
 
 

@@ -12,6 +12,9 @@
 #include <iostream>
 #include <climits>
 #include <iconv.h>
+
+#include <boost/thread.hpp>
+
 #include "../SineSoundComponent.h"
 
 class SineSoundComponent_SW : public SineSoundComponent {

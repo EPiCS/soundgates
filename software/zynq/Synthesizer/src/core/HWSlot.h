@@ -8,7 +8,7 @@
 #ifndef HWSLOT_H_
 #define HWSLOT_H_
 
-#include "HWThreadManager.h"
+#include "HWResourceManager.h"
 #include "Synthesizer.h"
 
 class HWSlot {

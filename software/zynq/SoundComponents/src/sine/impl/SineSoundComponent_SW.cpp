@@ -70,20 +70,20 @@ double my_sine(double x)
 SineSoundComponent_SW::SineSoundComponent_SW(std::vector<std::string> params) :
 		SineSoundComponent(params)
 {
-
 	m_Phase = 0.0;
 }
 
 void SineSoundComponent_SW::process()
 {
 
+//    std::cout << "Processing " << boost::this_thread::get_id() << std::endl;
+    int32_t* buffer = (int32_t*) m_SoundOut_1_Port->getBuffer();
+
 	if (this->m_active)
 	{
-
-		for (int i = 0; i < Synthesizer::config::blocksize; i++)
+		for (std::size_t i = 0; i < Synthesizer::config::blocksize; i++)
 		{
-
-			m_SoundOut_1_Port->writeSample(sine_lookup(m_Phase) * (1 << 30), i);  //  Q1.30
+		    buffer[i] = (sine_lookup(m_Phase) * (1 << 30));  //  Q1.30
 
 			m_Phase += m_PhaseIncr;
 
@@ -95,11 +95,7 @@ void SineSoundComponent_SW::process()
 	}
 	else
 	{
-		for (int i = 0; i < Synthesizer::config::blocksize; i++)
-		{
-			m_SoundOut_1_Port->writeSample(0, i);
-
-		}
+	    m_SoundOut_1_Port->clearBuffer();
 	}
 
 }

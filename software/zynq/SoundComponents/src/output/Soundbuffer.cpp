@@ -10,16 +10,14 @@
 Soundbuffer::Soundbuffer(bool record)
 {
 	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
-	this->SOUNDBUFFERSIZE = cfg.get<int>(
-			SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
-	;
+	this->SOUNDBUFFERSIZE = cfg.get<int>(SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
 
 	this->ALSACHARS = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
-	unsigned int samplerate = Synthesizer::config::samplerate;
+	const unsigned int samplerate = Synthesizer::config::samplerate;
 
 	// It is important that ALSACHAR divides SOUNDBUFFERSIZE!
 	// Else we would access memory behind the buffer when sending data to the soundcard.
-	this->buffer = (char*) malloc(this->SOUNDBUFFERSIZE * sizeof(char));
+	this->buffer = new char[(this->SOUNDBUFFERSIZE * sizeof(char))];
 
 	int err;
 
@@ -31,6 +29,7 @@ Soundbuffer::Soundbuffer(bool record)
 	this->writeoffset = 0;
 	this->readoffset = 0;
 	this->recorder = record;
+
 	for (int i = 0; i < SOUNDBUFFERSIZE; i++)
 	{
 		this->buffer[i] = 0;
@@ -163,7 +162,7 @@ void Soundbuffer::run()
 		// Wait for the playback to start
 		if (!this->playing)
 		{
-			usleep(50000);
+			boost::this_thread::sleep(boost::posix_time::millisec(100));
 		}
 		else
 		{
@@ -252,7 +251,8 @@ Soundbuffer::~Soundbuffer()
 {
 	snd_pcm_hw_free(this->pcm_handle);
 	snd_pcm_close(this->pcm_handle);
-	free (this->buffer);
+
+	delete[] this->buffer;
 }
 
 char* Soundbuffer::getNextFrames()
@@ -414,9 +414,8 @@ void Soundbuffer::fillbuffer(char* data, int size)
 	}
 
 	// Block as long as the buffer can't accept new samples
-	while (!this->canAcceptData(size))
-	{
-		usleep(100);
+	while (!this->canAcceptData(size)){
+		boost::this_thread::sleep(boost::posix_time::microseconds(100));
 	}
 
 	this->mutex.lock();

@@ -8,13 +8,15 @@
 #ifndef SOUNDPORT_H_
 #define SOUNDPORT_H_
 
-#include <memory.h>
-#include <stdint.h>
-#include <boost/smart_ptr.hpp>
 
 #include "Port.h"
 #include "BufferedLink.h"
 #include "Synthesizer.h"
+
+#include <stdint.h>
+#include <memory.h>
+#include <boost/smart_ptr.hpp>
+
 
 class SoundPort;
 
@@ -28,15 +30,28 @@ public:
 
 	int init();
 
-	void clearWriteBuffer();
-	void clearReadBuffer();
+	inline void clearBuffer(){
+	    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
 
-	char* getReadBuffer();
-	char* getWriteBuffer();
+	    memset(soundlink->getBuffer(), 0x00, Synthesizer::config::bytesPerBlock);
+	}
 
-	void writeSample(int32_t, uint32_t);
+	inline char* getBuffer(){
 
-	int operator[](size_t nIndex);
+	    BufferedLinkPtr soundlink = boost::static_pointer_cast<BufferedLink>( getLink());
+
+	    if(soundlink){
+
+	        return soundlink->getBuffer();
+	    }
+
+	    return NULL;
+
+	}
+
+	void writeSample(int32_t, std::size_t);
+
+	int operator[](std::size_t nIndex);
 
 
 	SoundPort& operator=(SoundPort& rhs);

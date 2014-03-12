@@ -21,6 +21,7 @@ typedef boost::shared_ptr<Port>  PortPtr;
 class Port {
 
 private:
+
 	int 	    m_PortNumber;
 	LinkPtr 	m_Link;
 

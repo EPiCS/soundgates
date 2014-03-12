@@ -66,7 +66,7 @@ void Ramp_SW::process() {
 
         case IDLE:
 
-            m_SoundOut_1_Port->clearWriteBuffer();
+            m_SoundOut_1_Port->clearBuffer();
             blockSamplesProcessed = Synthesizer::config::blocksize;
 
             break;

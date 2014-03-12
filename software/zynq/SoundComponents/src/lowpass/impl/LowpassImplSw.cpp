@@ -21,7 +21,7 @@ void LowpassImplSW::process() {
 
 	float acc;
 
-	char* readbuffer = ((BufferedLink*) m_SoundInport->getLink())->getReadBuffer();
+	char* readbuffer = ((BufferedLink*) m_SoundInport->getLink())->getBuffer();
 	char* writebuffer =	((BufferedLink*) m_SoundOutport->getLink())->getWriteBuffer();
 
 	int*  writebufferptr = (int*)writebuffer;

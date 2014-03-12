@@ -57,6 +57,7 @@ namespace Synthesizer{
 		static const int 	blocksize      = 64;
 		static const int    bytesPerSample = sizeof(int);
 		static const int    bytesPerBlock  = blocksize * bytesPerSample;
+		static const int    nPortsMax      = 10;
 	}
 }
 
@@ -66,8 +67,10 @@ namespace SoundComponents{
 
 	enum PredefinedComponents { INPUT, SIZE_OF_PREDEF_COMPONENTS };
 
+	#pragma GCC diagnostic ignored "-Wunused-variable"
 	static const char* ImplTypeNames[SIZE_OF_IMPLTYPES] = {"hw", "sw"};
 
+	#pragma GCC diagnostic ignored "-Wunused-variable"
 	static const char* PredefinedComponentsNames[SIZE_OF_PREDEF_COMPONENTS] = { "input" };
 }
 

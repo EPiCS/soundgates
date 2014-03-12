@@ -31,13 +31,14 @@ private:
 
     SoundComponentImplPtr   m_pDelegate;
 
+    SoundComponentImpl*     m_pDelegateRaw;
+
 public:
 
 	SoundComponent(int uid, SoundComponentImplPtr impl);
 	virtual ~SoundComponent();
 
-	void addOutgoingLink(LinkPtr link, unsigned int port);
-	void addIncomingLink(LinkPtr link, unsigned int port);
+	void addLink(LinkPtr link, Link::direction direction);
 
 	SoundComponentImplPtr getDelegate();
 

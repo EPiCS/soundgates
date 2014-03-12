@@ -37,7 +37,7 @@ class RecordingSoundComponent: public SoundComponentImpl
 {
 
 private:
-	Soundbuffer* buffer;
+	Soundbuffer buffer;
 public:
 
 	DECLARE_COMPONENTNAME

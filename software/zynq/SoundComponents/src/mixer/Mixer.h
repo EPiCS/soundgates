@@ -8,9 +8,6 @@
 #ifndef MIXER_H_
 #define MIXER_H_
 
-#include <sstream>
-#include <limits.h>
-
 #include <Synthesizer.h>
 #include <SoundComponentImpl.h>
 #include <SoundPort.h>

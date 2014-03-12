@@ -10,44 +10,40 @@
 
 SoundComponent::SoundComponent(int uid, SoundComponentImplPtr delegate) : Node(uid){
 
-	m_pDelegate = delegate;
-
+	m_pDelegate     = delegate;
+	m_pDelegateRaw  = delegate.get();
 }
 
 SoundComponent::~SoundComponent(){ }
 
 void SoundComponent::run(){
-    m_pDelegate->process();
+
+//    LOG_DEBUG("Processing node " << this->getUid());
+    m_pDelegateRaw->process();
 }
 
 void SoundComponent::init() {
 
-	this->m_pDelegate->init();
+	this->m_pDelegateRaw->init();
 }
 
-void SoundComponent::addOutgoingLink(LinkPtr link, unsigned int port){
+
+void SoundComponent::addLink(LinkPtr link, Link::direction dir){
 
     try{
 
-        getOutgoingLinks().push_back(link);
-
-        m_pDelegate->getOutport(port)->setLink(link);
+        if(Link::IN == dir)
+        {
+            getLinks(dir).push_back(link);
+        }
+        else
+        if (Link::OUT == dir)
+        {
+            getLinks(dir).push_back(link);
+        }
 
     }catch(std::out_of_range& e){
 
-        std::cerr << e.what();
-    }
-}
-
-void SoundComponent::addIncomingLink(LinkPtr link, unsigned int port) {
-
-    try {
-
-        getIncomingLinks().push_back(link);
-
-        m_pDelegate->getInport(port)->setLink(link);
-
-    } catch (std::out_of_range& e) {
         std::cerr << e.what();
     }
 }

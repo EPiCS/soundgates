@@ -41,12 +41,14 @@ bool Node::operator==(const Node& other) const{
 }
 
 
-std::vector<LinkPtr>& Node::getOutgoingLinks(){
+std::vector<LinkPtr>& Node::getLinks(Link::direction dir){
 
-    return m_IncomingLinks;
-}
-
-std::vector<LinkPtr>& Node::getIncomingLinks(){
-
-    return m_OutgoingLinks;
+    if(Link::IN == dir)
+    {
+        return m_IncomingLinks;
+    }
+    else
+    {
+        return m_OutgoingLinks;
+    }
 }

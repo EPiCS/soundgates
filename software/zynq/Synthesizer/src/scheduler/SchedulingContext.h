@@ -10,29 +10,27 @@
 
 #include "IScheludingStrategy.h"
 
+#include "algorithms/ASAPScheduler.h"
+
+#include "../core/Node.h"
+
+#include <vector>
 #include <boost/foreach.hpp>
 
-template <typename T=IScheludingStrategy>
-class SchedulingContext {
+template <typename Strategy>
+class SchedulingContext  {
 
 private:
 
-    StaticSchedule*       m_pSchedule;
-
-    T    m_SchedulingStrategyRef;
+    Strategy*             m_SchedulingStrategy;
 
 public:
+
     SchedulingContext();
 
     virtual ~SchedulingContext();
 
-    StaticSchedule& getSchedule();
-
-    Node& getNode(int uid);
-
-    std::vector<Node>& getNodes();
-
-    bool isReady(const NodePtr&);
+    StaticSchedule CalculateSchedule(NodePtr root, NodePtr sink, const std::vector<NodePtr>&);
 
 };
 

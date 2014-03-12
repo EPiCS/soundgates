@@ -65,7 +65,7 @@ void Ramp_HW::init(){
 
 	reconos_hwt_create(&m_ReconOSThread, slot.getSlot(), NULL);
 
-	m_SoundOut_1_Port->clearWriteBuffer();
+	m_SoundOut_1_Port->clearBuffer();
 }
 
 uint32_t getIncrement(uint32_t milliseconds)
@@ -103,7 +103,7 @@ void Ramp_HW::process(){
         switch (m_ADSRState) {
 
         case IDLE:
-            m_SoundOut_1_Port->clearWriteBuffer();
+            m_SoundOut_1_Port->clearBuffer();
             break;
 
         case PROCESS:

@@ -7,58 +7,22 @@
 
 #include "SchedulingContext.h"
 
-template <typename T>
-SchedulingContext<T>::SchedulingContext() {
-
-    m_pSchedule = NULL;
-
+template <typename Strategy>
+SchedulingContext<Strategy>::SchedulingContext()
+{
+    m_SchedulingStrategy = new Strategy();
 }
-template <typename T>
-SchedulingContext<T>::~SchedulingContext() {
-
-}
-
-template <typename T>
-StaticSchedule& SchedulingContext<T>::getSchedule(){
-
-    if(!m_pSchedule){
-
-        m_pSchedule = new StaticSchedule();
-
-        m_SchedulingStrategyRef.CalculateSchedule();
-
-    }
-
-    return *m_pSchedule;
+template <typename Strategy>
+SchedulingContext<Strategy>::~SchedulingContext() {
+    delete m_SchedulingStrategy;
 }
 
-template <typename T>
-bool SchedulingContext<T>::isReady(const NodePtr& node){
+template <typename Strategy>
+StaticSchedule SchedulingContext<Strategy>::CalculateSchedule(NodePtr root, NodePtr sink, const std::vector<NodePtr>& nodes){
 
+    return m_SchedulingStrategy->CalculateSchedule(root, sink, nodes);
 
-    bool isready = true;
-
-    switch(node->getType()){
-
-    case Node::MASTER_SOURCE:
-        return true;
-    case Node::MASTER_SINK:
-        return false;
-    case Node::INTERMEDIATE:
-
-        /* Check if all predecessor node were already scheduled */
-        BOOST_FOREACH(LinkPtr link, node->getIncomingLinks()){
-
-            NodePtr source = link->getSource();
-
-            if(!m_pSchedule->isSchduled(source)){
-
-                isready = false;
-                break;
-            }
-        }
-    }
-
-    return isready;
 }
+
+template class SchedulingContext<ASAPScheduler>;
 
