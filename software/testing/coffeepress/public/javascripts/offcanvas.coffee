@@ -156,7 +156,7 @@ expand = (execution) ->
 
 expandComponent = (component) ->
   # Create Component Header
-  row = $('<div class="span10"/>').attr("id", __replaceRaute(component.uid)).appendTo('#execution')
+  row = $('<div class="span10"/>').attr("id", __replaceRaute(component.uid)).css("margin-left","0px").appendTo('#execution')
   card = $('<div class="card"/>').appendTo(row)
   title = $('<h2 class="card-heading"/>').appendTo(card).text( 'UID: ' + component.uid )
   body = $('<div class="card-body"/>').appendTo(card)
