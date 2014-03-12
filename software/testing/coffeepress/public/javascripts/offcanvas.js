@@ -123,6 +123,7 @@
         c = _ref[_i];
         turn = turn + __calcAverageExecutionTime(c.execution_times);
       }
+      turn = turn.toFixed(2);
       div = $('#turnaround');
       $('<br/>').appendTo(div);
       $('<h1/>').html(turn + ' &micros').css("font-weight", "Bold").appendTo(div);
@@ -189,6 +190,7 @@
     td = $('<td>');
     td.appendTo(tr).addClass("span3").text('Average execution time:');
     avgtime = __calcAverageExecutionTime(component.execution_times);
+    avgtime = avgtime.toFixed(2);
     td = $('<td>');
     td.appendTo(tr).addClass("span9").html(avgtime + ' &micros');
     __addSampleInformation(component, tbody);
@@ -235,6 +237,7 @@
       }
     }
     sw_percentage = sw_components > 0 ? sw_components * 100 / components.length : 0;
+    sw_percentage = Math.floor(sw_percentage);
     hw_percentage = 100 - sw_percentage;
     sw = {
       label: "SW",

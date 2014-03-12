@@ -137,6 +137,7 @@ expand = (execution) ->
     turn = 0
     for c in execution.components
       turn = turn + __calcAverageExecutionTime c.execution_times
+    turn = turn.toFixed 2
     div = $('#turnaround')
     $('<br/>').appendTo(div)
     $('<h1/>').html(turn + ' &micros').css("font-weight","Bold").appendTo(div)
@@ -227,6 +228,7 @@ expandComponent = (component) ->
   td = $ '<td>'
   td.appendTo(tr).addClass("span3").text('Average execution time:')
   avgtime = __calcAverageExecutionTime component.execution_times
+  avgtime = avgtime.toFixed 2
   td = $ '<td>'
   td.appendTo(tr).addClass("span9").html(avgtime + ' &micros')
   # Add information about samples
@@ -266,6 +268,7 @@ __calcTypeImplementationDistribution = ( components ) ->
     sw_components += 1 if c.type is 'SW' or c.type is 'sw' or c.type is 'Sw'
   #sw_percentage = (components.length / sw_components) if sw_components is not 0
   sw_percentage = if sw_components > 0 then ( sw_components * 100 / components.length) else 0
+  sw_percentage = Math.floor sw_percentage
   hw_percentage = 100 - sw_percentage
 
   sw = 
