@@ -70,7 +70,7 @@ use IEEE.MATH_REAL.ALL;
         to_signed(8, 32), -- On phase
         to_signed(8, 32)  -- Off phase
         );
-		  
+
 	 constant argc : integer := 5;
   
     -- arbitrary addresses
