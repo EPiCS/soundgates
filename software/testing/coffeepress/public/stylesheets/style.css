@@ -65,4 +65,6 @@ div.logo {
     opacity:0;
 }
 
+a { cursor: pointer; cursor: hand; }
+
 img.title { vertical-align: middle; height: 80px; width: 80px; margin-right: 4px; }

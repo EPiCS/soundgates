@@ -51,12 +51,15 @@
         exec = executions[_i];
         exec.formattedTime = getFormattedTime(exec.timestamp);
         li = $('<li>').appendTo(nav);
-        _results.push(el = $('<a href="#">').hide().appendTo(li).text(exec.formattedTime).fadeIn("fast"));
+        el = $('<a>').hide().appendTo(li).text(exec.formattedTime).attr("time", exec.timestamp).fadeIn("fast");
+        _results.push(el.click(function() {
+          console.log("CLICKED! + value: " + $(this).data("time"));
+        }));
       }
       return _results;
     } else {
       li = $('<li>').appendTo(nav);
-      return el = $('<a href="#">').hide().appendTo(li).text("No data").fadeIn("fast");
+      return el = $('<a>').hide().appendTo(li).text("No data").fadeIn("fast");
     }
   };
 
@@ -68,7 +71,7 @@
     for (_i = 0, _len = components.length; _i < _len; _i++) {
       c = components[_i];
       li = $('<li>').appendTo(nav);
-      el = $('<a href="#">').hide().appendTo(li).text(c.uid).fadeIn("fast");
+      el = $('<a>').hide().appendTo(li).text(c.uid).fadeIn("fast");
       _results.push(li.click(function() {
         var target;
         target = '#' + __replaceRaute($(this).children('a').text());
@@ -88,8 +91,10 @@
       });
     });
     $("#generate_test").click(function() {
-      return generateTestdata().done(function(executions) {
-        return initExecutionNavigation(executions);
+      return generateTestdata().done(function() {
+        return getExecutionList().done(function(executions) {
+          return initExecutionNavigation(executions);
+        });
       });
     });
     $("#remove_test").click(function() {
@@ -100,8 +105,15 @@
   };
 
   expand = function(execution) {
-    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, _i, _len, _ref;
+    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, _i, _len, _ref;
     getComponentList(execution.timestamp).done(initComponentNavigation);
+    expand_clean = function() {
+      $("#execution_date").empty();
+      $("#component_count").empty();
+      $("#turnaround").empty();
+      $("#component_implementations").empty();
+      $("#component_average_execution").empty();
+    };
     expand_addDate = function(execution) {
       var date, div, _getDate, _getHour;
       date = __getJsDate(execution.timestamp);
@@ -168,6 +180,7 @@
         return bar;
       });
     };
+    expand_clean;
     expand_addDate(execution);
     expand_addComponentCount(execution);
     expand_addImplementationDistribution(execution);

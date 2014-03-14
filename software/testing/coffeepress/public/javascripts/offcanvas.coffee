@@ -42,10 +42,6 @@ initializeDocument = () ->
         $(this).animate
           opacity: "1"
         , 500
-      # else if top_of_window > bottom_of_object - offset
-      #   $(this).animate
-      #     opacity: "1"
-      #   , 0
       return
 
     return
@@ -64,10 +60,14 @@ initExecutionNavigation = ( executions ) ->
     for exec in executions
       exec.formattedTime = getFormattedTime exec.timestamp
       li = $('<li>').appendTo(nav)
-      el = $('<a href="#">').hide().appendTo(li).text(exec.formattedTime).fadeIn("fast")
+      el = $('<a>').hide().appendTo(li).text(exec.formattedTime).attr("time",exec.timestamp).fadeIn("fast")
+      el.click ->
+        console.log "CLICKED! + value: " + $(this).data("time")
+        #getExecution( $(this).data("value") ).done(expand)
+        return
   else
     li = $('<li>').appendTo(nav)
-    el = $('<a href="#">').hide().appendTo(li).text("No data").fadeIn("fast")
+    el = $('<a>').hide().appendTo(li).text("No data").fadeIn("fast")
   # $("#list-executions").children(".li").each (index, element) =>
   #     # formValues = (elem.value for elem in $('.input'))
   #     value = $(element).attr("value")
@@ -79,7 +79,7 @@ initComponentNavigation = ( components ) ->
   $('<li class="nav-header">').appendTo(nav).text("Components")
   for c in components
     li = $('<li>').appendTo(nav)
-    el = $('<a href="#">').hide().appendTo(li).text(c.uid).fadeIn("fast")
+    el = $('<a>').hide().appendTo(li).text(c.uid).fadeIn("fast")
     li.click ->
       target = '#' + __replaceRaute $(this).children('a').text()
       console.log "Scrolling to " + target
@@ -93,8 +93,9 @@ initializeButtons = () ->
       initExecutionNavigation executions
   
   $("#generate_test").click ->
-    generateTestdata().done ( executions ) ->
-      initExecutionNavigation executions
+    generateTestdata().done ->
+      getExecutionList().done (executions )->
+        initExecutionNavigation executions
 
   $("#remove_test").click ->
     removeEveryExecution().done ->
@@ -115,6 +116,13 @@ expand = (execution) ->
 
 # / ----------------------------------------------------------------------
 # Define expanding methods before calling
+  expand_clean = ( ) ->
+    $("#execution_date").empty()
+    $("#component_count").empty()
+    $("#turnaround").empty()
+    $("#component_implementations").empty()
+    $("#component_average_execution").empty()
+    return
 
   expand_addDate = ( execution ) ->
     date = __getJsDate execution.timestamp
@@ -195,6 +203,7 @@ expand = (execution) ->
 # / ----------------------------------------------------------------------
 # Call expanding methods
 
+  expand_clean
   expand_addDate execution
   expand_addComponentCount execution
   expand_addImplementationDistribution execution

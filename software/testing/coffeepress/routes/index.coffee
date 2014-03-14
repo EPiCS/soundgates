@@ -157,7 +157,7 @@ exports.generateData = (req, res) ->
         execution.save ( err ) ->
             console.log "Info: Created testdata"
             return
-    exports.getExecutionList(req, res)
+    res.send "Testdata Created"
 
 createSineSamples = ( begin, end ) ->
     data = []
