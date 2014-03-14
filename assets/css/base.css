@@ -164,10 +164,13 @@ ul ul li {
 }
 
 #header #logo {
+	width: 230px;
+	float:left;
+}
+
+#header #logo #img {
 	width: 51px;
 	height: auto;
-	object-fit: cover;
-	float:left;
 }
 
 #navi {
