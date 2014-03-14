@@ -166,6 +166,7 @@ ul ul li {
 #header #logo {
 	width: 51px;
 	height: 48px;
+	overflow: hidden;
 	float:left;
 }
 
