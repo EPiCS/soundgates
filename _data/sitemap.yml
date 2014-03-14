@@ -1,0 +1,26 @@
+/:
+  - [/about, About Project, /about/objectives]
+  - [/gettingstarted, Getting Started, /gettingstarted/tutorial]
+  - [/tutorials, Tutorials, /tutorials/editormanual]
+  - [/documentation, Documentation, /documentation/components]
+  - [/publications, Publications]
+
+/about:
+  - [/about/objectives, Objectives]
+  - [/about/system, System]
+  - [/about/workflow, Workflow]
+
+/gettingstarted:
+  - [/gettingstarted/tutorial, Tutorial]
+  - [/gettingstarted/github, Github Repository, "https://github.com/pc2/pg-soundgates", y]
+
+/tutorials:
+  - [/tutorials/editormanual, Editor Manual]
+  - [/tutorials/createcomponent, Creation of sound components]
+  - [/tutorials/createsensor, Adding a sensor]
+
+/documentation:
+  - [/documentation/components, Synthesizer Components]
+  - [/documentation/architecture, Synthesizer Architecture]
+  - [/documentation/api, API Documentation]
+

@@ -1,0 +1,29 @@
+/:
+  - [/about, About ReconOS, /about/objectives]
+  - [/gettingstarted, Getting Started, /gettingstarted/tutorial]
+  - [/documentation, Documentation, /documentation/userguide]
+  - [/getinvolved, Get Involved, /getinvolved/howto]
+  - [/publications, Publications]
+
+/about:
+  - [/about/objectives, Objectives]
+  - [/about/history, History]
+  - [/about/stories, Success Stories]
+
+/gettingstarted:
+  - [/gettingstarted/tutorial, Tutorial]
+  - [/gettingstarted/starterkit, Demo Builds]
+  - [/gettingstarted/samplecode, Sample Code]
+  - [/gettingstarted/github, Github Repository, "https://github.com/ReconOS/reconos", y]
+
+/documentation:
+  - [/documentation/userguide, User Guide, /documentation/userguide/bla]
+  - [/documentation/api, API Documentation]
+
+/documentation/userguide/bla:
+  - [/documentation/userguide/bla/blub, Blub]
+  - [/documentation/userguide/bla/blub2, Blub2]
+  
+/getinvolved:
+  - [/getinvolved/howto, How to get Involved]
+  - [/getinvolved/forum, Developer Forum]

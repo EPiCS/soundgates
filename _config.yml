@@ -1,0 +1,7 @@
+name: "Soundgates"
+description: "Interactive Music Synthesis on FPGAs"
+
+pygments: true # syntax highlighting with pygments
+markdown: redcarpet #specifies Markdown renderer
+redcarpet:
+  extensions: ["fenced_code_blocks", "tables", "with_toc_data"]
