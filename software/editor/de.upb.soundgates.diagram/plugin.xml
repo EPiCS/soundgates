@@ -65,18 +65,6 @@
    <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
       <?gmfgen generated="false"?>
       <objectContribution
-            id="Soundgates.diagram.InitDiagram"
-            nameFilter="*.sgd"
-            objectClass="org.eclipse.core.resources.IFile">
-         <action
-               label="%initDiagramActionLabel"
-               class="soundgates.diagram.part.SoundgatesInitDiagramFileAction"
-               menubarPath="additions"
-               enablesFor="1"
-               id="Soundgates.diagram.InitDiagramAction">
-         </action>
-      </objectContribution>
-      <objectContribution
             id="Soundgates.diagram.export.composite"
             objectClass="soundgates.diagram.edit.parts.SelectableEditPartForCompositeCreation">
          <action
