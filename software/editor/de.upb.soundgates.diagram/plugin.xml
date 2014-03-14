@@ -42,7 +42,7 @@
    <extension point="org.eclipse.ui.newWizards" id="creation-wizard">
       <?gmfgen generated="false"?>
   	  <wizard
-  	     name="%newWizardName"
+  	     name="Soundgates Patch Diagram"
   	     icon="icons/obj16/SoundgatesDiagramFile.gif"
   	     category="de.upb.soundgates.diagram.ID"
   	     class="soundgates.diagram.part.SoundgatesCreationWizard"
