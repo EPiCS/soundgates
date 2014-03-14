@@ -18,7 +18,6 @@
         var sideBarNavWidth;
         sideBarNavWidth = $(parentPanel).width();
         elem.css("width", sideBarNavWidth);
-        console.log("Setting width to: " + sideBarNavWidth);
       };
       resizeFn();
       $(window).resize(resizeFn);
@@ -43,17 +42,22 @@
   };
 
   initExecutionNavigation = function(executions) {
-    var exec, li, nav, _i, _len, _results;
+    var el, exec, li, nav, _i, _len, _results;
     nav = $("#nav_executions").empty();
     $('<li class="nav-header">').appendTo(nav).text("Executions");
-    _results = [];
-    for (_i = 0, _len = executions.length; _i < _len; _i++) {
-      exec = executions[_i];
-      exec.formattedTime = getFormattedTime(exec.timestamp);
+    if (executions != null) {
+      _results = [];
+      for (_i = 0, _len = executions.length; _i < _len; _i++) {
+        exec = executions[_i];
+        exec.formattedTime = getFormattedTime(exec.timestamp);
+        li = $('<li>').appendTo(nav);
+        _results.push(el = $('<a href="#">').hide().appendTo(li).text(exec.formattedTime).fadeIn("fast"));
+      }
+      return _results;
+    } else {
       li = $('<li>').appendTo(nav);
-      _results.push($('<a href="#">').appendTo(li).text(exec.formattedTime).fadeIn());
+      return el = $('<a href="#">').hide().appendTo(li).text("No data").fadeIn("fast");
     }
-    return _results;
   };
 
   initComponentNavigation = function(components) {
@@ -64,7 +68,7 @@
     for (_i = 0, _len = components.length; _i < _len; _i++) {
       c = components[_i];
       li = $('<li>').appendTo(nav);
-      el = $('<a href="#">').appendTo(li).text(c.uid).fadeIn();
+      el = $('<a href="#">').hide().appendTo(li).text(c.uid).fadeIn("fast");
       _results.push(li.click(function() {
         var target;
         target = '#' + __replaceRaute($(this).children('a').text());
@@ -79,13 +83,20 @@
 
   initializeButtons = function() {
     $("#refresh_test").click(function() {
-      $("html, body").animate({
-        scrollTop: $('home').position().top
-      }, "slow");
+      return getExecutionList().done(function(executions) {
+        return initExecutionNavigation(executions);
+      });
     });
-    $("#refresh_test").click(getExecutionList);
-    $("#generate_test").click(generateTestdata);
-    $("#remove_test").click(removeEveryExecution);
+    $("#generate_test").click(function() {
+      return generateTestdata().done(function(executions) {
+        return initExecutionNavigation(executions);
+      });
+    });
+    $("#remove_test").click(function() {
+      return removeEveryExecution().done(function() {
+        return initExecutionNavigation(null);
+      });
+    });
   };
 
   expand = function(execution) {
@@ -150,7 +161,7 @@
           return d.label;
         }).y(function(d) {
           return d.value;
-        }).staggerLabels(true).tooltips(false).showValues(true).transitionDuration(350);
+        }).staggerLabels(true).tooltips(true).showValues(true).transitionDuration(350);
         div = '#component_average_execution';
         data = __calcAverageExecutionTimeList(execution.components);
         d3.select(div).append('svg').attr('height', 200).datum(data).transition().duration(350).call(bar);
@@ -383,9 +394,8 @@
   };
 
   generateTestdata = function() {
-    return $.ajax({
-      url: '/generate',
-      type: "GET"
+    return $.get('/generate', function(data) {
+      console.log("AJAX: Generate Testdata Successful");
     });
   };
 
@@ -399,9 +409,8 @@
   };
 
   removeEveryExecution = function() {
-    return $.ajax({
-      url: '/remove/all',
-      type: "GET"
+    return $.get('/remove/all', function(data) {
+      console.log("AJAX: Cleared Database");
     });
   };
 

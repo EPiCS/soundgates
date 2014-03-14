@@ -20,7 +20,6 @@ initializeDocument = () ->
     resizeFn = ->
       sideBarNavWidth = $(parentPanel).width()
       elem.css "width", sideBarNavWidth
-      console.log "Setting width to: " + sideBarNavWidth
       return
     resizeFn()
     $(window).resize resizeFn
@@ -61,10 +60,14 @@ initializeDocument = () ->
 initExecutionNavigation = ( executions ) ->
   nav = $("#nav_executions").empty()
   $('<li class="nav-header">').appendTo(nav).text("Executions")
-  for exec in executions
-    exec.formattedTime = getFormattedTime exec.timestamp
+  if executions?
+    for exec in executions
+      exec.formattedTime = getFormattedTime exec.timestamp
+      li = $('<li>').appendTo(nav)
+      el = $('<a href="#">').hide().appendTo(li).text(exec.formattedTime).fadeIn("fast")
+  else
     li = $('<li>').appendTo(nav)
-    $('<a href="#">').appendTo(li).text(exec.formattedTime).fadeIn()
+    el = $('<a href="#">').hide().appendTo(li).text("No data").fadeIn("fast")
   # $("#list-executions").children(".li").each (index, element) =>
   #     # formValues = (elem.value for elem in $('.input'))
   #     value = $(element).attr("value")
@@ -76,7 +79,7 @@ initComponentNavigation = ( components ) ->
   $('<li class="nav-header">').appendTo(nav).text("Components")
   for c in components
     li = $('<li>').appendTo(nav)
-    el = $('<a href="#">').appendTo(li).text(c.uid).fadeIn()
+    el = $('<a href="#">').hide().appendTo(li).text(c.uid).fadeIn("fast")
     li.click ->
       target = '#' + __replaceRaute $(this).children('a').text()
       console.log "Scrolling to " + target
@@ -85,15 +88,17 @@ initComponentNavigation = ( components ) ->
         , "slow"
 
 initializeButtons = () ->
-  # Add methods to buttons
   $("#refresh_test").click ->
-    $("html, body").animate
-        scrollTop: $('home').position().top
-        , "slow"
-    return
-  $("#refresh_test").click(getExecutionList)
-  $("#generate_test").click(generateTestdata)
-  $("#remove_test").click(removeEveryExecution)
+    getExecutionList().done (executions )->
+      initExecutionNavigation executions
+  
+  $("#generate_test").click ->
+    generateTestdata().done ( executions ) ->
+      initExecutionNavigation executions
+
+  $("#remove_test").click ->
+    removeEveryExecution().done ->
+      initExecutionNavigation null
   return
 
 
@@ -174,7 +179,7 @@ expand = (execution) ->
         .x (d) -> d.label
         .y (d) -> d.value
         .staggerLabels(true)
-        .tooltips(false)
+        .tooltips(true)
         .showValues(true)
         .transitionDuration(350)
       div = '#component_average_execution'
@@ -382,10 +387,13 @@ getExecutionList = () ->
 
 # Debugging methods
 generateTestdata = () ->
-  return $.ajax({
-    url : '/generate',
-    type : "GET"
-  })
+  $.get '/generate', (data) ->
+    console.log "AJAX: Generate Testdata Successful"
+    return
+  # return $.ajax({
+  #   url : '/generate',
+  #   type : "GET"
+  # })
 
 removeExecution = (timestamp) ->
   if isInt timestamp
@@ -395,11 +403,9 @@ removeExecution = (timestamp) ->
     })
 
 removeEveryExecution = () ->
-  # TODO: insert warning
-    return $.ajax({
-      url : '/remove/all',
-      type : "GET"
-    })
+  $.get '/remove/all', (data) ->
+    console.log "AJAX: Cleared Database"
+    return
 
 # + ---------------------- +
 # |   Helper Funtctions    |
