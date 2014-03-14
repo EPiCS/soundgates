@@ -79,7 +79,7 @@ exports.getExecution = (req, res) ->
 
 exports.getLatestExecution = (req, res) ->
     query = Execution.find()
-    query.sort({'timestamp':1})
+    query.sort({'timestamp':-1})
     query.limit(1)
     query.exec ( err, execution ) ->
         if err

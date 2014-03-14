@@ -24,6 +24,7 @@ initializeDocument = () ->
     resizeFn()
     $(window).resize resizeFn
     return
+  
   # Margin hardcoded Bugfix
   $("#component_average_execution").parent().parent().css("margin-left", "0px")
 
@@ -46,7 +47,6 @@ initializeDocument = () ->
 
     return
 
-
   # Initialize Navigation Sidebar with every available execution
   getExecutionList().done(initExecutionNavigation)
   # Get the latest execution and draw it
@@ -60,18 +60,16 @@ initExecutionNavigation = ( executions ) ->
     for exec in executions
       exec.formattedTime = getFormattedTime exec.timestamp
       li = $('<li>').appendTo(nav)
-      el = $('<a>').hide().appendTo(li).text(exec.formattedTime).attr("time",exec.timestamp).fadeIn("fast")
+      el = $('<a>').hide().appendTo(li).text(exec.formattedTime).data("timestamp",exec.timestamp).fadeIn("fast")
       el.click ->
-        console.log "CLICKED! + value: " + $(this).data("time")
-        #getExecution( $(this).data("value") ).done(expand)
+        $('html, body').animate({scrollTop:0}, 'slow')
+        timestamp = $(this).data("timestamp")
+        getExecution(timestamp).done(expand)
         return
   else
     li = $('<li>').appendTo(nav)
     el = $('<a>').hide().appendTo(li).text("No data").fadeIn("fast")
-  # $("#list-executions").children(".li").each (index, element) =>
-  #     # formValues = (elem.value for elem in $('.input'))
-  #     value = $(element).attr("value")
-  #     return
+
 
 # Adds every used componend of the selected Execution to the sidebar
 initComponentNavigation = ( components ) ->
@@ -88,6 +86,10 @@ initComponentNavigation = ( components ) ->
         , "slow"
 
 initializeButtons = () ->
+  $("#home").click ->
+    $('html, body').animate({scrollTop:0}, 'slow')
+    return false
+
   $("#refresh_test").click ->
     getExecutionList().done (executions )->
       initExecutionNavigation executions
@@ -117,11 +119,13 @@ expand = (execution) ->
 # / ----------------------------------------------------------------------
 # Define expanding methods before calling
   expand_clean = ( ) ->
-    $("#execution_date").empty()
-    $("#component_count").empty()
-    $("#turnaround").empty()
-    $("#component_implementations").empty()
-    $("#component_average_execution").empty()
+    console.log "Cleaning."
+    $("#execution_date").fadeOut("fast").empty()
+    $("#component_count").fadeOut("fast").empty()
+    $("#turnaround").fadeOut("fast").empty()
+    $("#component_implementations").fadeOut("fast").empty()
+    $("#component_average_execution").fadeOut("fast").empty()
+    $("#execution").fadeOut("fast").empty()
     return
 
   expand_addDate = ( execution ) ->
@@ -132,7 +136,7 @@ expand = (execution) ->
       monthNames = [ "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December" ]
       return d.getDate() + '/' +  monthNames[d.getMonth()] + '/' + d.getFullYear()
-    div = $('#execution_date')
+    div = $('#execution_date').fadeIn("fast")
     $('<br/>').appendTo(div)
     $('<h1 class="text-right"/>').text(_getHour date).css("font-weight","Bold").appendTo(div)
     $('<p class="text-right"/>').text(_getDate date).appendTo(div)
@@ -140,7 +144,7 @@ expand = (execution) ->
 
   expand_addComponentCount = ( execution ) ->
     count = execution.components.length
-    div = $('#component_count')
+    div = $('#component_count').fadeIn("fast")
     $('<br/>').appendTo(div)
     $('<h1/>').text('#' + count).css("font-weight","Bold").appendTo(div)
     $('<p/>').text('have been found').appendTo(div)
@@ -151,13 +155,14 @@ expand = (execution) ->
     for c in execution.components
       turn = turn + __calcAverageExecutionTime c.execution_times
     turn = turn.toFixed 2
-    div = $('#turnaround')
+    div = $('#turnaround').fadeIn("fast")
     $('<br/>').appendTo(div)
     $('<h1/>').html(turn + ' &micros').css("font-weight","Bold").appendTo(div)
     $('<p/>').text('does it take for one cycle').appendTo(div)
     return
 
   expand_addImplementationDistribution = ( execution ) ->  
+    $("#component_implementations").fadeIn("fast")
     # DONUT Chart
     nv.addGraph ->
       pie = nv.models.pieChart()
@@ -180,6 +185,7 @@ expand = (execution) ->
     return
 
   expand_addAverageExuction = () ->
+    $("#component_average_execution").fadeIn("fast")
     # Adding AVG execution time
     # BAR Chart
     nv.addGraph ->
@@ -203,7 +209,7 @@ expand = (execution) ->
 # / ----------------------------------------------------------------------
 # Call expanding methods
 
-  expand_clean
+  expand_clean()
   expand_addDate execution
   expand_addComponentCount execution
   expand_addImplementationDistribution execution
@@ -219,7 +225,8 @@ expand = (execution) ->
 
 expandComponent = (component) ->
   # Create Card
-  row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left","0px").appendTo('#execution')
+  div = $("#execution").fadeIn("fast")
+  row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left","0px").appendTo(div)
   card = $('<div class="card"/>').appendTo(row)
   title = $('<h2 class="card-heading"/>').appendTo(card).text( 'UID: ' + component.uid )
   # Create Table
@@ -381,12 +388,11 @@ getComponentList = ( timestamp ) ->
     type : "GET"
   })
 
-getExecution = (timestamp) ->
-  if isInt timestamp
-    return $.ajax({
-      url : '/execution/' + timestamp,
-      type : "GET"
-    })
+getExecution = ( timestamp ) ->
+  if not isInt timestamp
+    parseInt timestamp  
+  console.log "Ajax: Retrieving Execution " + timestamp
+  return $.get '/execution/' + timestamp
 
 getExecutionList = () ->
   return $.ajax({

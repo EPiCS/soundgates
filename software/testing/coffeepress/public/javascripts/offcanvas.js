@@ -51,9 +51,14 @@
         exec = executions[_i];
         exec.formattedTime = getFormattedTime(exec.timestamp);
         li = $('<li>').appendTo(nav);
-        el = $('<a>').hide().appendTo(li).text(exec.formattedTime).attr("time", exec.timestamp).fadeIn("fast");
+        el = $('<a>').hide().appendTo(li).text(exec.formattedTime).data("timestamp", exec.timestamp).fadeIn("fast");
         _results.push(el.click(function() {
-          console.log("CLICKED! + value: " + $(this).data("time"));
+          var timestamp;
+          $('html, body').animate({
+            scrollTop: 0
+          }, 'slow');
+          timestamp = $(this).data("timestamp");
+          getExecution(timestamp).done(expand);
         }));
       }
       return _results;
@@ -85,6 +90,12 @@
   };
 
   initializeButtons = function() {
+    $("#home").click(function() {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 'slow');
+      return false;
+    });
     $("#refresh_test").click(function() {
       return getExecutionList().done(function(executions) {
         return initExecutionNavigation(executions);
@@ -108,11 +119,13 @@
     var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, _i, _len, _ref;
     getComponentList(execution.timestamp).done(initComponentNavigation);
     expand_clean = function() {
-      $("#execution_date").empty();
-      $("#component_count").empty();
-      $("#turnaround").empty();
-      $("#component_implementations").empty();
-      $("#component_average_execution").empty();
+      console.log("Cleaning.");
+      $("#execution_date").fadeOut("fast").empty();
+      $("#component_count").fadeOut("fast").empty();
+      $("#turnaround").fadeOut("fast").empty();
+      $("#component_implementations").fadeOut("fast").empty();
+      $("#component_average_execution").fadeOut("fast").empty();
+      $("#execution").fadeOut("fast").empty();
     };
     expand_addDate = function(execution) {
       var date, div, _getDate, _getHour;
@@ -125,7 +138,7 @@
         monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         return d.getDate() + '/' + monthNames[d.getMonth()] + '/' + d.getFullYear();
       };
-      div = $('#execution_date');
+      div = $('#execution_date').fadeIn("fast");
       $('<br/>').appendTo(div);
       $('<h1 class="text-right"/>').text(_getHour(date)).css("font-weight", "Bold").appendTo(div);
       $('<p class="text-right"/>').text(_getDate(date)).appendTo(div);
@@ -133,7 +146,7 @@
     expand_addComponentCount = function(execution) {
       var count, div;
       count = execution.components.length;
-      div = $('#component_count');
+      div = $('#component_count').fadeIn("fast");
       $('<br/>').appendTo(div);
       $('<h1/>').text('#' + count).css("font-weight", "Bold").appendTo(div);
       $('<p/>').text('have been found').appendTo(div);
@@ -147,12 +160,13 @@
         turn = turn + __calcAverageExecutionTime(c.execution_times);
       }
       turn = turn.toFixed(2);
-      div = $('#turnaround');
+      div = $('#turnaround').fadeIn("fast");
       $('<br/>').appendTo(div);
       $('<h1/>').html(turn + ' &micros').css("font-weight", "Bold").appendTo(div);
       $('<p/>').text('does it take for one cycle').appendTo(div);
     };
     expand_addImplementationDistribution = function(execution) {
+      $("#component_implementations").fadeIn("fast");
       nv.addGraph(function() {
         var data, div, pie;
         pie = nv.models.pieChart().x(function(d) {
@@ -167,6 +181,7 @@
       });
     };
     expand_addAverageExuction = function() {
+      $("#component_average_execution").fadeIn("fast");
       nv.addGraph(function() {
         var bar, data, div;
         bar = nv.models.discreteBarChart().x(function(d) {
@@ -180,7 +195,7 @@
         return bar;
       });
     };
-    expand_clean;
+    expand_clean();
     expand_addDate(execution);
     expand_addComponentCount(execution);
     expand_addImplementationDistribution(execution);
@@ -194,8 +209,9 @@
   };
 
   expandComponent = function(component) {
-    var avgtime, body, card, row, table, tbody, td, title, tr;
-    row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left", "0px").appendTo('#execution');
+    var avgtime, body, card, div, row, table, tbody, td, title, tr;
+    div = $("#execution").fadeIn("fast");
+    row = $('<div class="span12"/>').addClass("hideme").attr("id", __replaceRaute(component.uid)).css("margin-left", "0px").appendTo(div);
     card = $('<div class="card"/>').appendTo(row);
     title = $('<h2 class="card-heading"/>').appendTo(card).text('UID: ' + component.uid);
     body = $('<div class="card-body"/>').appendTo(card);
@@ -391,12 +407,11 @@
   };
 
   getExecution = function(timestamp) {
-    if (isInt(timestamp)) {
-      return $.ajax({
-        url: '/execution/' + timestamp,
-        type: "GET"
-      });
+    if (!isInt(timestamp)) {
+      parseInt(timestamp);
     }
+    console.log("Ajax: Retrieving Execution " + timestamp);
+    return $.get('/execution/' + timestamp);
   };
 
   getExecutionList = function() {
