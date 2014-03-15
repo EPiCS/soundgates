@@ -67,7 +67,7 @@ a {
 }
 
 a:hover {
-	color:#823c3c;
+	color:#00205b;
 }
 
 hr {
@@ -199,7 +199,7 @@ ul ul li {
 }
 
 #navi .active a {
-	color:#823c3c;
+	color:#00205b;
 }
 
 #navi ul:first-child a {
@@ -268,7 +268,7 @@ ul ul li {
 }
 
 #footer a:hover {
-	color:#823c3c;
+	color:#00205b;
 }
 
 #footer #links {
