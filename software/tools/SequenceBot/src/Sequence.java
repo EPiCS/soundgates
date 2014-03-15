@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 
 public class Sequence {
 	MusicalEvent [] events;
@@ -7,5 +9,10 @@ public class Sequence {
 		super();
 		this.events = events;
 		this.importance = importance;
+	}
+	
+	@Override
+	public String toString() {
+		return "[Importance: " + importance + Arrays.toString(events) + "]";
 	}
 }
