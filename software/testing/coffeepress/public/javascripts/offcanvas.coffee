@@ -3,6 +3,11 @@
 # + ---------------------- +
 
 # Method is executed as soon document becomes ready
+
+global_timestamp = 0
+global_components = null
+global_component_charts = null
+
 readyFn = (jQuery) ->
   console.log "Ready."
 
@@ -73,6 +78,7 @@ initExecutionNavigation = ( executions ) ->
 
 # Adds every used componend of the selected Execution to the sidebar
 initComponentNavigation = ( components ) ->
+  global_components = components
   nav = $("#nav_components").empty()
   $('<li class="nav-header">').appendTo(nav).text("Components")
   for c in components
@@ -112,11 +118,6 @@ initializeButtons = () ->
 
 expand = (execution) ->
 # / ----------------------------------------------------------------------
-# Preprocessing
-
-  getComponentList(execution.timestamp).done(initComponentNavigation)
-
-# / ----------------------------------------------------------------------
 # Define expanding methods before calling
   expand_clean = ( ) ->
     console.log "Cleaning."
@@ -126,6 +127,8 @@ expand = (execution) ->
     $("#component_implementations").fadeOut("fast").empty()
     $("#component_average_execution").fadeOut("fast").empty()
     $("#execution").fadeOut("fast").empty()
+    # Clean global variables
+    global_component_charts = []
     return
 
   expand_addDate = ( execution ) ->
@@ -207,8 +210,12 @@ expand = (execution) ->
     return
 
 # / ----------------------------------------------------------------------
-# Call expanding methods
+# Preprocessing
+  global_timestamp = execution.timestamp
+  getComponentList(execution.timestamp).done(initComponentNavigation)
 
+# / ----------------------------------------------------------------------
+# Call expanding methods
   expand_clean()
   expand_addDate execution
   expand_addComponentCount execution
@@ -353,7 +360,12 @@ __createDiagram = (component) ->
     nv.utils.windowResize(chart.update);
     nv.utils.windowResize ->
       chart.update()
-      return 
+      return
+
+    global_chart =
+      "uid" : component.uid
+      "chart" : chart
+    global_component_charts.push global_chart 
     return chart
 
 __createBrush = (component) ->
@@ -377,16 +389,41 @@ __createBrush = (component) ->
   
   xAxis = d3.svg.axis().scale(x_scale).orient("bottom")
 
+  # Get corresponding chart
+  __getChart = (component) ->
+      for c in global_component_charts
+        if c.uid = component.uid
+          return c.chart
+      console.log "Error: Could not find chart: " + component.uid
+      return null
+
   brushed = () ->
+    # Get selected samples
     b = if not brush.empty() then brush.extent() else x_scale.domain()
     b[0] = Math.floor b[0]
     b[1] = Math.ceil b[1]
-    console.log b
+    sample_amount = b[1] - b[0]
+    if sample_amount < 1 then return
+    # Get chart
+    chart = __getChart component
+    # Get data from DB
+    ob = 
+      timestamp : global_timestamp
+      uid : component.uid
+      skip : b[0]
+      amount : sample_amount
+    console.log ob
+    d = getSamples ob
+    console.log "RECEIVED??: "
+    console.log d
+    # Update Chart
+    #chart.xDomain b
+    #chart.update 
     return
   
   brush = d3.svg.brush()
     .x(x_scale)
-    .on("brush", brushed);
+    .on("brushend", brushed);
   
   svg = d3.select(selector).append("svg")
       .attr("width", width)
@@ -468,6 +505,19 @@ getExecutionList = () ->
       type : "GET"
     })
 
+getSamples = ( param ) ->
+  timestamp = param.timestamp
+  uid = param.uid
+  amount = param.amount
+  skip = param.skip
+  $.post '/samples',
+    timestamp: timestamp
+    uid: uid
+    amount: amount
+    skip: skip
+    (data) -> console.log data
+
+
 # Debugging methods
 generateTestdata = () ->
   $.get '/generate', (data) ->
@@ -525,38 +575,3 @@ __getJsDate = (x) ->
     return date
 
 $(document).ready readyFn
-
-
-# __createDiagram = (component) ->
-#   console.log "Info: Creating compnent diagram for " + component.uid
-#   # Prepare data
-#   dataAscolumns = __prepareSamples component
-#   if dataAscolumns.length > 0
-#     selector = __replaceRaute(component.uid)
-#     selector = '#' + selector
-#     datarr = { columns: dataAscolumns }
-
-#     chart = c3.generate({
-#       bindto : selector,
-#       data   : datarr
-#       zoom   : { enabled: true} }) 
-#   return
-
-# __prepareSamples = (component) ->
-#   columns = []
-#   input_length = component.input_samples.length
-#   for port, i in component.input_samples
-#       c = []
-#       c.push 'Input_' + i 
-#       for sample in component.input_samples[i].values
-#         c.push sample
-#       columns.push c
-
-#   for port, i in component.output_samples
-#       c = []
-#       c.push 'Output_' + i
-#       for sample in component.output_samples[i].values
-#         c.push sample
-#       columns.push c
-
-#   return columns

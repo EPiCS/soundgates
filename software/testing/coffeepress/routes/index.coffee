@@ -64,6 +64,26 @@ exports.getComponentList = (req, res) ->
         return
     return
 
+exports.getSamples = (req, res) ->
+    timestamp = req.param("timestamp")
+    console.log timestamp
+    uid = req.param("uid")
+    console.log uid
+    skip = req.param("skip")
+    console.log skip
+    amount = req.param("amount")
+    console.log amount
+    query = Execution.findOne({'timestamp':timestamp})
+    query.where('components.uid').equals(uid)
+    query.slice('components.input_samples.values', skip, amount)
+    query.exec ( err, samples )->
+        if err
+            console.log err
+        else
+            console.dir samples
+        return
+    return
+
 exports.getExecution = (req, res) ->
     timestamp = req.params.id
     console.log "Info: Getting Execution with timestamp: " + timestamp

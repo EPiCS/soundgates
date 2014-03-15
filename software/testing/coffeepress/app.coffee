@@ -30,6 +30,7 @@ app.get "/componentlist/:id", routes.getComponentList
 app.get "/generate", routes.generateData
 app.get "/remove/all", routes.removeAllExecutions
 app.get "/remove/:id", routes.removeExecution
+app.post "/samples", routes.getSamples
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
   return
