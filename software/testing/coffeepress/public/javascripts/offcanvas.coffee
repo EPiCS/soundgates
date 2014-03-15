@@ -256,9 +256,12 @@ expandComponent = (component) ->
   __addSampleInformation component,tbody
   # Add diagram
   $('<div/>').appendTo(body).attr('id', __replaceRaute(component.uid) + "_graphic" )
+  # Add Brush div
+  $('<div/>').appendTo(body).attr('id', __replaceRaute(component.uid) + "_brush" )
   # Create diagram
   if component.input_samples[0]? or component.output_samples[0]?
     __createDiagram(component)
+    __createBrush(component)
   return
 
 __addSampleInformation = ( component, tbody ) ->
@@ -352,6 +355,71 @@ __createDiagram = (component) ->
       chart.update()
       return 
     return chart
+
+__createBrush = (component) ->
+  selector = __replaceRaute(component.uid)
+  selector = '#' + selector + '_brush'
+  width = $(selector).parent().css("width")
+  width = parseInt(width, 10);
+  height = 60
+
+  values = component.output_samples[0].values
+  length = values.length
+  draw_data = 
+        x : (i for e,i in values)
+        y : (e for e in values)
+  
+  x_domain = [0, length]
+  y_domain = d3.extent(draw_data.y.map( (d) -> return d))
+  
+  x_scale = d3.scale.linear().range([0, width]).domain(x_domain).clamp(true)
+  y_scale = d3.scale.linear().range([height, 0]).domain(y_domain).clamp(true)
+  
+  xAxis = d3.svg.axis().scale(x_scale).orient("bottom")
+
+  brushed = () ->
+    b = if not brush.empty() then brush.extent() else x_scale.domain()
+    b[0] = Math.floor b[0]
+    b[1] = Math.ceil b[1]
+    console.log b
+    return
+  
+  brush = d3.svg.brush()
+    .x(x_scale)
+    .on("brush", brushed);
+  
+  svg = d3.select(selector).append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  area = d3.svg.area().interpolate("linear").x((d) ->
+    console.log x_scale(d.x)
+    return x_scale(d.x)
+  ).y0(height).y1((d) ->
+    console.log y_scale(d.y)
+    return y_scale(d.y)
+  )
+
+  context = svg.append("g")
+    .attr("class", "context");
+
+  context.append("path")
+      .datum(draw_data)
+      .attr("class", "area")
+      .attr("d", area);
+
+  context.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  context.append("g")
+      .attr("class", "x brush")
+      .call(brush)
+    .selectAll("rect")
+      .attr("y", -6)
+      .attr("height", height);
+  return
 
 __prepareSamples = (component) ->
   data = []

@@ -68,3 +68,28 @@ div.logo {
 a { cursor: pointer; cursor: hand; }
 
 img.title { vertical-align: middle; height: 80px; width: 80px; margin-right: 4px; }
+
+
+
+svg {
+  font: 10px sans-serif;
+}
+
+.area {
+  fill: steelblue;
+  clip-path: url(#clip);
+}
+
+.axis path,
+.axis line {
+  fill: black;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: steelblue;
+  fill: steelblue;
+  fill-opacity: .325;
+  shape-rendering: crispEdges;
+}
