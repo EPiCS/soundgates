@@ -33,7 +33,7 @@ is Prof. Dr. Marco Platzner, email: <platzner@uni-paderborn.de>
 
 ## Disclaimer
 
-The ReconOS website may contain hyperlinks to the web pages of
+The Soundgates website may contain hyperlinks to the web pages of
 third parties. The University of Paderborn shall have no liability
 for the contents of such web pages and does not represent or endorse
 such web pages or their contents. The University of Paderborn does
