@@ -6,15 +6,15 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - mul.vhd
+--   title:        VHDL module - pwm.vhd
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  multiplies two samples
+--   description:  pwm
 --
 -- ======================================================================
-    
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -23,32 +23,38 @@ use IEEE.MATH_REAL.ALL;
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
-entity mul is
-port(                
-        clk       : in  std_logic;
-        rst       : in  std_logic;
-        ce        : in  std_logic;
-        sample_in     : in  signed(31 downto 0);
-	    sample_in2     : in  signed(31 downto 0);       
-	    output    : out signed(31 downto 0)
-    );
+entity pwm is
+    Port (    clk    : in  STD_LOGIC;
+              rst    : in  STD_LOGIC;
+              ce     : in  STD_LOGIC;
+              sample_in  : in signed(31 downto 0);
+              sample_in2 : in signed(31 downto 0);
+              pwm        : out signed(31 downto 0));
+end pwm;
 
-end mul;
+architecture Behavioral of pwm is
 
-architecture Behavioral of mul is
-  
-  signal output64 : signed (63 downto 0);
-  
+begin
+
+ 	process (clk, rst, ce)
 	begin
-	output <= output64(31 downto 0);
-	
-		adder : process (clk, rst, ce)
-        begin
-            if rising_edge(clk) then
-                if ce = '1' then
-                    output64 <= sample_in * sample_in2;
+		if ce = '1' then
+			
+			if (rst = '1') then
+				pwm <= (others => '0');
+			end if;
+			
+			if (rising_edge(clk)) then    
+				if sample_in > sample_in2 then
+                    pwm <= (31 => '0', others => '1');
+                else
+                    pwm <= (others => '1');
                 end if;
-            end if;
-        end process;
-        
+			end if;
+			
+		end if;
+	end process;	
+
 end Behavioral;
+
+
