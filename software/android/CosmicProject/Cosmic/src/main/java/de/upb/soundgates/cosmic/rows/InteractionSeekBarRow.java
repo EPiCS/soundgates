@@ -8,8 +8,7 @@ import android.widget.TextView;
 
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
-import de.upb.soundgates.cosmic.MinMaxSeekBar;
+import de.upb.soundgates.cosmic.misc.MinMaxSeekBar;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCArgument;
 import de.upb.soundgates.cosmic.osc.OSCMessage;

@@ -3,7 +3,7 @@ package de.upb.soundgates.cosmic.osc;
 import java.util.LinkedList;
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
+import de.upb.soundgates.cosmic.rows.InteractionMethod;
 
 /**
  * Created by posewsky on 12.11.13.

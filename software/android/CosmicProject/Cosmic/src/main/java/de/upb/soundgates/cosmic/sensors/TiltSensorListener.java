@@ -1,23 +1,23 @@
-package de.upb.soundgates.cosmic.sensor;
+package de.upb.soundgates.cosmic.sensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 
-import de.upb.soundgates.cosmic.sensor.util.Vector3d;
+import de.upb.soundgates.cosmic.sensors.util.Vector3d;
 
 /**
- * Created by Thorbjörn Posewsky on 05.02.14.
+ * Created by Thorbjörn Posewsky on 06.02.14.
  */
-public class RotaryZSensorListener extends AbstractSensorListener {
+public class TiltSensorListener extends AbstractSensorListener {
     private Vector3d rot;
     private float rotationInPercent;
 
     private float deltaRotation;
     private float rotationOffsetInPercent;
 
-    public RotaryZSensorListener(Context context) {
+    public TiltSensorListener(Context context) {
         super(context, Sensor.TYPE_ROTATION_VECTOR);
 
         rot = new Vector3d(0,0,0);
@@ -43,9 +43,9 @@ public class RotaryZSensorListener extends AbstractSensorListener {
         SensorManager.getRotationMatrixFromVector(R, rot.toFloatVector());
         SensorManager.getOrientation(R, values);
 
-        float azimuth = values[0];
+        float roll = values[2];
 
-        rotationInPercent = (float)((azimuth + Math.PI) / (2*Math.PI));
+        rotationInPercent = (float)((roll + Math.PI) / (2*Math.PI));
 
         setChanged();
         notifyObservers();
