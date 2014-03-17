@@ -363,6 +363,7 @@ begin
                         when 1 =>
                             o_RAMWE_adsr         <= '1';
 									 start <= (others => '0');
+									 stop  <= (others => '0');
                             state_inner_process <= 2;
 							   when 2 =>
 									 o_RAMAddr_adsr       <= std_logic_vector(unsigned(o_RAMAddr_adsr) + 1);
