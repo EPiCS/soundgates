@@ -2,6 +2,7 @@
 title: Trivial Graph Format
 layout: page
 ---
+# Trivial Graph Format
 
 The Synthesizer uses the Trivial Graph Format to construct a patch from sound components. Users will not want to write more complex TGF files by hand, but use the editor to generate them.
 The format consists of node and edge definitions.

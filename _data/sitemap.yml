@@ -13,6 +13,7 @@
 /gettingstarted:
   - [/gettingstarted/tutorial, Tutorial]
   - [/gettingstarted/github, Github Repository, "https://github.com/pc2/pg-soundgates", y]
+  - [/gettingstarted/cplusplus, C++ settings]
 
 /tutorials:
   - [/tutorials/editormanual, Editor Manual]
