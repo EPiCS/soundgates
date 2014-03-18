@@ -47,20 +47,20 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
 
 ## Adding sound components to the patch and connecting them
 1. To add an atomic sound component to your patch, perform following steps:
- * Choose the corresponding category in the tool palette.
- * Click once on the tool entry associated with the atomic sound component.
- * Click once in the editor canvas in the point where you want to place the component.  
+ - Choose the corresponding category in the tool palette.
+ - Click once on the tool entry associated with the atomic sound component.
+ - Click once in the editor canvas in the point where you want to place the component.  
  
-   Add the following components to your patch:
- * "SineGenerator" from the category "Oscillator".
- * "SampleControlMultiplication" from "Arithmetic".
- * "SoundOutput" from "Sink".
- * Two "IO" components from "OSC".
+   Add the following components to your patch:  
+ - "SineGenerator" from the category "Oscillator".
+ - "SampleControlMultiplication" from "Arithmetic".
+ - "SoundOutput" from "Sink".
+ - Two "IO" components from "OSC".
 
 2. A component can have an arbitrary name in the diagram. To rename a component, perform following steps:
- * Click once on the component in the diagram. The component is marked.
- * Click once on the name of the component.
- * Type the new name.  
+ - Click once on the component in the diagram. The component is marked.
+ - Click once on the name of the component.
+ - Type the new name.  
    **IMPORTANT: The IO components must have unique names.**  
    Rename one of the two added IO components to "/freq" and the second one to "/ampl".  
    Now your patch may look like this:  
@@ -84,17 +84,19 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
 
 4. Now the ports of the sound components must be connected. To make a connection you have two possibilities.  
    The first one uses the tool palette:
- * Choose the part "Connections" in the tool palette and click once on the tool entry "Link".
- * Click on an out-port without releasing the left mouse button, drag the new link to an in-port and release the button.  
+ - Choose the part "Connections" in the tool palette and click once on the tool entry "Link".
+ - Click on an out-port without releasing the left mouse button, drag the new link to an in-port and release the button.  
    
-   The second way to create a link doesn't use the tool palette and is a bit faster:
- * Point the mouse over an out-port. A small arrow appears.
- * Drag this arrow to an in-port and release the button.
-   Connect the following ports:
+   The second way to create a link doesn't use the tool palette and is a bit faster:  
+ - Point the mouse over an out-port. A small arrow appears.
+ - Drag this arrow to an in-port and release the button.  
+   
+   Connect the following ports:  
  - "Value" of "/freq" with "Frequency" of "SineGenerator1"
  - "Value" of "/ampl" with "Multiplier" of "SampleControlMultiplication1"
  - "Output" of "SineGenerator" with "Multiplicand" of "SampleControlMultiplication1"
- - "Product" of "SampleControlMultiplication1" with "Sound" of "SoundOutput"
+ - "Product" of "SampleControlMultiplication1" with "Sound" of "SoundOutput"  
+ 
    Your patch may look like this:  
    
    ![Connected components](http://pc2.github.io/pg-soundgates/assets/images/9_blocks_connected.png)  
@@ -214,3 +216,7 @@ In this case you can create a composite sound component from these existing comp
    If you then export the component and place it in the patch instead of the two atomic components, the patch may look like this:  
    
    ![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/19_patch_with_composite.png)  
+   
+##Using of the component "WavePlayer" and the folder "samples"
+
+   
