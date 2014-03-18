@@ -400,9 +400,10 @@ __createBrush = (component) ->
   brushed = () ->
     # Get selected samples
     b = if not brush.empty() then brush.extent() else x_scale.domain()
-    b[0] = Math.floor b[0]
-    b[1] = Math.ceil b[1]
-    sample_amount = b[1] - b[0]
+    start = Math.floor b[0]
+    end = Math.ceil b[1]
+    sample_amount = end - start
+    console.log "Getting sample " + start + " to " + end
     if sample_amount < 1 then return
     # Get chart
     chart = __getChart component
@@ -410,15 +411,20 @@ __createBrush = (component) ->
     ob = 
       timestamp : global_timestamp
       uid : component.uid
-      skip : b[0]
-      amount : sample_amount
-    console.log ob
-    d = getSamples ob
-    console.log "RECEIVED??: "
-    console.log d
-    # Update Chart
-    #chart.xDomain b
-    #chart.update 
+    $.post("/samples", ob).done (data) ->
+      console.log "Ajax Success:"
+      data = __prepareSamples data.components[0], start, end
+      console.log "CALCUTRON: "
+      console.log data
+      # Update Chart
+      #chart.xDomain(data)
+      selector = __replaceRaute(component.uid)
+      selector = '#' + selector + '_graphic'
+      $(selector).find("svg").remove()
+      d3.select(selector).append("svg").datum(data).call(chart)
+      chart.update()
+    
+ 
     return
   
   brush = d3.svg.brush()
@@ -458,20 +464,44 @@ __createBrush = (component) ->
       .attr("height", height);
   return
 
-__prepareSamples = (component) ->
+# __prepareSamples = (component) ->
+#   data = []
+#   console.dir component.input_samples
+#   input_length = component.input_samples.length
+#   for port, i in component.input_samples
+#       data.push { key: 'Input port ' + i, values: [] } 
+#       for sample, j in component.input_samples[i].values
+#         data[i].values.push {x:j, y: sample} 
+
+#   for port, i in component.output_samples
+#       data.push { key: 'Output port ' + i, values: [] } 
+#       for sample, j in component.output_samples[i].values
+#         data[input_length + i].values.push {x:j, y: sample} 
+
+#   return data
+
+__prepareSamples = (component, start=0, end=0) ->
+  console.log component
   data = []
-  console.dir component.input_samples
   input_length = component.input_samples.length
+  console.dir component
   for port, i in component.input_samples
       data.push { key: 'Input port ' + i, values: [] } 
-      for sample, j in component.input_samples[i].values
-        data[i].values.push {x:j, y: sample} 
+      uend = if end == 0 then component.input_samples[i].values.length else end
+      subset = component.input_samples[i].values[start..uend]
+      console.log "INPUT SUBSET"
+      console.log subset
+      for sample,j in subset
+        data[i].values.push {x:j, y: sample}
 
   for port, i in component.output_samples
-      data.push { key: 'Output port ' + i, values: [] } 
-      for sample, j in component.output_samples[i].values
+      data.push { key: 'Output port ' + i, values: [] }
+      uend = if end == 0 then component.output_samples[i].values.length else end
+      console.log "OUTPUT SUBSET"
+      subset = component.output_samples[i].values[start..uend]
+      console.log subset
+      for sample,j in subset
         data[input_length + i].values.push {x:j, y: sample} 
-
   return data
    
 __replaceRaute = (text) ->
@@ -506,17 +536,30 @@ getExecutionList = () ->
     })
 
 getSamples = ( param ) ->
-  timestamp = param.timestamp
-  uid = param.uid
-  amount = param.amount
-  skip = param.skip
-  $.post '/samples',
-    timestamp: timestamp
-    uid: uid
-    amount: amount
-    skip: skip
-    (data) -> console.log data
-
+  console.log "AJAX FOLLOWING-"
+  processData = (data, textStatux, jqXHR) ->
+      console.log "HI was geht"
+  $.post(
+    '/samples'
+    param
+    processData
+    )
+  # timestamp = param.timestamp
+  # uid = param.uid
+  # amount = param.amount
+  # skip = param.skip
+  # $.ajax '/samples',
+  #   type : "POST"
+  #   dataType : 'json'
+  #   data : param
+  #   (data, textStatus, jqXHR) ->
+  #     console.log "Stachursk."
+  #     console.dir data
+  # return $.post '/samples',
+  #   timestamp: timestamp
+  #   uid: uid
+  #   amount: amount
+  #   skip: skip
 
 # Debugging methods
 generateTestdata = () ->

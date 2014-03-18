@@ -66,21 +66,18 @@ exports.getComponentList = (req, res) ->
 
 exports.getSamples = (req, res) ->
     timestamp = req.param("timestamp")
-    console.log timestamp
     uid = req.param("uid")
-    console.log uid
-    skip = req.param("skip")
-    console.log skip
-    amount = req.param("amount")
-    console.log amount
     query = Execution.findOne({'timestamp':timestamp})
     query.where('components.uid').equals(uid)
-    query.slice('components.input_samples.values', skip, amount)
+    query.select('components.$.')
     query.exec ( err, samples )->
         if err
+            console.log "Error: "
             console.log err
+            res.json err
         else
             console.dir samples
+            res.json samples
         return
     return
 

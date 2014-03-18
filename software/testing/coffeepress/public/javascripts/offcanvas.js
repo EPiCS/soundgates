@@ -412,25 +412,31 @@
       return null;
     };
     brushed = function() {
-      var b, chart, d, ob, sample_amount;
+      var b, chart, end, ob, sample_amount, start;
       b = !brush.empty() ? brush.extent() : x_scale.domain();
-      b[0] = Math.floor(b[0]);
-      b[1] = Math.ceil(b[1]);
-      sample_amount = b[1] - b[0];
+      start = Math.floor(b[0]);
+      end = Math.ceil(b[1]);
+      sample_amount = end - start;
+      console.log("Getting sample " + start + " to " + end);
       if (sample_amount < 1) {
         return;
       }
       chart = __getChart(component);
       ob = {
         timestamp: global_timestamp,
-        uid: component.uid,
-        skip: b[0],
-        amount: sample_amount
+        uid: component.uid
       };
-      console.log(ob);
-      d = getSamples(ob);
-      console.log("RECEIVED??: ");
-      console.log(d);
+      $.post("/samples", ob).done(function(data) {
+        console.log("Ajax Success:");
+        data = __prepareSamples(data.components[0], start, end);
+        console.log("CALCUTRON: ");
+        console.log(data);
+        selector = __replaceRaute(component.uid);
+        selector = '#' + selector + '_graphic';
+        $(selector).find("svg").remove();
+        d3.select(selector).append("svg").datum(data).call(chart);
+        return chart.update();
+      });
     };
     brush = d3.svg.brush().x(x_scale).on("brushend", brushed);
     svg = d3.select(selector).append("svg").attr("width", width).attr("height", height);
@@ -447,11 +453,18 @@
     context.append("g").attr("class", "x brush").call(brush).selectAll("rect").attr("y", -6).attr("height", height);
   };
 
-  __prepareSamples = function(component) {
-    var data, i, input_length, j, port, sample, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+  __prepareSamples = function(component, start, end) {
+    var data, i, input_length, j, port, sample, subset, uend, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1;
+    if (start == null) {
+      start = 0;
+    }
+    if (end == null) {
+      end = 0;
+    }
+    console.log(component);
     data = [];
-    console.dir(component.input_samples);
     input_length = component.input_samples.length;
+    console.dir(component);
     _ref = component.input_samples;
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       port = _ref[i];
@@ -459,25 +472,31 @@
         key: 'Input port ' + i,
         values: []
       });
-      _ref1 = component.input_samples[i].values;
-      for (j = _j = 0, _len1 = _ref1.length; _j < _len1; j = ++_j) {
-        sample = _ref1[j];
+      uend = end === 0 ? component.input_samples[i].values.length : end;
+      subset = component.input_samples[i].values.slice(start, +uend + 1 || 9e9);
+      console.log("INPUT SUBSET");
+      console.log(subset);
+      for (j = _j = 0, _len1 = subset.length; _j < _len1; j = ++_j) {
+        sample = subset[j];
         data[i].values.push({
           x: j,
           y: sample
         });
       }
     }
-    _ref2 = component.output_samples;
-    for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
-      port = _ref2[i];
+    _ref1 = component.output_samples;
+    for (i = _k = 0, _len2 = _ref1.length; _k < _len2; i = ++_k) {
+      port = _ref1[i];
       data.push({
         key: 'Output port ' + i,
         values: []
       });
-      _ref3 = component.output_samples[i].values;
-      for (j = _l = 0, _len3 = _ref3.length; _l < _len3; j = ++_l) {
-        sample = _ref3[j];
+      uend = end === 0 ? component.output_samples[i].values.length : end;
+      console.log("OUTPUT SUBSET");
+      subset = component.output_samples[i].values.slice(start, +uend + 1 || 9e9);
+      console.log(subset);
+      for (j = _l = 0, _len3 = subset.length; _l < _len3; j = ++_l) {
+        sample = subset[j];
         data[input_length + i].values.push({
           x: j,
           y: sample
@@ -521,19 +540,12 @@
   };
 
   getSamples = function(param) {
-    var amount, skip, timestamp, uid;
-    timestamp = param.timestamp;
-    uid = param.uid;
-    amount = param.amount;
-    skip = param.skip;
-    return $.post('/samples', {
-      timestamp: timestamp,
-      uid: uid,
-      amount: amount,
-      skip: skip
-    }, function(data) {
-      return console.log(data);
-    });
+    var processData;
+    console.log("AJAX FOLLOWING-");
+    processData = function(data, textStatux, jqXHR) {
+      return console.log("HI was geht");
+    };
+    return $.post('/samples', param, processData);
   };
 
   generateTestdata = function() {
