@@ -87,9 +87,9 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
  - Choose the part "Connections" in the tool palette and click once on the tool entry "Link".
  - Click on an out-port without releasing the left mouse button, drag the new link to an in-port and release the button.  
    
-   The second way to create a link doesn't use the tool palette and is a bit faster:  
- - Point the mouse over an out-port. A small arrow appears.
- - Drag this arrow to an in-port and release the button.  
+   The second way to create a link doesn't use the tool palette and is a bit faster:
+  - Point the mouse over an out-port. A small arrow appears.
+  - Drag this arrow to an in-port and release the button.  
    
    Connect the following ports:  
  - "Value" of "/freq" with "Frequency" of "SineGenerator1"
