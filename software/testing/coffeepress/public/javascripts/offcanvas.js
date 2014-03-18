@@ -417,7 +417,6 @@
       start = Math.floor(b[0]);
       end = Math.ceil(b[1]);
       sample_amount = end - start;
-      console.log("Getting sample " + start + " to " + end);
       if (sample_amount < 1) {
         return;
       }
@@ -429,13 +428,9 @@
       $.post("/samples", ob).done(function(data) {
         console.log("Ajax Success:");
         data = __prepareSamples(data.components[0], start, end);
-        console.log("CALCUTRON: ");
-        console.log(data);
         selector = __replaceRaute(component.uid);
         selector = '#' + selector + '_graphic';
-        $(selector).find("svg").remove();
-        d3.select(selector).append("svg").datum(data).call(chart);
-        return chart.update();
+        return d3.select(selector + " svg").datum(data).call(chart);
       });
     };
     brush = d3.svg.brush().x(x_scale).on("brushend", brushed);
@@ -474,8 +469,6 @@
       });
       uend = end === 0 ? component.input_samples[i].values.length : end;
       subset = component.input_samples[i].values.slice(start, +uend + 1 || 9e9);
-      console.log("INPUT SUBSET");
-      console.log(subset);
       for (j = _j = 0, _len1 = subset.length; _j < _len1; j = ++_j) {
         sample = subset[j];
         data[i].values.push({
@@ -492,9 +485,7 @@
         values: []
       });
       uend = end === 0 ? component.output_samples[i].values.length : end;
-      console.log("OUTPUT SUBSET");
       subset = component.output_samples[i].values.slice(start, +uend + 1 || 9e9);
-      console.log(subset);
       for (j = _l = 0, _len3 = subset.length; _l < _len3; j = ++_l) {
         sample = subset[j];
         data[input_length + i].values.push({

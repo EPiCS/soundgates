@@ -403,7 +403,6 @@ __createBrush = (component) ->
     start = Math.floor b[0]
     end = Math.ceil b[1]
     sample_amount = end - start
-    console.log "Getting sample " + start + " to " + end
     if sample_amount < 1 then return
     # Get chart
     chart = __getChart component
@@ -414,15 +413,13 @@ __createBrush = (component) ->
     $.post("/samples", ob).done (data) ->
       console.log "Ajax Success:"
       data = __prepareSamples data.components[0], start, end
-      console.log "CALCUTRON: "
-      console.log data
       # Update Chart
       #chart.xDomain(data)
       selector = __replaceRaute(component.uid)
       selector = '#' + selector + '_graphic'
-      $(selector).find("svg").remove()
-      d3.select(selector).append("svg").datum(data).call(chart)
-      chart.update()
+      #$(selector).find("svg").remove()
+      d3.select(selector + " svg").datum(data).call(chart)
+      #chart.update()
     
  
     return
@@ -464,22 +461,6 @@ __createBrush = (component) ->
       .attr("height", height);
   return
 
-# __prepareSamples = (component) ->
-#   data = []
-#   console.dir component.input_samples
-#   input_length = component.input_samples.length
-#   for port, i in component.input_samples
-#       data.push { key: 'Input port ' + i, values: [] } 
-#       for sample, j in component.input_samples[i].values
-#         data[i].values.push {x:j, y: sample} 
-
-#   for port, i in component.output_samples
-#       data.push { key: 'Output port ' + i, values: [] } 
-#       for sample, j in component.output_samples[i].values
-#         data[input_length + i].values.push {x:j, y: sample} 
-
-#   return data
-
 __prepareSamples = (component, start=0, end=0) ->
   console.log component
   data = []
@@ -489,17 +470,13 @@ __prepareSamples = (component, start=0, end=0) ->
       data.push { key: 'Input port ' + i, values: [] } 
       uend = if end == 0 then component.input_samples[i].values.length else end
       subset = component.input_samples[i].values[start..uend]
-      console.log "INPUT SUBSET"
-      console.log subset
       for sample,j in subset
         data[i].values.push {x:j, y: sample}
 
   for port, i in component.output_samples
       data.push { key: 'Output port ' + i, values: [] }
       uend = if end == 0 then component.output_samples[i].values.length else end
-      console.log "OUTPUT SUBSET"
       subset = component.output_samples[i].values[start..uend]
-      console.log subset
       for sample,j in subset
         data[input_length + i].values.push {x:j, y: sample} 
   return data
