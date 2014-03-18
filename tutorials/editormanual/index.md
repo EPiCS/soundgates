@@ -108,11 +108,11 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
  - A link from a control-port to a control-port
  - A link from a control-port to a sound-port
 
-## Creating a composite sound component
+## Creating composite sound components
 Composite sound component are hierarchical components that contain other components. They have ports as interfaces and can be used as black boxes.  
 There are two ways to create a composite sound component. You can create an empty composite sound component and fill it with components or you can create a composite sound component from an existing component structure.
 
-### Creating an empty composite sound component
+## Creating an empty composite sound component
 Imagine you want to have a wave generator that gets a value for frequency and generates two different waves in parallel (a sine wave and a triangle wave). 
 These waves are mixed together and the resulting wave is the output. To get such a mixed generator you must create a composite sound component. The following tutorial shows the steps for this creation.  
 
@@ -137,7 +137,7 @@ These waves are mixed together and the resulting wave is the output. To get such
    To do this, click once on the component such that it is marked.  
    Click then on one of the black points on the border of the component and drag the bounds of the component.
 
-### Adding elements to the composite sound component and connecting them
+## Adding elements to the composite sound component and connecting them
 1. To add a sound component to the composite sound component you have to perform the same steps as for adding a component to a patch.  
    Add the following components to "CombinedWaves":
  - "SineGenerator" from "Oscillator"
@@ -150,7 +150,7 @@ These waves are mixed together and the resulting wave is the output. To get such
    **IMPORTANT: A composite sound component CAN NOT contain atomic sound components with types "IO" and/or "SoundOutput"!**   
    
 2. To add a port to the composite sound component, you have to click once on the tool entry "New Port" and then click once on the component.  
-   To set the port's properties you need the Eclipse Properties View. Right-click on a added port and choose "Show Properties View".  
+   To set the port's properties you need the Eclipse Properties View. Right-click on an added port and choose "Show Properties View".  
    You can set the data type, the direction and the name of the port.  
    
    ![Port properties](http://pc2.github.io/pg-soundgates/assets/images/13_new_port.png)   
@@ -180,7 +180,7 @@ These waves are mixed together and the resulting wave is the output. To get such
    
    ![CombinedWaves Connected](http://pc2.github.io/pg-soundgates/assets/images/14_new_composite_connected.png)  
    
-4. To use the created composite sound component in the patch editor, the component must be saved as an XML file in the folder "soundcomponents".  
+4. To use the created composite sound component in the patch editor, the component must be saved as a XML file in the folder "soundcomponents".  
    Right-click on the component and choose "Export Composite Sound Component as XML".  
    
    ![CombinedWaves Export](http://pc2.github.io/pg-soundgates/assets/images/15_composite_export.png) 
@@ -190,12 +190,12 @@ These waves are mixed together and the resulting wave is the output. To get such
    
 5. If you open the patch editor, the category "Imported Composite Sound Components" should contain the entry "CombinedWaves".  
    Add it to the canvas in the same way you add an atomic sound component.  
-   You can not modify the embedded elements of an composite sound component in the patch editor.  
-   If you don't want to see the embedded elements, then right-click on the component and choose "Hide/Show Embedded Elements", such you can use the composite sound component as a black box.  
+   You can not modify the embedded elements of a composite sound component in the patch editor.  
+   If you don't want to see the embedded elements, then right-click on the component and choose "Hide/Show Embedded Elements", such that you can use the composite sound component as a black box.  
    
    ![CombinedWaves Black Box](http://pc2.github.io/pg-soundgates/assets/images/16_composite_as_black_box.png)  
    
-###Creating a composite sound component from an existing component structure
+##Creating a composite sound component from an existing component structure
 Imagine you created a patch and you want to use a part of it in another patch. For example, you want to use the combination of the components SineGenerator and SampleControlMultiplication that you saw in the first tutorial.  
 In this case you can create a composite sound component from these existing components. To do this, you have to perform the following steps:  
 
@@ -218,5 +218,29 @@ In this case you can create a composite sound component from these existing comp
    ![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/19_patch_with_composite.png)  
    
 ##Using of the component "WavePlayer" and the folder "samples"
+If you want to play wave files in your patch, you must copy them into the folder "samples". 
+In the patch you need the component "WavePlayer", which you find in the category "Source". 
+The WavePlayer has the property "FileName" where you must type the name of a wave file contained in the folder "samples".
+For example, if have a file named "beat.wav" in the mentioned folder and you want to use it, you must type "beat.wav" into the field "FileName" of the "WavePlayer" as shown in the picture:  
+
+![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/20_wave_player.png)  
+
+The field "FileName" expects a path relative to the folder "samples". Consider the following sub-folders in the folder "samples":  
+
+![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/21_samples.png)  
+
+For example, you want to use the file "bassline2.wav" in a WavePlayer, you must type "basslines/bassline2" in its field "FileName".
+
+##Operations with a patch
+![Patch operations](http://pc2.github.io/pg-soundgates/assets/images/10_patch_menu.png)  
+
+If you have a patch, you can perform the following operations:
+- "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.
+- "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.
+- "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.
+- "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file. 
+If you have a XML file describing a patch and you want to get an EMF model out of it such that you can edit it in the patch editor, right-click on the XML file and choose "Soundgates" -> "Create Patch from XML".
+**Attention**: all the atomic and composite sound components that are used in this patch must be present in your "soundcomponents" folder!.
+
 
    
