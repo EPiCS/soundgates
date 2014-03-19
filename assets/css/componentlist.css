@@ -3,36 +3,55 @@
 
 table {
 	table-layout:fixed;
-    border-spacing:0px;
+	border-spacing:0px;
 
 	margin-top:5px;
 	margin-bottom:20px;
 
-	max-width:100%;
+	width:100%;
 }
 
 th {
     font-weight:300;
     color:#787878;
-    font-size:12px;
+    font-size:14px;
     text-align:left;
     padding-right:15px;
+    padding-bottom:5px;
+    text-decoration: underline;
+    background-color: #e0e0e0;
+    
 }
 
 td { 
 	padding-right:15px;
 	padding-bottom:2px;
 	vertical-align:middle;
+	
 }
 
 
 tr { 
 	font-family:Consolas, "Liberation Mono", Courier, monospace; 
 	font-size:12px; 
+	background-color: #f4f4f4;
 }
+
+tr:nth-child(even) 
+{
+	background-color: #eaeaea;
+}
+
+ol 
+{
+	padding-left: 0;
+	list-style-position: inside;
+}
+
 
 li.sound 
 {
 	font-weight: bold;
+	margin: 0px;
 }
 
