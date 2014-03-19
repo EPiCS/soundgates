@@ -78,6 +78,9 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		IGotoMarker {
 
+	SoundgatesPaletteFactory soundgatesPaletteFactory;
+	IFolder xmlFolder;
+	
 	/**
 	 * @generated
 	 */
@@ -93,6 +96,7 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 	 */
 	public SoundgatesDiagramEditor() {
 		super(true);
+		soundgatesPaletteFactory = new SoundgatesPaletteFactory();
 	}
 
 	/**
@@ -116,15 +120,20 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(g.getURI().toPlatformString(false)));
 		IProject project = resource.getProject();
-		IFolder folder = project.getFolder("soundcomponents");
+		xmlFolder = project.getFolder("soundcomponents");
 
 		// Tell the Component Library about the new path
-		AtomicSoundComponentLibrary.setXMLFolder(folder);
-		CompositeSoundComponentLibrary.setXMLFolder(folder);
+		AtomicSoundComponentLibrary.setXMLFolder(xmlFolder);
+		CompositeSoundComponentLibrary.setXMLFolder(xmlFolder);
 
 		PaletteRoot root = super.createPaletteRoot(existingPaletteRoot);
-		new SoundgatesPaletteFactory().fillPalette(root);
+		soundgatesPaletteFactory.fillPalette(root);
 		return root;
+	}
+	
+	public void updatePalette(){
+		CompositeSoundComponentLibrary.setXMLFolder(xmlFolder);
+		soundgatesPaletteFactory.updateImportedCompositeSoundComponents();
 	}
 
 	@Override

@@ -99,11 +99,11 @@ public class Bot {
 		
 			//send it
 			try {
-				sendFloat(sender, "frequency", frequencies[currentEvent.getPitch()]);
-				sendFloat(sender, "volume", 1);
+				sendFloat(sender, "frequency_0_0", frequencies[currentEvent.getPitch()-30]);
+				sendFloat(sender, "trigger_0", 1);
 				
 				Thread.sleep((long) (currentEvent.getDuration() * CONFIG_PRESS_PERCENTAGE *CONFIG_TEMPO_SCALE));
-				sendFloat(sender, "volume", 0);
+				sendFloat(sender, "trigger_0", 0);
 				Thread.sleep((long) (currentEvent.getWaitingTime()*CONFIG_TEMPO_SCALE+currentEvent.getDuration()*(1-CONFIG_PRESS_PERCENTAGE)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

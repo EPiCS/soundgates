@@ -40,11 +40,13 @@
 									<listOptionValue builtIn="false" value="BOOST_LOG_DYN_LINK"/>
 									<listOptionValue builtIn="false" value="APPLICATION_CONTEXT"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1177297778" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1789124438" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="gcc" id="cdt.managedbuild.tool.gnu.c.compiler.so.release.890168542" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.release">
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.so.release.option.optimization.level.2071172010" name="Optimization Level" superClass="gnu.c.compiler.so.release.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.so.release.option.debugging.level.1457458858" name="Debug Level" superClass="gnu.c.compiler.so.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.misc.other.152986620" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1058755323" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.so.release.2119155467" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.so.release">
@@ -54,6 +56,7 @@
 								<option defaultValue="true" id="gnu.cpp.link.so.release.option.shared.2062843576" name="Shared (-shared)" superClass="gnu.cpp.link.so.release.option.shared" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.914057106" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="dl"/>
+									<listOptionValue builtIn="false" value="mongoc"/>
 									<listOptionValue builtIn="false" value="lo"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 									<listOptionValue builtIn="false" value="boost_filesystem"/>
@@ -130,7 +133,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.496722355" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Libraries/arm/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.other.other.1890495757" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -isystem&quot;${workspace_loc:/Libraries/x86_64/include}&quot;" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.1890495757" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -isystem&quot;${workspace_loc:/Libraries/arm/include}&quot;" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.556736563" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ZYNQ"/>
 									<listOptionValue builtIn="false" value="BOOST_LOG_DYN_LINK"/>
@@ -150,6 +153,7 @@
 								<option defaultValue="true" id="gnu.cpp.link.so.release.option.shared.806611276" name="Shared (-shared)" superClass="gnu.cpp.link.so.release.option.shared" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.625185621" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="dl"/>
+									<listOptionValue builtIn="false" value="mongoc"/>
 									<listOptionValue builtIn="false" value="lo"/>
 									<listOptionValue builtIn="false" value="reconos"/>
 									<listOptionValue builtIn="false" value="pthread"/>

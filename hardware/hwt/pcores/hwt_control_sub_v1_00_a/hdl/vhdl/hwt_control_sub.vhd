@@ -11,13 +11,16 @@
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Hardware thread for subtracting control units
+--   description:  Hardware thread for a control_sub
 --
 -- ======================================================================
 
 library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+
+library proc_common_v3_00_a;
+use proc_common_v3_00_a.proc_common_pkg.all;
 
 library reconos_v3_00_c;
 use reconos_v3_00_c.reconos_pkg.all;
@@ -27,6 +30,9 @@ use soundgates_v1_00_a.soundgates_common_pkg.all;
 use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
 entity hwt_control_sub is
+    generic(
+		SND_COMP_CLK_FREQ : integer := 100_000_000
+	);
    port (
 		-- OSIF FIFO ports
 		OSIF_FIFO_Sw2Hw_Data    : in  std_logic_vector(31 downto 0);
@@ -61,17 +67,16 @@ architecture Behavioral of hwt_control_sub is
     -- Subcomponent declarations
     ----------------------------------------------------------------
     component sub is
-    port(               
+    port(                
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        wave1     : in  signed(31 downto 0);
-	    wave2     : in  signed(31 downto 0);       
+        sample_in     : in  signed(31 downto 0);
+	    sample_in2     : in  signed(31 downto 0);       
 	    output    : out signed(31 downto 0)
     );
+    end component sub;
 
-    end component;  
- 
     signal clk   : std_logic;
 	signal rst   : std_logic;
 
@@ -88,29 +93,31 @@ architecture Behavioral of hwt_control_sub is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_INIT, STATE_WAITING, STATE_REFRESH_INPUT, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_IDLE, STATE_REFRESH_HWT_ARGS, STATE_READ, STATE_READ2, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 64;
+    constant C_MAX_SAMPLE_COUNT : integer := 1;
     
    	-- define size of local RAM here
-	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
-	constant C_LOCAL_RAM_addrESS_WIDTH : integer := 6;--clog2(C_LOCAL_RAM_SIZE);
+	constant C_LOCAL_RAM_SIZE          : integer := 2*C_MAX_SAMPLE_COUNT;
+	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);    -- 6
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
-    signal o_RAMaddr_sub : std_logic_vector(0 to C_LOCAL_RAM_addrESS_WIDTH-1);
-	signal o_RAMData_sub : std_logic_vector(0 to 31);   -- sub to local ram
-	signal i_RAMData_sub : std_logic_vector(0 to 31);   -- local ram to sub
-    signal o_RAMWE_sub   : std_logic;
-	
-  	signal o_RAMaddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_addrESS_WIDTH-1);
-	signal o_RAMaddr_reconos_2 : std_logic_vector(0 to 31);
+    signal o_RAMAddr_control_sub  : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+    signal o_RAMAddr_control_sub2 : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_control_sub  : std_logic_vector(0 to 31);   -- control_sub to local ram
+	signal i_RAMData_control_sub  : std_logic_vector(0 to 31);   -- local ram to control_sub
+	signal i_RAMData_control_sub2 : std_logic_vector(0 to 31);   -- local ram to control_sub
+    signal o_RAMWE_control_sub    : std_logic;
+
+  	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
 	signal o_RAMData_reconos   : std_logic_vector(0 to 31);
 	signal o_RAMWE_reconos     : std_logic;
 	signal i_RAMData_reconos   : std_logic_vector(0 to 31);
@@ -119,49 +126,63 @@ architecture Behavioral of hwt_control_sub is
     signal ignore : std_logic_vector(31 downto 0);
     
     
-    constant o_RAMaddr_max : std_logic_vector(0 to C_LOCAL_RAM_addrESS_WIDTH-1) := (others=>'1');
+    constant o_RAMAddr_max : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) := (others=>'1');
 
 	shared variable local_ram : LOCAL_MEMORY_T;
     
-    signal snd_comp_header : snd_comp_header_msg_t;  -- common sound component header
-       
-    signal sample_count            : unsigned(15 downto 0) := to_unsigned(0, 16);
+    ----------------------------------------------------------------
+    -- Hardware arguements
+    ----------------------------------------------------------------
+    signal      hwtio : hwtio_t;
+
+    
     
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal sub_ce          : std_logic;           -- sub clock enable (like a start/stop signal)
+    signal control_sub_ce       : std_logic;                                                       -- control_sub clock enable (like a start/stop signal)
+    signal sample_count : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+    signal control_sub_data     : signed(31 downto 0);
 
-    
-    signal refresh_state    : integer;
-    signal process_state    : integer;
-    
-    signal input1             : std_logic_vector(31 downto 0);
-    signal input2             : std_logic_vector(31 downto 0);
-    signal input1_addr        : std_logic_vector(31 downto 0);
-    signal input2_addr        : std_logic_vector(31 downto 0);
-	 
-	 signal sub_data : signed(31 downto 0);
-    
+    signal sourceaddr   : std_logic_vector(DWORD_WIDTH - 1 downto 0);
+    signal sourceaddr2  : std_logic_vector(DWORD_WIDTH - 1 downto 0);
+    signal destaddr     : std_logic_vector(DWORD_WIDTH - 1 downto 0);
+    signal sample_in    : std_logic_vector(31 downto 0);
+    signal sample_in2   : std_logic_vector(31 downto 0);
+
+    signal state_inner_process : integer;
+    signal bang_state       : integer range 0 to 1;
+
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant sub_START : std_logic_vector(31 downto 0) := x"0000000F";
-    constant sub_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    constant control_sub_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant control_sub_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+
+
+    constant    hwt_argc : integer := 3;
 
 begin
+
+    -----------------------------------
+    -- Component related wiring
+    -----------------------------------
+    sourceaddr  <= hwtio.argv(0);
+    sourceaddr2 <= hwtio.argv(1);
+    destaddr    <= hwtio.argv(2);
+
+    sample_in   <= i_RAMData_control_sub;
+    sample_in2  <= i_RAMData_control_sub2;
+
     -----------------------------------
     -- Hard wirings
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    --o_RAMData_sub <= std_logic_vector(sub_data);
-    --sub_wave <= signed(i_RAMData_sub);
     
     
-    
-    o_RAMaddr_reconos(0 to C_LOCAL_RAM_addrESS_WIDTH-1) <= o_RAMaddr_reconos_2((32-C_LOCAL_RAM_addrESS_WIDTH) to 31);
+    o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
         
     -- ReconOS Stuff
@@ -194,33 +215,31 @@ begin
     ram_setup (
 		i_ram,
 		o_ram,
-		o_RAMaddr_reconos_2,
+		o_RAMAddr_reconos_2,
 		o_RAMWE_reconos,
 		o_RAMData_reconos,
 		i_RAMData_reconos
 	);
-            
-
-
+           
 
     -- /ReconOS Stuff
-    sub_INST : sub
+	control_sub_INST : sub
     port map( 
             clk         => clk,
             rst         => rst,
-            ce          => sub_ce,
-            wave1       => signed(input1),
-            wave2       => signed(input2),
-            output      => sub_data
+            ce          => control_sub_ce,
+            sample_in   => signed (sample_in),
+            sample_in2  => signed (sample_in2),
+            output      => control_sub_data
             );
-            
+
     local_ram_ctrl_1 : process (clk) is
 	begin
 		if (rising_edge(clk)) then
 			if (o_RAMWE_reconos = '1') then
-				local_ram(to_integer(unsigned(o_RAMaddr_reconos))) := o_RAMData_reconos;
+				local_ram(to_integer(unsigned(o_RAMAddr_reconos))) := o_RAMData_reconos;
 			else
-				i_RAMData_reconos <= local_ram(to_integer(unsigned(o_RAMaddr_reconos)));
+				i_RAMData_reconos <= local_ram(to_integer(unsigned(o_RAMAddr_reconos)));
 			end if;
 		end if;
 	end process;
@@ -228,180 +247,131 @@ begin
     local_ram_ctrl_2 : process (clk) is
 	begin
 		if (rising_edge(clk)) then		
-			if (o_RAMWE_sub = '1') then
-				local_ram(to_integer(unsigned(o_RAMaddr_sub))) := o_RAMData_sub;
-            else      -- else needed, because sub is consuming samples
-				i_RAMData_sub <= local_ram(to_integer(unsigned(o_RAMaddr_sub)));
+			if (o_RAMWE_control_sub = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_control_sub))) := o_RAMData_control_sub;
+            else
+				i_RAMData_control_sub  <= local_ram(to_integer(unsigned(o_RAMAddr_control_sub)));
+				i_RAMData_control_sub2 <= local_ram(to_integer(unsigned(o_RAMAddr_control_sub2)));
 			end if;
 		end if;
-	end process;
+	end process;    
     
-    
-    sub_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
+    control_sub_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
         variable done : boolean;            
     begin
         if rst = '1' then
-                    
+            o_RAMData_control_sub <= (others => '0');
             osif_reset(o_osif);
 			memif_reset(o_memif);           
             ram_reset(o_ram);
+            osif_ctrl_signal    <= (others => '0');
             
-            state           <= STATE_INIT;
-            sample_count    <= to_unsigned(0, 16);
-            osif_ctrl_signal <= (others => '0');
-            
-            
-            sub_ce     <= '0';
-            o_RAMWE_sub<= '0';
-            o_RAMaddr_sub <= (others => '0');
-            
-            refresh_state <= 0;
-				process_state <= 0;
-            
+            state               <= STATE_IDLE;
+            sample_count        <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+            control_sub_ce              <= '0';
+				
+				
+            o_RAMWE_control_sub         <= '0';
+            state_inner_process <= 0;
+            o_RAMData_control_sub <= (others => '0');
+            -- Initialize hwt args         
+            hwtio_init(hwtio);
+
             done := False;
-              
+              o_RAMAddr_control_sub <= (others => '0');
         elsif rising_edge(clk) then
-
-            case state is            
-            -- INIT State gets the address of the header struct
-            when STATE_INIT =>               
-
-                snd_comp_get_header(i_osif, o_osif, i_memif, o_memif, snd_comp_header, done);         
-                if done then
-                    input2_addr        <= snd_comp_header.opt_arg_addr;
-
-                    state <= STATE_WAITING;
-                end if;            
+            o_RAMData_control_sub       <= std_logic_vector(control_sub_data);
+            control_sub_ce              <= '0';
+            o_RAMWE_control_sub         <= '0';
+            osif_ctrl_signal    <= ( others => '0');
             
-            when STATE_WAITING =>
+            case state is
+            when STATE_IDLE =>
 
                 -- Software process "Synthesizer" sends the start signal via mbox_start
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
-                if done then
-                    if osif_ctrl_signal = sub_START then
-                        
-                        sample_count <= to_unsigned(0, 16);
-                        state        <= STATE_REFRESH_INPUT;
 
-                    elsif osif_ctrl_signal = sub_EXIT then
+                if done then
+                    if osif_ctrl_signal = control_sub_START then
+                        
+                        sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
+                        state        <= STATE_REFRESH_HWT_ARGS;
+                    elsif osif_ctrl_signal = control_sub_EXIT then
                         
                         state   <= STATE_EXIT;
 
                     end if;    
                 end if;
                  
-            when STATE_REFRESH_INPUT =>
-                
-                -- Refresh your signals
-                
-                case refresh_state is
-                when 0 => 
-                    memif_read_word(i_memif, o_memif, snd_comp_header.source_addr , input1, done);
-                    if done then
-                        refresh_state <= 1;
-                    end if;
-                when 1 =>
-                    memif_read_word(i_memif, o_memif, input2_addr , input2, done);
-                    if done then
-                        refresh_state <= 0;
-                        state <= STATE_PROCESS; 
-                    end if;
-                when others =>
-							refresh_state <= 0;
-					  end case;
---                    memif_read(i_ram, o_ram, i_memif, o_memif, snd_comp_header.source_addr, X"00000000", std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)) ,done);
---                    if done then
---                        refresh_state <= 0;
---                        state <= STATE_PROCESS;                        
---                    end if;
---					 when others =>
---							refresh_state <= 0;
---					  end case;
-            
+            when STATE_REFRESH_HWT_ARGS =>               
+                get_hwt_args(i_osif, o_osif, i_memif, o_memif, hwtio, hwt_argc, done);
+
+                if done then
+                    state <= STATE_READ;
+                end if;   
+
+            when STATE_READ => 
+                -- store input samples in local ram
+				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr, X"00000000", 
+                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES/2,24)), done); -- always in bytes
+				if done then
+				    state   <= STATE_READ2;
+			    end if;
+
+            when STATE_READ2 => 
+                -- store input samples in local ram
+				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr2, X"00000001", 
+                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES/2,24)), done); -- always in bytes
+				if done then
+				    state   <= STATE_PROCESS;
+                    o_RAMAddr_control_sub     <= (others => '0');   -- start with the first sample
+                    o_RAMAddr_control_sub2    <= std_logic_vector(to_unsigned(C_MAX_SAMPLE_COUNT,1));   -- start with the first sample
+			    end if;
+
             when STATE_PROCESS =>
-                --if sample_count < to_unsigned(C_MAX_SAMPLE_COUNT, 16) then
-                   
-                    case process_state is
-
-                    when 0 => 
-                        sub_ce        <= '1';
-                        
-                        process_state  <= 1;
-
-                    when 1 => 
-                        o_RAMData_sub <= std_logic_vector(sub_data);
-                        o_RAMWE_sub   <= '1';
-
-                        sub_ce        <= '0';
-                        process_state  <= 2;       
-
-                    when 2 =>
-                        o_RAMWE_sub   <= '0';
-                       -- o_RAMaddr_sub <= std_logic_vector(unsigned(o_RAMaddr_sub) + 1);
-                       -- sample_count   <= sample_count + 1; 
-
-                        process_state  <= 3;
-                    when 3 =>
-                        --o_RAMaddr_sub  <= (others => '0');
-                        state <= STATE_WRITE_MEM;
+                if sample_count > 0 then
+                    case state_inner_process is
+                        when 0 =>
+                            control_sub_ce              <= '1'; -- ein takt früher
+                            state_inner_process <= 1;
+                        when 1 =>
+                            o_RAMWE_control_sub         <= '1';
+                            state_inner_process <= 2;
+					   when 2 =>
+				            o_RAMAddr_control_sub     <= std_logic_vector(unsigned(o_RAMAddr_control_sub)  + 1);
+				            o_RAMAddr_control_sub2    <= std_logic_vector(unsigned(o_RAMAddr_control_sub2) + 1);
+                            sample_count        <= sample_count - 1;
+                            state_inner_process <= 3;
 					when others =>
-						process_state <= 0;
-
+					    state_inner_process <= 0;
                     end case;
-
-              --  else
-              --      -- Samples have been generated
-              --      o_RAMaddr_sub  <= (others => '0');
-              --      sample_count    <= to_unsigned(0, 16);
-              --      state <= STATE_WRITE_MEM;
-              --  end if;
+                else
+                    -- Samples have been generated
+                    o_RAMAddr_control_sub  <= (others => '0');
+                    o_RAMAddr_control_sub2 <= (others => '0'); 
+                    state <= STATE_WRITE_MEM;
+                end if;
 
              when STATE_WRITE_MEM =>
         
-                memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", snd_comp_header.dest_addr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done);
+                memif_write(i_ram, o_ram, i_memif, o_memif, X"00000000", destaddr, std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done);
                 if done then
                     state <= STATE_NOTIFY;
-						end if;
-				
+				end if;
+
 		    when STATE_NOTIFY =>
 
-                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, snd_comp_header.dest_addr, ignore, done);
+                osif_mbox_put(i_osif, o_osif, MBOX_FINISH, destaddr, ignore, done);
                 if done then
-                    state <= STATE_WAITING;
+                    state <= STATE_IDLE;
 				end if;
                         
             when STATE_EXIT =>
 
-                   osif_thread_exit(i_osif,o_osif);            
+                osif_thread_exit(i_osif,o_osif);            
             end case;
         end if;
     end process;
 
-
 end Behavioral;
-
--- ====================================
--- = RECONOS Function Library - Copy and Paste!
--- ====================================        
--- osif_mbox_put(i_osif, o_osif, MBOX_NAME, SOURCESIGNAL, ignore, done);
--- osif_mbox_get(i_osif, o_osif, MBOX_NAME, TARGETSIGNAL, done);
-
--- Read from shared memory:
-
--- Speicherzugriffe:
--- Wortzugriff:
--- memif_read_word(i_memif, o_memif, addr, TARGETSIGNAL, done);
--- memif_write_word(i_memif, o_memif, addr, SOURCESIGNAL, done);
-
--- Die Laenge ist bei Speicherzugriffen Byte adressiert!
--- memif_read(i_ram, o_ram, i_memif, o_memif, SRC_addr std_logic_vector(31 downto 0);
---            dst_addr std_logic_vector(31 downto 0);
---            BYTES std_logic_vector(23 downto 0);
---            done);
--- memif_write(i_ram, o_ram, i_memif, o_memif,
---             src_addr : in std_logic_vector(31 downto 0),
---             dst_addr : in std_logic_vector(31 downto 0);
---             len      : in std_logic_vector(23 downto 0);
---             done);
-
 

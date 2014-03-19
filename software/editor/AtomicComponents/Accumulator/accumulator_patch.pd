@@ -12,8 +12,11 @@
 #X obj 388 273 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X msg 345 344 1;
-#X obj 376 488 expr if ($f2 > 0 \, $f2 - $f3 \, 0);
+#X obj 353 488 expr if ($f2 > 0 \, $f2 - $f3 \, 0);
 #X msg 239 420 10;
+#X obj 237 89 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X connect 0 0 8 0;
 #X connect 3 0 7 1;
 #X connect 4 0 6 0;
 #X connect 5 0 6 1;
@@ -27,3 +30,4 @@
 #X connect 11 0 12 2;
 #X connect 12 0 5 0;
 #X connect 13 0 5 0;
+#X connect 14 0 8 0;

@@ -16,7 +16,14 @@ import com.illposed.osc.OSCPortOut;
 
 public class Bot {
 
-	static final float CONFIG_TEMPO_SCALE = 2f;
+	static final int NOTE_ZERO = 0;
+	static final int NOTE_SIXTEENTH = 625;
+	static final int NOTE_EIGTHS = 1250;
+	static final int NOTE_QUARTER = 2500;
+	static final int NOTE_HALF = 5000;
+	static final int NOTE_FULL = 10000;
+	
+	static final float CONFIG_TEMPO_SCALE = 0.2f;
 	static final int CONFIG_FIRST_BASE_NOTE = 0;
 	static final float CONFIG_PRESS_PERCENTAGE = 0.6f;
 	
@@ -33,7 +40,6 @@ public class Bot {
 	static final float CONFIG_BASE_NOTE_CHANGE_PROBABILITY = 1f;
 	static final String CONFIG_RYTHM_SYNC_MESSAGE = "/rythmSync";
 	static boolean useRythmSync = false;
-	static float speedfactor = 1;
 
 	private static float[] frequencies = new float[128];
 	private static int [] notes;
@@ -178,24 +184,51 @@ public class Bot {
 
 	private static long getLengthOfPosition(Sequence[][] voices,
 			int position) {
-		long length = 0;
+		double length = 0;
 		for (int i = 0; i < voices.length; i ++){
-			long tmpLength = 0;
+			double tmpLength = 0;
 			for (MusicalEvent event : voices[i][position].events){
-				tmpLength += event.getDuration() + event.getWaitingTime();
+				tmpLength += (event.getDuration() + event.getWaitingTime() ) *CONFIG_TEMPO_SCALE;
 			}
 			if (length < tmpLength){
 				length = tmpLength;
 			}
 		}
-		return length;
+		return (long)Math.ceil(length);
 	}
 	
 	private static Score createScore() {
 		Score result = new Score(2);
-		result.addSequence(0, 0, new Sequence(new MusicalEvent [] {new MusicalEvent(0, 200, 0),new MusicalEvent(1, 100, 100),new MusicalEvent(2, 100, 100),new MusicalEvent(3, 100, 100),new MusicalEvent(7, 100, 0),new MusicalEvent(5, 100, 0),new MusicalEvent(3, 100, 100),new MusicalEvent(2, 100, 100)}, 20));
-		result.addSequence(0, 1, new Sequence(new MusicalEvent [] {new MusicalEvent(4, 100, 100),new MusicalEvent(2, 100, 100),new MusicalEvent(4, 100, 0),new MusicalEvent(1, 100, 0)}, 15));
-		result.addSequence(0, 2, new Sequence(new MusicalEvent [] {new MusicalEvent(8, 100, 100),new MusicalEvent(7, 100, 100),new MusicalEvent(8, 100, 100),new MusicalEvent(9, 100, 100)}, 10));
+		result.addSequence(0, 0, new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0,3,5), NOTE_FULL, NOTE_ZERO),
+				new MusicalEvent(new Chord(1,4,6), NOTE_FULL, NOTE_ZERO)},  20));
+		result.addSequence(0, 1, new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0,3,6), NOTE_FULL, NOTE_ZERO)},  5));
+		result.addSequence(0, 2, new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0,4,6), NOTE_FULL, NOTE_ZERO)},  5));
+		result.addSequence(1, 0, new Sequence(new MusicalEvent [] {
+				new MusicalEvent(0, NOTE_QUARTER, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(4, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(5, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(6, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(5, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(4, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_HALF)}, 20));
+		result.addSequence(1, 1, new Sequence(new MusicalEvent [] {
+				new MusicalEvent(0, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(2, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(4, NOTE_QUARTER, NOTE_ZERO),
+				new MusicalEvent(4, NOTE_QUARTER, NOTE_EIGTHS)}, 20));
+		result.addSequence(1, 2, new Sequence(new MusicalEvent [] {
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(4, NOTE_QUARTER, NOTE_ZERO),
+				new MusicalEvent(3, NOTE_QUARTER, NOTE_ZERO)}, 20));
 		result.setPositionImportance(0, 20);
 		result.setPositionImportance(1, 15);
 		result.setPositionImportance(2, 10);
@@ -252,17 +285,17 @@ public class Bot {
 					for (MusicalEvent event : toPlay.events){
 						for (int i = 0; i < event.getChord().notes.length; i++){
 							try {
-								sendFloat(sender, "frequency" + voice + "_" + i, frequencies[event.getChord().notes[i] - event.getModifier() + baseNote]);
+								sendFloat(sender, "frequency_" + voice + "_" + i, frequencies[notes[event.getChord().notes[i] - event.getModifier()] + baseNote]);
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
 						try {
-							sendFloat(sender, "volume", 1);
-							Thread.sleep((long) (event.getDuration() * CONFIG_PRESS_PERCENTAGE *CONFIG_TEMPO_SCALE * speedfactor));
-							sendFloat(sender, "volume", 0);
-							Thread.sleep((long) ((event.getWaitingTime()*CONFIG_TEMPO_SCALE+event.getDuration()*(1-CONFIG_PRESS_PERCENTAGE)) * speedfactor));
+							sendFloat(sender, "trigger_" + voice, 1);
+							Thread.sleep((long) ((float)(event.getDuration() * CONFIG_PRESS_PERCENTAGE) * CONFIG_TEMPO_SCALE));
+							sendFloat(sender, "trigger_" + voice, 0);
+							Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*CONFIG_TEMPO_SCALE*(1-CONFIG_PRESS_PERCENTAGE)));
 						} catch (IOException | InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

@@ -5,7 +5,7 @@
 	<Category>Arithmetic</Category>
 	<Ports>
 		<Port Name="SoundIn" Direction="IN" DataType="SOUND"/>
-		<Port Name="Multiplier" Direction="IN" DataType="CONTROL"/>
+		<Port Name="Multiplier" Direction="IN" DataType="SOUND"/>
 		<Port Name="SoundOut" Direction="OUT" DataType="SOUND"/>
 	</Ports>
 	<Properties>

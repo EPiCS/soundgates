@@ -15,6 +15,7 @@ import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicy
 import soundgatesComposite.diagram.edit.commands.EmptyCommand;
 import soundgatesComposite.diagram.edit.policies.CompositeSoundComponentComponentCompartmentCanonicalEditPolicy;
 import soundgatesComposite.diagram.edit.policies.CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy;
+import soundgatesComposite.diagram.edit.policies.SoundgatesCreationEditPolicyWithCustomReparent;
 import soundgatesComposite.diagram.edit.policies.SoundgatesDragDropEditPolicy;
 import soundgatesComposite.diagram.part.SoundgatesCompositeVisualIDRegistry;
 
@@ -64,7 +65,7 @@ public class CompositeSoundComponentComponentCompartmentEditPart extends
 				EditPolicyRoles.SEMANTIC_ROLE,
 				new CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy());
 		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
-				new CreationEditPolicyWithCustomReparent(
+				new SoundgatesCreationEditPolicyWithCustomReparent(
 						SoundgatesCompositeVisualIDRegistry.TYPED_INSTANCE));
 		installEditPolicy(EditPolicyRoles.DRAG_DROP_ROLE,
 				new SoundgatesDragDropEditPolicy());

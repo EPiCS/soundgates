@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionDelegate;
@@ -45,8 +46,28 @@ public class SynthDataGenAction implements IObjectActionDelegate{
 				if(tester.testPatch(patch) == false)
 					return;				
 				
-				// export TGF file and project as zip				
-				dataGen.generateSynthData(patch, file, projectPath);			
+				IFile newZipFile = file.getProject().getFile(file.getName().replace(".sgd", ".zip"));
+				if(newZipFile.exists())
+					{  MessageDialog dialog = new MessageDialog(
+								      null, "File \""+newZipFile.getName()+"\" already exists", 
+								      null, "Do you want to replace the file \""+newZipFile.getName()+"\"?",
+								      MessageDialog.QUESTION,
+								      new String[] {"Yes", "No"},
+								      0); 
+						   
+						   int result =  dialog.open();
+						   if(result==0){ 
+							   // export TGF file and project as zip				
+								dataGen.generateSynthData(patch, file, projectPath);
+						   }
+						   else return;
+						
+					}
+				else{
+					// export TGF file and project as zip				
+					dataGen.generateSynthData(patch, file, projectPath);
+				}
+							
 				
 			} catch (Exception e) {				
 				e.printStackTrace();

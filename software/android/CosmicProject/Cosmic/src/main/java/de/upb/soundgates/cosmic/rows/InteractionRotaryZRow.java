@@ -10,11 +10,10 @@ import android.widget.TextView;
 
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCSender;
-import de.upb.soundgates.cosmic.sensor.RotaryZSensorListener;
+import de.upb.soundgates.cosmic.sensors.RotaryZSensorListener;
 
 /**
  * Created by posewsky on 10.01.14.

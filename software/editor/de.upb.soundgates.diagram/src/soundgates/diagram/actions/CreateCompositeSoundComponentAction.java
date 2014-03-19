@@ -5,6 +5,13 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -16,13 +23,15 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.w3c.dom.Document;
 
 import soundgates.diagram.XMLexport.CompositeSoundComponentExporter;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
-import soundgatesComposite.diagram.XMLexport.CompositeSoundComponentImporter;
+import soundgates.diagram.part.SoundgatesDiagramEditor;
 import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
+import soundgatesComposite.diagram.XMLexport.CompositeSoundComponentImporter;
 
 
 
@@ -49,24 +58,51 @@ public class CreateCompositeSoundComponentAction implements IObjectActionDelegat
 		try {
 			soundgatesComposite.diagram.soundcomponents.AtomicSoundComponentLibrary.
 				setXMLFolder(AtomicSoundComponentLibrary.getXMLFolder());			
-			
+			soundgatesComposite.diagram.soundcomponents.CompositeSoundComponentLibrary.
+				setXMLFolder(AtomicSoundComponentLibrary.getXMLFolder());	
 			
 			IProject project = AtomicSoundComponentLibrary.getXMLFolder().getProject();
 			IPath location = project.getLocation();
 			String filePath = findNewFileName(location.toString());
 			
-			CompositeSoundComponentImporter.
-				createWorkbenchWithCompositeSoundComponentFromXML(						
-						filePath,						
-						CompositeSoundComponentExporter.
-						getCompositeSoundComponentXMLDocumentFromEditParts(selectedEditParts));
+			String[] segments =	filePath.split("/");
+			String componentNameWithExtension = segments[segments.length-1];
+			String componentName = componentNameWithExtension.replace(".sgcd", "");			
 			
-			project.refreshLocal(1, null);
+			Document newCompositeSoundComponentXML = CompositeSoundComponentExporter.
+									getCompositeSoundComponentXMLDocumentFromEditParts(selectedEditParts,componentName);
 			
-		} catch (IOException e) {
+			//create workbench
+			if(newCompositeSoundComponentXML!=null){
+				CompositeSoundComponentImporter.
+					createWorkbenchWithCompositeSoundComponentFromXML(						
+							filePath,newCompositeSoundComponentXML);
+				
+				//save as xml
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(newCompositeSoundComponentXML);			
+				
+				String xmlFilePath = AtomicSoundComponentLibrary.getXMLFolder().getRawLocation().toString()+
+						"/"+componentNameWithExtension.replace(".sgcd", ".xml");
+				StreamResult result = new StreamResult(new File(xmlFilePath));
+				
+				transformer.transform(source, result);
+				
+				//refresh
+				Object[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors();
+				for(Object editor : editors){
+					if(editor instanceof SoundgatesDiagramEditor){
+						((SoundgatesDiagramEditor) editor).updatePalette();
+					}
+				}
+				
+				project.refreshLocal(2, null);
+			}
+			
+		} catch (IOException | TransformerException | CoreException e) {
 
-		} catch (CoreException e) {
-		}
+		} 
 	}
 
 	/**
@@ -85,7 +121,7 @@ public class CreateCompositeSoundComponentAction implements IObjectActionDelegat
 		String filePath;
 		File test;
 		for(int i=1; i<=100; i++){
-			filePath = location+"/new" + i + ".sgcd";
+			filePath = location+"/NewCompositeSoundComponent" + i + ".sgcd";
 			test = new File(filePath);
 			if(!test.exists())
 				return filePath;
