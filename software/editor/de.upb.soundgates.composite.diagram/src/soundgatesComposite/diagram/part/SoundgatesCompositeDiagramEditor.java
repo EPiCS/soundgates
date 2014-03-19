@@ -64,8 +64,10 @@ import soundgatesComposite.CompositeSoundComponent;
 import soundgatesComposite.Connection;
 import soundgatesComposite.diagram.edit.commands.EmptyCommand;
 import soundgatesComposite.diagram.edit.parts.AtomicSoundComponentEditPart;
+import soundgatesComposite.diagram.edit.parts.CompositeSoundComponent2EditPart;
 import soundgatesComposite.diagram.edit.parts.CompositeSoundComponentEditPart;
 import soundgatesComposite.diagram.edit.parts.ConnectionAbstractEditPart;
+import soundgatesComposite.diagram.edit.parts.PortEditPart;
 import soundgatesComposite.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgatesComposite.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
@@ -167,7 +169,7 @@ public class SoundgatesCompositeDiagramEditor extends DiagramDocumentEditor
 				if(	object instanceof EditPart)	
 				{	
 					if(object instanceof AtomicSoundComponentEditPart || 
-							object instanceof CompositeSoundComponentEditPart){
+							object instanceof CompositeSoundComponent2EditPart){
 						
 						EditPart parent = ((EditPart)object).getParent();
 						try{
@@ -179,6 +181,16 @@ public class SoundgatesCompositeDiagramEditor extends DiagramDocumentEditor
 							
 						}
 					}
+					
+					else if(object instanceof PortEditPart){
+						EditPart parent = ((EditPart)object).getParent();
+						if(parent instanceof CompositeSoundComponent2EditPart || 
+								parent instanceof AtomicSoundComponentEditPart){
+							
+							if(!objects.contains(parent))
+								return true;							
+						}
+					}				
 					
 					else if(object instanceof ConnectionAbstractEditPart){
 						Connection connection = ((ConnectionAbstractEditPart) object).getConnection();

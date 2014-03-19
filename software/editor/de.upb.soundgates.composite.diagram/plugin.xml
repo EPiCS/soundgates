@@ -42,9 +42,9 @@
    <extension point="org.eclipse.ui.newWizards" id="creation-wizard">
       <?gmfgen generated="true"?>
   	  <wizard
-  	     name="%newWizardName"
+  	     name="Soundgates Composite Diagram"
   	     icon="icons/obj16/SoundgatesCompositeDiagramFile.gif"
-  	     category="org.eclipse.ui.Examples"
+  	     category="de.upb.soundgates.diagram.ID"
   	     class="soundgatesComposite.diagram.part.SoundgatesCompositeCreationWizard"
   	     id="soundgatesComposite.diagram.part.SoundgatesCompositeCreationWizardID">
   	  	 <description>%newWizardDesc</description>  
@@ -53,18 +53,6 @@
 
    <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
       <?gmfgen generated="true"?>
-      <objectContribution
-            id="SoundgatesComposite.diagram.InitDiagram"
-            nameFilter="*.soundgatescomposite"
-            objectClass="org.eclipse.core.resources.IFile">
-         <action
-               label="%initDiagramActionLabel"
-               class="soundgatesComposite.diagram.part.SoundgatesCompositeInitDiagramFileAction"
-               menubarPath="additions"
-               enablesFor="1"
-               id="SoundgatesComposite.diagram.InitDiagramAction">
-         </action>
-      </objectContribution>
       <objectContribution
             id="SoundgatesComposite.diagram.export.composite"
             objectClass="soundgatesComposite.diagram.edit.parts.CompositeSoundComponentEditPart">
@@ -87,17 +75,6 @@
                class="soundgatesComposite.diagram.actions.ValidateCompositeSoundComponentAction"
                id="Soundgates.composite.diagram.action.ValidateCompositeAction"
                label="Validate Composite Sound Component"
-               menubarPath="Soundgates.diagram.menu/group">
-         </action>
-      </objectContribution>
-      <objectContribution
-            id="SoundgatesComposite.diagram.HideElements"
-            objectClass="soundgatesComposite.diagram.edit.parts.CompositeSoundComponentAbstractEditPart">
-         <action
-               class="soundgatesComposite.diagram.actions.HideEmbeddedElementsAction"
-               enablesFor="1"
-               id="Soundgates.diagram.action.HideEmbeddedElementsAction"
-               label="Hide/Show Embedded Elements"
                menubarPath="Soundgates.diagram.menu/group">
          </action>
       </objectContribution>

@@ -9,6 +9,7 @@ public class VHDLPort {
 	Range range; 
 	String sigis;
 	boolean isVector;
+	String supportfn;
 	
 	public VHDLPort(String vhdlName, Direction dir, String dataType){
 		this.vhdlName = vhdlName;
@@ -80,6 +81,14 @@ public class VHDLPort {
 	
 	public boolean isVector(){
 		return isVector;
+	}
+	
+	public String getSupportfn(){
+		return supportfn;
+	}
+	
+	public void setSupportfn(String s){
+		this.supportfn = s;
 	}
 	
 	public class Range{

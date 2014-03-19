@@ -21,19 +21,19 @@ public class Messages extends NLS {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	public static String SoundgatesCompositeCreationWizardTitle;
+	public static String SoundgatesCompositeCreationWizardTitle  = "New Soundgates Composite Diagram";
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	public static String SoundgatesCompositeCreationWizard_DiagramModelFilePageTitle;
+	public static String SoundgatesCompositeCreationWizard_DiagramModelFilePageTitle = "Create Soundgates Composite Diagram";
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	public static String SoundgatesCompositeCreationWizard_DiagramModelFilePageDescription;
+	public static String SoundgatesCompositeCreationWizard_DiagramModelFilePageDescription = "Select file that will contain composite diagram.";
 
 	/**
 	 * @generated
