@@ -78,17 +78,6 @@
                menubarPath="Soundgates.diagram.menu/group">
          </action>
       </objectContribution>
-      <objectContribution
-            id="SoundgatesComposite.diagram.HideElements"
-            objectClass="soundgatesComposite.diagram.edit.parts.CompositeSoundComponentAbstractEditPart">
-         <action
-               class="soundgatesComposite.diagram.actions.HideEmbeddedElementsAction"
-               enablesFor="1"
-               id="Soundgates.diagram.action.HideEmbeddedElementsAction"
-               label="Hide/Show Embedded Elements"
-               menubarPath="Soundgates.diagram.menu/group">
-         </action>
-      </objectContribution>
    </extension>
 	
    <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">

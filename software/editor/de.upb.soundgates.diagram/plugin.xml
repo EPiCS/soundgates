@@ -123,17 +123,6 @@
          </action>
       </objectContribution>
       <objectContribution
-            id="Soundgates.diagram.HideElements"
-            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentAbstractEditPart">
-         <action
-               class="soundgates.diagram.actions.HideEmbeddedElementsAction"
-               enablesFor="1"
-               id="Soundgates.diagram.action.HideEmbeddedElementsAction"
-               label="Hide/Show Embedded Elements"
-               menubarPath="Soundgates.diagram.editormenu/group">
-         </action>
-      </objectContribution>
-      <objectContribution
             id="Soundgates.diagram.VHDlExport"
             objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart">
          <action
