@@ -25,7 +25,7 @@ The following tutorials show the functions of the two Soundgates editors on simp
    ![Soundgates Project](http://pc2.github.io/pg-soundgates/assets/images/3_ready_project.png)
 
 ## Creating a Soundgates patch
-Imagine you want to have a patch where you control a sine generator with OSC messages. A sine generator has only its frequency as input. Imagine you want to control also the amplitude of the sine wave. The following tutorial shows to to create such a patch.  
+Imagine you want to have a patch where you control a sine generator with OSC messages. A sine generator has only its frequency as input. Imagine you want to control also the amplitude of the sine wave. The following tutorial shows how to create such a patch.  
 
 1. Right-click on the Soundgates project and choose "New" -> "Other".
 
@@ -46,12 +46,12 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
    ![Editor workbench](http://pc2.github.io/pg-soundgates/assets/images/5_editor_with_palette.png)
 
 ## Adding sound components to the patch and connecting them
-1. To add an atomic sound component to your patch, perform following steps:
+To add an atomic sound component to your patch, perform following steps:
  - Choose the corresponding category in the tool palette.
  - Click once on the tool entry associated with the atomic sound component.
  - Click once in the editor canvas in the point where you want to place the component.  
  
-   Add the following components to your patch:  
+1. Add the following components to your patch:  
  - "SineGenerator" from the category "Oscillator".
  - "SampleControlMultiplication" from "Arithmetic".
  - "SoundOutput" from "Sink".
@@ -83,19 +83,19 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
    Double-click on the IO component named "/ampl" and set "0" for "MinValue" and "2" for "MaxValue".
 
 4. Now the ports of the sound components must be connected. To make a connection you have two possibilities.  
-   The first one uses the tool palette:
- - Choose the part "Connections" in the tool palette and click once on the tool entry "Link".
- - Click on an out-port without releasing the left mouse button, drag the new link to an in-port and release the button.  
+   The first one uses the tool palette:  
+   - Choose the part "Connections" in the tool palette and click once on the tool entry "Link".  
+   - Click on an out-port without releasing the left mouse button, drag the new link to an in-port and release the button.  
    
-   The second way to create a link doesn't use the tool palette and is a bit faster:
-  - Point the mouse over an out-port. A small arrow appears.
-  - Drag this arrow to an in-port and release the button.  
+   The second way to create a link doesn't use the tool palette and is a bit faster:  
+   - Point the mouse over an out-port. A small arrow appears.  
+   - Drag this arrow to an in-port and release the button.  
    
    Connect the following ports:  
- - "Value" of "/freq" with "Frequency" of "SineGenerator1"
- - "Value" of "/ampl" with "Multiplier" of "SampleControlMultiplication1"
- - "Output" of "SineGenerator" with "Multiplicand" of "SampleControlMultiplication1"
- - "Product" of "SampleControlMultiplication1" with "Sound" of "SoundOutput"  
+   - "Value" of "/freq" with "Frequency" of "SineGenerator1"  
+   - "Value" of "/ampl" with "Multiplier" of "SampleControlMultiplication1"  
+   - "Output" of "SineGenerator" with "Multiplicand" of "SampleControlMultiplication1"  
+   - "Product" of "SampleControlMultiplication1" with "Sound" of "SoundOutput"  
  
    Your patch may look like this:  
    
@@ -103,10 +103,10 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
    
    **IMPORTANT: An out-port can have an arbitrary number of outgoing links, but an in-port can have only ONE incoming link!**  
    **Only following links are allowed:**  
- - A link from an out-port to an in-port
- - A link from a sound-port to a sound-port
- - A link from a control-port to a control-port
- - A link from a control-port to a sound-port
+   - A link from an out-port to an in-port  
+   - A link from a sound-port to a sound-port  
+   - A link from a control-port to a control-port  
+   - A link from a control-port to a sound-port
 
 ## Creating composite sound components
 Composite sound component are hierarchical components that contain other components. They have ports as interfaces and can be used as black boxes.  
@@ -165,16 +165,16 @@ These waves are mixed together and the resulting wave is the output. To get such
    
 3. Now the ports must be connected. The ports of the embedded components are connected in exactly the same way as in the patch editor.  
    Create the following links:  
- - From port "Output" of "SineGenerator1" to port "Waveform1" of "Mixer"
- - From port "Output" of "TriangleGenerator1" to port "Waveform2" of "Mixer"
- - From port "Value" of "Constant1" to port "Bias" of "Mixer1"
+   - From port "Output" of "SineGenerator1" to port "Waveform1" of "Mixer"  
+   - From port "Output" of "TriangleGenerator1" to port "Waveform2" of "Mixer"  
+   - From port "Value" of "Constant1" to port "Bias" of "Mixer1"
  
    To connect ports of the composite sound component with the ports of its embedded components, delegations are needed.  
    To create a delegation, use the tool entry "Delegation" and perform the same steps as for creating a link.  
    Create the following delegations:  
- - From port "Frequency" of "CombinedWaves" to port "Frequency" of "SineGenerator1"
- - From port "Frequency" of "CombinedWaves" to port "Frequency" of "TriangleGenerator1"
- - From port "Output" of "Mixer1" to port "Output" of "CombinedWaves"  
+   - From port "Frequency" of "CombinedWaves" to port "Frequency" of "SineGenerator1"  
+   - From port "Frequency" of "CombinedWaves" to port "Frequency" of "TriangleGenerator1"  
+   - From port "Output" of "Mixer1" to port "Output" of "CombinedWaves"  
  
    Now the component "CombinedWaves" should look like this:  
    
@@ -191,8 +191,9 @@ These waves are mixed together and the resulting wave is the output. To get such
 5. If you open the patch editor, the category "Imported Composite Sound Components" should contain the entry "CombinedWaves".  
    Add it to the canvas in the same way you add an atomic sound component.  
    You can not modify the embedded elements of a composite sound component in the patch editor.  
-   If you don't want to see the embedded elements, then right-click on the component and choose "Hide/Show Embedded Elements", such that you can use the composite sound component as a black box.  
+   If you don't want to see the embedded elements, then mark the component and click on the small icon under the component's name (shown in the picture). You can use the composite sound component as a black box.  
    
+   ![CombinedWaves Black Box](http://pc2.github.io/pg-soundgates/assets/images/16_composite_icon.png)  
    ![CombinedWaves Black Box](http://pc2.github.io/pg-soundgates/assets/images/16_composite_as_black_box.png)  
    
 ##Creating a composite sound component from an existing component structure
@@ -229,16 +230,16 @@ The field "FileName" expects a path relative to the folder "samples". Consider t
 
 ![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/21_samples.png)  
 
-For example, you want to use the file "bassline2.wav" in a WavePlayer, you must type "basslines/bassline2" in its field "FileName".
+For example, if you want to use the file "bassline2.wav" in a WavePlayer, you must type "basslines/bassline2" in its field "FileName".
 
 ##Operations with a patch
 ![Patch operations](http://pc2.github.io/pg-soundgates/assets/images/10_patch_menu.png)  
 
 If you have a patch, you can perform the following operations:
-- "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.
-- "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.
-- "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.
-- "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file. 
+ - "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.
+ - "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.
+ - "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.
+ - "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file. 
 If you have a XML file describing a patch and you want to get an EMF model out of it such that you can edit it in the patch editor, right-click on the XML file and choose "Soundgates" -> "Create Patch from XML".
 **Attention**: all the atomic and composite sound components that are used in this patch must be present in your "soundcomponents" folder!.
 
