@@ -171,9 +171,9 @@ public class SynthDataGen {
 		
 	}
 	
-	private String getImplName(AtomicSoundComponent atomicSoundComponent){
+	private String getImplName(AtomicSoundComponent atomicSoundComponent, String implType){
 		return atomicSoundComponent.getStringProperties().
-				get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
+				get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME+implType);
 	}
 	
 	private SynthData handleAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
@@ -181,9 +181,9 @@ public class SynthDataGen {
 		SynthData data = new SynthData();
 					
 		int uniqueId = uniqueIds.getValue(atomicSoundComponent);
-		String type = atomicSoundComponent.getType();
-		String implName = getImplName(atomicSoundComponent);
+		String type = atomicSoundComponent.getType();		
 		String implType = implTypes.get(atomicSoundComponent);
+		String implName = getImplName(atomicSoundComponent,implType);
 		
 		int hwSlot;
 		if(implType.equals("hw"))
