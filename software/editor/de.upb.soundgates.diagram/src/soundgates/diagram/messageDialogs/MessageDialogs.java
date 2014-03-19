@@ -115,12 +115,20 @@ public class MessageDialogs {
 		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please remove the IO component(s) from the composite sound component \""+name+"\"");		
 	}
 	
-	public static void ioComponentsMustHaveUniqueNames() {		
-		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
-	}
-	
 	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		
 		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please remove the SoundOutput block(s) from the composite sound component \""+name+"\"");		
+	}
+	
+	public static void newCompositeSoundComponentContaintsIOBlock() {		
+		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please unmark the IO component(s)");		
+	}
+	
+	public static void newCompositeSoundComponentContaintsSoundOutputBlock() {		
+		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please unmark the SoundOutput block(s)");		
+	}
+	
+	public static void ioComponentsMustHaveUniqueNames() {		
+		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
 	}
 	
 	public static void soundcomponentsFolderMissing(String projectName) {		

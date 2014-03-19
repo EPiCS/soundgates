@@ -70,17 +70,16 @@ def checkEnvironmentalVariables():
         
 def checkEnvReconOs():
     reconos = os.getenv("RECONOS")
-    if not os.path.isdir(reconos):
+    if reconos is None or not os.path.isdir(reconos):
         print 'Error: Can not build project.\nRECONOS Variable is not set or not pointing to a directory.'
         sys.exit()
         
 def checkEnvSoundgates():
     soundgates = os.getenv("SOUNDGATES")
-    if not os.path.isdir(soundgates):
+    if soundgates is None or not os.path.isdir(soundgates):
         print 'Error: Can not build project.\nSOUNDGATES Variable is not set or not pointing to a directory.'
-        sys.exit()    
-
-
+        sys.exit()
+        
 def usage():
     print 'This script creates a mhs file out of the TGF'
     print 'Usage: mhs_create.py -i <patch.tgf> [-c <path-to-component-implementations>] [-b <name-of-the-base-design>]'

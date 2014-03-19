@@ -1,7 +1,6 @@
 package soundgates.provider.custom;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -56,7 +55,7 @@ public class CustomPropertyInputDialog extends Dialog {
 		keysSorted.addAll(getAtomicSoundComponent().getUserStringProperties()
 				.keySet());
 
-		Collections.sort(keysSorted);
+//		Collections.sort(keysSorted);
 		Iterator<String> it = keysSorted.iterator();
 		
 		while (it.hasNext()) {

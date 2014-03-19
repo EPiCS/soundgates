@@ -3,12 +3,12 @@
     <alsa>
         <buffersize>16384</buffersize>
         <chunks>1024</chunks>
-        <devicename>plughw:1,0</devicename>
-        <devicename_in>plughw:1,0</devicename_in>
+        <devicename>plughw:0,0</devicename>
+        <devicename_in>plughw:0,0</devicename_in>
     </alsa>
     
     <core>
-        <hwt_support>true</hwt_support>
+        <hwt_support>false</hwt_support>
         <ports>
             <tcp>50050</tcp>
             <udp>50050</udp>
@@ -18,5 +18,13 @@
     <plugins>
         <searchdir>../SoundComponents/result</searchdir>
     </plugins>
+    
+    <logging>
+    	<initDelay>1000</initDelay>
+    	<stopAfter>1000</stopAfter>
+    	<enabled>false</enabled>
+    	<address>192.168.1.101</address>
+    	<port>27017</port>
+    </logging>
     
 </synthesizer>

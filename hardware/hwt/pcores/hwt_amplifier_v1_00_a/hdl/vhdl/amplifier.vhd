@@ -1,0 +1,1 @@
+../../../../../basic/amplifier/amplifier.vhd

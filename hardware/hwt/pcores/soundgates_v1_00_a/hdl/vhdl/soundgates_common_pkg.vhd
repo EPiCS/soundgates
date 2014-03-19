@@ -29,6 +29,9 @@ package soundgates_common_pkg is
 
 constant SOUNDGATE_FIX_PT_SCALING   : real    := 28.0;
 
+constant INT_MIN 							: real 	 := -2147483648.0;
+constant INT_MAX 							: real 	 := 2147483647.0;
+
 constant MAX_NCO_FREQUNCY           : integer := 16000;
 
 constant SAMPLE_WIDTH               : integer := 32;

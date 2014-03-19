@@ -146,7 +146,7 @@ public class CompositeSoundComponentEditPart extends
 		}
 		if (childEditPart instanceof soundgatesComposite.diagram.edit.parts.PortEditPart) {
 			BorderItemLocator locator = new BorderItemLocator(getMainFigure(),
-					PositionConstants.SOUTH);
+					PositionConstants.NORTH);
 			getBorderedFigure()
 					.getBorderItemContainer()
 					.add(((soundgatesComposite.diagram.edit.parts.PortEditPart) childEditPart)

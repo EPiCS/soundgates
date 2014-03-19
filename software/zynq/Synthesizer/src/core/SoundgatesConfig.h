@@ -48,6 +48,12 @@ public:
 	    /* Synthesizer related configuration values */
 	    CFG_DEFAULT_PLUGIN_PATH,
 
+		/* Value logging enabled */
+	    CFG_LOGGING_ENABLED,
+	    CFG_LOGGING_ADDRESS,
+	    CFG_LOGGING_PORT,
+	    CFG_LOGGING_DELAY,
+	    CFG_LOGGING_RUNTIME
 	};
 
 

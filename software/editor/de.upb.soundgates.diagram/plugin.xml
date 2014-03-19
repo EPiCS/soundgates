@@ -67,7 +67,7 @@
       <?gmfgen generated="false"?>
       <objectContribution
             id="Soundgates.diagram.InitDiagram"
-            nameFilter="*.soundgates"
+            nameFilter="*.sgd"
             objectClass="org.eclipse.core.resources.IFile">
          <action
                label="%initDiagramActionLabel"
@@ -83,7 +83,7 @@
          <action
                class="soundgates.diagram.actions.CreateCompositeSoundComponentAction"
                id="Soundgates.diagram.action.ExportCompositeAction"
-               label="Create a new Composite Sound Component from the selected Components"
+               label="Create new Composite Sound Component"
                menubarPath="Soundgates.diagram.editormenu/group">
          </action>
          <menu
@@ -143,6 +143,17 @@
                enablesFor="1"
                id="Soundgates.diagram.action.HideEmbeddedElementsAction"
                label="Hide/Show Embedded Elements"
+               menubarPath="Soundgates.diagram.editormenu/group">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="Soundgates.diagram.VHDlExport"
+            objectClass="soundgates.diagram.edit.parts.CompositeSoundComponentEditPart">
+         <action
+               class="soundgates.diagram.actions.VHDLExportAction"
+               enablesFor="1"
+               id="Soundgates.diagram.action.VHDLExport"
+               label="Export VDHL file"
                menubarPath="Soundgates.diagram.editormenu/group">
          </action>
       </objectContribution>
@@ -478,21 +489,6 @@
        </propertyTester>
    </extension>
 
-	   <extension point="org.eclipse.ui.navigator.viewer" id="navigator-viewbinding">
-      <?gmfgen generated="true"?>
-      <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-         <includes>
-            <contentExtension pattern="Soundgates.diagram.resourceContent"/>
-			<contentExtension pattern="Soundgates.diagram.domainResourceContent"/>
-            <contentExtension pattern="Soundgates.diagram.navigatorLinkHelper"/>
-         </includes>
-      </viewerContentBinding>
-      <viewerActionBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-         <includes>
-            <actionExtension pattern="Soundgates.diagram.navigatorActionProvider"/>
-         </includes>
-      </viewerActionBinding>
-   </extension>
 
    <extension point="org.eclipse.ui.navigator.navigatorContent" id="navigator-content">
       <?gmfgen generated="true"?>

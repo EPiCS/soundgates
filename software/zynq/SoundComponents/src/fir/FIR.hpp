@@ -19,8 +19,8 @@
 
 #include "fir_coeff.hpp"
 
-#define FIR_TYPE_LP "lp"
-#define FIR_TYPE_HP "hp"
+#define FIR_TYPE_LP "Lowpass"
+#define FIR_TYPE_HP "Highpass"
 #define FIR_TYPE_BP "bp"
 
 class FIR: public SoundComponentImpl
