@@ -1,8 +1,7 @@
-package de.upb.soundgates.cosmic.sensor;
+package de.upb.soundgates.cosmic.sensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 

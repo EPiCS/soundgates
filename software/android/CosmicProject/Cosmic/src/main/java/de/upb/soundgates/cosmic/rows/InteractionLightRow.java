@@ -10,11 +10,9 @@ import android.widget.TextView;
 import java.util.Observable;
 
 import de.upb.soundgates.cosmic.osc.OSCSender;
-import de.upb.soundgates.cosmic.sensor.CosmicSensorManager;
-import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
-import de.upb.soundgates.cosmic.sensor.LightSensorListener;
+import de.upb.soundgates.cosmic.sensors.LightSensorListener;
 
 /**
  * Created by posewsky on 10.01.14.
@@ -49,11 +47,13 @@ public class InteractionLightRow implements InteractionRow {
 
     private static class ViewHolder {
         final TextView msgText;
+        final TextView description;
         final TextView luxValue;
         final Button calibrate;
 
-        private ViewHolder(TextView msgText, TextView luxValue, Button calibrate) {
+        private ViewHolder(TextView msgText, TextView description, TextView luxValue, Button calibrate) {
             this.msgText = msgText;
+            this.description = description;
             this.luxValue = luxValue;
             this.calibrate= calibrate;
         }
@@ -81,6 +81,7 @@ public class InteractionLightRow implements InteractionRow {
 
             holder = new ViewHolder(
                     (TextView) viewGroup.findViewById(R.id.msg),
+                    (TextView) viewGroup.findViewById(R.id.description),
                     (TextView) viewGroup.findViewById(R.id.value),
                     (Button) viewGroup.findViewById(R.id.calibrate)
             );
@@ -103,6 +104,7 @@ public class InteractionLightRow implements InteractionRow {
 
         // actually setup the view
         holder.msgText.setText(msg.getPath());
+        holder.description.setText(msg.getInteractionMethod().toString());
         //holder.shakeIndicator.setText();
 
         return view;

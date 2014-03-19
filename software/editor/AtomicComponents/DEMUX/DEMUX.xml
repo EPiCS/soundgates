@@ -12,7 +12,7 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="sw" name="const">
+			<Implementation type="sw" name="demux">
 			    <PortMapping PortName="Data" PortNumber="1"/>
 			    <PortMapping PortName="Data1" PortNumber="1"/>
 			    <PortMapping PortName="Data2" PortNumber="2"/>

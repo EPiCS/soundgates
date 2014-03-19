@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic;
+package de.upb.soundgates.cosmic.misc;
 
 import android.content.Context;
 import android.util.AttributeSet;
