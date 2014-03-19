@@ -20,12 +20,11 @@ All control values are of datatype float. If the control value is used for boole
 
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
-| Constant | const | - | - | <ol><li>Value</li></ol> | {{page.uncheck}} <td colspan="2"> Constant control value</td> |
+| Constant | const | - | - | <ol><li>Value</li></ol> | {{page.check}} <td colspan="2"> Constant control value</td> |
 | Control Addition | addcc | <ol><li>Summand1</li><li>Summand2</li></ol> | <ol><li>Result</li></ol> | - | ? <td colspan="2"> Adds two control values </td> |
 | Control Division | divcc | <ol><li>Dividend</li><li>Divisor</li></ol> | <ol><li>Quotient</li></ol> | - | ? <td colspan="2"> Divides *Dividend* by *Divisor* </td> |
 | Control Multiplication | mulcc | <ol><li>Multiplicand</li><li>Multiplier</li></ol> | <ol><li>Product</li></ol> | - | ? <td colspan="2"> Multiplies *Multiplicand* with *Multiplier* </td> |
 | Control Subtraction | subcc | <ol><li>Minuend</li><li>Subtrahend</li></ol> | <ol><li>Difference</li></ol> | - | ? <td colspan="2"> Subtracts *Subtrahend* from *Minuend* </td> |
-| Number | ?? | TODO XML Beshreibung für Komponente namens Number vorhanden. Was soll das für eine Komponente sein? | op | p | hw <td colspan="2"> d </td> |
 | Sample Addition | addss | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Adds two soundwave samplewise </td> |
 | Sample Control Addition | addsc | <ol><li class="sound">Sound1</li><li>Summand</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Adds a control value to each sound sample </td> |
 | Sample Control Multiplication | mulsc | <ol><li class="sound">Sound1</li><li>Multiplier</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Multiplies a control value witch each sound sample </td> |
