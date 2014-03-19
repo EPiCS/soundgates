@@ -3,17 +3,21 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPortIn;
 import com.illposed.osc.OSCPortOut;
 
 
 public class Bot {
 
 	static final float CONFIG_TEMPO_SCALE = 2f;
+	static final int CONFIG_FIRST_BASE_NOTE = 0;
 	static final float CONFIG_PRESS_PERCENTAGE = 0.6f;
 	
 	//Moll: 0 2 3 5 7 8 10 12
@@ -26,10 +30,9 @@ public class Bot {
 	
 	static Score score;
 	
-
-	
 	static final float CONFIG_BASE_NOTE_CHANGE_PROBABILITY = 1f;
-	
+	static final String CONFIG_RYTHM_SYNC_MESSAGE = "/rythmSync";
+	static boolean useRythmSync = false;
 	static float speedfactor = 1;
 
 	private static float[] frequencies = new float[128];
@@ -37,13 +40,31 @@ public class Bot {
 	
 
 	static OSCPortOut sender;
+	static OSCPortIn receiver;
 	
+	static int listenPort = 50050;
+	static String filename = "";
 	
-
-	
+	static boolean playSequenceNow = false;
+	static Date currentSequenceEnd = Calendar.getInstance().getTime();
 	
 	public static void main(String[] args) throws SocketException, UnknownHostException{
+		if (args.length == 0){
+
+			System.out.println("Usage: Bot <filename> <optionalListenPort>");
+		}
+		
+		if (args.length >= 1){
+			filename = args[0];
+		}
+		if (args.length >= 2){
+			useRythmSync = true;
+			listenPort = Integer.parseInt(args[1]);
+		}
+		
 		sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
+
+		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			
 			@Override
@@ -55,6 +76,9 @@ public class Bot {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				sender.close();
+				receiver.stopListening();
+				receiver.close();
 				
 			}
 		});
@@ -69,99 +93,104 @@ public class Bot {
 		calculateNotes();
 
 	
+
+		final Random random = new Random();
+
 		
-		Thread play = new Thread(){
-
-			@Override
-			public void run() {		
+		final Sequence [][] voices = score.getVoices();
+		final float [] positionProbabilities = score.getPositionProbabilites();
+		
+		if (useRythmSync){
+			receiver = new OSCPortIn(listenPort);
+			receiver.addListener(CONFIG_RYTHM_SYNC_MESSAGE ,new OSCListener() {
 				
-				
-	
-				Random random = new Random();
-
-				
-				
-				int nextBaseNoteIndex = -1;
-				int nextPositionIndex;
-				
-				Sequence [][] voices = score.getVoices();
-				float [] positionProbabilities = score.getPositionProbabilites();
-				
-				while(true){
-					
-					int baseNoteSum = 0;
-					for (int i = 0; i < notes.length; i++){
-						baseNoteSum += baseNoteImportances[notes[i]];
-						
+				@Override
+				public void acceptMessage(Date receivedAt, OSCMessage arg1) {
+					if (currentSequenceEnd.before(receivedAt)){
+						generateAndPlay(random, positionProbabilities, voices);
 					}
-					
-					float [] baseNoteProbabilites = new float [baseNoteImportances.length];
-					for (int i = 0; i < baseNoteImportances.length; i++){
-						baseNoteProbabilites[i] = (float)(baseNoteImportances[i]) / baseNoteSum;
-					}
-					
-					float nextPositionValue = random.nextFloat();
-					float nextBaseNoteValue = random.nextFloat();
-					
-					nextPositionIndex = 0;
-					while(nextPositionValue > positionProbabilities[nextPositionIndex]){
-						nextPositionValue -= positionProbabilities[nextPositionIndex];
-						nextPositionIndex++;
-						if (nextPositionIndex >= positionProbabilities.length -1){
-							break;
-						}
-					}
-					
-					if (nextBaseNoteIndex < 0 || random.nextFloat() < CONFIG_BASE_NOTE_CHANGE_PROBABILITY){
-						nextBaseNoteIndex = 0;
-
-						while(nextBaseNoteValue > baseNoteProbabilites[notes[nextBaseNoteIndex]]){
-							nextBaseNoteValue -= baseNoteProbabilites[notes[nextBaseNoteIndex]];
-							nextBaseNoteIndex++;
-							if (nextBaseNoteIndex >= notes.length - 1){
-								break;
-							}
-						}
-						
-						System.out.println("Changed Basenote to: " + notes[nextBaseNoteIndex]);
-					}
-					
-					try {
-						playSequence(sender, voices, nextPositionIndex, notes[nextBaseNoteIndex]);
-						Thread.sleep(getLengthOfPosition(voices, nextPositionIndex));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				}
+			});
+			receiver.startListening();
+		} else {
+			while(true){
+				int playedPosition = generateAndPlay(random, positionProbabilities, voices);
+				try {
+					Thread.sleep(getLengthOfPosition(voices, playedPosition));
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	private static int generateAndPlay(Random random, float [] positionProbabilities, Sequence [][] voices){
+		
+		int baseNoteSum = 0;
+		for (int i = 0; i < notes.length; i++){
+			baseNoteSum += baseNoteImportances[notes[i]];
+			
+		}
+		
+		float [] baseNoteProbabilites = new float [baseNoteImportances.length];
+		for (int i = 0; i < baseNoteImportances.length; i++){
+			baseNoteProbabilites[i] = (float)(baseNoteImportances[i]) / baseNoteSum;
+		}
+		
+		float nextPositionValue = random.nextFloat();
+		float nextBaseNoteValue = random.nextFloat();
+		
+		int nextPositionIndex = 0;
+		while(nextPositionValue > positionProbabilities[nextPositionIndex]){
+			nextPositionValue -= positionProbabilities[nextPositionIndex];
+			nextPositionIndex++;
+			if (nextPositionIndex >= positionProbabilities.length -1){
+				break;
+			}
+		}
+		int nextBaseNoteIndex = CONFIG_FIRST_BASE_NOTE;
+		if (random.nextFloat() < CONFIG_BASE_NOTE_CHANGE_PROBABILITY){
+			nextBaseNoteIndex = 0;
 
-			private long getLengthOfPosition(Sequence[][] voices,
-					int position) {
-				long length = 0;
-				for (int i = 0; i < voices.length; i ++){
-					long tmpLength = 0;
-					for (MusicalEvent event : voices[i][position].events){
-						tmpLength += event.getDuration() + event.getWaitingTime();
-					}
-					if (length < tmpLength){
-						length = tmpLength;
-					}
+			while(nextBaseNoteValue > baseNoteProbabilites[notes[nextBaseNoteIndex]]){
+				nextBaseNoteValue -= baseNoteProbabilites[notes[nextBaseNoteIndex]];
+				nextBaseNoteIndex++;
+				if (nextBaseNoteIndex >= notes.length - 1){
+					break;
 				}
-				return length;
 			}
 			
-		};
+			System.out.println("Changed Basenote to: " + notes[nextBaseNoteIndex]);
+		}
 		
-		play.run();
-		
-
-		
+		try {
+			playSequence(sender, voices, nextPositionIndex, notes[nextBaseNoteIndex]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return nextPositionIndex;
 	}
 
+	private static long getLengthOfPosition(Sequence[][] voices,
+			int position) {
+		long length = 0;
+		for (int i = 0; i < voices.length; i ++){
+			long tmpLength = 0;
+			for (MusicalEvent event : voices[i][position].events){
+				tmpLength += event.getDuration() + event.getWaitingTime();
+			}
+			if (length < tmpLength){
+				length = tmpLength;
+			}
+		}
+		return length;
+	}
+	
 	private static Score createScore() {
 		Score result = new Score(2);
 		result.addSequence(0, 0, new Sequence(new MusicalEvent [] {new MusicalEvent(0, 200, 0),new MusicalEvent(1, 100, 100),new MusicalEvent(2, 100, 100),new MusicalEvent(3, 100, 100),new MusicalEvent(7, 100, 0),new MusicalEvent(5, 100, 0),new MusicalEvent(3, 100, 100),new MusicalEvent(2, 100, 100)}, 20));
