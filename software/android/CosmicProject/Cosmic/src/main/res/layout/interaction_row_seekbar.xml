@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <de.upb.soundgates.cosmic.MinMaxSeekBar
+    <de.upb.soundgates.cosmic.misc.MinMaxSeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar"

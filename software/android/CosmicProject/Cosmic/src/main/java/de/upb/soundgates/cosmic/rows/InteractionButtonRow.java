@@ -2,7 +2,6 @@ package de.upb.soundgates.cosmic.rows;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCSender;

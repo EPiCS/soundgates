@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic.sensor.util;
+package de.upb.soundgates.cosmic.sensors.util;
 
 /**
 * Created by Thorbjörn Posewsky on 01.02.14.

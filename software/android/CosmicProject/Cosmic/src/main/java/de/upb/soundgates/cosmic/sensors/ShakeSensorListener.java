@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic.sensor;
+package de.upb.soundgates.cosmic.sensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -7,7 +7,7 @@ import android.hardware.SensorEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.upb.soundgates.cosmic.sensor.util.Vector3d;
+import de.upb.soundgates.cosmic.sensors.util.Vector3d;
 
 /**
  * Created by Thorbjörn Posewsky on 05.02.14.

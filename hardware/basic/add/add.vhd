@@ -28,8 +28,8 @@ port(
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        wave1     : in  signed(31 downto 0);
-	    wave2     : in  signed(31 downto 0);       
+        sample_in : in  signed(31 downto 0);
+	    sample_in2: in  signed(31 downto 0);       
 	    output    : out signed(31 downto 0)
     );
 
@@ -42,7 +42,7 @@ architecture Behavioral of add is
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    output <= wave1 + wave2;
+                    output <= sample_in + sample_in2;
                 end if;
             end if;
         end process;

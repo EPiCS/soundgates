@@ -114,6 +114,14 @@ public class VHDLPortDescriptor {
 		return isVector;
 	}
 	
+	public String getSupportfn(){
+		return supportfn;
+	}
+	
+	public void setSupportfn(String s){
+		this.supportfn = s;
+	}
+	
 	public class Range{
 		int leftValue;
 		int rightValue;

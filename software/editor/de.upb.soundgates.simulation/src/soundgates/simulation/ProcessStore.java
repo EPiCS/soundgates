@@ -37,8 +37,8 @@ public class ProcessStore {
 		currentCodeGen = new Codegen();
 					try {
 						IProject project = modelFile.getProject();
-						Patch patch = CodeGenHelper.getPatch(modelFile.getFullPath().toOSString());
-						Diagram diagram = CodeGenHelper.getDiagram(modelFile.getFullPath().toOSString());
+						Patch patch = CodeGenHelper.getPatch(modelFile.getFullPath().toPortableString());
+						Diagram diagram = CodeGenHelper.getDiagram(modelFile.getFullPath().toPortableString());
 						currentCodeGen.generate(patch, diagram, project);
 						modelFile.getParent().refreshLocal(1, null);
 						

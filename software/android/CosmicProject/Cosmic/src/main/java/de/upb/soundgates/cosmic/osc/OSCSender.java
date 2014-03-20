@@ -51,7 +51,7 @@ public class OSCSender extends AsyncTask<OSCMessage, Void, Boolean> {
 
                 for(int j = 0; j < numParams; ++j)
                 {
-                    OSCType param = msg.getTypes().get(j);
+                    OSCArgument param = msg.getTypes().get(j);
                     switch(param.getTypeTag())
                     {
                         case 'i':

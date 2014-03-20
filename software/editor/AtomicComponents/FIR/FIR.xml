@@ -17,6 +17,11 @@
 				<PortMapping PortName="CutoffFrequency" PortNumber="2"/>
 				<PortMapping PortName="SoundOut" PortNumber="1"/>
 			</Implementation>
+			<Implementation type="hw" name="fir">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="CutoffFrequency" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
 		</Device>
 	</Code>
 </AtomicSoundComponent>

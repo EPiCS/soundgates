@@ -1,4 +1,4 @@
-package de.upb.soundgates.cosmic.sensor;
+package de.upb.soundgates.cosmic.sensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -10,12 +10,12 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
+import de.upb.soundgates.cosmic.rows.InteractionMethod;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
 import de.upb.soundgates.cosmic.osc.OSCSender;
-import de.upb.soundgates.cosmic.sensor.util.Quaternion;
-import de.upb.soundgates.cosmic.sensor.util.Vector3d;
+import de.upb.soundgates.cosmic.sensors.util.Quaternion;
+import de.upb.soundgates.cosmic.sensors.util.Vector3d;
 
 /**
  * Created by posewsky on 08.01.14.
