@@ -21,6 +21,7 @@
   - [/tutorials/createsensor, Adding a sensor]
 
 /documentation:
+  - [/documentation/config, Configuration]
   - [/documentation/components, Synthesizer Components]
   - [/documentation/architecture, Synthesizer Architecture]
   - [/documentation/api, API Documentation]
