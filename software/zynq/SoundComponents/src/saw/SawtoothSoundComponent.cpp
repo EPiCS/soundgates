@@ -47,3 +47,10 @@ double SawtoothSoundComponent::getPhaseIncrement(float frequency)
 	return (2 * M_PI / Synthesizer::config::samplerate) * frequency;
 
 }
+
+double SawtoothSoundComponent::getPhaseIncrementHW(float frequency)
+{
+
+	return ((INT_MAX - INT_MIN)/ Synthesizer::config::samplerate) * frequency;
+
+}

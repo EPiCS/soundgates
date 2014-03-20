@@ -6,12 +6,13 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - sawtooth.vhd
+--   title:        VHDL module - BASIC_COMPONENT.vhd
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Sawtooth wave generator
+--   description:  basic component example, which is used in the hardware
+--                 thread
 --
 -- ======================================================================
     
@@ -23,45 +24,34 @@ use IEEE.MATH_REAL.ALL;
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
-entity sawtooth is
+entity BASIC_COMPONENT is
 port(                
         clk     : in  std_logic;
         rst     : in  std_logic;
         ce      : in  std_logic;
-        incr    : in  signed(31 downto 0); 
-        offset  : in  signed(31 downto 0);  
-        saw     : out signed(31 downto 0)
+        param   : in  signed(31 downto 0); 
+        output  : out signed(31 downto 0)
     );
 
-end sawtooth;
+end BASIC_COMPONENT;
 
-architecture Behavioral of sawtooth is  
-    
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+architecture Behavioral of BASIC_COMPONENT is
 
-    constant upper  : signed (31 downto 0) := (0=>'0', others => '1');
-    constant lower  : signed (31 downto 0) := (others => '1');
 		  
 	begin
-		  
-        saw <= x;
-          
-
-        CALC_SAW : process (clk, rst)
+		            
+        CALC : process (clk, rst)
         begin
             if rst = '1' then
-                x <= offset;
+                x    <= offset;
             else
             if rising_edge(clk) then
                 if ce = '1' then
-                    x <= x + incr;
-                    if x > upper then
-                        x <= lower;
-                    end if;
+                    --do your calculations here
+                    
                 end if;
             end if;
 				end if;
         end process;  
-	  
         
 end Behavioral;
