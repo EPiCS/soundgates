@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 import soundgates.AtomicSoundComponent;
 import soundgates.Direction;
 import soundgates.SoundgatesFactory;
-import soundgates.VHDLXMLPort;
+import soundgates.VHDLPortDescriptor;;
 
 
 /**
@@ -216,7 +216,7 @@ public class AtomicSoundComponentXMLHandler{
 		}
 	}
 	
-	private static VHDLXMLPort createVHDLPortFromNode(Node vhdlPortNode){
+	private static VHDLPortDescriptor createVHDLPortFromNode(Node vhdlPortNode){
 
 //		<Port name="rst"  dir="in" datatype="std_logic" sigis="rst"/>
 //		<Port name="y_in" dir="out" datatype="signed" range="23:0" sigis="user" portnum="1"/>
@@ -230,7 +230,7 @@ public class AtomicSoundComponentXMLHandler{
 		
 		String dataType = vhdlPortNode.getAttributes().getNamedItem("datatype").getNodeValue();
 		
-		VHDLXMLPort vhdlPort = new VHDLXMLPort(vhdlName, dir, dataType);
+		VHDLPortDescriptor vhdlPort = new VHDLPortDescriptor(vhdlName, dir, dataType);
 		
 		if(vhdlPortNode.getAttributes().getNamedItem("sigis")!=null){
 			vhdlPort.setSigis(vhdlPortNode.getAttributes().getNamedItem("sigis").getNodeValue());
@@ -255,8 +255,8 @@ public class AtomicSoundComponentXMLHandler{
 		return vhdlPort;
 	}
 	
-	private static LinkedList<VHDLXMLPort> createVHDLPortsListFromNodeList(NodeList vhdlNodeList){
-		LinkedList<VHDLXMLPort> vhdlPortsList = new LinkedList<>();
+	private static LinkedList<VHDLPortDescriptor> createVHDLPortsListFromNodeList(NodeList vhdlNodeList){
+		LinkedList<VHDLPortDescriptor> vhdlPortsList = new LinkedList<>();
 		for(int i=0; i<vhdlNodeList.getLength(); i++){
 			if(vhdlNodeList.item(i).getNodeName().equals("VHDLPort"))
 				vhdlPortsList.add(createVHDLPortFromNode(vhdlNodeList.item(i)));

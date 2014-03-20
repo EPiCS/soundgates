@@ -16,7 +16,7 @@ public class VHDLPortDescriptor {
 	private Direction 	dir; 
 	private String 		dataType; 
 	private Range 		range; 
-	
+	private String 		supportfn;
 	private boolean 	isVector;
 	private SIGIS		sigis;
 	

@@ -55,7 +55,7 @@ public class VHDLUtils {
 			return "???";
 		}
 		
-		return atomic.getStringProperties().get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
+		return atomic.getStringProperties().get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME_HARDWARE);
 		
 		
 	}
