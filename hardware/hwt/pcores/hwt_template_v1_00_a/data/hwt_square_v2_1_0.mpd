@@ -1,11 +1,11 @@
-BEGIN hwt_square
+BEGIN hwt_template
 
 ## Peripheral Options
 OPTION IPTYPE = PERIPHERAL
 OPTION IMP_NETLIST = TRUE
 OPTION HDL = VHDL
-OPTION DESC = SndComp - square hwt
-OPTION LONG_DESC = Hardwarethread that implements a square Wave
+OPTION DESC = SndComp - template hwt
+OPTION LONG_DESC = Hardwarethread template
 #OPTION ARCH_SUPPORT_MAP = (others=DEVELOPMENT)
 
 
