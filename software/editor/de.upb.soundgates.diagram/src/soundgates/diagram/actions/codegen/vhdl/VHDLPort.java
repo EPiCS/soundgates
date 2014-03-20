@@ -2,7 +2,10 @@ package soundgates.diagram.actions.codegen.vhdl;
 
 import java.util.ArrayList;
 
-public class VHDLPort extends VHDLElement {
+import soundgates.Direction;
+import soundgates.VHDLPortDescriptor;
+
+public class VHDLPort extends VHDLElement implements IVHDLLabeledElement {
 	
 	public enum Direction {		
 		IN,
@@ -15,17 +18,42 @@ public class VHDLPort extends VHDLElement {
 	private	Direction	 direction;
 	
 	public VHDLPort(String name, Direction direction, VHDLDatatype datatype){
-		this.direction = direction;
 		this.name 	   = name;
-		this.datatype  = datatype;
+		this.direction = direction;
+		this.datatype  = datatype;		
+	}
+	
+	public VHDLPort(VHDLPortDescriptor port){
 		
+		
+		this.name    			= port.getVhdlName(); 
+		
+		
+		if(!port.isVector()){
+			this.datatype = new VHDLDatatype(port.getDatatype());
+			
+		}else{
+			this.datatype = new VHDLDatatype(port.getDatatype(), new VHDLRange(port.getRange().getLeftValue(), port.getRange().getRightValue()));
+		}
+		
+		if(port.getDir() == soundgates.Direction.IN){
+			
+			this.direction = VHDLPort.Direction.IN;			
+	
+		}else if(port.getDir() == soundgates.Direction.OUT){
+			
+			this.direction = VHDLPort.Direction.OUT;		
+		}else {
+			
+			throw new RuntimeException("Unknown port direction: " + port.getDir().toString());
+		}	
 	}
 	
 	@Override
 	public VHDLStringRepresentation getStringRepresentation() {
 		VHDLStringRepresentation representaion = new VHDLStringRepresentation();
 			
-		representaion.add(this.name);
+		representaion.add(getLabel());
 		representaion.add("    : ");
 		representaion.add(direction.toString());
 		representaion.add("      ");
@@ -38,6 +66,11 @@ public class VHDLPort extends VHDLElement {
 	public ArrayList<VHDLElement> getElements() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String getLabel() {
+		return this.name;
 	}
 
 }

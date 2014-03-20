@@ -1,16 +1,26 @@
 package soundgates;
 
-public class VHDLXMLPort {
-
+public class VHDLPortDescriptor {
+	
+	
+	public enum SIGIS{
+		
+		CLK,
+		RST,
+		CE,
+		UNKNOWN
+	}
+	
 	private String 		modelName;
 	private String 		vhdlName; 
 	private Direction 	dir; 
 	private String 		dataType; 
 	private Range 		range; 
-	private String 		sigis;
-	private boolean 	isVector;
 	
-	public VHDLXMLPort(String vhdlName, Direction dir, String dataType){
+	private boolean 	isVector;
+	private SIGIS		sigis;
+	
+	public VHDLPortDescriptor(String vhdlName, Direction dir, String dataType){
 		this.vhdlName = vhdlName;
 		this.dir = dir;
 		this.dataType = dataType;	
@@ -66,12 +76,34 @@ public class VHDLXMLPort {
 		isVector = true;
 	}
 
-	public String getSigis() {
-		return sigis;
+	public boolean isClockSignal(){		
+		return this.getSigis().equals(SIGIS.CLK);
+	}
+	
+	public boolean isResetSignal(){
+		return this.getSigis().equals(SIGIS.RST);
+	}
+	
+	public boolean isChipEnableSignal(){
+		return this.getSigis().equals(SIGIS.CE);
+	}
+	
+	public SIGIS getSigis() {
+		
+		return this.sigis;
 	}
 
 	public void setSigis(String sigis) {
-		this.sigis = sigis;
+		
+		if(sigis.toUpperCase().equals(SIGIS.CLK.name())){
+			this.sigis = SIGIS.CLK;		
+		}else if(sigis.toUpperCase().equals(SIGIS.RST.name())){
+			this.sigis = SIGIS.RST;
+		}else if(sigis.toUpperCase().equals(SIGIS.CE.name())){
+			this.sigis = SIGIS.CE;
+		}else{
+			this.sigis = SIGIS.UNKNOWN;
+		}
 	}
 	
 	public boolean hasSigis(){

@@ -1,22 +1,32 @@
-package soundgates.diagram.actions.codegen.vhdl;
+package soundgates.diagram.actions.codegen.vhdl.decl;
 
 import java.util.ArrayList;
 
-public class VHDLComponent extends VHDLElement {
+import soundgates.diagram.actions.codegen.vhdl.IVHDLLabeledElement;
+import soundgates.diagram.actions.codegen.vhdl.VHDLElement;
+import soundgates.diagram.actions.codegen.vhdl.VHDLPort;
+import soundgates.diagram.actions.codegen.vhdl.VHDLStringRepresentation;
+
+public class VHDLComponentDeclaration extends VHDLElement implements IVHDLLabeledElement {
 	
 	private ArrayList<VHDLElement> ports = null;
 	
+
 	private String name;
 	
-	public VHDLComponent(String name, ArrayList<VHDLElement> ports){
+	public VHDLComponentDeclaration(String name, ArrayList<VHDLElement> ports){
 		this.name  = name;
 		this.ports = ports;
 	}
 	
+	public String getLabel() {
+		return name;
+	}
+
 	@Override
 	public VHDLStringRepresentation getStringRepresentation() {
-		VHDLStringRepresentation componentrep = new VHDLStringRepresentation();
-		VHDLStringRepresentation portrep = new VHDLStringRepresentation();;
+		VHDLStringRepresentation componentrep 	= new VHDLStringRepresentation();
+		VHDLStringRepresentation portrep 		= new VHDLStringRepresentation();;
 		
 		componentrep.addLine("component " + name + " is");
 		componentrep.addLine("Port (");
@@ -32,9 +42,7 @@ public class VHDLComponent extends VHDLElement {
 			}
 		}
 		
-		portrep = portrep.pack().indent(4);
-		
-		componentrep.addLine(portrep);
+		componentrep.add(portrep.pack().indent(4));
 		
 		componentrep.addLine(");");
 		componentrep.addLine("end component " + name + ";");

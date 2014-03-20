@@ -18,17 +18,13 @@ public class VHDLStringRepresentation extends ArrayList<String> {
 	}
 	
 	public boolean add(VHDLStringRepresentation rep){
-		return this.add(rep.toString());		
+				
+		return this.addAll(rep);		
 	}
 	
 	public boolean addLine(String elem){
 		return super.add(elem + "\n");
 	}
-	
-	public boolean addLine(VHDLStringRepresentation rep){
-		return this.addLine(rep.toString());
-	}
-	
 	
 	public VHDLStringRepresentation pack(){
 		VHDLStringRepresentation rep = new VHDLStringRepresentation();

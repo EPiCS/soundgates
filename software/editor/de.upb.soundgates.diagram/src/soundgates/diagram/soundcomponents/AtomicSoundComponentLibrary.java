@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import soundgates.AtomicSoundComponent;
-import soundgates.VHDLXMLPort;
+import soundgates.VHDLPortDescriptor;
 
 //TODO needs to check whether there are duplicate keys in the boolean/float/integer properties
 public class AtomicSoundComponentLibrary{
@@ -21,7 +21,7 @@ public class AtomicSoundComponentLibrary{
 	private static IFolder xmlfolder;
 	
 	public static HashMap<String,String> typeToCategory = new HashMap<>();
-	public static HashMap<String,LinkedList<VHDLXMLPort>> componentTypeToVHDLPortsList = new HashMap<>();
+	public static HashMap<String,LinkedList<VHDLPortDescriptor>> componentTypeToVHDLPortsList = new HashMap<>();
 	
 	public final static String samplesFolderName = "samples";
 	public final static String wavePlayerComponentType = "WavePlayer";
