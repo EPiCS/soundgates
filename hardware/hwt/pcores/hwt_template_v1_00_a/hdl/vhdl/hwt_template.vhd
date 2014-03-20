@@ -161,6 +161,12 @@ begin
     destaddr    <= hwtio.argv(0);
     param       <= hwtio.argv(1);
 
+-- for hwts with input samples:
+--  sourceaddr  <= hwtio.argv(0);
+--  destaddr    <= hwtio.argv(1);
+--  param       <= hwtio.argv(2);
+
+
     -----------------------------------
     -- Hard wirings
     -----------------------------------
