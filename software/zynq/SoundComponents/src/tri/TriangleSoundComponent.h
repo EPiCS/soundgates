@@ -1,12 +1,12 @@
 /*
- * SawtoothSoundComponent.h
+ * TriangleSWSoundComponent.h
  *
  *  Created on: Nov 27, 2013
- *      Author: gwue
+ *      Author: hendrik
  */
 
-#ifndef SAWSOUNDCOMPONENT_H_
-#define SAWSOUNDCOMPONENT_H_
+#ifndef TRIANGLESWSOUNDCOMPONENT_H_
+#define TRIANGLESWSOUNDCOMPONENT_H_
 
 #include <string.h>
 #include <vector>
@@ -18,35 +18,36 @@
 
 #include <SoundComponentImpl.h>
 
-class SawtoothSoundComponent : public SoundComponentImpl{
+class TriangleSoundComponent : public SoundComponentImpl{
 
 public:
 
     float m_PhaseIncr;
     float m_Frequency;
-    bool m_active;
+    bool  m_active;
 
     DECLARE_COMPONENTNAME;
 
     DECLARE_PORT3(SoundPort, SoundOut, 1);
     DECLARE_PORT3(ControlPort, FrequencyIn, 1);
 
-	SawtoothSoundComponent(std::vector<std::string> params);
-	virtual ~SawtoothSoundComponent();
+	TriangleSoundComponent(std::vector<std::string> params);
+	virtual ~TriangleSoundComponent();
 
 	virtual void init(void);
 	virtual void process(void) = 0;
 
 	double getPhaseIncrement(float frequency);
-    double getPhaseIncrementHW(float frequency);
 
 };
 
+
+
 class OnFrequencyChange : public ICallbackFunctor {
 private:
-    SawtoothSoundComponent& m_ObjRef;
+    TriangleSoundComponent& m_ObjRef;
 public:
-    OnFrequencyChange(SawtoothSoundComponent& ref ) : m_ObjRef(ref){ }
+    OnFrequencyChange(TriangleSoundComponent& ref ) : m_ObjRef(ref){ }
 
     void operator()(){
         float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();
@@ -55,14 +56,18 @@ public:
             LOG_INFO("Frequency changed: " << freq)
             m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement(freq);
             m_ObjRef.m_Frequency = freq;
-            if (freq == 0) {
+            if (freq == 0)
+            {
+            	LOG_INFO("Triangle generator turned off. Reset phase to 0");
             	m_ObjRef.m_active = false;
             }
-            else {
+            else
+            {
             	m_ObjRef.m_active = true;
             }
         }
     }
 };
 
-#endif /* SawtoothSOUNDCOMPONENT_H_ */
+
+#endif /* TriangleSWSOUNDCOMPONENT_H_ */
