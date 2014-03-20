@@ -67,8 +67,7 @@ public class VHDLComponentInstantiationStatement extends VHDLElement implements 
 	public String getLabel() {
 		return getLabelName(this.name, decl.getLabel());
 	}
-	
-	
+		
 	public static String getLabelName(String modelname, String type){
 		
 		return modelname.toUpperCase() + "_" + type.toUpperCase() + prefix;

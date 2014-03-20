@@ -103,8 +103,7 @@ public class VHDLExportAction implements IObjectActionDelegate{
 		VHDLSignalDeclaration		clk			 = new VHDLSignalDeclaration("clk", new VHDLDatatype(VHDLStandardDataType.STD_LOGIC.name()));
 		VHDLSignalDeclaration		rst			 = new VHDLSignalDeclaration("rst", new VHDLDatatype(VHDLStandardDataType.STD_LOGIC.name()));
 		VHDLSignalDeclaration		ce			 = new VHDLSignalDeclaration("ce", new VHDLDatatype(VHDLStandardDataType.STD_LOGIC.name()));
-		
-		
+				
 		VHDLEntity					hwtentity    = null;
 		
 		IFile templatefile = AtomicSoundComponentLibrary.getXMLFolder().getProject().getFile(hwtTemplateFilename);
@@ -148,7 +147,7 @@ public class VHDLExportAction implements IObjectActionDelegate{
 				ArrayList<VHDLElement> vhdlports 		  = new ArrayList<VHDLElement>();
 
 				AtomicSoundComponent atomicSoundComponent = ((AtomicSoundComponent) soundComponent);				
-				String implname 				 		  = atomicSoundComponent.getStringProperties().get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
+				String implname 				 		  = VHDLUtils.getImplName(soundComponent);
 				String modelname 						  = atomicSoundComponent.getName();
 				
 				/* Create VHDL component declaration/instantiation */
@@ -207,7 +206,14 @@ public class VHDLExportAction implements IObjectActionDelegate{
 				
 				
 				
-				VHDLComponentDeclaration 			component_decl 		= new VHDLComponentDeclaration(implname, vhdlports);
+				VHDLComponentDeclaration component_decl = VHDLUtils.<VHDLComponentDeclaration>getElementByLabel(hwtentity.getElements(), implname);
+				
+				if(null == component_decl){
+					
+					 component_decl = new VHDLComponentDeclaration(implname, vhdlports);
+					 hwtentity.addElement(component_decl);
+				}
+				
 				VHDLComponentInstantiationStatement	component_instance 	= new VHDLComponentInstantiationStatement(modelname, component_decl);
 				
 				VHDLPortAssignment clk_portassign 						= new VHDLPortAssignment(clkport, clk);
@@ -218,7 +224,7 @@ public class VHDLExportAction implements IObjectActionDelegate{
 				component_instance.addElement(rst_portassign);
 				component_instance.addElement(ce_portassign);
 				
-				hwtentity.addElement(component_decl);
+				
 				hwtentity.addElement(component_instance);
 								
 			}
@@ -320,7 +326,7 @@ public class VHDLExportAction implements IObjectActionDelegate{
 						hwtentity.getElements().add(ram2local_decl);
 						hwtentity.getElements().add(ram2local_assign);						
 						
-						/* Create port assignment of connecte component */						
+						/* Create port assignment of connected component */						
 						
 						VHDLComponentInstantiationStatement vhdlinstance = VHDLUtils.<VHDLComponentInstantiationStatement>getElementByLabel(hwtentity.getElements(), 
 																			VHDLComponentInstantiationStatement.getLabelName(modelname, implname));
@@ -341,7 +347,7 @@ public class VHDLExportAction implements IObjectActionDelegate{
 					
 					AtomicSoundComponent soundcomponent = (AtomicSoundComponent) sourceport.getComponent();
 					String vhdlportname = getVHDLPort(soundcomponent, sourceport).getVhdlName();					
-					String implname 	= soundcomponent.getStringProperties().get(AtomicSoundComponentXMLHandler.DEVICE_PREFIX_IMPLNAME);
+					String implname 	= VHDLUtils.getImplName(soundcomponent);
 					String modelname    = soundcomponent.getName();
 					/* Create signal from local memory to connected component */
 					VHDLSignalDeclaration 			local2ram_decl  = new VHDLSignalDeclaration(sourceport.getName()
@@ -405,6 +411,7 @@ public class VHDLExportAction implements IObjectActionDelegate{
 		
 		/* Create reconos interface */
 		{
+
 			/* Create new address signal */
 			o_ram_reconos_addr = new VHDLSignalDeclaration("o_RAM_RECONOS_ADDR_" + port.getName(), 
 									new VHDLDatatype(VHDLStandardDataType.STD_LOGIC_VECTOR.name(), 
@@ -429,12 +436,15 @@ public class VHDLExportAction implements IObjectActionDelegate{
 			o_ram_reconos_we = new VHDLSignalDeclaration("o_RAM_RECONOS_WE_" + port.getName(), 
 									new VHDLDatatype(VHDLStandardDataType.STD_LOGIC.name()));
 		
+			VHDLSignalAssignmentStatement addr_translate_stmt = new VHDLSignalAssignmentStatement(o_ram_reconos_addr, o_ram_reconos_addr2, new VHDLRange("(32-C_LOCAL_RAM_ADDRESS_WIDTH)", "31", VHDLRange.Direction.TO));
+
 			returnval.add(o_ram_reconos_addr);
 			returnval.add(o_ram_reconos_addr2);
 			returnval.add(o_ram_reconos_data);
 			returnval.add(i_ram_reconos_data);
 			returnval.add(o_ram_reconos_we);
 			
+			hwtentity.addElement(addr_translate_stmt);
 			hwtentity.addElement(o_ram_reconos_addr);
 			hwtentity.addElement(o_ram_reconos_addr2);
 			hwtentity.addElement(o_ram_reconos_data);
@@ -476,7 +486,9 @@ public class VHDLExportAction implements IObjectActionDelegate{
 		
 		/* Create control processes */
 		{			
-			/* Reconos */			
+			/* ------------------------------------------------------------------------------------------------ */
+			/* Reconos 																							*/
+			/* ------------------------------------------------------------------------------------------------ */	
 			ArrayList<VHDLSignalDeclaration> sensitivitylist = new ArrayList<VHDLSignalDeclaration>();
 			sensitivitylist.add(clk);
 			{
@@ -550,13 +562,14 @@ public class VHDLExportAction implements IObjectActionDelegate{
 	
 	private VHDLPortDescriptor getVHDLPort(AtomicSoundComponent atomic, Port modelPort){
 		LinkedList<VHDLPortDescriptor> vhdlPorts = AtomicSoundComponentLibrary.componentTypeToVHDLPortsList.get(atomic.getType());
-		
+		VHDLPortDescriptor port = null;
 		try{
 		
 			for(VHDLPortDescriptor vhdlPort : vhdlPorts){
 				if(vhdlPort.hasModelName()){
 					if(vhdlPort.getModelName().equals(modelPort.getName())){
-						return vhdlPort;
+						port = vhdlPort;
+						break;
 					}
 				}
 			}
@@ -570,7 +583,19 @@ public class VHDLExportAction implements IObjectActionDelegate{
 					, e), 
 					StatusManager.SHOW);
 		}
-		return null;
+		
+		if(null == port){
+			
+			StatusManager.getManager().handle(new Status(IStatus.WARNING, 
+					SoundgatesDiagramEditorPlugin.ID, 
+					"Something is fishy! There is no vhdl for this model port. \n"
+					+ "Component: " + atomic.getName() 	+ "\n"
+					+ "Port: " + modelPort.getName()	+ "\n"), 
+					StatusManager.SHOW);
+		}
+		
+		
+		return port;
 	}
 	
 	private VHDLPortDescriptor getVHDLPort(AtomicSoundComponent atomicSoundComponent, VHDLPortDescriptor.SIGIS sigis){

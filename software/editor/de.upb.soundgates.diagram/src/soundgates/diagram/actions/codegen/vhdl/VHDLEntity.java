@@ -18,8 +18,7 @@ public class VHDLEntity extends VHDLElement {
 	static private String templateParameterSampleCount     = "%%TEMPLATE_PARAM_SAMPLE_COUNT%%";
 	static private String templateArchitectureVariableDecl = "%%HWT_ARCHITECTURE_VARIABLE_DECLARATION%%"; 
 	static private String templateArchitectureBegin		   = "%%HWT_ARCHITECTURE_BEGIN%%";
-	
-	
+		
 	static private int	  samplecount  = 64;
 	
 	private ArrayList<VHDLElement>   vhdlelements;
@@ -97,7 +96,8 @@ public class VHDLEntity extends VHDLElement {
 				
 				for(int offset : offsetIndicies)
 				{
-					template.add(offset, element.getStringRepresentation().pack().indent(4).toString());					
+					template.add(offset, element.getStringRepresentation().pack().indent(4).toString());
+					template.add(offset, "----------------------------------------------------------------\n");
 				}
 			}
 			

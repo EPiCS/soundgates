@@ -85,7 +85,7 @@ public class VHDLRange extends VHDLElement {
 			 
 			 rep.add("(" + lhsName + " " + this.direction.toString() + " " + Integer.toString(right) + ")");
 			 
-		 }else if(left > -1 && right > -1 && !lhsName.isEmpty() && !rhsName.isEmpty()){
+		 }else if(left < -1 && right < -1 && !lhsName.isEmpty() && !rhsName.isEmpty()){
 			 
 			 rep.add("(" + lhsName + " " + this.direction.toString() + " " + rhsName + ")");
 		 }
