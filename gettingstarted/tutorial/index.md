@@ -11,6 +11,8 @@ Try it with the provided example patch that plays a sine with a constant frequen
 
 `./patchStarter.sh sin440.zip`.
 
+If you get error messages regarding ALSA and you cannot hear any sound, you might need to adjust your device settings as described in the [config documentation]({{site.url}}/documentation/config). Note that the Synthesizer needs exclusive access to your soundcard, so you may have to close other programs that play sound.
+
 # Step By Step Guide for the Zynq
 To get started using ReconOS, this guide leads you through the
 first steps to setup your development environment using the
