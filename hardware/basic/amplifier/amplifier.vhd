@@ -37,13 +37,17 @@ end amplifier;
 
 architecture Behavioral of amplifier is
   
+	signal input_fixed_point : signed(59 downto 0) := (others => '0');
+	signal output_fixed_point : signed(91 downto 0) := (others => '0');
 	begin
+		  input_fixed_point(59 downto 28) <= wave;
+		  amp <= output_fixed_point(87 downto 56);
 		  
         ampl : process (clk, rst, ce)
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    amp <= resize(wave * percentage, 32);
+                    output_fixed_point <= input_fixed_point * percentage;
                 end if;
             end if;
         end process;	  

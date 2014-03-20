@@ -41,8 +41,8 @@ architecture Behavioral of triangle is
 
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 
-    constant upper  : signed (31 downto 0) := to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-    constant lower  : signed (31 downto 0) := to_signed(integer(real(-1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    constant upper  : signed (31 downto 0) := (0=>'0', others => '1');
+    constant lower  : signed (31 downto 0) := (others => '1');
         		  
 	begin
 		  

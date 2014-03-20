@@ -114,6 +114,8 @@ architecture Behavioral of hwt_ramp is
 	signal o_RAMData_ramp : std_logic_vector(0 to 31);   -- ramp to local ram
 	signal i_RAMData_ramp : std_logic_vector(0 to 31);   -- local ram to ramp
     signal o_RAMWE_ramp   : std_logic;
+	signal input_fixed_point : std_logic_vector(59 downto 0) := (others => '0');
+	signal output_fixed_point : std_logic_vector(91 downto 0) := (others => '0');
 
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
@@ -164,7 +166,7 @@ architecture Behavioral of hwt_ramp is
     constant    hwt_argc : integer := 5;
 
 begin
-
+	input_fixed_point(59 downto 28) <= i_RAMData_ramp;
     -----------------------------------
     -- Component related wiring
     -----------------------------------
@@ -278,7 +280,8 @@ begin
             done := False;
             o_RAMAddr_ramp <= (others => '0');
         elsif rising_edge(clk) then
-            o_RAMData_ramp <= std_logic_vector(resize(ramp_data * signed(i_RAMData_ramp), 32));
+            output_fixed_point <= std_logic_vector(ramp_data * signed(input_fixed_point));
+				o_RAMData_ramp <= output_fixed_point(87 downto 56);
             ramp_ce              <= '0';
             o_RAMWE_ramp         <= '0';
             osif_ctrl_signal    <= ( others => '0');
