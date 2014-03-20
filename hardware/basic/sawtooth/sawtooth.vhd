@@ -37,10 +37,10 @@ end sawtooth;
 
 architecture Behavioral of sawtooth is  
     
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    signal x        : signed (31 downto 0) := (others => '0');
 
-    constant upper  : signed (31 downto 0) := (0=>'0', others => '1');
-    constant lower  : signed (31 downto 0) := (others => '1');
+    constant upper  : signed (31 downto 0) := to_signed(integer(real(INT_MAX)), 32);
+    constant lower  : signed (31 downto 0) := to_signed(integer(real(INT_MIN)), 32);
 		  
 	begin
 		  
@@ -54,10 +54,11 @@ architecture Behavioral of sawtooth is
             else
             if rising_edge(clk) then
                 if ce = '1' then
-                    x <= x + incr;
-                    if x > upper then
+                    if upper - incr < x then
                         x <= lower;
-                    end if;
+						  else
+								x <= x + incr;
+						  end if;
                 end if;
             end if;
 				end if;

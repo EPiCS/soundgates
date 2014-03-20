@@ -39,11 +39,11 @@ architecture Behavioral of triangle is
 
     signal direction : std_logic := '0';
 
-    signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+    signal x        : signed (31 downto 0) := (others => '0');
 
-    constant upper  : signed (31 downto 0) := (0=>'0', others => '1');
-    constant lower  : signed (31 downto 0) := (others => '1');
-        		  
+    constant upper  : signed (31 downto 0) := to_signed(integer(real(INT_MAX)), 32);
+    constant lower  : signed (31 downto 0) := to_signed(integer(real(INT_MIN)), 32);
+
 	begin
 		  
         tri <= x;
@@ -57,15 +57,20 @@ architecture Behavioral of triangle is
             if rising_edge(clk) then
                 if ce = '1' then
                     if direction = '0' then
-                        x <= x + incr;
-                        if x > upper then
+                        if x > upper - incr then
                             direction <= '1';
-                        end if;
+									 x <= upper;
+                        else
+									 x <= x + incr;
+								end if;
+                        
                     elsif direction = '1' then
-                       x <= x - incr;
-                        if x < lower then
+                        if x < lower + incr then
                             direction <= '0';
-                        end if; 
+									 x <= lower;
+                        else
+									 x <= x - incr;
+								end if;
                     end if;
                 end if;
             end if;

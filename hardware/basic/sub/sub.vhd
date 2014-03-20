@@ -42,7 +42,13 @@ architecture Behavioral of sub is
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    output <= sample_in - sample_in2;
+                    if sample_in - sample_in2 > to_signed(integer(real(INT_MAX)), 32) then 
+                        output <= to_signed(integer(real(INT_MAX)), 32);
+                    elsif sample_in - sample_in2 < to_signed(integer(real(INT_MIN)), 32) then 
+                        output <= to_signed(integer(real(INT_MIN)), 32);
+                    else
+                        output <= sample_in - sample_in2;
+                    end if;
                 end if;
             end if;
         end process;

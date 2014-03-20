@@ -145,7 +145,7 @@ architecture Behavioral of hwt_template is
     signal param        : std_logic_vector(DWORD_WIDTH - 1 downto 0);
 
     signal state_inner_process : std_logic;
-
+    signal input_sample : std_logic_vector(DWORD_WIDTH - 1 downto 0) := (others => '0');
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
@@ -167,7 +167,8 @@ begin
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
     
-    
+    input_sample <= i_RAMData_hwt; -- store current sample from local RAM in signal    
+
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
         
@@ -214,6 +215,7 @@ begin
             clk          => clk,
             rst          => rst,
             ce           => ce,
+            input        => signed(input_sample),
             param        => signed(param),
             output       => data
             );
@@ -289,8 +291,18 @@ begin
                 get_hwt_args(i_osif, o_osif, i_memif, o_memif, hwtio, hwt_argc, done);
 
                 if done then
+                   -- state <= STATE_READ; -- for input samples
                     state <= STATE_PROCESS;
                 end if;
+
+--            when STATE_READ => 
+--                -- store input samples in local ram
+--				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr, X"00000000", 
+--                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done); -- always in bytes
+--				if done then
+--				    state   <= STATE_PROCESS;
+--                    o_RAMAddr_hwt     <= (others => '0');   -- start with the first sample
+--			    end if;
 
             when STATE_PROCESS =>
                 if sample_count > 0 then
