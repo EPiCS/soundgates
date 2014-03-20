@@ -1,0 +1,15 @@
+##############################################################################
+## Filename:          hwt_template_v1_0_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Mon Jun 10 12:27:04 2013 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib reconos_v3_00_c reconos_pkg vhdl
+lib proc_common_v3_00_a  proc_common_pkg vhdl
+
+lib soundgates_v1_00_a soundgates_common_pkg vhdl
+lib soundgates_v1_00_a soundgates_reconos_pkg vhdl
+
+lib hwt_template_v1_00_a hwt_template vhdl
+lib hwt_template_v1_00_a BASIC_COMPONENT vhdl
+
