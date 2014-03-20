@@ -17,7 +17,7 @@ The following tutorials show the functions of the two Soundgates editors on simp
 
    ![New Soundgates Project](http://pc2.github.io/pg-soundgates/assets/images/2_create_project.png)
 
-4. On the following wizard page type the name of your project, for example "MySoundgatesProject" and click on "Finish".
+4. On the following wizard page enter the name of your project, for example "MySoundgatesProject" and click on "Finish".
 
 5. A new Soundgates project appears in your project explorer. It contains two folders: "samples" and "soundcomponents".   
    **IMPORTANT: DO NOT delete or rename these folders!**  
@@ -33,7 +33,7 @@ Imagine you want to have a patch where you control a sine generator with OSC mes
 
    ![New Soundgates Patch](http://pc2.github.io/pg-soundgates/assets/images/4_new_patch.png)
 
-3. Type the name of your patch file, for example "MyPatchDiagram.sgd" and click on "Finish".  
+3. Enter the name of your patch file, for example "MyPatchDiagram.sgd" and click on "Finish".  
    **IMPORTANT: the file ending must be "sgd".**
 
 4. A file with the new patch is created in your project and the editor for this patch opens.  
@@ -60,7 +60,7 @@ To add an atomic sound component to your patch, perform following steps:
 2. A component can have an arbitrary name in the diagram. To rename a component, perform following steps:
  - Click once on the component in the diagram. The component is marked.
  - Click once on the name of the component.
- - Type the new name.  
+ - Enter the new name.  
    **IMPORTANT: The IO components must have unique names.**  
    Rename one of the two added IO components to "/freq" and the second one to "/ampl".  
    Now your patch may look like this:  
@@ -120,7 +120,7 @@ These waves are mixed together and the resulting wave is the output. To get such
 
 2. Choose "Soundgates Composite Diagram" from the folder "Soundgates" and click "Next".
 
-3. Type the name of the file containing the new component, for example "CombinedWaves.sgcd" and click on "Finish".  
+3. Enter the name of the file containing the new component, for example "CombinedWaves.sgcd" and click on "Finish".  
    **IMPORTANT: the file ending must be "sgcd".**
 
 4. A file with the new composite sound component is created in your project and the editor for this component opens.  
@@ -194,6 +194,7 @@ These waves are mixed together and the resulting wave is the output. To get such
    If you don't want to see the embedded elements, then mark the component and click on the small icon under the component's name (shown in the picture). You can use the composite sound component as a black box.  
    
    ![CombinedWaves Black Box](http://pc2.github.io/pg-soundgates/assets/images/16_composite_icon.png)  
+   
    ![CombinedWaves Black Box](http://pc2.github.io/pg-soundgates/assets/images/16_composite_as_black_box.png)  
    
 ##Creating a composite sound component from an existing component structure
@@ -221,8 +222,8 @@ In this case you can create a composite sound component from these existing comp
 ##Using of the component "WavePlayer" and the folder "samples"
 If you want to play wave files in your patch, you must copy them into the folder "samples". 
 In the patch you need the component "WavePlayer", which you find in the category "Source". 
-The WavePlayer has the property "FileName" where you must type the name of a wave file contained in the folder "samples".
-For example, if have a file named "beat.wav" in the mentioned folder and you want to use it, you must type "beat.wav" into the field "FileName" of the "WavePlayer" as shown in the picture:  
+The WavePlayer has the property "FileName" where you must enter the name of a wave file contained in the folder "samples".
+For example, if have a file named "beat.wav" in the mentioned folder and you want to use it, you must enter "beat.wav" into the field "FileName" of the "WavePlayer" as shown in the picture:  
 
 ![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/20_wave_player.png)  
 
@@ -230,18 +231,26 @@ The field "FileName" expects a path relative to the folder "samples". Consider t
 
 ![New Composite in Patch](http://pc2.github.io/pg-soundgates/assets/images/21_samples.png)  
 
-For example, if you want to use the file "bassline2.wav" in a WavePlayer, you must type "basslines/bassline2" in its field "FileName".
+For example, if you want to use the file "bassline2.wav" in a WavePlayer, you must enter "basslines/bassline2" in its field "FileName".
 
 ##Operations with a patch
 ![Patch operations](http://pc2.github.io/pg-soundgates/assets/images/10_patch_menu.png)  
 
-If you have a patch, you can perform the following operations:
- - "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.
- - "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.
- - "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.
- - "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file. 
-If you have a XML file describing a patch and you want to get an EMF model out of it such that you can edit it in the patch editor, right-click on the XML file and choose "Soundgates" -> "Create Patch from XML".
+If you have a patch, you can perform the following operations:  
+- "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.  
+- "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.  
+- "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.  
+- "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file.  
+If you have a XML file describing a patch and you want to get an EMF model out of it such that you can edit it in the patch editor, right-click on the XML file and choose "Soundgates" -> "Create Patch from XML".  
 **Attention**: all the atomic and composite sound components that are used in this patch must be present in your "soundcomponents" folder!.
 
-
-   
+##Simulating a patch with PureData
+If you want to simulate your patch, you have to perform the following steps:  
+1. Download PureDate from http://puredata.info and install it.  
+2. Choose in Eclipse "Window" -> "Preference" and click on "Pure Data" in the right menu. You get the following dialog:  
+   ![PureData settings](http://pc2.github.io/pg-soundgates/assets/images/23_puredata_settings.png)  
+3. Click on "Browse" and choose the file "pd.exe" from your file system. If you need parameters to start PureData (depends on the operating system you use), enter them into the field "Parameters". Click on "OK".  
+4. Mark the patch you want to simulate in your Soundgates project and press the green "Start the simulation" button:  
+   ![Start simulation](http://pc2.github.io/pg-soundgates/assets/images/22_simulate_b.png)  
+5. When the simulation is running, you can send OSC messages to the patch. Use the Soundgates app, enter your IP and the port 50050.  
+   You can also send OSC messages via the control panel. To do this, click on the button "Show controls".
