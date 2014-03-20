@@ -237,20 +237,20 @@ For example, if you want to use the file "bassline2.wav" in a WavePlayer, you mu
 ![Patch operations](http://pc2.github.io/pg-soundgates/assets/images/10_patch_menu.png)  
 
 If you have a patch, you can perform the following operations:  
-- "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.
-- "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.
-- "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.
-- "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file. 
-If you have a XML file describing a patch and you want to get an EMF model out of it such that you can edit it in the patch editor, right-click on the XML file and choose "Soundgates" -> "Create Patch from XML".
+- "Export Synthesizer Input" is the main operation which generates a zip file. This zip file contains the tgf file that describes the patch and the wave files that are used in the patch.  
+- "Validate Patch": you can check if your patch is correct. If something is wrong, error messages are shown.  
+- "Generate PureData Code": you can generate PureData code to simulate the patch in PureData.  
+- "Export Patch as XML": if you want to save your patch without using EMF or if you want to exchange your patch with other users, you can export it as a XML file.  
+If you have a XML file describing a patch and you want to get an EMF model out of it such that you can edit it in the patch editor, right-click on the XML file and choose "Soundgates" -> "Create Patch from XML".  
 **Attention**: all the atomic and composite sound components that are used in this patch must be present in your "soundcomponents" folder!.
 
 ##Simulating a patch with PureData
 If you want to simulate your patch, you have to perform the following steps:  
-1. Download PureDate from http://puredata.info and install it. 
+1. Download PureDate from http://puredata.info and install it.  
 2. Choose in Eclipse "Window" -> "Preference" and click on "Pure Data" in the right menu. You get the following dialog:  
    ![PureData settings](http://pc2.github.io/pg-soundgates/assets/images/23_puredata_settings.png)  
-3. Click on "Browse" and choose the file "pd.exe" from your file system. If you need parameters to start PureData (depends on the operating system you use), enter them into the field "Parameters". Click on "OK".
+3. Click on "Browse" and choose the file "pd.exe" from your file system. If you need parameters to start PureData (depends on the operating system you use), enter them into the field "Parameters". Click on "OK".  
 4. Mark the patch you want to simulate in your Soundgates project and press the green "Start the simulation" button:  
    ![Start simulation](http://pc2.github.io/pg-soundgates/assets/images/22_simulate_b.png)  
-5. When the simulation is running, you can send OSC messages to the patch. Use the Soundgates app, enter your IP and the port 50050.
+5. When the simulation is running, you can send OSC messages to the patch. Use the Soundgates app, enter your IP and the port 50050.  
    You can also send OSC messages via the control panel. To do this, click on the button "Show controls".
