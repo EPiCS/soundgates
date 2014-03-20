@@ -53,7 +53,7 @@ void SawtoothSoundComponent_HW::init(){
         m_HWTParams[0] = (uint32_t) m_LocalBuffer;
 
         m_HWTParams[1]  = 0;
-        m_HWTParams[2]  = (uint32_t) (getPhaseIncrement(440) * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[2]  = (uint32_t) (getPhaseIncrement(440));
 
         m_ReconOSResource[0].type = RECONOS_TYPE_MBOX;
         m_ReconOSResource[0].ptr  = &m_CtrlStart;

@@ -24,6 +24,7 @@ public:
 
     float m_PhaseIncr;
     float m_Frequency;
+    float m_DutyCycle;
     bool m_active;
 
     DECLARE_COMPONENTNAME;
@@ -38,6 +39,7 @@ public:
 	virtual void process(void) = 0;
 
 	double getPhaseIncrement(float frequency);
+	double getPhaseIncrement_HW(float frequency);
 
 };
 
@@ -46,6 +48,29 @@ private:
     SquareSoundComponent& m_ObjRef;
 public:
     OnFrequencyChange(SquareSoundComponent& ref ) : m_ObjRef(ref){ }
+
+    void operator()(){
+        float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();
+
+        if(freq != m_ObjRef.m_Frequency){
+            LOG_INFO("Frequency changed: " << freq)
+            m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement(freq);
+            m_ObjRef.m_Frequency = freq;
+            if (freq == 0) {
+            	m_ObjRef.m_active = false;
+            }
+            else {
+            	m_ObjRef.m_active = true;
+            }
+        }
+    }
+};
+
+class OnDutyCycleChange : public ICallbackFunctor {
+private:
+    SquareSoundComponent& m_ObjRef;
+public:
+    OnDutyCycleChange(SquareSoundComponent& ref ) : m_ObjRef(ref){ }
 
     void operator()(){
         float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();

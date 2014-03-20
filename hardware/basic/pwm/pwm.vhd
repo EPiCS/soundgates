@@ -46,9 +46,9 @@ begin
 			
 			if (rising_edge(clk)) then    
 				if sample_in > sample_in2 then
-                    pwm <= (31 => '0', others => '1');
+                    pwm <= to_signed(integer(real(INT_MAX)), 32);
                 else
-                    pwm <= (others => '1');
+                    pwm <= to_signed(integer(real(INT_MIN)), 32);
                 end if;
 			end if;
 			
