@@ -1,7 +1,7 @@
 // JavaScript Document
 
 function initPage() {
-    $('.lightbox-popup-link').magnificPopup(
+    $('.test-popup-link').magnificPopup(
         { 
             type:'image'
         }
