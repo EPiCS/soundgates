@@ -48,7 +48,7 @@ public:
 
 #else
 
-class Noise_HW: public Noise{
+class Noise_HW: public NoiseSoundComponent{
 
 public:
     Noise_HW(std::vector<std::string>);
