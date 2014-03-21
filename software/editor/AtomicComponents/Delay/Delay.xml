@@ -11,11 +11,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="delay">
-				<PortMapping PortName="Delay" PortNumber="1"/>
-				<PortMapping PortName="SoundIn" PortNumber="2"/>
-				<PortMapping PortName="SoundOut" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="delay">
 				<PortMapping PortName="Delay" PortNumber="1"/>
 				<PortMapping PortName="SoundIn" PortNumber="2"/>

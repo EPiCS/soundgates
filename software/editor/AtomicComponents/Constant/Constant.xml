@@ -10,9 +10,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="const">
-				<PortMapping PortName="Value" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="const">
 			    <PortMapping PortName="Value" PortNumber="1"/>
 			</Implementation>

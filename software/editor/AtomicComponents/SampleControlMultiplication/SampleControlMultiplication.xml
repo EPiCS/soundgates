@@ -13,11 +13,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="mulsc">
-				<PortMapping PortName="Multiplicand" PortNumber="1"/>
-				<PortMapping PortName="Multiplier" PortNumber="2"/>
-				<PortMapping PortName="Product" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="mulsc">
 				<PortMapping PortName="Multiplicand" PortNumber="1"/>
 				<PortMapping PortName="Multiplier" PortNumber="2"/>
