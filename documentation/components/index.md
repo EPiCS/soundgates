@@ -20,17 +20,17 @@ All control values are of datatype float. If the control value is used for boole
 
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
-| Constant | const | - | - | <ol><li>Value</li></ol> | {{page.check}} <td colspan="2"> Constant control value</td> |
-| Control Addition | addcc | <ol><li>Summand1</li><li>Summand2</li></ol> | <ol><li>Result</li></ol> | - | ? <td colspan="2"> Adds two control values </td> |
-| Control Division | divcc | <ol><li>Dividend</li><li>Divisor</li></ol> | <ol><li>Quotient</li></ol> | - | ? <td colspan="2"> Divides *Dividend* by *Divisor* </td> |
-| Control Multiplication | mulcc | <ol><li>Multiplicand</li><li>Multiplier</li></ol> | <ol><li>Product</li></ol> | - | ? <td colspan="2"> Multiplies *Multiplicand* with *Multiplier* </td> |
-| Control Subtraction | subcc | <ol><li>Minuend</li><li>Subtrahend</li></ol> | <ol><li>Difference</li></ol> | - | ? <td colspan="2"> Subtracts *Subtrahend* from *Minuend* </td> |
+| Constant | const | - | - | <ol><li>Value</li></ol> | {{page.uncheck}} <td colspan="2"> Constant control value</td> |
+| Control Addition | addcc | <ol><li>Summand1</li><li>Summand2</li></ol> | <ol><li>Result</li></ol> | - | {{page.check}} <td colspan="2"> Adds two control values </td> |
+| Control Division | divcc | <ol><li>Dividend</li><li>Divisor</li></ol> | <ol><li>Quotient</li></ol> | - | {{page.uncheck}} <td colspan="2"> Divides *Dividend* by *Divisor* </td> |
+| Control Multiplication | mulcc | <ol><li>Multiplicand</li><li>Multiplier</li></ol> | <ol><li>Product</li></ol> | - | {{page.check}} <td colspan="2"> Multiplies *Multiplicand* with *Multiplier* </td> |
+| Control Subtraction | subcc | <ol><li>Minuend</li><li>Subtrahend</li></ol> | <ol><li>Difference</li></ol> | - | {{page.check}} <td colspan="2"> Subtracts *Subtrahend* from *Minuend* </td> |
 | Sample Addition | addss | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Adds two soundwave samplewise </td> |
-| Sample Control Addition | addsc | <ol><li class="sound">Sound1</li><li>Summand</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Adds a control value to each sound sample </td> |
-| Sample Control Multiplication | mulsc | <ol><li class="sound">Sound1</li><li>Multiplier</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Multiplies a control value witch each sound sample </td> |
-| Sample Control Addition | subsc | <ol><li class="sound">Sound1</li><li>Subtrahend</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Subtracts a control value from each sound sample </td> |
+| Sample Control Addition | addsc | <ol><li class="sound">Sound1</li><li>Summand</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Adds a control value to each sound sample </td> |
+| Sample Control Multiplication | mulsc | <ol><li class="sound">Sound1</li><li>Multiplier</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Multiplies a control value witch each sound sample </td> |
+| Sample Control Addition | subsc | <ol><li class="sound">Sound1</li><li>Subtrahend</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Subtracts a control value from each sound sample </td> |
 | Sample Multiplication | mulss | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Multiplies two soundwave samplewise </td> |
-| Sample Addition | subss | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Subtracts two soundwave samplewise </td> |
+| Sample Subtraction | subss | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li></ol> | <ol><li class="sound">Result</li></ol> | - | {{page.check}} <td colspan="2"> Subtracts two soundwave samplewise </td> |
 
 ### Control
 
@@ -47,7 +47,7 @@ All control values are of datatype float. If the control value is used for boole
 
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
-| Delay | delay | <ol><li>Delay</li><li class="sound">SoundIn</li></ol> | <ol><li class="sound">SoundOut</li></ol> | - | ? <td colspan="2"> Delays an incoming sound signal by *Delay* seconds </td> |
+| Delay | delay | <ol><li>Delay</li><li class="sound">SoundIn</li></ol> | <ol><li class="sound">SoundOut</li></ol> | - | {{page.uncheck}} <td colspan="2"> Delays an incoming sound signal by *Delay* seconds </td> |
 | Pulse Width Modulation | pwm | <ol><li class="sound">SoundIn1</li><li class="sound">SoundIn2</li></ol> | <ol><li class="sound">SoundOut</li></ol> | - | {{page.check}} <td colspan="2"> Compares both incoming sounds sample and returns a sample with maximum amplitude if the first is larger then the other or a sample with minimum amplitude otherwise </td> |
 
 
@@ -68,7 +68,7 @@ All control values are of datatype float. If the control value is used for boole
 
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
-| Mixer | mixer | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li><li>Bias</li></ol> | <ol><li class="sound">Output</li></ol> | - | {{page.check}} | Mixes together two waveforms, weighed by *Bias*</td> |
+| Mixer | mixer | <ol><li class="sound">Sound1</li><li class="sound">Sound2</li><li>Bias</li></ol> | <ol><li class="sound">Output</li></ol> | - | {{page.uncheck}} | Mixes together two waveforms, weighed by *Bias*</td> |
 | Recorder | adc | - | <ol><li class="sound">SoundOut</li></ol> | - | {{page.uncheck}} <td colspan="2"> Records sound from a microphone</td> |
 
 ### Logic
@@ -77,8 +77,8 @@ All control values are of datatype float. If the control value is used for boole
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
 | Accumulator	| accumulatorcc	| <ol><li>AccIn</li><li>Reset</li></ol> | <ol><li>Out</li></ol> | - | {{page.uncheck}} <td colspan="2"> Accumulates incoming control values and pushes them to the output.</td> |
 | AND		| and		| <ol><li>Value1</li><li>Value2</li></ol> | <ol><li>Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Boolean AND</td> |
-| Demultiplexer | demux | <ol><li>Data</li><li>Selector</li></ol> | <ol><li>Data1</li><li>Data2</li></ol> | - | ? <td colspan="2"> Puses the incoming *Data* to one of the outputs, depending on whether *Selector* is `true` or `false`</td> |
-| Multiplexer | mux | TODO Zum MUX gibt es noch keine XML Beschreibung im Editor! | op | p | hw <td colspan="2"> d</td> |
+| Demultiplexer | demux | <ol><li>Data</li><li>Selector</li></ol> | <ol><li>Data1</li><li>Data2</li></ol> | - | {{page.uncheck}} <td colspan="2"> Puses the incoming *Data* to one of the outputs, depending on whether *Selector* is `true` or `false`</td> |
+| Multiplexer | mux | TODO Zum MUX gibt es noch keine XML Beschreibung im Editor! | op | p | {{page.uncheck}} <td colspan="2"> d</td> |
 | NOT | not | <ol><li>Value</li></ol> | <ol><li>Negation</li></op> | - | {{page.uncheck}} <td colspan="2"> Logical NOT</td> |
 | OR	| or		| <ol><li>Value1</li><li>Value2</li></ol> | <ol><li>Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Boolean OR</td> |
 
@@ -108,7 +108,7 @@ All control values are of datatype float. If the control value is used for boole
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
 | White Noise | noise | - | <ol><li class="sound">Samples</li></ol> | - | {{page.check}} <td colspan="2"> Generates White noise</td> |
-| Wave Player | smplply | <ol><li>Trigger</li></ol> | <ol><li class="sound">Output</li></ol> | <ol><li>Filename</li></ol> | {{page.check}} <td colspan="2"> When triggered, plays the wave file specified in the parameter. The filename has to be relative to the waves directory.</td> |
+| Wave Player | smplply | <ol><li>Trigger</li></ol> | <ol><li class="sound">Output</li></ol> | <ol><li>Filename</li></ol> | {{page.uncheck}} <td colspan="2"> When triggered, plays the wave file specified in the parameter. The filename has to be relative to the waves directory.</td> |
 
 
 
