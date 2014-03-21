@@ -38,7 +38,7 @@ SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){
 
 void SawtoothSoundComponent_HW::init(){
 
-    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(*this)));
+    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange_HW(*this)));
 
 
     /* initialize reconos */
@@ -72,7 +72,7 @@ void SawtoothSoundComponent_HW::init(){
 
 void SawtoothSoundComponent_HW::process(){
     if (this->m_active) {
-        m_HWTParams[2] = (uint32_t) (m_PhaseIncr * SOUNDGATES_FIXED_PT_SCALE); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
 		mbox_put(&m_CtrlStart, SINUS_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
