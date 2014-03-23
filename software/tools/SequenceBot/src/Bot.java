@@ -31,20 +31,23 @@ public class Bot {
 	
 	static final int[] SCALE = new int[] { 0, 2, 3, 5, 7, 8, 10 };
 	static final int SCALE_LENGTH = 12;
-	//static int [] baseNoteImportances = new int [] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-
-	static int [] baseNoteImportances = new int [] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,20,80,20,20,20,80,20,80,80,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	
 	
 	static Score score;
-	
+
 	static final float CONFIG_BASE_NOTE_CHANGE_PROBABILITY = 1f;
+	static int baseNoteMin = 1;
+	static int baseNoteMax = 1;
+	
 	static final String CONFIG_RYTHM_SYNC_MESSAGE = "/rythmSync";
 	static boolean useRythmSync = false;
 
 	private static float[] frequencies = new float[128];
 	private static int [] notes;
 	
-
+	static int baseNoteMean = 30; 
+	static float baseNoteStandardDeviation = 1;
+	
 	static OSCPortOut sender;
 	static OSCPortIn receiver;
 	
@@ -53,6 +56,8 @@ public class Bot {
 	
 	static boolean playSequenceNow = false;
 	static Date currentSequenceEnd = Calendar.getInstance().getTime();
+
+	final static Random random = new Random();
 	
 	public static void main(String[] args) throws SocketException, UnknownHostException{
 		if (args.length == 0){
@@ -100,7 +105,6 @@ public class Bot {
 
 	
 
-		final Random random = new Random();
 
 		
 		final Sequence [][] voices = score.getVoices();
@@ -131,21 +135,19 @@ public class Bot {
 		}
 	}
 	
+	private static int getGaussian(double mean, double deviation, int min, int max){
+		double result = random.nextGaussian() * deviation + mean;
+		if (result < min){
+			return min;
+		} else if (result > max){
+			return max;
+		}
+		return (int) Math.round(result);
+	}
+	
 	private static int generateAndPlay(Random random, float [] positionProbabilities, Sequence [][] voices){
 		
-		int baseNoteSum = 0;
-		for (int i = 0; i < notes.length; i++){
-			baseNoteSum += baseNoteImportances[notes[i]];
-			
-		}
-		
-		float [] baseNoteProbabilites = new float [baseNoteImportances.length];
-		for (int i = 0; i < baseNoteImportances.length; i++){
-			baseNoteProbabilites[i] = (float)(baseNoteImportances[i]) / baseNoteSum;
-		}
-		
 		float nextPositionValue = random.nextFloat();
-		float nextBaseNoteValue = random.nextFloat();
 		
 		int nextPositionIndex = 0;
 		while(nextPositionValue > positionProbabilities[nextPositionIndex]){
@@ -155,17 +157,11 @@ public class Bot {
 				break;
 			}
 		}
-		int nextBaseNoteIndex = CONFIG_FIRST_BASE_NOTE;
+		
+		int nextBaseNoteIndex = 0;
 		if (random.nextFloat() < CONFIG_BASE_NOTE_CHANGE_PROBABILITY){
-			nextBaseNoteIndex = 0;
+			nextBaseNoteIndex = getGaussian(baseNoteMean, baseNoteStandardDeviation, baseNoteMin, baseNoteMax);;
 
-			while(nextBaseNoteValue > baseNoteProbabilites[notes[nextBaseNoteIndex]]){
-				nextBaseNoteValue -= baseNoteProbabilites[notes[nextBaseNoteIndex]];
-				nextBaseNoteIndex++;
-				if (nextBaseNoteIndex >= notes.length - 1){
-					break;
-				}
-			}
 			
 			System.out.println("Changed Basenote to: " + notes[nextBaseNoteIndex]);
 		}
@@ -260,6 +256,14 @@ public class Bot {
 		for (int i = 0; i < notes.length; i++){
 			notes [i] = noteList.get(i);
 		}
+		
+		baseNoteMin = 0;
+		baseNoteMax = notes.length - getMaxNote() - 1;
+	}
+	
+	private static int getMaxNote(){
+		//FIXME actually calculate
+		return 8;
 	}
 
 	public static void sendFloat(OSCPortOut sender, String componentName, float value) throws IOException{
