@@ -38,6 +38,7 @@ public:
 	virtual void process(void) = 0;
 
 	double getPhaseIncrement(float frequency);
+    double getPhaseIncrement_HW(float frequency);
 
 };
 
@@ -53,6 +54,29 @@ public:
         if(freq != m_ObjRef.m_Frequency){
             LOG_INFO("Frequency changed: " << freq)
             m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement(freq);
+            m_ObjRef.m_Frequency = freq;
+            if (freq == 0) {
+            	m_ObjRef.m_active = false;
+            }
+            else {
+            	m_ObjRef.m_active = true;
+            }
+        }
+    }
+};
+
+class OnFrequencyChange_HW : public ICallbackFunctor {
+private:
+    SawtoothSoundComponent& m_ObjRef;
+public:
+    OnFrequencyChange_HW(SawtoothSoundComponent& ref ) : m_ObjRef(ref){ }
+
+    void operator()(){
+        float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();
+
+        if(freq != m_ObjRef.m_Frequency){
+            LOG_INFO("Frequency changed: " << freq)
+            m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement_HW(freq);
             m_ObjRef.m_Frequency = freq;
             if (freq == 0) {
             	m_ObjRef.m_active = false;

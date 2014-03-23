@@ -1,50 +1,49 @@
 /*
- * SawtoothSoundComponent_HW.cpp
+ * SquareSoundComponent_HW.cpp
  *
  *  Created on: Nov 29, 2013
- *      Author: CaiusC
+ *      Author: Hendrik
  */
 
 
-#include "SawtoothSoundComponent_HW.h"
+#include "SquareSoundComponent_HW.h"
 
 #ifndef ZYNQ
 
-SawtoothSoundComponent_HW::SawtoothSoundComponent_HW(std::vector<std::string> params) : SawtoothSoundComponent(params){
+SquareSoundComponent_HW::SquareSoundComponent_HW(std::vector<std::string> params) : SquareSoundComponent(params){
 }
 
-SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){}
+SquareSoundComponent_HW::~SquareSoundComponent_HW(){}
 
 
 
-void SawtoothSoundComponent_HW::init(){ }
+void SquareSoundComponent_HW::init(){ }
 
-void SawtoothSoundComponent_HW::process(){ }
+void SquareSoundComponent_HW::process(){ }
 
 #else
 
-SawtoothSoundComponent_HW::SawtoothSoundComponent_HW(std::vector<std::string> params)
-    : SawtoothSoundComponent(params),
-    slot(SawtoothSoundComponent::name) {
+SquareSoundComponent_HW::SquareSoundComponent_HW(std::vector<std::string> params)
+    : SquareSoundComponent(params),
+    slot(SquareSoundComponent::name) {
 
     m_LocalBuffer = new char[Synthesizer::config::bytesPerBlock];
 
 
 }
 
-SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){
+SquareSoundComponent_HW::~SquareSoundComponent_HW(){
     delete m_LocalBuffer;
 }
 
-void SawtoothSoundComponent_HW::init(){
+void SquareSoundComponent_HW::init(){
 
-    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange_HW(*this)));
+    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(*this)));
 
 
     /* initialize reconos */
 
     if(slot.isValid()){
-        // TODO: Warum werden hier zwei message boxen benötigt!?
 
         /* initialize message boxes with 1 data word */
         mbox_init(&m_CtrlStart, 1);
@@ -54,6 +53,8 @@ void SawtoothSoundComponent_HW::init(){
 
         m_HWTParams[1]  = 0;
         m_HWTParams[2]  = (uint32_t) (getPhaseIncrement_HW(440));
+        m_HWTParams[3]  = (uint32_t) 0.5f * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[4]  = (uint32_t) 0.5f * SOUNDGATES_FIXED_PT_SCALE);
 
         m_ReconOSResource[0].type = RECONOS_TYPE_MBOX;
         m_ReconOSResource[0].ptr  = &m_CtrlStart;
@@ -70,9 +71,9 @@ void SawtoothSoundComponent_HW::init(){
     }
 }
 
-void SawtoothSoundComponent_HW::process(){
+void SquareSoundComponent_HW::process(){
     if (this->m_active) {
-        m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[2] = (uint32_t) (m_PhaseIncr * SOUNDGATES_FIXED_PT_SCALE); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
 		mbox_put(&m_CtrlStart, SINUS_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */

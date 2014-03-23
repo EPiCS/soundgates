@@ -1,50 +1,49 @@
 /*
- * SawtoothSoundComponent_HW.cpp
+ * TriangleImpl_HW.cpp
  *
  *  Created on: Nov 29, 2013
- *      Author: CaiusC
+ *      Author: hendrik
  */
 
 
-#include "SawtoothSoundComponent_HW.h"
+#include "TriangleSoundComponent_HW.h"
 
 #ifndef ZYNQ
 
-SawtoothSoundComponent_HW::SawtoothSoundComponent_HW(std::vector<std::string> params) : SawtoothSoundComponent(params){
+TriangleSoundComponent_HW::TriangleSoundComponent_HW(std::vector<std::string> params) : TriangleSoundComponent(params){
 }
 
-SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){}
+TriangleSoundComponent_HW::~TriangleSoundComponent_HW(){}
 
 
 
-void SawtoothSoundComponent_HW::init(){ }
+void TriangleSoundComponent_HW::init(){ }
 
-void SawtoothSoundComponent_HW::process(){ }
+void TriangleSoundComponent_HW::process(){ }
 
 #else
 
-SawtoothSoundComponent_HW::SawtoothSoundComponent_HW(std::vector<std::string> params)
-    : SawtoothSoundComponent(params),
-    slot(SawtoothSoundComponent::name) {
+TriangleSoundComponent_HW::TriangleSoundComponent_HW(std::vector<std::string> params)
+    : TriangleSoundComponent(params),
+    slot(TriangleSoundComponent::name) {
 
     m_LocalBuffer = new char[Synthesizer::config::bytesPerBlock];
 
-
 }
 
-SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){
+TriangleSoundComponent_HW::~TriangleSoundComponent_HW(){
     delete m_LocalBuffer;
 }
 
-void SawtoothSoundComponent_HW::init(){
 
-    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange_HW(*this)));
+void TriangleSoundComponent_HW::init(){
+
+    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(*this)));
 
 
     /* initialize reconos */
 
     if(slot.isValid()){
-        // TODO: Warum werden hier zwei message boxen benötigt!?
 
         /* initialize message boxes with 1 data word */
         mbox_init(&m_CtrlStart, 1);
@@ -70,9 +69,9 @@ void SawtoothSoundComponent_HW::init(){
     }
 }
 
-void SawtoothSoundComponent_HW::process(){
+void TriangleSoundComponent_HW::process(){
     if (this->m_active) {
-        m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[2] = (uint32_t) (m_PhaseIncr * SOUNDGATES_FIXED_PT_SCALE); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
 		mbox_put(&m_CtrlStart, SINUS_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */

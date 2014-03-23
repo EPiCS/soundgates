@@ -124,7 +124,9 @@ architecture Behavioral of hwt_amplifier is
     
     signal osif_ctrl_signal : std_logic_vector(31 downto 0);
     signal ignore : std_logic_vector(31 downto 0);
-    
+	 
+	signal input_fixed_point : std_logic_vector(59 downto 0) := (others => '0');
+	signal output_fixed_point : std_logic_vector(90 downto 0) := (others => '0');    
     
     constant o_RAMAddr_max : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) := (others=>'1');
 
@@ -323,7 +325,7 @@ begin
             when STATE_READ2 => 
                 -- store input samples in local ram
 				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr2, std_logic_vector(to_unsigned(C_MAX_SAMPLE_COUNT,32)), 
-                    4, done); -- always in bytes
+                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES/2,24)), done); -- always in bytes
 				if done then
 				    state   <= STATE_PROCESS;
                     o_RAMAddr_amplifier     <= (others => '0');   -- start with the first sample

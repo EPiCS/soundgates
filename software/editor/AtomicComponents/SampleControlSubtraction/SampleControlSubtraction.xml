@@ -13,11 +13,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="subsc">
-				<PortMapping PortName="Minuend" PortNumber="1"/>
-				<PortMapping PortName="Subtrahend" PortNumber="2"/>
-				<PortMapping PortName="Difference" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="subsc">
 				<PortMapping PortName="Minuend" PortNumber="1"/>
 				<PortMapping PortName="Subtrahend" PortNumber="2"/>

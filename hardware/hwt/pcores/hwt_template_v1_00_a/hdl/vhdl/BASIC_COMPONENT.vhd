@@ -6,12 +6,13 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - add.vhd
+--   title:        VHDL module - BASIC_COMPONENT.vhd
 --
 --   project:      PG-Soundgates
 --   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  adds up two samples or control units
+--   description:  basic component example, which is used in the hardware
+--                 thread
 --
 -- ======================================================================
     
@@ -23,34 +24,35 @@ use IEEE.MATH_REAL.ALL;
 library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 
-entity add is
+entity BASIC_COMPONENT is
 port(                
-        clk       : in  std_logic;
-        rst       : in  std_logic;
-        ce        : in  std_logic;
-        sample_in : in  signed(31 downto 0);
-	    sample_in2: in  signed(31 downto 0);       
-	    output    : out signed(31 downto 0)
+        clk     : in  std_logic;
+        rst     : in  std_logic;
+        ce      : in  std_logic;
+        input   : in  signed(31 downto 0);
+        param   : in  signed(31 downto 0); 
+        output  : out signed(31 downto 0)
     );
 
-end add;
+end BASIC_COMPONENT;
 
-architecture Behavioral of add is
-  
+architecture Behavioral of BASIC_COMPONENT is
+
+		  
 	begin
-		adder : process (clk, rst, ce)
+		            
+        CALC : process (clk, rst)
         begin
+            if rst = '1' then
+                x    <= offset;
+            else
             if rising_edge(clk) then
                 if ce = '1' then
-                    if sample_in + sample_in2 > to_signed(integer(real(INT_MAX)), 32) then 
-                        output <= to_signed(integer(real(INT_MAX)), 32);
-                    elsif sample_in + sample_in2 < to_signed(integer(real(INT_MIN)), 32) then 
-                        output <= to_signed(integer(real(INT_MIN)), 32);
-                    else
-                        output <= sample_in + sample_in2;
-                    end if;
+                    --do your calculations here
+                    
                 end if;
             end if;
-        end process;
+				end if;
+        end process;  
         
 end Behavioral;
