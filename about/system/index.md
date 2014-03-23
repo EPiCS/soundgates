@@ -13,8 +13,14 @@ A completed patch can be exported as a TGF file (included in a ZIP archive) that
 The Cosmic Android App is usually the last step in the Soundgates system workflow.
 It is used to control the patches that are running on the synthesizer.
 Therefore the first step to use the App is to connect to the synthesizer:  
-<p align="center">![Cosmic App - Connect](http://pc2.github.io/pg-soundgates/assets/images/android_connect_fragment.png)  </p>
-Next the user needs to choose which components he wants to control and by which sensor:  
-<p align="center">![Cosmic App - Connect](http://pc2.github.io/pg-soundgates/assets/images/android_select_fragment.png)  </p>
-The last fragment of the App shows informations about the interaction with the system and allows to set parameters:  
-<p align="center">![Cosmic App - Connect](http://pc2.github.io/pg-soundgates/assets/images/android_interaction_fragment.png)  </p>
+<div align="center">
+<img alt="Cosmic App - Connect" src="http://pc2.github.io/pg-soundgates/assets/images/android_connect_fragment.png" />
+</div>  
+<p>Next the user needs to choose which components he wants to control and by which sensor (or other interaction method):</p>  
+<div align="center"> 
+<img alt="Cosmic App - Select" src="http://pc2.github.io/pg-soundgates/assets/images/android_select_fragment.png" />
+</div>  
+<p>The last fragment of the App shows informations about the interaction with the system and allows to set parameters:</p>  
+<div align="center">
+<img alt="Cosmic App - Interact" src="http://pc2.github.io/pg-soundgates/assets/images/android_interaction_fragment.png" />
+</div>
