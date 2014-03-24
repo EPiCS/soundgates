@@ -134,7 +134,7 @@ The tag "Ports" contains the list of the component's ports. Each port has its ow
 	</Ports>
 ```
 
-The tag "Properties" is optional since only some components have static properties. Each property has a name (tag "Name"). A property can have an initial value (tag "InitialValue") which is optional. Their are two kinds of static properties: 
+The tag "Properties" is optional since only some components have static properties. Each property has a name (attribute "Name"). A property can have an initial value (attribute "InitialValue") which is optional. Their are two kinds of static properties: 
 
 1. Float properties are described with the tag "FloatProperty". The value of such a property is a float number.
 2. String properties are described with the tag "UserStringProperty". The value of such a property can be an arbitrary text. A string property can have predefined options, as you see in the sound component "FIR":
