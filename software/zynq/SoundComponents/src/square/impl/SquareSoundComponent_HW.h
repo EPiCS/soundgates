@@ -1,9 +1,3 @@
-/*
- * SquareSoundComponent_HW.h
- *
- *  Created on: Nov 29, 2013
- *      Author: Hendrik
- */
 
 #ifndef SQUAREIMPL_HW_H_
 #define SQUAREIMPL_HW_H_

@@ -61,7 +61,7 @@
     constant adsr_START      : std_logic_vector(31 downto 0) := x"0000000F";
     constant adsr_EXIT       : std_logic_vector(31 downto 0) := x"000000F0";
     
-	 signal bang      : signed(31 downto 0) := x"0000000F";
+	 signal bang      : signed(31 downto 0) := x"00000010";
 	 signal bang_stop : signed(31 downto 0) := x"000000F0";
 	 
 	 
