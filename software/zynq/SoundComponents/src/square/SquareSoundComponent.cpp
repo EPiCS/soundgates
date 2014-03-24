@@ -11,7 +11,7 @@
 
 DEFINE_COMPONENTNAME(SquareSoundComponent, "square")
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(SquareSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(SquareSoundComponent);
 
 SquareSoundComponent::SquareSoundComponent(std::vector<std::string> params) :
 		SoundComponentImpl(params)

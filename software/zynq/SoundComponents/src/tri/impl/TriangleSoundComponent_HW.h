@@ -2,11 +2,11 @@
  * TriangleImpl_HW.h
  *
  *  Created on: Nov 29, 2013
- *      Author: hendrik
+ *      Author: lukas
  */
 
-#ifndef TriangleIMPL_HW_H_
-#define TriangleIMPL_HW_H_
+#ifndef TRIANGLEIMPL_HW_H_
+#define TRIANGLEIMPL_HW_H_
 
 
 #include "../TriangleSoundComponent.h"
@@ -63,4 +63,4 @@ public:
 
 #endif
 
-#endif /* TriangleIMPL_HW_H_ */
+#endif /* TRIANGLEIMPL_HW_H_ */
