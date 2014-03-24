@@ -45,7 +45,61 @@ The makefile for a component only needs to include makefiles/common.mk, specify 
 Note that you must have the core library and includes (libsynthesizercore) in your SoundComponents projects to build components, which described in the [project settings](https://github.com/pc2/pg-soundgates/wiki/Cplusplus-project-settings).
 
 # Hardware implementation
-What steps are necessary to bring the component to an FPGA?
+This tutorial is based on the template for Hardware Thread sound components which you can find [here](https://github.com/pc2/pg-soundgates/tree/development/hardware/hwt/pcores/hwt_template_v1_00_a/hdl/vhdl).
+
+## Create Basic VHDL Component
+
+All your component needs is one (or more) _output_ and one _enable_ port. Additionally one or more input ports are possible. 
+
+For the following we assume, that we already have an inplemented component (`BASIC_COMPONENT`) with the following ports.
+
+* `clk : in std_logic;`
+* `rst : in std_logic;`
+* `ce : in std_logic;`
+* `input : in signed(31 downto 0);` for incoming samples
+* `param : in signed(31 downto 0);` as another random parameter
+* `output : in signed(31 downto 0);` for modified samples
+
+
+## Embed Basic Component into ReConOS Hardware Thread
+### General Functionality
+Each HWT is attached to a FIFO in order to receive data from the Synthesizer. In order to use them for calculations, the HWT copies this data to its local RAM, where the samples, parameters etc are read as required.
+
+### General Structure
+The HWT's processing takes place in the state machine in the process `HWT_CTRL_FSM_PROC`. Basically, the FSM consists of the following states:
+* `STATE_IDLE`, where the HWT waits for the Synthesizer to start the HWT
+* `STATE_REFRESH_HWT_ARGS`, where the HWT loads the Synthesizer's data (parameters etc) to local signals
+* `STATE_READ`, where the HWT loads the incoming samples to local RAM
+* `STATE_PROCESS`, where the basic component is enabled to create/modify samples
+* `STATE_WRITE_MEM`, where the created/modified samples are written back to the FIFO
+* `STATE_NOTIFY`, where the Synthesizer is informed, that the HWT is finished
+* `STATE_EXIT`, where the HWT is terminated
+
+### Example
+You can see the basic component's embedment [here](https://github.com/pc2/pg-soundgates/blob/development/hardware/hwt/pcores/hwt_template_v1_00_a/hdl/vhdl/hwt_template.vhd). 
+
+### How does the FSM work?
+* `STATE_IDLE`: Wait for a Messagebox from the Synthesizer.
+* `STATE_REFRESH_HWT_ARGS`: The HWT's arguments/parameters are refreshed. In this example, they arguments contain `sourceaddress`, where samples are read, `destaddress`, where samples are written and `param`, which is a random argument. These arguments are stored in the signals `hwtio.argv(0)`, `hwtio.argv(1)` and `hwtio.argv(3)`.
+* `STATE_READ`: According to the source address in `hwtio.argv(0)` 64 samples are read into local RAM
+* `STATE_PROCESS`: The signal `o_RAMAddr_hwt` is the address to the current sample in the local RAM, which is increased after enabling the basic component. This address is pointing to a sample stored in the signal `i_RAMData_hwt`. In order to write a sample, the signal `o_RAMData_hwt` needs to be assigned.
+* `STATE_WRITE_MEM`: Write local RAM back to FIFO
+* `STATE_NOTIFY`: Notify Synthesizer
+
+### How to bind signals to the component's ports?
+* `clk` and `rst` are wired to the Clock and Reset signal from the HWT
+* `ce` is wired to a local signal, also called `ce`
+* `input` is wired to `i_RAMData_hwt`, which depicts the current value from the local RAM, on which `o_RAMAddr_hwt` points
+* `param` is wired to `hwtio.argv(2)`
+* `output` is a driver for the signal `o_RAMData_hwt`. This stores the modified sample to the local RAM.
+
+## Create a PCore
+In order to use your HWT, you need to create a directory [here](https://github.com/pc2/pg-soundgates/tree/development/hardware/hwt/pcores), which contains the following to directories:
+
+* `data` - adjust MPD, PAO and TCL files and store them here
+* `hdl/vhdl` -  your VHDL files (basic component, HWT) are stored here
+
+## Create Drivers for the Synthesizer
 
 # Pure Data simulation
 What do I have to do to create a pd equivalent to our component?

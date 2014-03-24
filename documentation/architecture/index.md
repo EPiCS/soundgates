@@ -1,15 +1,23 @@
 ---
 title: Synthesizer Architecture
 layout: page
----
-# Synthesizer Architecture
 
+---
+![FOO]({{site.url}}/assets/images/slider_architecture.png)
+
+# Synthesizer Architecture
 
 ## Introduction
 
-The _Synthesizer_ is a dynamic data flow graph processing engine. The Synthesizer is designed as a framework such that it can be extended by dsp plugins (e.g. filters, oscillators, arithmetic components and so on). The framework also  provides some internal interfaces where it can be extended by other developers (e.g. user interfaces services).
+The _Synthesizer_ is a dynamic data flow graph processing engine. The Synthesizer is designed as a framework such that it can be extended by dsp _plugins_ (e.g. filters, oscillators, arithmetic components and so on). The framework also  provides some internal interfaces where it can be extended by other developers (e.g. user interfaces services).
 
-In the following the parts of the framework will explained in more detail.
+In the following the parts of the framework will explained in more detail. Click the class diagram for a better overview:
+
+<div style="text-align:center; margin-top:20px; margin-bottom:20px;">
+    <a class="lightbox-popup-link" href="{{site.url}}/assets/images/Synthesizer.svg" title="Synthesizer architecture class diagram">
+	    <img src="{{site.url}}/assets/images/Synthesizer.svg" height="400" width="520">
+    </a>
+</div>
 
 ## SoundComponent, Links and Ports
 
@@ -34,8 +42,4 @@ A Patch object is the main hub for all sound components and the links between th
 ## SoundgatesConfig
 
 The `SoundgatesConfig` is an interface to the configuration values of the Synthesizer. It is a wrapper around ` boost::property_tree`, therefore it can be easily extended to other file formats and properties. A value in the configuration is accessed by the enumaration value via `SoundgatesConfig::getInstance().get<datatype>(ENUM)`, which is sould be defined in the `SoundgatesConfig`-header file. The search path for configuration files is relative to the Synthesizer: `.\config\config.xml`.
-
-
-
-
 
