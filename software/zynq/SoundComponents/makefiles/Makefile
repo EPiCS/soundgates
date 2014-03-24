@@ -1,4 +1,5 @@
-SoundComponents += accumulatorcc \
+SoundComponents += accumulator \
+                  accumulatorcc \
                   addss \
 				  addsc \
 				  addcc \
