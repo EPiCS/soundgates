@@ -114,17 +114,20 @@ To use a sound component in the editor you need a XML file that contains the des
 
 I will explain the concrete syntax of such a XML file on an example. Consider the sound component fir filter. The first tag is the "Type" tag which contains the type of the component.
 
-```<Type> FIR </Type>
+```
+	<Type> FIR </Type>
 ```
 
 The next tag "Category" is used in the editor to put the components in categories. If the XML description does not have this tag, the component is put into the category "General".
 
-```<Category> Filter </Category>
+```
+	<Category> Filter </Category>
 ```
 
 The tag "Ports" contains the list of the component's ports. Each port has its own tag "Port". It has attributes "Name", "DataType" and "Direction".
 
-``` <Ports>
+``` 
+	<Ports>
 		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
 		<Port DataType="CONTROL" Direction="IN" Name="CutoffFrequency"/>
 		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
@@ -136,7 +139,8 @@ The tag "Properties" is optional since only some components have static properti
 1. Float properties are described with the tag "FloatProperty". The value of such a property is a float number.
 2. String properties are described with the tag "UserStringProperty". The value of such a property can be an arbitrary text. A string property can have predefined options, as you see in the sound component "FIR":
 
-```	<Properties>
+```	
+	<Properties>
 		<UserStringProperty InitialValue="Lowpass" Name="FilterType" Options="Lowpass|Highpass"/>
 	</Properties>
 ```
@@ -145,7 +149,8 @@ The options must be separated with "|". The initial value must be one of the opt
 
 The tag "Code" contains informations for the execution of the component, in the simulation and in the synthesizer. The tag "Simulation" is created by the Atomic Builder. The tag "Device" contains the information that are used by the Soundgates synthesizer. It can have one or two "Implementation" tags. Such a tag stands either for the software implementation (indicated by the type "sw") or for the hardware implementation (indicated by the type "hw"). An implementation has the attribute "Name" which is the internal name of the component and is used e.g. in the TGF file.
 
-```	<Code>
+```	
+	<Code>
 		<Simulation/>
 		<Device>
 			<Implementation type="sw" name="fir">
