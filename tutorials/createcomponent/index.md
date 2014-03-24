@@ -51,4 +51,12 @@ What steps are necessary to bring the component to an FPGA?
 What do I have to do to create a pd equivalent to our component?
 
 # Editor integration
-How do I make the component appear in our editor?
+To use a sound component in the editor you need a XML file that contains the description of it. The XML file contains the following informations:  
+- Name
+- Ports with their attributes
+- Internal name(s)
+- Port mappings for the software and the hardware implementations  
+
+I will explain the concrete syntax of such a XML file on an example. Consider the sound component "Mixer". The first tag is the "Type" tag which contains the type of the component. This component type is used in the editor.
+```<Type> FIR </Type>
+```
