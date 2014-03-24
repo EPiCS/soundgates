@@ -29,3 +29,7 @@ ADSRSoundComponent::ADSRSoundComponent(std::vector<std::string> params) : SoundC
 
 ADSRSoundComponent::~ADSRSoundComponent() {}
 
+double ADSRSoundComponent::getIncrement_HW(int msec)
+{
+	return (1000/(double)msec)/44100;
+}
