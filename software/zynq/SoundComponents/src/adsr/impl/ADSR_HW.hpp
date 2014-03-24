@@ -5,7 +5,7 @@
 #ifndef ADSR_HW_HPP_
 #define ADSR_HW_HPP_
 
-#include "../ADSR.hpp"
+#include "../ADSRSoundComponent.hpp"
 #include <HWSlot.h>
 #include <HWTParameters.h>
 
@@ -22,7 +22,7 @@ extern "C"{
 #define ADSR_RELEASED(a, b) a > 0 && b == 0
 
 
-class ADSR_HW: public ADSR{
+class ADSR_HW: public ADSRSoundComponent{
 
 private:
 
@@ -93,7 +93,7 @@ public:
                 LOG_DEBUG("ADSR Released");
                 m_HWTParams.args[2] = (uint32_t) x0000000F;
                 m_HWTParams.args[3] = (uint32_t) xFFFFFFFF;
-                currTrigger = 0;
+                currTrigger = 1;
             }
 
         m_LastTrigger = trigger;

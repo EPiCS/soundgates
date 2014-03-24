@@ -28,3 +28,8 @@ Ramp::Ramp(std::vector<std::string> params) : SoundComponentImpl(params) {
 
 Ramp::~Ramp() {}
 
+double Ramp::getIncrement_HW(int msec)
+{
+	return (1000/(double)msec)/44100;
+}
+

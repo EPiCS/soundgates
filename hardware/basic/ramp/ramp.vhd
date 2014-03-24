@@ -42,7 +42,7 @@ architecture Behavioral of ramp is
 	 signal state : states := s_idle;
 	 signal s_one : signed (31 downto 0) := to_signed(integer(real(1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
 	 signal s_zero : signed (31 downto 0) := to_signed(integer(real(0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);	
-    constant c_Bang : signed (31 downto 0) := x"0000000F";
+    constant c_Bang : std_logic_vector (31 downto 0) := x"0000000F";
 
     signal x        : signed (31 downto 0) := to_signed(integer(real( 0.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
 		  
@@ -58,7 +58,7 @@ architecture Behavioral of ramp is
             else
                 if rising_edge(clk) then
                     if ce = '1' then
-                        if bang = c_Bang then
+                        if bang = signed(c_Bang) then
                             state <= s_increasing;
                         end if;
 
