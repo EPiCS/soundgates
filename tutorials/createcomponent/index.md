@@ -66,16 +66,27 @@ For the following we assume, that we already have an inplemented component (`BAS
 Each HWT is attached to a FIFO in order to receive data from the Synthesizer. In order to use them for calculations, the HWT copies this data to its local RAM, where the samples, parameters etc are read as required.
 
 ### General Structure
-The HWT's processing takes place in the state machine in the process `HWT_CTRL_FSM_PROC`. Basically, the FSM consists of the following states:
-* `STATE_IDLE`, where the HWT waits for the Synthesizer to start the HWT
-* `STATE_REFRESH_HWT_ARGS`, where the HWT loads the Synthesizer's data (parameters etc) to local signals
-* `STATE_READ`, where the HWT loads the incoming samples to local RAM
-* `STATE_PROCESS`, where the basic component is enabled to create/modify samples
-* `STATE_WRITE_MEM`, where the created/modified samples are written back to the FIFO
-* `STATE_NOTIFY`, where the Synthesizer is informed, that the HWT is finished
-* `STATE_EXIT`, where the HWT is terminated
+
+Basically, the FSM consists of the following states:
+* `IDLE`, where the HWT waits for the Synthesizer to start the HWT
+* `REFRESH ARGUMENTS`, where the HWT loads the Synthesizer's data (parameters etc) to local signals
+* `CHECK TRIGGER`, where the HWT checks if it has been triggered yet
+* `READ SAMPLES`, where the HWT loads the incoming samples to local RAM
+* `PROCESS`, where the basic component is enabled to create/modify samples
+* `WRITE TO MEMORY`, where the created/modified samples are written back to the FIFO
+* `NOTIFY`, where the Synthesizer is informed, that the HWT is finished
+* `EXIT`, where the HWT is terminated
+
+<div>
+   <img src="./state%20machine.png" alt="HWT State Machines">
+    Figure 1: (a) FSM for generating samples without input (b) FSM for manipulating input samples (c) FSM for triggered samples manipulation
+</div>
+
+
+As depicted in Figure 1, there are several ways to create HWT. Figure 1a is used for HWTs that only create output samples e.g. a Sawtooth wave generator. Hence, it does not need states for reading input samples or for checking triggers. In the case that there are samples to comsume, the HWT needs a Read Samples state as depicted in Figure 1b. If there are samples to comsume, which needs to be triggered, one needs a HWT structure as shown in Figure 1c. Samples are only read and processed on if the HWT is triggered.
 
 ### Example
+This example works with the HWT structure depicted in Figure 1b, as it consumes and manipulates samples.
 You can see the basic component's embedment [here](https://github.com/pc2/pg-soundgates/blob/development/hardware/hwt/pcores/hwt_template_v1_00_a/hdl/vhdl/hwt_template.vhd). 
 
 ### How does the FSM work?
@@ -98,8 +109,6 @@ In order to use your HWT, you need to create a directory [here](https://github.c
 
 * `data` - adjust MPD, PAO and TCL files and store them here
 * `hdl/vhdl` -  your VHDL files (basic component, HWT) are stored here
-
-## Create Drivers for the Synthesizer
 
 # Pure Data simulation
 What do I have to do to create a pd equivalent to our component?
