@@ -52,7 +52,7 @@ void SquareSoundComponent_HW::init(){
         m_HWTParams[0] = (uint32_t) m_LocalBuffer;
 
         m_HWTParams[1]  = 0;
-        m_HWTParams[2]  = (uint32_t) (getPhaseIncrement(440) * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[2]  = (uint32_t) (getPhaseIncrement_HW(440));
         m_HWTParams[3]  = (uint32_t) 0.5f * SOUNDGATES_FIXED_PT_SCALE);
         m_HWTParams[4]  = (uint32_t) 0.5f * SOUNDGATES_FIXED_PT_SCALE);
 

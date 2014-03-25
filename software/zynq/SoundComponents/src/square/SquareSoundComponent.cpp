@@ -46,3 +46,9 @@ double SquareSoundComponent::getPhaseIncrement(float frequency)
 	return (2 * M_PI / Synthesizer::config::samplerate) * frequency;
 
 }
+
+double SquareSoundComponent::getPhaseIncrement_HW(float frequency){
+
+	return  ( frequency / Synthesizer::config::samplerate) ;
+
+}

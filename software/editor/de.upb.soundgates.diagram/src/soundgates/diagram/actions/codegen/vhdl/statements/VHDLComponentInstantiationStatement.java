@@ -48,8 +48,9 @@ public class VHDLComponentInstantiationStatement extends VHDLElement implements 
 				rep.add(element.getStringRepresentation().indent(4));
 			}
 			if(iter.hasNext()){
-				rep.addLine(",");
+				rep.add(",");
 			}
+			rep.add("\n");
 		}
 		
 		rep.addLine(");");

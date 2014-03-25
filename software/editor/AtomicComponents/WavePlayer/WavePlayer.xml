@@ -11,10 +11,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="smplply">
-				<PortMapping PortName="Trigger" PortNumber="1"/>
-				<PortMapping PortName="Output" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="smplply">
 				<PortMapping PortName="Trigger" PortNumber="1"/>
 				<PortMapping PortName="Output" PortNumber="1"/>

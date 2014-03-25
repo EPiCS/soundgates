@@ -47,6 +47,7 @@ import soundgates.diagram.actions.codegen.vhdl.decl.VHDLSignalDeclaration;
 import soundgates.diagram.actions.codegen.vhdl.decl.VHDLVariableDeclaration;
 import soundgates.diagram.actions.codegen.vhdl.decl.util.VHDLUtils;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLComponentInstantiationStatement;
+import soundgates.diagram.actions.codegen.vhdl.statements.VHDLProcedureCallStatement;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLProcessStatement;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLSequentialStatement;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLSignalAssignmentStatement;
@@ -387,16 +388,19 @@ public class VHDLExportAction implements IObjectActionDelegate{
 		VHDLProcessStatement	memctrl_reconos		= null;
 		VHDLProcessStatement	memctrl_user		= null;
 		
-		VHDLSignalDeclaration 	o_ram_reconos_addr 	= null;		// list index 0
-		VHDLSignalDeclaration   o_ram_reconos_addr2 = null;		// list index 1
-		VHDLSignalDeclaration 	i_ram_reconos_data 	= null;		// list index 2
-		VHDLSignalDeclaration 	o_ram_reconos_data 	= null;		// list index 3
-		VHDLSignalDeclaration 	o_ram_reconos_we 	= null;		// list index 4
+		VHDLSignalDeclaration 	o_ram_reconos_addr 	= null;		// list index  0
+		VHDLSignalDeclaration   o_ram_reconos_addr2 = null;		// list index  1
+		VHDLSignalDeclaration 	i_ram_reconos_data 	= null;		// list index  2
+		VHDLSignalDeclaration 	o_ram_reconos_data 	= null;		// list index  3
+		VHDLSignalDeclaration 	o_ram_reconos_we 	= null;		// list index  4
 		
-		VHDLSignalDeclaration 	o_ram_user_addr 	= null;		// list index 5
-		VHDLSignalDeclaration 	i_ram_user_data 	= null;		// list index 6
-		VHDLSignalDeclaration 	o_ram_user_data 	= null;		// list index 7
-		VHDLSignalDeclaration 	o_ram_user_we 		= null;		// list index 8
+		VHDLSignalDeclaration 	o_ram_user_addr 	= null;		// list index  5
+		VHDLSignalDeclaration 	i_ram_user_data 	= null;		// list index  6
+		VHDLSignalDeclaration 	o_ram_user_data 	= null;		// list index  7
+		VHDLSignalDeclaration 	o_ram_user_we 		= null;		// list index  8
+		
+		VHDLSignalDeclaration	i_ram_port			= null;		// list index  9
+		VHDLSignalDeclaration	o_ram_port			= null;		// list index 10	
 		
 		VHDLVariableDeclaration shared_varaible 	= null;
 				
@@ -436,14 +440,34 @@ public class VHDLExportAction implements IObjectActionDelegate{
 			o_ram_reconos_we = new VHDLSignalDeclaration("o_RAM_RECONOS_WE_" + port.getName(), 
 									new VHDLDatatype(VHDLStandardDataType.STD_LOGIC.name()));
 		
+			/* Create i/o ram handle */
+			
+			i_ram_port		= new VHDLSignalDeclaration("i_ram_" + port.getName(), new VHDLDatatype("i_ram_t"));
+			o_ram_port		= new VHDLSignalDeclaration("o_ram_" + port.getName(), new VHDLDatatype("o_ram_t"));
+			
+			/* Create signal translate statement */
 			VHDLSignalAssignmentStatement addr_translate_stmt = new VHDLSignalAssignmentStatement(o_ram_reconos_addr, o_ram_reconos_addr2, new VHDLRange("(32-C_LOCAL_RAM_ADDRESS_WIDTH)", "31", VHDLRange.Direction.TO));
-
+			
 			returnval.add(o_ram_reconos_addr);
 			returnval.add(o_ram_reconos_addr2);
 			returnval.add(o_ram_reconos_data);
 			returnval.add(i_ram_reconos_data);
 			returnval.add(o_ram_reconos_we);
+			returnval.add(i_ram_port);
+			returnval.add(o_ram_port);
 			
+			ArrayList<String>			ram_setup_args = new ArrayList<String>();
+			
+			ram_setup_args.add(i_ram_port.getName());
+			ram_setup_args.add(o_ram_port.getName());
+			ram_setup_args.add(o_ram_reconos_addr2.getName());	// addr
+			ram_setup_args.add(o_ram_reconos_we.getName());		// write enable
+			ram_setup_args.add(o_ram_reconos_data.getName());	// out  data
+			ram_setup_args.add(i_ram_reconos_data.getName());	// in   data
+			
+			VHDLProcedureCallStatement	ram_setup_call = new VHDLProcedureCallStatement("ram_setup", ram_setup_args);
+			
+			hwtentity.addElement(ram_setup_call);
 			hwtentity.addElement(addr_translate_stmt);
 			hwtentity.addElement(o_ram_reconos_addr);
 			hwtentity.addElement(o_ram_reconos_addr2);

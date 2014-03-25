@@ -6,6 +6,7 @@ import soundgates.diagram.actions.codegen.vhdl.decl.VHDLComponentDeclaration;
 import soundgates.diagram.actions.codegen.vhdl.decl.VHDLSignalDeclaration;
 import soundgates.diagram.actions.codegen.vhdl.decl.VHDLVariableDeclaration;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLComponentInstantiationStatement;
+import soundgates.diagram.actions.codegen.vhdl.statements.VHDLProcedureCallStatement;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLProcessStatement;
 import soundgates.diagram.actions.codegen.vhdl.statements.VHDLSignalAssignmentStatement;
 
@@ -96,8 +97,21 @@ public class VHDLEntity extends VHDLElement {
 				
 				for(int offset : offsetIndicies)
 				{
-					template.add(offset, element.getStringRepresentation().pack().indent(4).toString());
+					template.add("\n");
 					template.add(offset, "----------------------------------------------------------------\n");
+					template.add(offset, element.getStringRepresentation().pack().indent(4).toString());
+				}
+			}
+			
+			if(element instanceof VHDLProcedureCallStatement){
+				
+				offsetIndicies = template.getStringOffset(templateArchitectureBegin);
+				
+				for(int offset : offsetIndicies)
+				{	
+					template.add("\n");
+					template.add(offset, "----------------------------------------------------------------\n");
+					template.add(offset, element.getStringRepresentation().pack().indent(4).toString());				
 				}
 			}
 			
@@ -106,7 +120,9 @@ public class VHDLEntity extends VHDLElement {
 				offsetIndicies = template.getStringOffset(templateComponentInstPlaceHolder);
 				
 				for(int offset : offsetIndicies)
-				{					
+				{
+					template.add("\n");
+					template.add(offset, "----------------------------------------------------------------\n");
 					template.add(offset, element.getStringRepresentation().pack().indent(4).toString());				
 				}
 			}

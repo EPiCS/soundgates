@@ -64,18 +64,20 @@ architecture Behavioral of ramp is
 
 		                case state is
 			                when s_increasing =>
-				                x <= x + incr;
-				                if x >= s_one then
+				                if x >= s_one - incr then
 					                 state <= s_decreasing;
 										  x<=s_one;
+									 else
+										  x <= x + incr;
 				                end if;
 			                when s_decreasing => 
-				                x <= x - incr2;
-				                if x <= s_zero then
+				                if x <= s_zero + incr2 then
 					                state <= s_exit;
 										 x<=s_zero;
+									 else
+										 x <= x - incr2;
 				                end if; 
-                            when s_exit =>
+                         when s_exit =>
 								    state <= s_idle;
 								 when s_idle =>
 									-- nothing

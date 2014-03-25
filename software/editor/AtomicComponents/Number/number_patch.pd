@@ -1,8 +1,0 @@
-#N canvas 0 49 718 745 10;
-#X obj 58 167 outlet;
-#X obj 62 55 inlet;
-#X obj 57 107 float;
-#X text 123 10 inports NumberIn;
-#X text 0 0 outports NumberOut;
-#X connect 1 0 2 0;
-#X connect 2 0 0 0;

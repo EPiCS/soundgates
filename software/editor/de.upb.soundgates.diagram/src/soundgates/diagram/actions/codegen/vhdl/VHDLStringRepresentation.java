@@ -103,7 +103,7 @@ public class VHDLStringRepresentation extends ArrayList<String> {
 		this.set(index, indent + elem);
 	}
 	
-	private String getIndentString(int length){
+	public static String getIndentString(int length){
 		String indent = "";
 		while(length-- > 0){
 			indent += delimiter;			

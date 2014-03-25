@@ -29,6 +29,7 @@ port(
         clk     : in  std_logic;
         rst     : in  std_logic;
         ce      : in  std_logic;
+        input   : in  signed(31 downto 0);
         param   : in  signed(31 downto 0); 
         output  : out signed(31 downto 0)
     );
