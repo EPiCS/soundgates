@@ -20,7 +20,8 @@ public enum InteractionMethod {
     TILT(InteractionTiltRow.class, "Tilt"),
     ROTARYZ(InteractionRotaryZRow.class, "Rotary Switch"),
     SHAKE(InteractionShakeRow.class, "Shake"),
-    LIGHT(InteractionLightRow.class, "Light");
+    LIGHT(InteractionLightRow.class, "Light"),
+    PROXIMITY(InteractionProximityRow.class, "Proximity");
 
     //------------------------------------------------------------------------------------------
 

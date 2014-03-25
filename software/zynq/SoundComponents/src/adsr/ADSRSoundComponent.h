@@ -18,6 +18,8 @@ class ADSRSoundComponent: public SoundComponentImpl {
 public:
 	DECLARE_COMPONENTNAME;
 
+	double getIncrement_HW(int msec);
+
     /* in ports */
 
 	DECLARE_PORT3(SoundPort, SoundIn, 1);

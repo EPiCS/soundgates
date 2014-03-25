@@ -1,11 +1,11 @@
 /*
- * Ramp_HW.hpp
+ * ADSR_HW.hpp
  */
 
-#ifndef RAMP_HW_HPP_
-#define RAMP_HW_HPP_
+#ifndef ADSR_HW_HPP_
+#define ADSR_HW_HPP_
 
-#include "../RampSoundComponent.hpp"
+#include "../ADSRSoundComponent.hpp"
 #include <HWSlot.h>
 #include <HWTParameters.h>
 
@@ -16,12 +16,13 @@ extern "C"{
     #include <reconos/mbox.h>
 }
 
-#define RAMP_HWT_START 0x0F
-#define RAMP_HWT_STOP  0xF0
-#define RAMP_TRIGGERED(a, b) a == 0 && b > 0
+#define ADSR_HWT_START 0x0F
+#define ADSR_HWT_STOP  0xF0
+#define ADSR_TRIGGERED(a, b) a == 0 && b > 0
+#define ADSR_RELEASED(a, b) a > 0 && b == 0
 
 
-class Ramp_HW: public Ramp{
+class ADSR_HW: public ADSRSoundComponent{
 
 private:
 
@@ -35,11 +36,14 @@ private:
     struct reconos_hwt      m_ReconOSThread;
 
     float               m_AttackTime;
+    float               m_DecayTime;
+    float               m_SustainLevel;
     float               m_ReleaseTime;
+    bool                m_SkipSustain;
 
 public:
 
-    Ramp_HW(std::vector<std::string>);
+    ADSR_HW(std::vector<std::string>);
 
     void init();
     void process();
@@ -67,20 +71,29 @@ public:
      */
     class OnTriggerHW : public ICallbackFunctor {
     private:
-        RampSoundComponent_SW* const m_ObjRef;
+        ADSRSoundComponent_SW* const m_ObjRef;
 
         float m_LastTrigger;
 
         uint32_t triggerHW   = x0000000F;
+        uint32_t releaseHW   = xFFFFFFFF;
         uint32_t currTrigger = 1;
     public:
-        OnTriggerHW(Ramp_HW* ref) : m_ObjRef(ref) {
+        OnTriggerHW(ADSR_HW* ref) : m_ObjRef(ref) {
             m_LastTrigger  = m_ObjRef->m_Trigger_6_Port->pop();
 
-            if (Ramp_TRIGGERED(m_LastTrigger, trigger)) {
-                LOG_DEBUG("Ramp Triggered");
-                m_HWTParams.args[4] = (uint32_t) triggerHW + currTrigger;
+            if (ADSR_TRIGGERED(m_LastTrigger, trigger)) {
+                LOG_DEBUG("ADSR Triggered");
+                m_HWTParams.args[2] = (uint32_t) triggerHW + currTrigger;
+                m_HWTParams.args[3] = (uint32_t) x00000000;
                 currTrigger++;
+            }
+
+            if (ADSR_RELEASED(m_LastTrigger, trigger)) {
+                LOG_DEBUG("ADSR Released");
+                m_HWTParams.args[2] = (uint32_t) x0000000F;
+                m_HWTParams.args[3] = (uint32_t) xFFFFFFFF;
+                currTrigger = 1;
             }
 
         m_LastTrigger = trigger;
@@ -93,10 +106,10 @@ public:
 
 #else
 
-class Ramp_HW: public Ramp{
+class ADSR_HW: public ADSRSoundComponent{
 
 public:
-    Ramp_HW(std::vector<std::string>);
+    ADSR_HW(std::vector<std::string>);
 
     void init(){
 
@@ -109,4 +122,4 @@ public:
 
 #endif
 
-#endif /* Ramp_HW_HPP_ */
+#endif /* ADSR_HW_HPP_ */

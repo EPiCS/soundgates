@@ -41,6 +41,9 @@ public abstract class AbstractSensorListener extends Observable implements Senso
         sensorManager.unregisterListener(this);
     }
 
+    public SensorManager getSensorManager() {
+        return sensorManager;
+    }
     public int getSensorType() {
         return sensorType;
     }

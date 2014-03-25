@@ -4,6 +4,7 @@
 	<Ports>
 		<Port DataType="CONTROL" Direction="IN" Name="Input"/>
 		<Port DataType="CONTROL" Direction="IN" Name="Speed"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Reset"/>
 		<Port DataType="CONTROL" Direction="OUT" Name="Value"/>
 	</Ports>
 	<Properties>
@@ -15,6 +16,7 @@
 			<Implementation type="sw" name="const">
 			    <PortMapping PortName="Input" PortNumber="1"/>
 			    <PortMapping PortName="Speed" PortNumber="2"/>
+			    <PortMapping PortName="Reset" PortNumber="3"/>
 			    <PortMapping PortName="Value" PortNumber="1"/>
 			</Implementation>
 		</Device>
