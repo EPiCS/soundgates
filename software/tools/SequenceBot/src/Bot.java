@@ -23,9 +23,12 @@ public class Bot {
 	static final int NOTE_HALF = 5000;
 	static final int NOTE_FULL = 10000;
 	
-	static final float CONFIG_TEMPO_SCALE = 0.2f;
+	static final float CONFIG_TEMPO_SCALE_DEFAULT = 0.2f;
 	static final int CONFIG_FIRST_BASE_NOTE = 0;
-	static final float CONFIG_PRESS_PERCENTAGE = 0.6f;
+	static final float CONFIG_PRESS_PERCENTAGE_DEFAULT = 0.6f;
+	
+	static float pressPercentage = CONFIG_PRESS_PERCENTAGE_DEFAULT;
+	static float tempoScale = CONFIG_TEMPO_SCALE_DEFAULT;
 	
 	//Moll: 0 2 3 5 7 8 10 12
 	
@@ -38,8 +41,13 @@ public class Bot {
 	static final float CONFIG_BASE_NOTE_CHANGE_PROBABILITY = 1f;
 	static int baseNoteMin = 1;
 	static int baseNoteMax = 1;
-	
+
 	static final String CONFIG_RYTHM_SYNC_MESSAGE = "/rythmSync";
+	static final String CONFIG_BASENOTE_MEAN_MESSAGE = "/baseNoteMean";
+	static final String CONFIG_BASENOTE_DEVIATION_MESSAGE = "/baseNoteDeviation";
+	static final String CONFIG_HIT_PERCENTAGE_MESSAGE = "/hitPercentage";
+	static final String CONFIG_SPEED_MESSAGE = "/speed";
+	
 	static boolean useRythmSync = false;
 
 	private static float[] frequencies = new float[128];
@@ -96,6 +104,8 @@ public class Bot {
 		
 		score = createScore();
 		
+		addListener(receiver);
+		
 		frequencies[0]=(float) 27.5;
 		for (int i = 1; i < frequencies.length; i++){
 			frequencies[i] = 1.059463094f * frequencies[i-1];
@@ -122,6 +132,7 @@ public class Bot {
 				}
 			});
 			receiver.startListening();
+			
 		} else {
 			while(true){
 				int playedPosition = generateAndPlay(random, positionProbabilities, voices);
@@ -135,6 +146,37 @@ public class Bot {
 		}
 	}
 	
+	private static void addListener(OSCPortIn receiver) {
+		receiver.addListener(CONFIG_BASENOTE_MEAN_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				baseNoteMean = (int) arg1.getArguments()[0];
+			}
+		});
+		receiver.addListener(CONFIG_BASENOTE_DEVIATION_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				baseNoteStandardDeviation = (float) arg1.getArguments()[0];
+			}
+		});
+		receiver.addListener(CONFIG_HIT_PERCENTAGE_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				pressPercentage = (float) arg1.getArguments()[0];
+			}
+		});
+		receiver.addListener(CONFIG_SPEED_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				tempoScale =  (float) arg1.getArguments()[0];
+			}
+		});
+	}
+
 	private static int getGaussian(double mean, double deviation, int min, int max){
 		double result = random.nextGaussian() * deviation + mean;
 		if (result < min){
@@ -184,7 +226,7 @@ public class Bot {
 		for (int i = 0; i < voices.length; i ++){
 			double tmpLength = 0;
 			for (MusicalEvent event : voices[i][position].events){
-				tmpLength += (event.getDuration() + event.getWaitingTime() ) *CONFIG_TEMPO_SCALE;
+				tmpLength += (event.getDuration() + event.getWaitingTime() ) * tempoScale;
 			}
 			if (length < tmpLength){
 				length = tmpLength;
@@ -297,9 +339,9 @@ public class Bot {
 						}
 						try {
 							sendFloat(sender, "trigger_" + voice, 1);
-							Thread.sleep((long) ((float)(event.getDuration() * CONFIG_PRESS_PERCENTAGE) * CONFIG_TEMPO_SCALE));
+							Thread.sleep((long) ((float)(event.getDuration() * pressPercentage) * tempoScale));
 							sendFloat(sender, "trigger_" + voice, 0);
-							Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*CONFIG_TEMPO_SCALE*(1-CONFIG_PRESS_PERCENTAGE)));
+							Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*tempoScale*(1-pressPercentage)));
 						} catch (IOException | InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
