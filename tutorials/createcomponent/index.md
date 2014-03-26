@@ -78,7 +78,7 @@ Basically, the FSM consists of the following states:
 * `EXIT`, where the HWT is terminated
 
 <div>
-   <img src="./state%20machine.png" alt="HWT State Machines">
+   <img src="./state%20machine.png" alt="HWT State Machines" width="900px" height="633px"/>
     Figure 1: (a) FSM for generating samples without input (b) FSM for manipulating input samples (c) FSM for triggered samples manipulation
 </div>
 
