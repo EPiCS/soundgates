@@ -37,3 +37,18 @@ Slots:
     2 = Triangle generator
     3 = Sawtooth generator
     4 = Noise generator
+    
+-------------------
+
+Name:
+    saw_sine_ramp_pwm_adsr   
+
+Description:
+
+Slots:     
+    saw/hw(0)
+    sine/hw(1)
+    ramp/hw(2)
+    pwm/hw(3)
+    adsr/hw(4)
+
