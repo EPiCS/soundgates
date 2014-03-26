@@ -6,7 +6,8 @@ public class MessageDialogs {
 
 	
 	// --DIALOGS--
-	
+
+
 	public static boolean replaceExistingCompositeSoundComponentDialog(String name){	
 	
 	   MessageDialog dialog = new MessageDialog(
@@ -129,6 +130,10 @@ public class MessageDialogs {
 	
 	public static void ioComponentsMustHaveUniqueNames() {		
 		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
+	}
+	
+	public static void patchContainsMoreThanOneSoundOutput(){
+		MessageDialog.openWarning(null, "There are several SoundOutput components in the patch", "A patch can contain only one SoundOutput component");
 	}
 	
 	public static void soundcomponentsFolderMissing(String projectName) {		
