@@ -25,6 +25,7 @@ public:
     float m_PhaseIncr;
     float m_Frequency;
     bool m_active;
+    float m_Offset;
 
     DECLARE_COMPONENTNAME;
 
