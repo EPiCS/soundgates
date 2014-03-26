@@ -52,7 +52,7 @@ body
 
 h1.title{
   display:inline;
-  font-size: 80px;
+  font-size: 60px;
 }
 
 div.logo {
@@ -75,9 +75,10 @@ svg {
   font: 10px sans-serif;
 }
 
-.area {
-  fill: steelblue;
-  clip-path: url(#clip);
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
 }
 
 .axis path,

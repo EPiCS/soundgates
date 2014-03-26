@@ -339,7 +339,7 @@ __createDiagram = (component) ->
 
   nv.addGraph ->
     chart = nv.models.lineChart()
-            .margin(left: 20)
+            .margin(left: 90)
             .useInteractiveGuideline(true)
             .transitionDuration(350)
             .showLegend(true)
@@ -348,7 +348,7 @@ __createDiagram = (component) ->
     #Chart x-axis settings
     chart.xAxis.axisLabel("Samples").tickFormat d3.format(",r")
     #Chart y-axis settings
-    chart.yAxis.axisLabel("Amplitude").tickFormat d3.format(",.2f")
+    chart.yAxis.tickFormat d3.format("+,d")
     
     #Select the <svg> element you want to render the chart in.   
     #Populate the <svg> element with chart data...
@@ -369,25 +369,6 @@ __createDiagram = (component) ->
     return chart
 
 __createBrush = (component) ->
-  selector = __replaceRaute(component.uid)
-  selector = '#' + selector + '_brush'
-  width = $(selector).parent().css("width")
-  width = parseInt(width, 10);
-  height = 60
-
-  values = component.output_samples[0].values
-  length = values.length
-  draw_data = 
-        x : (i for e,i in values)
-        y : (e for e in values)
-  
-  x_domain = [0, length]
-  y_domain = d3.extent(draw_data.y.map( (d) -> return d))
-  
-  x_scale = d3.scale.linear().range([0, width]).domain(x_domain).clamp(true)
-  y_scale = d3.scale.linear().range([height, 0]).domain(y_domain).clamp(true)
-  
-  xAxis = d3.svg.axis().scale(x_scale).orient("bottom")
 
   # Get corresponding chart
   __getChart = (component) ->
@@ -419,41 +400,62 @@ __createBrush = (component) ->
       selector = '#' + selector + '_graphic'
       #$(selector).find("svg").remove()
       d3.select(selector + " svg").datum(data).call(chart)
+      __updateGlobalCharts()
       #chart.update()
-    
- 
     return
+
+  # Preprocessing
+  selector = __replaceRaute(component.uid)
+  selector = '#' + selector + '_brush'
+  width = $(selector).parent().css("width")
+  width = parseInt(width, 10);
+  height = 60
+
+  values = component.output_samples[0].values
+  length = values.length
+  draw_data = 
+        x : (i for e,i in values)
+        y : (e for e in values)
+  
+  x_domain = [0, length]
+  y_domain = d3.extent(draw_data.y.map( (d) -> return d))
+  
+  x_scale = d3.scale.linear().range([0, width]).domain(x_domain).clamp(true)
+  y_scale = d3.scale.linear().range([height, 0]).domain(y_domain).clamp(true)
   
   brush = d3.svg.brush()
-    .x(x_scale)
-    .on("brushend", brushed);
-  
-  svg = d3.select(selector).append("svg")
-      .attr("width", width)
-      .attr("height", height);
+    .x( x_scale )
+    .on( "brushend", brushed );
 
-  area = d3.svg.area().interpolate("linear").x((d) ->
-    console.log x_scale(d.x)
-    return x_scale(d.x)
-  ).y0(height).y1((d) ->
-    console.log y_scale(d.y)
-    return y_scale(d.y)
-  )
+  line = d3.svg.line()
+    .x( (d) -> return x_scale d.x )
+    .y( (d) -> return y_scale d.y );
+
+  svg = d3.select(selector).append("svg")
+    .attr("width", width)
+    .attr("height", height)
+#    .append("g")
+#    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  svg.append("path")
+    .datum(draw_data)
+    .attr("class", "line")
+    .attr("d", line)
+
+  # area = d3.svg.area().interpolate("linear").x((d) ->
+  #   console.log x_scale(d.x)
+  #   return x_scale(d.x)
+  # ).y0(height).y1((d) ->
+  #   console.log y_scale(d.y)
+  #   return y_scale(d.y)
+  # )
 
   context = svg.append("g")
-    .attr("class", "context");
+    .attr("class", "context")
+    .attr("width", width)
+    .attr("height", height);
 
-  context.append("path")
-      .datum(draw_data)
-      .attr("class", "area")
-      .attr("d", area);
-
-  context.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
-
-  context.append("g")
+  svg.append("g")
       .attr("class", "x brush")
       .call(brush)
     .selectAll("rect")
@@ -480,6 +482,11 @@ __prepareSamples = (component, start=0, end=0) ->
       for sample,j in subset
         data[input_length + i].values.push {x:j, y: sample} 
   return data
+
+__updateGlobalCharts = () ->
+  for c in global_component_charts
+    chart = c.chart
+    chart.update()
    
 __replaceRaute = (text) ->
   return text.replace /#/g, '_'

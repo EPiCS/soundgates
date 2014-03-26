@@ -132,24 +132,24 @@ exports.generateData = (req, res) ->
                     type: "SW"
                     control_ports: [ { name: 'Control 1', values: [440, 300] } ]
                     input_samples: [ ]
-                    output_samples: [ { name: 'Output_Port', values: createSineSamples 0, 500 } ]
-                    execution_times: [500, 450, 700]
+                    output_samples: [ { name: 'Output_Port', values: createSineSamples 0, 1500 } ]
+                    execution_times: [20, 25, 22]
                 },
                 {
                     uid: "cosine#0"
                     type: "SW"
                     control_ports: [ { name: 'Control 1', values: [440, 300] } ]
-                    input_samples: [ { name: 'Input_Port', values: createSineSamples 0, 500 } ]
-                    output_samples: [ { name: 'Output_Port', values: createCosineSamples 0, 500 } ]
-                    execution_times: [500, 450, 700]
+                    input_samples: [ { name: 'Input_Port', values: createSineSamples 0, 1500 } ]
+                    output_samples: [ { name: 'Output_Port', values: createCosineSamples 0, 1500 } ]
+                    execution_times: [20, 15, 15]
                 },
                 {
                     uid: "saw#0"
                     type: "HW"
                     control_ports: [ { name: 'Control 1', values: [440, 300] } ]
                     input_samples: [ ]
-                    output_samples: [ { name: 'Output_Port', values: createSawtoothSamples 0, 500 } ]
-                    execution_times: [500, 450, 700]
+                    output_samples: [ { name: 'Output_Port', values: createSawtoothSamples 0, 1500 } ]
+                    execution_times: [30, 30, 20]
                 }
             ]
        }
