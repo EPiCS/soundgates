@@ -282,7 +282,7 @@ begin
             done := False;
             o_RAMAddr_ramp <= (others => '0');
         elsif rising_edge(clk) then
-            output_fixed_point <= std_logic_vector(ramp_data * input_fixed_point);
+            output_fixed_point <= std_logic_vector(ramp_data * signed(input_fixed_point));
 				o_RAMData_ramp <= output_fixed_point(87 downto 56);
             ramp_ce              <= '0';
             o_RAMWE_ramp         <= '0';
