@@ -5,7 +5,7 @@
 #ifndef RAMP_HW_HPP_
 #define RAMP_HW_HPP_
 
-#include "../RampSoundComponent.hpp"
+#include "../Ramp.h"
 #include <HWSlot.h>
 #include <HWTParameters.h>
 
@@ -67,23 +67,27 @@ public:
      */
     class OnTriggerHW : public ICallbackFunctor {
     private:
-        RampSoundComponent_SW* const m_ObjRef;
+        Ramp_HW* const m_ObjRef;
 
         float m_LastTrigger;
+        float m_NewTrigger;
 
-        uint32_t triggerHW   = x0000000F;
-        uint32_t currTrigger = 1;
+        uint32_t triggerHW;
+        uint32_t currTrigger;
     public:
         OnTriggerHW(Ramp_HW* ref) : m_ObjRef(ref) {
-            m_LastTrigger  = m_ObjRef->m_Trigger_6_Port->pop();
+        	triggerHW   = 0x0000000F;
+        	currTrigger = 1;
 
-            if (Ramp_TRIGGERED(m_LastTrigger, trigger)) {
+            m_NewTrigger  = m_ObjRef->m_Trigger_4_Port->pop();
+
+            if (RAMP_TRIGGERED(m_LastTrigger, m_NewTrigger)) {
                 LOG_DEBUG("Ramp Triggered");
-                m_HWTParams.args[4] = (uint32_t) triggerHW + currTrigger;
+                m_ObjRef->m_HWTParams.args[4] = (uint32_t) triggerHW + currTrigger;
                 currTrigger++;
             }
 
-        m_LastTrigger = trigger;
+        m_LastTrigger = m_NewTrigger;
 
         }
         void operator()();
