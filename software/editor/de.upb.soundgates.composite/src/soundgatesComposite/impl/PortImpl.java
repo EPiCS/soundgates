@@ -448,14 +448,17 @@ public class PortImpl extends NamedElementImpl implements Port {
 		return result.toString();
 	}
 	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public void setName(String newName) {
-		if(!(this.eContainer() instanceof AtomicSoundComponent)){
-			String oldName = name;
-			name = newName;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesCompositePackage.NAMED_ELEMENT__NAME, oldName, name));
-			
-		}
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesCompositePackage.NAMED_ELEMENT__NAME, oldName, name));
+		
 	}
 
 } //PortImpl

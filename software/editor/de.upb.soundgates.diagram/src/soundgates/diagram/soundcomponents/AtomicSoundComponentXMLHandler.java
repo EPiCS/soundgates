@@ -48,7 +48,9 @@ public class AtomicSoundComponentXMLHandler{
 	public static String DEVICE_PREFIX = "deviceProp_";
 	public static String DEVICE_PREFIX_PROP_MAPPINGS = DEVICE_PREFIX + "_propMappings_";
 	public static String DEVICE_PREFIX_PORT_MAPPINGS = DEVICE_PREFIX + "_portMappings_";
-	public static String DEVICE_PREFIX_IMPLNAME = DEVICE_PREFIX + "_name";
+	public static String DEVICE_PREFIX_IMPLNAME = DEVICE_PREFIX + "_name_";
+	public static String DEVICE_PREFIX_IMPLNAME_HARDWARE = DEVICE_PREFIX_IMPLNAME + "hw";
+	public static String DEVICE_PREFIX_IMPLNAME_SOFTWARE = DEVICE_PREFIX_IMPLNAME + "sw";
 
 	public static void readFromXML(AtomicSoundComponentLibrary library, String libraryPath) {
 		try {
@@ -166,7 +168,7 @@ public class AtomicSoundComponentXMLHandler{
 												} while ((childNode = childNode.getNextSibling()) != null);
 
 												soundComponent.getStringProperties().put(DEVICE_PREFIX_PORT_MAPPINGS + implType, portMappings.toString());
-												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME, implName);
+												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME + implType, implName);
 //												soundComponent.getStringProperties().put(DEVICE_PREFIX_PROP_MAPPINGS + implType, propMappings.toString());
 											
 												if(implType.equals("sw")) sw=true;
@@ -236,6 +238,10 @@ public class AtomicSoundComponentXMLHandler{
 		
 		if(vhdlPortNode.getAttributes().getNamedItem("modelName")!=null){
 			vhdlPort.setModelName(vhdlPortNode.getAttributes().getNamedItem("modelName").getNodeValue());
+		}
+		
+		if(vhdlPortNode.getAttributes().getNamedItem("supportfn")!=null){
+			vhdlPort.setSupportfn(vhdlPortNode.getAttributes().getNamedItem("supportfn").getNodeValue());
 		}
 		
 		if(vhdlPortNode.getAttributes().getNamedItem("range")!=null){

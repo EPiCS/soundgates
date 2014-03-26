@@ -49,7 +49,7 @@ public class Bot {
 	static final String CONFIG_BASENOTE_DEVIATION_MESSAGE = "/baseNoteDeviation";
 	static final String CONFIG_SEQUENCE_DEVIATION_MESSAGE = "/sequenceDeviation";
 	static final String CONFIG_HIT_PERCENTAGE_MESSAGE = "/hitPercentage";
-	static final String CONFIG_SPEED_MESSAGE = "/speed";
+	static final String CONFIG_SPEED_MESSAGE = "/slowdown";
 	
 	static boolean useRythmSync = false;
 
@@ -89,11 +89,12 @@ public class Bot {
 		
 		List<String []> inputs = new ArrayList<String []>();
 		inputs.add(new String []{CONFIG_BASENOTE_DEVIATION_MESSAGE, "0", "10"});
-		inputs.add(new String []{CONFIG_BASENOTE_MEAN_MESSAGE, "0", "80"});
-		inputs.add(new String []{CONFIG_SEQUENCE_MEAN_MESSAGE, "0", "80"});
-		inputs.add(new String []{CONFIG_HIT_PERCENTAGE_MESSAGE, "0", "1"});
+		inputs.add(new String []{CONFIG_BASENOTE_MEAN_MESSAGE, "0", "50"});
+		inputs.add(new String []{CONFIG_SEQUENCE_MEAN_MESSAGE, "0", "10"});
+		inputs.add(new String []{CONFIG_SEQUENCE_DEVIATION_MESSAGE, "0", "2"});
+		inputs.add(new String []{CONFIG_HIT_PERCENTAGE_MESSAGE, "0.1", "0.99"});
 		inputs.add(new String []{CONFIG_RYTHM_SYNC_MESSAGE, "0", "1"});
-		inputs.add(new String []{CONFIG_SPEED_MESSAGE, "0", "1"});
+		inputs.add(new String []{CONFIG_SPEED_MESSAGE, "0.1", "0.4"});
 		final HandshakeThread hsThread = new HandshakeThread(inputs, 50051);
 		hsThread.start();
 		
@@ -260,52 +261,71 @@ public class Bot {
 	}
 	
 	private static Score vengaScore(){
-		Score result = new Score(1);
+		Score result = new Score(6);
 		
 		Sequence empty = new Sequence(new MusicalEvent[]{
 				new MusicalEvent(new Chord(), NOTE_ZERO, NOTE_FULL)},  20);
 		
 		Sequence slow = new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(0), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_HALF + NOTE_QUARTER + NOTE_SIXTEENTH)},  20);
+				new MusicalEvent(new Chord(0,9), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_HALF + NOTE_QUARTER + NOTE_SIXTEENTH)},  20);
 		
 		Sequence mediumUp = new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_QUARTER),
-				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_QUARTER),
-				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS),
-				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS)},  20);
+				new MusicalEvent(new Chord(0,9), NOTE_EIGTHS, NOTE_QUARTER),
+				new MusicalEvent(new Chord(0,9), NOTE_EIGTHS, NOTE_QUARTER),
+				new MusicalEvent(new Chord(3,12), NOTE_EIGTHS, NOTE_EIGTHS),
+				new MusicalEvent(new Chord(3,12), NOTE_EIGTHS, NOTE_EIGTHS)},  20);
 		
 		Sequence mediumDown = new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(4), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(4), NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(new Chord(3), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(3), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_SIXTEENTH)},  20);
+				new MusicalEvent(new Chord(4,13), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4,13), NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(new Chord(3,12), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3,12), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_SIXTEENTH)},  20);
 		
 		Sequence mediumUp2 = new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(0), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_QUARTER),
-				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS),
-				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS)},  20);
+				new MusicalEvent(new Chord(0,9), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(0,9), NOTE_EIGTHS, NOTE_QUARTER),
+				new MusicalEvent(new Chord(3,12), NOTE_EIGTHS, NOTE_EIGTHS),
+				new MusicalEvent(new Chord(3,12), NOTE_EIGTHS, NOTE_EIGTHS)},  20);
 		
 		Sequence fast1 = new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(4), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_ZERO),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_ZERO),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
+				new MusicalEvent(new Chord(4,13), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4,13), NOTE_SIXTEENTH, NOTE_ZERO),
+				new MusicalEvent(new Chord(4,13), NOTE_SIXTEENTH, NOTE_ZERO),
+				new MusicalEvent(new Chord(4,13), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4,13), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3,12), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3,12), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
 				},  20);
 		
 		Sequence fast2 = new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
-				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
+				new MusicalEvent(new Chord(0,9), NOTE_EIGTHS, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(0,9), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new MusicalEvent(new Chord(4,13,15), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4,13,15), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4,13,15), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3,12,15), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3,12,15), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
 				},  20);
 
+		Sequence rythm1 = new Sequence(new RythmEvent[]{
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER)	
+		}, 20);
+
+		Sequence rythm2 = new Sequence(new RythmEvent[]{
+				new RythmEvent(new Chord(0), NOTE_ZERO, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS)	
+		}, 20);
+		
 		result.addSequence(0, 0, empty);
 		result.addSequence(0, 1, slow);
 		result.addSequence(0, 2, mediumUp);
@@ -313,6 +333,11 @@ public class Bot {
 		result.addSequence(0, 4, mediumUp2);
 		result.addSequence(0, 5, fast1);
 		result.addSequence(0, 6, fast2);
+		result.addSequence(2, 4, rythm1);
+		result.addSequence(2, 5, rythm1);
+		result.addSequence(2, 6, rythm1);
+		result.addSequence(4, 5, rythm2);
+		result.addSequence(4, 6, rythm2);
 		
 		return result;
 	}
@@ -398,7 +423,7 @@ public class Bot {
 	
 	private static int getMaxNote(){
 		//FIXME actually calculate
-		return 8;
+		return 16;
 	}
 
 	public static void sendFloat(OSCPortOut sender, String componentName, float value) throws IOException{
@@ -423,24 +448,39 @@ public class Bot {
 				public void run() {
 					for (MusicalEvent event : toPlay.events){
 						for (int i = 0; i < event.getChord().notes.length; i++){
-							try {
-								sendFloat(sender, "frequency_" + voice + "_" + i, frequencies[notes[event.getChord().notes[i] - event.getModifier()] + baseNote]);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							if (!(event instanceof RythmEvent))
+								sendFrequency(sender, voice, i, event);
 						}
 						try {
-							sendFloat(sender, "trigger_" + voice, 1);
-							Thread.sleep((long) ((float)(event.getDuration() * pressPercentage) * tempoScale));
-							sendFloat(sender, "trigger_" + voice, 0);
-							Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*tempoScale*(1-pressPercentage)));
+							if (!(event instanceof RythmEvent)){
+								if (event.getDuration() > 0){
+									sendFloat(sender, "trigger_" + voice, 1);	
+								}
+								Thread.sleep((long) ((float)(event.getDuration() * pressPercentage) * tempoScale));
+								sendFloat(sender, "trigger_" + voice, 0);
+								Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*tempoScale*(1-pressPercentage)));
+							} else {
+								if (event.getDuration() > 0){
+									sendFloat(sender, "trigger_" + voice, 1);	
+								}
+								Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*tempoScale));
+							}
 						} catch (IOException | InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
 							
+					}
+				}
+
+				private void sendFrequency(OSCPortOut sender, int voice, int i,
+						MusicalEvent event) {
+					try {
+						sendFloat(sender, "frequency_" + voice + "_" + i, frequencies[notes[event.getChord().notes[i] - event.getModifier()] + baseNote]);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 				
@@ -450,5 +490,5 @@ public class Bot {
 		
 		
 	}
-
+	
 }

@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -50,15 +49,12 @@ public class PortItemProvider
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
-
-			addOutgoingConnectionPropertyDescriptor(object);
-			addIncomingConnectionPropertyDescriptor(object);
 			addDirectionPropertyDescriptor(object);
 			addDataTypePropertyDescriptor(object);
 		}
@@ -109,11 +105,28 @@ public class PortItemProvider
 				 null));
 	}
 
+	@Override
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedElement_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedElement_name_feature", "_UI_NamedElement_type"),
+				 SoundgatesPackage.Literals.NAMED_ELEMENT__NAME,
+				 false,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+	
 	/**
 	 * This adds a property descriptor for the Direction feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addDirectionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -123,7 +136,7 @@ public class PortItemProvider
 				 getString("_UI_Port_direction_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Port_direction_feature", "_UI_Port_type"),
 				 SoundgatesPackage.Literals.PORT__DIRECTION,
-				 true,
+				 false,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
@@ -135,7 +148,7 @@ public class PortItemProvider
 	 * This adds a property descriptor for the Data Type feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addDataTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -145,7 +158,7 @@ public class PortItemProvider
 				 getString("_UI_Port_dataType_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Port_dataType_feature", "_UI_Port_type"),
 				 SoundgatesPackage.Literals.PORT__DATA_TYPE,
-				 true,
+				 false,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,

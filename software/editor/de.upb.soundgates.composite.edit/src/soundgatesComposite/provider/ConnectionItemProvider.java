@@ -67,7 +67,7 @@ public class ConnectionItemProvider
 	 * This adds a property descriptor for the Source feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addSourcePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -77,7 +77,7 @@ public class ConnectionItemProvider
 				 getString("_UI_Connection_source_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_source_feature", "_UI_Connection_type"),
 				 SoundgatesCompositePackage.Literals.CONNECTION__SOURCE,
-				 true,
+				 false,
 				 false,
 				 true,
 				 null,
@@ -89,7 +89,7 @@ public class ConnectionItemProvider
 	 * This adds a property descriptor for the Target feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addTargetPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -99,7 +99,7 @@ public class ConnectionItemProvider
 				 getString("_UI_Connection_target_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_target_feature", "_UI_Connection_type"),
 				 SoundgatesCompositePackage.Literals.CONNECTION__TARGET,
-				 true,
+				 false,
 				 false,
 				 true,
 				 null,

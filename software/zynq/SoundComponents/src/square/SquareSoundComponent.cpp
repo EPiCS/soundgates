@@ -8,10 +8,11 @@
 #include "SquareSoundComponent.h"
 
 #include "impl/SquareSoundComponent_SW.h"
+#include "impl/SquareSoundComponent_HW.h"
 
 DEFINE_COMPONENTNAME(SquareSoundComponent, "square")
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(SquareSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(SquareSoundComponent);
 
 SquareSoundComponent::SquareSoundComponent(std::vector<std::string> params) :
 		SoundComponentImpl(params)
@@ -44,5 +45,11 @@ double SquareSoundComponent::getPhaseIncrement(float frequency)
 {
 
 	return (2 * M_PI / Synthesizer::config::samplerate) * frequency;
+
+}
+
+double SquareSoundComponent::getPhaseIncrement_HW(float frequency){
+
+	return  ( frequency / Synthesizer::config::samplerate) ;
 
 }

@@ -114,6 +114,8 @@ architecture Behavioral of hwt_ramp is
 	signal o_RAMData_ramp : std_logic_vector(0 to 31);   -- ramp to local ram
 	signal i_RAMData_ramp : std_logic_vector(0 to 31);   -- local ram to ramp
     signal o_RAMWE_ramp   : std_logic;
+	signal input_fixed_point : std_logic_vector(63 downto 0) := (others => '0');
+	signal output_fixed_point : std_logic_vector(95 downto 0) := (others => '0');
 
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
@@ -159,12 +161,14 @@ architecture Behavioral of hwt_ramp is
     constant ramp_START : std_logic_vector(31 downto 0) := x"0000000F";
     constant ramp_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
 
-	 constant C_START_BANG : std_logic_vector(31 downto 0) := x"0000000F";
+	 constant C_START_BANG : signed(31 downto 0) := x"0000000F";
+	 signal prev_bang : signed(31 downto 0);
+    signal rampbang : std_logic_vector(31 downto 0);
 
     constant    hwt_argc : integer := 5;
 
 begin
-
+	input_fixed_point(59 downto 28) <= i_RAMData_ramp;
     -----------------------------------
     -- Component related wiring
     -----------------------------------
@@ -172,7 +176,7 @@ begin
     destaddr    <= hwtio.argv(1);
     incr        <= hwtio.argv(2);
     incr2       <= hwtio.argv(3);
-    --bang        <= hwtio.argv(4);
+    bang        <= hwtio.argv(4);
 
     -----------------------------------
     -- Hard wirings
@@ -229,7 +233,7 @@ begin
             ce          => ramp_ce,
             incr        => signed(incr),
             incr2       => signed(incr2),
-            bang        => signed(bang),
+            bang        => signed(rampbang),
             rmp        => ramp_data
             );
 
@@ -259,7 +263,7 @@ begin
         variable done : boolean;            
     begin
         if rst = '1' then
-            
+            prev_bang <= C_START_BANG;
             osif_reset(o_osif);
 			memif_reset(o_memif);           
             ram_reset(o_ram);
@@ -278,7 +282,8 @@ begin
             done := False;
             o_RAMAddr_ramp <= (others => '0');
         elsif rising_edge(clk) then
-            o_RAMData_ramp <= std_logic_vector(resize(ramp_data * signed(i_RAMData_ramp), 32));
+            output_fixed_point <= std_logic_vector(ramp_data * signed(input_fixed_point));
+				o_RAMData_ramp <= output_fixed_point(87 downto 56);
             ramp_ce              <= '0';
             o_RAMWE_ramp         <= '0';
             osif_ctrl_signal    <= ( others => '0');
@@ -305,13 +310,13 @@ begin
                 get_hwt_args(i_osif, o_osif, i_memif, o_memif, hwtio, hwt_argc, done);
 
                 if done then
-						  bang        <= hwtio.argv(4);
                     state <= STATE_CHECK_BANG;
                 end if;
 
             when STATE_CHECK_BANG => 
-				 if bang = C_START_BANG then
+				 if signed(bang) > prev_bang then
 					  state <= STATE_READ;
+					  prev_bang <= signed(bang);
 					  --bang <= (others => '0');
 				 else
 					  state <= STATE_IDLE;
@@ -323,7 +328,8 @@ begin
                     std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES,24)), done); -- always in bytes
 				if done then
 				    state   <= STATE_PROCESS;
-                    o_RAMAddr_ramp     <= (others => '0');   -- start with the first sample
+					  o_RAMAddr_ramp     <= (others => '0');   -- start with the first sample
+					  prev_bang <= C_START_BANG;
 			    end if;
 
             when STATE_PROCESS =>
@@ -331,16 +337,16 @@ begin
                     case state_inner_process is
                         when 0 =>
                             ramp_ce              <= '1'; -- ein takt früher
+                            rampbang <= x"0000000F";
                             state_inner_process <= 1;
                         when 1 =>
+                            rampbang <= x"00000000";
                             o_RAMWE_ramp         <= '1';
-									--bang <= (others => '0');
                             state_inner_process <= 2;
-									 bang <= (others => '0');
 						when 2 =>
 							o_RAMAddr_ramp       <= std_logic_vector(unsigned(o_RAMAddr_ramp) + 1);
-                            sample_count        <= sample_count - 1;
-                            state_inner_process <= 3;
+						 sample_count        <= sample_count - 1;
+						 state_inner_process <= 3;
 						when others =>
 						    state_inner_process <= 0;
                     end case;

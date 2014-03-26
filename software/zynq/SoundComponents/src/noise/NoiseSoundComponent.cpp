@@ -7,11 +7,11 @@
 
 #include "NoiseSoundComponent.h"
 #include "impl/NoiseImplSW.h"
-
+#include "impl/Noise_HW.hpp"
 
 DEFINE_COMPONENTNAME(NoiseSoundComponent, "noise");
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(NoiseSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(NoiseSoundComponent);
 
 
 NoiseSoundComponent::NoiseSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params){

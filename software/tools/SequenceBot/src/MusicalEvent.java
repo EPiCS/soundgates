@@ -1,4 +1,5 @@
 
+
 public class MusicalEvent {
 	private Chord chord = null;
 	private int modifier = 0;

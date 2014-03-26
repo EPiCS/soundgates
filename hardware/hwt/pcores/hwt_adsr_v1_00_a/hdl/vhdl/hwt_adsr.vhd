@@ -116,6 +116,10 @@ architecture Behavioral of hwt_adsr is
     signal o_RAMAddr_adsr : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMData_adsr : std_logic_vector(0 to 31);   -- adsr to local ram
 	signal i_RAMData_adsr : std_logic_vector(0 to 31);   -- local ram to adsr
+	
+	--signal input_fixed_point : std_logic_vector(59 downto 0) := (others => '0');
+	signal input_fixed_point : std_logic_vector(63 downto 0) := (others => '0');
+	signal output_fixed_point : std_logic_vector(95 downto 0) := (others => '0');
     signal o_RAMWE_adsr   : std_logic;
 
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
@@ -168,12 +172,13 @@ architecture Behavioral of hwt_adsr is
     constant ADSR_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
 
 	 constant C_START_BANG : signed(31 downto 0) := x"0000000F";
-    constant C_STOP_BANG  : signed(31 downto 0) := x"000000F0";
+	 signal prev_bang : signed(31 downto 0);
+    constant C_STOP_BANG  : signed(31 downto 0) :=  x"FFFFFFFF";
 
     constant    hwt_argc : integer := 8;
-
 begin
-
+    
+	input_fixed_point(59 downto 28) <= i_RAMData_adsr;
     -----------------------------------
     -- Component related wiring
     -----------------------------------
@@ -274,7 +279,7 @@ begin
         variable done : boolean;            
     begin
         if rst = '1' then
-            
+            prev_bang <= C_START_BANG;
             osif_reset(o_osif);
 			memif_reset(o_memif);           
             ram_reset(o_ram);
@@ -294,7 +299,8 @@ begin
             done := False;
               o_RAMAddr_adsr <= (others => '0');
         elsif rising_edge(clk) then
-            o_RAMData_adsr <= std_logic_vector(resize(adsr_data * signed(i_RAMData_adsr), 32));
+            output_fixed_point <= std_logic_vector(adsr_data * signed(input_fixed_point));
+				o_RAMData_adsr <= output_fixed_point(87 downto 56);
             adsr_ce              <= '0';
             o_RAMWE_adsr         <= '0';
             osif_ctrl_signal    <= ( others => '0');
@@ -327,10 +333,11 @@ begin
             when STATE_CHECK_BANG =>
             case bang_state is                
                     when 0 =>
-							 if signed(bang) = C_START_BANG then
+							 if signed(bang) > prev_bang then
 								  bang_state <= 1;
 								  start <= (others => '1');
 								  state <= STATE_READ;
+								  prev_bang <= signed(bang);
 							 else
 								  state <= STATE_IDLE;
 							 end if;
@@ -340,6 +347,7 @@ begin
 								  bang_state <= 0;
 								  stop <= (others => '1');
 								  state <= STATE_READ;
+								  prev_bang <= C_START_BANG;
 							 else
 								  state <= STATE_IDLE;
 							 end if;

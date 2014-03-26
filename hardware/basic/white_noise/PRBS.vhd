@@ -46,7 +46,7 @@ begin
 		if ce = '1' then
 			
 			if (rst = '1') then
-				seed <= (0 => '1', others => '0');
+				seed <= (0 => '1', 16 => '1', others => '0');
 			end if;
 			
 			if (rising_edge(clk)) then    

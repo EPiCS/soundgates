@@ -11,9 +11,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="input">
-				<PortMapping PortName="Value" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="input">
 			    <PortMapping PortName="Value" PortNumber="1"/>
 			</Implementation>

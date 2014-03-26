@@ -68,7 +68,7 @@ use IEEE.MATH_REAL.ALL;
         to_signed(0, 32),   -- phase offset
         to_signed(1, 32),   -- phase increment
         to_signed(8, 32), -- On phase
-        to_signed(8, 32)  -- Off phase
+        to_signed(16, 32)  -- Off phase
         );
 
 	 constant argc : integer := 5;
