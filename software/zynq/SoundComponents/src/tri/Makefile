@@ -5,6 +5,6 @@ OBJECTS=TriangleSoundComponent_SW.o TriangleSoundComponent_HW.o TriangleSoundCom
 all: libTriangle.so
 
 libTriangle.so: $(OBJECTS) 
-	$(CC) -g3 -Wno-unused-variable -shared $(OBJECTS) -o $@
+	$(CC) $(CLINKER_FLAGS) -o $@  $(OBJECTS)
 
 	

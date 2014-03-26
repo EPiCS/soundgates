@@ -13,11 +13,11 @@
 
 #else
 
-Noise_HW::Noise_HW(std::vector<std::string> params) : Noise(params), m_HWTSlot(Noise::name) {
+NoiseSoundComponent_HW::NoiseSoundComponent_HW(std::vector<std::string> params) : NoiseSoundComponent(params), m_HWTSlot(NoiseSoundComponent::name) {
 
 }
 
-void Noise_HW::init(){
+void NoiseSoundComponent_HW::init(){
 
     // You can init() sound output ports to clear their buffers
     m_SoundOut_1_Port->init();
@@ -40,23 +40,23 @@ void Noise_HW::init(){
 
    //     m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
    //    m_HWTParams.args[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
-    	m_HWTParams.args[0] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+    	m_HWTParams[0] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
 
         reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
-        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams.args[0]);
+        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams[0]);
 
         reconos_hwt_create(&m_ReconOSThread, m_HWTSlot.getSlot(), NULL);
 
     }
 }
 
-void Noise_HW::process(){
+void NoiseSoundComponent_HW::process(){
 
   //  m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
   //  m_HWTParams.args[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
 
 
-	m_HWTParams.args[0] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+	m_HWTParams[0] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
 
     mbox_put(&m_CtrlStart, NOISE_HWT_START);
     mbox_get(&m_CtrlStop);
