@@ -29,10 +29,11 @@ public class Bot {
 	
 	static float pressPercentage = CONFIG_PRESS_PERCENTAGE_DEFAULT;
 	static float tempoScale = CONFIG_TEMPO_SCALE_DEFAULT;
-	
+
 	//Moll: 0 2 3 5 7 8 10 12
+	//Dur: 0 2 4 5 7 9 11 12
 	
-	static final int[] SCALE = new int[] { 0, 2, 3, 5, 7, 8, 10 };
+	static final int[] SCALE = new int[] { 0, 2, 4, 5, 7, 9, 11 };
 	static final int SCALE_LENGTH = 12;
 	
 	
@@ -44,7 +45,9 @@ public class Bot {
 
 	static final String CONFIG_RYTHM_SYNC_MESSAGE = "/rythmSync";
 	static final String CONFIG_BASENOTE_MEAN_MESSAGE = "/baseNoteMean";
+	static final String CONFIG_SEQUENCE_MEAN_MESSAGE = "/sequenceMean";
 	static final String CONFIG_BASENOTE_DEVIATION_MESSAGE = "/baseNoteDeviation";
+	static final String CONFIG_SEQUENCE_DEVIATION_MESSAGE = "/sequenceDeviation";
 	static final String CONFIG_HIT_PERCENTAGE_MESSAGE = "/hitPercentage";
 	static final String CONFIG_SPEED_MESSAGE = "/speed";
 	
@@ -56,10 +59,13 @@ public class Bot {
 	static int baseNoteMean = 30; 
 	static float baseNoteStandardDeviation = 1;
 	
+	static int sequenceMean = 0; 
+	static float sequenceStandardDeviation = 1;
+	
 	static OSCPortOut sender;
 	static OSCPortIn receiver;
 	
-	static int listenPort = 50050;
+	static int listenPort = 50051;
 	static String filename = "";
 	
 	static boolean playSequenceNow = false;
@@ -81,8 +87,20 @@ public class Bot {
 			listenPort = Integer.parseInt(args[1]);
 		}
 		
+		List<String []> inputs = new ArrayList<String []>();
+		inputs.add(new String []{CONFIG_BASENOTE_DEVIATION_MESSAGE, "0", "10"});
+		inputs.add(new String []{CONFIG_BASENOTE_MEAN_MESSAGE, "0", "80"});
+		inputs.add(new String []{CONFIG_SEQUENCE_MEAN_MESSAGE, "0", "80"});
+		inputs.add(new String []{CONFIG_HIT_PERCENTAGE_MESSAGE, "0", "1"});
+		inputs.add(new String []{CONFIG_RYTHM_SYNC_MESSAGE, "0", "1"});
+		inputs.add(new String []{CONFIG_SPEED_MESSAGE, "0", "1"});
+		final HandshakeThread hsThread = new HandshakeThread(inputs, 50051);
+		hsThread.start();
+		
 		sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
 
+		receiver = new OSCPortIn(listenPort);
+		receiver.startListening();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			
@@ -98,11 +116,13 @@ public class Bot {
 				sender.close();
 				receiver.stopListening();
 				receiver.close();
+				hsThread.stopMe();
 				
 			}
 		});
 		
-		score = createScore();
+		//score = createScore();
+		score = vengaScore();
 		
 		addListener(receiver);
 		
@@ -121,7 +141,6 @@ public class Bot {
 		final float [] positionProbabilities = score.getPositionProbabilites();
 		
 		if (useRythmSync){
-			receiver = new OSCPortIn(listenPort);
 			receiver.addListener(CONFIG_RYTHM_SYNC_MESSAGE ,new OSCListener() {
 				
 				@Override
@@ -131,7 +150,6 @@ public class Bot {
 					}
 				}
 			});
-			receiver.startListening();
 			
 		} else {
 			while(true){
@@ -151,7 +169,7 @@ public class Bot {
 			
 			@Override
 			public void acceptMessage(Date arg0, OSCMessage arg1) {
-				baseNoteMean = (int) arg1.getArguments()[0];
+				baseNoteMean = (int)Math.round((float)arg1.getArguments()[0]);
 			}
 		});
 		receiver.addListener(CONFIG_BASENOTE_DEVIATION_MESSAGE, new OSCListener() {
@@ -175,36 +193,42 @@ public class Bot {
 				tempoScale =  (float) arg1.getArguments()[0];
 			}
 		});
+		receiver.addListener(CONFIG_SEQUENCE_DEVIATION_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				sequenceStandardDeviation = (float)arg1.getArguments()[0];
+			}
+		});
+		receiver.addListener(CONFIG_SEQUENCE_MEAN_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				sequenceMean = (int)Math.round((float)arg1.getArguments()[0]);
+			}
+		});
 	}
 
 	private static int getGaussian(double mean, double deviation, int min, int max){
 		double result = random.nextGaussian() * deviation + mean;
 		if (result < min){
 			return min;
-		} else if (result > max){
-			return max;
+		} else if (result > max -1){
+			return max -1;
 		}
 		return (int) Math.round(result);
 	}
 	
 	private static int generateAndPlay(Random random, float [] positionProbabilities, Sequence [][] voices){
 		
-		float nextPositionValue = random.nextFloat();
 		
 		int nextPositionIndex = 0;
-		while(nextPositionValue > positionProbabilities[nextPositionIndex]){
-			nextPositionValue -= positionProbabilities[nextPositionIndex];
-			nextPositionIndex++;
-			if (nextPositionIndex >= positionProbabilities.length -1){
-				break;
-			}
-		}
+		nextPositionIndex = getGaussian(sequenceMean, sequenceStandardDeviation, 0, voices[0].length);
+		System.out.println("Changed Position to: " + nextPositionIndex);
 		
 		int nextBaseNoteIndex = 0;
 		if (random.nextFloat() < CONFIG_BASE_NOTE_CHANGE_PROBABILITY){
-			nextBaseNoteIndex = getGaussian(baseNoteMean, baseNoteStandardDeviation, baseNoteMin, baseNoteMax);;
-
-			
+			nextBaseNoteIndex = getGaussian(baseNoteMean, baseNoteStandardDeviation, baseNoteMin, baseNoteMax);
 			System.out.println("Changed Basenote to: " + notes[nextBaseNoteIndex]);
 		}
 		
@@ -235,38 +259,107 @@ public class Bot {
 		return (long)Math.ceil(length);
 	}
 	
+	private static Score vengaScore(){
+		Score result = new Score(1);
+		
+		Sequence empty = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(), NOTE_ZERO, NOTE_FULL)},  20);
+		
+		Sequence slow = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_HALF + NOTE_QUARTER + NOTE_SIXTEENTH)},  20);
+		
+		Sequence mediumUp = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_QUARTER),
+				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_QUARTER),
+				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS),
+				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS)},  20);
+		
+		Sequence mediumDown = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(4), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4), NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(new Chord(3), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_SIXTEENTH)},  20);
+		
+		Sequence mediumUp2 = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_QUARTER),
+				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS),
+				new MusicalEvent(new Chord(3), NOTE_EIGTHS, NOTE_EIGTHS)},  20);
+		
+		Sequence fast1 = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(4), NOTE_EIGTHS + NOTE_SIXTEENTH, NOTE_EIGTHS + NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_ZERO),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_ZERO),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
+				},  20);
+		
+		Sequence fast2 = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0), NOTE_EIGTHS, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(4), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH),
+				new MusicalEvent(new Chord(3), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
+				},  20);
+
+		result.addSequence(0, 0, empty);
+		result.addSequence(0, 1, slow);
+		result.addSequence(0, 2, mediumUp);
+		result.addSequence(0, 3, mediumDown);
+		result.addSequence(0, 4, mediumUp2);
+		result.addSequence(0, 5, fast1);
+		result.addSequence(0, 6, fast2);
+		
+		return result;
+	}
+	
 	private static Score createScore() {
 		Score result = new Score(2);
-		result.addSequence(0, 0, new Sequence(new MusicalEvent[]{
+		
+		Sequence chord1 = new Sequence(new MusicalEvent[]{
 				new MusicalEvent(new Chord(0,3,5), NOTE_FULL, NOTE_ZERO),
-				new MusicalEvent(new Chord(1,4,6), NOTE_FULL, NOTE_ZERO)},  20));
-		result.addSequence(0, 1, new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(0,3,6), NOTE_FULL, NOTE_ZERO)},  5));
-		result.addSequence(0, 2, new Sequence(new MusicalEvent[]{
-				new MusicalEvent(new Chord(0,4,6), NOTE_FULL, NOTE_ZERO)},  5));
-		result.addSequence(1, 0, new Sequence(new MusicalEvent [] {
+				new MusicalEvent(new Chord(1,4,6), NOTE_FULL, NOTE_ZERO)},  20);
+		
+		Sequence chord2 = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0,3,6), NOTE_FULL, NOTE_ZERO)},  5);
+		
+		Sequence chord3 = new Sequence(new MusicalEvent[]{
+				new MusicalEvent(new Chord(0,4,6), NOTE_FULL, NOTE_ZERO)},  5);
+		
+		
+		Sequence melody1 = new Sequence(new MusicalEvent [] {
 				new MusicalEvent(0, NOTE_QUARTER, NOTE_ZERO),
 				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(4, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(0, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(4, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(5, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(6, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(5, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(4, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(3, NOTE_EIGTHS, NOTE_HALF)}, 20));
-		result.addSequence(1, 1, new Sequence(new MusicalEvent [] {
+				new MusicalEvent(4, NOTE_QUARTER, NOTE_ZERO)}, 20);
+		
+		Sequence melody2 = new Sequence(new MusicalEvent [] {
 				new MusicalEvent(0, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(2, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(4, NOTE_QUARTER, NOTE_ZERO),
-				new MusicalEvent(4, NOTE_QUARTER, NOTE_EIGTHS)}, 20));
-		result.addSequence(1, 2, new Sequence(new MusicalEvent [] {
+				new MusicalEvent(4, NOTE_QUARTER, NOTE_EIGTHS)}, 20);
+		
+		Sequence melody3 = new Sequence(new MusicalEvent [] {
+				new MusicalEvent(0, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
-				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
+				new MusicalEvent(0, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(3, NOTE_EIGTHS, NOTE_ZERO),
 				new MusicalEvent(4, NOTE_QUARTER, NOTE_ZERO),
-				new MusicalEvent(3, NOTE_QUARTER, NOTE_ZERO)}, 20));
+				new MusicalEvent(3, NOTE_QUARTER, NOTE_ZERO)}, 20);
+		
+		result.addSequence(0, 0, chord1);
+		result.addSequence(0, 1, chord2);
+		result.addSequence(0, 2, chord3);
+		result.addSequence(1, 0, melody1);
+		result.addSequence(1, 1, melody2);
+		result.addSequence(1, 2, melody3);
 		result.setPositionImportance(0, 20);
 		result.setPositionImportance(1, 15);
 		result.setPositionImportance(2, 10);
