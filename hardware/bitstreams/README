@@ -24,3 +24,16 @@ Slots:
 	0 = FIR filter
 	1 = Sine osclillator	
 
+-------------------
+
+Name:
+    sin_sq_tri_saw_noise
+    
+Description:
+    
+Slots:
+    0 = Sine generator
+    1 = Square generator
+    2 = Triangle generator
+    3 = Sawtooth generator
+    4 = Noise generator
