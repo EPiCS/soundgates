@@ -43,9 +43,6 @@ Link later
 
 ### Dynamically linked libraries  
  * `-L"<path_to>/pg_soundgates/software/zynq/Libraries/x86_64/lib" `
- * `-L"<path_to_reconos>"`
- 
-If compiling for the Zynq the (TODO Lukas fragen: Sind die Libs nicht im Repo? Da ist noch ein Pfad in den Projekt settings eingetragen. Ließ sich letztens aber auch so auf dem PG Rechner kompilieren)
  
  * `-ldl -lmongoc -llo -lpthread -lboost_filesystem -lboost_thread -lboost_program_options -lboost_regex -lboost_log -lboost_system -lxmlrpc_server_abyss++ -lxmlrpc_server++ -lxmlrpc_server_abyss -lxmlrpc_server -lxmlrpc_abyss -lxmlrpc++ -lxmlrpc -lxmlrpc_util -lxmlrpc_xmlparse -lxmlrpc_xmltok`  
 

@@ -37,7 +37,7 @@ All control values are of datatype float. If the control value is used for boole
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
 | Sound2Control | soundtocontrol | <ol><li>Lower</li><li>Upper</li><li class="sound">SoundIn</li></ol> | <ol><li>ControlOut</li></ol> | - | {{page.uncheck}} <td colspan="2"> Calculates the average value of an incoming soundwave and maps this value to a range between *Lower* and *Upper* </td> |
-| Timer | timer  | <ol><li>TriggerIn</li><li>Loop</li><li>Delay</li></ol> | <ol><li>TriggerOut</li></ol> | - | {{page.uncheck}} <td colspan="2"> TODO Beschreibung der exakten Funktionsweise </td>|
+| Timer | timer  | <ol><li>TriggerIn</li><li>Loop</li><li>Delay</li></ol> | <ol><li>TriggerOut</li></ol> | - | {{page.uncheck}} <td colspan="2"> Will send out a true after *delay* when triggered, or peridocally every *delay* seconds whenn *loop* is true. </td>|
 
 
 
@@ -56,7 +56,7 @@ All control values are of datatype float. If the control value is used for boole
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
 | ADSR Envelope | adsr | <ol><li class="sound">SoundIn</li><li>Attack</li><li>Decay</li><li>Sustain</li><li>Release</li><li>Trigger</ol> |<ol><li>SoundOut</li></ol> | - | {{page.check}} <td colspan="2"> Modifies the amplitude of an incoming sound signal. Once *trigger* receives a 1, the sound signal goes from 0% to 100% amplitude over *attack* seconds, falls over *decay* seconds to stays at *sustain* % as long as *trigger* is still 1 and fades out to 0% over *release* seconds</td> |
-| Ramp Envelope | ramp | <ol><li class="sound">SamplesIn</li><li>Rising Time</li><li>Falling Time</li><li>Trigger</li></ol> | <ol><li class="sound">SamplesOut</li></ol> | - | {{page.check}} <td colspan="2"> TODO Was genau macht die Ramp?</td> |
+| Ramp Envelope | ramp | <ol><li class="sound">SamplesIn</li><li>Rising Time</li><li>Falling Time</li><li>Trigger</li></ol> | <ol><li class="sound">SamplesOut</li></ol> | - | {{page.check}} <td colspan="2"> When triggered, increases the volume from 0% to 100% over *rising time* seconds and decreases again over *falling time* seconds.</td> |
 
 ### Filter
 
@@ -78,7 +78,7 @@ All control values are of datatype float. If the control value is used for boole
 | Accumulator	| accumulatorcc	| <ol><li>AccIn</li><li>Reset</li></ol> | <ol><li>Out</li></ol> | - | {{page.uncheck}} <td colspan="2"> Accumulates incoming control values and pushes them to the output.</td> |
 | AND		| and		| <ol><li>Value1</li><li>Value2</li></ol> | <ol><li>Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Boolean AND</td> |
 | Demultiplexer | demux | <ol><li>Data</li><li>Selector</li></ol> | <ol><li>Data1</li><li>Data2</li></ol> | - | {{page.uncheck}} <td colspan="2"> Puses the incoming *Data* to one of the outputs, depending on whether *Selector* is `true` or `false`</td> |
-| Multiplexer | mux | TODO Zum MUX gibt es noch keine XML Beschreibung im Editor! | op | p | {{page.uncheck}} <td colspan="2"> d</td> |
+| Multiplexer | mux | <ol><li>MuxIn1</li><li>MuxIn2</li><li>Selector</li></ol> | <ol><li>Data</li></ol> | - | {{page.uncheck}} <td colspan="2"> Multiplexes between two incoming control signals.</td> |
 | NOT | not | <ol><li>Value</li></ol> | <ol><li>Negation</li></op> | - | {{page.uncheck}} <td colspan="2"> Logical NOT</td> |
 | OR	| or		| <ol><li>Value1</li><li>Value2</li></ol> | <ol><li>Result</li></ol> | - | {{page.uncheck}} <td colspan="2"> Boolean OR</td> |
 
@@ -87,7 +87,7 @@ All control values are of datatype float. If the control value is used for boole
 
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
-| IO | input | - | <ol><li>Value</li></ol> | <ol><li>TODO Name, Range... abweichendes Format</li></ol> | {{page.uncheck}} <td colspan="2"> TODO</td> |
+| IO | input | - | <ol><li>Value</li></ol> | <ol><li>OSC Name</li><li>Value range</li></ol> | {{page.uncheck}} <td colspan="2"> IO components can be communicated with via OSC messages. They will also appear in the COSMIC android app.</td> |
 
 ### Oscillator
 
