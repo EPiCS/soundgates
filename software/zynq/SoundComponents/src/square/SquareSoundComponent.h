@@ -110,6 +110,6 @@ public:
 //            }
 //        }
 //    }
-};
+// };
 
 #endif /* SQUARESOUNDCOMPONENT_H_ */

@@ -10,7 +10,7 @@
 #include "impl/TriangleSoundComponent_SW.h"
 #include "impl/TriangleSoundComponent_HW.h"
 
-DEFINE_COMPONENTNAME(TriangleSoundComponent, "Triangle")
+DEFINE_COMPONENTNAME(TriangleSoundComponent, "triangle")
 
 EXPORT_SOUNDCOMPONENT_MIXED_IMPL(TriangleSoundComponent);
 

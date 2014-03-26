@@ -8,6 +8,7 @@
 #include "SquareSoundComponent.h"
 
 #include "impl/SquareSoundComponent_SW.h"
+#include "impl/SquareSoundComponent_HW.h"
 
 DEFINE_COMPONENTNAME(SquareSoundComponent, "square")
 
