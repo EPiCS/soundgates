@@ -7,12 +7,12 @@
 
 #include "TriangleSoundComponent.h"
 
-//#include "impl/TriangleSoundComponent_SW.h"
+#include "impl/TriangleSoundComponent_SW.h"
 #include "impl/TriangleSoundComponent_HW.h"
 
 DEFINE_COMPONENTNAME(TriangleSoundComponent, "triangle")
 
-EXPORT_SOUNDCOMPONENT_HW_ONLY(TriangleSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(TriangleSoundComponent);
 
 TriangleSoundComponent::TriangleSoundComponent(std::vector<std::string> params)
     : SoundComponentImpl(params) {

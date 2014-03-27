@@ -11,6 +11,7 @@
 #include <string.h>
 #include <vector>
 #include <cmath>
+#include <climits>
 
 #include <SoundPort.h>
 #include <Synthesizer.h>
