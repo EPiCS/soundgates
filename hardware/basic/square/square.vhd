@@ -42,7 +42,7 @@ architecture Behavioral of square is
     constant last_int : integer := integer(SOUNDGATE_FIX_PT_SCALING) + 1;
 
     constant pi     : signed (31 downto 0) := to_signed(integer(real(MATH_PI     * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
-	 constant one    : signed (31 downto 0) := to_signed(integer(real(1     * 2**SOUNDGATE_FIX_PT_SCALING)), 32);
+	 constant one    : signed (31 downto 0) := to_signed(integer(real(2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant two_pi : signed (31 downto 0) := to_signed(integer(real(2.0 *MATH_PI* 2**SOUNDGATE_FIX_PT_SCALING)), 32);
     constant upper  : signed (31 downto 0) := to_signed(integer(real(INT_MAX)), 32);
     constant lower  : signed (31 downto 0) := to_signed(integer(real(INT_MIN)), 32);
@@ -64,9 +64,9 @@ architecture Behavioral of square is
             if rising_edge(clk) then
                 if ce = '1' then
                     x <= x + incr;
-                    if x >= duty_on and x < duty_off then  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
-                        square <= lower;
-                    elsif x >= duty_off and x < one then --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
+                    if x < duty_on then  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
+                        square <= upper;
+                    elsif x >= duty_on and x < one then --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
 								square <= upper;
 						  elsif x > one then
                         x <= (others => '0');
