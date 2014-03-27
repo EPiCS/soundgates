@@ -65,15 +65,12 @@ architecture Behavioral of square is
                 if ce = '1' then
                     if x < duty_on then  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square <= upper;
-								x <= duty_on;
+						      x <= x + incr;
                     elsif x < duty_off and x >= duty_on then --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
 								square <= lower;
-								x <= duty_off;
+						      x <= x + incr;
                     elsif x >= duty_off then
 								x <= (others => '0');
-								square <= upper;
-						  else
-						      x <= x + incr;
 						  end if;
                 end if;
             end if;
