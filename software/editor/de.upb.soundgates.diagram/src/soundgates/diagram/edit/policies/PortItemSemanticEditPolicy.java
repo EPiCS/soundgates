@@ -1,19 +1,33 @@
 package soundgates.diagram.edit.policies;
 
+import java.util.Iterator;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gmf.runtime.diagram.core.commands.DeleteCommand;
+import org.eclipse.gmf.runtime.emf.commands.core.command.CompositeTransactionalCommand;
+import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
 
+import org.eclipse.gmf.runtime.notation.Edge;
+import org.eclipse.gmf.runtime.notation.View;
 import soundgates.AtomicSoundComponent;
 import soundgates.DataType;
 import soundgates.Direction;
 import soundgates.Port;
+import soundgates.diagram.edit.commands.DelegationCreateCommand;
+import soundgates.diagram.edit.commands.DelegationReorientCommand;
 import soundgates.diagram.edit.commands.EmptyCommand;
+import soundgates.diagram.edit.commands.Link2CreateCommand;
+import soundgates.diagram.edit.commands.Link2ReorientCommand;
 import soundgates.diagram.edit.commands.LinkCreateCommand;
 import soundgates.diagram.edit.commands.LinkReorientCommand;
+import soundgates.diagram.edit.parts.DelegationEditPart;
+import soundgates.diagram.edit.parts.Link2EditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
+import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
 import soundgates.impl.PatchImpl;
 
@@ -34,7 +48,7 @@ public class PortItemSemanticEditPolicy extends
 	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
-			return new EmptyCommand();		
+		return new EmptyCommand();
 	}
 
 	/**
@@ -48,7 +62,7 @@ public class PortItemSemanticEditPolicy extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getStartCreateRelationshipCommand(
 			CreateRelationshipRequest req) {
@@ -56,6 +70,7 @@ public class PortItemSemanticEditPolicy extends
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
+
 		return null;
 	}
 
@@ -116,13 +131,14 @@ public class PortItemSemanticEditPolicy extends
 	 * Returns command to reorient EClass based link. New link target or source
 	 * should be the domain model element associated with this node.
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getReorientRelationshipCommand(
 			ReorientRelationshipRequest req) {
 		switch (getVisualID(req)) {
 		case LinkEditPart.VISUAL_ID:
 			return getGEFWrapper(new LinkReorientCommand(req));
+
 		}
 		return super.getReorientRelationshipCommand(req);
 	}

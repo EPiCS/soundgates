@@ -149,7 +149,7 @@ public class CompositeSoundComponent2EditPart extends
 	 * @generated NOT
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
-		
+
 		return false;
 	}
 
