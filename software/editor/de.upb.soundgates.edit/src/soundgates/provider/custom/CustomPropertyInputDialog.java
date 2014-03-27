@@ -152,15 +152,9 @@ public class CustomPropertyInputDialog extends Dialog {
 					keySet());
 			Iterator<String> it = keys.iterator();
 				
-			while (it.hasNext()) {			
+			while (it.hasNext()) {		
 					
-			
-					// TODO hier wird eine exception im Diagram Editor
-					// geworfen.
-					// Funktioniert durch Abfangen der Exception so, ist
-					// aber
-					// ein dreckicker Hack. Man sollte hier ein GMF Command
-					// absetzen
+		
 					String desc = it.next();
 					
 						if (getAtomicSoundComponent().getFloatProperties()

@@ -23,6 +23,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.LabelEditPart;
+
+import org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.figures.IBorderItemLocator;
 import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry;
 import org.eclipse.gmf.runtime.diagram.ui.label.ILabelDelegate;
@@ -681,7 +683,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	static final Font THIS_FONT = new Font(Display.getCurrent(), Display
 			.getDefault().getSystemFont().getFontData()[0].getName(), 8,

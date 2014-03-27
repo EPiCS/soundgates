@@ -32,7 +32,8 @@ import soundgates.diagram.part.SoundgatesVisualIDRegistry;
  * @generated NOT
  */
 public class CompositeSoundComponentEditPart extends
-		CompositeSoundComponentAbstractEditPart implements SelectableEditPartForCompositeCreation {
+		CompositeSoundComponentAbstractEditPart implements
+		SelectableEditPartForCompositeCreation {
 
 	/**
 	 * @generated
