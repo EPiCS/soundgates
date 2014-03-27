@@ -72,9 +72,9 @@ public:
 
 class OnFrequencyChange_HW : public ICallbackFunctor {
 private:
-    SawtoothSoundComponent& m_ObjRef;
+	TriangleSoundComponent& m_ObjRef;
 public:
-    OnFrequencyChange_HW(SawtoothSoundComponent& ref ) : m_ObjRef(ref){ }
+    OnFrequencyChange_HW(TriangleSoundComponent& ref ) : m_ObjRef(ref){ }
 
     void operator()(){
         float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();

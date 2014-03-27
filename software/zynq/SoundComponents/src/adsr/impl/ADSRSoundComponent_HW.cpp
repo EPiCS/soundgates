@@ -1,44 +1,42 @@
 /*
- * SawtoothSoundComponent_HW.cpp
+ * ADSRSoundComponent_HW.cpp
  *
- *  Created on: Nov 29, 2013
- *      Author: CaiusC
  */
 
 
-#include "SawtoothSoundComponent_HW.h"
+#include "ADSRSoundComponent_HW.h"
 
 #ifndef ZYNQ
 
-SawtoothSoundComponent_HW::SawtoothSoundComponent_HW(std::vector<std::string> params) : SawtoothSoundComponent(params){
+ADSRSoundComponent_HW::ADSRSoundComponent_HW(std::vector<std::string> params) : ADSRSoundComponent(params){
 }
 
-SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){}
+ADSRSoundComponent_HW::~ADSRSoundComponent_HW(){}
 
 
 
-void SawtoothSoundComponent_HW::init(){ }
+void ADSRSoundComponent_HW::init(){ }
 
-void SawtoothSoundComponent_HW::process(){ }
+void ADSRSoundComponent_HW::process(){ }
 
 #else
 
-SawtoothSoundComponent_HW::SawtoothSoundComponent_HW(std::vector<std::string> params)
-    : SawtoothSoundComponent(params),
-    slot(SawtoothSoundComponent::name) {
+ADSRSoundComponent_HW::ADSRSoundComponent_HW(std::vector<std::string> params)
+    : ADSRSoundComponent(params),
+    slot(ADSRSoundComponent::name) {
 
     m_LocalBuffer = new char[Synthesizer::config::bytesPerBlock];
 
 
 }
 
-SawtoothSoundComponent_HW::~SawtoothSoundComponent_HW(){
+ADSRSoundComponent_HW::~ADSRSoundComponent_HW(){
     delete m_LocalBuffer;
 }
 
-void SawtoothSoundComponent_HW::init(){
+void ADSRSoundComponent_HW::init(){
 
-    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange_HW(*this)));
+    m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange(*this)));
 
 
     /* initialize reconos */
@@ -49,6 +47,21 @@ void SawtoothSoundComponent_HW::init(){
         /* initialize message boxes with 1 data word */
         mbox_init(&m_CtrlStart, 1);
         mbox_init(&m_CtrlStop,  1);
+
+        m_HWTParams[0] =
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         m_HWTParams[0] = (uint32_t) m_LocalBuffer;
 
@@ -70,11 +83,9 @@ void SawtoothSoundComponent_HW::init(){
     }
 }
 
-void SawtoothSoundComponent_HW::process(){
+void ADSRSoundComponent_HW::process(){
     if (this->m_active) {
-        m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
-
-   //     m_HWTParams[0] = (uint32_t) (m_SoundOut_1_Port->getWriteBuffer());
+        m_HWTParams[2] = (uint32_t) (m_PhaseIncr * SOUNDGATES_FIXED_PT_SCALE); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
 		mbox_put(&m_CtrlStart, SINUS_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */

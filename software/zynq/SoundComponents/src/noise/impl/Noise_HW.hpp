@@ -33,6 +33,8 @@ private:
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
 
+    char*  m_LocalBuffer;
+
     struct reconos_resource m_ReconOSResource[2];
     struct reconos_hwt      m_ReconOSThread;
 

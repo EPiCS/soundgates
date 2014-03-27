@@ -39,6 +39,7 @@ SoundComponents += accumulator \
 				  pwm \
 				  fir \
 				  log \
+				  tri \
 				  ramp 
 
 

@@ -7,12 +7,12 @@
 
 #include "TriangleSoundComponent.h"
 
-#include "impl/TriangleSoundComponent_SW.h"
+//#include "impl/TriangleSoundComponent_SW.h"
 #include "impl/TriangleSoundComponent_HW.h"
 
 DEFINE_COMPONENTNAME(TriangleSoundComponent, "triangle")
 
-EXPORT_SOUNDCOMPONENT_MIXED_IMPL(TriangleSoundComponent);
+EXPORT_SOUNDCOMPONENT_HW_ONLY(TriangleSoundComponent);
 
 TriangleSoundComponent::TriangleSoundComponent(std::vector<std::string> params)
     : SoundComponentImpl(params) {
@@ -42,8 +42,8 @@ double TriangleSoundComponent::getPhaseIncrement(float frequency){
 
 }
 
-double SawtoothSoundComponent::getPhaseIncrement_HW(float frequency)
+double TriangleSoundComponent::getPhaseIncrement_HW(float frequency)
 {
-	return (((2* ((double)INT_MAX - (double)INT_MIN))/ Synthesizer::config::samplerate) * frequency;
+	return ((2* ((double)INT_MAX - (double)INT_MIN))/ Synthesizer::config::samplerate) * frequency;
 
 }
