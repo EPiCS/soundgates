@@ -331,18 +331,23 @@ begin
 								    --read sample 1
 									 old_o_RAMAddr_pwm <= o_RAMAddr_pwm;
 									 sample1 <= i_RAMData_pwm;
+                            state_inner_process <= 1;
 								when 1 =>
 								    o_RAMAddr_pwm <= std_logic_vector(signed(o_RAMAddr_pwm) + to_signed(C_MAX_SAMPLE_COUNT,7));
+                            state_inner_process <= 9;
+							   when 9 =>
+									 state_inner_process <= 2;
 								when 2 =>
 								    --read sample 2
 									 sample2 <= i_RAMData_pwm;
-									 o_RAMAddr_pwm <= old_o_RAMAddr_pwm;
+                            state_inner_process <= 3;
                         when 3 =>
+									 o_RAMAddr_pwm <= old_o_RAMAddr_pwm;
                             pwm_ce              <= '1'; -- ein takt früher
-                            state_inner_process <= 1;
+                            state_inner_process <= 4;
                         when 4 =>
                             o_RAMWE_pwm         <= '1';
-                            state_inner_process <= 2;
+                            state_inner_process <= 5;
 								when 5 =>
 				            o_RAMAddr_pwm     <= std_logic_vector(unsigned(o_RAMAddr_pwm)  + 1);
                             sample_count        <= sample_count - 1;
