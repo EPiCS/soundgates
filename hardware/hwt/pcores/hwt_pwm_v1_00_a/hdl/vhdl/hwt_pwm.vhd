@@ -342,7 +342,7 @@ begin
 					   when 2 =>
 				            o_RAMAddr_pwm     <= std_logic_vector(unsigned(o_RAMAddr_pwm)  + 1);
 				            o_RAMAddr_pwm2    <= std_logic_vector(unsigned(o_RAMAddr_pwm2) + 1);
-                            sample_count        <= sample_count - 1;
+                            sample_count      <= sample_count - 1;
                             state_inner_process <= 3;
 					when others =>
 					    state_inner_process <= 0;
