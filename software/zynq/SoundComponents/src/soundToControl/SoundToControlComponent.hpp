@@ -26,7 +26,7 @@ public:
 
 	DECLARE_PORT3(ControlPort, lowerControlIn, 1);
 	DECLARE_PORT3(ControlPort, upperControlIn, 2);
-	DECLARE_PORT3(SoundPort, SoundIn, 3);
+	DECLARE_PORT3(SoundPort,   SoundIn, 3);
 	DECLARE_PORT3(ControlPort, controlOut, 1);
 
 	SoundToControlComponent(std::vector<std::string> params);

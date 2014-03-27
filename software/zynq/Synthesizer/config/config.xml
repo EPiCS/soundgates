@@ -8,7 +8,7 @@
     </alsa>
     
     <core>
-        <hwt_support>true</hwt_support>
+        <hwt_support>false</hwt_support>
         <ports>
             <tcp>50050</tcp>
             <udp>50050</udp>

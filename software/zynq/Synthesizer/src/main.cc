@@ -124,12 +124,12 @@ int main( int argc, const char* argv[])
 //	ui::UIManager::getInstance().registerService(xmlrpcservice, "xmlrpc", true);
 
     ui::UIService* oscservice    = (ui::UIService*) new ui::OSCService(patch);
-    ui::UIService* ncursesui     = (ui::UIService*) new ui::NcursesUI(patch);
+//    ui::UIService* ncursesui     = (ui::UIService*) new ui::NcursesUI(patch);
 	ui::UIService* tcphandshake  = (ui::UIService*) new ui::TCPHandshakeService(patch);
 
 	ui::UIManager::getInstance().registerService(oscservice,    "oscservice",   true);
 	ui::UIManager::getInstance().registerService(tcphandshake,  "tcphandshake", true);
-	ui::UIManager::getInstance().registerService(ncursesui,     "ncurses",      true);
+//	ui::UIManager::getInstance().registerService(ncursesui,     "ncurses",      true);
 
 	patch.run();
 

@@ -12,7 +12,7 @@
 23 const/sw/'349.228'
 24 const/sw/'391.995'
 25 const/sw/'440.0'
-26 const/sw/'493.883'
+26 const/hw(0)/'493.883'
 
 10 input/sw/'/trigger/note_c f'
 11 input/sw/'/trigger/note_d f'

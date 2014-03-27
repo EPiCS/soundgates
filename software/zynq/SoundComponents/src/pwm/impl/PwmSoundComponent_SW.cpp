@@ -20,11 +20,17 @@ void PwmSoundComponent_SW::process()
 	// Components that produce sound need to do so for a number of samples in one processing step
 	// This is done by iterating from 0 to blocksize
 	for (int i = 0; i < Synthesizer::config::blocksize; i++ ) {
+
 		int valueA = (*m_PwmSoundIn_1_Port)[i];
 		int valueB = (*m_PwmSoundIn_2_Port)[i];
+
 		if( valueA > valueB)
+		{
 			m_PwmSoundOut_1_Port->writeSample(INT_MAX, i);
+		}
 		else
+		{
 			m_PwmSoundOut_1_Port->writeSample(INT_MIN, i);
+		}
 	}
 }
