@@ -66,9 +66,9 @@ use IEEE.MATH_REAL.ALL;
     constant hwt_args : mem32(0 to 4) := (
         to_signed(0, 32),   -- destination address
         to_signed(0, 32),   -- phase offset
-        to_signed(1, 32),   -- phase increment
-        to_signed(8, 32), -- On phase
-        to_signed(16, 32)  -- Off phase
+        to_signed(integer(real( 0.1 * 2**SOUNDGATE_FIX_PT_SCALING)), 32),   -- phase increment
+        to_signed(integer(real( 0.5 * 2**SOUNDGATE_FIX_PT_SCALING)), 32), -- On phase
+        to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32)  -- Off phase
         );
 
 	 constant argc : integer := 5;

@@ -110,7 +110,7 @@ architecture Behavioral of hwt_pwm is
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
     signal o_RAMAddr_pwm  : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
-    signal o_RAMAddr_pwm2 : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+    signal old_o_RAMAddr_pwm  : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMData_pwm  : std_logic_vector(0 to 31);   -- pwm to local ram
 	signal i_RAMData_pwm  : std_logic_vector(0 to 31);   -- local ram to pwm
 	signal i_RAMData_pwm2 : std_logic_vector(0 to 31);   -- local ram to pwm
@@ -147,8 +147,8 @@ architecture Behavioral of hwt_pwm is
     signal sourceaddr   : std_logic_vector(DWORD_WIDTH - 1 downto 0);
     signal sourceaddr2  : std_logic_vector(DWORD_WIDTH - 1 downto 0);
     signal destaddr     : std_logic_vector(DWORD_WIDTH - 1 downto 0);
-    signal sample_in    : std_logic_vector(31 downto 0);
-    signal sample_in2   : std_logic_vector(31 downto 0);
+    signal sample1       : std_logic_vector(31 downto 0);
+	 signal sample2       : std_logic_vector(31 downto 0);
 
     signal state_inner_process : integer;
     signal bang_state       : integer range 0 to 1;
@@ -174,8 +174,7 @@ begin
     sourceaddr2 <= hwtio.argv(1);
     destaddr    <= hwtio.argv(2);
 
-    sample_in   <= i_RAMData_pwm;
-    sample_in2  <= i_RAMData_pwm2;
+--    sample   <= i_RAMData_pwm;
 
     -----------------------------------
     -- Hard wirings
@@ -230,8 +229,8 @@ begin
             clk         => clk,
             rst         => rst,
             ce          => pwm_ce,
-            sample_in   => signed (sample_in),
-            sample_in2  => signed (sample_in2),
+            sample_in   => signed (sample1),
+            sample_in2  => signed (sample2),
             pwm         => pwm_data
             );
 
@@ -281,6 +280,7 @@ begin
 
             done := False;
               o_RAMAddr_pwm <= (others => '0');
+				  old_o_RAMAddr_pwm<= (others => '0');
         elsif rising_edge(clk) then
             o_RAMData_pwm       <= std_logic_vector(pwm_data);
             pwm_ce              <= '0';
@@ -326,24 +326,38 @@ begin
                     std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES/2,24)), done); -- always in bytes
 				if done then
 				    state   <= STATE_PROCESS;
-                    o_RAMAddr_pwm     <= (others => '0');   -- start with the first sample
-                    o_RAMAddr_pwm2    <= std_logic_vector(to_unsigned(C_MAX_SAMPLE_COUNT,7));   -- start with the first sample
+                    o_RAMAddr_pwm     <= (others => '0');   -- start with the first sample   -- start with the first sample
 			    end if;
 
             when STATE_PROCESS =>
                 if sample_count > 0 then
                     case state_inner_process is
-                        when 0 =>
-                            pwm_ce              <= '1'; -- ein takt früher
+						      when 0 =>
+								    --read sample 1
+									 old_o_RAMAddr_pwm <= o_RAMAddr_pwm;
+									 sample1 <= i_RAMData_pwm;
                             state_inner_process <= 1;
-                        when 1 =>
+								when 1 =>
+								    o_RAMAddr_pwm <= std_logic_vector(signed(o_RAMAddr_pwm) + to_signed(C_MAX_SAMPLE_COUNT,7));
+                            state_inner_process <= 9;
+							   when 9 =>
+									 state_inner_process <= 2;
+								when 2 =>
+								    --read sample 2
+									 sample2 <= i_RAMData_pwm;
+                            state_inner_process <= 3;
+                        when 3 =>
+									 o_RAMAddr_pwm <= old_o_RAMAddr_pwm;
+                            pwm_ce              <= '1'; -- ein takt früher
+                            state_inner_process <= 4;
+                        when 4 =>
                             o_RAMWE_pwm         <= '1';
-                            state_inner_process <= 2;
-					   when 2 =>
+                            state_inner_process <= 5;
+								when 5 =>
 				            o_RAMAddr_pwm     <= std_logic_vector(unsigned(o_RAMAddr_pwm)  + 1);
 				            o_RAMAddr_pwm2    <= std_logic_vector(unsigned(o_RAMAddr_pwm2) + 1);
-                            sample_count      <= sample_count - 1;
-                            state_inner_process <= 3;
+                            sample_count        <= sample_count - 1;
+                            state_inner_process <= 6;
 					when others =>
 					    state_inner_process <= 0;
                     end case;
