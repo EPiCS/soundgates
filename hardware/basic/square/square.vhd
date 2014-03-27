@@ -67,7 +67,7 @@ architecture Behavioral of square is
                     if x < duty_on then  --to_signed(integer(real( 1.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
                         square <= upper;
                     elsif x >= duty_on and x < one then --to_signed(integer(real( 2.0 * 2**SOUNDGATE_FIX_PT_SCALING)), 32) then
-								square <= upper;
+								square <= lower;
 						  elsif x > one then
                         x <= (others => '0');
                     end if;
