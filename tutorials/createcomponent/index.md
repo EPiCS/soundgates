@@ -67,17 +67,16 @@ Each HWT is attached to a FIFO in order to receive data from the Synthesizer. In
 
 ### General Structure
 
-Basically, the FSM consists of the following states:
-* `IDLE`, where the HWT waits for the Synthesizer to start the HWT
-* `REFRESH ARGUMENTS`, where the HWT loads the Synthesizer's data (parameters etc) to local signals
-* `CHECK TRIGGER`, where the HWT checks if it has been triggered yet
-* `READ SAMPLES`, where the HWT loads the incoming samples to local RAM
-* `PROCESS`, where the basic component is enabled to create/modify samples
-* `WRITE TO MEMORY`, where the created/modified samples are written back to the FIFO
-* `NOTIFY`, where the Synthesizer is informed, that the HWT is finished
-* `EXIT`, where the HWT is terminated
+Basically, the FSM consists of the following states: 
 
-
+* `IDLE`, where the HWT waits for the Synthesizer to start the HWT 
+* `REFRESH ARGUMENTS`, where the HWT loads the Synthesizer's data (parameters etc) to local signals 
+* `CHECK TRIGGER`, where the HWT checks if it has been triggered yet 
+* `READ SAMPLES`, where the HWT loads the incoming samples to local RAM 
+* `PROCESS`, where the basic component is enabled to create/modify samples 
+* `WRITE TO MEMORY`, where the created/modified samples are written back to the FIFO 
+* `NOTIFY`, where the Synthesizer is informed, that the HWT is finished 
+* `EXIT`, where the HWT is terminated 
 
 <div>
    <img src="./state%20machine.png" alt="HWT State Machines" width="900px" height="633px"/>
@@ -86,6 +85,98 @@ Basically, the FSM consists of the following states:
 
 
 As depicted in Figure 1, there are several ways to create HWT. Figure 1a is used for HWTs that only create output samples e.g. a Sawtooth wave generator. Hence, it does not need states for reading input samples or for checking triggers. In the case that there are samples to comsume, the HWT needs a Read Samples state as depicted in Figure 1b. If there are samples to comsume, which needs to be triggered, one needs a HWT structure as shown in Figure 1c. Samples are only read and processed on if the HWT is triggered.
+
+### Retrieve arguments from software
+
+In order to retrieve arguments (e.g. addresses, control values) from the software side, there exist two helper procedures that make life a little easier. You might want to tell your hardware thread where is should read its samples from or where to write the result. One way to do this is to give the hardware thread a read/write pointer to your software-side sample buffer.
+
+You might use native reconos procedures for this task, but the `soundgates_reconos_pkg.vhd` provides helper procedures for this task:
+
+#### hwtio&#95;init
+
+Initialize hardware arguement signal.
+
+``` vhdl
+procedure hwtio_init( 
+        signal hwt_args : inout hwtio_t 
+);
+```
+
+#### get&#95;hwt&#95;args
+
+Get hardware arguements.
+
+```
+procedure get_hwt_args(
+        signal i_osif : in i_osif_t;
+        signal o_osif : out o_osif_t;
+        signal i_memif : in i_memif_t;
+        signal o_memif : out o_memif_t;
+        signal hwt_args : inout hwtio_t;
+        constant argc : in integer;
+        variable done : out boolean
+);
+```
+
+#### Example use
+
+Hardware side:
+
+``` vhdl
+
+architecture Behavioral of hwt_my_fancy_component is
+    ...
+
+    ----------------------------------------------------------------
+    -- Hardware arguements
+    ----------------------------------------------------------------
+    signal hwtio : hwtio_t;
+
+    -- arg[0] = source address
+    -- arg[1] = destination address
+    -- arg[2] = same random arguements
+    
+    constant hwt_argc : integer := 3;
+
+    ...
+begin
+    
+    sourceaddr  <= hwtio.argv(0);
+    destaddr    <= hwtio.argv(1);
+    myfacyarg   <= hwtio.argv(2);
+    ...
+    when STATE_SOME_STATE =>
+        get_hwt_args(i_osif, o_osif, i_memif, o_memif, hwtio, hwt_argc, done);
+
+        if done then
+            state <= STATE_DO_FANCY_STUFF;
+        end if; 
+    
+    ...
+```
+
+Software side:
+
+``` cpp
+
+	int* srcbuffer  = new int[BLOCK_SIZE];
+    int* destbuffer = new int[BLOCK_SIZE];
+
+    int  leon3;
+
+    uint32_t hwt_args[31];
+    
+    hwt_args[0] = (uint32_t) srcbuffer;
+    hwt_args[1] = (uint32_t) destbuffer;
+    hwt_args[2] = (uint32_t) &leon3;
+
+    ...
+    reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &hwt_args[0]);
+
+    ...
+    leon3 = 42;
+
+```
 
 ### Example
 This example works with the HWT structure depicted in Figure 1b, as it consumes and manipulates samples.

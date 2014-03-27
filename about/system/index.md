@@ -24,3 +24,8 @@ Therefore the first step to use the App is to connect to the synthesizer:
 <div align="center">
 <img alt="Cosmic App - Interact" src="http://pc2.github.io/pg-soundgates/assets/images/android_interaction_fragment.png" />
 </div>
+
+## Synthesizer
+
+The Synthesizer is a dynamic data flow graph processing engine. It is designed as a plugin architecture in order to use *sound components*. Sound components can be signal processing components (e.g. filters, arithmetic components, signal sources, envelope) as well as control objects (e.g. multiplexer, timer) and common objects like sample players. The synthesizer currently reads a *.tgf*-file which can be created using the *Soundgates Editor*. The synthesizer works on Linux x86(_64) and the Zynq-7000 FPGA architecture (ARM).
+
