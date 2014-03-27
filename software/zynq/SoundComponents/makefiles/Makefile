@@ -35,6 +35,7 @@ SoundComponents += accumulator \
                   soundToControl \
 				  template \
 			      timer \
+			      tri \
 				  saw \
 				  pwm \
 				  fir \
