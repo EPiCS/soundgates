@@ -69,7 +69,7 @@ void SquareSoundComponent_HW::process(){
     if (this->m_active) {
         m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
-		mbox_put(&m_CtrlStart, SINUS_HWT_START);
+		mbox_put(&m_CtrlStart, SQUARE_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
 
 		memcpy(m_SoundOut_1_Port->getWriteBuffer(), &m_LocalBuffer[0], Synthesizer::config::bytesPerBlock);

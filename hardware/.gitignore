@@ -3,7 +3,6 @@
 ### XilinxISE ###
 # intermediate build files
 *.bgn
-*.bit
 *.bld
 *.cmd_log
 *.drc

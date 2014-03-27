@@ -118,7 +118,8 @@ architecture Behavioral of hwt_adsr is
 	signal i_RAMData_adsr : std_logic_vector(0 to 31);   -- local ram to adsr
 	
 	--signal input_fixed_point : std_logic_vector(59 downto 0) := (others => '0');
-	signal output_fixed_point : std_logic_vector(63 downto 0) := (others => '0');
+	signal input_fixed_point : std_logic_vector(63 downto 0) := (others => '0');
+	signal output_fixed_point : std_logic_vector(95 downto 0) := (others => '0');
     signal o_RAMWE_adsr   : std_logic;
 
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
@@ -177,7 +178,7 @@ architecture Behavioral of hwt_adsr is
     constant    hwt_argc : integer := 8;
 begin
     
-	--input_fixed_point(59 downto 28) <= i_RAMData_adsr;
+	input_fixed_point(59 downto 28) <= i_RAMData_adsr;
     -----------------------------------
     -- Component related wiring
     -----------------------------------
@@ -298,8 +299,8 @@ begin
             done := False;
               o_RAMAddr_adsr <= (others => '0');
         elsif rising_edge(clk) then
-            output_fixed_point <= std_logic_vector(adsr_data * signed(i_RAMData_adsr));
-				o_RAMData_adsr <= output_fixed_point(59 downto 28);
+            output_fixed_point <= std_logic_vector(adsr_data * signed(input_fixed_point));
+				o_RAMData_adsr <= output_fixed_point(87 downto 56);
             adsr_ce              <= '0';
             o_RAMWE_adsr         <= '0';
             osif_ctrl_signal    <= ( others => '0');
