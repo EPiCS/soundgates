@@ -78,6 +78,26 @@
                menubarPath="Soundgates.diagram.menu/group">
          </action>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="SoundgatesComposite.diagram.edit.composite"
+            nameFilter="*.xml"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               id="Soundgates.diagram.menu"
+               label="Soundgates"
+               path="additions">
+            <separator
+                  name="group">
+            </separator>
+         </menu>
+         <action
+               class="soundgatesComposite.diagram.actions.EditCompositeComponentAction"
+               id="de.upb.soundgates.composite.diagram.edit.composite"
+               label="Edit Composite Sound Component"
+               menubarPath="Soundgates.diagram.menu/group">
+         </action>
+      </objectContribution>
    </extension>
 	
    <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">
