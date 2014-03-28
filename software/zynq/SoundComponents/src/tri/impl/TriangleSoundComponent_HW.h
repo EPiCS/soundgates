@@ -12,7 +12,6 @@
 #include "../TriangleSoundComponent.h"
 
 #include <HWSlot.h>
-#include <HWTParameters.h>
 #include <stdint.h>
 
 #ifdef ZYNQ

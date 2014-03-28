@@ -1,6 +1,6 @@
 -include ../../makefiles/common.mk
    
-OBJECTS=TriangleSoundComponent_SW.o TriangleSoundComponent_HW.o TriangleSoundComponent.o
+OBJECTS=TriangleSoundComponent_HW.o TriangleSoundComponent_SW.o TriangleSoundComponent.o
 
 all: libTriangle.so
 

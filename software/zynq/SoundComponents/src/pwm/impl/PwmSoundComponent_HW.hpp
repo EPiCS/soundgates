@@ -5,7 +5,7 @@
 #ifndef PWM_HW_HPP_
 #define PWM_HW_HPP_
 
-#include "../PWMSoundComponent.hpp"
+#include "../PwmSoundComponent.hpp"
 #include <HWSlot.h>
 #include <HWTParameters.h>
 
@@ -20,12 +20,12 @@ extern "C"{
 #define PWM_HWT_STOP  0xF0
 
 
-class PWM_HW: public PWMSoundComponent{
+class PwmSoundComponent_HW: public PwmSoundComponent{
 
 private:
 
-    HWSlot              m_HWTSlot;
-    HWTParameters<31>   m_HWTParams;
+    HWSlot          m_HWTSlot;
+    uint32_t      	m_HWTParams[32];
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
@@ -35,18 +35,18 @@ private:
 
 public:
 
-    PWM_HW(std::vector<std::string>);
+    PwmSoundComponent_HW(std::vector<std::string>);
 
     void init();
     void process();
 
-
+};
 #else
 
-class PWM_HW: public PWMSoundComponent{
+class PwmSoundComponent_HW: public PwmSoundComponent{
 
 public:
-    PWM_HW(std::vector<std::string>);
+    PwmSoundComponent_HW(std::vector<std::string>);
 
     void init(){
 
