@@ -416,7 +416,7 @@
   };
 
   __calcAverageExecutionTimeList = function(components) {
-    var c, data, result, _i, _len;
+    var c, data, l, result, _i, _len;
     result = [
       {
         key: "Average Execution Time",
@@ -426,8 +426,10 @@
     for (_i = 0, _len = components.length; _i < _len; _i++) {
       c = components[_i];
       if (!c.uid.startsWith("const") && !c.uid.startsWith("input")) {
+        l = __replaceRaute(c.uid);
+        l = c.type.toUpperCase() === 'HW' ? l + "_HW" : l;
         data = {
-          label: __replaceRaute(c.uid),
+          label: l,
           value: __calcAverageExecutionTime(c.execution_times)
         };
         result[0].values.push(data);

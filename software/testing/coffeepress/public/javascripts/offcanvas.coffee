@@ -423,8 +423,10 @@ __calcAverageExecutionTimeList = ( components ) ->
   result = [ { key: "Average Execution Time", values:[] }]
   for c in components
     if not c.uid.startsWith("const") and not c.uid.startsWith("input")
+      l = __replaceRaute c.uid
+      l = if c.type.toUpperCase() is 'HW' then l + "_HW" else l
       data = 
-        label: __replaceRaute c.uid
+        label: l
         value: __calcAverageExecutionTime c.execution_times
       result[0].values.push data
   return result
