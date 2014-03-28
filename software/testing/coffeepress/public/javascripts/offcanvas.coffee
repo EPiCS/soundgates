@@ -127,6 +127,7 @@ expand = (execution) ->
     $("#component_implementations").fadeOut("fast").empty()
     $("#component_average_execution").fadeOut("fast").empty()
     $("#execution").fadeOut("fast").empty()
+    $("#hardware").fadeOut("fast").empty()
     # Clean global variables
     global_component_charts = []
     return
@@ -222,6 +223,20 @@ expand = (execution) ->
   expand_addImplementationDistribution execution
   expand_addTurnaround execution
   expand_addAverageExuction execution
+
+# / ----------------------------------------------------------------------
+# Add FPGA information
+  # Gather HW components
+  hw_components = []
+  console.log "COMASPDMASPMD"
+  console.dir zedboard
+  for c in execution.components
+    if c.type.toUpperCase() is 'HW'
+      hw_components.push c.uid.substr(0, c.uid.indexOf('#')); 
+      console.log c.uid.substr(0, c.uid.indexOf('#')); 
+  console.log "COMASPDMASPMD"
+
+
 
 # / ----------------------------------------------------------------------
 # Draw graphs

@@ -123,7 +123,7 @@
   };
 
   expand = function(execution) {
-    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, _i, _len, _ref;
+    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, _i, _j, _len, _len1, _ref, _ref1;
     expand_clean = function() {
       console.log("Cleaning.");
       $("#execution_date").fadeOut("fast").empty();
@@ -132,6 +132,7 @@
       $("#component_implementations").fadeOut("fast").empty();
       $("#component_average_execution").fadeOut("fast").empty();
       $("#execution").fadeOut("fast").empty();
+      $("#hardware").fadeOut("fast").empty();
       global_component_charts = [];
     };
     expand_addDate = function(execution) {
@@ -210,9 +211,21 @@
     expand_addImplementationDistribution(execution);
     expand_addTurnaround(execution);
     expand_addAverageExuction(execution);
+    hw_components = [];
+    console.log("COMASPDMASPMD");
+    console.dir(zedboard);
     _ref = execution.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       c = _ref[_i];
+      if (c.type.toUpperCase() === 'HW') {
+        hw_components.push(c.uid.substr(0, c.uid.indexOf('#')));
+        console.log(c.uid.substr(0, c.uid.indexOf('#')));
+      }
+    }
+    console.log("COMASPDMASPMD");
+    _ref1 = execution.components;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      c = _ref1[_j];
       expandComponent(c);
     }
   };
