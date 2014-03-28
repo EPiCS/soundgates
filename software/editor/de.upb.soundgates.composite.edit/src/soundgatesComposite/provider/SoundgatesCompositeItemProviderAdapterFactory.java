@@ -101,20 +101,26 @@ public class SoundgatesCompositeItemProviderAdapterFactory extends SoundgatesCom
 	 * @generated
 	 */
 	protected PortItemProvider portItemProvider;
+	
+	protected NotEditablePortItemProvider notEditablePortItemProvider;
 
 	/**
 	 * This creates an adapter for a {@link soundgatesComposite.Port}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated 
 	 */
 	@Override
 	public Adapter createPortAdapter() {
-		if (portItemProvider == null) {
+		if(portItemProvider==null)
 			portItemProvider = new PortItemProvider(this);
-		}
-
 		return portItemProvider;
+	}
+	
+	@Override
+	public Adapter createNotEditablePortAdapter() {
+		notEditablePortItemProvider = new NotEditablePortItemProvider(this);
+		return notEditablePortItemProvider;
 	}
 
 	/**
