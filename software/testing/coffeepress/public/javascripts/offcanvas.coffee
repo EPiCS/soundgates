@@ -258,14 +258,14 @@ expand = (execution) ->
 
     tr = $ "<tr>"
     tr.appendTo thead
-    td = $ "<td>"
-    td.text("Ressource").appendTo thead
-    td = $ "<td>"
-    td.text("Used").appendTo thead
-    td = $ "<td>"
-    td.text("Percentage").appendTo thead
-    td = $ "<td>"
-    td.text("Capacity").appendTo thead
+    th = $ "<th>"
+    th.text("Ressource").appendTo tr
+    th = $ "<th>"
+    th.text("Used").appendTo tr
+    th = $ "<th>"
+    th.text("Percentage").appendTo tr
+    th = $ "<th>"
+    th.text("Capacity").appendTo tr
     
     # Create Table Body
     tbody = $ "<tbody>"

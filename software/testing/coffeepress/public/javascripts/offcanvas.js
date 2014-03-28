@@ -123,7 +123,7 @@
   };
 
   expand = function(execution) {
-    var body, c, card, div, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, hw_exists, load, percentage, row, table, tbody, td, thead, title, tr, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
+    var body, c, card, div, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, hw_exists, load, percentage, row, table, tbody, td, th, thead, title, tr, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
     expand_clean = function() {
       console.log("Cleaning.");
       $("#execution_date").fadeOut("fast").empty();
@@ -246,14 +246,14 @@
       thead.appendTo(table);
       tr = $("<tr>");
       tr.appendTo(thead);
-      td = $("<td>");
-      td.text("Ressource").appendTo(thead);
-      td = $("<td>");
-      td.text("Used").appendTo(thead);
-      td = $("<td>");
-      td.text("Percentage").appendTo(thead);
-      td = $("<td>");
-      td.text("Capacity").appendTo(thead);
+      th = $("<th>");
+      th.text("Ressource").appendTo(tr);
+      th = $("<th>");
+      th.text("Used").appendTo(tr);
+      th = $("<th>");
+      th.text("Percentage").appendTo(tr);
+      th = $("<th>");
+      th.text("Capacity").appendTo(tr);
       tbody = $("<tbody>");
       tbody.appendTo(table);
       tr = $("<tr>");
