@@ -82,16 +82,20 @@
     _results = [];
     for (_i = 0, _len = components.length; _i < _len; _i++) {
       c = components[_i];
-      li = $('<li>').appendTo(nav);
-      el = $('<a>').hide().appendTo(li).text(c.uid).fadeIn("fast");
-      _results.push(li.click(function() {
-        var target;
-        target = '#' + __replaceRaute($(this).children('a').text());
-        console.log("Scrolling to " + target);
-        return $("html, body").animate({
-          scrollTop: $(target).position().top
-        }, "slow");
-      }));
+      if (!c.uid.startsWith("const") && !c.uid.startsWith("input")) {
+        li = $('<li>').appendTo(nav);
+        el = $('<a>').hide().appendTo(li).text(c.uid).fadeIn("fast");
+        _results.push(li.click(function() {
+          var target;
+          target = '#' + __replaceRaute($(this).children('a').text());
+          console.log("Scrolling to " + target);
+          return $("html, body").animate({
+            scrollTop: $(target).position().top
+          }, "slow");
+        }));
+      } else {
+        _results.push(void 0);
+      }
     }
     return _results;
   };
@@ -304,7 +308,9 @@
     _ref1 = execution.components;
     for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
       c = _ref1[_k];
-      expandComponent(c);
+      if (!c.uid.startsWith("const") && !c.uid.startsWith("input")) {
+        expandComponent(c);
+      }
     }
   };
 
@@ -419,11 +425,13 @@
     ];
     for (_i = 0, _len = components.length; _i < _len; _i++) {
       c = components[_i];
-      data = {
-        label: __replaceRaute(c.uid),
-        value: __calcAverageExecutionTime(c.execution_times)
-      };
-      result[0].values.push(data);
+      if (!c.uid.startsWith("const") && !c.uid.startsWith("input")) {
+        data = {
+          label: __replaceRaute(c.uid),
+          value: __calcAverageExecutionTime(c.execution_times)
+        };
+        result[0].values.push(data);
+      }
     }
     return result;
   };

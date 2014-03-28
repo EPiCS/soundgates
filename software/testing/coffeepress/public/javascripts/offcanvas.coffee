@@ -82,14 +82,15 @@ initComponentNavigation = ( components ) ->
   nav = $("#nav_components").empty()
   $('<li class="nav-header">').appendTo(nav).text("Components")
   for c in components
-    li = $('<li>').appendTo(nav)
-    el = $('<a>').hide().appendTo(li).text(c.uid).fadeIn("fast")
-    li.click ->
-      target = '#' + __replaceRaute $(this).children('a').text()
-      console.log "Scrolling to " + target
-      $("html, body").animate
-        scrollTop: $(target).position().top
-        , "slow"
+    if not c.uid.startsWith("const") and not c.uid.startsWith("input")
+      li = $('<li>').appendTo(nav)
+      el = $('<a>').hide().appendTo(li).text(c.uid).fadeIn("fast")
+      li.click ->
+        target = '#' + __replaceRaute $(this).children('a').text()
+        console.log "Scrolling to " + target
+        $("html, body").animate
+          scrollTop: $(target).position().top
+          , "slow"
 
 initializeButtons = () ->
   $("#home").click ->
@@ -322,7 +323,8 @@ expand = (execution) ->
 # / ----------------------------------------------------------------------
 # Draw graphs
   for c in execution.components
-    expandComponent(c)
+    if not c.uid.startsWith("const") and not c.uid.startsWith("input")
+      expandComponent(c)
 
   return
 
@@ -420,10 +422,11 @@ __calcAverageExecutionTime = (execution_times) ->
 __calcAverageExecutionTimeList = ( components ) ->
   result = [ { key: "Average Execution Time", values:[] }]
   for c in components
-    data = 
-      label: __replaceRaute c.uid
-      value: __calcAverageExecutionTime c.execution_times
-    result[0].values.push data
+    if not c.uid.startsWith("const") and not c.uid.startsWith("input")
+      data = 
+        label: __replaceRaute c.uid
+        value: __calcAverageExecutionTime c.execution_times
+      result[0].values.push data
   return result
 
 # ## ---- NVD3
