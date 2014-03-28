@@ -123,7 +123,7 @@
   };
 
   expand = function(execution) {
-    var c, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, _i, _j, _len, _len1, _ref, _ref1;
+    var body, c, card, div, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, hw_exists, load, row, table, tbody, td, thead, title, tr, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
     expand_clean = function() {
       console.log("Cleaning.");
       $("#execution_date").fadeOut("fast").empty();
@@ -212,20 +212,85 @@
     expand_addTurnaround(execution);
     expand_addAverageExuction(execution);
     hw_components = [];
-    console.log("COMASPDMASPMD");
-    console.dir(zedboard);
+    hw_exists = false;
+    load = {
+      luts: 0,
+      registers: 0,
+      brams: 0,
+      dsps: 0
+    };
     _ref = execution.components;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       c = _ref[_i];
       if (c.type.toUpperCase() === 'HW') {
+        hw_exists = true;
         hw_components.push(c.uid.substr(0, c.uid.indexOf('#')));
-        console.log(c.uid.substr(0, c.uid.indexOf('#')));
       }
+    }
+    if (hw_exists) {
+      for (_j = 0, _len1 = hw_components.length; _j < _len1; _j++) {
+        c = hw_components[_j];
+        load.luts += zedboard.components[c].luts;
+        load.registers += zedboard.components[c].registers;
+        load.brams += zedboard.components[c].brams;
+        load.dsps += zedboard.components[c].dsps;
+      }
+      div = $("#hardware").fadeIn("fast");
+      row = $('<div class="span12"/>').addClass("hideme").css("margin-left", "0px").appendTo(div);
+      card = $('<div class="card"/>').appendTo(row);
+      title = $('<h2 class="card-heading"/>').appendTo(card).text('Hardware');
+      body = $('<div class="card-body"/>').appendTo(card);
+      table = $("<table>");
+      table.addClass("table table-condensed table-hover table-striped").appendTo(body);
+      thead = $("<thead>");
+      thead.appendTo(table);
+      tr = $("<tr>");
+      tr.appendTo(thead);
+      td = $("<td>");
+      td.text("Ressource").appendTo(thead);
+      td = $("<td>");
+      td.text("Used").appendTo(thead);
+      td = $("<td>");
+      td.text("Capacity").appendTo(thead);
+      tbody = $("<tbody>");
+      tbody.appendTo(table);
+      tr = $("<tr>");
+      tr.appendTo(tbody);
+      td = $("<td>");
+      td.appendTo(tr).addClass("span4").text('LUTs:');
+      td = $("<td>");
+      td.appendTo(tr).addClass("span4").text(load.luts);
+      td = $("<td>");
+      td.appendTo(tr).addClass("span4").text(zedboard.capacity.luts);
+      tr = $("<tr>");
+      tr.appendTo(tbody);
+      td = $('<td>');
+      td.appendTo(tr).addClass("span3").text('Registers:');
+      td = $('<td>');
+      td.appendTo(tr).addClass("span9").html(load.registers);
+      td = $("<td>");
+      td.appendTo(tr).addClass("span4").text(zedboard.capacity.registers);
+      tr = $("<tr>");
+      tr.appendTo(tbody);
+      td = $('<td>');
+      td.appendTo(tr).addClass("span3").text('BRAMs:');
+      td = $('<td>');
+      td.appendTo(tr).addClass("span9").html(load.brams);
+      td = $("<td>");
+      td.appendTo(tr).addClass("span4").text(zedboard.capacity.brams);
+      tr = $("<tr>");
+      tr.appendTo(tbody);
+      td = $('<td>');
+      td.appendTo(tr).addClass("span3").text('DSPs:');
+      td = $('<td>');
+      td.appendTo(tr).addClass("span9").html(load.dsps);
+      td = $("<td>");
+      td.appendTo(tr).addClass("span4").text(zedboard.capacity.dsps);
     }
     console.log("COMASPDMASPMD");
     _ref1 = execution.components;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      c = _ref1[_j];
+    for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+      c = _ref1[_k];
       expandComponent(c);
     }
   };
