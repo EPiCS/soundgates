@@ -464,7 +464,7 @@
   };
 
   __createBrush = function(component) {
-    var brush, brushed, context, draw_data, e, height, i, length, line, selector, svg, values, width, x_domain, x_scale, y_domain, y_scale, __getChart;
+    var brush, brushed, context, draw_data, e, height, i, length, line, selector, svg, values, width, x_domain, x_scale, y_domain, y_scale, __getChart, _ref;
     __getChart = function(component) {
       var c, _i, _len;
       for (_i = 0, _len = global_component_charts.length; _i < _len; _i++) {
@@ -505,7 +505,12 @@
     width = $(selector).parent().css("width");
     width = parseInt(width, 10);
     height = 60;
-    values = component.output_samples[0].values;
+    values = 0;
+    if (((_ref = component.output_samples[0]) != null ? _ref.values.length : void 0) > 0) {
+      values = component.output_samples[0].values;
+    } else {
+      values = component.input_samples[0].values;
+    }
     length = values.length;
     draw_data = {
       x: (function() {

@@ -510,7 +510,12 @@ __createBrush = (component) ->
   width = parseInt(width, 10);
   height = 60
 
-  values = component.output_samples[0].values
+  values = 0
+  if component.output_samples[0]?.values.length > 0
+    values = component.output_samples[0].values
+  else 
+    values = component.input_samples[0].values
+
   length = values.length
   draw_data = 
         x : (i for e,i in values)
