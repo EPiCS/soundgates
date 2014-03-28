@@ -123,7 +123,7 @@
   };
 
   expand = function(execution) {
-    var body, c, card, div, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, hw_exists, load, row, table, tbody, td, thead, title, tr, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
+    var body, c, card, div, expand_addAverageExuction, expand_addComponentCount, expand_addDate, expand_addImplementationDistribution, expand_addTurnaround, expand_clean, hw_components, hw_exists, load, percentage, row, table, tbody, td, thead, title, tr, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
     expand_clean = function() {
       console.log("Cleaning.");
       $("#execution_date").fadeOut("fast").empty();
@@ -251,43 +251,56 @@
       td = $("<td>");
       td.text("Used").appendTo(thead);
       td = $("<td>");
+      td.text("Percentage").appendTo(thead);
+      td = $("<td>");
       td.text("Capacity").appendTo(thead);
       tbody = $("<tbody>");
       tbody.appendTo(table);
       tr = $("<tr>");
       tr.appendTo(tbody);
       td = $("<td>");
-      td.appendTo(tr).addClass("span4").text('LUTs:');
+      td.appendTo(tr).addClass("span3").text('LUTs:');
       td = $("<td>");
-      td.appendTo(tr).addClass("span4").text(load.luts);
+      td.appendTo(tr).addClass("span3").text(load.luts);
       td = $("<td>");
-      td.appendTo(tr).addClass("span4").text(zedboard.capacity.luts);
+      percentage = load.luts > 0 ? load.luts * 100 / zedboard.capacity.luts : 0;
+      td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%');
+      td = $("<td>");
+      td.appendTo(tr).addClass("span3").text(zedboard.capacity.luts);
       tr = $("<tr>");
       tr.appendTo(tbody);
       td = $('<td>');
       td.appendTo(tr).addClass("span3").text('Registers:');
       td = $('<td>');
-      td.appendTo(tr).addClass("span9").html(load.registers);
+      td.appendTo(tr).addClass("span3").html(load.registers);
       td = $("<td>");
-      td.appendTo(tr).addClass("span4").text(zedboard.capacity.registers);
+      percentage = load.registers > 0 ? load.registers * 100 / zedboard.capacity.registers : 0;
+      td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%');
+      td = $("<td>");
+      td.appendTo(tr).addClass("span3").text(zedboard.capacity.registers);
       tr = $("<tr>");
       tr.appendTo(tbody);
       td = $('<td>');
       td.appendTo(tr).addClass("span3").text('BRAMs:');
       td = $('<td>');
-      td.appendTo(tr).addClass("span9").html(load.brams);
+      td.appendTo(tr).addClass("span3").html(load.brams);
       td = $("<td>");
-      td.appendTo(tr).addClass("span4").text(zedboard.capacity.brams);
+      percentage = load.brams > 0 ? load.brams * 100 / zedboard.capacity.brams : 0;
+      td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%');
+      td = $("<td>");
+      td.appendTo(tr).addClass("span3").text(zedboard.capacity.brams);
       tr = $("<tr>");
       tr.appendTo(tbody);
       td = $('<td>');
       td.appendTo(tr).addClass("span3").text('DSPs:');
       td = $('<td>');
-      td.appendTo(tr).addClass("span9").html(load.dsps);
+      td.appendTo(tr).addClass("span3").html(load.dsps);
       td = $("<td>");
-      td.appendTo(tr).addClass("span4").text(zedboard.capacity.dsps);
+      percentage = load.dsps > 0 ? load.dsps * 100 / zedboard.capacity.dsps : 0;
+      td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%');
+      td = $("<td>");
+      td.appendTo(tr).addClass("span3").text(zedboard.capacity.dsps);
     }
-    console.log("COMASPDMASPMD");
     _ref1 = execution.components;
     for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
       c = _ref1[_k];

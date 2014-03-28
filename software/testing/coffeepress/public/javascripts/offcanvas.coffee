@@ -263,6 +263,8 @@ expand = (execution) ->
     td = $ "<td>"
     td.text("Used").appendTo thead
     td = $ "<td>"
+    td.text("Percentage").appendTo thead
+    td = $ "<td>"
     td.text("Capacity").appendTo thead
     
     # Create Table Body
@@ -272,38 +274,50 @@ expand = (execution) ->
     tr = $ "<tr>"
     tr.appendTo(tbody)
     td = $ "<td>"
-    td.appendTo(tr).addClass("span4").text('LUTs:')
+    td.appendTo(tr).addClass("span3").text('LUTs:')
     td = $ "<td>"
-    td.appendTo(tr).addClass("span4").text(load.luts)
+    td.appendTo(tr).addClass("span3").text(load.luts)
     td = $ "<td>"
-    td.appendTo(tr).addClass("span4").text(zedboard.capacity.luts)
+    percentage = if load.luts > 0 then load.luts * 100 / zedboard.capacity.luts else 0
+    td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%')
+    td = $ "<td>"
+    td.appendTo(tr).addClass("span3").text(zedboard.capacity.luts)
     # Add line to Table Body
     tr = $ "<tr>"
     tr.appendTo(tbody)
     td = $ '<td>'
     td.appendTo(tr).addClass("span3").text('Registers:')
     td = $ '<td>'
-    td.appendTo(tr).addClass("span9").html(load.registers)
+    td.appendTo(tr).addClass("span3").html(load.registers)
     td = $ "<td>"
-    td.appendTo(tr).addClass("span4").text(zedboard.capacity.registers)
+    percentage = if load.registers > 0 then load.registers * 100 / zedboard.capacity.registers else 0
+    td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%')
+    td = $ "<td>"
+    td.appendTo(tr).addClass("span3").text(zedboard.capacity.registers)
     # Add line to Table Body
     tr = $ "<tr>"
     tr.appendTo(tbody)
     td = $ '<td>'
     td.appendTo(tr).addClass("span3").text('BRAMs:')
     td = $ '<td>'
-    td.appendTo(tr).addClass("span9").html(load.brams)
+    td.appendTo(tr).addClass("span3").html(load.brams)
     td = $ "<td>"
-    td.appendTo(tr).addClass("span4").text(zedboard.capacity.brams)
+    percentage = if load.brams > 0 then load.brams * 100 / zedboard.capacity.brams else 0
+    td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%')
+    td = $ "<td>"
+    td.appendTo(tr).addClass("span3").text(zedboard.capacity.brams)
     # Add line to Table Body
     tr = $ "<tr>"
     tr.appendTo(tbody)
     td = $ '<td>'
     td.appendTo(tr).addClass("span3").text('DSPs:')
     td = $ '<td>'
-    td.appendTo(tr).addClass("span9").html(load.dsps)
+    td.appendTo(tr).addClass("span3").html(load.dsps)
     td = $ "<td>"
-    td.appendTo(tr).addClass("span4").text(zedboard.capacity.dsps)
+    percentage = if load.dsps > 0 then load.dsps * 100 / zedboard.capacity.dsps else 0
+    td.appendTo(tr).addClass("span3").text(percentage.toFixed(2) + '%')
+    td = $ "<td>"
+    td.appendTo(tr).addClass("span3").text(zedboard.capacity.dsps)
 
 # / ----------------------------------------------------------------------
 # Draw graphs
