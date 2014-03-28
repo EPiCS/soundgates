@@ -200,12 +200,11 @@ public class PortEditPart extends BorderedBorderItemEditPart {
 	}
 
 	public String createToolTip() {
-		try{
+		try {
 			Port port = getPort();
 			return "Name: " + port.getName() + "\nDirection: "
 					+ port.getDirection() + "\nType: " + port.getDataType();
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			return "";
 		}
 	}

@@ -53,7 +53,7 @@ public class CompositeSoundComponent2ItemSemanticEditPolicy extends
 	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
-			return new EmptyCommand();		
+		return new EmptyCommand();
 	}
 
 	/**

@@ -65,7 +65,7 @@ public class SoundgatesCompositeAdapterFactory extends AdapterFactoryImpl {
 	 * The switch that delegates to the <code>createXXX</code> methods.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected SoundgatesCompositeSwitch<Adapter> modelSwitch =
 		new SoundgatesCompositeSwitch<Adapter>() {
@@ -83,7 +83,15 @@ public class SoundgatesCompositeAdapterFactory extends AdapterFactoryImpl {
 			}
 			@Override
 			public Adapter casePort(Port object) {
-				return createPortAdapter();
+				try{
+					if(object.eContainer().eContainer() instanceof Workbench)
+						return createPortAdapter();
+					else 
+						return createNotEditablePortAdapter();
+				}
+				catch(Exception e){
+					return createPortAdapter();
+				}
 			}
 			@Override
 			public Adapter caseNamedElement(NamedElement object) {
@@ -200,6 +208,11 @@ public class SoundgatesCompositeAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createPortAdapter() {
 		return null;
 	}
+	
+	public Adapter createNotEditablePortAdapter() {
+		return null;
+	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link soundgatesComposite.NamedElement <em>Named Element</em>}'.

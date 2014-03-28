@@ -24,6 +24,7 @@ public class Tester {
 	
 	private String projectPath;
 	private LinkedList<String> ioComponentNames = new LinkedList<>();
+	private boolean patchContainsSoundOutput = false;
 	private LinkedList<CompositeSoundComponent> compositeSoundComponents =
 			new LinkedList<CompositeSoundComponent>();
 
@@ -124,13 +125,22 @@ public class Tester {
 			ioComponentNames.add(atomicSoundComponent.getName());			
 		}		
 		
-		if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.wavePlayerComponentType)){
+		else if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.wavePlayerComponentType)){
 			// test file references
 			String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
 			String filePath = projectPath+"/" +AtomicSoundComponentLibrary.samplesFolderName + "/"+relativeFileName;
 			File testFile = new File(filePath);
 			if(!testFile.exists()){
 				MessageDialogs.fileNotFound(filePath);
+				return false;
+			}
+		}
+		
+		else if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.soundOutputType)){
+			if(!patchContainsSoundOutput)
+				patchContainsSoundOutput = true;
+			else {
+				MessageDialogs.patchContainsMoreThanOneSoundOutput();
 				return false;
 			}
 		}

@@ -35,10 +35,12 @@ SoundComponents += accumulator \
                   soundToControl \
 				  template \
 			      timer \
+			      tri \
 				  saw \
 				  pwm \
 				  fir \
 				  log \
+				  tri \
 				  ramp 
 
 

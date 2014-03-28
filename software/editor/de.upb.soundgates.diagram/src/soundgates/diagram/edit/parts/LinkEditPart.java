@@ -12,8 +12,8 @@ import soundgates.diagram.edit.policies.LinkItemSemanticEditPolicy;
 /**
  * @generated NOT
  */
-public class LinkEditPart extends ConnectionAbstractEditPart 
-	implements SelectableEditPartForCompositeCreation{
+public class LinkEditPart extends ConnectionAbstractEditPart implements
+		SelectableEditPartForCompositeCreation {
 
 	/**
 	 * @generated

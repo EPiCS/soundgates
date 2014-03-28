@@ -67,27 +67,9 @@ public class AtomicSoundComponentItemProvider
 			super.getPropertyDescriptors(object);
 
 			addTypePropertyDescriptor(object);
-			addPropertiesEntryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-	
-	protected void addPropertiesEntryPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-		(createItemPropertyDescriptor
-			(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-			 getResourceLocator(),
-			 "Properties",
-			 "Set your custom properties here",
-			 SoundgatesCompositePackage.Literals.ESTRING_TO_EFLOAT_OBJECT__VALUE,
-			 true,
-			 false,
-			 false,
-			 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-			 null,
-			 null));
-	}
-	
+	}	
 	
 	/**
 	 * This adds a property descriptor for the Type feature.

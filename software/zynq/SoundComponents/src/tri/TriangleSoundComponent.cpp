@@ -42,8 +42,8 @@ double TriangleSoundComponent::getPhaseIncrement(float frequency){
 
 }
 
-double SawtoothSoundComponent::getPhaseIncrement_HW(float frequency)
+double TriangleSoundComponent::getPhaseIncrement_HW(float frequency)
 {
-	return (((2* ((double)INT_MAX - (double)INT_MIN))/ Synthesizer::config::samplerate) * frequency;
+	return ((2* ((double)INT_MAX - (double)INT_MIN))/ Synthesizer::config::samplerate) * frequency;
 
 }

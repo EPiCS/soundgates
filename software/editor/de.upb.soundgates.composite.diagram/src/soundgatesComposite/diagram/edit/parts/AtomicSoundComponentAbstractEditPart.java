@@ -14,6 +14,7 @@ import org.eclipse.ui.PlatformUI;
 
 import soundgatesComposite.AtomicSoundComponent;
 import soundgatesComposite.Direction;
+import soundgatesComposite.Workbench;
 import soundgatesComposite.provider.custom.CustomPropertyInputDialog;
 
 public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorderedShapeEditPart {
@@ -102,13 +103,15 @@ protected void refreshChildren() {
 	
 	@Override
 	public void performRequest(Request req) {
-	    if(req.getType() == RequestConstants.REQ_OPEN) {
-			Dialog dialog = new CustomPropertyInputDialog(PlatformUI
-					.getWorkbench().getDisplay().getActiveShell(),
-					"dialogTitle", "dialogMessage", "initialValue", null,
-					getAtomicSoundComponent());
-			dialog.open();
-	    }
+		if(getAtomicSoundComponent().getParentComponent().eContainer() instanceof Workbench){
+		    if(req.getType() == RequestConstants.REQ_OPEN) {
+				Dialog dialog = new CustomPropertyInputDialog(PlatformUI
+						.getWorkbench().getDisplay().getActiveShell(),
+						"dialogTitle", "dialogMessage", "initialValue", null,
+						getAtomicSoundComponent());
+				dialog.open();
+		    }
+		}
 	}
 	
 	@Override

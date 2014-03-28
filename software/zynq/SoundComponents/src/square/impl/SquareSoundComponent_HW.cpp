@@ -67,7 +67,7 @@ void SquareSoundComponent_HW::init(){
 
 void SquareSoundComponent_HW::process(){
     if (this->m_active) {
-        m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[2] = (uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
 		mbox_put(&m_CtrlStart, SQUARE_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
