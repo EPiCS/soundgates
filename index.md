@@ -5,13 +5,22 @@ layout: main
 slider:
   - [ slider_zynq.jpg,
       Support for the Xilinx Zynq,
-      ReconOS now officially supports the Xilinx Zynq Platform]
-  - [ slider_version.jpg,
-      ReconOS v3.1 released,
-      ReconOS now utilizes the AXI-Bus in an improved architecture]
-  - [ slider_reconf.jpg,
-      Dynamically Reconfigurable Hardware Threads,
-      ReconOS allows to dynamically reconfigure your hardware threads utilizing the partial reconfiguration features of the FPGA]
+      Soundgates supports the Xilinx Zynq Platform]
+  - [ slider_architecture.jpg,
+      Synthesizer Architecture,
+      Soundgates heart is a digital music synthesizer]
+  - [ slider_editor.jpg,
+      Editor,
+      Assemble sound components together to playable patches]
+  - [ slider_pd.jpg,
+      Simulation,
+      Support for Pure Data simulation of patches]
+  - [ slider_sim.jpg,
+      Hardware Threads,
+      Use hardware threads to speedup your patches]
+  - [ slider_android.jpg,
+      Android App,
+      Control patches via smartphone sensors]
 ---
 
 <p style="text-align:justify">
