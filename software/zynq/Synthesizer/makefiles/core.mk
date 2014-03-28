@@ -5,7 +5,7 @@ XILINX_DIR=/opt/Xilinx/14.6/ISE_DS/EDK/gnu/arm/lin/bin
 CORE_SRC_DIR=../src/core
 
 OUTPUT_DIR=./build
-EXPORT_DIR=./export
+EXPORT_DIR=./libsynthesizercore
 
 # Compiler stuff
 CSYMBOLS=-DBOOST_LOG_DYN_LINK -DAPPLICATION_CONTEXT
@@ -87,19 +87,19 @@ $(OUTPUT_DIR)/HWSlot.d \
 $(OUTPUT_DIR)/HWThreadManager.d \
 $(OUTPUT_DIR)/Node.d 
 
-#all: folderstruct libsynthcore.so copyheaders
-all: folderstruct copyheaders	
+all: folderstruct libsynthcore.so copyheaders
+#all: folderstruct copyheaders	
 # Build objects
-#$(OUTPUT_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp
-#	@echo 'Building file: $<'
-#	@echo 'Invoking: GCC C++ Compiler'
-#	$(CC)  $(CFLAGS) -c $(CSYMBOLS) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-#	@echo 'Finished building: $<'
-#	@echo ' '
+$(OUTPUT_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C++ Compiler'
+	$(CC)  $(CFLAGS) -c $(CSYMBOLS) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
 
 folderstruct: 
-#	@mkdir -p $(OUTPUT_DIR)	 
-#	@mkdir -p $(EXPORT_DIR)/lib 
+	@mkdir -p $(OUTPUT_DIR)	 
+	@mkdir -p $(EXPORT_DIR)/lib 
 	@mkdir -p $(EXPORT_DIR)/include 
 	
 
