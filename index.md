@@ -3,24 +3,24 @@ title: Operating System for Reconfigurable Computing
 layout: main
 
 slider:
-  - [ slider_zynq.jpg,
-      Support for the Xilinx Zynq,
-      Soundgates supports the Xilinx Zynq Platform]
-  - [ slider_architecture.jpg,
-      Synthesizer Architecture,
-      Soundgates heart is a digital music synthesizer]
-  - [ slider_editor.jpg,
+  - [ slider_architecture.png,
+      Synthesizer,
+      Soundgates heart is a digital music synthesizer written in C++]
+  - [ slider_edit.png,
       Editor,
-      Assemble sound components together to playable patches]
-  - [ slider_pd.jpg,
+      Assemble sound components together to complex patches]
+  - [ slider_pd.png,
       Simulation,
-      Support for Pure Data simulation of patches]
-  - [ slider_sim.jpg,
+      Use Pure Data to directly test your created patches]
+  - [ slider_sim.png,
       Hardware Threads,
-      Use hardware threads to speedup your patches]
-  - [ slider_android.jpg,
+      Enable hardware threads to speedup your patches]
+  - [ slider_zynq.jpg,
+      Xilinx Zynq,
+      Soundgates supports the Xilinx Zynq Platform for Hardware Threads]
+  - [ slider_android.png,
       Android App,
-      Control patches via smartphone sensors]
+      Control patches via smartphone movements]
 ---
 
 <p style="text-align:justify">
