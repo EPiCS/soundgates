@@ -10,11 +10,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import java.util.Locale;
 
 import de.upb.soundgates.cosmic.fragments.*;
 import de.upb.soundgates.cosmic.misc.DisableSlidingViewPager;
+import de.upb.soundgates.cosmic.osc.OSCMessageStore;
+import de.upb.soundgates.cosmic.sensors.AbstractSensorListener;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     public static final String LOG_TAG = "Cosmic - MainActivity";
@@ -104,6 +107,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             case R.id.action_clearhistory:
                 clearHistory();
                 return true;
+            case R.id.action_disconnect:
+                disconnect();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -113,6 +119,26 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         CosmicPreferences prefs = CosmicPreferences.getInstance(this);
         prefs.putStringSet("hosts", null);
         prefs.putStringSet("ports", null);
+    }
+
+    // unregister current sensor listeners and clear lists
+    private void disconnect() {
+        AbstractSensorListener.unregisterListeners();
+
+        OSCMessageStore.getInstance().clear();
+
+        for(int i = 0; i < mSectionsPagerAdapter.getCount(); ++i) {
+            Fragment f = mSectionsPagerAdapter.getFragmentByPosition(i);
+            if(f instanceof SelectFragment) {
+                ListView lv = ((SelectFragment) f).getListView();
+                lv.deferNotifyDataSetChanged();
+                lv.setAdapter(null);
+            } else if(f instanceof InteractionFragment) {
+                ((InteractionFragment) f).clear();
+            }
+        }
+
+        mViewPager.setCurrentItem(0);
     }
 
     @Override
@@ -138,6 +164,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+        }
+
+        // http://stackoverflow.com/questions/6976027/reusing-fragments-in-a-fragmentpageradapter
+        public Fragment getFragmentByPosition(int pos) {
+            String tag = "android:switcher:" + mViewPager.getId() + ":" + pos;
+            return getSupportFragmentManager().findFragmentByTag(tag);
         }
 
         @Override
