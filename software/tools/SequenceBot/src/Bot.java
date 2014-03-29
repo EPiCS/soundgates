@@ -317,9 +317,7 @@ public class Bot {
 
 		result.addSequence(0, 4, rythm1);
 		result.addSequence(0, 5, rythm1);
-		result.addSequence(0, 6, rythm1);
 		result.addSequence(2, 5, rythm2);
-		result.addSequence(2, 6, rythm2);
 		
 		return result;
 	}
