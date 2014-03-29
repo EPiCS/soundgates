@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.ui,
  de.upb.soundgates;bundle-version="1.0.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.9.0",
  org.eclipse.core.resources,
- de.upb.soundgates.diagram;bundle-version="1.0.0"
+ Soundgates.diagram;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: soundgates.codegen,

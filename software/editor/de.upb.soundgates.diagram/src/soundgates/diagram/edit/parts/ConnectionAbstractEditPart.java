@@ -74,8 +74,8 @@ public abstract class ConnectionAbstractEditPart extends ConnectionNodeEditPart
 	}
 
 	public Connection getConnection() {
-		if (((org.eclipse.gmf.runtime.notation.Connector) getModel()).getElement() instanceof Connection)
-			return (Connection) ((org.eclipse.gmf.runtime.notation.Connector) getModel()).getElement();
+		if (((org.eclipse.gmf.runtime.notation.Edge) getModel()).getElement() instanceof Connection)
+			return (Connection) ((org.eclipse.gmf.runtime.notation.Edge) getModel()).getElement();
 		else 
 			return null;
 	}

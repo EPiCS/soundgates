@@ -68,9 +68,9 @@ void ADSRSoundComponent_SW::init() {
 
 void ADSRSoundComponent_SW::process() {
 
-    int m_attacksamplecount  = (int) (Synthesizer::config::samplerate * m_AttackTime);
-    int m_decaysamplecount   = (int) (Synthesizer::config::samplerate * m_DecayTime);
-    int m_releasesamplecount = (int) (Synthesizer::config::samplerate * m_ReleaseTime);
+    int m_attacksamplecount  = (int) (Synthesizer::config::samplerate * m_AttackTime / 1000);
+    int m_decaysamplecount   = (int) (Synthesizer::config::samplerate * m_DecayTime / 1000);
+    int m_releasesamplecount = (int) (Synthesizer::config::samplerate * m_ReleaseTime / 1000);
 
     int   blockSamplesProcessed = 0;
 

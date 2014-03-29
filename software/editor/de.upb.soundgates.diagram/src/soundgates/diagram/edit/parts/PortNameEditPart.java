@@ -279,7 +279,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	 * @generated
 	 */
 	protected boolean isEditable() {
-		return getParser() != null;
+		return false;
 	}
 
 	/**
@@ -681,7 +681,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	static final Font THIS_FONT = new Font(Display.getCurrent(), Display
 			.getDefault().getSystemFont().getFontData()[0].getName(), 8,

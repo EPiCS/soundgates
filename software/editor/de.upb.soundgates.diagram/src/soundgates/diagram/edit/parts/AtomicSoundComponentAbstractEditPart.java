@@ -88,17 +88,6 @@ public abstract class AtomicSoundComponentAbstractEditPart extends AbstractBorde
 	}
 	
 	@Override
-	public void performRequest(Request req) {
-	    if(req.getType() == RequestConstants.REQ_OPEN) {
-			Dialog dialog = new CustomPropertyInputDialog(PlatformUI
-					.getWorkbench().getDisplay().getActiveShell(),
-					"dialogTitle", "dialogMessage", "initialValue", null,
-					getAtomicSoundComponent());
-			dialog.open();
-	    }
-	}
-	
-	@Override
 	public void activate() {
 		super.activate();
 		setForegroundColor(new Color(null,0,0,0));

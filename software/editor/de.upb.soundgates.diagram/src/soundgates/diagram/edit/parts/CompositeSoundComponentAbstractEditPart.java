@@ -8,7 +8,7 @@ import org.eclipse.gmf.runtime.diagram.ui.figures.ResizableCompartmentFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.gmf.runtime.notation.impl.ShapeImpl;
+import org.eclipse.gmf.runtime.notation.impl.NodeImpl;
 import org.eclipse.swt.graphics.Color;
 
 import soundgates.CompositeSoundComponent;
@@ -37,7 +37,7 @@ public abstract class CompositeSoundComponentAbstractEditPart extends
 	
 	public void refreshContainer(){		 
 		 try{
-			 EObject container = (PatchImpl) ((ShapeImpl)getModel()).getElement().eContainer();
+			 EObject container = (PatchImpl) ((NodeImpl)getModel()).getElement().eContainer();
 			 SoundgatesDiagramUpdater.refreshContainer(container);
 		 }
 		 catch(Exception e){

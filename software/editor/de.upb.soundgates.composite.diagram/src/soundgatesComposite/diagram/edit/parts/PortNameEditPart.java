@@ -49,6 +49,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import soundgatesComposite.Workbench;
+
 /**
  * @generated
  */
@@ -277,8 +279,11 @@ public class PortNameEditPart extends LabelEditPart implements
 	/**
 	 * @generated
 	 */
-	protected boolean isEditable() {
-		return getParser() != null;
+	protected boolean isEditable() {		
+		if ( ((PortEditPart)getParent()).getPort().getComponent().eContainer() instanceof Workbench)
+			return true;
+		else 
+			return false;		
 	}
 
 	/**

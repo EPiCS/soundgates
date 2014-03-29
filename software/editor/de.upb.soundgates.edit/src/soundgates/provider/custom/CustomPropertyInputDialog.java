@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.edit.command.ChangeCommand;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -131,7 +134,15 @@ public class CustomPropertyInputDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		try {
+		
+		ChangeCommand changeCommand = new ChangeCommand(getAtomicSoundComponent()){
+
+			@Override
+			protected void doExecute() {
+				// TODO Auto-generated method stub
+				
+			
+		
 			List<String> keys = new ArrayList<String>();
 			keys.addAll(getAtomicSoundComponent().getIntegerProperties()
 					.keySet());
@@ -141,24 +152,11 @@ public class CustomPropertyInputDialog extends Dialog {
 					keySet());
 			Iterator<String> it = keys.iterator();
 				
-			while (it.hasNext()) {			
+			while (it.hasNext()) {		
 					
-				try{
-					// TODO hier wird eine exception im Diagram Editor
-					// geworfen.
-					// Funktioniert durch Abfangen der Exception so, ist
-					// aber
-					// ein dreckicker Hack. Man sollte hier ein GMF Command
-					// absetzen
+		
 					String desc = it.next();
 					
-						if (getAtomicSoundComponent().getIntegerProperties()
-								.containsKey(desc)) {
-							Integer value = Integer.parseInt(inputTexts.get(desc)
-									.getText());
-							getAtomicSoundComponent().getIntegerProperties().put(
-									desc, value);
-						}
 						if (getAtomicSoundComponent().getFloatProperties()
 								.containsKey(desc)) {
 							Float value = Float.parseFloat(inputTexts.get(desc)
@@ -183,15 +181,16 @@ public class CustomPropertyInputDialog extends Dialog {
 							}
 							getAtomicSoundComponent().getUserStringProperties().put(
 									desc, value);
-						}
-				}catch (IllegalStateException e) {
+						}				
 				}
-			}
 				
+			}	
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		};
+
+		EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(getAtomicSoundComponent());
+		editingDomain.getCommandStack().execute(changeCommand);
+		
 		super.okPressed();
 	}
 

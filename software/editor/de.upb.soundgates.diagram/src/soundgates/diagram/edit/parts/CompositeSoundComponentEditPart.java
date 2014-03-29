@@ -32,7 +32,8 @@ import soundgates.diagram.part.SoundgatesVisualIDRegistry;
  * @generated NOT
  */
 public class CompositeSoundComponentEditPart extends
-		CompositeSoundComponentAbstractEditPart implements SelectableEditPartForCompositeCreation {
+		CompositeSoundComponentAbstractEditPart implements
+		SelectableEditPartForCompositeCreation {
 
 	/**
 	 * @generated
@@ -60,9 +61,9 @@ public class CompositeSoundComponentEditPart extends
 	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
-		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
-				new CreationEditPolicyWithCustomReparent(
-						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
+//		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
+//				new CreationEditPolicyWithCustomReparent(
+//						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
 		super.createDefaultEditPolicies();
 		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
 				new CompositeSoundComponentItemSemanticEditPolicy());

@@ -117,9 +117,9 @@ architecture Behavioral of hwt_adsr is
 	signal o_RAMData_adsr : std_logic_vector(0 to 31);   -- adsr to local ram
 	signal i_RAMData_adsr : std_logic_vector(0 to 31);   -- local ram to adsr
 	
-	--signal input_fixed_point : std_logic_vector(59 downto 0) := (others => '0');
-	signal input_fixed_point : std_logic_vector(63 downto 0) := (others => '0');
-	signal output_fixed_point : std_logic_vector(95 downto 0) := (others => '0');
+	signal input25 : std_logic_vector(0 to 24) := (others => '0');
+	--signal input_fixed_point : std_logic_vector(63 downto 0) := (others => '0');
+	signal output_fixed_point : std_logic_vector(42 downto 0) := (others => '0');
     signal o_RAMWE_adsr   : std_logic;
 
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
@@ -178,7 +178,7 @@ architecture Behavioral of hwt_adsr is
     constant    hwt_argc : integer := 8;
 begin
     
-	input_fixed_point(59 downto 28) <= i_RAMData_adsr;
+	--input_fixed_point(59 downto 28) <= i_RAMData_adsr;
     -----------------------------------
     -- Component related wiring
     -----------------------------------
@@ -196,8 +196,8 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    
-    
+    o_RAMData_adsr <= output_fixed_point(38 downto 7);
+    input25 <= i_RAMData_adsr(0 to 24);
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
         
@@ -253,7 +253,7 @@ begin
             wave        => adsr_data
             );
 
-    local_ram_ctrl_1 : process (clk) is
+   local_ram_ctrl_1 : process (clk) is
 	begin
 		if (rising_edge(clk)) then
 			if (o_RAMWE_reconos = '1') then
@@ -292,18 +292,17 @@ begin
 	  		   stop  <= (others => '0'); 
             o_RAMWE_adsr         <= '0';
             state_inner_process <= 0;
-            o_RAMData_adsr <= (others => '0');
+            output_fixed_point <= (others => '0');
             -- Initialize hwt args         
             hwtio_init(hwtio);
 
             done := False;
               o_RAMAddr_adsr <= (others => '0');
         elsif rising_edge(clk) then
-            output_fixed_point <= std_logic_vector(adsr_data * signed(input_fixed_point));
-				o_RAMData_adsr <= output_fixed_point(87 downto 56);
+            output_fixed_point <= std_logic_vector(adsr_data(31 downto 14) * signed(input25));
             adsr_ce              <= '0';
             o_RAMWE_adsr         <= '0';
-            osif_ctrl_signal    <= ( others => '0');
+            osif_ctrl_signal    <= (others => '0');
             
             case state is
             when STATE_IDLE =>

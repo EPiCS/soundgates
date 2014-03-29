@@ -74,6 +74,8 @@ void SawtoothSoundComponent_HW::process(){
     if (this->m_active) {
         m_HWTParams[2] = (uint32_t) (m_PhaseIncr); //(uint32_t) (m_PhaseIncr *  SOUNDGATES_FIXED_PT_SCALE);
 
+   //     m_HWTParams[0] = (uint32_t) (m_SoundOut_1_Port->getWriteBuffer());
+
 		mbox_put(&m_CtrlStart, SINUS_HWT_START);
 		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
 
