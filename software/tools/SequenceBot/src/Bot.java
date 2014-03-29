@@ -32,12 +32,14 @@ public class Bot {
 
 	//Moll: 0 2 3 5 7 8 10 12
 	//Dur: 0 2 4 5 7 9 11 12
-	
+
 	static final int[] SCALE = new int[] { 0, 2, 4, 5, 7, 9, 11 };
+	//static final int[] SCALE = new int[] { 0, 2, 3, 5, 7, 8, 10 };
 	static final int SCALE_LENGTH = 12;
 	
-	
+
 	static Score score;
+	static Score rythm;
 
 	static final float CONFIG_BASE_NOTE_CHANGE_PROBABILITY = 1f;
 	static int baseNoteMin = 1;
@@ -46,8 +48,10 @@ public class Bot {
 	static final String CONFIG_RYTHM_SYNC_MESSAGE = "/rythmSync";
 	static final String CONFIG_BASENOTE_MEAN_MESSAGE = "/baseNoteMean";
 	static final String CONFIG_SEQUENCE_MEAN_MESSAGE = "/sequenceMean";
+	static final String CONFIG_RYTHM_MEAN_MESSAGE = "/rythmMean";
 	static final String CONFIG_BASENOTE_DEVIATION_MESSAGE = "/baseNoteDeviation";
 	static final String CONFIG_SEQUENCE_DEVIATION_MESSAGE = "/sequenceDeviation";
+	static final String CONFIG_RYTHM_DEVIATION_MESSAGE = "/rythmDeviation";
 	static final String CONFIG_HIT_PERCENTAGE_MESSAGE = "/hitPercentage";
 	static final String CONFIG_SPEED_MESSAGE = "/slowdown";
 	
@@ -61,6 +65,9 @@ public class Bot {
 	
 	static int sequenceMean = 0; 
 	static float sequenceStandardDeviation = 1;
+	
+	static int rythmMean = 0; 
+	static float rythmStandardDeviation = 1;
 	
 	static OSCPortOut sender;
 	static OSCPortIn receiver;
@@ -124,6 +131,7 @@ public class Bot {
 		
 		//score = createScore();
 		score = vengaScore();
+		rythm = vengaRythm();
 		
 		addListener(receiver);
 		
@@ -137,8 +145,9 @@ public class Bot {
 	
 
 
-		
+
 		final Sequence [][] voices = score.getVoices();
+		final Sequence [][] rythmVoices = rythm.getVoices();
 		final float [] positionProbabilities = score.getPositionProbabilites();
 		
 		if (useRythmSync){
@@ -147,16 +156,18 @@ public class Bot {
 				@Override
 				public void acceptMessage(Date receivedAt, OSCMessage arg1) {
 					if (currentSequenceEnd.before(receivedAt)){
-						generateAndPlay(random, positionProbabilities, voices);
+						generateAndPlay(random, positionProbabilities, voices, rythmVoices);
 					}
 				}
 			});
 			
 		} else {
 			while(true){
-				int playedPosition = generateAndPlay(random, positionProbabilities, voices);
+				long time = generateAndPlay(random, positionProbabilities, voices, rythmVoices);
 				try {
-					Thread.sleep(getLengthOfPosition(voices, playedPosition));
+					
+					
+					Thread.sleep(time);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -208,6 +219,20 @@ public class Bot {
 				sequenceMean = (int)Math.round((float)arg1.getArguments()[0]);
 			}
 		});
+		receiver.addListener(CONFIG_RYTHM_DEVIATION_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				rythmStandardDeviation = (float)arg1.getArguments()[0];
+			}
+		});
+		receiver.addListener(CONFIG_RYTHM_MEAN_MESSAGE, new OSCListener() {
+			
+			@Override
+			public void acceptMessage(Date arg0, OSCMessage arg1) {
+				rythmMean = (int)Math.round((float)arg1.getArguments()[0]);
+			}
+		});
 	}
 
 	private static int getGaussian(double mean, double deviation, int min, int max){
@@ -220,21 +245,30 @@ public class Bot {
 		return (int) Math.round(result);
 	}
 	
-	private static int generateAndPlay(Random random, float [] positionProbabilities, Sequence [][] voices){
+	private static long generateAndPlay(Random random, float [] positionProbabilities, Sequence [][] voices, Sequence [][] rythmVoices){
 		
-		
+
 		int nextPositionIndex = 0;
 		nextPositionIndex = getGaussian(sequenceMean, sequenceStandardDeviation, 0, voices[0].length);
 		System.out.println("Changed Position to: " + nextPositionIndex);
+		int nextRythmIndex = 0;
+		nextRythmIndex = getGaussian(rythmMean, rythmStandardDeviation, 0, rythmVoices[0].length);
+		System.out.println("Changed Rythm to: " + nextRythmIndex);
 		
 		int nextBaseNoteIndex = 0;
 		if (random.nextFloat() < CONFIG_BASE_NOTE_CHANGE_PROBABILITY){
 			nextBaseNoteIndex = getGaussian(baseNoteMean, baseNoteStandardDeviation, baseNoteMin, baseNoteMax);
 			System.out.println("Changed Basenote to: " + notes[nextBaseNoteIndex]);
 		}
-		
+		long length = 0;
 		try {
-			playSequence(sender, voices, nextPositionIndex, notes[nextBaseNoteIndex]);
+			playSequence(sender, "melody" , voices, nextPositionIndex, notes[nextBaseNoteIndex]);
+			playSequence(sender, "rythm", rythmVoices, nextRythmIndex, notes[nextBaseNoteIndex]);
+			
+			length = getLengthOfPosition(voices, nextPositionIndex);
+			long tmp = getLengthOfPosition(rythmVoices, nextRythmIndex);
+			if (length < tmp) length = tmp;
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -242,7 +276,7 @@ public class Bot {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return nextPositionIndex;
+		return length;
 	}
 
 	private static long getLengthOfPosition(Sequence[][] voices,
@@ -260,8 +294,38 @@ public class Bot {
 		return (long)Math.ceil(length);
 	}
 	
+	private static Score vengaRythm(){
+		Score result = new Score(4);
+		Sequence rythm1 = new Sequence(new RythmEvent[]{
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
+				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER)	
+		}, 20);
+
+		Sequence rythm2 = new Sequence(new RythmEvent[]{
+				new RythmEvent(new Chord(0), NOTE_ZERO, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
+				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS)	
+		}, 20);
+
+		result.addSequence(0, 4, rythm1);
+		result.addSequence(0, 5, rythm1);
+		result.addSequence(0, 6, rythm1);
+		result.addSequence(2, 5, rythm2);
+		result.addSequence(2, 6, rythm2);
+		
+		return result;
+	}
+	
 	private static Score vengaScore(){
-		Score result = new Score(6);
+		Score result = new Score(1);
 		
 		Sequence empty = new Sequence(new MusicalEvent[]{
 				new MusicalEvent(new Chord(), NOTE_ZERO, NOTE_FULL)},  20);
@@ -307,25 +371,7 @@ public class Bot {
 				new MusicalEvent(new Chord(3,12,15), NOTE_SIXTEENTH, NOTE_SIXTEENTH)
 				},  20);
 
-		Sequence rythm1 = new Sequence(new RythmEvent[]{
-				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
-				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
-				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER),	
-				new RythmEvent(new Chord(0), NOTE_QUARTER, NOTE_QUARTER)	
-		}, 20);
 
-		Sequence rythm2 = new Sequence(new RythmEvent[]{
-				new RythmEvent(new Chord(0), NOTE_ZERO, NOTE_EIGTHS),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_ZERO),
-				new RythmEvent(new Chord(0), NOTE_SIXTEENTH, NOTE_EIGTHS)	
-		}, 20);
-		
 		result.addSequence(0, 0, empty);
 		result.addSequence(0, 1, slow);
 		result.addSequence(0, 2, mediumUp);
@@ -333,11 +379,6 @@ public class Bot {
 		result.addSequence(0, 4, mediumUp2);
 		result.addSequence(0, 5, fast1);
 		result.addSequence(0, 6, fast2);
-		result.addSequence(2, 4, rythm1);
-		result.addSequence(2, 5, rythm1);
-		result.addSequence(2, 6, rythm1);
-		result.addSequence(4, 5, rythm2);
-		result.addSequence(4, 6, rythm2);
 		
 		return result;
 	}
@@ -425,14 +466,14 @@ public class Bot {
 		//FIXME actually calculate
 		return 16;
 	}
-
+	
 	public static void sendFloat(OSCPortOut sender, String componentName, float value) throws IOException{
 		OSCMessage message = new OSCMessage("/" + componentName, new Object [] { value });
 		sender.send(message);
 		//System.out.println("Sent: " + message.getAddress() + Arrays.toString(message.getArguments()));
 	}
 	
-	private static void playSequence(final OSCPortOut sender, Sequence [][] voices, final int position,final int baseNote) throws IOException, InterruptedException {
+	private static void playSequence(final OSCPortOut sender,final String prefix, Sequence [][] voices, final int position,final int baseNote) throws IOException, InterruptedException {
 		System.out.print("Playing Sequence (BaseNote: "+baseNote+"): ");
 		
 		for (int i = 0; i < voices.length; i++){
@@ -454,14 +495,14 @@ public class Bot {
 						try {
 							if (!(event instanceof RythmEvent)){
 								if (event.getDuration() > 0){
-									sendFloat(sender, "trigger_" + voice, 1);	
+									sendFloat(sender, prefix +  "_trigger_" + voice, 1);	
 								}
 								Thread.sleep((long) ((float)(event.getDuration() * pressPercentage) * tempoScale));
-								sendFloat(sender, "trigger_" + voice, 0);
+								sendFloat(sender, prefix +  "_trigger_" + voice, 0);
 								Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*tempoScale*(1-pressPercentage)));
 							} else {
 								if (event.getDuration() > 0){
-									sendFloat(sender, "trigger_" + voice, 1);	
+									sendFloat(sender, prefix +  "_trigger_" + voice, 1);	
 								}
 								Thread.sleep((long) ((float)(event.getWaitingTime()+event.getDuration())*tempoScale));
 							}
@@ -477,7 +518,7 @@ public class Bot {
 				private void sendFrequency(OSCPortOut sender, int voice, int i,
 						MusicalEvent event) {
 					try {
-						sendFloat(sender, "frequency_" + voice + "_" + i, frequencies[notes[event.getChord().notes[i] - event.getModifier()] + baseNote]);
+						sendFloat(sender, prefix +  "_frequency_" + voice + "_" + i, frequencies[notes[event.getChord().notes[i] - event.getModifier()] + baseNote]);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
