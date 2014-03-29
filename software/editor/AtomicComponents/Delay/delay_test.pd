@@ -1,4 +1,4 @@
-#N canvas 961 442 958 363 10;
+#N canvas 1282 50 1276 677 10;
 #X obj 58 213 dac~;
 #X floatatom 71 103 5 0 0 0 - - -;
 #X obj 176 163 tabplay~ G01-tab;

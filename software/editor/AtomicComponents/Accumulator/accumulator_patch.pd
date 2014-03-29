@@ -1,4 +1,4 @@
-#N canvas 1440 49 958 1085 10;
+#N canvas 2 50 1276 1388 10;
 #X obj 186 37 loadbang;
 #X text 0 0 outports Value;
 #X obj 297 92 inlet Speed;
@@ -16,12 +16,13 @@
 #X msg 409 192 0;
 #X obj 456 150 t b;
 #X text 115 5 inports Input Speed Reset;
+#X obj 304 611 change;
 #X connect 0 0 6 0;
 #X connect 2 0 6 1;
 #X connect 3 0 5 0;
 #X connect 4 0 5 1;
 #X connect 4 0 10 1;
-#X connect 4 0 7 0;
+#X connect 4 0 16 0;
 #X connect 5 0 4 0;
 #X connect 6 0 8 0;
 #X connect 6 0 9 0;
@@ -32,3 +33,4 @@
 #X connect 12 0 14 0;
 #X connect 13 0 4 0;
 #X connect 14 0 13 0;
+#X connect 16 0 7 0;
