@@ -111,10 +111,10 @@ public:
 
 #else
 
-class ADSR_HW: public ADSRSoundComponent{
+class ADSRSoundComponent_HW: public ADSRSoundComponent{
 
 public:
-    ADSR_HW(std::vector<std::string>);
+	ADSRSoundComponent_HW(std::vector<std::string>);
 
     void init(){
 
