@@ -28,6 +28,8 @@ private:
 
     HWSlot              m_HWTSlot;
     uint32_t      	m_HWTParams[32];
+    uint32_t   m_trigger;
+    uint32_t   m_release;
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
@@ -89,15 +91,15 @@ public:
             trigger  = m_ObjRef.m_Trigger_6_Port->pop();
             if (ADSR_TRIGGERED(m_LastTrigger, trigger)) {
                 LOG_DEBUG("ADSR Triggered");
-                m_ObjRef.m_HWTParams[2] = (uint32_t) triggerHW + currTrigger;
-                m_ObjRef.m_HWTParams[3] = (uint32_t) 0x00000000;
+                m_ObjRef.m_trigger = (uint32_t) triggerHW + currTrigger;
+                m_ObjRef.m_release = (uint32_t) 0x00000000;
                 currTrigger++;
             }
 
             if (ADSR_RELEASED(m_LastTrigger, trigger)) {
                 LOG_DEBUG("ADSR Released");
-                m_ObjRef.m_HWTParams[2] = (uint32_t) 0x0000000F;
-                m_ObjRef.m_HWTParams[3] = (uint32_t) 0xFFFFFFFF;
+                m_ObjRef.m_trigger = (uint32_t) triggerHW;
+                m_ObjRef.m_release = (uint32_t) releaseHW;
                 currTrigger = 1;
             }
 

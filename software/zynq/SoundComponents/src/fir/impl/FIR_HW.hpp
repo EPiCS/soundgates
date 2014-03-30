@@ -10,7 +10,6 @@
 
 #include "../FIR.hpp"
 #include <HWSlot.h>
-#include <HWTParameters.h>
 
 #ifdef ZYNQ
 
@@ -28,7 +27,7 @@ class FIR_HW: public FIR{
 private:
 
     HWSlot              m_HWTSlot;
-    HWTParameters<31>   m_HWTParams;
+    uint32_t      		m_HWTParams[32];
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
@@ -58,7 +57,7 @@ public:
 
             m_ObjRef.m_currCoeff        = m_ObjRef.m_coeff[(int) val];
 
-            memcpy(&m_ObjRef.m_HWTParams.args[2], m_ObjRef.m_currCoeff, N_FIR_COEFF * sizeof(uint32_t));
+            memcpy(&m_ObjRef.m_HWTParams[2], m_ObjRef.m_currCoeff, N_FIR_COEFF * sizeof(uint32_t));
         }
     };
 };

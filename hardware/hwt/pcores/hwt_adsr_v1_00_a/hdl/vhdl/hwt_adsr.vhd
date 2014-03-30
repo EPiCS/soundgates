@@ -338,7 +338,7 @@ begin
 								  state <= STATE_READ;
 								  prev_bang <= signed(bang);
 							 else
-								  state <= STATE_IDLE;
+								  state <= STATE_NOTIFY;
 							 end if;
  
                     when 1 =>

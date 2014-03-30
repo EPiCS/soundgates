@@ -23,6 +23,8 @@ void ADSRSoundComponent_HW::init(){
     m_Release_5_Port->registerCallback(ICallbackPtr(new OnValueChangeHW(&m_ReleaseTime, m_Release_5_Port)));
     m_Trigger_6_Port->registerCallback(ICallbackPtr(new OnTriggerHW(*this)));
 
+    m_trigger = 0;
+    m_release = 0;
 
     if(m_HWTSlot.isValid()){
         /* 1. initialize mailboxes */
@@ -40,9 +42,9 @@ void ADSRSoundComponent_HW::init(){
 
 
         m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
-        m_HWTParams[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
-        m_HWTParams[2] = (uint32_t) 0;
-        m_HWTParams[3] = (uint32_t) 0;
+        m_HWTParams[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+        m_HWTParams[2] = (uint32_t) m_trigger;
+        m_HWTParams[3] = (uint32_t) m_release;
         m_HWTParams[4] = (uint32_t) (getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE);
         m_HWTParams[5] = (uint32_t) (getIncrement_HW(m_DecayTime) * SOUNDGATES_FIXED_PT_SCALE);
         m_HWTParams[6] = (uint32_t) (m_SustainLevel * SOUNDGATES_FIXED_PT_SCALE);
@@ -57,11 +59,11 @@ void ADSRSoundComponent_HW::init(){
 }
 
 void ADSRSoundComponent_HW::process(){
-
+	LOG_DEBUG(m_trigger);
 	m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
-	m_HWTParams[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
-//	m_HWTParams[2] = (uint32_t) 0;
-//	m_HWTParams[3] = (uint32_t) 0; // are set by OnTriggerHW
+    m_HWTParams[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+	m_HWTParams[2] = (uint32_t) m_trigger;
+	m_HWTParams[3] = (uint32_t) m_release;
 	m_HWTParams[4] = (uint32_t) (getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE);
 	m_HWTParams[5] = (uint32_t) (getIncrement_HW(m_DecayTime) * SOUNDGATES_FIXED_PT_SCALE);
 	m_HWTParams[6] = (uint32_t) (m_SustainLevel * SOUNDGATES_FIXED_PT_SCALE);
@@ -69,6 +71,7 @@ void ADSRSoundComponent_HW::process(){
 
     mbox_put(&m_CtrlStart, ADSR_HWT_START);
     mbox_get(&m_CtrlStop);
+	LOG_DEBUG(m_trigger);
 }
 
 #endif
