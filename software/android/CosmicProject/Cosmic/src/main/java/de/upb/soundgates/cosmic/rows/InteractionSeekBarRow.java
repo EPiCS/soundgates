@@ -99,10 +99,12 @@ public class InteractionSeekBarRow implements InteractionRow{
         //configureMinMaxSeekBar(holder);
         holder.text.setText(msg.getPath());
 
-        OSCArgument t = msg.getTypes().get(0);
-        holder.seekbar.setMaximumValue(t.MAX_VALUE);
-        holder.seekbar.setMinimumValue(t.MIN_VALUE);
-        holder.seekbar.setFloatValue(t.value);
+        if(msg.getTypes().size() > 0) {
+            OSCArgument t = msg.getTypes().get(0);
+            holder.seekbar.setMaximumValue(t.MAX_VALUE);
+            holder.seekbar.setMinimumValue(t.MIN_VALUE);
+            holder.seekbar.setFloatValue(t.value);
+        }
         holder.seekbar.setOnSeekBarChangeListener(new OnMinMaxSeekBarChangeListener());
 
         return view;
