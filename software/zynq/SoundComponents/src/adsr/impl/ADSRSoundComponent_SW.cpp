@@ -19,7 +19,7 @@ void ADSRSoundComponent_SW::OnTrigger::operator()() {
     case ADSRSoundComponent_SW::RELEASE:
 
         if (ADSR_TRIGGERED(m_LastTrigger, trigger)) {
-            LOG_DEBUG("ADSR Triggered");
+//            LOG_DEBUG("ADSR Triggered");
             m_ObjRef->m_ADSRState = ADSRSoundComponent_SW::CLICK_SUPPRESSION;
             m_ObjRef->m_SkipSustain = false;
         }

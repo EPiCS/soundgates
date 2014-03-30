@@ -152,6 +152,7 @@ package body soundgates_reconos_pkg is
             when others =>
                 done := True;
                 hwt_args.f_step <= 0;
+                hwt_args.argptr <= (others => '0');
         end case;
 
     end procedure get_hwt_args;
