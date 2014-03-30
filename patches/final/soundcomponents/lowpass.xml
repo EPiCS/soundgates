@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Lowpass</Type>
+	<Category>Filter</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
+		<Port DataType="CONTROL" Direction="IN" Name="CutoffFrequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
+	</Ports>
+	<Properties>
+		<UserStringProperty InitialValue="Lowpass" Name="FilterType" Options="Lowpass"/>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="SoundIn" PortNumber="0"/><PortMapping PortName="CutoffFrequency" PortNumber="1"/><PortMapping PortName="SoundOut" PortNumber="0"/><PD>#N canvas 1380 322 718 704 10;
+#X text 53 5 inports SoundIn CutoffFrequency;
+#X text 48 24 outports SoundOut;
+#X obj 63 61 inlet~;
+#X obj 139 61 inlet;
+#X obj 83 147 lop~;
+#X obj 86 264 outlet~;
+#X connect 2 0 4 0;
+#X connect 3 0 4 1;
+#X connect 4 0 5 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="fir" type="sw">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="CutoffFrequency" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation name="fir" type="hw">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="CutoffFrequency" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

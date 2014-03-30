@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>PulseWidthModulation</Type>
+	<Category>Effect</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn2"/>
+		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="SoundIn" PortNumber="0"/><PortMapping PortName="SoundIn2" PortNumber="1"/><PortMapping PortName="SoundOut" PortNumber="0"/><PD>#N canvas 1440 49 958 1149 10;
+#X text -12 652 inports SoundIn SoundIn2;
+#X text -8 682 outports SoundOut;
+#X obj 91 192 inlet~;
+#X obj 250 207 inlet~;
+#X obj 98 274 expr~ if ($v1 &gt; $v2 \, 1 \, -1);
+#X obj 120 347 outlet~;
+#X connect 2 0 4 0;
+#X connect 3 0 4 1;
+#X connect 4 0 5 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="pwm" type="sw">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="SoundIn2" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation name="pwm" type="hw">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="SoundIn2" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Sound2Control</Type>
+	<Category>Control</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="LowerMapping"/>
+		<Port DataType="CONTROL" Direction="IN" Name="UpperMapping"/>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
+		<Port DataType="Control" Direction="OUT" Name="ControlOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="LowerMapping" PortNumber="0"/><PortMapping PortName="UpperMapping" PortNumber="1"/><PortMapping PortName="SoundIn" PortNumber="2"/><PortMapping PortName="ControlOut" PortNumber="0"/><PD>#N canvas 1440 49 958 1149 10;
+#X text -12 652 inports LowerMapping UpperMapping SoundIn;
+#X text -8 682 outports ControlOut;
+#X obj 175 578 outlet;
+#X obj 5 67 inlet lowermapping;
+#X obj 152 69 inlet uppermapping;
+#X obj 289 69 inlet~ soundin;
+#X obj 246 207 snapshot~;
+#X obj 443 90 loadbang;
+#X msg 442 116 1;
+#X obj 442 147 metro 1;
+#X obj 73 200 -;
+#X obj 132 388 *;
+#X obj 94 441 +;
+#X obj 204 301 * 0.5;
+#X obj 203 329 + 0.5;
+#X connect 3 0 10 1;
+#X connect 3 0 12 1;
+#X connect 4 0 10 0;
+#X connect 5 0 6 0;
+#X connect 6 0 13 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 6 0;
+#X connect 10 0 11 1;
+#X connect 11 0 12 0;
+#X connect 12 0 2 0;
+#X connect 13 0 14 0;
+#X connect 14 0 11 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="soundtocontrol" type="sw">
+				<PortMapping PortName="LowerMapping" PortNumber="1"/>
+				<PortMapping PortName="UpperMapping" PortNumber="2"/>
+				<PortMapping PortName="SoundIn" PortNumber="3"/>
+				<PortMapping PortName="ControlOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

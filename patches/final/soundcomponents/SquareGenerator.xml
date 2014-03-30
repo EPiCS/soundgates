@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>SquareGenerator</Type>
+	<Category>Oscillator</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="Frequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Frequency" PortNumber="0"/><PortMapping PortName="Output" PortNumber="0"/><PD>#N canvas 16 298 677 614 12;
+#X obj 116 116 * -1;
+#X msg 188 119 0;
+#X obj 58 159 phasor~;
+#X obj 159 157 phasor~;
+#X msg 237 119 0.5;
+#X obj 97 224 -~ 1;
+#X obj 96 197 +~;
+#X text 0 0 inports Frequency;
+#X text 0 0 outports Output;
+#X obj 239 48 loadbang;
+#X obj 99 360 outlet~;
+#X obj 63 60 inlet;
+#X obj 199 82 trigger bang;
+#X connect 0 0 3 0;
+#X connect 1 0 2 1;
+#X connect 2 0 6 0;
+#X connect 3 0 6 1;
+#X connect 4 0 3 1;
+#X connect 5 0 10 0;
+#X connect 6 0 5 0;
+#X connect 9 0 12 0;
+#X connect 11 0 0 0;
+#X connect 11 0 2 0;
+#X connect 11 0 12 0;
+#X connect 12 0 4 0;
+#X connect 12 0 1 0;
+#X connect 12 0 0 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="square" type="hw">
+				<PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+			<Implementation name="square" type="sw">
+			    <PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

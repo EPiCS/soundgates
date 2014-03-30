@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>NOT</Type>
+	<Category>Logic</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="Value"/>
+		<Port DataType="CONTROL" Direction="OUT" Name="Negation"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Value" PortNumber="0"/><PortMapping PortName="Negation" PortNumber="0"/><PD>#N canvas 0 49 718 849 10;
+#X obj 197 270 outlet;
+#X obj 169 55 inlet;
+#X text 132 1 inports Value;
+#X text 0 0 outports Negation;
+#X obj 196 225 expr if ($f1 &gt; 0 \, 0 \, 1);
+#X connect 1 0 4 0;
+#X connect 4 0 0 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="neg" type="sw">
+			    <PortMapping PortName="Value" PortNumber="1"/>
+			    <PortMapping PortName="Negation" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

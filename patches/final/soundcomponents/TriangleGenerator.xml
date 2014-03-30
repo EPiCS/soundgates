@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>TriangleGenerator</Type>
+	<Category>Oscillator</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="Frequency"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Output"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Frequency" PortNumber="0"/><PortMapping PortName="Output" PortNumber="0"/><PD>#N canvas 642 287 681 618 12;
+#X obj 116 116 * -1;
+#X msg 190 115 0;
+#X obj 58 159 phasor~;
+#X obj 159 157 phasor~;
+#X obj 59 199 *~ 2;
+#X obj 58 226 -~ 1;
+#X obj 57 254 clip~ 0 1;
+#X obj 159 202 *~ 2;
+#X obj 158 229 -~ 1;
+#X obj 157 257 clip~ 0 1;
+#X obj 105 308 +~;
+#X text 32 23 inports Frequency;
+#X text 20 3 outports Output;
+#X obj 33 47 inlet;
+#X obj 202 22 loadbang;
+#X obj 105 357 outlet~;
+#X obj 152 67 trigger bang;
+#X connect 0 0 3 0;
+#X connect 1 0 3 1;
+#X connect 1 0 2 1;
+#X connect 2 0 4 0;
+#X connect 3 0 7 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 10 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 1;
+#X connect 10 0 15 0;
+#X connect 13 0 0 0;
+#X connect 13 0 2 0;
+#X connect 13 0 16 0;
+#X connect 14 0 16 0;
+#X connect 16 0 0 0;
+#X connect 16 0 1 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="triangle" type="hw">
+				<PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+			<Implementation name="triangle" type="sw">
+			    <PortMapping PortName="Frequency" PortNumber="1"/>
+				<PortMapping PortName="Output" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

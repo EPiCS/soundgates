@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>SampleControlAddition</Type>
+	<Category>Arithmetic</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="Summand1"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Summand2"/>
+		<Port DataType="SOUND" Direction="OUT" Name="Result"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Summand1" PortNumber="0"/><PortMapping PortName="Summand2" PortNumber="1"/><PortMapping PortName="Result" PortNumber="0"/><PD>#N canvas 0 49 718 849 10;
+#X obj 120 18 inlet;
+#X text 116 0 inports Summand1 Summand2;
+#X text 0 0 outports Result;
+#X obj 74 76 +~;
+#X obj 62 19 inlet~;
+#X obj 62 103 outlet~;
+#X connect 0 0 3 1;
+#X connect 3 0 5 0;
+#X connect 4 0 3 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="addsc" type="sw">
+			    <PortMapping PortName="Summand1" PortNumber="1"/>
+				<PortMapping PortName="Summand2" PortNumber="2"/>
+				<PortMapping PortName="Result" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

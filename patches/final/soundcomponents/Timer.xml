@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Timer</Type>
+	<Category>Control</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="TriggerIn"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Loop"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Delay"/>
+		<Port DataType="CONTROL" Direction="OUT" Name="TriggerOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="TriggerIn" PortNumber="0"/><PortMapping PortName="Loop" PortNumber="1"/><PortMapping PortName="Delay" PortNumber="2"/><PortMapping PortName="TriggerOut" PortNumber="0"/><PD>#N canvas 959 83 958 1064 12;
+#X text 28 16 outports TriggerOut;
+#X obj 48 79 inlet trigger;
+#X obj 198 79 inlet mode;
+#X obj 302 78 inlet delay;
+#X obj 225 382 outlet trigger;
+#X obj 67 123 trigger bang;
+#X obj 225 234 delay;
+#X obj 252 121 t b;
+#X obj 187 169 spigot;
+#X msg 247 320 1;
+#X obj 310 135 sel 0;
+#X text 79 34 inports TriggerIn Loop Delay;
+#X connect 1 0 5 0;
+#X connect 2 0 8 1;
+#X connect 3 0 10 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 8 0;
+#X connect 8 0 6 0;
+#X connect 9 0 4 0;
+#X connect 10 1 6 1;
+</PD></Simulation>
+		<Device>
+			<Implementation name="timer" type="sw">
+				<PortMapping PortName="TriggerIn" PortNumber="1"/>
+				<PortMapping PortName="Loop" PortNumber="2"/>
+				<PortMapping PortName="Delay" PortNumber="3"/>
+				<PortMapping PortName="TriggerOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

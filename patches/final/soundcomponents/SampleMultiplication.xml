@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>SampleMultiplication</Type>
+	<Category>Arithmetic</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
+		<Port DataType="SOUND" Direction="IN" Name="Multiplier"/>
+		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="SoundIn" PortNumber="0"/><PortMapping PortName="Multiplier" PortNumber="1"/><PortMapping PortName="SoundOut" PortNumber="0"/><PD>#N canvas 0 49 718 849 10;
+#X text 121 0 inports SoundIn Multiplier;
+#X text 0 0 outports SoundOut;
+#X obj 62 19 inlet~;
+#X obj 120 18 inlet~;
+#X obj 79 96 *~;
+#X obj 71 128 outlet~;
+#X connect 2 0 4 0;
+#X connect 3 0 4 1;
+#X connect 4 0 5 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="mulss" type="hw">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="Multiplier" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+			<Implementation name="mulss" type="sw">
+				<PortMapping PortName="SoundIn" PortNumber="1"/>
+				<PortMapping PortName="Multiplier" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

@@ -1,0 +1,13 @@
+#N canvas 2332 509 744 650 12;
+#X obj 75 133 *~ 2;
+#X obj 75 163 -~ 1;
+#X text 0 0 inports Frequency;
+#X text 0 0 outports Output;
+#X text 76 12;
+#X obj 75 203 outlet~;
+#X obj 76 69 inlet;
+#X obj 76 103 phasor~;
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 6 0 7 0;
+#X connect 7 0 0 0;

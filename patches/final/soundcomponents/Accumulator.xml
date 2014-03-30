@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Accumulator</Type>
+	<Category>Logic</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="Input"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Speed"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Reset"/>
+		<Port DataType="CONTROL" Direction="OUT" Name="Value"/>
+	</Ports>
+	<Properties>
+		<FloatProperty InitialValue="0" Name="Value"/>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Input" PortNumber="0"/><PortMapping PortName="Speed" PortNumber="1"/><PortMapping PortName="Reset" PortNumber="2"/><PortMapping PortName="Value" PortNumber="0"/><PD>#N canvas 2 50 1276 1388 10;
+#X obj 186 37 loadbang;
+#X text 0 0 outports Value;
+#X obj 297 92 inlet Speed;
+#X obj 76 98 inlet Value;
+#X obj 275 492 float;
+#X obj 215 490 +;
+#X obj 268 223 metro;
+#X obj 276 721 outlet;
+#X obj 388 273 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144-1 -1;
+#X msg 345 344 1;
+#X obj 353 488 expr if ($f2 &gt; 0 \, $f2 - $f3 \, 0);
+#X msg 239 420 10;
+#X obj 423 96 inlet reset;
+#X msg 409 192 0;
+#X obj 456 150 t b;
+#X text 115 5 inports Input Speed Reset;
+#X obj 304 611 change;
+#X connect 0 0 6 0;
+#X connect 2 0 6 1;
+#X connect 3 0 5 0;
+#X connect 4 0 5 1;
+#X connect 4 0 10 1;
+#X connect 4 0 16 0;
+#X connect 5 0 4 0;
+#X connect 6 0 8 0;
+#X connect 6 0 9 0;
+#X connect 6 0 10 0;
+#X connect 9 0 10 2;
+#X connect 10 0 4 0;
+#X connect 11 0 4 0;
+#X connect 12 0 14 0;
+#X connect 13 0 4 0;
+#X connect 14 0 13 0;
+#X connect 16 0 7 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="accumulator" type="sw">
+			    <PortMapping PortName="Input" PortNumber="1"/>
+			    <PortMapping PortName="Speed" PortNumber="2"/>
+			    <PortMapping PortName="Reset" PortNumber="3"/>
+			    <PortMapping PortName="Value" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

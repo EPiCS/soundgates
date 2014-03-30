@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Logger</Type>
+	<Category>Sink</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="Sound"/>
+		<Port DataType="CONTROL" Direction="IN" Name="Trigger"/>
+	</Ports>
+	<Properties>
+		<UserStringProperty InitialValue="soundlog:" Name="Logging Prefix"/>
+		<UserStringProperty InitialValue="/tmp/soundlog" Name="Filename"/>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Value" PortNumber="0"/><PD>#N canvas 0 49 718 849 10;
+#X text 0 0 outports Value;
+#X obj 49 90 outlet;
+#X obj 45 50 r @ComponentName;
+#X connect 2 0 1 0;
+#X text inports SoundIn CutoffFrequency#X text outports SoundOut;
+</PD></Simulation>
+		<Device>
+			<Implementation name="log" type="sw">
+				<PortMapping PortName="Sound" PortNumber="1"/>
+				<PortMapping PortName="Trigger" PortNumber="2"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>SoundOutput</Type>
+	<Category>Sink</Category>
+	<Ports>
+		<Port DataType="SOUND" Direction="IN" Name="Sound"/>
+	</Ports>
+	<Code>
+		<Simulation><PortMapping PortName="Sound" PortNumber="0"/><PD>#N canvas 110 539 450 300 10;
+#X obj 47 28 inlet~;
+#X obj 47 89 dac~;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X text 0 0 inports Sound;
+</PD></Simulation>
+		<Device>
+			<Implementation name="dac" type="sw">
+				<PortMapping PortName="Sound" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>

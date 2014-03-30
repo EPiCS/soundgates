@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
+	<Type>Delay</Type>
+	<Category>Effect</Category>
+	<Ports>
+		<Port DataType="CONTROL" Direction="IN" Name="Delay"/>
+		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
+		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
+	</Ports>
+	<Properties>
+	</Properties>
+	<Code>
+		<Simulation><PortMapping PortName="Delay" PortNumber="0"/><PortMapping PortName="SoundIn" PortNumber="1"/><PortMapping PortName="SoundOut" PortNumber="0"/><PD>#N canvas 2 50 1276 1388 10;
+#X obj 96 80 inlet;
+#X obj 114 196 outlet~;
+#X obj 272 99 inlet~;
+#X obj 113 151 delread~ \$0_delayline;
+#X obj 256 150 delwrite~ \$0_delayline 10000;
+#X text 88 250 outports SoundOut;
+#X text 89 280 inports Delay SoundIn;
+#X connect 0 0 3 0;
+#X connect 2 0 4 0;
+#X connect 3 0 1 0;
+</PD></Simulation>
+		<Device>
+			<Implementation name="delay" type="sw">
+				<PortMapping PortName="Delay" PortNumber="1"/>
+				<PortMapping PortName="SoundIn" PortNumber="2"/>
+				<PortMapping PortName="SoundOut" PortNumber="1"/>
+			</Implementation>
+		</Device>
+	</Code>
+</AtomicSoundComponent>
