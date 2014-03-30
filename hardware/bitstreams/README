@@ -52,3 +52,51 @@ Slots:
     pwm/hw(3)
     adsr/hw(4)
 
+------------------
+Name:
+    sinsawtrisqnoiserampadsrpwmfir.bit
+
+Description:
+    Bitstream with each HWT, two times instantiated
+
+Slots:
+   sine/hw(0)
+   sine/hw(1)
+   saw/hw(2)
+   saw/hw(3)
+   triangle/hw(4)
+   triangle/hw(5)
+   square/hw(6)
+   square/hw(7)
+   noise/hw(8)
+   noise/hw(9)
+   ramp/hw(10)
+   ramp/hw(11)
+   adsr/hw(12)
+   adsr/hw(13)
+   pwm/hw(14)
+   pwm/hw(15)
+   fir/hw(16)
+   fir/hw(17)
+
+
+------------------
+Name:
+    512.bit / 1024.bit
+
+Description:
+    sample block with 512/1024 samples
+
+Slots:
+    0 sin
+    1 sin
+    2 saw 
+    3 saw
+    4 triangle
+    5 triangle
+    6 square
+    7 square
+    8 noise
+    9 noise
+   10 fir
+   11 fir

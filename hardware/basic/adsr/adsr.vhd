@@ -34,7 +34,8 @@ port(
         decay       : in  signed(31 downto 0);
         sustain     : in  signed(31 downto 0);
         release     : in  signed(31 downto 0);
-        wave        : out signed(31 downto 0)
+        wave        : out signed(31 downto 0);
+		  adsr_done   : out std_logic
     );
 
 end adsr;
@@ -60,6 +61,7 @@ architecture Behavioral of adsr is
                 i_wave <= s_zero;
                 state <= s_idle;
                 b_stop <= '0';
+					 adsr_done <= '0';
             else
             
             if rising_edge(clk) then
@@ -75,6 +77,7 @@ architecture Behavioral of adsr is
                     case state is
 						  
                         when s_attack   =>
+									 adsr_done <= '0';
                             i_wave <= i_wave + attack;
                             if i_wave >= s_one then
                                 state <= s_decay;
@@ -98,6 +101,7 @@ architecture Behavioral of adsr is
                                 state <= s_exit;
                             end if;
 							  when s_exit		=>
+								  adsr_done <= '1';
 								  state <= s_idle;
 								when others =>
 								  -- nothing

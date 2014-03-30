@@ -1,5 +1,5 @@
 
-#include "PWM_HW.hpp"
+#include "ADSR_HW.hpp"
 
 #ifndef ZYNQ
 
@@ -7,11 +7,13 @@
 
 #else
 
-ADSR_HW::ADSR_HW(std::vector<std::string> params) : ADSRSoundComponent(params), m_HWTSlot(ADSR::name) {
-
+ADSRSoundComponent_HW::ADSRSoundComponent_HW(std::vector<std::string> params) : ADSRSoundComponent(params), m_HWTSlot(ADSRSoundComponent::name) {
+    const uint32_t triggerHW   = 0x0000000F;
+    const uint32_t releaseHW   = 0xFFFFFFFF;
+    uint32_t currTrigger = 1;
 }
 
-void ADSR_HW::init(){
+void ADSRSoundComponent_HW::init(){
 
     // You can init() sound output ports to clear their buffers
 	m_SoundOut_1_Port->init();
@@ -19,8 +21,10 @@ void ADSR_HW::init(){
     m_Decay_3_Port->registerCallback(ICallbackPtr(new OnValueChangeHW(&m_DecayTime, m_Decay_3_Port)));
     m_Sustain_4_Port->registerCallback(ICallbackPtr(new OnValueChangeHW(&m_SustainLevel, m_Sustain_4_Port)));
     m_Release_5_Port->registerCallback(ICallbackPtr(new OnValueChangeHW(&m_ReleaseTime, m_Release_5_Port)));
-    m_Trigger_6_Port->registerCallback(ICallbackPtr(new OnTiggerHW(*this)));
+    m_Trigger_6_Port->registerCallback(ICallbackPtr(new OnTriggerHW(*this)));
 
+    m_trigger = 0;
+    m_release = 0;
 
     if(m_HWTSlot.isValid()){
         /* 1. initialize mailboxes */
@@ -37,36 +41,37 @@ void ADSR_HW::init(){
         m_ReconOSResource[1].ptr  = &m_CtrlStop;
 
 
-        m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
-        m_HWTParams.args[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
-        m_HWTParams.args[2] = (uint32_t) 0;
-        m_HWTParams.args[3] = (uint32_t) 0;
-        m_HWTParams.args[4] = (uint32_t) getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE;
-        m_HWTParams.args[5] = (uint32_t) getIncrement_HW(m_DecayTime) * SOUNDGATES_FIXED_PT_SCALE;
-        m_HWTParams.args[6] = (uint32_t) getIncrement_HW(m_SustainLevel) * SOUNDGATES_FIXED_PT_SCALE;
-        m_HWTParams.args[7] = (uint32_t) getIncrement_HW(m_ReleaseTime) * SOUNDGATES_FIXED_PT_SCALE;
+        m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
+        m_HWTParams[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+        m_HWTParams[2] = (uint32_t) m_trigger;
+        m_HWTParams[3] = (uint32_t) m_release;
+        m_HWTParams[4] = (uint32_t) (getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[5] = (uint32_t) (getIncrement_HW(m_DecayTime) * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[6] = (uint32_t) (m_SustainLevel * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[7] = (uint32_t) (getIncrement_HW(m_ReleaseTime) * SOUNDGATES_FIXED_PT_SCALE);
 
         reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
-        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams.args[0]);
+        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams[0]);
 
         reconos_hwt_create(&m_ReconOSThread, m_HWTSlot.getSlot(), NULL);
 
     }
 }
 
-void ADSR_HW::process(){
-
-	m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
-	m_HWTParams.args[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
-//	m_HWTParams.args[2] = (uint32_t) 0;
-//	m_HWTParams.args[3] = (uint32_t) 0; // are set by OnTriggerHW
-	m_HWTParams.args[4] = (uint32_t) getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE;
-	m_HWTParams.args[5] = (uint32_t) getIncrement_HW(m_DecayTime) * SOUNDGATES_FIXED_PT_SCALE;
-	m_HWTParams.args[6] = (uint32_t) getIncrement_HW(m_SustainLevel) * SOUNDGATES_FIXED_PT_SCALE;
-	m_HWTParams.args[7] = (uint32_t) getIncrement_HW(m_ReleaseTime) * SOUNDGATES_FIXED_PT_SCALE;
+void ADSRSoundComponent_HW::process(){
+	LOG_DEBUG(m_trigger);
+	m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
+    m_HWTParams[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+	m_HWTParams[2] = (uint32_t) m_trigger;
+	m_HWTParams[3] = (uint32_t) m_release;
+	m_HWTParams[4] = (uint32_t) (getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE);
+	m_HWTParams[5] = (uint32_t) (getIncrement_HW(m_DecayTime) * SOUNDGATES_FIXED_PT_SCALE);
+	m_HWTParams[6] = (uint32_t) (m_SustainLevel * SOUNDGATES_FIXED_PT_SCALE);
+	m_HWTParams[7] = (uint32_t) (getIncrement_HW(m_ReleaseTime) * SOUNDGATES_FIXED_PT_SCALE);
 
     mbox_put(&m_CtrlStart, ADSR_HWT_START);
     mbox_get(&m_CtrlStop);
+	LOG_DEBUG(m_trigger);
 }
 
 #endif

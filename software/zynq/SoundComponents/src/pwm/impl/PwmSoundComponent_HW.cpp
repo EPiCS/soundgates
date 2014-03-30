@@ -32,6 +32,20 @@ void PwmSoundComponent_HW::init(){
         m_ReconOSResource[1].type = RECONOS_TYPE_MBOX;
         m_ReconOSResource[1].ptr  = &m_CtrlStop;
 
+        if(m_PwmSoundIn_1_Port.get() == NULL ){
+
+        	std::cout << "Null pointer!" << std::endl;
+        }
+
+        if(m_PwmSoundIn_2_Port.get() == NULL ){
+
+        	std::cout << "Null pointer!" << std::endl;
+        }
+        if(m_PwmSoundOut_1_Port.get() == NULL ){
+
+        	std::cout << "Null pointer!" << std::endl;
+        }
+
 
     	m_HWTParams[0] = (uint32_t) m_PwmSoundIn_1_Port->getReadBuffer();
     	m_HWTParams[1] = (uint32_t) m_PwmSoundIn_2_Port->getReadBuffer();
@@ -47,12 +61,25 @@ void PwmSoundComponent_HW::init(){
 
 void PwmSoundComponent_HW::process(){
 
-//	m_HWTParams[0] = (uint32_t) m_PwmSoundIn_1_Port->getReadBuffer();
-//	m_HWTParams[1] = (uint32_t) m_PwmSoundIn_2_Port->getReadBuffer();
-//	m_HWTParams[2] = (uint32_t) m_PwmSoundOut_1_Port->getWriteBuffer();
+//	char* readbuffer = new char[64 * sizeof(int)];
+//	char* writebuffer = new char[64 * sizeof(int)];
+
+	m_HWTParams[0] = (uint32_t) m_PwmSoundIn_1_Port->getReadBuffer();
+		m_HWTParams[1] = (uint32_t) m_PwmSoundIn_2_Port->getReadBuffer();
+		m_HWTParams[2] = (uint32_t) m_PwmSoundOut_1_Port->getWriteBuffer();
+//
+//
+//
+//	m_HWTParams[0] = (uint32_t)readbuffer;
+//	m_HWTParams[1] = (uint32_t) readbuffer;
+//	m_HWTParams[2] = (uint32_t) writebuffer;
 
     mbox_put(&m_CtrlStart, PWM_HWT_START);
     mbox_get(&m_CtrlStop);
+
+//    delete readbuffer;
+//    delete writebuffer;
+
 }
 
 #endif

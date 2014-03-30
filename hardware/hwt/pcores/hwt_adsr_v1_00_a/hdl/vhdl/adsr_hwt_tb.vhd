@@ -90,10 +90,10 @@
         to_signed(2, 32),         -- destination address
         bang,              -- bang
         bang_stop,              -- stop bang
-        to_signed(33554432, 32), -- attack
-        to_signed(33554432, 32), -- decay
+        to_signed(8388608, 32), -- attack
+        to_signed(8388608, 32), -- decay
 		  to_signed(214748000,32), --sustain
-		  to_signed(33554432, 32)  -- release
+		  to_signed(8388608, 32)  -- release
         );
 		  
 

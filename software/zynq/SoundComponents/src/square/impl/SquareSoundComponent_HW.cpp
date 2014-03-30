@@ -34,21 +34,24 @@ void SquareSoundComponent_HW::init(){
     m_FrequencyIn_1_Port->registerCallback(ICallbackPtr(new OnFrequencyChange_HW(*this)));
 
 
+    m_SoundOut_1_Port->init();
     /* initialize reconos */
 
     if(slot.isValid()){
         // TODO: Warum werden hier zwei message boxen benötigt!?
 
-        /* initialize message boxes with 1 data word */
+
+
+    	/* initialize message boxes with 1 data word */
         mbox_init(&m_CtrlStart, 1);
         mbox_init(&m_CtrlStop,  1);
 
         m_HWTParams[0] = (uint32_t) m_LocalBuffer;
 
         m_HWTParams[1]  = 0;
-        m_HWTParams[2]  = (uint32_t) (getPhaseIncrement_HW(440));
-        m_HWTParams[3]  = (uint32_t) 0.5f * SOUNDGATES_FIXED_PT_SCALE;
-        m_HWTParams[4]  = (uint32_t) 0.5f * SOUNDGATES_FIXED_PT_SCALE;
+        m_HWTParams[2]  = (uint32_t) (getPhaseIncrement_HW(440) * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[3]  = (uint32_t) (0.5f * SOUNDGATES_FIXED_PT_SCALE);
+        m_HWTParams[4]  = (uint32_t) (1.0f * SOUNDGATES_FIXED_PT_SCALE);
 
         m_ReconOSResource[0].type = RECONOS_TYPE_MBOX;
         m_ReconOSResource[0].ptr  = &m_CtrlStart;

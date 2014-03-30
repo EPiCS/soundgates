@@ -68,7 +68,6 @@ public class PortItemSemanticEditPolicy extends
 
 		boolean patch;
 		boolean linkAllowed;
-		boolean delegationAllowed;
 
 		//             port          component    container
 		patch = (req.getContainer().eContainer().eContainer() instanceof PatchImpl);
@@ -78,32 +77,7 @@ public class PortItemSemanticEditPolicy extends
 		linkAllowed = (sourceContainer == targetContainer)
 				&& ((Port) req.getTarget()).getDirection() == Direction.IN
 				&& ((Port) req.getTarget()).getIncomingConnection() == null
-				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
-						.getTarget()).getDataType() == DataType.CONTROL));
-
-		if (sourceContainer instanceof PatchImpl) {
-			delegationAllowed = sourceContainer.eContents().contains(
-					targetContainer);
-		} else if (targetContainer instanceof PatchImpl) {
-			delegationAllowed = targetContainer.eContents().contains(
-					sourceContainer);
-		} else {
-			delegationAllowed = (sourceContainer.eContents().contains(
-					targetContainer) || targetContainer.eContents().contains(
-					sourceContainer));
-		}
-
-		delegationAllowed = delegationAllowed
-				&& ((Port) req.getTarget()).getDirection() == ((Port) req
-						.getSource()).getDirection()
-				&& ((Port) req.getTarget()).getIncomingConnection() == null
-				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
-						.getTarget()).getDataType() == DataType.CONTROL));
-
-		if (req.getTarget().eContainer() instanceof AtomicSoundComponent) {
-			delegationAllowed = delegationAllowed
-					&& ((Port) req.getTarget()).getDirection() == Direction.IN;
-		}
+				&& ( ((Port) req.getSource()).getDataType() == ((Port) req.getTarget()).getDataType() );	
 
 		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch
 				&& linkAllowed) {
