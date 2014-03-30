@@ -356,7 +356,7 @@ begin
 								  prev_bang <= signed(bang);
 								  processing <= '1';
 							 else
-								  state <= STATE_IDLE;
+								  state <= STATE_NOTIFY;
 							 end if;
  
                     when 1 =>

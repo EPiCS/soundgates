@@ -52,3 +52,29 @@ Slots:
     pwm/hw(3)
     adsr/hw(4)
 
+------------------
+Name:
+    sinsawtrisqnoiserampadsrpwmfir.bit
+
+Description:
+    Bitstream with each HWT, two times instantiated
+
+Slots:
+   sine/hw(0)
+   sine/hw(1)
+   saw/hw(2)
+   saw/hw(3)
+   triangle/hw(4)
+   triangle/hw(5)
+   square/hw(6)
+   square/hw(7)
+   noise/hw(8)
+   noise/hw(9)
+   ramp/hw(10)
+   ramp/hw(11)
+   adsr/hw(12)
+   adsr/hw(13)
+   pwm/hw(14)
+   pwm/hw(15)
+   fir/hw(16)
+   fir/hw(17)
