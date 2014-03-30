@@ -88,7 +88,7 @@ $(OUTPUT_DIR)/HWThreadManager.d \
 $(OUTPUT_DIR)/Node.d 
 
 all: folderstruct libsynthcore.so copyheaders
-	
+#all: folderstruct copyheaders	
 # Build objects
 $(OUTPUT_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp
 	@echo 'Building file: $<'

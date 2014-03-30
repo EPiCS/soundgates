@@ -58,6 +58,10 @@ public class OSCMessageStore {
         return true;
     }
 
+    public void clear() {
+        store.clear();
+    }
+
     public String toString() {
         String ret = "";
         for(OSCMessage msg : store)

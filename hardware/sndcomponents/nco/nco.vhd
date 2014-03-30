@@ -29,12 +29,12 @@ entity nco is
 		WAVEFORM       : WAVEFORM_TYPE := SIN
 	 );
     Port ( 
-            clk    : in  std_logic;           
-            rst    : in  std_logic;
-            ce     : in  std_logic;
-            phase_offset : in signed(31 downto 0);
-            phase_incr   : in signed(31 downto 0);
-            data         : out signed(31 downto 0)
+            clk             : in  std_logic;           
+            rst             : in  std_logic;
+            ce              : in  std_logic;
+            phase_offset    : in  signed(31 downto 0);
+            phase_incr      : in  signed(31 downto 0);
+            data            : out signed(31 downto 0)
            );
 end nco;
 

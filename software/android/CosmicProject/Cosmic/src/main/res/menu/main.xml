@@ -9,4 +9,8 @@
         android:title="@string/action_clearhistory"
         android:orderInCategory="200"
         app:showAsAction="never" />
+    <item android:id="@+id/action_disconnect"
+        android:title="@string/action_disconnect"
+        android:orderInCategory="300"
+        app:showAsAction="always" />
 </menu>

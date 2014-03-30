@@ -61,9 +61,9 @@ public class CompositeSoundComponentEditPart extends
 	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
-		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
-				new CreationEditPolicyWithCustomReparent(
-						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
+//		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
+//				new CreationEditPolicyWithCustomReparent(
+//						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
 		super.createDefaultEditPolicies();
 		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
 				new CompositeSoundComponentItemSemanticEditPolicy());
