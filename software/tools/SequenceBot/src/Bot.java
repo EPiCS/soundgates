@@ -107,8 +107,9 @@ public class Bot {
 		final HandshakeThread hsThread = new HandshakeThread(inputs, 50051);
 		hsThread.start();
 
-		sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
+//		sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
 //		sender = new OSCPortOut(InetAddress.getByName("192.168.1.106"),50050);
+		sender = new OSCPortOut(InetAddress.getByName("192.168.1.99"),50050);
 
 		receiver = new OSCPortIn(listenPort);
 		receiver.startListening();

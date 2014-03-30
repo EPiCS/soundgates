@@ -7,11 +7,12 @@
 
 #include "ADSRSoundComponent.h"
 #include "impl/ADSRSoundComponent_SW.h"
+#include "impl/ADSR_HW.hpp"
 
 /* Define component name */
 DEFINE_COMPONENTNAME(ADSRSoundComponent, "adsr")
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(ADSRSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(ADSRSoundComponent);
 
 ADSRSoundComponent::ADSRSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params) {
 

@@ -373,10 +373,10 @@ void Soundbuffer::readbuffer(char* data, int size)
 				<< std::endl;
 		return;
 	}
-	if (size >= SOUNDBUFFERSIZE)
+	if (size > SOUNDBUFFERSIZE)
 	{
 		std::cerr << "Too many samples. Might be at most "
-				<< SOUNDBUFFERSIZE / 2 << std::endl;
+				<< SOUNDBUFFERSIZE / 4 << std::endl;
 		return;
 	}
 
@@ -404,10 +404,10 @@ void Soundbuffer::fillbuffer(char* data, int size)
 				<< std::endl;
 		return;
 	}
-	if (size >= SOUNDBUFFERSIZE)
+	if (size > SOUNDBUFFERSIZE)
 	{
 		std::cerr << "Too many samples. Might be at most "
-				<< SOUNDBUFFERSIZE / 2 << std::endl;
+				<< SOUNDBUFFERSIZE / 4 << std::endl;
 		return;
 	}
 

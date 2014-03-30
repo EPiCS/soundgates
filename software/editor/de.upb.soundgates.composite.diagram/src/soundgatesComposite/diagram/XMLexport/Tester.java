@@ -118,7 +118,7 @@ public class Tester {
 		}
 		
 		//test types
-		if(link.getSource().getDataType()==DataType.SOUND && link.getTarget().getDataType()==DataType.CONTROL){
+		if(link.getSource().getDataType()!=link.getTarget().getDataType()){
 			MessageDialogs.soundToControlConnection(parentString, link.getSource().getName(), link.getTarget().getName());
 			return false;
 		}
