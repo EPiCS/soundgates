@@ -27,8 +27,8 @@ public class Bot {
 	static final int CONFIG_FIRST_BASE_NOTE = 0;
 	static final float CONFIG_PRESS_PERCENTAGE_DEFAULT = 0.6f;
 	
-	static float pressPercentage = CONFIG_PRESS_PERCENTAGE_DEFAULT;
-	static float tempoScale = CONFIG_TEMPO_SCALE_DEFAULT;
+	static Float pressPercentage = CONFIG_PRESS_PERCENTAGE_DEFAULT;
+	static Float tempoScale = CONFIG_TEMPO_SCALE_DEFAULT;
 
 	//Moll: 0 2 3 5 7 8 10 12
 	//Dur: 0 2 4 5 7 9 11 12
@@ -60,14 +60,14 @@ public class Bot {
 	private static float[] frequencies = new float[128];
 	private static int [] notes;
 	
-	static int baseNoteMean = 30; 
-	static float baseNoteStandardDeviation = 1;
+	static DownCounter baseNoteMean = new DownCounter(2, 15, 0.008f);
+	static float baseNoteStandardDeviation = (float) 0.1;
 	
-	static int sequenceMean = 0; 
-	static float sequenceStandardDeviation = 1;
+	static DownCounter sequenceMean = new DownCounter(2, 0, 0.008f);
+	static float sequenceStandardDeviation = (float) 0.1;
 	
-	static int rythmMean = 0; 
-	static float rythmStandardDeviation = 1;
+	static DownCounter rythmMean = new DownCounter(2, 0, 0.8f);
+	static float rythmStandardDeviation = (float) 0.1;
 	
 	static OSCPortOut sender;
 	static OSCPortIn receiver;
@@ -98,14 +98,17 @@ public class Bot {
 		inputs.add(new String []{CONFIG_BASENOTE_DEVIATION_MESSAGE, "0", "10"});
 		inputs.add(new String []{CONFIG_BASENOTE_MEAN_MESSAGE, "0", "50"});
 		inputs.add(new String []{CONFIG_SEQUENCE_MEAN_MESSAGE, "0", "10"});
+		inputs.add(new String []{CONFIG_RYTHM_MEAN_MESSAGE, "0", "10"});
 		inputs.add(new String []{CONFIG_SEQUENCE_DEVIATION_MESSAGE, "0", "2"});
+		inputs.add(new String []{CONFIG_RYTHM_DEVIATION_MESSAGE, "0", "2"});
 		inputs.add(new String []{CONFIG_HIT_PERCENTAGE_MESSAGE, "0.1", "0.99"});
 		inputs.add(new String []{CONFIG_RYTHM_SYNC_MESSAGE, "0", "1"});
 		inputs.add(new String []{CONFIG_SPEED_MESSAGE, "0.1", "0.4"});
 		final HandshakeThread hsThread = new HandshakeThread(inputs, 50051);
 		hsThread.start();
-		
+
 		sender = new OSCPortOut(InetAddress.getByName("localhost"),50050);
+//		sender = new OSCPortOut(InetAddress.getByName("192.168.1.106"),50050);
 
 		receiver = new OSCPortIn(listenPort);
 		receiver.startListening();
@@ -134,6 +137,10 @@ public class Bot {
 		rythm = vengaRythm();
 		
 		addListener(receiver);
+		
+//		baseNoteMean.start();
+//		sequenceMean.start();
+//		rythmMean.start();
 		
 		frequencies[0]=(float) 27.5;
 		for (int i = 1; i < frequencies.length; i++){
@@ -177,11 +184,13 @@ public class Bot {
 	}
 	
 	private static void addListener(OSCPortIn receiver) {
+		int speed = 20;
+		
 		receiver.addListener(CONFIG_BASENOTE_MEAN_MESSAGE, new OSCListener() {
 			
 			@Override
 			public void acceptMessage(Date arg0, OSCMessage arg1) {
-				baseNoteMean = (int)Math.round((float)arg1.getArguments()[0]);
+				baseNoteMean.add((float) Math.round((float)arg1.getArguments()[0]));
 			}
 		});
 		receiver.addListener(CONFIG_BASENOTE_DEVIATION_MESSAGE, new OSCListener() {
@@ -216,7 +225,7 @@ public class Bot {
 			
 			@Override
 			public void acceptMessage(Date arg0, OSCMessage arg1) {
-				sequenceMean = (int)Math.round((float)arg1.getArguments()[0]);
+				sequenceMean.add((float) Math.round((float)arg1.getArguments()[0]));
 			}
 		});
 		receiver.addListener(CONFIG_RYTHM_DEVIATION_MESSAGE, new OSCListener() {
@@ -230,8 +239,7 @@ public class Bot {
 			
 			@Override
 			public void acceptMessage(Date arg0, OSCMessage arg1) {
-				rythmMean = (int)Math.round((float)arg1.getArguments()[0]);
-			}
+				rythmMean.add((float) Math.round((float)arg1.getArguments()[0]));			}
 		});
 	}
 
@@ -249,15 +257,17 @@ public class Bot {
 		
 
 		int nextPositionIndex = 0;
-		nextPositionIndex = getGaussian(sequenceMean, sequenceStandardDeviation, 0, voices[0].length);
-		System.out.println("Changed Position to: " + nextPositionIndex);
+		float seqMean = sequenceMean.get();
+		nextPositionIndex = getGaussian(seqMean, sequenceStandardDeviation, 0, voices[0].length);
+		System.out.println("Changed Position to: " + nextPositionIndex + " Raw data: " + seqMean);
 		int nextRythmIndex = 0;
-		nextRythmIndex = getGaussian(rythmMean, rythmStandardDeviation, 0, rythmVoices[0].length);
-		System.out.println("Changed Rythm to: " + nextRythmIndex);
+		nextRythmIndex = getGaussian(rythmMean.get(), rythmStandardDeviation, 0, rythmVoices[0].length);
+		float rytMean = rythmMean.get();
+		System.out.println("Changed Rythm to: " + nextRythmIndex + " Raw data: " + rytMean);
 		
 		int nextBaseNoteIndex = 0;
 		if (random.nextFloat() < CONFIG_BASE_NOTE_CHANGE_PROBABILITY){
-			nextBaseNoteIndex = getGaussian(baseNoteMean, baseNoteStandardDeviation, baseNoteMin, baseNoteMax);
+			nextBaseNoteIndex = getGaussian(baseNoteMean.get(), baseNoteStandardDeviation, baseNoteMin, baseNoteMax);
 			System.out.println("Changed Basenote to: " + notes[nextBaseNoteIndex]);
 		}
 		long length = 0;
