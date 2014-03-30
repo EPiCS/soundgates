@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><AtomicSoundComponent xmlns="soundgates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../Soundgates model/atomicComponent.xsd">
-	<Type>FIR</Type>
+	<Type>Highpass</Type>
 	<Category>Filter</Category>
 	<Ports>
 		<Port DataType="SOUND" Direction="IN" Name="SoundIn"/>
@@ -7,7 +7,7 @@
 		<Port DataType="SOUND" Direction="OUT" Name="SoundOut"/>
 	</Ports>
 	<Properties>
-		<UserStringProperty InitialValue="Lowpass" Name="FilterType" Options="Lowpass|Highpass"/>
+		<UserStringProperty InitialValue="Highpass" Name="FilterType" Options="Highpass"/>
 	</Properties>
 	<Code>
 		<Simulation/>
