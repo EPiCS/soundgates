@@ -7,7 +7,6 @@
 
 #include "../PwmSoundComponent.hpp"
 #include <HWSlot.h>
-#include <HWTParameters.h>
 
 #ifdef ZYNQ
 

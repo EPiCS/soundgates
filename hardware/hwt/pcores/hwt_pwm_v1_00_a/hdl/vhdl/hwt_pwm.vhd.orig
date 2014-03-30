@@ -6,12 +6,12 @@
 --                                |___/                    
 -- ======================================================================
 --
---   title:        VHDL module - hwt_sinus
+--   title:        VHDL module - hwt_pwm
 --
 --   project:      PG-Soundgates
---   author:       Lukas Funke, University of Paderborn
+--   author:       Hendrik Hangmann, University of Paderborn
 --
---   description:  Hardware thread for a sine wave
+--   description:  Hardware thread for a pwm
 --
 -- ======================================================================
 
@@ -29,7 +29,7 @@ library soundgates_v1_00_a;
 use soundgates_v1_00_a.soundgates_common_pkg.all;
 use soundgates_v1_00_a.soundgates_reconos_pkg.all;
 
-entity hwt_sinus is
+entity hwt_pwm is
     generic(
 		SND_COMP_CLK_FREQ : integer := 100_000_000
 	);
@@ -59,29 +59,24 @@ entity hwt_sinus is
 		HWT_Clk   : in  std_logic;
 		HWT_Rst   : in  std_logic
     );
-end hwt_sinus;
+end hwt_pwm;
 
-architecture Behavioral of hwt_sinus is
+architecture Behavioral of hwt_pwm is
 
     ----------------------------------------------------------------
     -- Subcomponent declarations
     ----------------------------------------------------------------
-    
-    component nco is
-	generic(
-		FPGA_FREQUENCY  : integer       := 100_000_000;
-		WAVEFORM        : WAVEFORM_TYPE := SIN
-	);
+    component pwm is
     Port ( 
-            clk          : in  std_logic;           
-            rst          : in  std_logic;
-            ce           : in  std_logic;
-            phase_offset : in  signed(31 downto 0);
-            phase_incr   : in  signed(31 downto 0);
-            data         : out signed(31 downto 0)
+            clk         : in  std_logic;
+            rst         : in  std_logic;
+            ce          : in  std_logic;
+            sample_in   : in  signed(31 downto 0);
+            sample_in2  : in  signed(31 downto 0);
+            pwm         : out signed(31 downto 0)
            );
-    end component nco;
- 
+    end component pwm;
+
     signal clk   : std_logic;
 	signal rst   : std_logic;
 
@@ -98,27 +93,28 @@ architecture Behavioral of hwt_sinus is
     constant MBOX_FINISH  : std_logic_vector(31 downto 0) := x"00000001";
 -- /ReconOS Stuff
 
-    type STATE_TYPE is (STATE_IDLE, STATE_REFRESH_HWT_ARGS, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
+    type STATE_TYPE is (STATE_IDLE, STATE_REFRESH_HWT_ARGS, STATE_READ, STATE_READ2, STATE_PROCESS, STATE_WRITE_MEM, STATE_NOTIFY, STATE_EXIT);
     signal state    : STATE_TYPE;
     
     ----------------------------------------------------------------
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 128;
+    constant C_MAX_SAMPLE_COUNT : integer := 64;
     
    	-- define size of local RAM here
-	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
+	constant C_LOCAL_RAM_SIZE          : integer := 2*C_MAX_SAMPLE_COUNT;
 	constant C_LOCAL_RAM_ADDRESS_WIDTH : integer := clog2(C_LOCAL_RAM_SIZE);    -- 6
 	constant C_LOCAL_RAM_SIZE_IN_BYTES : integer := 4*C_LOCAL_RAM_SIZE;
 
     type LOCAL_MEMORY_T is array (0 to C_LOCAL_RAM_SIZE-1) of std_logic_vector(31 downto 0);
         
-    signal o_RAMAddr_nco : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
-	signal o_RAMData_nco : std_logic_vector(0 to 31);   -- nco to local ram
-	signal i_RAMData_nco : std_logic_vector(0 to 31);   -- local ram to nco
-    signal o_RAMWE_nco   : std_logic;
-	
+    signal o_RAMAddr_pwm  : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+    signal old_o_RAMAddr_pwm  : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
+	signal o_RAMData_pwm  : std_logic_vector(0 to 31);   -- pwm to local ram
+	signal i_RAMData_pwm  : std_logic_vector(0 to 31);   -- local ram to pwm
+    signal o_RAMWE_pwm    : std_logic;
+
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
 	signal o_RAMData_reconos   : std_logic_vector(0 to 31);
@@ -138,48 +134,50 @@ architecture Behavioral of hwt_sinus is
     ----------------------------------------------------------------
     signal      hwtio : hwtio_t;
 
-    -- arg[0]   = destination address
-    -- arg[1]   = phase offset
-    -- arg[2]   = phase increment
-
-    -- argc     = 3
     
-    constant    hwt_argc : integer := 3;
+    
     ----------------------------------------------------------------
     -- Component dependent signals
     ----------------------------------------------------------------
-    signal nco_ce       : std_logic;                                                       -- nco clock enable (like a start/stop signal)
+    signal pwm_ce       : std_logic;                                                       -- pwm clock enable (like a start/stop signal)
     signal sample_count : unsigned(15 downto 0) := to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-    signal nco_data     : signed(31 downto 0);
+    signal pwm_data     : signed(31 downto 0);
 
+    signal sourceaddr   : std_logic_vector(DWORD_WIDTH - 1 downto 0);
+    signal sourceaddr2  : std_logic_vector(DWORD_WIDTH - 1 downto 0);
     signal destaddr     : std_logic_vector(DWORD_WIDTH - 1 downto 0);
-    signal phaseoffset  : std_logic_vector(31 downto 0);
-    signal phaseincr    : std_logic_vector(31 downto 0);
+    signal sample1       : std_logic_vector(31 downto 0);
+	 signal sample2       : std_logic_vector(31 downto 0);
 
-    signal state_inner_process : std_logic;
+    signal state_inner_process : integer;
+    signal bang_state       : integer range 0 to 1;
 
     ----------------------------------------------------------------
     -- OS Communication
     ----------------------------------------------------------------
     
-    constant NCO_START : std_logic_vector(31 downto 0) := x"0000000F";
-    constant NCO_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+    constant pwm_START : std_logic_vector(31 downto 0) := x"0000000F";
+    constant pwm_EXIT  : std_logic_vector(31 downto 0) := x"000000F0";
+
+    constant    hwt_argc : integer := 3;
 
 begin
 
     -----------------------------------
     -- Component related wiring
     -----------------------------------
-    destaddr    <= hwtio.argv(0);
-    phaseoffset <= hwtio.argv(1);
-    phaseincr   <= hwtio.argv(2);
+    sourceaddr  <= hwtio.argv(0);
+    sourceaddr2 <= hwtio.argv(1);
+    destaddr    <= hwtio.argv(2);
+
+--    sample   <= i_RAMData_pwm;
 
     -----------------------------------
     -- Hard wirings
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_nco <= std_logic_vector(nco_data);
+    
     
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
@@ -219,22 +217,19 @@ begin
 		o_RAMData_reconos,
 		i_RAMData_reconos
 	);
-            
+           
+
     -- /ReconOS Stuff
-    nco_inst : nco
-    generic map(
-		FPGA_FREQUENCY  => SND_COMP_CLK_FREQ,
-		WAVEFORM        => SIN
-	 )
+	pwm_INST : pwm
     port map( 
-            clk          => clk,
-            rst          => rst,
-            ce           => nco_ce,
-            phase_offset => signed(phaseoffset),
-            phase_incr   => signed(phaseincr),
-            data         => nco_data
+            clk         => clk,
+            rst         => rst,
+            ce          => pwm_ce,
+            sample_in   => signed (sample1),
+            sample_in2  => signed (sample2),
+            pwm         => pwm_data
             );
-            
+
     local_ram_ctrl_1 : process (clk) is
 	begin
 		if (rising_edge(clk)) then
@@ -249,19 +244,19 @@ begin
     local_ram_ctrl_2 : process (clk) is
 	begin
 		if (rising_edge(clk)) then		
-			if (o_RAMWE_nco = '1') then
-				local_ram(to_integer(unsigned(o_RAMAddr_nco))) := o_RAMData_nco;
-            --else      -- else not needed, because nco is not consuming any samples
-			--	i_RAMData_nco <= local_ram(conv_integer(unsigned(o_RAMAddr_nco)));
+			if (o_RAMWE_pwm = '1') then
+				local_ram(to_integer(unsigned(o_RAMAddr_pwm))) := o_RAMData_pwm;
+            else
+				i_RAMData_pwm  <= local_ram(to_integer(unsigned(o_RAMAddr_pwm)));
 			end if;
 		end if;
 	end process;    
     
-    NCO_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
+    pwm_CTRL_FSM_PROC : process (clk, rst, o_osif, o_memif) is
         variable done : boolean;            
     begin
         if rst = '1' then
-            
+            o_RAMData_pwm <= (others => '0');
             osif_reset(o_osif);
 			memif_reset(o_memif);           
             ram_reset(o_ram);
@@ -269,21 +264,22 @@ begin
             
             state               <= STATE_IDLE;
             sample_count        <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
-            nco_ce              <= '0';
-            o_RAMWE_nco         <= '0';
-            state_inner_process <= '0';
-            
-
+            pwm_ce              <= '0';
+				
+				
+            o_RAMWE_pwm         <= '0';
+            state_inner_process <= 0;
+            o_RAMData_pwm <= (others => '0');
             -- Initialize hwt args         
-            hwtio.f_step        <= 0;
-            hwtio.base_addr     <= (others => '0');
+            hwtio_init(hwtio);
 
             done := False;
-              
+              o_RAMAddr_pwm <= (others => '0');
+				  old_o_RAMAddr_pwm<= (others => '0');
         elsif rising_edge(clk) then
-            
-            nco_ce              <= '0';
-            o_RAMWE_nco         <= '0';
+            o_RAMData_pwm       <= std_logic_vector(pwm_data);
+            pwm_ce              <= '0';
+            o_RAMWE_pwm         <= '0';
             osif_ctrl_signal    <= ( others => '0');
             
             case state is
@@ -293,11 +289,11 @@ begin
                 osif_mbox_get(i_osif, o_osif, MBOX_START, osif_ctrl_signal, done);
 
                 if done then
-                    if osif_ctrl_signal = NCO_START then
+                    if osif_ctrl_signal = pwm_START then
                         
                         sample_count <= to_unsigned(C_MAX_SAMPLE_COUNT, 16);
                         state        <= STATE_REFRESH_HWT_ARGS;
-                    elsif osif_ctrl_signal = NCO_EXIT then
+                    elsif osif_ctrl_signal = pwm_EXIT then
                         
                         state   <= STATE_EXIT;
 
@@ -308,26 +304,66 @@ begin
                 get_hwt_args(i_osif, o_osif, i_memif, o_memif, hwtio, hwt_argc, done);
 
                 if done then
-                    state <= STATE_PROCESS;
-                end if;
+                    state <= STATE_READ;
+                end if;   
+
+            when STATE_READ => 
+                -- store input samples in local ram
+				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr, X"00000000", 
+                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES/2,24)), done); -- always in bytes
+				if done then
+				    state   <= STATE_READ2;
+			    end if;
+
+            when STATE_READ2 => 
+                -- store input samples in local ram
+				memif_read(i_ram, o_ram, i_memif, o_memif, sourceaddr2, std_logic_vector(to_unsigned(C_MAX_SAMPLE_COUNT,32)), 
+                    std_logic_vector(to_unsigned(C_LOCAL_RAM_SIZE_IN_BYTES/2,24)), done); -- always in bytes
+				if done then
+				    state   <= STATE_PROCESS;
+                    o_RAMAddr_pwm     <= (others => '0');   -- start with the first sample   -- start with the first sample
+			    end if;
 
             when STATE_PROCESS =>
                 if sample_count > 0 then
                     case state_inner_process is
-                        when '0' =>
-                            o_RAMWE_nco         <= '1';
-                            nco_ce              <= '1'; -- ein takt früher
-                            state_inner_process <= '1';
-                        when '1' =>
-                            o_RAMAddr_nco       <= std_logic_vector(unsigned(o_RAMAddr_nco) + 1);
+						      when 0 =>
+								    --read sample 1
+									 old_o_RAMAddr_pwm <= o_RAMAddr_pwm;
+									 sample1 <= i_RAMData_pwm;
+                            state_inner_process <= 1;
+								when 1 =>
+								    o_RAMAddr_pwm <= std_logic_vector(signed(o_RAMAddr_pwm) + to_signed(C_MAX_SAMPLE_COUNT,7));
+                            state_inner_process <= 9;
+							   when 9 =>
+									 state_inner_process <= 2;
+								when 2 =>
+								    --read sample 2
+									 sample2 <= i_RAMData_pwm;
+                            state_inner_process <= 3;
+                        when 3 =>
+									 o_RAMAddr_pwm <= old_o_RAMAddr_pwm;
+                            pwm_ce              <= '1'; -- ein takt früher
+                            state_inner_process <= 4;
+                        when 4 =>
+                            o_RAMWE_pwm         <= '1';
+                            state_inner_process <= 5;
+								when 5 =>
+				            o_RAMAddr_pwm     <= std_logic_vector(unsigned(o_RAMAddr_pwm)  + 1);
+<<<<<<< HEAD
+				            o_RAMAddr_pwm2    <= std_logic_vector(unsigned(o_RAMAddr_pwm2) + 1);
+                            sample_count      <= sample_count - 1;
+                            state_inner_process <= 3;
+=======
                             sample_count        <= sample_count - 1;
-                            state_inner_process <= '0';
-						when others =>
-						    state_inner_process <= '0';
+                            state_inner_process <= 6;
+>>>>>>> ae3619e246185b72bba591e31fd6f5c1afcf3c90
+					when others =>
+					    state_inner_process <= 0;
                     end case;
                 else
                     -- Samples have been generated
-                    o_RAMAddr_nco <= (others => '0');
+                    o_RAMAddr_pwm  <= (others => '0');
                     state <= STATE_WRITE_MEM;
                 end if;
 
@@ -337,7 +373,7 @@ begin
                 if done then
                     state <= STATE_NOTIFY;
 				end if;
-				
+
 		    when STATE_NOTIFY =>
 
                 osif_mbox_put(i_osif, o_osif, MBOX_FINISH, destaddr, ignore, done);
@@ -353,4 +389,3 @@ begin
     end process;
 
 end Behavioral;
-

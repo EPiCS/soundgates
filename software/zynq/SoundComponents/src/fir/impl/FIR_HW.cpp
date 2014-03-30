@@ -40,11 +40,11 @@ void FIR_HW::init(){
         m_ReconOSResource[1].ptr  = &m_CtrlStop;
 
 
-        m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
-        m_HWTParams.args[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
+        m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
+        m_HWTParams[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
 
         reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
-        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams.args[0]);
+        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams[0]);
 
         reconos_hwt_create(&m_ReconOSThread, m_HWTSlot.getSlot(), NULL);
 
@@ -53,8 +53,8 @@ void FIR_HW::init(){
 
 void FIR_HW::process(){
 
-    m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
-    m_HWTParams.args[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
+    m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
+    m_HWTParams[1] = (uint32_t) m_SoundOut_1_Port->getWriteBuffer();
 
     mbox_put(&m_CtrlStart, FIR_HWT_START);
     mbox_get(&m_CtrlStop);

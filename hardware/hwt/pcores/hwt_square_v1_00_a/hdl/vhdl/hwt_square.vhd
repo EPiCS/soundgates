@@ -1,3 +1,4 @@
+
 --  ____                        _             _            
 -- / ___|  ___  _   _ _ __   __| | __ _  __ _| |_ ___  ___ 
 -- \___ \ / _ \| | | | '_ \ / _` |/ _` |/ _` | __/ _ \/ __|
@@ -102,7 +103,7 @@ architecture Behavioral of hwt_square is
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 64;
+    constant C_MAX_SAMPLE_COUNT : integer := 128;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
