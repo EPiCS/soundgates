@@ -24,6 +24,7 @@ import de.upb.soundgates.cosmic.rows.InteractionRow;
 public class InteractionFragment extends ListFragment {
     private LayoutInflater inflater;
     private boolean isScrolling;
+    private OSCMessageAdapter adapter;
 
     public static InteractionFragment newInstance() {
         InteractionFragment fragment = new InteractionFragment();
@@ -33,6 +34,7 @@ public class InteractionFragment extends ListFragment {
 
     public InteractionFragment() {
         isScrolling = false;
+        adapter = null;
     }
 
     public boolean isScrolling() {
@@ -52,7 +54,7 @@ public class InteractionFragment extends ListFragment {
         OSCMessageStore msg_store = OSCMessageStore.hasInstance();
         if(msg_store != null)
         {
-            OSCMessageAdapter adapter = new OSCMessageAdapter(msg_store.getSelectedOSCMessageAsList());
+            adapter = new OSCMessageAdapter(msg_store.getSelectedOSCMessageAsList());
             setListAdapter(adapter);
             getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
@@ -72,6 +74,12 @@ public class InteractionFragment extends ListFragment {
         }
     }
 
+    public void clear() {
+        if(adapter != null)
+            adapter.clear();
+        setListAdapter(null);
+    }
+
     private class OSCMessageAdapter extends BaseAdapter {
         final List<InteractionRow> rows;
 
@@ -89,6 +97,11 @@ public class InteractionFragment extends ListFragment {
                     System.exit(-1);
                 }
             }
+        }
+
+        public void clear() {
+            rows.clear();
+            notifyDataSetChanged();
         }
 
         @Override

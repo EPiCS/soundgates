@@ -261,6 +261,16 @@ public class Codegen {
 		}
 		int objNum = componentList.size();
 		StringBuilder result = new StringBuilder();
+		
+		result.append("#X obj 30 20 loadbang;\n");
+		result.append("#X obj 30 30 delay 100;\n");
+		result.append("#X msg 30 40 ;pd dsp 1;\n");
+
+		result.append("#X connect "+objNum+" 0 " + (objNum+1) + " 0;\n");
+		result.append("#X connect "+(objNum+1)+" 0 " +( objNum+2) + " 0;\n");
+		
+		objNum+= 3;
+		
 		HashMap<AtomicSoundComponent, Integer> mapping = new HashMap<AtomicSoundComponent, Integer>(); 
 		result.append("#X obj 72 31 dumpOSC 50050;\n");
 		objNum += 1;
