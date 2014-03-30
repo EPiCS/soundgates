@@ -115,6 +115,8 @@ public class OSCMessage extends Observable {
     }
     public void setSelected(boolean selected) {
         this.selected = selected;
+        setChanged();
+        notifyObservers();
     }
 
     public InteractionMethod getInteractionMethod() { return interactionMethod; }

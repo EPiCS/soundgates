@@ -16,7 +16,6 @@ import org.eclipse.gmf.runtime.notation.View;
 
 import soundgatesComposite.AtomicSoundComponent;
 import soundgatesComposite.CompositeSoundComponent;
-import soundgatesComposite.DataType;
 import soundgatesComposite.Direction;
 import soundgatesComposite.Port;
 import soundgatesComposite.diagram.edit.commands.DelegationCreateCommand;
@@ -162,8 +161,7 @@ public class PortItemSemanticEditPolicy
 		linkAllowed = (sourceContainer == targetContainer)
 				&& ((Port) req.getTarget()).getDirection() == Direction.IN
 				&& ((Port) req.getTarget()).getIncomingConnection() == null
-				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
-						.getTarget()).getDataType() == DataType.CONTROL));
+				&& ( ((Port) req.getSource()).getDataType() == ((Port) req.getTarget()).getDataType() );
 
 		if (sourceContainer instanceof WorkbenchImpl) {
 			delegationAllowed = sourceContainer.eContents().contains(
@@ -181,8 +179,7 @@ public class PortItemSemanticEditPolicy
 				&& ((Port) req.getTarget()).getDirection() == ((Port) req
 						.getSource()).getDirection()
 				&& ((Port) req.getTarget()).getIncomingConnection() == null
-				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
-						.getTarget()).getDataType() == DataType.CONTROL));
+				&& ( ((Port) req.getSource()).getDataType() == ((Port) req.getTarget()).getDataType() );
 
 		if (req.getTarget().eContainer() instanceof AtomicSoundComponent) {
 			delegationAllowed = delegationAllowed

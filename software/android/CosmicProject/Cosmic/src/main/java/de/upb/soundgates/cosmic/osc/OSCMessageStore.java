@@ -25,6 +25,8 @@ public class OSCMessageStore {
         return holder;
     }
     public static void removeInstance() {
+        if(holder != null)
+            holder.clear();
         holder = null;
     }
 
@@ -59,6 +61,9 @@ public class OSCMessageStore {
     }
 
     public void clear() {
+        for(OSCMessage msg : store) {
+            msg.deleteObservers();
+        }
         store.clear();
     }
 
