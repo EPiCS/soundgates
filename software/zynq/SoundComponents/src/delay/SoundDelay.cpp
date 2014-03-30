@@ -15,7 +15,7 @@ EXPORT_SOUNDCOMPONENT_NO_IMPL(SoundDelayComponent);
 
 inline int SoundDelayComponent::delayToSampleCount(float delay){
 
-	return  (((Synthesizer::config::samplerate * delay)) / Synthesizer::config::bytesPerBlock) * Synthesizer::config::bytesPerBlock;
+	return  (((Synthesizer::config::samplerate * delay / 1000)) / Synthesizer::config::bytesPerBlock) * Synthesizer::config::bytesPerBlock;
 }
 
 

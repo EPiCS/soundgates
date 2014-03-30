@@ -13,7 +13,7 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="sw" name="const">
+			<Implementation type="sw" name="accumulator">
 			    <PortMapping PortName="Input" PortNumber="1"/>
 			    <PortMapping PortName="Speed" PortNumber="2"/>
 			    <PortMapping PortName="Reset" PortNumber="3"/>

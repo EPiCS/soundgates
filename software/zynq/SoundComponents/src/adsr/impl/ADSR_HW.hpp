@@ -5,7 +5,7 @@
 #ifndef ADSR_HW_HPP_
 #define ADSR_HW_HPP_
 
-#include "../ADSRSoundComponent.hpp"
+#include "../ADSRSoundComponent.h"
 #include <HWSlot.h>
 #include <HWTParameters.h>
 
@@ -22,12 +22,14 @@ extern "C"{
 #define ADSR_RELEASED(a, b) a > 0 && b == 0
 
 
-class ADSR_HW: public ADSRSoundComponent{
+class ADSRSoundComponent_HW: public ADSRSoundComponent{
 
 private:
 
     HWSlot              m_HWTSlot;
-    HWTParameters<31>   m_HWTParams;
+    uint32_t      	m_HWTParams[32];
+    uint32_t   m_trigger;
+    uint32_t   m_release;
 
     struct mbox m_CtrlStart;
     struct mbox m_CtrlStop;
@@ -43,7 +45,7 @@ private:
 
 public:
 
-    ADSR_HW(std::vector<std::string>);
+    ADSRSoundComponent_HW(std::vector<std::string>);
 
     void init();
     void process();
@@ -71,35 +73,38 @@ public:
      */
     class OnTriggerHW : public ICallbackFunctor {
     private:
-        ADSRSoundComponent_SW* const m_ObjRef;
+        ADSRSoundComponent_HW& m_ObjRef;
 
         float m_LastTrigger;
+        float trigger;
 
-        uint32_t triggerHW   = x0000000F;
-        uint32_t releaseHW   = xFFFFFFFF;
-        uint32_t currTrigger = 1;
+        static const uint32_t triggerHW   = 0x0000000F;
+        static const uint32_t releaseHW   = 0xFFFFFFFF;
+        uint32_t currTrigger;
     public:
-        OnTriggerHW(ADSR_HW* ref) : m_ObjRef(ref) {
-            m_LastTrigger  = m_ObjRef->m_Trigger_6_Port->pop();
+        OnTriggerHW(ADSRSoundComponent_HW& ref) : m_ObjRef(ref) {
 
+            currTrigger = 1;
+
+        }
+        void operator()() {
+            trigger  = m_ObjRef.m_Trigger_6_Port->pop();
             if (ADSR_TRIGGERED(m_LastTrigger, trigger)) {
                 LOG_DEBUG("ADSR Triggered");
-                m_HWTParams.args[2] = (uint32_t) triggerHW + currTrigger;
-                m_HWTParams.args[3] = (uint32_t) x00000000;
+                m_ObjRef.m_trigger = (uint32_t) triggerHW + currTrigger;
+                m_ObjRef.m_release = (uint32_t) 0x00000000;
                 currTrigger++;
             }
 
             if (ADSR_RELEASED(m_LastTrigger, trigger)) {
                 LOG_DEBUG("ADSR Released");
-                m_HWTParams.args[2] = (uint32_t) x0000000F;
-                m_HWTParams.args[3] = (uint32_t) xFFFFFFFF;
+                m_ObjRef.m_trigger = (uint32_t) triggerHW;
+                m_ObjRef.m_release = (uint32_t) releaseHW;
                 currTrigger = 1;
             }
 
-        m_LastTrigger = trigger;
-
+            m_LastTrigger = trigger;
         }
-        void operator()();
     };
 };
 

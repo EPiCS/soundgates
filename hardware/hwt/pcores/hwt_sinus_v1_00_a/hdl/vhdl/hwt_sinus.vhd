@@ -105,7 +105,7 @@ architecture Behavioral of hwt_sinus is
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 64;
+    constant C_MAX_SAMPLE_COUNT : integer := 128;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;

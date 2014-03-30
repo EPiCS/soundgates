@@ -4,7 +4,7 @@
 SOUNDGATES_EDK=/home/soundgates/git/reconos_zynq/demos/soundgates/edk_zynq_linux/
 RECONOS_REPO=/home/soundgates/git/reconos_zynq/
 #SOUNDGATES_REPO=/tmp/pg-soundgates/
-SOUNDGATES_REPO=/home/soundgates/git/pg-soundgates/
+SOUNDGATES_REPO=/home/soundgates/git/gunnar/pg-soundgates/
 ZEDBOARD_REPO=/home/soundgates/git/zedboard/
 ZYNC_REPO=/home/soundgates/zynq/
 RECONOS_REPO_TOOLS=${RECONOS_REPO}tools/
@@ -34,8 +34,10 @@ INPUT_UIMAGE=${SOUNDGATES_REPO}hardware/design/linuximage/uImage  #new image in 
 INPUT_INIT=${RECONOS_REPO}cache/os_boot/ps7_init.tcl
 INPUT_UBOOT=${ZYNC_REPO}u-boot-xlnx/u-boot
 #INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/design/reference/zynq_audio_adau1761/implementation/download.bit #should work but needs reconos included (irqs changing when reconos is added)
-INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/one_sine_one_fir/system.bit
-INPUT_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/one_sine_one_fir/system.bit
+INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/512.bit
+INPUT_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/512.bit
+#INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/sinsawtrisqnoiserampadsrpwmfir.bit
+#INPUT_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/sinsawtrisqnoiserampadsrpwmfir.bit
 
 #Intermediate Files
 DEVICE_TREE_BLOB=${WORKING_DIR}devicetree.dtb
