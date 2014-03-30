@@ -77,7 +77,8 @@ architecture Behavioral of hwt_adsr is
             decay       : in  signed(31 downto 0);  
             sustain     : in  signed(31 downto 0);  
             release     : in  signed(31 downto 0);
-            wave        : out signed(31 downto 0)
+            wave        : out signed(31 downto 0);
+				adsr_done   : out std_logic
            );
     end component adsr;
 
@@ -160,6 +161,10 @@ architecture Behavioral of hwt_adsr is
     signal decay        : std_logic_vector(31 downto 0);
     signal sustain      : std_logic_vector(31 downto 0);
     signal release      : std_logic_vector(31 downto 0);
+	 signal adsr_done    : std_logic;
+	 
+	 
+    signal processing   : std_logic;
 
     signal state_inner_process : integer;
     signal bang_state       : integer range 0 to 1;
@@ -197,6 +202,7 @@ begin
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
     o_RAMData_adsr <= output_fixed_point(38 downto 7);
+	 
     input25 <= i_RAMData_adsr(0 to 24);
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
@@ -250,7 +256,8 @@ begin
             decay       => signed(decay),
             sustain     => signed(sustain), 
             release     => signed(release),
-            wave        => adsr_data
+            wave        => adsr_data,
+				adsr_done   => adsr_done
             );
 
    local_ram_ctrl_1 : process (clk) is
@@ -279,6 +286,7 @@ begin
         variable done : boolean;            
     begin
         if rst = '1' then
+				processing <= '0';
             prev_bang <= C_START_BANG;
             osif_reset(o_osif);
 			memif_reset(o_memif);           
@@ -299,6 +307,12 @@ begin
             done := False;
               o_RAMAddr_adsr <= (others => '0');
         elsif rising_edge(clk) then
+		  
+		  
+				if adsr_done = '1' then
+					processing <= '0';
+				end if;
+		  
             output_fixed_point <= std_logic_vector(adsr_data(31 downto 14) * signed(input25));
             adsr_ce              <= '0';
             o_RAMWE_adsr         <= '0';
@@ -330,13 +344,17 @@ begin
                 end if;
 
             when STATE_CHECK_BANG =>
-            case bang_state is                
+            if processing = '1' then
+					state <= STATE_READ;
+				else
+					case bang_state is                
                     when 0 =>
 							 if signed(bang) > prev_bang then
 								  bang_state <= 1;
 								  start <= (others => '1');
 								  state <= STATE_READ;
 								  prev_bang <= signed(bang);
+								  processing <= '1';
 							 else
 								  state <= STATE_NOTIFY;
 							 end if;
@@ -350,7 +368,9 @@ begin
 							 else
 								  state <= STATE_IDLE;
 							 end if;
-						end case;    
+						end case;  
+				end if;
+				
 
             when STATE_READ => 
                 -- store input samples in local ram
