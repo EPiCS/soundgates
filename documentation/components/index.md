@@ -101,7 +101,7 @@ All control values are of datatype float. If the control value is used for boole
 ### Sink
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
-| Logger | log | <ol><li class="sound">Sound</li><li>Trigger</li></ol> | - | <ol><li>Logging Prefix</li><li>Filename</li></ol> | {{page.uncheck}} <td colspan="2"> Logs all samples to console and to a file, as long as *Trigger* is `true`, preceeded by *Logging Prefix*. It is usually better to use the more sophisticated logging framework as described at !TODO HIER LINK ZUM LOGGING!</td> |
+| Logger | log | <ol><li class="sound">Sound</li><li>Trigger</li></ol> | - | <ol><li>Logging Prefix</li><li>Filename</li></ol> | {{page.uncheck}} <td colspan="2"> Logs all samples to console and to a file, as long as *Trigger* is `true`, preceeded by *Logging Prefix*. It is usually better to use the more sophisticated logging framework</td> |
 | Sound Output | dac | <ol><li class="sound">Sound</li></ol> | - | - | {{page.uncheck}} <td colspan="2"> Plays back an incoming soundwave using ALSA</td> |
 
 ### Source

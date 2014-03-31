@@ -49,7 +49,7 @@ An exemplary config file with default values is shown below. Parts of the config
 3. **plugins**:
  - *searchdir*: The folder where the shared libraries of sound components reside. Paths are relative to the Synthesizer executable. Absolute paths work as well, of course.
 4. **logging**:
- - *enabled*: Should logging (TODO: LINK ZUM DEBUGGER) be enabled at all. Logging will considerably affect playback, so only activate this for debug purpose.
+ - *enabled*: Should logging be enabled at all. Logging will considerably affect playback, so only activate this for debug purpose.
  - *initDelay*: An initial delay in milliseconds the Synthesizer will wait before producing any samples. Useful if you need to set input values before logging.
  - *stopAfter*: Milliseconds after which the Synthesizer program will exit. When logging, you should only log small amounts of time, since the BSON format can only handle limited amounts of data.
  - *address*: Address at which the database backend runs
