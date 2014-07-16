@@ -10,7 +10,7 @@
 
 /gettingstarted:
   - [/gettingstarted/tutorial, Tutorial]
-  - [/gettingstarted/github, Github Repository, "https://github.com/pc2/pg-soundgates", y]
+  - [/gettingstarted/github, Github Repository, "https://github.com/epics/soundgates", y]
   - [/gettingstarted/cplusplus, C++ settings]
 
 /tutorials:
@@ -23,4 +23,3 @@
   - [/documentation/components, Synthesizer Components]
   - [/documentation/architecture, Synthesizer Architecture]
   - [/documentation/tgf, TGF Format]
-
