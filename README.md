@@ -1,4 +1,4 @@
-pc2.github.io/pg-soundgates
-===========================
+www.epics-project.eu/soundgates
+===============================
 
-Soundgates Documentation
+Website for the Soundgates project
