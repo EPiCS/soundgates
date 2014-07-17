@@ -14,15 +14,15 @@ The Cosmic Android App is usually the last step in the Soundgates system workflo
 It is used to control the patches that are running on the synthesizer.
 Therefore the first step to use the App is to connect to the synthesizer:  
 <div align="center">
-<img alt="Cosmic App - Connect" src="/assets/images/android_connect_fragment.png" />
+<img alt="Cosmic App - Connect" src="{{ site.url }}/assets/images/android_connect_fragment.png" />
 </div>  
 <p>Next the user needs to choose which components he wants to control and by which sensor (or other interaction method):</p>  
 <div align="center">
-<img alt="Cosmic App - Select" src="/assets/images/android_select_fragment.png" />
+<img alt="Cosmic App - Select" src="{{ site.url }}/assets/images/android_select_fragment.png" />
 </div>  
 <p>The last fragment of the App shows informations about the interaction with the system and allows to set parameters:</p>  
 <div align="center">
-<img alt="Cosmic App - Interact" src="/assets/images/android_interaction_fragment.png" />
+<img alt="Cosmic App - Interact" src="{{ site.url }}/assets/images/android_interaction_fragment.png" />
 </div>
 
 ## Synthesizer
