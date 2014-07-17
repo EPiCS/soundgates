@@ -11,7 +11,7 @@ The following tutorials show the functions of the two Soundgates editors on simp
 
 2. Find the folder "Soundgates".  
 
-![Soundgates wizards](/assets/images/1_choose_wizard.png)
+![Soundgates wizards]({{ site.url }}/assets/images/1_choose_wizard.png)
 
 3. Choose "Soundgates Project" and click "Next".  
 
@@ -19,7 +19,7 @@ The following tutorials show the functions of the two Soundgates editors on simp
 
 4. On the following wizard page enter the name of your project, for example "MySoundgatesProject" and click on "Finish".
 
-5. A new Soundgates project appears in your project explorer. It contains two folders: "samples" and "soundcomponents".   
+5. A new Soundgates project appears in your project explorer. It contains two folders: "samples" and "soundcomponents".
 **IMPORTANT: DO NOT delete or rename these folders!**  
 
 ![Soundgates Project](/assets/images/3_ready_project.png)
@@ -113,7 +113,7 @@ Composite sound component are hierarchical components that contain other compone
 There are two ways to create a composite sound component. You can create an empty composite sound component and fill it with components or you can create a composite sound component from an existing component structure.
 
 ## Creating an empty composite sound component
-Imagine you want to have a wave generator that gets a value for frequency and generates two different waves in parallel (a sine wave and a triangle wave). 
+Imagine you want to have a wave generator that gets a value for frequency and generates two different waves in parallel (a sine wave and a triangle wave).
 These waves are mixed together and the resulting wave is the output. To get such a mixed generator you must create a composite sound component. The following tutorial shows the steps for this creation.  
 
 1. Right-click on the Soundgates project and choose "New" -> "Other".
@@ -147,13 +147,13 @@ Add the following components to "CombinedWaves":
 
 Set the static property "Value" of the component "Constant" to 0.5  
 
-**IMPORTANT: A composite sound component CAN NOT contain atomic sound components with types "IO" and/or "SoundOutput"!**   
+**IMPORTANT: A composite sound component CAN NOT contain atomic sound components with types "IO" and/or "SoundOutput"!**
 
 2. To add a port to the composite sound component, you have to click once on the tool entry "New Port" and then click once on the component.  
 To set the port's properties you need the Eclipse Properties View. Right-click on an added port and choose "Show Properties View".  
 You can set the data type, the direction and the name of the port.  
 
-![Port properties](/assets/images/13_new_port.png)   
+![Port properties](/assets/images/13_new_port.png)
 
 Add two ports to "CombinedWaves":
 - Port "Frequency" with data type "CONTROL" and direction "IN"
@@ -183,7 +183,7 @@ Now the component "CombinedWaves" should look like this:
 4. To use the created composite sound component in the patch editor, the component must be saved as a XML file in the folder "soundcomponents".  
 Right-click on the component and choose "Export Composite Sound Component as XML".  
 
-![CombinedWaves Export](/assets/images/15_composite_export.png) 
+![CombinedWaves Export](/assets/images/15_composite_export.png)
 
 You can also check the component by choosing "Validate Composite Sound Component". Before XML export the validation is done automatically.  
 In case of a successful export a new XML file is created in the folder "soundcomponents". This file contains the description of the created component.  
@@ -207,7 +207,7 @@ In this case you can create a composite sound component from these existing comp
 
 ![New Composite From Existing Components](/assets/images/17_composite_from_elements.png)  
 
-3. A new composite sound component is created and saved in its own XML file in the folder "soundcomponents". The composite editor for the new component opens.     
+3. A new composite sound component is created and saved in its own XML file in the folder "soundcomponents". The composite editor for the new component opens.
 
 ![New Composite From Existing Components in Editor](/assets/images/18_composite_from_elements_in_editor.png)  
 
@@ -220,8 +220,8 @@ If you then export the component and place it in the patch instead of the two at
 ![New Composite in Patch](/assets/images/19_patch_with_composite.png)  
 
 ##Using of the component "WavePlayer" and the folder "samples"
-If you want to play wave files in your patch, you must copy them into the folder "samples". 
-In the patch you need the component "WavePlayer", which you find in the category "Source". 
+If you want to play wave files in your patch, you must copy them into the folder "samples".
+In the patch you need the component "WavePlayer", which you find in the category "Source".
 The WavePlayer has the property "FileName" where you must enter the name of a wave file contained in the folder "samples".
 For example, if have a file named "beat.wav" in the mentioned folder and you want to use it, you must enter "beat.wav" into the field "FileName" of the "WavePlayer" as shown in the picture:  
 
