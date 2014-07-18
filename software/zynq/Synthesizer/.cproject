@@ -77,6 +77,7 @@
 									<listOptionValue builtIn="false" value="xmlrpc_xmltok"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.476121715" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Libraries/x86_64/lib}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.strip.1958889210" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="false" valueType="boolean"/>

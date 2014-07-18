@@ -1,8 +1,10 @@
-/*
- * SamplePlayerSW.cpp
+/**
+ * @file   SamplePlayer_SW.cpp
+ * @Author lfu (lfunke@mail.upb.de)
+ * @date   December, 2013
+ * @brief  Sample player implementation
  *
- *  Created on: Dec 28, 2013
- *      Author: lukas
+ *
  */
 
 #include "SamplePlayer_SW.h"
