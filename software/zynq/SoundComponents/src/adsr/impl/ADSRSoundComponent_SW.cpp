@@ -19,7 +19,7 @@ void ADSRSoundComponent_SW::OnTrigger::operator()() {
     case ADSRSoundComponent_SW::RELEASE:
 
         if (ADSR_TRIGGERED(m_LastTrigger, trigger)) {
-            LOG_DEBUG("ADSR Triggered");
+//            LOG_DEBUG("ADSR Triggered");
             m_ObjRef->m_ADSRState = ADSRSoundComponent_SW::CLICK_SUPPRESSION;
             m_ObjRef->m_SkipSustain = false;
         }
@@ -68,9 +68,9 @@ void ADSRSoundComponent_SW::init() {
 
 void ADSRSoundComponent_SW::process() {
 
-    int m_attacksamplecount  = (int) (Synthesizer::config::samplerate * m_AttackTime);
-    int m_decaysamplecount   = (int) (Synthesizer::config::samplerate * m_DecayTime);
-    int m_releasesamplecount = (int) (Synthesizer::config::samplerate * m_ReleaseTime);
+    int m_attacksamplecount  = (int) (Synthesizer::config::samplerate * m_AttackTime / 1000);
+    int m_decaysamplecount   = (int) (Synthesizer::config::samplerate * m_DecayTime / 1000);
+    int m_releasesamplecount = (int) (Synthesizer::config::samplerate * m_ReleaseTime / 1000);
 
     int   blockSamplesProcessed = 0;
 
@@ -144,7 +144,7 @@ void ADSRSoundComponent_SW::process() {
                 if (m_SamplesProcessed >= m_releasesamplecount) {
 
                     for (int j = blockSamplesProcessed; j < Synthesizer::config::blocksize; j++) {
-                        m_SoundIn_1_Port->writeSample(0, j);
+                        m_SoundOut_1_Port->writeSample(0, j);
                     }
 
                     blockSamplesProcessed = Synthesizer::config::blocksize;
@@ -160,7 +160,7 @@ void ADSRSoundComponent_SW::process() {
 
             for (; blockSamplesProcessed < Synthesizer::config::blocksize;
                     blockSamplesProcessed++)  {
-                m_SoundIn_1_Port->writeSample((*m_SoundIn_1_Port)[blockSamplesProcessed] * m_currentlevel * \
+                m_SoundOut_1_Port->writeSample((*m_SoundIn_1_Port)[blockSamplesProcessed] * m_currentlevel * \
                         (float)((Synthesizer::config::blocksize - blockSamplesProcessed) / Synthesizer::config::blocksize) , blockSamplesProcessed);
             }
             m_ADSRState = ADSRSoundComponent_SW::ATTACK;

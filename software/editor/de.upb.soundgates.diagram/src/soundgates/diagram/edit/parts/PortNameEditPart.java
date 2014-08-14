@@ -23,7 +23,6 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IBorderItemEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.LabelEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.figures.IBorderItemLocator;
 import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry;
 import org.eclipse.gmf.runtime.diagram.ui.label.ILabelDelegate;
@@ -47,8 +46,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
-
 import org.eclipse.swt.widgets.Display;
+
 import soundgates.diagram.edit.policies.SoundgatesTextSelectionEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
 import soundgates.diagram.providers.SoundgatesElementTypes;
@@ -108,12 +107,10 @@ public class PortNameEditPart extends LabelEditPart implements
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new LabelDirectEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
 				new SoundgatesTextSelectionEditPolicy());
 	}
@@ -282,7 +279,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	 * @generated
 	 */
 	protected boolean isEditable() {
-		return getParser() != null;
+		return false;
 	}
 
 	/**
@@ -684,7 +681,7 @@ public class PortNameEditPart extends LabelEditPart implements
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	static final Font THIS_FONT = new Font(Display.getCurrent(), Display
 			.getDefault().getSystemFont().getFontData()[0].getName(), 8,

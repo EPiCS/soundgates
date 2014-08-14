@@ -9,6 +9,10 @@
 #define LISTSCHEDULER_H_
 
 #include <stdint.h>
+#include <vector>
+#include "../IScheludingStrategy.h"
+#include "../../core/Node.h"
+
 
 class ListScheduler: public IScheludingStrategy {
 

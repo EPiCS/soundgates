@@ -6,7 +6,8 @@ public class MessageDialogs {
 
 	
 	// --DIALOGS--
-	
+
+
 	public static boolean replaceExistingCompositeSoundComponentDialog(String name){	
 	
 	   MessageDialog dialog = new MessageDialog(
@@ -115,12 +116,24 @@ public class MessageDialogs {
 		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please remove the IO component(s) from the composite sound component \""+name+"\"");		
 	}
 	
+	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		
+		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please remove the SoundOutput block(s) from the composite sound component \""+name+"\"");		
+	}
+	
+	public static void newCompositeSoundComponentContaintsIOBlock() {		
+		MessageDialog.openWarning(null, "IO components in composite components are not allowed", "Please unmark the IO component(s)");		
+	}
+	
+	public static void newCompositeSoundComponentContaintsSoundOutputBlock() {		
+		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please unmark the SoundOutput block(s)");		
+	}
+	
 	public static void ioComponentsMustHaveUniqueNames() {		
 		MessageDialog.openWarning(null, "IO components must have unique names", "Please assign each IO component an unique name");		
 	}
 	
-	public static void compositeSoundComponentContaintsSoundOutputBlock(String name) {		
-		MessageDialog.openWarning(null, "SoundOutput blocks in composite components are not allowed", "Please remove the SoundOutput block(s) from the composite sound component \""+name+"\"");		
+	public static void patchContainsMoreThanOneSoundOutput(){
+		MessageDialog.openWarning(null, "There are several SoundOutput components in the patch", "A patch can contain only one SoundOutput component");
 	}
 	
 	public static void soundcomponentsFolderMissing(String projectName) {		

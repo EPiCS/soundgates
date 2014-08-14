@@ -1,22 +1,18 @@
 package de.upb.soundgates.cosmic.rows;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
-import de.upb.soundgates.cosmic.MinMaxSeekBar;
+import de.upb.soundgates.cosmic.misc.MinMaxSeekBar;
 import de.upb.soundgates.cosmic.R;
-import de.upb.soundgates.cosmic.fragments.InteractionFragment;
+import de.upb.soundgates.cosmic.osc.OSCArgument;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCSender;
-import de.upb.soundgates.cosmic.osc.OSCType;
 
 /**
  * Created by posewsky on 10.01.14.
@@ -103,10 +99,12 @@ public class InteractionSeekBarRow implements InteractionRow{
         //configureMinMaxSeekBar(holder);
         holder.text.setText(msg.getPath());
 
-        OSCType t = msg.getTypes().get(0);
-        holder.seekbar.setMaximumValue(t.MAX_VALUE);
-        holder.seekbar.setMinimumValue(t.MIN_VALUE);
-        holder.seekbar.setFloatValue(t.value);
+        if(msg.getTypes().size() > 0) {
+            OSCArgument t = msg.getTypes().get(0);
+            holder.seekbar.setMaximumValue(t.MAX_VALUE);
+            holder.seekbar.setMinimumValue(t.MIN_VALUE);
+            holder.seekbar.setFloatValue(t.value);
+        }
         holder.seekbar.setOnSeekBarChangeListener(new OnMinMaxSeekBarChangeListener());
 
         return view;
@@ -144,7 +142,7 @@ public class InteractionSeekBarRow implements InteractionRow{
 
         if(msg.getTypes().size() == 1)
         {
-            OSCType t = msg.getTypes().get(0);
+            OSCArgument t = msg.getTypes().get(0);
             viewHolder.seekbar.setMaximumValue(t.MAX_VALUE);
             viewHolder.seekbar.setMinimumValue(t.MIN_VALUE);
             viewHolder.seekbar.setFloatValue(t.MIN_VALUE);

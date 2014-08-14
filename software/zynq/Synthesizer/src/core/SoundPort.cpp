@@ -35,7 +35,8 @@ void SoundPort::writeSample(int32_t pcm_data, std::size_t nIndex){
             LOG_ERROR("Index out of bounds, while writing to soundport");
         }
     }else{
-        LOG_ERROR("Try to access sample buffer of unconnected");
+        LOG_ERROR("Try to write sample buffer of unconnected");
+        throw ;
         //TODO throw exception here
     }
 }
@@ -59,7 +60,8 @@ int SoundPort::operator[](size_t nIndex) {
             LOG_ERROR("Index out of bounds, while reading from soundport");
         }
     }else{
-        LOG_ERROR("Try to access sample buffer of unconnected");
+        LOG_ERROR("Try to read sample buffer of unconnected");
+        throw;
         //TODO throw exception here
     }
 

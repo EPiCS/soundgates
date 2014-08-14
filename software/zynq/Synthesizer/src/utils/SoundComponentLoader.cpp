@@ -188,5 +188,7 @@ SoundComponentImplPtr SoundComponentLoader::createFromString(const std::string& 
         m_RegisteredSndInstances.push_back(newcomponent);
     }
 
+    newcomponent->setImplType(SoundComponents::ImplTypeNames[impltype]);
+
 	return newcomponent;
 }

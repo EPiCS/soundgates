@@ -7,11 +7,12 @@
 
 #include "ADSRSoundComponent.h"
 #include "impl/ADSRSoundComponent_SW.h"
+#include "impl/ADSR_HW.hpp"
 
 /* Define component name */
 DEFINE_COMPONENTNAME(ADSRSoundComponent, "adsr")
 
-EXPORT_SOUNDCOMPONENT_SW_ONLY(ADSRSoundComponent);
+EXPORT_SOUNDCOMPONENT_MIXED_IMPL(ADSRSoundComponent);
 
 ADSRSoundComponent::ADSRSoundComponent(std::vector<std::string> params) : SoundComponentImpl(params) {
 
@@ -29,3 +30,7 @@ ADSRSoundComponent::ADSRSoundComponent(std::vector<std::string> params) : SoundC
 
 ADSRSoundComponent::~ADSRSoundComponent() {}
 
+double ADSRSoundComponent::getIncrement_HW(int msec)
+{
+	return (1000/(double)msec)/44100;
+}

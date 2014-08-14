@@ -15,3 +15,5 @@ ramp,hwt_ramp_v1_00_a
 const,const_hwt
 dac,dac_hwt
 amp,hwt_amplifier_v1_00_a
+pwm,hwt_pwm_v1_00_a
+fir,hwt_fir_v1_00_a

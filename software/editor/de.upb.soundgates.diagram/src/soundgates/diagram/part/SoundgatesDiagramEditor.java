@@ -78,6 +78,9 @@ import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		IGotoMarker {
 
+	SoundgatesPaletteFactory soundgatesPaletteFactory;
+	IFolder xmlFolder;
+
 	/**
 	 * @generated
 	 */
@@ -89,10 +92,11 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 	public static final String CONTEXT_ID = "soundgates.diagram.ui.diagramContext"; //$NON-NLS-1$
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public SoundgatesDiagramEditor() {
 		super(true);
+		soundgatesPaletteFactory = new SoundgatesPaletteFactory();
 	}
 
 	/**
@@ -116,84 +120,89 @@ public class SoundgatesDiagramEditor extends DiagramDocumentEditor implements
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(g.getURI().toPlatformString(false)));
 		IProject project = resource.getProject();
-		IFolder folder = project.getFolder("soundcomponents");
+		xmlFolder = project.getFolder("soundcomponents");
 
 		// Tell the Component Library about the new path
-		AtomicSoundComponentLibrary.setXMLFolder(folder);
-		CompositeSoundComponentLibrary.setXMLFolder(folder);
+		AtomicSoundComponentLibrary.setXMLFolder(xmlFolder);
+		CompositeSoundComponentLibrary.setXMLFolder(xmlFolder);
 
 		PaletteRoot root = super.createPaletteRoot(existingPaletteRoot);
-		new SoundgatesPaletteFactory().fillPalette(root);
+		soundgatesPaletteFactory.fillPalette(root);
 		return root;
+	}
+
+	public void updatePalette() {
+		CompositeSoundComponentLibrary.setXMLFolder(xmlFolder);
+		soundgatesPaletteFactory.updateImportedCompositeSoundComponents();
 	}
 
 	@Override
 	protected KeyHandler getKeyHandler() {
 		// TODO Auto-generated method stub
-		KeyHandler keyHandler =  super.getKeyHandler();
-		
-        ActionRegistry registry = getActionRegistry();
-        IAction action;
+		KeyHandler keyHandler = super.getKeyHandler();
 
-        action = new SoundgatesPromptingDeleteAction(this);
-        action.setText(DiagramUIMessages.DiagramEditor_Delete_from_Diagram);
-        registry.registerAction(action);
-        getSelectionActions().add(action.getId());
-        
-        keyHandler.remove(KeyStroke.getPressed(SWT.DEL, 127, 0));
-        keyHandler.remove(KeyStroke.getPressed(SWT.DEL, 8, 0));
-        
-        keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-                getActionRegistry().getAction(ActionFactory.DELETE.getId()));
-        keyHandler.put(KeyStroke.getPressed(SWT.BS, 8, 0),
-                getActionRegistry().getAction(ActionFactory.DELETE.getId()));
-        
-        return keyHandler;
+		ActionRegistry registry = getActionRegistry();
+		IAction action;
+
+		action = new SoundgatesPromptingDeleteAction(this);
+		action.setText(DiagramUIMessages.DiagramEditor_Delete_from_Diagram);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		keyHandler.remove(KeyStroke.getPressed(SWT.DEL, 127, 0));
+		keyHandler.remove(KeyStroke.getPressed(SWT.DEL, 8, 0));
+
+		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+		keyHandler.put(KeyStroke.getPressed(SWT.BS, 8, 0), getActionRegistry()
+				.getAction(ActionFactory.DELETE.getId()));
+
+		return keyHandler;
 	}
-	
+
 	class SoundgatesPromptingDeleteAction extends PromptingDeleteAction {
 
 		public SoundgatesPromptingDeleteAction(IWorkbenchPart part) {
 			super(part);
 		}
-		
+
 		@Override
 		public Command createCommand(List objects) {
-			if(listContainsEditPartsNotToRemove(objects))
+			if (listContainsEditPartsNotToRemove(objects))
 				return new EmptyCommand();
 			else
 				return super.createCommand(objects);
 		}
-		
-		public boolean listContainsEditPartsNotToRemove(List objects){
-			for(Object object : objects){
-				if(	object instanceof PortEditPart)
-				{
-					if( !objects.contains(((EditPart)object).getParent()) )
-						return true;					
-				}
-				else if(object instanceof CompositeSoundComponent2EditPart || 
-						object instanceof AtomicSoundComponent2EditPart || 
-						object instanceof Link2EditPart || 
-						object instanceof DelegationEditPart)
-				{
-					EditPart parent = ((EditPart)object).getParent();
-					if(parent instanceof CompositeSoundComponentComponentCompartmentEditPart){
-						if( !objects.contains( ((CompositeSoundComponentComponentCompartmentEditPart) parent).getParent() ))
+
+		public boolean listContainsEditPartsNotToRemove(List objects) {
+			for (Object object : objects) {
+				if (object instanceof PortEditPart) {
+					if (!objects.contains(((EditPart) object).getParent()))
+						return true;
+				} else if (object instanceof CompositeSoundComponent2EditPart
+						|| object instanceof AtomicSoundComponent2EditPart
+						|| object instanceof Link2EditPart
+						|| object instanceof DelegationEditPart) {
+					EditPart parent = ((EditPart) object).getParent();
+					if (parent instanceof CompositeSoundComponentComponentCompartmentEditPart) {
+						if (!objects
+								.contains(((CompositeSoundComponentComponentCompartmentEditPart) parent)
+										.getParent()))
+							return true;
+					} else if (parent instanceof CompositeSoundComponentComponentCompartment2EditPart) {
+						if (!objects
+								.contains(((CompositeSoundComponentComponentCompartment2EditPart) parent)
+										.getParent()))
 							return true;
 					}
-					else if(parent instanceof CompositeSoundComponentComponentCompartment2EditPart){
-						if( !objects.contains( ((CompositeSoundComponentComponentCompartment2EditPart) parent).getParent() ))
-							return true;
-					}
-				
+
 				}
 			}
 			return false;
 		}
 
 	}
-	
+
 	/**
 	 * @generated
 	 */

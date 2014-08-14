@@ -36,7 +36,7 @@
 47 adsr/sw
 
 50 mixer/sw/'7' 
-99 dac/sw
+99 pulseout/sw
 
 #Sinus to envelope
 1 41 '1,1'

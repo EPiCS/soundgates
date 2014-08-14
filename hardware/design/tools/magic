@@ -3,7 +3,8 @@
 #Files etc...
 SOUNDGATES_EDK=/home/soundgates/git/reconos_zynq/demos/soundgates/edk_zynq_linux/
 RECONOS_REPO=/home/soundgates/git/reconos_zynq/
-SOUNDGATES_REPO=/home/soundgates/git/pg-soundgates/
+#SOUNDGATES_REPO=/tmp/pg-soundgates/
+SOUNDGATES_REPO=/home/soundgates/git/gunnar/pg-soundgates/
 ZEDBOARD_REPO=/home/soundgates/git/zedboard/
 ZYNC_REPO=/home/soundgates/zynq/
 RECONOS_REPO_TOOLS=${RECONOS_REPO}tools/
@@ -17,21 +18,26 @@ LINUX_PASSWORD=root
 ZEDBOARD_IP=192.168.1.99
 ZEDBOARD_NETMASK=255.255.255.0
 ZEDBOARD_GATEWAY=192.168.1.1
-NFS_ROOT_IP=192.168.1.100
+NFS_ROOT_IP=192.168.1.114
 NFS_EXPORT=/exports/rootfs_archlinux
 
 #Executables
 EXECUTABLE_DTC=${ZEDBOARD_REPO}linux/scripts/dtc/dtc
 
 #Input Files
-INPUT_DEVICE_TREE=${SOUNDGATES_REPO}hardware/design/reference/zynq_audio_adau1761/zynq-zed.dts
+#INPUT_DEVICE_TREE=${SOUNDGATES_REPO}hardware/design/reference/zynq_audio_adau1761/zynq-zed.dts
+#INPUT_DEVICE_TREE=${SOUNDGATES_REPO}hardware/design/reference/cf_adv7511_zed/zynq-zed-adv7511.dts #new version
+INPUT_DEVICE_TREE_FOLDER=${SOUNDGATES_REPO}hardware/design/reference/cf_adv7511_zed # .dts includes something, need the whole folder
 INPUT_DEVICE_TREE_INCLUDES="";
-INPUT_UIMAGE=${ZEDBOARD_REPO}linux/arch/arm/boot/uImage
+#INPUT_UIMAGE=${ZEDBOARD_REPO}linux/arch/arm/boot/uImage 
+INPUT_UIMAGE=${SOUNDGATES_REPO}hardware/design/linuximage/uImage  #new image in our own repository
 INPUT_INIT=${RECONOS_REPO}cache/os_boot/ps7_init.tcl
 INPUT_UBOOT=${ZYNC_REPO}u-boot-xlnx/u-boot
 #INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/design/reference/zynq_audio_adau1761/implementation/download.bit #should work but needs reconos included (irqs changing when reconos is added)
-INPUT_INITIAL_BITSTREAM=${RECONOS_REPO}demos/soundgates/edk_zynq_linux/implementation/download.bit # works
-INPUT_BITSTREAM=${RECONOS_REPO}demos/soundgates/edk_zynq_linux/implementation/download.bit
+INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/512.bit
+INPUT_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/512.bit
+#INPUT_INITIAL_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/sinsawtrisqnoiserampadsrpwmfir.bit
+#INPUT_BITSTREAM=${SOUNDGATES_REPO}hardware/bitstreams/sinsawtrisqnoiserampadsrpwmfir.bit
 
 #Intermediate Files
 DEVICE_TREE_BLOB=${WORKING_DIR}devicetree.dtb

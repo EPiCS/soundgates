@@ -18,10 +18,13 @@ StaticSchedule ASAPScheduler::CalculateSchedule(NodePtr root, NodePtr sink, cons
     schedule.schedule(readynodes, time++);
     readynodes.clear();
 
-    while (schedule.getNumberOfScheduledNodes() < nodes.size()) {
-        BOOST_FOREACH(NodePtr node, nodes) {
+    while (schedule.getNumberOfScheduledNodes() < nodes.size())
+    {
+        BOOST_FOREACH(NodePtr node, nodes)
+        {
 
-            if (schedule.isReady(node)) {
+            if (schedule.isReady(node))
+            {
                 readynodes.push_back(node);
             }
         }

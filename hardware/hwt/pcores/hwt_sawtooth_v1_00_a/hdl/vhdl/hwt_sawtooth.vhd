@@ -101,7 +101,7 @@ architecture Behavioral of hwt_sawtooth is
     -- Common sound component signals, constants and types
     ----------------------------------------------------------------
     
-    constant C_MAX_SAMPLE_COUNT : integer := 64;
+    constant C_MAX_SAMPLE_COUNT : integer := 128;
     
    	-- define size of local RAM here
 	constant C_LOCAL_RAM_SIZE          : integer := C_MAX_SAMPLE_COUNT;
@@ -114,7 +114,7 @@ architecture Behavioral of hwt_sawtooth is
 	signal o_RAMData_nco : std_logic_vector(0 to 31);   -- nco to local ram
 	signal i_RAMData_nco : std_logic_vector(0 to 31);   -- local ram to nco
     signal o_RAMWE_nco   : std_logic;
-	
+
   	signal o_RAMAddr_reconos   : std_logic_vector(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1);
 	signal o_RAMAddr_reconos_2 : std_logic_vector(0 to 31);
 	signal o_RAMData_reconos   : std_logic_vector(0 to 31);
@@ -175,7 +175,7 @@ begin
     -----------------------------------
     clk <= HWT_Clk;
 	rst <= HWT_Rst;
-    o_RAMData_nco <= std_logic_vector(nco_data);
+    
     
     o_RAMAddr_reconos(0 to C_LOCAL_RAM_ADDRESS_WIDTH-1) <= o_RAMAddr_reconos_2((32-C_LOCAL_RAM_ADDRESS_WIDTH) to 31);
     
@@ -265,14 +265,14 @@ begin
             nco_ce              <= '0';
             o_RAMWE_nco         <= '0';
             state_inner_process <= '0';
-            
+            o_RAMData_nco <= (others => '0');
             -- Initialize hwt args         
             hwtio_init(hwtio);
 
             done := False;
-              
+              o_RAMAddr_nco <= (others => '0');
         elsif rising_edge(clk) then
-            
+            o_RAMData_nco <= std_logic_vector(nco_data);
             nco_ce              <= '0';
             o_RAMWE_nco         <= '0';
             osif_ctrl_signal    <= ( others => '0');
@@ -328,7 +328,7 @@ begin
                 if done then
                     state <= STATE_NOTIFY;
 				end if;
-				
+
 		    when STATE_NOTIFY =>
 
                 osif_mbox_put(i_osif, o_osif, MBOX_FINISH, destaddr, ignore, done);
@@ -344,4 +344,3 @@ begin
     end process;
 
 end Behavioral;
-

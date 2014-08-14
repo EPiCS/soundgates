@@ -24,6 +24,7 @@
 #include "core/ControlPort.h"
 #include "core/HWResourceManager.h"
 #include "core/SoundgatesConfig.h"
+#include "core/SoundComponentLogging.h"
 #include "utils/SoundComponenLoader.h"
 
 #include <boost/foreach.hpp>
@@ -62,7 +63,10 @@ public:
         * @internal    Number of times a schedule has been executed
         */
         int64_t taskcallcount;
-
+        /**
+         * @internal
+         */
+        Synthesizer::state::ePatchState  patchState;
     }info_t;
 
 
@@ -102,13 +106,11 @@ private:
 
 	NodePtr                             m_SinkNode;
 
-	Synthesizer::state::ePatchState     m_PatchState;
-
 	info_t                              m_RuntimeInfo;
 
+	boost::asio::io_service             m_TimerIOService;
+
 	void initialize(void);
-
-
 
 };
 

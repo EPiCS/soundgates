@@ -24,7 +24,7 @@ public class ProcessStore {
 			ProcessStore.currentPureDataProcess = null;
 		}
 		if (ProcessStore.handShakeThread != null){
-			ProcessStore.handShakeThread.stopMe();
+			ProcessStore.handShakeThread.interrupt();
 			ProcessStore.handShakeThread = null;
 		}
 		if (currentCodeGen != null){
@@ -37,8 +37,8 @@ public class ProcessStore {
 		currentCodeGen = new Codegen();
 					try {
 						IProject project = modelFile.getProject();
-						Patch patch = CodeGenHelper.getPatch(modelFile.getFullPath().toOSString());
-						Diagram diagram = CodeGenHelper.getDiagram(modelFile.getFullPath().toOSString());
+						Patch patch = CodeGenHelper.getPatch(modelFile.getFullPath().toPortableString());
+						Diagram diagram = CodeGenHelper.getDiagram(modelFile.getFullPath().toPortableString());
 						currentCodeGen.generate(patch, diagram, project);
 						modelFile.getParent().refreshLocal(1, null);
 						
@@ -67,8 +67,6 @@ public class ProcessStore {
 		if (Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, PdPreferencePage.PD_NOGUI, false, null)){
 			executionArguments.add("-nogui");
 		}
-		executionArguments.add("-send");
-		executionArguments.add("pd dsp 1");
 		executionArguments.add(project.getFolder("pdcode").getFile("patch.pd").getLocation().toOSString());
 
 		if (ProcessStore.currentPureDataProcess == null) {

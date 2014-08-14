@@ -1,8 +1,10 @@
-/*
- * SamplePlayerSW.cpp
+/**
+ * @file   SamplePlayer_SW.cpp
+ * @Author lfu (lfunke@mail.upb.de)
+ * @date   December, 2013
+ * @brief  Sample player implementation
  *
- *  Created on: Dec 28, 2013
- *      Author: lukas
+ *
  */
 
 #include "SamplePlayer_SW.h"
@@ -202,7 +204,7 @@ void SamplePlayer_SW::init() {
     }
 
 
-    char* writeLeftPortPtr  = m_SoundOut_Left_1_Port->getWriteBuffer();
+    char* writeLeftPortPtr  = m_SoundOut_Left_1_Port->getBuffer();
 //    char* writeRightPortPtr = m_SoundOut_Right_2_Port->getWriteBuffer();
 
     memset(writeLeftPortPtr,  0, Synthesizer::config::bytesPerBlock);
@@ -217,7 +219,7 @@ void SamplePlayer_SW::init() {
 
 void SamplePlayer_SW::process() {
 
-    int* writeLeftPortPtr  = (int*)m_SoundOut_Left_1_Port->getWriteBuffer();
+    int* writeLeftPortPtr  = (int*)m_SoundOut_Left_1_Port->getBuffer();
 //    int* writeRightPortPtr = (int*)m_SoundOut_Right_2_Port->getWriteBuffer();
 
     //int trigger = (int) m_Trigger_1_Port->pop();

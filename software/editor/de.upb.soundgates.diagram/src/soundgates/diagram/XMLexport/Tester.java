@@ -9,8 +9,6 @@ import org.eclipse.emf.common.util.EList;
 
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
-import soundgates.DataType;
-import soundgates.Delegation;
 import soundgates.Direction;
 import soundgates.Link;
 import soundgates.Patch;
@@ -24,85 +22,10 @@ public class Tester {
 	
 	private String projectPath;
 	private LinkedList<String> ioComponentNames = new LinkedList<>();
+	private boolean patchContainsSoundOutput = false;
 	private LinkedList<CompositeSoundComponent> compositeSoundComponents =
 			new LinkedList<CompositeSoundComponent>();
 
-	public boolean testCompositeSoundComponent(CompositeSoundComponent compositeSoundComponent, boolean testCurrentComponent){
-		
-		LinkedList<Link> links = new LinkedList<>();
-		
-		// test name
-		if (compositeSoundComponent.getName()==null || "".equals(compositeSoundComponent.getName())){
-			MessageDialogs.compositeSoundComponentHasNoName();
-			return false;
-		}
-		
-		// test links
-		for(Link link : compositeSoundComponent.getLinks()){
-			if(testLink(compositeSoundComponent, link) == false)
-				return false;
-			else
-				links.add(link);
-		}
-		
-		// test containers of links
-		boolean modelChanged = false;
-		for(Link link : links){
-			if(!(link.getSource().getComponent().eContainer()==compositeSoundComponent)){
-				compositeSoundComponent.getLinks().remove(link);
-				setCorrectContainerForLink(link, compositeSoundComponents);
-				modelChanged = true;
-			}
-		}
-		
-		if(modelChanged){
-			try {
-				compositeSoundComponent.eResource().save(Collections.EMPTY_MAP);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		// test delegations
-		for(Delegation delegation : compositeSoundComponent.getDelegations()){
-			if (testDelegation(compositeSoundComponent, delegation) == false)
-				return false;
-		}
-		
-		// test ports
-		boolean outport = false;
-		for(Port port : compositeSoundComponent.getPorts()){			
-			if ( testCompositeSoundComponentPort(port, compositeSoundComponent, testCurrentComponent) == false )
-				return false;
-			
-			if(port.getDirection()==Direction.OUT) outport = true;
-		}
-		if(!outport){
-			MessageDialogs.compositeSoundComponentHasNoOutPort(compositeSoundComponent.getName());
-			return false;
-		}
-		
-		// test embedded components
-		if ( testEmbeddedSoundComponents(
-				compositeSoundComponent.getName(), 
-				compositeSoundComponent.getEmbeddedComponents()) == false)
-		return false;
-			
-		for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
-			if(soundComponent instanceof CompositeSoundComponent){
-				if (testCompositeSoundComponent((CompositeSoundComponent) soundComponent, false) == false)
-					return false;
-				else
-					compositeSoundComponents.add((CompositeSoundComponent) soundComponent);
-			}
-			else if(soundComponent instanceof AtomicSoundComponent){
-				if (testAtomicSoundComponent((AtomicSoundComponent) soundComponent) == false)
-					return false;
-			}
-		}
-		
-		return true;
-	}
 
 	public boolean testAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
 
@@ -124,13 +47,22 @@ public class Tester {
 			ioComponentNames.add(atomicSoundComponent.getName());			
 		}		
 		
-		if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.wavePlayerComponentType)){
+		else if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.wavePlayerComponentType)){
 			// test file references
 			String relativeFileName = atomicSoundComponent.getUserStringProperties().get("FileName");
 			String filePath = projectPath+"/" +AtomicSoundComponentLibrary.samplesFolderName + "/"+relativeFileName;
 			File testFile = new File(filePath);
 			if(!testFile.exists()){
 				MessageDialogs.fileNotFound(filePath);
+				return false;
+			}
+		}
+		
+		else if (atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.soundOutputType)){
+			if(!patchContainsSoundOutput)
+				patchContainsSoundOutput = true;
+			else {
+				MessageDialogs.patchContainsMoreThanOneSoundOutput();
 				return false;
 			}
 		}
@@ -158,14 +90,6 @@ public class Tester {
 			if(element instanceof AtomicSoundComponent){				
 				if( testAtomicSoundComponent((AtomicSoundComponent) element) == false)
 					return false;
-			}
-			
-			// composite components
-			else if(element instanceof CompositeSoundComponent){				
-				if( testCompositeSoundComponent((CompositeSoundComponent) element, false) == false)
-					return false;
-				
-				compositeSoundComponents.add((CompositeSoundComponent) element);
 			}
 			
 			// links
@@ -231,43 +155,8 @@ public class Tester {
 			return false;
 		}
 		
-		if(link.getSource().getDataType()==DataType.SOUND && link.getTarget().getDataType()==DataType.CONTROL){
+		if(link.getSource().getDataType()!=link.getTarget().getDataType()){
 			MessageDialogs.soundToControlConnection(parentString, link.getSource().getName(), link.getTarget().getName());
-			return false;
-		}
-		
-		return true;
-	}
-
-	public boolean testDelegation(CompositeSoundComponent parent, Delegation delegation){
-		// test directions
-			
-		if(delegation.getSource().getDirection()!=delegation.getTarget().getDirection()){
-			MessageDialogs.delegationError(
-					parent.getName(),
-					delegation.getSource().getName()+" ("+delegation.getSource().getDirection()+")",
-					delegation.getTarget().getName()+" ("+delegation.getTarget().getDirection()+")"
-				);
-			return false;
-		}		
-		
-		if(delegation.getSource().getDataType()==DataType.SOUND && delegation.getTarget().getDataType()==DataType.CONTROL){
-			MessageDialogs.soundToControlConnection(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
-			return false;
-		}
-		
-		// special case
-		if(parent.getPorts().contains(delegation.getTarget()) && 
-				delegation.getTarget().getDirection()==Direction.IN)
-		{
-			MessageDialogs.delegation2Error(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
-			return false;
-		}
-		// special case
-		if(parent.getPorts().contains(delegation.getSource()) && 
-				delegation.getTarget().getDirection()==Direction.OUT)
-		{
-			MessageDialogs.delegation2Error(parent.getName(), delegation.getSource().getName(), delegation.getTarget().getName());
 			return false;
 		}
 		

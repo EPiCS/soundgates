@@ -12,17 +12,11 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
+import de.upb.soundgates.cosmic.rows.InteractionMethod;
 import de.upb.soundgates.cosmic.R;
 import de.upb.soundgates.cosmic.osc.OSCMessage;
 import de.upb.soundgates.cosmic.osc.OSCMessageStore;
-import de.upb.soundgates.cosmic.rows.InteractionButtonRow;
-import de.upb.soundgates.cosmic.rows.InteractionLightRow;
-import de.upb.soundgates.cosmic.rows.InteractionRotaryZRow;
 import de.upb.soundgates.cosmic.rows.InteractionRow;
-import de.upb.soundgates.cosmic.rows.InteractionSeekBarRow;
-import de.upb.soundgates.cosmic.rows.InteractionShakeRow;
-import de.upb.soundgates.cosmic.rows.InteractionTiltRow;
 
 /**
  * Created by posewsky on 03.12.13.
@@ -30,6 +24,7 @@ import de.upb.soundgates.cosmic.rows.InteractionTiltRow;
 public class InteractionFragment extends ListFragment {
     private LayoutInflater inflater;
     private boolean isScrolling;
+    private OSCMessageAdapter adapter;
 
     public static InteractionFragment newInstance() {
         InteractionFragment fragment = new InteractionFragment();
@@ -39,6 +34,7 @@ public class InteractionFragment extends ListFragment {
 
     public InteractionFragment() {
         isScrolling = false;
+        adapter = null;
     }
 
     public boolean isScrolling() {
@@ -58,7 +54,7 @@ public class InteractionFragment extends ListFragment {
         OSCMessageStore msg_store = OSCMessageStore.hasInstance();
         if(msg_store != null)
         {
-            OSCMessageAdapter adapter = new OSCMessageAdapter(msg_store.getSelectedOSCMessageAsList());
+            adapter = new OSCMessageAdapter(msg_store.getSelectedOSCMessageAsList());
             setListAdapter(adapter);
             getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
@@ -78,6 +74,12 @@ public class InteractionFragment extends ListFragment {
         }
     }
 
+    public void clear() {
+        if(adapter != null)
+            adapter.clear();
+        setListAdapter(null);
+    }
+
     private class OSCMessageAdapter extends BaseAdapter {
         final List<InteractionRow> rows;
 
@@ -86,29 +88,20 @@ public class InteractionFragment extends ListFragment {
             rows = new ArrayList<InteractionRow>(msgList.size());
 
             for (OSCMessage msg : msgList) {
-                InteractionMethod im = msg.getInteractionMethod();
-                switch (im)
-                {
-                    case SEEKBAR:
-                        rows.add(new InteractionSeekBarRow(inflater, msg));
-                        break;
-                    case BUTTON:
-                        rows.add(new InteractionButtonRow(inflater, msg));
-                        break;
-                    case TILT:
-                        rows.add(new InteractionTiltRow(inflater, msg));
-                        break;
-                    case ROTARYZ:
-                        rows.add(new InteractionRotaryZRow(inflater, msg));
-                        break;
-                    case SHAKE:
-                        rows.add(new InteractionShakeRow(inflater, msg));
-                        break;
-                    case LIGHT:
-                        rows.add(new InteractionLightRow(inflater, msg));
-                        break;
+                InteractionRow ir = msg.getInteractionMethod().createRow(inflater, msg);
+                if(ir != null) {
+                    rows.add(ir);
+                } else {
+                    String err = "Interaction method of [" + msg.toStringFull() + "] unknown";
+                    Log.e("InteractionFragment", err);
+                    System.exit(-1);
                 }
             }
+        }
+
+        public void clear() {
+            rows.clear();
+            notifyDataSetChanged();
         }
 
         @Override

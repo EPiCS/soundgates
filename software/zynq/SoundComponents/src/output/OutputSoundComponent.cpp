@@ -39,5 +39,5 @@ void OutputSoundComponent::process()
 
 void OutputSoundComponent::init()
 {
-	std::cout << "Soundbuffer initialized" << std::endl;
+    // empty
 }

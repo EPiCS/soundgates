@@ -8,13 +8,13 @@
 #ifndef INTERACTIVECOMPONENTHANDLER_H_
 #define INTERACTIVECOMPONENTHANDLER_H_
 
-#include <xmlrpc-c/base.hpp>
-#include <xmlrpc-c/registry.hpp>
-#include <xmlrpc-c/server_abyss.hpp>
-
 #include "../../Patch.h"
 #include "../../InputSoundComponent.h"
 
+
+#include <xmlrpc-c/base.hpp>
+#include <xmlrpc-c/registry.hpp>
+#include <xmlrpc-c/server_abyss.hpp>
 
 namespace ui {
 
@@ -24,7 +24,6 @@ class InteractiveComponentHandler: public xmlrpc_c::method {
 private:
 
 	void init(Patch* patch = NULL);
-
 
 	Patch* m_pPatch;
 

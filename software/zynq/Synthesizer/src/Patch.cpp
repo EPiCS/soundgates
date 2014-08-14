@@ -12,32 +12,41 @@
 
 Patch::Patch()
 {
-	m_PatchState  	        = Synthesizer::state::created;
+    m_RuntimeInfo.patchState = Synthesizer::state::created;
 }
 
-Patch::~Patch(){ }
+Patch::~Patch()
+{
+}
 
 /**
  *
- * Returns a reference to a vector of input soundcomponents
+ * Returns a reference to a vector of input sound components
  *
  * @return
  */
-vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
+vector<InputSoundComponentPtr>& Patch::getInputSoundComponents()
+{
 
-    if(!m_InputComponents.size()){
-        for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
-                iter != m_ComponentsVector.end(); ++iter ){
+    if (!m_InputComponents.size())
+    {
+        for (vector<SoundComponentPtr>::iterator iter =
+                m_ComponentsVector.begin(); iter != m_ComponentsVector.end();
+                ++iter)
+        {
 
             SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
 
-            if (typeid(*sndcomponent) == typeid(InputSoundComponent)) {
+            if (typeid(*sndcomponent) == typeid(InputSoundComponent))
+            {
 
-                m_InputComponents.push_back(boost::static_pointer_cast<InputSoundComponent>(sndcomponent));
+                m_InputComponents.push_back(
+                        boost::static_pointer_cast<InputSoundComponent>(
+                                sndcomponent));
             }
         }
     }
-	return m_InputComponents;
+    return m_InputComponents;
 }
 
 /**
@@ -49,165 +58,179 @@ vector<InputSoundComponentPtr>& Patch::getInputSoundComponents(){
  * @param parameters vector of parameters as string
  * @param slot hardware slot where reconos can find the component
  */
-void Patch::createSoundComponent(int uid, const std::string& type, std::vector<std::string> parameters, int slot){
+void Patch::createSoundComponent(int uid, const std::string& type,
+        std::vector<std::string> parameters, int slot)
+{
 
-	SoundComponents::ImplType impltype;
-	bool useHWThreads = SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS);
+    SoundComponents::ImplType impltype;
+    bool useHWThreads = SoundgatesConfig::getInstance().get<bool>(
+            SoundgatesConfig::CFG_USE_HW_THREADS);
 
-	SoundComponentLoader& loader = SoundComponentLoader::getInstance();
+    SoundComponentLoader& loader = SoundComponentLoader::getInstance();
 
-	/* Create hw threads if demanded */
-    impltype = ((slot < 0) || !useHWThreads) ? SoundComponents::SW : SoundComponents::HW;
+    /* Create hw threads if demanded */
+    impltype =
+            ((slot < 0) || !useHWThreads) ?
+                    SoundComponents::SW : SoundComponents::HW;
 
-	if(impltype == SoundComponents::HW){
-	    HWResourceManager::getInstance().declareSlot(type, slot);
-	}
+    if (impltype == SoundComponents::HW)
+    {
+        HWResourceManager::getInstance().declareSlot(type, slot);
+    }
 
-	SoundComponentImplPtr impl = loader.createFromString(type, impltype, parameters);
+    SoundComponentImplPtr impl = loader.createFromString(type, impltype,
+            parameters);
 
-	if(NULL != impl){
+    if (NULL != impl)
+    {
 
-		SoundComponentPtr component(new SoundComponent(uid, impl));
+        SoundComponentPtr component(new SoundComponent(uid, impl));
 
-		LOG_DEBUG("Adding component to patch uid: " << component->getUid());
+        LOG_DEBUG("Adding component to patch uid: " << component->getUid());
 
-		m_ComponentsVector.push_back(component);
-	}
+        m_ComponentsVector.push_back(component);
+    }
 }
 
+void Patch::createLink(int sourceid, int srcport, int destid, int destport)
+{
 
-void Patch::createLink(int sourceid, int srcport, int destid, int destport){
+    SoundComponentPtr src;
+    SoundComponentPtr dst;
 
+    /* Get source and destination components */
+    BOOST_FOREACH(SoundComponentPtr node, m_ComponentsVector)
+    {
 
-	SoundComponentPtr src;
-	SoundComponentPtr dst;
-
-	/* Get source and destination components */
-	BOOST_FOREACH(SoundComponentPtr node, m_ComponentsVector){
-
-        if(node->getUid() == sourceid){
+        if (node->getUid() == sourceid)
+        {
             src = node;
         }
-        if(node->getUid() == destid) {
+        if (node->getUid() == destid)
+        {
             dst = node;
         }
-	}
+    }
 
-	/* Check if source and destination were found */
-	if(!src || !dst){
+    /* Check if source and destination were found */
+    if (!src || !dst)
+    {
 
-	    throw std::invalid_argument("Could not create link between sound components: NULL pointer");
-	}
+        throw std::invalid_argument(
+                "Could not create link between sound components: NULL pointer");
+    }
 
-	if(!src->getDelegate() || !dst->getDelegate() ){
+    if (!src->getDelegate() || !dst->getDelegate())
+    {
 
-	    throw std::invalid_argument("No delegate set.");
-	}
+        throw std::invalid_argument("No delegate set.");
+    }
 
-	PortPtr srcprt = src->getDelegate()->getOutport(srcport);
-	PortPtr dstprt = dst->getDelegate()->getInport(destport);
+    PortPtr srcprt = src->getDelegate()->getOutport(srcport);
+    PortPtr dstprt = dst->getDelegate()->getInport(destport);
 
-	try{
+    try
+    {
 
-        if(typeid(*srcprt) == typeid(*dstprt))
+        if (typeid(*srcprt) == typeid(*dstprt))
         {
 
-            if(srcprt->getLink()) /* Check if source has already an outgoing connection */
+            if (srcprt->getLink()) /* Check if source has already an outgoing connection */
             {
 
                 LOG_DEBUG("Source port already connected, reusing connection");
                 dst->addLink(srcprt->getLink(), Link::IN);
                 dstprt->setLink(srcprt->getLink());
 
-            }
-            else
-            if(dstprt->getLink())  /* Check if destination port has already been linked */
+            } else if (dstprt->getLink()) /* Check if destination port has already been linked */
             {
 
-                throw std::invalid_argument("Destination port already connected!");
-            }
-            else{
+                throw std::invalid_argument(
+                        "Destination port already connected!");
+            } else
+            {
 
-                if(typeid(*srcprt) == typeid(SoundPort))
+                if (typeid(*srcprt) == typeid(SoundPort))
                 {
 
-                    LOG_DEBUG("Creating sound link from node " << src->getUid() << ":" << srcprt->getPortNumber()
-                                << " to Node " << dst->getUid() << ":" << dstprt->getPortNumber());
+                    LOG_DEBUG(
+                            "Creating sound link from node " << src->getUid() << ":" << srcprt->getPortNumber() << " to Node " << dst->getUid() << ":" << dstprt->getPortNumber());
 
-                    LinkPtr link(new BufferedLink(
-                            boost::static_pointer_cast<Node>(src),
-                            boost::static_pointer_cast<Node>(dst)));
+                    LinkPtr link(
+                            new BufferedLink(
+                                    boost::static_pointer_cast<Node>(src),
+                                    boost::static_pointer_cast<Node>(dst)));
 
                     src->addLink(link, Link::OUT);
                     dst->addLink(link, Link::IN);
 
                     srcprt->setLink(link);
                     dstprt->setLink(link);
-                }
-                else
-                if(typeid(*srcprt) == typeid(ControlPort))
+                } else if (typeid(*srcprt) == typeid(ControlPort))
                 {
 
-                    LOG_DEBUG("Creating control link from node " << src->getUid() << ":" << srcprt->getPortNumber()
-                                << " to Node " << dst->getUid() << ":" << dstprt->getPortNumber());
+                    LOG_DEBUG(
+                            "Creating control link from node " << src->getUid() << ":" << srcprt->getPortNumber() << " to Node " << dst->getUid() << ":" << dstprt->getPortNumber());
 
-                    LinkPtr link(new ControlLink(
-                                           boost::static_pointer_cast<Node>(src),
-                                           boost::static_pointer_cast<Node>(dst)));
+                    LinkPtr link(
+                            new ControlLink(
+                                    boost::static_pointer_cast<Node>(src),
+                                    boost::static_pointer_cast<Node>(dst)));
 
                     src->addLink(link, Link::OUT);
                     dst->addLink(link, Link::IN);
 
                     srcprt->setLink(link);
                     dstprt->setLink(link);
-                }
-                else
+                } else
                 {
                     throw std::runtime_error("Could not determine port type");
                 }
 
-
             }
-        }
-        else{
+        } else
+        {
 
             throw std::invalid_argument("Port type mismatch.");
         }
 
-    }catch(std::exception& e){
+    } catch (std::exception& e)
+    {
 
         LOG_ERROR("Exception: " << e.what());
-	}
+    }
 
 }
 
-void Patch::initialize(void){
+void Patch::initialize(void)
+{
 
 #ifdef ZYNQ
-    if(SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS)){
+    if(SoundgatesConfig::getInstance().get<bool>(SoundgatesConfig::CFG_USE_HW_THREADS))
+    {
 
         reconos_init();
-	}
+    }
 #endif
 
-	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
-	        iter != m_ComponentsVector.end(); ++iter ){
+    for (vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+            iter != m_ComponentsVector.end(); ++iter)
+    {
 
         SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
 
         sndcomponent->init();
-	}
+    }
 
-	// Second initialization phase (e.g. Const blocks need be initialized at the end to reliably propagate values)
-	for(vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
-	        iter != m_ComponentsVector.end(); ++iter ){
-
+    // Second initialization phase (e.g. constant blocks need be initialized at the end to reliably propagate values)
+    for (vector<SoundComponentPtr>::iterator iter = m_ComponentsVector.begin();
+            iter != m_ComponentsVector.end(); ++iter)
+    {
         SoundComponentImplPtr sndcomponent = (*iter)->getDelegate();
-
         sndcomponent->initLater();
-	}
+    }
 
-	m_PatchState    = Synthesizer::state::initialized;
+    m_RuntimeInfo.patchState = Synthesizer::state::initialized;
 }
 
 /**
@@ -216,52 +239,56 @@ void Patch::initialize(void){
  * then initialize the patch and run it afterwards.
  *
  */
-void Patch::run(){
+void Patch::run()
+{
 
-    if(Synthesizer::state::created == m_PatchState){
-        initialize();
+    if(Synthesizer::state::running != m_RuntimeInfo.patchState)
+    {
+
+        if (Synthesizer::state::created == m_RuntimeInfo.patchState)
+        {
+            initialize();
+        }
+
+
+        if (Synthesizer::state::initialized == m_RuntimeInfo.patchState)
+        {
+            m_RuntimeInfo.patchState = Synthesizer::state::running;
+
+            //Calculate schedule
+            std::vector<NodePtr> nodes;
+            nodes.insert(nodes.begin(), m_ComponentsVector.begin(), m_ComponentsVector.end());
+
+            SchedulingContext<ASAPScheduler> schedctx = SchedulingContext<ASAPScheduler>();
+
+            StaticSchedule schedule = schedctx.CalculateSchedule(getRootNode(), getSinkNode(), nodes);
+
+            const int interrupt_interval = (1000 * 1000 / (Synthesizer::config::samplerate / Synthesizer::config::blocksize)) + 1;
+
+            boost::asio::deadline_timer timer(m_TimerIOService, boost::posix_time::microseconds(interrupt_interval));
+
+            timer.async_wait(boost::bind(&StaticSchedule::timerInterrupt,
+                                            &schedule,
+                                            boost::asio::placeholders::error,
+                                            &timer,
+                                            &m_RuntimeInfo));
+
+            //schedule.printScheduleTable();
+
+            m_TimerIOService.run();
+
+            LOG_INFO("Exit");
+
+            return;
+        }
+
+        if(Synthesizer::state::stopped == m_RuntimeInfo.patchState)
+        {
+            m_RuntimeInfo.patchState = Synthesizer::state::running;
+        }
     }
 
-	if(Synthesizer::state::initialized == m_PatchState){
-
-	    /*
-	     * Calculate schedule
-	     */
-	    std::vector<NodePtr> nodes;
-	    nodes.insert(nodes.begin(), m_ComponentsVector.begin(), m_ComponentsVector.end());
-
-	    NodePtr root = getRootNode();
-	    NodePtr sink = getSinkNode();
-
-	    SchedulingContext<ASAPScheduler> schedctx = SchedulingContext<ASAPScheduler>();
-
-	    StaticSchedule schedule = schedctx.CalculateSchedule(root, sink, nodes);
-
-        boost::thread_group             threadgroup;
-        boost::asio::io_service         node_io;
-        boost::asio::io_service         timer_io;
-        boost::asio::io_service::work   work(node_io);
-
-        for (std::size_t i = 0; i < boost::thread::hardware_concurrency(); i++) {
-            threadgroup.create_thread(
-                    boost::bind(
-                            static_cast<size_t (boost::asio::io_service::*)()>(&boost::asio::io_service::run), &node_io)
-            );
-        }
-        const int interrupt_interval = (1000 * 1000 / (Synthesizer::config::samplerate  / Synthesizer::config::blocksize)) + 1;
-
-        boost::asio::deadline_timer timer(timer_io, boost::posix_time::microseconds(interrupt_interval));
-
-        timer.async_wait(boost::bind(&StaticSchedule::timerInterrupt,
-                                    &schedule,
-                                    boost::asio::placeholders::error,
-                                    &timer, &node_io, &m_RuntimeInfo));
-
-	    schedule.printScheduleTable();
-
-	    timer_io.run();
-
-	}
+    LOG_INFO("A start was requested, but is already running."); // TODO improve message
 }
 
 /**
@@ -271,16 +298,19 @@ void Patch::run(){
  * afterwards.
  *
  */
-void Patch::dispose(){
-
-    /* stop path */
+void Patch::dispose()
+{
+    /* stop patch */
     this->stop();
 
-    #ifdef ZYNQ
+#ifdef ZYNQ
     reconos_cleanup();
-    #endif
+#endif
 
-    BOOST_FOREACH(SoundComponentPtr node, m_ComponentsVector){
+    this->m_TimerIOService.stop();
+
+    BOOST_FOREACH(SoundComponentPtr node, m_ComponentsVector)
+    {
         node.reset();
     }
 }
@@ -292,12 +322,15 @@ void Patch::dispose(){
  * otherwise nothing will happen.
  *
  */
-void Patch::stop(){
+void Patch::stop()
+{
 
-	if(Synthesizer::state::running == m_PatchState){
+    LOG_INFO("A stop was requested."); // TODO improve message
 
-		m_PatchState = Synthesizer::state::stopped;
-	}
+    if (Synthesizer::state::running == m_RuntimeInfo.patchState)
+    {
+        m_RuntimeInfo.patchState = Synthesizer::state::stopped;
+    }
 }
 
 /**
@@ -306,10 +339,9 @@ void Patch::stop(){
  *
  * @return bool true if the patch is running, false otherwise
  */
-bool Patch::isRunning(){
-
-    return (m_PatchState == Synthesizer::state::running);
-
+bool Patch::isRunning()
+{
+    return (m_RuntimeInfo.patchState == Synthesizer::state::running);
 }
 
 /**
@@ -317,21 +349,25 @@ bool Patch::isRunning(){
  * node acts as an artificial root node
  *
  *
- * @return
+ * @return root node
  */
-NodePtr Patch::getRootNode(){
+NodePtr Patch::getRootNode()
+{
 
     /* Check if master source has already been set */
-    if(!m_RootNode){
+    if (!m_RootNode)
+    {
 
         m_RootNode = NodePtr(new Node(0x4FFFFFFF, Node::MASTER_SOURCE));
 
         /* Get all Node which have no incoming connection */
-        BOOST_FOREACH(NodePtr node, m_ComponentsVector){
+        BOOST_FOREACH(NodePtr node, m_ComponentsVector)
+        {
 
             LinkVector in = node->getLinks(Link::IN);
 
-            if(in.size() < 1){
+            if (in.size() < 1)
+            {
 
                 /* Connect master sink to this node by a simple link */
                 LinkPtr link = LinkPtr(new Link(m_RootNode, node));
@@ -354,19 +390,23 @@ NodePtr Patch::getRootNode(){
  *
  * @return sink node
  */
-NodePtr Patch::getSinkNode(){
+NodePtr Patch::getSinkNode()
+{
 
     /* Check if master source has already been set */
-    if(!m_SinkNode){
+    if (!m_SinkNode)
+    {
 
         m_SinkNode = NodePtr(new Node(0x7FFFFFFF, Node::MASTER_SOURCE));
 
         /* Get all Node which have no incoming connection */
-        BOOST_FOREACH(NodePtr node, m_ComponentsVector){
+        BOOST_FOREACH(NodePtr node, m_ComponentsVector)
+        {
 
             LinkVector out = node->getLinks(Link::OUT);
 
-            if(out.size() < 1){
+            if (out.size() < 1)
+            {
 
                 /* Connect master sink to this node by a simple link */
                 LinkPtr link = LinkPtr(new Link(node, m_SinkNode));

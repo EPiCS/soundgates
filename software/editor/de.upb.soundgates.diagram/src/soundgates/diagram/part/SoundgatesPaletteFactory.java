@@ -2,6 +2,7 @@ package soundgates.diagram.part;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.gef.Request;
@@ -20,54 +21,63 @@ import soundgates.diagram.soundcomponents.AtomicSoundComponentLibrary;
 import soundgates.diagram.soundcomponents.CompositeSoundComponentLibrary;
 
 /**
- * @generated
+ * @generated NOT
  */
 public class SoundgatesPaletteFactory {
-	
-	private HashMap<String,PaletteDrawer> categoryToPaletteDrawer = new HashMap<>();
+
+	private HashMap<String, PaletteDrawer> categoryToPaletteDrawer = new HashMap<>();
+	private PaletteRoot paletteRoot;
+	private List<String> availableCompositeSoundComponents;
 
 	/**
 	 * @generated NOT
 	 */
 	public void fillPalette(PaletteRoot paletteRoot) {
-		
-		//atomics		
-		List<String> availableTypes = AtomicSoundComponentLibrary.getInstance().getAvailableTypes();		
 
-		for(String category : AtomicSoundComponentLibrary.typeToCategory.values())
-		{
+		this.paletteRoot = paletteRoot;
+
+		//atomics		
+		List<String> availableTypes = AtomicSoundComponentLibrary.getInstance()
+				.getAvailableTypes();
+
+		for (String category : AtomicSoundComponentLibrary.typeToCategory
+				.values()) {
 			PaletteDrawer categoryContainer = new PaletteDrawer(category);
-			categoryContainer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
+			categoryContainer
+					.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 			categoryContainer.setId(category);
-			
-			if(!categoryToPaletteDrawer.containsKey(category)){
+
+			if (!categoryToPaletteDrawer.containsKey(category)) {
 				categoryToPaletteDrawer.put(category, categoryContainer);
-				
+
 				paletteRoot.add(categoryContainer);
 			}
 		}
-		
+
 		String category;
 		for (int i = 0; i < availableTypes.size(); i++) {
-			category = AtomicSoundComponentLibrary.typeToCategory.get(availableTypes.get(i));
-			PaletteDrawer paletteDrawer = categoryToPaletteDrawer.get(category);			
-			paletteDrawer.add(createConcreteAtomicNodeCreationTool(availableTypes.get(i)));
+			category = AtomicSoundComponentLibrary.typeToCategory
+					.get(availableTypes.get(i));
+			PaletteDrawer paletteDrawer = categoryToPaletteDrawer.get(category);
+			paletteDrawer
+					.add(createConcreteAtomicNodeCreationTool(availableTypes
+							.get(i)));
 		}
-		
+
 		//separator
 		PaletteSeparator paletteSeparator = new PaletteSeparator();
 		paletteRoot.add(paletteSeparator);
-		
+
 		//composites
 		paletteRoot.add(createImportedCompositeSoundComponents());
-		
+
 		//separator
 		PaletteSeparator paletteSeparator2 = new PaletteSeparator();
 		paletteRoot.add(paletteSeparator2);
-		
+
 		paletteRoot.add(createConnections3Group());
 	}
-	
+
 	/**
 	 * Creates "Imported Composite Components" palette tool group
 	 * 
@@ -77,18 +87,56 @@ public class SoundgatesPaletteFactory {
 		PaletteDrawer paletteContainer = new PaletteDrawer(
 				"Imported Composite Sound Components");
 		paletteContainer.setId("createImportedCompositeSoundComponents"); //$NON-NLS-1$
-		
-		List<String> availableComponents = CompositeSoundComponentLibrary
+
+		availableCompositeSoundComponents = CompositeSoundComponentLibrary
 				.getInstance().getAvailableComponents();
-		for (int i = 0; i < availableComponents.size(); i++) {
+		for (int i = 0; i < availableCompositeSoundComponents.size(); i++) {
 			paletteContainer
-					.add(createConcreteCompositeNodeCreationTool(availableComponents
-							.get(i))); // MYTOOL
+					.add(createConcreteCompositeNodeCreationTool(availableCompositeSoundComponents
+							.get(i)));
 		}
-		
+
 		paletteContainer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 
 		return paletteContainer;
+	}
+
+	public void updateImportedCompositeSoundComponents() {
+		for (Object object : paletteRoot.getChildren()) {
+			if (object instanceof PaletteDrawer) {
+				if (((PaletteDrawer) object).getId().equals(
+						"createImportedCompositeSoundComponents")) {
+					List<String> newAvailableCompositeSoundComponents = getNewAvailableCompositeSoundComponents();
+					for (int i = 0; i < newAvailableCompositeSoundComponents
+							.size(); i++) {
+						((PaletteDrawer) object)
+								.add(createConcreteCompositeNodeCreationTool(newAvailableCompositeSoundComponents
+										.get(i)));
+					}
+				}
+			}
+		}
+	}
+
+	private List<String> getNewAvailableCompositeSoundComponents() {
+		List<String> allAvailableCompositeSoundComponents = CompositeSoundComponentLibrary
+				.getInstance().getAvailableComponents();
+		List<String> newAvailableCompositeSoundComponents = new LinkedList<String>();
+		for (String soundComponent : allAvailableCompositeSoundComponents) {
+			if (!listContainsString(availableCompositeSoundComponents,
+					soundComponent))
+				newAvailableCompositeSoundComponents.add(soundComponent);
+		}
+		availableCompositeSoundComponents = allAvailableCompositeSoundComponents;
+		return newAvailableCompositeSoundComponents;
+	}
+
+	private boolean listContainsString(List<String> list, String string) {
+		for (String s : list) {
+			if (s.equals(string))
+				return true;
+		}
+		return false;
 	}
 
 	/**
@@ -101,7 +149,7 @@ public class SoundgatesPaletteFactory {
 		paletteContainer.setId("createConnections3Group"); //$NON-NLS-1$
 		paletteContainer.setDescription(Messages.Connections3Group_desc);
 		paletteContainer.add(createLink1CreationTool());
-		
+
 		paletteContainer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		return paletteContainer;
 	}
@@ -115,7 +163,7 @@ public class SoundgatesPaletteFactory {
 		types.add(SoundgatesElementTypes.Link_4002);
 		LinkToolEntry entry = new LinkToolEntry(
 				Messages.Link1CreationTool_title,
-				"A link connects two ports of sound components that are on the same level", 
+				"A link connects two ports of sound components that are on the same level",
 				types);
 		entry.setId("createLink1CreationTool"); //$NON-NLS-1$
 		return entry;

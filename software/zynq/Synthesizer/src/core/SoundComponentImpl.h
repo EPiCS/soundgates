@@ -66,11 +66,14 @@
                 void destroy(CLASSNAME * cmp) { delete cmp; }                   \
                 const char* getComponentName() { return CLASSNAME::name; } }
 
+// Macro that needs to be implemented in each subclass, to create a static name field and an accessor method
 #define DECLARE_COMPONENTNAME   \
-        static const char* name;
+        static const char* name; \
+        const char* getName();
 
 #define DEFINE_COMPONENTNAME(CLASSNAME, VALUE)  \
-        const char* CLASSNAME::name = VALUE;
+        const char* CLASSNAME::name = VALUE; \
+        const char* CLASSNAME::getName() { return name; }
 
 #define DECLARE_PORT(TYPE, PORTNAME)  \
         TYPE*   m_ ## PORTNAME ## Port;           \
@@ -118,6 +121,7 @@ private:
 
 	std::vector<std::string> m_Parameters;
 
+	const char* implType;
 public:
 
 	SoundComponentImpl();
@@ -135,6 +139,11 @@ public:
 	virtual void init() = 0;
 	virtual void process() = 0;
 	virtual void initLater();
+	// Virtual function that is implemented in the subclasses by the DECLARE_ and DEFINE_COMPONENTNAME macros (see above)
+	virtual const char* getName() = 0;
+
+	void setImplType(const char* t);
+	const char* getImplType();
 
 };
 

@@ -11,11 +11,6 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="hw" name="addsc">
-				<PortMapping PortName="Summand1" PortNumber="1"/>
-				<PortMapping PortName="Summand2" PortNumber="2"/>
-				<PortMapping PortName="Result" PortNumber="1"/>
-			</Implementation>
 			<Implementation type="sw" name="addsc">
 			    <PortMapping PortName="Summand1" PortNumber="1"/>
 				<PortMapping PortName="Summand2" PortNumber="2"/>

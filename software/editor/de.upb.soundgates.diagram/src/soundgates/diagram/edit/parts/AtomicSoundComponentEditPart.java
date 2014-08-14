@@ -8,6 +8,8 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
@@ -22,17 +24,21 @@ import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.edit.policies.reparent.CreationEditPolicyWithCustomReparent;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.ui.PlatformUI;
 
 import soundgates.diagram.edit.policies.AtomicSoundComponentCanonicalEditPolicy;
 import soundgates.diagram.edit.policies.AtomicSoundComponentItemSemanticEditPolicy;
 import soundgates.diagram.part.SoundgatesVisualIDRegistry;
+import soundgates.provider.custom.CustomPropertyInputDialog;
 
 /**
  * @generated NOT
  */
 public class AtomicSoundComponentEditPart extends
-		AtomicSoundComponentAbstractEditPart implements SelectableEditPartForCompositeCreation  {
+		AtomicSoundComponentAbstractEditPart implements
+		SelectableEditPartForCompositeCreation {
 
 	/**
 	 * @generated
@@ -319,6 +325,18 @@ public class AtomicSoundComponentEditPart extends
 			return new Label(createToolTip());
 		}
 
+	}
+	
+	
+	@Override
+	public void performRequest(Request req) {
+	    if(req.getType() == RequestConstants.REQ_OPEN) {
+			Dialog dialog = new CustomPropertyInputDialog(PlatformUI
+					.getWorkbench().getDisplay().getActiveShell(),
+					"dialogTitle", "dialogMessage", "initialValue", null,
+					getAtomicSoundComponent());
+			dialog.open();
+	    }
 	}
 
 }

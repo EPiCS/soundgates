@@ -101,7 +101,7 @@ public class CompositeSoundComponentXMLHandler {
 		return null;
 	}
 	
-	public static boolean addNewComponentToLibrary(CompositeSoundComponentLibrary library, Element element) throws CompositeSoundComponentNotFoundException{
+	public static CompositeSoundComponent createCompositeSoundComponentFromXMLElement(Element element) throws CompositeSoundComponentNotFoundException{
 		CompositeSoundComponent compositeSoundComponent = SoundgatesCompositeFactory.eINSTANCE.createCompositeSoundComponent();						
 		compositeSoundComponent.setName(element.getAttribute("Name"));			
 
@@ -123,7 +123,7 @@ public class CompositeSoundComponentXMLHandler {
 				MessageDialogs.atomicComponentInCompositeComponentMissing(
 						atomCompElement.getAttribute("Type"),
 						element.getAttribute("Name"));											   
-				return false;
+				return null;
 			}
 										
 			atomicSoundComponent.setName(atomCompElement.getAttribute("Name"));
@@ -202,12 +202,20 @@ public class CompositeSoundComponentXMLHandler {
 			delegation.setTarget(targetPort);
 			compositeSoundComponent.getDelegations().add(delegation);
 		}
-
-		library.addComponent(compositeSoundComponent);
+		return compositeSoundComponent;
+	}
+	
+	public static boolean addNewComponentToLibrary(CompositeSoundComponentLibrary library, Element element) throws CompositeSoundComponentNotFoundException{
+		library.addComponent(createCompositeSoundComponentFromXMLElement(element));
 		return true;
 	}
 	
 	static class CompositeSoundComponentNotFoundException extends Exception{
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -7548458196868659058L;
 		
 		String embeddedCompositeSoundComponentName;
 		

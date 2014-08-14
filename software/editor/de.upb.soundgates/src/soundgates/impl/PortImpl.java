@@ -243,15 +243,13 @@ public class PortImpl extends NamedElementImpl implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	public void setDirection(Direction newDirection) {
-		if(!(this.eContainer() instanceof AtomicSoundComponent)){
-			Direction oldDirection = direction;
-			direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
-		}
+		Direction oldDirection = direction;
+		direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DIRECTION, oldDirection, direction));
 	}
 
 	/**
@@ -269,12 +267,10 @@ public class PortImpl extends NamedElementImpl implements Port {
 	 * @generated NOT
 	 */
 	public void setDataType(DataType newDataType) {
-		if(!(this.eContainer() instanceof AtomicSoundComponent)){
-			DataType oldDataType = dataType;
-			dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));
-		}
+		DataType oldDataType = dataType;
+		dataType = newDataType == null ? DATA_TYPE_EDEFAULT : newDataType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.PORT__DATA_TYPE, oldDataType, dataType));	
 	}
 
 	/**
@@ -452,13 +448,10 @@ public class PortImpl extends NamedElementImpl implements Port {
 	}
 	
 	public void setName(String newName) {
-		if(!(this.eContainer() instanceof AtomicSoundComponent)){
-			String oldName = name;
-			name = newName;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.NAMED_ELEMENT__NAME, oldName, name));
-			
-		}
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SoundgatesPackage.NAMED_ELEMENT__NAME, oldName, name));		
 	}
 
 } //PortImpl

@@ -15,7 +15,7 @@ EXPORT_SOUNDCOMPONENT_NO_IMPL(SoundDelayComponent);
 
 inline int SoundDelayComponent::delayToSampleCount(float delay){
 
-	return  (((Synthesizer::config::samplerate * delay)) / Synthesizer::config::bytesPerBlock) * Synthesizer::config::bytesPerBlock;
+	return  (((Synthesizer::config::samplerate * delay / 1000)) / Synthesizer::config::bytesPerBlock) * Synthesizer::config::bytesPerBlock;
 }
 
 
@@ -57,7 +57,7 @@ void SoundDelayComponent::process(void){
 	size_t offset = 0;
 
 	int* readbuffer  = (int*)(m_SoundIn_2_Port->getBuffer());
-	int* writebuffer = (int*)(m_SoundOut_1_Port->getWriteBuffer());
+	int* writebuffer = (int*)(m_SoundOut_1_Port->getBuffer());
 
 	// size_t delay = delayToSampleCount(delayLink->getNextControlData());	/*< delay in bytes */
 	size_t delay = delayToSampleCount(delayValue);	/*< delay in bytes */

@@ -2,6 +2,7 @@ package soundgates.diagram.soundcomponents;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,7 +15,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import soundgates.AtomicSoundComponent;
+import soundgates.Direction;
 import soundgates.SoundgatesFactory;
+import soundgates.VHDLPortDescriptor;;
 
 
 /**
@@ -29,6 +32,7 @@ public class AtomicSoundComponentXMLHandler{
 	public static String NODENAME_SIMULATION_PD = "PD";
 	public static String NODENAME_SIMULATION_PROP_MAPPING = "PropMapping";
 	public static String NODENAME_SIMULATION_PORT_MAPPING = "PortMapping";
+	
 	public static String CODEGEN_PREFIX = "codeGenProp_";
 	public static String CODEGEN_PREFIX_PDCODE = CODEGEN_PREFIX + "_pdcode";
 	public static String CODEGEN_PREFIX_VHDL = CODEGEN_PREFIX + "_vhdl";
@@ -39,12 +43,14 @@ public class AtomicSoundComponentXMLHandler{
 	public static String NODENAME_DEVICE_IMPL = "Implementation";
 	public static String NODENAME_DEVICE_PROP_MAPPING = "PropMapping";
 	public static String NODENAME_DEVICE_PORT_MAPPING = "PortMapping";
+	public static String NODENAME_DEVICE_VHDL_PORTS = "VHDLPorts";
+	
 	public static String DEVICE_PREFIX = "deviceProp_";
 	public static String DEVICE_PREFIX_PROP_MAPPINGS = DEVICE_PREFIX + "_propMappings_";
 	public static String DEVICE_PREFIX_PORT_MAPPINGS = DEVICE_PREFIX + "_portMappings_";
-	public static String DEVICE_PREFIX_IMPLNAME = DEVICE_PREFIX + "_name";
-	
-	// private AtomicSoundComponentLibrary library;
+	public static String DEVICE_PREFIX_IMPLNAME = DEVICE_PREFIX + "_name_";
+	public static String DEVICE_PREFIX_IMPLNAME_HARDWARE = DEVICE_PREFIX_IMPLNAME + "hw";
+	public static String DEVICE_PREFIX_IMPLNAME_SOFTWARE = DEVICE_PREFIX_IMPLNAME + "sw";
 
 	public static void readFromXML(AtomicSoundComponentLibrary library, String libraryPath) {
 		try {
@@ -153,10 +159,16 @@ public class AtomicSoundComponentXMLHandler{
 //														propMappings.append(childNode.getAttributes().getNamedItem("Tag"));
 //														propMappings.append("||");
 //													}
+													if (childNode.getNodeName().equals(NODENAME_DEVICE_VHDL_PORTS)){
+														NodeList VHDLPortsNodeList = childNode.getChildNodes();
+														AtomicSoundComponentLibrary.componentTypeToVHDLPortsList.put(
+																soundComponent.getType(),
+																createVHDLPortsListFromNodeList(VHDLPortsNodeList));
+													}
 												} while ((childNode = childNode.getNextSibling()) != null);
 
 												soundComponent.getStringProperties().put(DEVICE_PREFIX_PORT_MAPPINGS + implType, portMappings.toString());
-												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME, implName);
+												soundComponent.getStringProperties().put(DEVICE_PREFIX_IMPLNAME + implType, implName);
 //												soundComponent.getStringProperties().put(DEVICE_PREFIX_PROP_MAPPINGS + implType, propMappings.toString());
 											
 												if(implType.equals("sw")) sw=true;
@@ -204,5 +216,54 @@ public class AtomicSoundComponentXMLHandler{
 		}
 	}
 	
+	private static VHDLPortDescriptor createVHDLPortFromNode(Node vhdlPortNode){
+
+//		<Port name="rst"  dir="in" datatype="std_logic" sigis="rst"/>
+//		<Port name="y_in" dir="out" datatype="signed" range="23:0" sigis="user" portnum="1"/>
+		
+		String vhdlName = vhdlPortNode.getAttributes().getNamedItem("vhdlName").getNodeValue();
+		
+		String directionString = vhdlPortNode.getAttributes().getNamedItem("dir").getNodeValue();
+		Direction dir;
+		if(directionString.equals("in")) 	dir=Direction.IN;
+		else								dir=Direction.OUT;
+		
+		String dataType = vhdlPortNode.getAttributes().getNamedItem("datatype").getNodeValue();
+		
+		VHDLPortDescriptor vhdlPort = new VHDLPortDescriptor(vhdlName, dir, dataType);
+		
+		if(vhdlPortNode.getAttributes().getNamedItem("sigis")!=null){
+			vhdlPort.setSigis(vhdlPortNode.getAttributes().getNamedItem("sigis").getNodeValue());
+		}
+		
+		if(vhdlPortNode.getAttributes().getNamedItem("modelName")!=null){
+			vhdlPort.setModelName(vhdlPortNode.getAttributes().getNamedItem("modelName").getNodeValue());
+		}
+		
+		if(vhdlPortNode.getAttributes().getNamedItem("supportfn")!=null){
+			vhdlPort.setSupportfn(vhdlPortNode.getAttributes().getNamedItem("supportfn").getNodeValue());
+		}
+		
+		if(vhdlPortNode.getAttributes().getNamedItem("range")!=null){
+			String range = vhdlPortNode.getAttributes().getNamedItem("range").getNodeValue();
+			String[] values = range.split(":");
+			int leftValue = Integer.parseInt(values[0]);
+			int rightValue = Integer.parseInt(values[1]);
+			vhdlPort.setRange(leftValue,rightValue);
+		}
+		
+		return vhdlPort;
+	}
+	
+	private static LinkedList<VHDLPortDescriptor> createVHDLPortsListFromNodeList(NodeList vhdlNodeList){
+		LinkedList<VHDLPortDescriptor> vhdlPortsList = new LinkedList<>();
+		for(int i=0; i<vhdlNodeList.getLength(); i++){
+			if(vhdlNodeList.item(i).getNodeName().equals("VHDLPort"))
+				vhdlPortsList.add(createVHDLPortFromNode(vhdlNodeList.item(i)));
+		}
+		return vhdlPortsList;
+	}
+	
+
 
 }

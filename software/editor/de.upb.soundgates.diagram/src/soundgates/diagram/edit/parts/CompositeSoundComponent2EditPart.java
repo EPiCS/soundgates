@@ -60,9 +60,9 @@ public class CompositeSoundComponent2EditPart extends
 	 * @generated NOt
 	 */
 	protected void createDefaultEditPolicies() {
-		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
-				new CreationEditPolicyWithCustomReparent(
-						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
+//		installEditPolicy(EditPolicyRoles.CREATION_ROLE,
+//				new CreationEditPolicyWithCustomReparent(
+//						SoundgatesVisualIDRegistry.TYPED_INSTANCE));
 		super.createDefaultEditPolicies();
 		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
 				new CompositeSoundComponent2ItemSemanticEditPolicy());
@@ -149,7 +149,7 @@ public class CompositeSoundComponent2EditPart extends
 	 * @generated NOT
 	 */
 	protected boolean removeFixedChild(EditPart childEditPart) {
-		
+
 		return false;
 	}
 

@@ -10,7 +10,7 @@
 	<Code>
 		<Simulation/>
 		<Device>
-			<Implementation type="sw" name="or">
+			<Implementation type="sw" name="neg">
 			    <PortMapping PortName="Value" PortNumber="1"/>
 			    <PortMapping PortName="Negation" PortNumber="1"/>
 			</Implementation>

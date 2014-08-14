@@ -44,7 +44,7 @@ namespace ui {
 			for (vector<InputSoundComponentPtr>::const_iterator iter = sndcomponents.begin(); iter != sndcomponents.end(); ++iter) {
 
 				string msg = (*iter)->getOscAddress();
-				msg = msg + (*iter)->getOscTypeTag();
+				msg        = msg + " " + (*iter)->getOscTypeTag();
 				oscreturn.push_back(xmlrpc_c::value_string(msg));
 			}
 		}

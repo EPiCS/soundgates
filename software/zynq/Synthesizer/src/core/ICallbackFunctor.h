@@ -17,8 +17,8 @@ class ICallbackFunctor {
 
 public:
 
-    ICallbackFunctor(){ }
-    virtual ~ICallbackFunctor(){ }
+    ICallbackFunctor();
+    virtual ~ICallbackFunctor();
 
     virtual void operator()(void) = 0;
 

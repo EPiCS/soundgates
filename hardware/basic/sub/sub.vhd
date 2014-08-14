@@ -28,8 +28,8 @@ port(
         clk       : in  std_logic;
         rst       : in  std_logic;
         ce        : in  std_logic;
-        wave1     : in  signed(31 downto 0);
-	    wave2     : in  signed(31 downto 0);       
+        sample_in     : in  signed(31 downto 0);
+	    sample_in2     : in  signed(31 downto 0);       
 	    output    : out signed(31 downto 0)
     );
 
@@ -38,11 +38,17 @@ end sub;
 architecture Behavioral of sub is
   
 	begin
-		adder : process (clk, rst, ce)
+		sub_proc : process (clk, rst, ce)
         begin
             if rising_edge(clk) then
                 if ce = '1' then
-                    output <= wave1 - wave2;
+                    if sample_in - sample_in2 > to_signed(integer(real(INT_MAX)), 32) then 
+                        output <= to_signed(integer(real(INT_MAX)), 32);
+                    elsif sample_in - sample_in2 < to_signed(integer(real(INT_MIN)), 32) then 
+                        output <= to_signed(integer(real(INT_MIN)), 32);
+                    else
+                        output <= sample_in - sample_in2;
+                    end if;
                 end if;
             end if;
         end process;

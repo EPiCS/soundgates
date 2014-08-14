@@ -39,18 +39,9 @@ public class DelegationReorientCommand extends EditElementCommand {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean canExecute() {
-		if (false == getElementToEdit() instanceof soundgatesComposite.Delegation) {
-			return false;
-		}
-		if (reorientDirection == ReorientRelationshipRequest.REORIENT_SOURCE) {
-			return canReorientSource();
-		}
-		if (reorientDirection == ReorientRelationshipRequest.REORIENT_TARGET) {
-			return canReorientTarget();
-		}
 		return false;
 	}
 

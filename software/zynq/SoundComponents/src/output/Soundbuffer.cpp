@@ -10,10 +10,10 @@
 Soundbuffer::Soundbuffer(bool record)
 {
 	SoundgatesConfig& cfg = SoundgatesConfig::getInstance();
-	this->SOUNDBUFFERSIZE = cfg.get<int>(SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
-
+	this->SOUNDBUFFERSIZE = cfg.get<int>(
+			SoundgatesConfig::CFG_SOUND_BUFFER_SIZE);
 	this->ALSACHARS = cfg.get<int>(SoundgatesConfig::CFG_ALSA_CHUNKS);
-	const unsigned int samplerate = Synthesizer::config::samplerate;
+	unsigned int samplerate = Synthesizer::config::samplerate;
 
 	// It is important that ALSACHAR divides SOUNDBUFFERSIZE!
 	// Else we would access memory behind the buffer when sending data to the soundcard.
@@ -29,7 +29,6 @@ Soundbuffer::Soundbuffer(bool record)
 	this->writeoffset = 0;
 	this->readoffset = 0;
 	this->recorder = record;
-
 	for (int i = 0; i < SOUNDBUFFERSIZE; i++)
 	{
 		this->buffer[i] = 0;
@@ -162,7 +161,7 @@ void Soundbuffer::run()
 		// Wait for the playback to start
 		if (!this->playing)
 		{
-			boost::this_thread::sleep(boost::posix_time::millisec(100));
+			usleep(50000);
 		}
 		else
 		{
@@ -375,10 +374,10 @@ void Soundbuffer::readbuffer(char* data, int size)
 				<< std::endl;
 		return;
 	}
-	if (size >= SOUNDBUFFERSIZE)
+	if (size > SOUNDBUFFERSIZE)
 	{
 		std::cerr << "Too many samples. Might be at most "
-				<< SOUNDBUFFERSIZE / 2 << std::endl;
+				<< SOUNDBUFFERSIZE / 4 << std::endl;
 		return;
 	}
 
@@ -406,16 +405,17 @@ void Soundbuffer::fillbuffer(char* data, int size)
 				<< std::endl;
 		return;
 	}
-	if (size >= SOUNDBUFFERSIZE)
+	if (size > SOUNDBUFFERSIZE)
 	{
 		std::cerr << "Too many samples. Might be at most "
-				<< SOUNDBUFFERSIZE / 2 << std::endl;
+				<< SOUNDBUFFERSIZE / 4 << std::endl;
 		return;
 	}
 
 	// Block as long as the buffer can't accept new samples
-	while (!this->canAcceptData(size)){
-		boost::this_thread::sleep(boost::posix_time::microseconds(100));
+	while (!this->canAcceptData(size))
+	{
+		usleep(100);
 	}
 
 	this->mutex.lock();
@@ -429,6 +429,7 @@ void Soundbuffer::fillbuffer(char* data, int size)
 		}
 	}
 	this->mutex.unlock();
+
 }
 
 bool Soundbuffer::canAcceptData(int size)

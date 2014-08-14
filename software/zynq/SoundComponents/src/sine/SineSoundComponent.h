@@ -53,12 +53,12 @@ public:
         float freq = m_ObjRef.m_FrequencyIn_1_Port->pop();
 
         if(freq != m_ObjRef.m_Frequency){
-            LOG_INFO("Frequency changed: " << freq)
+//            LOG_INFO("Frequency changed: " << freq)
             m_ObjRef.m_PhaseIncr = m_ObjRef.getPhaseIncrement(freq);
             m_ObjRef.m_Frequency = freq;
             if (freq == 0)
             {
-            	LOG_INFO("Sine generator turned off. Reset phase to 0");
+//            	LOG_INFO("Sine generator turned off. Reset phase to 0");
             	m_ObjRef.m_active = false;
             }
             else

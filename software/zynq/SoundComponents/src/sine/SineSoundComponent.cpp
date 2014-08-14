@@ -17,9 +17,10 @@ EXPORT_SOUNDCOMPONENT_MIXED_IMPL(SineSoundComponent);
 SineSoundComponent::SineSoundComponent(std::vector<std::string> params)
     : SoundComponentImpl(params) {
 
-    m_Frequency     = 0.0;
-    m_PhaseIncr     = 0.0;
-    m_active        = true;
+    m_Frequency = 0.0;
+    m_PhaseIncr = 0.0;
+    m_active    = false;
+
     CREATE_AND_REGISTER_PORT3(SineSoundComponent, In, ControlPort, FrequencyIn, 1);
 
     CREATE_AND_REGISTER_PORT3(SineSoundComponent, Out, SoundPort,  SoundOut, 1);

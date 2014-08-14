@@ -46,11 +46,11 @@ begin
 		if ce = '1' then
 			
 			if (rst = '1') then
-				seed <= (0 => '1', others => '0');
+				seed <= (0 => '1', 16 => '1', others => '0');
 			end if;
 			
 			if (rising_edge(clk)) then    
-				feedback <= feedback xor (seed(5) xor (seed(3) xor (seed(2) xor seed(0))));
+				feedback <= feedback xor (seed(21) xor (seed(13) xor (seed(8) xor (seed(5) xor (seed(3) xor (seed(2) xor seed(0)))))));
 			
 			seed <= feedback & seed (levels - 1 downto 1);
 			end if;

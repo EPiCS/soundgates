@@ -32,6 +32,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.799497622" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Libraries/arm/include/reconos}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Synthesizer/src/core}&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/include/pulse"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1789124438" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

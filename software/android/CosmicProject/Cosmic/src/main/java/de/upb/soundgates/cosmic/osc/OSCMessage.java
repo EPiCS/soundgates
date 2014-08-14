@@ -3,7 +3,7 @@ package de.upb.soundgates.cosmic.osc;
 import java.util.LinkedList;
 import java.util.Observable;
 
-import de.upb.soundgates.cosmic.InteractionMethod;
+import de.upb.soundgates.cosmic.rows.InteractionMethod;
 
 /**
  * Created by posewsky on 12.11.13.
@@ -11,7 +11,7 @@ import de.upb.soundgates.cosmic.InteractionMethod;
 
 public class OSCMessage extends Observable {
     protected String path;
-    protected LinkedList<OSCType> types;
+    protected LinkedList<OSCArgument> types;
     protected boolean selected;
     protected InteractionMethod interactionMethod;
 
@@ -24,7 +24,7 @@ public class OSCMessage extends Observable {
             OSCMessage msg = new OSCMessage(parts[0]);
             String types = parts[1].replaceAll("\"", "");
             for(int i = 0; i < types.length(); ++i) {
-                OSCType type = OSCType.newInstance(msg, types.charAt(i));
+                OSCArgument type = OSCArgument.newInstance(msg, types.charAt(i));
                 if(type == null)
                     return null;
 
@@ -39,7 +39,7 @@ public class OSCMessage extends Observable {
                 if(range.length != 2)
                     return null;
 
-                OSCType type = OSCType.newInstance(msg, types.charAt(i), range[0], range[1]);
+                OSCArgument type = OSCArgument.newInstance(msg, types.charAt(i), range[0], range[1]);
                 if(type == null)
                     return null;
 
@@ -52,7 +52,7 @@ public class OSCMessage extends Observable {
 
     private OSCMessage(String path) {
         this.path       = path;
-        this.types      = new LinkedList<OSCType>();
+        this.types      = new LinkedList<OSCArgument>();
         this.selected   = false;
         this.interactionMethod = InteractionMethod.values()[0];
     }
@@ -63,7 +63,7 @@ public class OSCMessage extends Observable {
 
     public String toStringFull() {
         String ret = path;
-        for(OSCType t: types)
+        for(OSCArgument t: types)
             ret += " " + t.toString();
         ret += " selected: " + isSelected();
         ret += " interaction method: " + getInteractionMethod();
@@ -74,11 +74,11 @@ public class OSCMessage extends Observable {
     public String getPath() { return path; }
     public void setPath(String path) { this.path = path; }
 
-    public LinkedList<OSCType> getTypes() { return types; }
+    public LinkedList<OSCArgument> getTypes() { return types; }
 
     public void setValue(float value) {
         if(getTypes().size() > 0) {
-            OSCType arg = getTypes().get(0);
+            OSCArgument arg = getTypes().get(0);
             arg.setValue(value);
             setChanged();
             notifyObservers(value);
@@ -87,7 +87,7 @@ public class OSCMessage extends Observable {
 
     public float getValue() {
         if(getTypes().size() > 0) {
-            OSCType arg = getTypes().get(0);
+            OSCArgument arg = getTypes().get(0);
             return arg.getValue();
         }
         return Float.NaN;
@@ -95,7 +95,7 @@ public class OSCMessage extends Observable {
 
     public void setValueAsPercent(float value) {
         if(getTypes().size() > 0) {
-            OSCType arg = getTypes().get(0);
+            OSCArgument arg = getTypes().get(0);
             arg.setValueAsPercent(value);
             setChanged();
             notifyObservers(value);
@@ -104,7 +104,7 @@ public class OSCMessage extends Observable {
 
     public float getValueAsPercent() {
         if(getTypes().size() > 0) {
-            OSCType arg = getTypes().get(0);
+            OSCArgument arg = getTypes().get(0);
             return arg.getValueAsPercent();
         }
         return Float.NaN;
@@ -115,6 +115,8 @@ public class OSCMessage extends Observable {
     }
     public void setSelected(boolean selected) {
         this.selected = selected;
+        setChanged();
+        notifyObservers();
     }
 
     public InteractionMethod getInteractionMethod() { return interactionMethod; }

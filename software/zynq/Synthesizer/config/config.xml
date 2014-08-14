@@ -19,4 +19,12 @@
         <searchdir>../SoundComponents/result</searchdir>
     </plugins>
     
+    <logging>
+    	<initDelay>1000</initDelay>
+    	<stopAfter>1000</stopAfter>
+    	<enabled>false</enabled>
+    	<address>192.168.1.101</address>
+    	<port>27017</port>
+    </logging>
+    
 </synthesizer>

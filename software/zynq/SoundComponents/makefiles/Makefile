@@ -1,4 +1,5 @@
-SoundComponents += accumulatorcc \
+SoundComponents += accumulator \
+                  accumulatorcc \
                   addss \
 				  addsc \
 				  addcc \
@@ -34,11 +35,14 @@ SoundComponents += accumulatorcc \
                   soundToControl \
 				  template \
 			      timer \
+			      tri \
 				  saw \
 				  pwm \
 				  fir \
 				  log \
-				  ramp 
+				  tri \
+				  ramp \
+				  pulseout \
 
 
 SRCDIR = ../src

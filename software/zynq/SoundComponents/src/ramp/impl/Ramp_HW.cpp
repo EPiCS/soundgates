@@ -1,172 +1,64 @@
-/*
- * Ramp_HW.cpp
- *
- *  Created on: Nov 29, 2013
- *      Author: CaiusC
- */
 
+#include "Ramp_HW.hpp"
 
-#include "Ramp_HW.h"
-#define ZYNQ
 #ifndef ZYNQ
 
-Ramp_HW::Ramp_HW(std::vector<std::string> params) : Ramp(params){
-}
-
-Ramp_HW::~Ramp_HW(){}
-
-
-
-void Ramp_HW::init(){ }
-
-void Ramp_HW::process(){ }
+/* do nothing */
 
 #else
 
-Ramp_HW::Ramp_HW(std::vector<std::string> params)
-    : Ramp(params),
-    slot(Ramp::name) {
+Ramp_HW::Ramp_HW(std::vector<std::string> params) : RampSoundComponent(params), m_HWTSlot(Ramp::name) {
 
-	m_ADSRState = IDLE;
-    m_LocalBuffer = new char[Synthesizer::config::bytesPerBlock];
-
-
-}
-
-Ramp_HW::~Ramp_HW(){
-    delete m_LocalBuffer;
 }
 
 void Ramp_HW::init(){
-    //Ramp_SW::instcount++;
-    //myid = Ramp_SW::instcount;
-    m_Attack_2_Port->registerCallback(ICallbackPtr(new OnValueChange(&m_AttackTime, m_Attack_2_Port)));
-    m_Release_3_Port->registerCallback(ICallbackPtr(new OnValueChange(&m_ReleaseTime, m_Release_3_Port)));
-    m_Trigger_4_Port->registerCallback(ICallbackPtr(new OnTrigger(this)));
 
-    /* initialize message boxes with 1 data word */
-    mbox_init(&m_CtrlStart, 1);
-    mbox_init(&m_CtrlStop,  1);
+    // You can init() sound output ports to clear their buffers
+	m_SoundOut_1_Port->init();
+	m_Attack_2_Port->registerCallback(ICallbackPtr(new OnValueChangeHW(&m_AttackTime, m_Attack_2_Port)));
+    m_Release_3_Port->registerCallback(ICallbackPtr(new OnValueChangeHW(&m_ReleaseTime, m_Release_3_Port)));
+    m_Trigger_4_Port->registerCallback(ICallbackPtr(new OnTiggerHW(*this)));
 
-    /* initialize hardware component */
-    m_HWTParams[0] = (uint32_t) m_SoundIn_1_Port;  								  /* Input */
-    m_HWTParams[1] = (uint32_t) m_LocalBuffer; 							      /* Write destination */
-    m_HWTParams[2] = (uint32_t) (getIncrement(200) * SOUNDGATES_FIXED_PT_SCALE); /* Rising */
-    m_HWTParams[3] = (uint32_t) (getIncrement(200) * SOUNDGATES_FIXED_PT_SCALE); /* Falling */
 
-	m_ReconOSResource[0].type = RECONOS_TYPE_MBOX;
-	m_ReconOSResource[0].ptr = &m_CtrlStart;
+    if(m_HWTSlot.isValid()){
+        /* 1. initialize mailboxes */
+        mbox_init(&m_CtrlStart, 1);
+        mbox_init(&m_CtrlStop,  1);
 
-	m_ReconOSResource[1].type = RECONOS_TYPE_MBOX;
-	m_ReconOSResource[1].ptr = &m_CtrlStop;
+        /* 2. initialize reconos */
+        reconos_init();
 
-	reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
-	reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams[0]);
+        m_ReconOSResource[0].type = RECONOS_TYPE_MBOX;
+        m_ReconOSResource[0].ptr  = &m_CtrlStart;
 
-	reconos_hwt_create(&m_ReconOSThread, slot.getSlot(), NULL);
+        m_ReconOSResource[1].type = RECONOS_TYPE_MBOX;
+        m_ReconOSResource[1].ptr  = &m_CtrlStop;
 
-	m_SoundOut_1_Port->clearBuffer();
-}
 
-uint32_t getIncrement(uint32_t milliseconds)
-{
-	return ( ( 1000 / milliseconds ) / Synthesizer::config::samplerate );
-}
+        m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
+        m_HWTParams.args[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
+        m_HWTParams.args[2] = (uint32_t) getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE;
+        m_HWTParams.args[3] = (uint32_t) getIncrement_HW(m_ReleaseTime) * SOUNDGATES_FIXED_PT_SCALE;
+        m_HWTParams.args[4] = (uint32_t) 0;
 
-void Ramp_SW::OnTrigger::operator()() {
+        reconos_hwt_setresources(&m_ReconOSThread, &m_ReconOSResource[0], 2);
+        reconos_hwt_setinitdata(&m_ReconOSThread, (void *) &m_HWTParams.args[0]);
 
-    int trigger = m_ObjRef->m_Trigger_4_Port->pop();
+        reconos_hwt_create(&m_ReconOSThread, m_HWTSlot.getSlot(), NULL);
 
-    switch (m_ObjRef->m_ADSRState) {
-    case Ramp_SW::IDLE:
-    case Ramp_SW::ATTACK:
-    case Ramp_SW::RELEASE:
-
-        if (trigger > 0) {
-//            LOG_DEBUG("Ramp Triggered" << m_ObjRef->myid);
-            m_ObjRef->m_ADSRState = Ramp_SW::CLICK_SUPPRESSION;
-        }
-
-        break;
-    case CLICK_SUPPRESSION:
-        break;
     }
-    m_ObjRef->m_SamplesProcessed = 0;
 }
-
 
 void Ramp_HW::process(){
 
-    int m_attacksamplecount  = (int) (Synthesizer::config::samplerate * m_AttackTime / 1000);
-    int m_releasesamplecount = (int) (Synthesizer::config::samplerate * m_ReleaseTime / 1000);
+    m_HWTParams.args[0] = (uint32_t) m_SoundIn_1_Port->getReadBuffer();
+    m_HWTParams.args[1] = (uint32_t) m_SoundIn_1_Port->getWriteBuffer();
+    m_HWTParams.args[2] = (uint32_t) getIncrement_HW(m_AttackTime) * SOUNDGATES_FIXED_PT_SCALE;
+    m_HWTParams.args[3] = (uint32_t) getIncrement_HW(m_ReleaseTime) * SOUNDGATES_FIXED_PT_SCALE;
+   // m_HWTParams.args[4] = (uint32_t) 0; // set by OnTrigger
 
-        switch (m_ADSRState) {
-
-        case IDLE:
-            m_SoundOut_1_Port->clearBuffer();
-            break;
-
-        case PROCESS:
-        	mbox_put(&m_CtrlStart, SINUS_HWT_START);
-        	int ret = mbox_get(&m_CtrlStop);
-        	if (ret == FINISHED)
-        	{
-        		m_ADSRState = IDLE;
-        	}
-        }
+    mbox_put(&m_CtrlStart, RAMP_HWT_START);
+    mbox_get(&m_CtrlStop);
 }
-//        case ATTACK:
-//
-//    		mbox_put(&m_CtrlStart, SINUS_HWT_START);
-//    		mbox_get(&m_CtrlStop);                   /* Blocks until thread ready */
-//
-//
-//            for (; blockSamplesProcessed < Synthesizer::config::blocksize; m_SamplesProcessed++, blockSamplesProcessed++) {
-//
-//                m_currentlevel = ((float) m_SamplesProcessed / m_attacksamplecount);
-//
-//                m_SoundOut_1_Port->writeSample( (*m_SoundIn_1_Port)[blockSamplesProcessed] * m_currentlevel, blockSamplesProcessed);
-//
-//                if (m_SamplesProcessed >= m_attacksamplecount) {
-//                    m_SamplesProcessed = 0;
-//                    m_ADSRState = RELEASE;
-//                    break;
-//                }
-//            }
-//
-//            break;
-//
-//        case RELEASE:
-//            for (; blockSamplesProcessed < Synthesizer::config::blocksize; m_SamplesProcessed++, blockSamplesProcessed++) {
-//
-//                m_currentlevel = ((float) m_SamplesProcessed / m_releasesamplecount);
-//                m_SoundOut_1_Port->writeSample( (*m_SoundIn_1_Port)[blockSamplesProcessed] * (1.0 - m_currentlevel), blockSamplesProcessed);
-//
-//                if (m_SamplesProcessed >= m_releasesamplecount) {
-//
-//                    for (int j = blockSamplesProcessed; j < Synthesizer::config::blocksize; j++) {
-//                        m_SoundIn_1_Port->writeSample(0, j);
-//                    }
-//
-//                    blockSamplesProcessed = Synthesizer::config::blocksize;
-//                    m_SamplesProcessed = 0;
-//                    m_ADSRState = IDLE;
-//                    break;
-//                }
-//            }
-//            break;
-//
-//        case CLICK_SUPPRESSION:
-//
-//            for (; blockSamplesProcessed < Synthesizer::config::blocksize;
-//                    blockSamplesProcessed++)  {
-//                m_SoundIn_1_Port->writeSample((*m_SoundIn_1_Port)[blockSamplesProcessed] * m_currentlevel * \
-//                        (float)((Synthesizer::config::blocksize - blockSamplesProcessed) / Synthesizer::config::blocksize) , blockSamplesProcessed);
-//            }
-//            m_ADSRState = Ramp_SW::ATTACK;
-//            break;
-//        }
-//    }
-//}
 
 #endif

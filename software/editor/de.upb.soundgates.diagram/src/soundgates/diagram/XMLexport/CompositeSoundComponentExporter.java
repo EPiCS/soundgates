@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import soundgates.AtomicSoundComponent;
 import soundgates.CompositeSoundComponent;
 import soundgates.Delegation;
+import soundgates.Direction;
 import soundgates.Link;
 import soundgates.Port;
 import soundgates.SoundComponent;
@@ -23,6 +24,8 @@ import soundgates.SoundgatesFactory;
 import soundgates.diagram.edit.parts.AtomicSoundComponentEditPart;
 import soundgates.diagram.edit.parts.CompositeSoundComponentEditPart;
 import soundgates.diagram.edit.parts.LinkEditPart;
+import soundgates.diagram.messageDialogs.MessageDialogs;
+import soundgatesComposite.diagram.soundcomponents.AtomicSoundComponentLibrary;
 
 public class CompositeSoundComponentExporter extends Exporter {
 
@@ -118,23 +121,26 @@ public class CompositeSoundComponentExporter extends Exporter {
 		}
 	}
 	
-	public static Document getCompositeSoundComponentXMLDocumentFromEditParts(List<EditPart> selectedEditParts){
-		return CompositeSoundComponentExporter.getDocForCompositeSoundComponent(
-				createCompositeSoundComponent(selectedEditParts));
+	public static Document getCompositeSoundComponentXMLDocumentFromEditParts(List<EditPart> selectedEditParts, String componentName){
+		LinkedList<soundgates.Element> elements = getElementsFromEditParts(selectedEditParts);
+		if(elements==null)
+			return null;
+		else
+			return CompositeSoundComponentExporter.getDocForCompositeSoundComponent(
+				createCompositeSoundComponentFromSelectedEditParts(elements,componentName));
 	}
 	
-	private static CompositeSoundComponent createCompositeSoundComponent(List<EditPart> selectedEditParts){		
+	private static CompositeSoundComponent createCompositeSoundComponentFromSelectedEditParts(LinkedList<soundgates.Element> elements, String componentName){		
 		
 		HashMap<SoundComponent,SoundComponent> componentCopies = new HashMap<SoundComponent,SoundComponent>();
 		
 		CompositeSoundComponent compositeSoundComponent = SoundgatesFactory.eINSTANCE.createCompositeSoundComponent();
-		
-		LinkedList<soundgates.Element> elements = getElementsFromEditParts(selectedEditParts);
+		compositeSoundComponent.setName(componentName);
 		LinkedList<Link> links = new LinkedList<>();
 		
 		for(soundgates.Element element : elements){
 			if(element instanceof AtomicSoundComponent){
-				AtomicSoundComponent oldAtomicSoundComponent = (AtomicSoundComponent) element;
+				AtomicSoundComponent oldAtomicSoundComponent = (AtomicSoundComponent) element;				
 				AtomicSoundComponent newAtomicSoundComponent = EcoreUtil.copy(oldAtomicSoundComponent);
 				newAtomicSoundComponent.setType(oldAtomicSoundComponent.getType());
 				componentCopies.put(oldAtomicSoundComponent, newAtomicSoundComponent);
@@ -165,6 +171,46 @@ public class CompositeSoundComponentExporter extends Exporter {
 			compositeSoundComponent.getLinks().add(newLink);
 		}
 		
+		//create ports for the composite component and delegations
+		int portCounter = 1;
+		for(SoundComponent soundComponent : compositeSoundComponent.getEmbeddedComponents()){
+			for(Port port : soundComponent.getPorts()){
+				if(port.getDirection()==Direction.IN){
+					if(port.getIncomingConnection()==null){
+						
+						Port newPort = SoundgatesFactory.eINSTANCE.createPort();
+						newPort.setDirection(port.getDirection());
+						newPort.setDataType(port.getDataType());
+						newPort.setName("Port"+portCounter+"_"+port.getName());
+						
+						Delegation delegation = SoundgatesFactory.eINSTANCE.createDelegation();
+						delegation.setSource(newPort);
+						delegation.setTarget(port);
+						
+						compositeSoundComponent.getPorts().add(newPort);
+						compositeSoundComponent.getDelegations().add(delegation);
+					}
+				}
+				else if(port.getDirection()==Direction.OUT){
+					if (port.getOutgoingConnection().size()==0){
+						
+						Port newPort = SoundgatesFactory.eINSTANCE.createPort();
+						newPort.setDirection(port.getDirection());
+						newPort.setDataType(port.getDataType());
+						newPort.setName("Port"+portCounter+"_"+port.getName());
+						
+						Delegation delegation = SoundgatesFactory.eINSTANCE.createDelegation();
+						delegation.setSource(port);
+						delegation.setTarget(newPort);
+						
+						compositeSoundComponent.getPorts().add(newPort);
+						compositeSoundComponent.getDelegations().add(delegation);
+					}
+				}
+				portCounter++;
+			}
+		}
+		
 		return compositeSoundComponent;
 	}
 	
@@ -182,6 +228,9 @@ public class CompositeSoundComponentExporter extends Exporter {
 		for(EditPart editPart : selectedEditParts){
 			if(editPart instanceof AtomicSoundComponentEditPart){
 				elements.add(((AtomicSoundComponentEditPart) editPart).getAtomicSoundComponent());
+				
+				if(!checkAtomicSoundComponent(((AtomicSoundComponentEditPart) editPart).getAtomicSoundComponent()))
+					return null;
 			}
 			else if(editPart instanceof CompositeSoundComponentEditPart){
 				elements.add(((CompositeSoundComponentEditPart) editPart).getCompositeSoundComponent());
@@ -201,5 +250,18 @@ public class CompositeSoundComponentExporter extends Exporter {
 		}
 		
 		return elements;
+	}
+	
+	private static boolean checkAtomicSoundComponent(AtomicSoundComponent atomicSoundComponent){
+		if(atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.soundOutputType)){
+			MessageDialogs.newCompositeSoundComponentContaintsSoundOutputBlock();
+			return false;
+		}
+		else if(atomicSoundComponent.getType().equals(AtomicSoundComponentLibrary.IOComponentType)){
+			MessageDialogs.newCompositeSoundComponentContaintsIOBlock();
+			return false;
+		}
+		else 
+			return true;
 	}
 }

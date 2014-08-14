@@ -22,7 +22,7 @@ class SchedulingContext  {
 
 private:
 
-    Strategy*             m_SchedulingStrategy;
+    Strategy* m_SchedulingStrategy;
 
 public:
 

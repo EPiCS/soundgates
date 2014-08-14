@@ -21,19 +21,19 @@ public class Messages extends NLS {
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	public static String SoundgatesCreationWizardTitle;
+	public static String SoundgatesCreationWizardTitle = "New Soundgates Patch Diagram";
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	public static String SoundgatesCreationWizard_DiagramModelFilePageTitle;
+	public static String SoundgatesCreationWizard_DiagramModelFilePageTitle = "Create Soundgates Patch Diagram";
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
-	public static String SoundgatesCreationWizard_DiagramModelFilePageDescription;
+	public static String SoundgatesCreationWizard_DiagramModelFilePageDescription = "Select file that will contain patch diagram.";
 
 	/**
 	 * @generated

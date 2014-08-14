@@ -1,7 +1,8 @@
 -include ../../makefiles/common.mk
  
 OBJECTS +=ADSRSoundComponent_SW.o \
-		  ADSRSoundComponent.o
+		  ADSR_HW.o \
+		  ADSRSoundComponent.o 
 
 all: libadsr.so
 	

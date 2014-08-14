@@ -1,0 +1,74 @@
+doctype html
+html
+  head
+    title Soundgates
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
+    //- link(rel='stylesheet', href='/stylesheets/nv.d3.css')
+    link(rel='stylesheet', href='/stylesheets/c3.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/d3.js')
+    script(src='/javascripts/c3.min.js')      
+    link(rel='shortcut icon', href='../../assets/ico/favicon.ico')
+    body
+    .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
+      .container-fluid
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#') Soundgates Debugger
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li.active
+              a(href='#') Home
+            li
+              a(href='#about') About
+            li
+              a(href='#contact') Contact
+        // /.nav-collapse
+      // /.container
+    // /.navbar
+    .container
+      .row.row-offcanvas.row-offcanvas-right
+        .col-xs-12.col-sm-9
+          p.pull-right.visible-xs
+            button.btn.btn-primary.btn-xs(type='button', data-toggle='offcanvas') Toggle nav
+          .jumbotron
+            h1 Soundgates Debugger
+            p
+              | Some helping text&period;
+          //- ###############################
+          //- Following Code is DB dependent
+          //- ###############################
+          #execution
+            h2 Execution:
+
+        #sidebar.col-xs-6.col-sm-3.sidebar-offcanvas(role='navigation')
+          .list-group(id="list-group")
+            - each execution in executions
+              a.list-group-item(href='#', value = '#{execution.timestamp}') #{execution.formattedTime}
+          button(id="refresh_test", type="button", class="btn btn-primary") Refresh Executions
+          br
+          br
+          button(id="generate_test", type="button", class="btn btn-info") Generate Testdata
+          br
+          br
+          button(id="remove_test", type="button", class="btn btn-danger") Remove Testdata
+            //- a.list-group-item(href='/generate', value = 'generate') Generate Testdata
+            //- a.list-group-item(href='/remove/all', value = 'RemoveAll') Remove All
+        // /span
+      // /row
+      hr
+      footer
+        p &copy; Soundgates 2014
+    // /.container
+    //
+       Bootstrap core JavaScript
+          ================================================== 
+    // Placed at the end of the document so the pages load faster
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/offcanvas.js')

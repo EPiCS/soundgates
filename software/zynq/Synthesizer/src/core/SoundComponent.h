@@ -17,6 +17,7 @@
 #include "Node.h"
 #include "SoundComponentImpl.h"
 
+#include "SoundgatesConfig.h"
 #include "Synthesizer.h"
 
 using namespace std;
@@ -30,8 +31,8 @@ class SoundComponent : public Node{
 private:
 
     SoundComponentImplPtr   m_pDelegate;
-
     SoundComponentImpl*     m_pDelegateRaw;
+    bool                    m_logging_enabled;
 
 public:
 

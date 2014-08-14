@@ -19,7 +19,7 @@ public class CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getCreateCommand(CreateElementRequest req) {
 		if (soundgatesComposite.diagram.providers.SoundgatesCompositeElementTypes.AtomicSoundComponent_3005 == req
@@ -31,6 +31,11 @@ public class CompositeSoundComponentComponentCompartmentItemSemanticEditPolicy
 				.getElementType()) {
 			return getGEFWrapper(new soundgatesComposite.diagram.edit.commands.CompositeSoundComponent2CreateCommand(
 					req));
+		}
+		if (soundgatesComposite.diagram.providers.SoundgatesCompositeElementTypes.Port_3004 == req
+				.getElementType()) {
+			
+			return getGEFWrapper(new soundgatesComposite.diagram.edit.commands.PortCreateCommand(req));
 		}
 		return super.getCreateCommand(req);
 	}

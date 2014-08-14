@@ -18,6 +18,7 @@ class Ramp: public SoundComponentImpl {
 
 public:
 	DECLARE_COMPONENTNAME;
+	double getIncrement_HW(int msec);
 
     /* in ports */
 

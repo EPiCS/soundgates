@@ -2,6 +2,7 @@ package soundgates.diagram.soundcomponents;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -9,16 +10,18 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import soundgates.AtomicSoundComponent;
+import soundgates.VHDLPortDescriptor;
 
 //TODO needs to check whether there are duplicate keys in the boolean/float/integer properties
 public class AtomicSoundComponentLibrary{
 
 	private static AtomicSoundComponentLibrary instance;
 	private static HashMap<String,Integer> diagramAndTypeToCounter = new HashMap<>();
-	private TreeMap<String, AtomicSoundComponent> components;
+	private TreeMap<String, AtomicSoundComponent> components;	
 	private static IFolder xmlfolder;
 	
-	public static HashMap<String,String> typeToCategory = new HashMap<>();	
+	public static HashMap<String,String> typeToCategory = new HashMap<>();
+	public static HashMap<String,LinkedList<VHDLPortDescriptor>> componentTypeToVHDLPortsList = new HashMap<>();
 	
 	public final static String samplesFolderName = "samples";
 	public final static String wavePlayerComponentType = "WavePlayer";

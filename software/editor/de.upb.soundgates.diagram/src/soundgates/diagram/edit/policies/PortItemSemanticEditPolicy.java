@@ -34,7 +34,7 @@ public class PortItemSemanticEditPolicy extends
 	 * @generated NOT
 	 */
 	protected Command getDestroyElementCommand(DestroyElementRequest req) {
-			return new EmptyCommand();		
+		return new EmptyCommand();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class PortItemSemanticEditPolicy extends
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getStartCreateRelationshipCommand(
 			CreateRelationshipRequest req) {
@@ -56,6 +56,7 @@ public class PortItemSemanticEditPolicy extends
 			return getGEFWrapper(new LinkCreateCommand(req, req.getSource(),
 					req.getTarget()));
 		}
+
 		return null;
 	}
 
@@ -67,7 +68,6 @@ public class PortItemSemanticEditPolicy extends
 
 		boolean patch;
 		boolean linkAllowed;
-		boolean delegationAllowed;
 
 		//             port          component    container
 		patch = (req.getContainer().eContainer().eContainer() instanceof PatchImpl);
@@ -77,32 +77,7 @@ public class PortItemSemanticEditPolicy extends
 		linkAllowed = (sourceContainer == targetContainer)
 				&& ((Port) req.getTarget()).getDirection() == Direction.IN
 				&& ((Port) req.getTarget()).getIncomingConnection() == null
-				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
-						.getTarget()).getDataType() == DataType.CONTROL));
-
-		if (sourceContainer instanceof PatchImpl) {
-			delegationAllowed = sourceContainer.eContents().contains(
-					targetContainer);
-		} else if (targetContainer instanceof PatchImpl) {
-			delegationAllowed = targetContainer.eContents().contains(
-					sourceContainer);
-		} else {
-			delegationAllowed = (sourceContainer.eContents().contains(
-					targetContainer) || targetContainer.eContents().contains(
-					sourceContainer));
-		}
-
-		delegationAllowed = delegationAllowed
-				&& ((Port) req.getTarget()).getDirection() == ((Port) req
-						.getSource()).getDirection()
-				&& ((Port) req.getTarget()).getIncomingConnection() == null
-				&& (!(((Port) req.getSource()).getDataType() == DataType.SOUND && ((Port) req
-						.getTarget()).getDataType() == DataType.CONTROL));
-
-		if (req.getTarget().eContainer() instanceof AtomicSoundComponent) {
-			delegationAllowed = delegationAllowed
-					&& ((Port) req.getTarget()).getDirection() == Direction.IN;
-		}
+				&& ( ((Port) req.getSource()).getDataType() == ((Port) req.getTarget()).getDataType() );	
 
 		if (SoundgatesElementTypes.Link_4001 == req.getElementType() && patch
 				&& linkAllowed) {
@@ -116,13 +91,14 @@ public class PortItemSemanticEditPolicy extends
 	 * Returns command to reorient EClass based link. New link target or source
 	 * should be the domain model element associated with this node.
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected Command getReorientRelationshipCommand(
 			ReorientRelationshipRequest req) {
 		switch (getVisualID(req)) {
 		case LinkEditPart.VISUAL_ID:
 			return getGEFWrapper(new LinkReorientCommand(req));
+
 		}
 		return super.getReorientRelationshipCommand(req);
 	}

@@ -19,6 +19,7 @@
 #include "../core/SoundComponent.h"
 
 #include "../Patch.h"
+#include "../NodeWorker.h"
 
 #include <boost/chrono/thread_clock.hpp>
 #include <boost/foreach.hpp>
@@ -40,6 +41,7 @@ private:
     uint32_t                           m_nScheduledNodes;
     std::vector<std::vector<NodePtr> > m_ScheduleTable;
 
+
 public:
 
     StaticSchedule();
@@ -55,7 +57,6 @@ public:
 
     void timerInterrupt(const boost::system::error_code&,
                           boost::asio::deadline_timer*,
-                          boost::asio::io_service*,
                           Patch::info_t* patchinfo);
 
     uint32_t getNumberOfScheduledNodes();

@@ -12,10 +12,11 @@ SoundComponentImpl::SoundComponentImpl(){
     m_Outports.reserve(Synthesizer::config::nPortsMax);
     m_Inports.reserve(Synthesizer::config::nPortsMax);
 
+	implType = 0;
 }
 
 SoundComponentImpl::SoundComponentImpl(std::vector<std::string> parameters){
-
+	implType = 0;
 	m_Parameters = parameters;
 }
 
@@ -58,3 +59,9 @@ std::vector<PortPtr>& SoundComponentImpl::getOutports(){
 void SoundComponentImpl::initLater(){
 }
 
+void SoundComponentImpl::setImplType(const char* t) {
+	this->implType = t;
+}
+const char* SoundComponentImpl::getImplType() {
+	return this->implType;
+}
