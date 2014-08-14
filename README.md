@@ -1,6 +1,6 @@
 = Repository for the project group Soundgates
 
-
+If you have any questions, please don't hesitate to contact me: lfunke[at]mail.upb.de
 
 == Roadmap for the future
 
@@ -27,14 +27,3 @@
 * Add support for other operation systems (e.g. MacOS)
 
 
-== Repository layout
-
-== Participants
-
-* Boonk Martin
-* Cioran Caius
-* Funke Lukas
-* Hangmann Hendrik
-* Pines Andrey
-* Posewsky Thorbjörn
-* Wuellrich Gunnar (gwue)
