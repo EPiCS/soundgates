@@ -5,6 +5,5 @@ pygments: true # syntax highlighting with pygments
 markdown: redcarpet #specifies Markdown renderer
 redcarpet:
   extensions: ["fenced_code_blocks", "tables", "with_toc_data"]
-  
-url: "http://www.epics-project.eu/soundgates"
 
+url: "http://epics.uni-paderborn.de/soundgates"
