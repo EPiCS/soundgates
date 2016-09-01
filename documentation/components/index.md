@@ -5,12 +5,12 @@ check: "&#10003;"
 uncheck: "&#10007;"
 ---
 # Synthesizer Components
-This is a list of all components that were already implemented. 
+This is a list of all components that were already implemented.
 If you want to learn how to implement a component of your own, please refer to [Creation of sound components](/tutorials/createcomponent).
 
 ## Component list
 
-Ports displayed **bold** are Sound ports, others are Control ports. 
+Ports displayed **bold** are Sound ports, others are Control ports.
 
 Hardware implementation do not exist for all components, especially for most of the control components, a hardware implementation would be rather unfeasible.
 
@@ -99,16 +99,15 @@ All control values are of datatype float. If the control value is used for boole
 | Triangle Generator | triangle | <ol><li>Frequency</li></ol> | <ol><li class="sound">SoundOut</li></ol> | - | {{page.check}} <td colspan="2"> Generates a triangle soundwave with a given frequency</td> |
 
 ### Sink
+
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
 | Logger | log | <ol><li class="sound">Sound</li><li>Trigger</li></ol> | - | <ol><li>Logging Prefix</li><li>Filename</li></ol> | {{page.uncheck}} <td colspan="2"> Logs all samples to console and to a file, as long as *Trigger* is `true`, preceeded by *Logging Prefix*. It is usually better to use the more sophisticated logging framework</td> |
 | Sound Output | dac | <ol><li class="sound">Sound</li></ol> | - | - | {{page.uncheck}} <td colspan="2"> Plays back an incoming soundwave using ALSA</td> |
 
 ### Source
+
 | **Component** | **Internal&nbsp;name** | **Input&nbsp;Ports** | **Output&nbsp;Ports** | **Properties** | **HW** <th colspan="2"> **Description**</th> |
 | ------------- | ----------------- | ----- | ---------------- | -------------- | --------------------- | ---------------------|
 | White Noise | noise | - | <ol><li class="sound">Samples</li></ol> | - | {{page.check}} <td colspan="2"> Generates White noise</td> |
 | Wave Player | smplply | <ol><li>Trigger</li></ol> | <ol><li class="sound">Output</li></ol> | <ol><li>Filename</li></ol> | {{page.uncheck}} <td colspan="2"> When triggered, plays the wave file specified in the parameter. The filename has to be relative to the waves directory.</td> |
-
-
-
